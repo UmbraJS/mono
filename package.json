@@ -1,7 +1,6 @@
 {
   "name": "@myriadjs/core",
-  "private": true,
-  "version": "0.0.0",
+  "version": "0.0.46",
   "description": "Function for auto generating scemantic color themes according to the Myriad color pattern from simple object schemas",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
@@ -14,18 +13,20 @@
   "license": "MIT",
   "keywords": ["colors", "themes", "myriad"],
   "type": "module",
-  "files": ["dist"],
-  "main": "./dist/myriad.umd.cjs",
-  "module": "./dist/myriad.js",
-  "types": "./dist/index.d.ts",
+  "main": "./index.umd.cjs",
+  "module": "./index.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/myriad.js",
-      "require": "./dist/myriad.umd.cjs"
-    }
+      "types": "./types/index.d.ts",
+      "require": "./index.umd.cjs",
+      "import": "./index.js"
+    },
+    "./*": "./*"
   },
   "scripts": {
-    "build": "tsc && vite build"
+    "build": "tsc && vite build && copy package.json dist && copy README.md dist",
+    "publish": "cd dist && npm publish"
   },
   "devDependencies": {
     "@types/node": "^18.15.3",

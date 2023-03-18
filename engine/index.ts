@@ -12,18 +12,18 @@ export const createScheme = (scheme?: Myriad): MyriadOutput => {
 }
 
 const htmlElement = typeof document === 'undefined' ? null : document.documentElement
-export const colorBus = (scheme?: Myriad, element = htmlElement) => {
+export const myriad = (scheme?: Myriad, element = htmlElement) => {
   const generated = createScheme(scheme)
   distributeScheme(generated, element)
   return generated
 }
 
-export const elementScheme = (scheme: Myriad, element: HTMLElement, id: string) => {
-  //runs the colorBus on a subsceme 
+export const subScheme = (scheme: Myriad, element: HTMLElement, id: string) => {
+  //runs the myriad on a subsceme 
   //and attaches it to an element
   let subSchemes = scheme.subSchemes
   if(subSchemes !== undefined) {
-    colorBus(subSchemes[id], element)
+    myriad(subSchemes[id], element)
   }
 }
 
@@ -32,7 +32,7 @@ export const rootScheme = (scheme: Myriad) => {
   //Creates a root scheme with 
   //the neccesary root scheme checks
   let checkedScheme = scheme ? scheme : defaultScheme
-  let warning = 'colorBus: No valid root scheme detected. Default scheme enabled. Make sure your passed scheme has a background property'
+  let warning = 'myriad: No valid root scheme detected. Default scheme enabled. Make sure your passed scheme has a background property'
   
   if (!checkedScheme.background) {
     console.warn(warning)
@@ -42,4 +42,4 @@ export const rootScheme = (scheme: Myriad) => {
   return createScheme(checkedScheme)
 }
 
-export default colorBus
+export default myriad

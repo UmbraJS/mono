@@ -8,11 +8,10 @@ export default defineConfig({
     outputDir: 'dist/types',
   })],
   build: {
-    outDir: 'dist',
     lib: {
       entry: resolve(__dirname, 'index.ts'),
       name: 'myriad',
-      fileName: 'myriad',
+      fileName: 'index',
     },
   }
 })
