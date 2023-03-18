@@ -1,0 +1,33 @@
+{
+  "name": "@myriadjs/core",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Function for generating color themes according to the Myriad color approach.",
+  "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "license": "MIT",
+  "keywords": ["colors", "themes", "myriad"],
+  "type": "module",
+  "files": ["dist"],
+  "main": "./dist/myriad.umd.cjs",
+  "module": "./dist/myriad.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/my-lib.js",
+      "require": "./dist/my-lib.umd.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "@types/tinycolor2": "^1.4.3",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0",
+    "vite-plugin-dts": "^2.1.0"
+  },
+  "dependencies": {
+    "tinycolor2": "^1.4.2"
+  }
+}
