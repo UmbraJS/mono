@@ -2,8 +2,15 @@
   "name": "@myriadjs/core",
   "private": true,
   "version": "0.0.0",
-  "description": "Function for generating color themes according to the Myriad color approach.",
+  "description": "Function for auto generating scemantic color themes according to the Myriad color pattern from simple object schemas",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MyriadJS/core/tree/main"
+  },
+  "bugs": {
+    "url": "https://github.com/MyriadJS/core/tree/main/issues"
+  },
   "license": "MIT",
   "keywords": ["colors", "themes", "myriad"],
   "type": "module",
@@ -13,8 +20,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/my-lib.js",
-      "require": "./dist/my-lib.umd.cjs"
+      "import": "./dist/myriad.js",
+      "require": "./dist/myriad.umd.cjs"
     }
   },
   "scripts": {
