@@ -18,10 +18,19 @@ span {
 }
 
 p.caption {
-  color: var(--shade);
+  color: var(--foreground-30);
+}
+
+p.caption-faint {
+  color: var(--foreground-50);
 }
 
 div.card {
-  background: var(--shade);
+  background: var(--background-30);
   padding: 2em;
+}
+
+div.faint {
+  height: 20px;
+  background: var(--background-50);
 }

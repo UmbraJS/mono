@@ -68,6 +68,11 @@ const contrastToMix = (props: ColorRange, readability = 0.01) => {
 }
 
 
+export function rangeShader(color: Color, mixer: Color, percent = 50) {
+  return tinycolor.mix(color, mixer, percent).toHexString()
+}
+
+
 export const mixToShade = (color: Color, mixer: Color, readability = 1.5) => {
   let newColor = tinycolor.mix(color, mixer, 1)
 

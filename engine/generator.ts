@@ -1,5 +1,5 @@
 import tinycolor from "tinycolor2"
-import { mixToShade, pickContrast } from "./primitives/color"
+import { mixToShade, pickContrast, rangeShader } from "./primitives/color"
 import { adjust } from "./adjust"
 import { AdjustedScheme, MyriadOutput, GenColor } from "./config"
 
@@ -8,16 +8,23 @@ interface ColorRange {
   antithesis: tinycolor.Instance,
 }
 
+function shade(colors: ColorRange) {
+  //const faintness = 1.1
+  const { color, antithesis } = colors
+  return {
+    30: rangeShader(color, antithesis, 10),
+    50: rangeShader(color, antithesis, 30)
+  }
+}
+
+//mixToShade(color, antithesis, 12.0),
+
 export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme): GenColor => {
   //Generic color object with all its auto generated color variations
-  const faintness = 1.1
-  const { color, antithesis } = colors
-
   return {
-    color: color.toHexString(),
-    shade: mixToShade(color, antithesis, 12.0),
-    shade2: mixToShade(color, antithesis, faintness),
-    contrast: pickContrast(color, scheme).toString()
+    color: colors.color.toHexString(),
+    shade: shade(colors),
+    contrast: pickContrast(colors.color, scheme).toString()
   }
 }
 

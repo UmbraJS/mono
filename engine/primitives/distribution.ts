@@ -1,6 +1,6 @@
 import tinycolor from "tinycolor2"
 import { createScheme } from '..'
-import { MyriadOutput, GenColor, ColorList, customColor } from '../config'
+import { MyriadOutput, SchemeKey, GenColor, ColorList, customColor } from '../config'
 import  { accent, adjusted } from "../adjust"
 import { ColorObj } from "../generator"
 
@@ -10,12 +10,21 @@ export const distributeScheme = (
   scheme = createScheme(),
   element = htmlElement,
 ) => {
-  const { background, foreground, accents } = scheme
+  const { background, accents } = scheme
   if(!background || !element) return
-  setBackground({background, element})
-  setForeground({foreground, element})
+  //setBackground({background, element})
+  //setForeground({foreground, element})
+
+  setColor('background', {
+    color: scheme.background, element,
+  })
+
+  setColor('foreground', {
+    color: scheme.foreground, element,
+  })
+
   setAccents({accents, element})
-  setOthers(scheme, element)
+  setCustom(scheme, element)
   //This line makes sure that subschemes change their color if needed
   setProperty('color', 'var(--foreground)', element)
 }
@@ -24,7 +33,7 @@ const setProperty = (name: string, value: string, element: HTMLElement) => {
   element.style.setProperty(name, value)
 }
 
-const setOthers = (scheme: MyriadOutput, element: HTMLElement) => {
+const setCustom = (scheme: MyriadOutput, element: HTMLElement) => {
   const custom = scheme.origin.custom
   if(!scheme.foreground || !custom) return
 
@@ -75,20 +84,16 @@ const setOthers = (scheme: MyriadOutput, element: HTMLElement) => {
 //   return typeof obj === 'object'
 // }
 
-const setBackground = (props: {background: GenColor, element: HTMLElement}) => {
-  const { background, element } = props
-  if(!background) return
-  setProperty('--background', background.color, element)
-  setProperty('--shade', background.shade, element)
-  setProperty('--shade-faint', background.shade2, element)
-}
-
-const setForeground = (props: {foreground?: GenColor, element: HTMLElement}) => {
-  const { foreground, element } = props
-  if(!foreground) return
-  setProperty('--foreground', foreground.color, element)
-  setProperty('--foreground-shade', foreground.shade, element)
-  setProperty('--foreground-shade-faint', foreground.shade2, element)
+const setColor = (name: SchemeKey | string, { color, element }: {color?: GenColor, element: HTMLElement}) => {
+  if(!color) return
+  if(color instanceof Array) return
+  setProperty('--' + name, color.color, element)
+  setProperty('--' + name + '-contrast', color.contrast, element)
+  Array.from(Object.entries(color.shade)).forEach((shade) => {
+    const k = shade[0]
+    const value = shade[1]
+    setProperty('--' + name + '-' + k, value, element)
+  })
 }
 
 interface AccentsInterface {
@@ -105,12 +110,11 @@ const setAccents = (props: AccentsInterface) => {
 }
 
 const setAccent = (index = 0, fl: GenColor, element: HTMLElement, name = "accent") => {
-  let vName = '--' + name
   let id = index > 0 ? index : ''
-  setProperty(vName + id, fl.color, element)
-  setProperty(vName + id + '-shade', fl.shade, element)
-  setProperty(vName + id + '-shade-faint', fl.shade2, element)
-  setProperty(vName + id + '-contrast', fl.contrast, element)
+  setColor(name + id, {
+    color: fl,
+    element,
+  })
 }
 
 export default distributeScheme

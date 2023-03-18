@@ -2,10 +2,13 @@ import tinycolor from "tinycolor2"
 
 export interface GenColor {
   color: string;
-  shade: string;
-  shade2: string;
   contrast: string;
+  shade: {
+    [key: number]: string
+  };
 }
+
+export type SchemeKey = 'foreground' | 'background' | 'accents'
 
 export interface MyriadOutput {
   background?: GenColor,
