@@ -5,10 +5,10 @@
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MyriadJS/core/tree/main"
+    "url": "https://github.com/MyriadJS/core"
   },
   "bugs": {
-    "url": "https://github.com/MyriadJS/core/tree/main/issues"
+    "url": "https://github.com/MyriadJS/core/issues"
   },
   "license": "MIT",
   "keywords": ["colors", "themes", "myriad"],
@@ -25,6 +25,7 @@
     "./*": "./*"
   },
   "scripts": {
+    "dev": "vite",
     "build": "tsc && vite build && copy package.json dist && copy README.md dist",
     "publish": "cd dist && npm publish"
   },
