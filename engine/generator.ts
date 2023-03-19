@@ -23,6 +23,7 @@ export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme, range = [30
     color: colors.color.toHexString(),
     shade: shade(colors, range),
     contrast: pickContrast(colors.color, scheme)
+    //add ratings object / or maybe make the rating a function
   }
 }
 
