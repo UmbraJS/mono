@@ -1,11 +1,11 @@
 import tinycolor from "tinycolor2"
 
+export type DynamicObject = {[key: number]: string}
+
 export interface GenColor {
   color: string;
   contrast: string;
-  shade: {
-    [key: number]: string
-  };
+  shade: DynamicObject;
 }
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string

@@ -103,7 +103,6 @@ function setAllShade(name: SchemeKey, {color, element}: SetProps) {
 function setContrast(name: SchemeKey | string, {color, element}: SetProps) {
   if(!color) return
   const bgfg = name === 'foreground' || name === 'background'
-  //const value = color.contrast === 
   if(!bgfg) setProperty('--' + name + '-contrast', color.contrast, element)
 }
 

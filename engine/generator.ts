@@ -1,26 +1,27 @@
 import tinycolor from "tinycolor2"
 import { pickContrast, rangeShader } from "./primitives/color"
 import { adjust } from "./adjust"
-import { AdjustedScheme, MyriadOutput, GenColor } from "./config"
+import { AdjustedScheme, MyriadOutput, GenColor, DynamicObject } from "./config"
 
 interface ColorRange {
   color: tinycolor.Instance,
   antithesis: tinycolor.Instance,
 }
 
-function shade(colors: ColorRange) {
+function shade(colors: ColorRange, range = [30, 50]) {
   const { color, antithesis } = colors
-  return {
-    30: rangeShader(color, antithesis, 10),
-    50: rangeShader(color, antithesis, 30)
-  }
+  let shades: DynamicObject = {}
+  range.forEach((val, i) => {
+    shades[i * 10 + 10] = rangeShader(color, antithesis, val)
+  })
+  return shades
 }
 
-export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme): GenColor => {
+export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme, range = [30, 50]): GenColor => {
   //Generic color object with all its auto generated color variations
   return {
     color: colors.color.toHexString(),
-    shade: shade(colors),
+    shade: shade(colors, range),
     contrast: pickContrast(colors.color, scheme)
   }
 }
@@ -30,8 +31,8 @@ function background(scheme: AdjustedScheme) {
   const { background, foreground } = scheme
   return ColorObj({
     color: background, 
-    antithesis: foreground || background
-  }, scheme)
+    antithesis: foreground || background,
+  }, scheme, [10, 30])
 }
 
 function foreground(scheme: AdjustedScheme) {

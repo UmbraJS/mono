@@ -31,7 +31,6 @@ export const makeReadable = (color: string, Myriad: Myriad, readability = 1) => 
   }, readability)
 }
 
-
 export const converse = (col: Color, val = 100) => {
   return col.isDark() ? col.lighten(val) : col.darken(val)
 }
