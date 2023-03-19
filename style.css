@@ -3,6 +3,10 @@ html {
   color: var(--foreground);
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -44,8 +48,27 @@ div.faint {
 }
 
 div.pallets {
+  position: relative;
   display: flex;
-  gap: 1em;
+  flex-direction: column;
+  gap: 0em;
+  width: 50px;
+}
+
+div.pallets label {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  padding: 0.5em 0.1em; 
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  background: var(--background);
+  border: 1px solid var(--foreground);
+}
+
+div.pallets.block label {
+  right: -0.9px;
+  top: -0.9px;
 }
 
 div.pallets > div {
@@ -54,36 +77,50 @@ div.pallets > div {
   background: var(--foreground);
   border: 1px solid var(--foreground);
 }
-  
-div.fg.pallets > div:nth-child(1) {
-  background: var(--foreground-20);
+
+div.bg.pallets {
+  flex-direction: column-reverse;
 }
 
-div.fg.pallets > div:nth-child(2) {
-  background: var(--foreground-10);
+div.fg.pallets > div.color {
+  background: var(--foreground);
+  color: var(--background);
 }
 
-  
-div.bg.pallets > div:nth-child(1) {
-  background: var(--background-10);
-}
-
-div.bg.pallets > div:nth-child(2) {
-  background: var(--background-20);
-}
-
-div.bg.pallets > div:nth-child(3) {
+div.bg.pallets > div.color {
   background: var(--background);
 }
 
-div.ac.pallets > div:nth-child(1) {
-  background: var(--accent-10);
-}
-
-div.ac.pallets > div:nth-child(2) {
-  background: var(--accent-20);
-}
-
-div.ac.pallets > div:nth-child(3) {
+div.ac.pallets > div.color {
   background: var(--accent);
+}
+
+.ranges {
+  display: flex;
+  gap: 0em;
+}
+
+.ranges .range {
+  display: flex;
+  flex-direction: column;
+  gap: 0em;
+}
+
+.accent-range {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0em;
+}
+
+.accent-range .block {
+  background: var(--accent-contrast);
+  border: 1px solid var(--foreground);
+}
+
+.divider {
+  background: var(--foreground-20);
+  width: 1px;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  opacity: 0.5;
 }
