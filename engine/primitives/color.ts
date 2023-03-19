@@ -44,7 +44,7 @@ export const pickContrast = (c: Color, scheme: AdjustedScheme) => {
     scheme.background || tinycolor('white'),
     scheme.foreground || tinycolor('black'),
   ])
-  return mostReadable
+  return mostReadable.toString()
 }
 
 type ColorRange = {

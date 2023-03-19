@@ -8,7 +8,7 @@ export interface GenColor {
   };
 }
 
-export type SchemeKey = 'foreground' | 'background' | 'accents'
+export type SchemeKey = 'foreground' | 'background' | 'accents' | string
 
 export interface MyriadOutput {
   background?: GenColor,

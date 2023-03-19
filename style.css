@@ -4,13 +4,19 @@ html {
 }
 
 body {
-  width: 80em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+
+  width: 40em;
   max-width: 100vw;
   padding: 4em;
+  margin: auto;
 }
 
 p, li, a, h1, h2, h3, h4, h5, h6 {
   max-width: 500px;
+  margin: 0px;
 }
 
 span {
@@ -26,6 +32,7 @@ p.caption-faint {
 }
 
 div.card {
+  margin-top: 1em;
   background: var(--background-30);
   padding: 2em;
 }

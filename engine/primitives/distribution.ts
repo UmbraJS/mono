@@ -10,41 +10,43 @@ export const distributeScheme = (
   scheme = createScheme(),
   element = htmlElement,
 ) => {
-  const { background, accents } = scheme
+  const { foreground, background, accents } = scheme
   if(!background || !element) return
-  //setBackground({background, element})
-  //setForeground({foreground, element})
 
   setColor('background', {
-    color: scheme.background, element,
+    color: background, element,
   })
 
   setColor('foreground', {
-    color: scheme.foreground, element,
+    color: foreground, element,
   })
 
-  setAccents({accents, element})
+  accents?.forEach((fl: GenColor, index: number) => {
+    setAccent(index, fl, element)
+  })
+
   setCustom(scheme, element)
+
   //This line makes sure that subschemes change their color if needed
   setProperty('color', 'var(--foreground)', element)
 }
 
-const setProperty = (name: string, value: string, element: HTMLElement) => {
+const setProperty = (name: SchemeKey, value: string, element: HTMLElement) => {
   element.style.setProperty(name, value)
+}
+
+const makeArray = (obj: ColorList): ColorList[] => {
+  const objArray = Object.entries(obj)
+  return objArray.map(([key, value]) => {
+    return {[key]: value}
+  })
 }
 
 const setCustom = (scheme: MyriadOutput, element: HTMLElement) => {
   const custom = scheme.origin.custom
   if(!scheme.foreground || !custom) return
 
-  const makeArray = (obj: ColorList): ColorList[] => {
-    const objArray = Object.entries(obj)
-    return objArray.map(([key, value]) => {
-      return {[key]: value}
-    })
-  }
-
-  const generateCustomColors = (array: ColorList[]) => {
+  const genCustomColors = (array: ColorList[]) => {
     return array.map((obj) => {
       const key = Object.keys(obj)[0]
       const value = Object.values(obj)[0]
@@ -61,34 +63,36 @@ const setCustom = (scheme: MyriadOutput, element: HTMLElement) => {
     return color
   }
 
-  const customColors = generateCustomColors(makeArray(custom))
+  const colorArray = makeArray(custom)
+  const customColors = genCustomColors(colorArray)
   customColors.forEach((c) => {
+    if(!adjusted) return
     const key = Object.keys(c)[0]
     const value = Object.values(c)[0]
-    let newColor = tinycolor(value)
-    if(!adjusted) return
-    const gen = ColorObj({
-      color: newColor,
-      antithesis: newColor
-    }, adjusted)
-    setAccent(0, gen, element, key)
+    const color = {
+      color: tinycolor(value),
+      antithesis: tinycolor(value)
+    }
+    setAccent(0, ColorObj(color, adjusted), element, key)
   })
 
 }
 
-// function isArray(obj: any) {
-//   return Array.isArray(obj)
-// }
+interface SetProps {
+  color?: GenColor,
+  element: HTMLElement
+}
 
-// function isObject(obj: any) {
-//   return typeof obj === 'object'
-// }
-
-const setColor = (name: SchemeKey | string, { color, element }: {color?: GenColor, element: HTMLElement}) => {
+const setColor = (name: SchemeKey, { color, element }: SetProps) => {
   if(!color) return
   if(color instanceof Array) return
   setProperty('--' + name, color.color, element)
-  setProperty('--' + name + '-contrast', color.contrast, element)
+  setContrast(name, {color, element})
+  setAllShade(name, {color, element})
+}
+
+function setAllShade(name: SchemeKey, {color, element}: SetProps) {
+  if(!color) return
   Array.from(Object.entries(color.shade)).forEach((shade) => {
     const k = shade[0]
     const value = shade[1]
@@ -96,17 +100,11 @@ const setColor = (name: SchemeKey | string, { color, element }: {color?: GenColo
   })
 }
 
-interface AccentsInterface {
-  accents?: GenColor[]
-  element: HTMLElement
-}
-
-const setAccents = (props: AccentsInterface) => {
-  const { accents, element } = props
-  if(!accents) return
-  accents.forEach((fl: GenColor, index: number) => {
-    setAccent(index, fl, element)
-  })
+function setContrast(name: SchemeKey | string, {color, element}: SetProps) {
+  if(!color) return
+  const bgfg = name === 'foreground' || name === 'background'
+  //const value = color.contrast === 
+  if(!bgfg) setProperty('--' + name + '-contrast', color.contrast, element)
 }
 
 const setAccent = (index = 0, fl: GenColor, element: HTMLElement, name = "accent") => {
