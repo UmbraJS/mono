@@ -1,5 +1,5 @@
 # Myriad
-MyriadJS is a powerful and flexible theme managment library that allows you to create semantic color themes based on the Myriad pattern. This pattern defines the relationship between colors as opposed to focusing on the elements the colors belong to. Its a simpler way to ensure readability and consistency across a wide range of themes. By following this convention and taking advantge of the powefull color generator and its underlying color primitives, you can generate both light and dark themes, as well as any other theme in between, with ease.
+MyriadJS is a flexible theme managment library that allows you to create semantic color themes based on the Myriad pattern. This pattern defines the relationship between colors as opposed to focusing on the elements the colors belong to. Its a simpler way to ensure readability and consistency across a wide range of themes. By following this convention and taking advantge of the powefull color generator and its underlying color primitives, you can generate both light and dark themes, as well as any other theme in between, with ease.
 
 Test it out yourself. Head over to [MyriadX](https://myriadx.netlify.app/) to get an idea of whats possible and feel out the performance. 
 

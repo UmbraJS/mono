@@ -1,7 +1,7 @@
 {
   "name": "@myriadjs/core",
   "version": "0.0.471",
-  "description": "MyriadJS is a powerful and flexible theme managment library that allows you to create semantic color themes based on the Myriad pattern. ",
+  "description": "MyriadJS is a flexible theme managment library that allows you to create semantic color themes based on the Myriad pattern.",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "url": "https://github.com/MyriadJS/core/issues"
   },
   "license": "MIT",
-  "keywords": ["colors", "themes", "myriad"],
+  "keywords": ["colors", "colours", "themes", "theming", "myriad", "customization"],
   "type": "module",
   "main": "./index.umd.cjs",
   "module": "./index.js",
