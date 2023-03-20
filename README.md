@@ -19,18 +19,6 @@ This approach lets you easily adjust or completely change your entire theme from
 ```bash
 npm install @myriadjs/core
 ```
-
-## :building_construction: Setup
-```js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import glsl from 'vite-plugin-glsl'
-
-export default defineConfig({
-  plugins: [vue(), glsl()],
-})
-```
-
 ## :crystal_ball: Usage
 Simple example
 ```ts
