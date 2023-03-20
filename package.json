@@ -1,6 +1,6 @@
 {
   "name": "@myriadjs/core",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "Function for auto generating scemantic color themes according to the Myriad color pattern from simple object schemas",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
