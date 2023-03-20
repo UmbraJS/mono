@@ -3,6 +3,7 @@ import {
   // getReadable,
   // makeReadable,
   // Myriad
+  GenColor
 } from "."
 
 // function linkColor(m: Myriad) {
@@ -61,8 +62,6 @@ function setAccent() {
 }
 
 function update() {
-  shadeArray('.fg', m.foreground?.shade)
-  shadeArray('.bg', m.background?.shade)
   setAccent()
 }
 
@@ -106,29 +105,21 @@ template.innerHTML = `
     }
   </style>
   <div class="pallets">
-    <div class="color">0</div>
+    <div class="color"></div>
   </div>
 `
 
-function ifForeground(shadow: ShadowRoot) {
+function setColor(shadow: ShadowRoot, color: GenColor | undefined) {
+  if(!color) return
   const pallets = shadow.querySelector('.pallets')
-  const shades = m.foreground?.shade
-
-  sa(pallets, shades)
-
-  const colorCSS = `background: ${m.foreground?.color}; color: ${m.background?.color}`
+  sa(pallets, color.shade)
+  const colorCSS = `background: ${color.color};`
   shadow.querySelector('.color')?.setAttribute('style', colorCSS)
-}
-
-function ifBackground(shadow: ShadowRoot) {
-  const pallets = shadow.querySelector('.pallets')
-  const shades = m.background?.shade
-  pallets?.classList.add('reverse')
-
-  sa(pallets, shades)
-
-  const colorCSS = `background: ${m.background?.color}; color: ${m.foreground?.color}`
-  shadow.querySelector('.color')?.setAttribute('style', colorCSS)
+  return {
+    reverse: () => {
+      pallets?.classList.add('reverse')
+    }
+  }
 }
 
 class Pallet extends HTMLElement {
@@ -141,10 +132,10 @@ class Pallet extends HTMLElement {
     const shadow = this.attachShadow({mode: 'open'})
     shadow.append(template.content.cloneNode(true))
 
-    if(name === 'foreground') ifForeground(shadow)
-    if(name === 'background') ifBackground(shadow)
+    if(name === 'foreground') setColor(shadow, m.foreground)
+    if(name === 'background') setColor(shadow, m.background)?.reverse()
   }
 }
 
-customElements.define('m-pallet', Pallet)
+customElements.define('color-pallet', Pallet)
 

@@ -1,6 +1,6 @@
 import { myriad } from "./engine/index"
 import { getReadable, makeReadable } from './engine/primitives/color'
-import { Myriad } from './engine/config'
+import { Myriad, GenColor } from './engine/config'
 
 export {
   myriad,
@@ -9,5 +9,6 @@ export {
 }
 
 export type {
-  Myriad
+  Myriad,
+  GenColor
 }
