@@ -9,8 +9,8 @@ Test it out yourself. Head over to [MyriadX](https://myriadx.netlify.app/) to ge
 - :kissing_cat: ***Simple*** - Just a simple JS function that lets you define youre theme. Nothing more
 - :muscle: ***Flexible*** - Flexible primitives underneath that let you build your own logic
 - :telescope: ***Typesafe*** - Written fully in typescript 
-- :hammer_and_wrench: ***Maintainable*** - HTML stays descriptive of content letting canvas images flows with the HTML elements
-- :man_in_manual_wheelchair: ***Accessible*** - Let's control readability scores. Enforce good readability or just help monitor
+- :hammer_and_wrench: ***Maintainable*** - Enforces a single source of truth for your entire color system
+- :man_in_manual_wheelchair: ***Accessible*** - Lets you control readability scores, enforce good readability or just help monitor
 
 #### :test_tube: Benefits of this approach
 This approach lets you easily adjust or completely change your entire theme from a single place and at a moments notice, making it ideal for both highly dynamic and less dynamic theme requirements. The Myriad pattern also enables you to predict and dictate readability scores and even auto-generate themes or parts of themes. MyriadJS provides a highly customizable and scalable approach to color systems that can accommodate any color theme without the need to change any color assignments.
@@ -21,8 +21,6 @@ npm install @myriadjs/core
 ```
 
 ## :building_construction: Setup
-You can inject GLSL as a string but if you want to actually use it you're going to want to store GLSL in files that you can import. In order to do that you need to let Vite know how to handle GLSL files though. Import the [vite-plugin-glsl](https://github.com/UstymUkhman/vite-plugin-glsl) package and register it as a plugin in your vite.config file.
-
 ```js
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
