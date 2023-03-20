@@ -47,74 +47,23 @@ div.faint {
   padding: 2em;
 }
 
-div.pallets {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0em;
-  width: 50px;
-}
-
-div.pallets label {
-  position: absolute;
-  top: 0px;
-  right: 0;
-  padding: 0.5em 0.1em; 
-  writing-mode: vertical-lr;
-  text-orientation: mixed;
-  background: var(--background);
-  border: 1px solid var(--foreground);
-}
-
-div.pallets.block label {
-  right: -0.9px;
-  top: -0.9px;
-}
-
-div.pallets > div {
-  height: 50px;
-  aspect-ratio: 1 / 1;
-  background: var(--foreground);
-  border: 1px solid var(--foreground);
-}
-
-div.bg.pallets {
-  flex-direction: column-reverse;
-}
-
-div.fg.pallets > div.color {
-  background: var(--foreground);
-  color: var(--background);
-}
-
-div.bg.pallets > div.color {
-  background: var(--background);
-}
-
-div.ac.pallets > div.color {
-  background: var(--accent);
-}
-
 .ranges {
   display: flex;
   gap: 0em;
+  margin-bottom: 10em;
 }
 
-.ranges .range {
+.range {
   display: flex;
   flex-direction: column;
   gap: 0em;
+  outline: solid 0px var(--accent);
+  transition: .2s;
 }
 
-.accent-range {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 0em;
-}
-
-.accent-range .block {
-  background: var(--accent-contrast);
-  border: 1px solid var(--foreground);
+.range:hover {
+  gap: 1em;
+  outline: solid 3px var(--foreground);
 }
 
 .divider {
