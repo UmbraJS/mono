@@ -17,7 +17,7 @@ function shade(colors: ColorRange, range = [30, 50]) {
   return shades
 }
 
-export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme, range = [30, 50]): GenColor => {
+export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme, range = [20, 50]): GenColor => {
   //Generic color object with all its auto generated color variations
   return {
     color: colors.color.toHexString(),
@@ -42,7 +42,7 @@ function foreground(scheme: AdjustedScheme) {
   return ColorObj({
     color: foreground, 
     antithesis: background || foreground
-  }, scheme)
+  }, scheme, [20, 50])
 }
 
 function accents(scheme: AdjustedScheme): GenColor[] | undefined {

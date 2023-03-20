@@ -2,10 +2,11 @@ import {
   myriad,
   // getReadable,
   // makeReadable,
-  // Myriad
+  MyriadOutput,
 } from "."
 import { ColorPallet } from "./components/ColorPallet"
 import { AccentPallet } from "./components/AccentPallet"
+import { RandomButton } from "./components/RandomButton"
 
 // function linkColor(m: Myriad) {
 //   if(!m.foreground) return "black"
@@ -19,19 +20,10 @@ import { AccentPallet } from "./components/AccentPallet"
 //   return getReadable(m.foreground, 'black', 19)
 // }
 
-// type DynamicObject = {[key: number]: string}
-
-// const makeArray = (obj: DynamicObject) => {
-//   const objArray = Object.entries(obj)
-//   return objArray.map(([key, value]) => {
-//     return {[key]: value}
-//   })
-// }
-
-export const m = myriad({
+export let m = myriad({
   background: '#0c0915',
   foreground: '#c0aea3',
-  accents: ['#c97074', '#0c0915', 'darkblue'],
+  accents: ['#c97074'],
   // custom: {
   //   link: linkColor,
   //   imgColor: imgColor,
@@ -40,37 +32,14 @@ export const m = myriad({
   // }
 })
 
+export function mutateMyriad(newMyriad: MyriadOutput) {
+  m = newMyriad
+}
+
 function registerComponent() {
   customElements.define('color-pallet', ColorPallet)
   customElements.define('accent-pallet', AccentPallet)
+  customElements.define('random-button', RandomButton)
 }
 
 registerComponent()
-
-// function shadeArray(className: string, shade?: DynamicObject) {
-//   if(!shade) return
-//   const fs = makeArray(shade)
-//   const pallet = document.querySelector(className)
-//   if(!pallet) return
-//   fs.forEach((obj) => {
-//     const key = Object.keys(obj)[0]
-//     const value = Object.values(obj)[0]
-//     const div = document.createElement('div')
-//     div.style.backgroundColor = value
-//     div.innerHTML = key || '0'
-//     pallet.appendChild(div)
-//   })
-// }
-
-// function setAccent() {
-//   m.accents?.forEach((fl) => {
-//     shadeArray('.ac', fl.shade)
-//   })
-// }
-
-// function update() {
-//   setAccent()
-// }
-
-// update()
-

@@ -18,6 +18,20 @@ export const myriad = (scheme?: Myriad, element = htmlElement) => {
   return generated
 }
 
+function randomHex() {
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`
+}
+
+export function randomMyriad(element = htmlElement, accents = 1) {
+  //Generates a random scheme
+  const scheme = {
+    background: randomHex(),
+    foreground: randomHex(),
+    accents: Array.from({ length: accents }, () => randomHex()),
+  }
+  return myriad(scheme, element)
+}
+
 export const subScheme = (scheme: Myriad, element: HTMLElement, id: string) => {
   //runs the myriad on a subsceme 
   //and attaches it to an element

@@ -37,9 +37,7 @@ interface MyriadAdjusted {
   accents?: tinycolor.Instance[],
   generated?: any,
   readability?: number,
-  subSchemes?: {
-    [key: string]: Myriad
-  }
+  subSchemes?: subSchemes,
 }
 
 export interface AdjustedScheme extends MyriadAdjusted {
@@ -57,7 +55,7 @@ export const defaultScheme: Myriad = {
   accents: ['#5200ff'],
   
   generated: null,
-  readability: 2,
+  readability: 11,
 
   subSchemes: {},
   custom: {
