@@ -1,19 +1,8 @@
-import { Myriad, MyriadOutput } from './types'
-
-interface SettingType {
-  shade?: number[]
-}
-
-export interface SettingsType {
-  readability: number
-  foreground: SettingType
-  background: SettingType
-  accents: SettingType
-}
+import { Myriad, MyriadOutput, MyriadSettings, SettingType } from './types'
 
 export let generated: MyriadOutput | null = null
 
-export function changeSettings(newSettings: SettingsType) {
+export function changeSettings(newSettings: MyriadSettings) {
   settings = {
     ...settings,
     ...newSettings,
@@ -27,7 +16,7 @@ function setting(passed?: SettingType) {
   }
 }
 
-export let settings: SettingsType = {
+export let settings: MyriadSettings = {
   readability: 11,
   foreground: setting({ shade: [20, 50]}),
   background: setting({ shade: [10, 30]}),

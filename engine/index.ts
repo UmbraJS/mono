@@ -1,6 +1,6 @@
 //Configs and Utilities
-import { defaultScheme, changeSettings, SettingsType } from './store'
-import { Myriad, MyriadOutput } from './store/types'
+import { defaultScheme, changeSettings } from './store'
+import { Myriad, MyriadOutput, MyriadSettings } from './store/types'
 import { distributeScheme } from './primitives/distribution'
 
 //Main functions
@@ -14,7 +14,7 @@ export const createScheme = (scheme?: Myriad): MyriadOutput => {
 
 interface Props {
   element?: HTMLElement
-  settings?: SettingsType
+  settings?: MyriadSettings
 }
 
 export const myriad = (scheme?: Myriad, props?: Props) => {
@@ -41,7 +41,7 @@ export function randomMyriad(element?: HTMLElement, accents = 1) {
 interface SubSchemeProps extends Props {
   id: string
   element: HTMLElement
-  settings?: SettingsType
+  settings?: MyriadSettings
 }
 
 export const subScheme = (scheme: Myriad, props: SubSchemeProps) => {

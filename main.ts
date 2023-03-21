@@ -2,6 +2,7 @@ import {
   myriad,
   // getReadable,
   // makeReadable,
+  MyriadSettings,
   MyriadOutput,
 } from "."
 import { ColorPallet } from "./components/ColorPallet"
@@ -20,6 +21,13 @@ import { RandomButton } from "./components/RandomButton"
 //   return getReadable(m.foreground, 'black', 19)
 // }
 
+const settings: MyriadSettings = {
+  readability: 11,
+  foreground: {
+    shade: [10, 40]
+  } 
+}
+
 export let m = myriad({
   background: '#0c0915',
   foreground: '#c0aea3',
@@ -30,7 +38,7 @@ export let m = myriad({
   //   success: '#00ff00',
   //   error: '#ff0000',
   // }
-})
+}, {settings})
 
 export function mutateMyriad(newMyriad: MyriadOutput) {
   m = newMyriad
