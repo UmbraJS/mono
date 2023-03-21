@@ -9,7 +9,8 @@ export class ColorPallet extends HTMLElement {
   constructor() {
     super()
     const name = this.getAttribute('name') || 'foreground';
-    const index = this.getAttribute('index') || 0;
+    const atIndex = this.getAttribute('index')
+    const index = atIndex ? parseInt(atIndex, 10) : 0
     const shadow = shadowDOM(this, `
       <style>
         div.pallets {
@@ -43,8 +44,8 @@ export class ColorPallet extends HTMLElement {
       </div>
     `)
 
-    if(name === 'foreground') setColor(shadow, m[name])
-    if(name === 'background') setColor(shadow, m[name])?.reverse()
-    if(name === 'accents' && m.accents) setColor(shadow, m.accents[+index])
+    if(name === 'foreground') setColor(shadow, name)
+    if(name === 'background') setColor(shadow, name)?.reverse()  
+    if(name === 'accents' && m.accents) setColor(shadow, name, index)
   }
 }
