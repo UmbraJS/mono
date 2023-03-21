@@ -38,12 +38,18 @@ export function randomMyriad(element?: HTMLElement, accents = 1) {
   return myriad(scheme, {element})
 }
 
-export const subScheme = (scheme: Myriad, element: HTMLElement, id: string) => {
+interface SubSchemeProps extends Props {
+  id: string
+  element: HTMLElement
+  settings?: SettingsType
+}
+
+export const subScheme = (scheme: Myriad, props: SubSchemeProps) => {
   //runs the myriad on a subsceme 
   //and attaches it to an element
   let subSchemes = scheme.subSchemes
   if(subSchemes !== undefined) {
-    myriad(subSchemes[id], {element})
+    myriad(subSchemes[props.id], props)
   }
 }
 
