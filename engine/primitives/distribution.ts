@@ -1,6 +1,6 @@
 import tinycolor from "tinycolor2"
 import { createScheme } from '..'
-import { MyriadOutput, SchemeKey, GenColor, ColorList, customColor } from '../config'
+import { MyriadOutput, SchemeKey, GenColor, ColorList, customColor } from '../store/types'
 import  { accent, adjusted } from "../adjust"
 import { ColorObj } from "../generator"
 

@@ -1,4 +1,4 @@
-import { AdjustedScheme, Myriad } from '../config'
+import { AdjustedScheme, Myriad } from '../store/types'
 import tinycolor from "tinycolor2"
 export type Color = tinycolor.Instance
 export type Colour = string | Color
@@ -10,7 +10,6 @@ export const getHSLA = (col: string, a = 0.6) => {
   const string = alpha.toHslString();
   return { string, HSL }
 }
-
 
 const checkReadability = (col: Colour, bg: Colour, mult = 1) => {
   return tinycolor.readability(col, bg) * mult

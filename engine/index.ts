@@ -1,5 +1,6 @@
 //Configs and Utilities
-import { defaultScheme, Myriad, MyriadOutput  } from './config'
+import { defaultScheme, changeSettings, SettingsType } from './store'
+import { Myriad, MyriadOutput } from './store/types'
 import { distributeScheme } from './primitives/distribution'
 
 //Main functions
@@ -11,10 +12,15 @@ export const createScheme = (scheme?: Myriad): MyriadOutput => {
   return generate(adjust(scheme))
 }
 
-const htmlElement = typeof document === 'undefined' ? null : document.documentElement
-export const myriad = (scheme?: Myriad, element = htmlElement) => {
+interface Props {
+  element?: HTMLElement
+  settings?: SettingsType
+}
+
+export const myriad = (scheme?: Myriad, props?: Props) => {
+  if(props?.settings) changeSettings(props?.settings)
   const generated = createScheme(scheme)
-  distributeScheme(generated, element)
+  distributeScheme(generated, props?.element)
   return generated
 }
 
@@ -22,14 +28,14 @@ function randomHex() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
 
-export function randomMyriad(element = htmlElement, accents = 1) {
+export function randomMyriad(element?: HTMLElement, accents = 1) {
   //Generates a random scheme
   const scheme = {
     background: randomHex(),
     foreground: randomHex(),
     accents: Array.from({ length: accents }, () => randomHex()),
   }
-  return myriad(scheme, element)
+  return myriad(scheme, {element})
 }
 
 export const subScheme = (scheme: Myriad, element: HTMLElement, id: string) => {
@@ -37,7 +43,7 @@ export const subScheme = (scheme: Myriad, element: HTMLElement, id: string) => {
   //and attaches it to an element
   let subSchemes = scheme.subSchemes
   if(subSchemes !== undefined) {
-    myriad(subSchemes[id], element)
+    myriad(subSchemes[id], {element})
   }
 }
 
@@ -48,7 +54,7 @@ export const rootScheme = (scheme: Myriad) => {
   let checkedScheme = scheme ? scheme : defaultScheme
   let warning = 'myriad: No valid root scheme detected. Default scheme enabled. Make sure your passed scheme has a background property'
   
-  if (!checkedScheme.background) {
+  if(!checkedScheme.background) {
     console.warn(warning)
     checkedScheme = defaultScheme
   }

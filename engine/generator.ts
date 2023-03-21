@@ -1,7 +1,13 @@
 import tinycolor from "tinycolor2"
 import { pickContrast, rangeShader } from "./primitives/color"
 import { adjust } from "./adjust"
-import { AdjustedScheme, MyriadOutput, GenColor, DynamicObject } from "./config"
+import { settings } from "./store"
+import { 
+  AdjustedScheme, 
+  MyriadOutput, 
+  GenColor, 
+  DynamicObject 
+} from "./store/types"
 
 interface ColorRange {
   color: tinycolor.Instance,
@@ -33,7 +39,7 @@ function background(scheme: AdjustedScheme) {
   return ColorObj({
     color: background, 
     antithesis: foreground || background,
-  }, scheme, [10, 30])
+  }, scheme, settings.background.shade)
 }
 
 function foreground(scheme: AdjustedScheme) {
@@ -42,7 +48,7 @@ function foreground(scheme: AdjustedScheme) {
   return ColorObj({
     color: foreground, 
     antithesis: background || foreground
-  }, scheme, [20, 50])
+  }, scheme, settings.foreground.shade)
 }
 
 function accents(scheme: AdjustedScheme): GenColor[] | undefined {
@@ -51,7 +57,7 @@ function accents(scheme: AdjustedScheme): GenColor[] | undefined {
       scheme.background || color,
       scheme.foreground || color,
     ])
-    return ColorObj({color, antithesis }, scheme)
+    return ColorObj({color, antithesis }, scheme, settings.foreground.shade)
   }) 
 }
 

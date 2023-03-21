@@ -3,7 +3,8 @@ import tinycolor from "tinycolor2"
 
 //Internal dependencies
 import { converse, getReadable, makeReadable } from './primitives/color'
-import { defaultScheme, Myriad, AdjustedScheme } from './config'
+import { defaultScheme, settings } from './store'
+import { Myriad, AdjustedScheme } from './store/types'
 
 const fallback = tinycolor.random().toHexString()
 const defaultBG = tinycolor('white')
@@ -29,13 +30,11 @@ const background = (scheme: Myriad) => {
 
 const foreground = (scheme: Myriad) => {
   //Adjusts the foreground and makes sure its readable against the background
-  let readability = scheme.readability || defaultScheme.readability || 5
+  let readability = settings.readability || 5
   const bg = bgInstance(scheme)
-  const computedForeground = scheme.foreground
-    ? getReadable(tinycolor(scheme.foreground), bg, readability)
-    : converse(bg.clone())
-
-  return tinycolor(computedForeground)
+  return tinycolor(scheme.foreground
+    ? getReadable(scheme.foreground, bg, readability)
+    : converse(bg.clone()))
 }
 
 export const accent = (fl: string, scheme: Myriad) => {
