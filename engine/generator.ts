@@ -39,7 +39,7 @@ function background(scheme: AdjustedScheme) {
   return ColorObj({
     color: background, 
     antithesis: foreground || background,
-  }, scheme, settings.background.shade)
+  }, scheme, settings?.background?.shade)
 }
 
 function foreground(scheme: AdjustedScheme) {
@@ -48,7 +48,7 @@ function foreground(scheme: AdjustedScheme) {
   return ColorObj({
     color: foreground, 
     antithesis: background || foreground
-  }, scheme, settings.foreground.shade)
+  }, scheme, settings?.foreground?.shade)
 }
 
 function accents(scheme: AdjustedScheme): GenColor[] | undefined {
@@ -57,7 +57,7 @@ function accents(scheme: AdjustedScheme): GenColor[] | undefined {
       scheme.background || color,
       scheme.foreground || color,
     ])
-    return ColorObj({color, antithesis }, scheme, settings.foreground.shade)
+    return ColorObj({color, antithesis }, scheme, settings?.foreground?.shade)
   }) 
 }
 
