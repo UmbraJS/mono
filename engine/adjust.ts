@@ -5,19 +5,32 @@ import tinycolor from "tinycolor2"
 import { converse, getReadable, makeReadable } from './primitives/color'
 import { defaultScheme, Myriad, AdjustedScheme } from './config'
 
+const fallback = tinycolor.random().toHexString()
+const defaultBG = tinycolor('white')
+
+//instances
+function bgInstance(scheme: Myriad) {
+  return scheme.hasOwnProperty('background')
+    ? background(scheme)
+    : background(defaultScheme)
+}
+
+function fgInstance(scheme: Myriad) {
+  return scheme.hasOwnProperty('foreground')
+    ? foreground(scheme)
+    : foreground(defaultScheme)
+}
+
+//handlers
 const background = (scheme: Myriad) => {
   //Makes sure there exists a backgrund color. Defaults to white
-  return scheme.background ? tinycolor(scheme.background) : tinycolor('white')
+  return scheme.background ? tinycolor(scheme.background) : defaultBG
 }
 
 const foreground = (scheme: Myriad) => {
   //Adjusts the foreground and makes sure its readable against the background
   let readability = scheme.readability || defaultScheme.readability || 5
-
-  const bg = scheme.hasOwnProperty('background')
-    ? background(scheme)
-    : background(defaultScheme)
-
+  const bg = bgInstance(scheme)
   const computedForeground = scheme.foreground
     ? getReadable(tinycolor(scheme.foreground), bg, readability)
     : converse(bg.clone())
@@ -25,20 +38,12 @@ const foreground = (scheme: Myriad) => {
   return tinycolor(computedForeground)
 }
 
-export const accent = (fl: string, scheme: Myriad, fallback = tinycolor.random().toHexString()) => {
+export const accent = (fl: string, scheme: Myriad) => {
   //Adjusts the accent and makes sure its in contrast to BG and FG.
   //If no accent, generate a random one
-  const fg = scheme.hasOwnProperty('foreground')
-    ? foreground(scheme)
-    : foreground(defaultScheme)
-
-  const bg = scheme.hasOwnProperty('background')
-    ? background(scheme)
-    : background(defaultScheme)
-
   const context: Myriad = {
-    foreground: fg.toHexString(),
-    background: bg.toHexString(),
+    foreground: fgInstance(scheme).toHexString(),
+    background: bgInstance(scheme).toHexString(),
   }
 
   return fl
@@ -46,11 +51,7 @@ export const accent = (fl: string, scheme: Myriad, fallback = tinycolor.random()
     : tinycolor(makeReadable(fallback, context))
 }
 
-//export const adjustColors = (scheme = defaultScheme) => {
-//  if(!scheme.accents && !scheme.settings.length) return
-//  return scheme.settings?.map((s) => accent(s, scheme))
-//}
-
+//composer
 export let adjusted: AdjustedScheme | null = null
 export const adjust = (scheme = defaultScheme) => {
   //Gets the config and adjusts the colors according to
