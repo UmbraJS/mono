@@ -1,7 +1,6 @@
 import {
   myriad,
   // getReadable,
-  // getReadable,
   MyriadSettings,
   MyriadOutput,
 } from "."
@@ -16,13 +15,8 @@ import { RandomButton } from "./components/RandomButton"
 //   return linkColor
 // }
 
-// function imgColor(m: Myriad) {
-//   if(!m.foreground) return "black"
-//   return getReadable(m.foreground, 'black', 19)
-// }
-
 const settings: MyriadSettings = {
-  readability: 0.1,
+  readability: 1,
   foreground: {
     shade: [10, 40]
   } 
@@ -30,8 +24,8 @@ const settings: MyriadSettings = {
 
 const colorTheme = {
   background: 'white',
-  foreground: 'white',
-  accents: ['white'],
+  foreground: 'black',
+  accents: ['#5f9ea0'],
 };
 
 export let m = myriad(colorTheme, {settings})
