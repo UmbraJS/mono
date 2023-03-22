@@ -18,15 +18,13 @@ const checkReadability = (col: Colour, bg: Colour) => {
   return tinycolor.readability(col, bg)
 }
 
-export const getReadable = (props: ColorRange, debug?: boolean) => {
+export const getReadable = (props: ColorRange) => {
   const readability = props.readability || stored.readability
   const { color, contrast } = props
   let newColor = tinycolor(color)
-  //Change lightness value until color contrasts
 
   function readable() {
     const current = checkReadability(newColor, contrast)
-    if(debug) console.log("try", current, current < readability);
     return current > readability
   }
 
@@ -36,7 +34,6 @@ export const getReadable = (props: ColorRange, debug?: boolean) => {
     iterations += 1
   }
 
-  if(debug) console.log("done", !readable());
   return newColor.toHexString()
 }
 
@@ -48,7 +45,6 @@ export const moveAwayFromContrast = (color: Color, contrast: Color, val = 100) =
     ? colorDark ? color.lighten(val) : color.darken(val)
     : contrastDark ? color.lighten(val) : color.darken(val)
 }
-
 
 export const pickContrast = (c: Color, scheme: AdjustedScheme) => {
   //returns either the background or the foreground
