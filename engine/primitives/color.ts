@@ -1,38 +1,54 @@
-import { AdjustedScheme, Myriad } from '../store/types'
+import { AdjustedScheme } from '../store/types'
+import { settings } from '../store'
 import tinycolor from "tinycolor2"
 export type Color = tinycolor.Instance
 export type Colour = string | Color
 
-export const getHSLA = (col: string, a = 0.6) => {
-  const color = tinycolor(col);
-  const alpha = color.setAlpha(a);
-  const HSL = alpha.toHsl();
-  const string = alpha.toHslString();
-  return { string, HSL }
+type ColorRange = {
+  color: Color, 
+  contrast: Color,
+  readability?: number
 }
 
-const checkReadability = (col: Colour, bg: Colour, mult = 1) => {
-  return tinycolor.readability(col, bg) * mult
+const stored = {
+  readability: settings.readability || 11
 }
 
-export const isDark = (col: Color) => {
-  return tinycolor(col).isDark()
+const checkReadability = (col: Colour, bg: Colour) => {
+  return tinycolor.readability(col, bg)
 }
 
+export const getReadable = (props: ColorRange, debug?: boolean) => {
+  const readability = props.readability || stored.readability
+  const { color, contrast } = props
+  let newColor = tinycolor(color)
+  //Change lightness value until color contrasts
 
-export const makeReadable = (color: string, Myriad: Myriad, readability = 1) => {
-  let { background, foreground } = Myriad
-  if(!background) background = tinycolor('white').toHexString()
-  return contrastToMix({
-    col: color,
-    antithesis: foreground || background,
-    catalyst: background
-  }, readability)
+  function readable() {
+    const current = checkReadability(newColor, contrast)
+    if(debug) console.log("try", current, current < readability);
+    return current > readability
+  }
+
+  let iterations = 0
+  while (!readable() && iterations < 10) {
+    newColor = moveAwayFromContrast(newColor, contrast, iterations)
+    iterations += 1
+  }
+
+  if(debug) console.log("done", !readable());
+  return newColor.toHexString()
 }
 
-export const converse = (col: Color, val = 100) => {
-  return col.isDark() ? col.lighten(val) : col.darken(val)
+export const moveAwayFromContrast = (color: Color, contrast: Color, val = 100) => {
+  const colorDark = color.isDark()
+  const contrastDark = contrast.isDark()
+  const isSame = colorDark === contrastDark
+  return isSame 
+    ? colorDark ? color.lighten(val) : color.darken(val)
+    : contrastDark ? color.lighten(val) : color.darken(val)
 }
+
 
 export const pickContrast = (c: Color, scheme: AdjustedScheme) => {
   //returns either the background or the foreground
@@ -45,70 +61,6 @@ export const pickContrast = (c: Color, scheme: AdjustedScheme) => {
   return mostReadable.toString()
 }
 
-type ColorRange = {
-  col: string, 
-  antithesis: Colour, 
-  catalyst: Colour
-}
-
-const contrastToMix = (props: ColorRange, readability = 0.01) => {
-  const { col, antithesis, catalyst } = props
-  let newColor = tinycolor(col)
-  //mix in some catalyst until it contrasts antithesis enough for readability threshold
-
-  let iterations = 0
-  while (checkReadability(newColor, antithesis, 5) < readability && iterations < 50) {
-    newColor = tinycolor.mix(newColor, catalyst, iterations)
-    iterations++
-  }
-
-  return getReadable(newColor, catalyst, 5)
-}
-
-
 export function rangeShader(color: Color, mixer: Color, percent = 50) {
   return tinycolor.mix(color, mixer, percent).toHexString()
-}
-
-
-export const mixToShade = (color: Color, mixer: Color, readability = 1.5) => {
-  let newColor = tinycolor.mix(color, mixer, 1)
-
-  //mix mixer color into new color untill new color contrasts old color enough for readability threshold
-
-  let iterations = 0
-  while (checkReadability(newColor, color) < readability && iterations < 20) {
-    newColor = tinycolor.mix(color, mixer, iterations)
-    iterations++
-  }
-  
-  return newColor.toHexString()
-}
-
-
-export const getReadable = (color: Colour, background: Colour, readability = 5) => {
-  let newColor = tinycolor(color)
-
-  //Change lightness value until color contrasts bg
-
-  let iterations = 0
-  while (checkReadability(newColor, background) < readability && iterations < 100) {
-    newColor = converse(newColor, iterations)
-    iterations++
-  }
-  return newColor.toHexString()
-}
-
-
-export const converseLuminance = (c: Color) => {
-  let color = tinycolor(c)
-  let prevColor = tinycolor(c)
-
-  let iterations = 0
-  while (isDark(color) === isDark(prevColor) && iterations < 100) {
-    color = converse(color, iterations)
-    iterations += 30
-  }
-
-  return color.toHexString()
 }

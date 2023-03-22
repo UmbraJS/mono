@@ -1,7 +1,7 @@
 import {
   myriad,
   // getReadable,
-  // makeReadable,
+  // getReadable,
   MyriadSettings,
   MyriadOutput,
 } from "."
@@ -12,7 +12,7 @@ import { RandomButton } from "./components/RandomButton"
 // function linkColor(m: Myriad) {
 //   if(!m.foreground) return "black"
 //   const blue = '#6b6bff'
-//   const linkColor = makeReadable(blue, m, 7)
+//   const linkColor = getReadable(blue, m, 7)
 //   return linkColor
 // }
 
@@ -22,23 +22,19 @@ import { RandomButton } from "./components/RandomButton"
 // }
 
 const settings: MyriadSettings = {
-  readability: 11,
+  readability: 0.1,
   foreground: {
     shade: [10, 40]
   } 
 }
 
-export let m = myriad({
-  background: '#0c0915',
-  foreground: '#c0aea3',
-  accents: ['#c97074'],
-  // custom: {
-  //   link: linkColor,
-  //   imgColor: imgColor,
-  //   success: '#00ff00',
-  //   error: '#ff0000',
-  // }
-}, {settings})
+const colorTheme = {
+  background: 'white',
+  foreground: 'white',
+  accents: ['white'],
+};
+
+export let m = myriad(colorTheme, {settings})
 
 export function mutateMyriad(newMyriad: MyriadOutput) {
   m = newMyriad
