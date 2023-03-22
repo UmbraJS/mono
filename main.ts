@@ -19,6 +19,9 @@ const settings: MyriadSettings = {
   readability: 1,
   foreground: {
     shade: [10, 40]
+  },
+  background: {
+    shade: [2, 10]
   } 
 }
 
