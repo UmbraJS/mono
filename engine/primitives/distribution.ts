@@ -32,6 +32,9 @@ export const distributeScheme = (
 }
 
 const setProperty = (name: SchemeKey, value: string, element: HTMLElement) => {
+  //TODO: use adoptedStyleSheets when support reaches 90% - current: 75% (2023-03-23) 
+  //status: https://caniuse.com/mdn-api_document_adoptedstylesheets
+  //guide https://stackoverflow.com/questions/707565/how-do-you-add-css-with-javascript
   element.style.setProperty(name, value)
 }
 

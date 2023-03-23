@@ -9,7 +9,8 @@ import { generate } from "./generator"
 
 //Composition Functions
 export const createScheme = (scheme?: Myriad): MyriadOutput => {
-  return generate(adjust(scheme))
+  const gen = generate(adjust(scheme))
+  return gen
 }
 
 interface Props {
@@ -17,10 +18,10 @@ interface Props {
   settings?: MyriadSettings
 }
 
-export const myriad = (scheme?: Myriad, props?: Props) => {
-  if(props?.settings) changeSettings(props?.settings)
+export const myriad = (scheme?: Myriad, settings?: MyriadSettings) => {
+  if(settings) changeSettings(settings)
   const generated = createScheme(scheme)
-  distributeScheme(generated, props?.element)
+  distributeScheme(generated, settings?.element)
   return generated
 }
 

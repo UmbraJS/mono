@@ -2,6 +2,15 @@ import { Myriad, MyriadOutput, MyriadSettings, SettingType } from './types'
 
 export let generated: MyriadOutput | null = null
 
+export let settings: MyriadSettings = {
+  element: undefined,
+  readability: 11,
+  iterations: 15,
+  foreground: setting({ shade: [20, 50]}),
+  background: setting({ shade: [10, 30]}),
+  accents: setting(),
+}
+
 export function changeSettings(newSettings: MyriadSettings) {
   settings = {
     ...settings,
@@ -14,13 +23,6 @@ function setting(passed?: SettingType) {
     shade: undefined,
     ...passed,
   }
-}
-
-export let settings: MyriadSettings = {
-  readability: 11,
-  foreground: setting({ shade: [20, 50]}),
-  background: setting({ shade: [10, 30]}),
-  accents: setting(),
 }
 
 export const defaultScheme: Myriad = {

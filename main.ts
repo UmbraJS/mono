@@ -16,22 +16,17 @@ import { RandomButton } from "./components/RandomButton"
 // }
 
 const settings: MyriadSettings = {
-  readability: 1,
-  foreground: {
-    shade: [10, 40]
-  },
+  readability: 5,
   background: {
-    shade: [2, 10]
+    shade: [10, 20]
   } 
 }
 
-const colorTheme = {
+export let m = myriad({
   background: 'white',
-  foreground: 'black',
-  accents: ['#5f9ea0'],
-};
-
-export let m = myriad(colorTheme, {settings})
+  foreground: 'white',
+  accents: ['green'],
+}, settings)
 
 export function mutateMyriad(newMyriad: MyriadOutput) {
   m = newMyriad

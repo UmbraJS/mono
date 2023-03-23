@@ -30,7 +30,7 @@ const foreground = (scheme: Myriad) => {
   const context = {
     color: tinycolor(scheme.foreground),
     contrast: contrast,
-    readability: settings.readability || 5
+    readability: settings.readability || 5,
   }
 
   return tinycolor(scheme.foreground

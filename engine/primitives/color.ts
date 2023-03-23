@@ -5,13 +5,15 @@ export type Color = tinycolor.Instance
 export type Colour = string | Color
 
 type ColorRange = {
-  color: Color, 
-  contrast: Color,
+  color: Color
+  contrast: Color
   readability?: number
+  iterations?: number
 }
 
 const stored = {
-  readability: settings.readability || 11
+  readability: settings.readability || 11,
+  iterations: settings.iterations || 15,
 }
 
 const checkReadability = (col: Colour, bg: Colour) => {
@@ -20,6 +22,7 @@ const checkReadability = (col: Colour, bg: Colour) => {
 
 export const getReadable = (props: ColorRange) => {
   const readability = props.readability || stored.readability
+  const max = props.iterations || stored.iterations
   const { color, contrast } = props
   let newColor = tinycolor(color)
 
@@ -29,7 +32,7 @@ export const getReadable = (props: ColorRange) => {
   }
 
   let iterations = 0
-  while (!readable() && iterations < 10) {
+  while (!readable() && iterations < max) {
     newColor = moveAwayFromContrast(newColor, contrast, iterations)
     iterations += 1
   }
