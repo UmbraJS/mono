@@ -2,7 +2,6 @@ import {
   myriad,
   // getReadable,
   MyriadSettings,
-  MyriadOutput,
 } from "."
 import { ColorPallet } from "./components/ColorPallet"
 import { AccentPallet } from "./components/AccentPallet"
@@ -28,7 +27,7 @@ export let m = myriad({
   accents: ['green'],
 }, settings)
 
-export function mutateMyriad(newMyriad: MyriadOutput) {
+export function mutateMyriad(newMyriad = m) {
   m = newMyriad
 }
 
