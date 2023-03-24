@@ -1,5 +1,5 @@
 //Configs and Utilities
-import { defaultScheme, changeSettings } from './store'
+import { defaultScheme, changeSettings, settings } from './store'
 import { Myriad, MyriadOutput, MyriadSettings } from './store/types'
 import { distributeScheme } from './primitives/distribution'
 
@@ -29,14 +29,21 @@ function randomHex() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
 
-export function randomMyriad(element?: HTMLElement, accents = 1) {
+interface RandomMyriadProps extends MyriadSettings {
+  amount: number
+}
+
+export function randomMyriad(props: RandomMyriadProps = { amount: 1 }) {
   //Generates a random scheme
   const scheme = {
     background: randomHex(),
     foreground: randomHex(),
-    accents: Array.from({ length: accents }, () => randomHex()),
+    accents: Array.from({ length: props.amount }, () => randomHex()),
   }
-  return myriad(scheme, {element})
+  return myriad(scheme, {
+    ...settings,
+    ...props
+  })
 }
 
 interface SubSchemeProps extends Props {
