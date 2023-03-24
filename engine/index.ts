@@ -2,6 +2,7 @@
 import { defaultScheme, changeSettings, settings } from './store'
 import { Myriad, MyriadOutput, MyriadSettings } from './store/types'
 import { distributeScheme } from './primitives/distribution'
+import { inverse, isDark } from './primitives/scheme'
 
 //Main functions
 import { adjust } from "./adjust"
@@ -22,7 +23,11 @@ export const myriad = (scheme?: Myriad, settings?: MyriadSettings) => {
   if(settings) changeSettings(settings)
   const generated = createScheme(scheme)
   distributeScheme(generated, settings?.element)
-  return generated
+  return {
+    colors: generated,
+    isDark: () => isDark(generated),
+    inverse: () => inverse(generated),
+  }
 }
 
 function randomHex() {
@@ -53,11 +58,13 @@ interface SubSchemeProps extends Props {
 }
 
 export const subScheme = (scheme: Myriad, props: SubSchemeProps) => {
-  //runs the myriad on a subsceme 
+  //runs the myriad on a subsceme
   //and attaches it to an element
   let subSchemes = scheme.subSchemes
   if(subSchemes !== undefined) {
-    myriad(subSchemes[props.id], props)
+    return myriad(subSchemes[props.id], props)
+  } else {
+    return null
   }
 }
 
