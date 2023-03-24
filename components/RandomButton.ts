@@ -7,7 +7,7 @@ export class RandomButton extends HTMLElement {
     super()
 
     const handleClick = () => {
-      mutateMyriad(randomMyriad())
+      mutateMyriad(randomMyriad().colors)
     }
 
     this.addEventListener('click', handleClick)

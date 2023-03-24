@@ -7,7 +7,7 @@ import { ColorObj } from "../generator"
 const htmlElement = typeof document === 'undefined' ? null : document.documentElement
 
 export const distributeScheme = (
-  scheme = createScheme(),
+  scheme = createScheme().colors,
   element = htmlElement,
 ) => {
   const { foreground, background, accents } = scheme

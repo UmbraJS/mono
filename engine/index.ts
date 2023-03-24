@@ -1,6 +1,6 @@
 //Configs and Utilities
 import { defaultScheme, changeSettings, settings } from './store'
-import { Myriad, MyriadOutput, MyriadSettings } from './store/types'
+import { Myriad, MyriadSettings } from './store/types'
 import { distributeScheme } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
@@ -9,9 +9,13 @@ import { adjust } from "./adjust"
 import { generate } from "./generator"
 
 //Composition Functions
-export const createScheme = (scheme?: Myriad): MyriadOutput => {
-  const gen = generate(adjust(scheme))
-  return gen
+export const createScheme = (scheme?: Myriad) => {
+  const colors = generate(adjust(scheme))
+  return {
+    colors: colors,
+    isDark: () => isDark(colors),
+    inverse: () => inverse(colors),
+  }
 }
 
 interface Props {
@@ -22,12 +26,8 @@ interface Props {
 export const myriad = (scheme?: Myriad, settings?: MyriadSettings) => {
   if(settings) changeSettings(settings)
   const generated = createScheme(scheme)
-  distributeScheme(generated, settings?.element)
-  return {
-    colors: generated,
-    isDark: () => isDark(generated),
-    inverse: () => inverse(generated),
-  }
+  distributeScheme(generated.colors, settings?.element)
+  return generated
 }
 
 function randomHex() {

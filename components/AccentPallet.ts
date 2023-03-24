@@ -20,7 +20,7 @@ export class AccentPallet extends HTMLElement {
         }
       </style>
       <div class="accents">
-        ${stringMap(m.accents?.map((fl, index) => {
+        ${stringMap(m.colors.accents?.map((fl, index) => {
           return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>

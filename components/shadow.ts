@@ -20,8 +20,8 @@ const makeArray = (obj: DynamicObject) => {
 
 const getArray = (name?: string, index?: number) => {
   if(!name) return
-  const myriadBasic: MyriadOutputBasic  = m
-  const color = m[name as keyof typeof myriadBasic]
+  const myriadBasic: MyriadOutputBasic = m.colors
+  const color = myriadBasic[name as keyof typeof myriadBasic]
 
   if(!color) return []
   if(Array.isArray(color)) {
