@@ -23,7 +23,6 @@ export const createScheme = (scheme?: Myriad): MyriadOutput => {
     inverse: () => inverse(colors),
   }
 }
-
 interface Props {
   element?: HTMLElement
   settings?: MyriadSettings
