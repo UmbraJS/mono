@@ -1,7 +1,7 @@
-import { myriad, randomMyriad } from "./engine/index"
+import { myriad, randomMyriad, MyriadOutput } from "./engine/index"
 import { getReadable } from './engine/primitives/color'
 import { colorAlly } from './engine/plugins/diagnostics'
-import { MyriadOutput, MyriadOutputBasic, MyriadSettings, Myriad, GenColor } from './engine/store/types'
+import { GenScheme, GenSchemeBasic, MyriadSettings, Myriad, GenColor } from './engine/store/types'
 
 export {
   myriad,
@@ -12,8 +12,9 @@ export {
 
 export type {
   Myriad,
-  MyriadOutput,
-  MyriadOutputBasic,
+  GenColor,
+  GenScheme,
+  GenSchemeBasic,
   MyriadSettings,
-  GenColor
+  MyriadOutput,
 }

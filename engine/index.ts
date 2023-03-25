@@ -1,6 +1,6 @@
 //Configs and Utilities
 import { defaultScheme, changeSettings, settings } from './store'
-import { Myriad, MyriadSettings } from './store/types'
+import { Myriad, MyriadSettings, GenScheme } from './store/types'
 import { distributeScheme } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
@@ -8,8 +8,14 @@ import { inverse, isDark } from './primitives/scheme'
 import { adjust } from "./adjust"
 import { generate } from "./generator"
 
+export interface MyriadOutput {
+  colors: GenScheme
+  isDark: () => boolean
+  inverse: () => MyriadOutput
+}
+
 //Composition Functions
-export const createScheme = (scheme?: Myriad) => {
+export const createScheme = (scheme?: Myriad): MyriadOutput => {
   const colors = generate(adjust(scheme))
   return {
     colors: colors,

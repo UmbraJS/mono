@@ -1,8 +1,8 @@
 import tinycolor from 'tinycolor2'
-import { MyriadOutput } from '../store/types'
+import { GenScheme } from '../store/types'
 import { myriad } from '..'
 
-export const inverse = (scheme: MyriadOutput) => {
+export const inverse = (scheme: GenScheme) => {
   const { background, foreground } = scheme.origin
   return myriad({
     ...scheme.origin,
@@ -11,6 +11,6 @@ export const inverse = (scheme: MyriadOutput) => {
   })
 }
 
-export const isDark = (scheme: MyriadOutput) => {
+export const isDark = (scheme: GenScheme) => {
   return tinycolor(scheme.background?.color).isDark()
 }

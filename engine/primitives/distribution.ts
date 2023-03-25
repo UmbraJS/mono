@@ -1,6 +1,6 @@
 import tinycolor from "tinycolor2"
 import { createScheme } from '..'
-import { MyriadOutput, SchemeKey, GenColor, ColorList, customColor } from '../store/types'
+import { GenScheme, SchemeKey, GenColor, ColorList, customColor } from '../store/types'
 import  { accent, adjusted } from "../adjust"
 import { ColorObj } from "../generator"
 
@@ -45,7 +45,7 @@ const makeArray = (obj: ColorList): ColorList[] => {
   })
 }
 
-const setCustom = (scheme: MyriadOutput, element: HTMLElement) => {
+const setCustom = (scheme: GenScheme, element: HTMLElement) => {
   const custom = scheme.origin.custom
   if(!scheme.foreground || !custom) return
 

@@ -1,6 +1,6 @@
 //Configs and Utilities
 import tinycolor from "tinycolor2"
-import { MyriadOutput } from '../store/types'
+import { GenScheme } from '../store/types'
 import { settings } from '../store'
 
 const readability = (col: string, bg: string) => {
@@ -8,7 +8,7 @@ const readability = (col: string, bg: string) => {
 }
 
 //Composition Functions
-export const colorAlly = (scheme: MyriadOutput) => {
+export const colorAlly = (scheme: GenScheme) => {
   const { background, foreground, accents } = scheme
   if(!background || !foreground || !accents) return
   const bg = background.color

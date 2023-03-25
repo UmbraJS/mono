@@ -10,13 +10,13 @@ export interface GenColor {
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string
 
-export interface MyriadOutputBasic {
+export interface GenSchemeBasic {
   background?: GenColor,
   foreground?: GenColor,
   accents?: GenColor[],
 } 
 
-export interface MyriadOutput extends MyriadOutputBasic {
+export interface GenScheme extends GenSchemeBasic {
   origin: Myriad,
 }
 

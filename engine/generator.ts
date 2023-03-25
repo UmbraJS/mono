@@ -4,7 +4,7 @@ import { adjust } from "./adjust"
 import { settings } from "./store"
 import { 
   AdjustedScheme, 
-  MyriadOutput, 
+  GenScheme, 
   GenColor, 
   DynamicObject 
 } from "./store/types"
@@ -62,8 +62,8 @@ function accents(scheme: AdjustedScheme): GenColor[] | undefined {
   }) 
 }
 
-export let generated: MyriadOutput | null = null
-export const generate = (scheme = adjust()): MyriadOutput => {
+export let generated: GenScheme | null = null
+export const generate = (scheme = adjust()): GenScheme => {
   //Gets the adjusted colors from the wrapper and generates more colors
   //assosiated with the root colors. Like, shadeded variations and accent contrast colors.
   const obj = {
