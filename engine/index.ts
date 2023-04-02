@@ -20,7 +20,7 @@ export const createScheme = (scheme?: Myriad): MyriadOutput => {
   return {
     colors: colors,
     isDark: () => isDark(colors),
-    inverse: () => inverse(colors),
+    inverse: () => myriad(inverse(colors.origin)),
   }
 }
 interface Props {
@@ -43,17 +43,27 @@ interface RandomMyriadProps extends MyriadSettings {
   amount: number
 }
 
-export function randomMyriad(props: RandomMyriadProps = { amount: 1 }) {
+
+export function randomScheme(props: RandomMyriadProps = { amount: 1 }) {
   //Generates a random scheme
   const scheme = {
     background: randomHex(),
     foreground: randomHex(),
     accents: Array.from({ length: props.amount }, () => randomHex()),
   }
-  return myriad(scheme, {
-    ...settings,
-    ...props
-  })
+
+  return {
+    scheme: scheme,
+    settings: {
+      ...settings,
+      ...props
+    }
+  }
+}
+
+export function randomMyriad(props: RandomMyriadProps = { amount: 1 }) {
+  const {scheme, settings} = randomScheme(props)
+  return myriad(scheme, settings)
 }
 
 interface SubSchemeProps extends Props {

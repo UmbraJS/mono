@@ -18,12 +18,12 @@ function bgInstance(scheme: Myriad) {
 }
 
 //handlers
-const background = (scheme: Myriad) => {
+export const background = (scheme: Myriad) => {
   //Makes sure there exists a backgrund color. Defaults to white
   return scheme.background ? tinycolor(scheme.background) : defaultBG
 }
 
-const foreground = (scheme: Myriad) => {
+export const foreground = (scheme: Myriad) => {
   //Adjusts the foreground and makes sure its readable against the background
   const contrast = bgInstance(scheme)
 

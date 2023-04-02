@@ -11,6 +11,19 @@ type ColorRange = {
   iterations?: number
 }
 
+interface MoveUntil {
+  color: Color
+  contrast?: Color
+  max?: number
+  condition: (newColor: tinycolor.Instance, iterations?: number) => boolean,
+}
+
+interface MoveAwayFrom {
+  color: Color
+  contrast?: Color
+  val: number
+}
+
 const stored = {
   readability: settings.readability || 11,
   iterations: settings.iterations || 15,
@@ -20,33 +33,34 @@ const checkReadability = (col: Colour, bg: Colour) => {
   return tinycolor.readability(col, bg)
 }
 
-export const getReadable = (props: ColorRange) => {
-  const readability = props.readability || stored.readability
-  const max = props.iterations || stored.iterations
-  const { color, contrast } = props
-  let newColor = tinycolor(color)
-
-  function readable() {
-    const current = checkReadability(newColor, contrast)
-    return current > readability
-  }
-
-  let iterations = 0
-  while (!readable() && iterations < max) {
-    newColor = moveAwayFromContrast(newColor, contrast, iterations)
-    iterations += 1
-  }
-
-  return newColor.toHexString()
+export const getReadable = ({color, contrast, readability, iterations}: ColorRange) => {
+  const safeReadability = readability || stored.readability
+  const max = iterations || stored.iterations
+  return moveUntil({color, contrast, max, condition: (c) => {
+    const current = checkReadability(c, contrast)
+    return current > safeReadability
+  }})
 }
 
-export const moveAwayFromContrast = (color: Color, contrast: Color, val = 100) => {
-  const colorDark = color.isDark()
-  const contrastDark = contrast.isDark()
-  const isSame = colorDark === contrastDark
-  return isSame 
-    ? colorDark ? color.lighten(val) : color.darken(val)
-    : contrastDark ? color.lighten(val) : color.darken(val)
+export function moveUntil({ color, contrast, condition, max = 15 }: MoveUntil) {
+  let newColor = color
+  let iterations = 0
+  while (!condition(newColor, iterations) && iterations < max) {
+    iterations += 1
+    newColor = moveAwayFromContrast({
+      val: iterations,
+      color: newColor,
+      contrast,
+    })
+  }
+  return newColor
+}
+
+const moveAwayFromContrast = ({color, contrast, val = 100}: MoveAwayFrom) => {
+  const same = contrast ? color.isDark() === contrast.isDark() : true
+  return same
+    ? color.isDark() ? color.lighten(val) : color.darken(val)
+    : contrast?.isDark() ? color.lighten(val) : color.darken(val)
 }
 
 export const pickContrast = (c: Color, scheme: AdjustedScheme) => {
