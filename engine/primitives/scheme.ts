@@ -2,7 +2,6 @@ import tinycolor from 'tinycolor2'
 import { GenScheme, Myriad } from '../store/types'
 import { foreground } from '../adjust'
 import { moveUntil } from './color'
-import { log } from 'console'
 
 function isGenerated(scheme: GenScheme | Myriad) {
   return scheme.hasOwnProperty('origin') 
