@@ -29,7 +29,6 @@ export let generated = myriad({
 }, settings)
 
 export function mutateMyriad(newMyriad = generated) {
-  //console.log("mutated");
   generated = newMyriad
 }
 
