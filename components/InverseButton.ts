@@ -8,7 +8,7 @@ export class InverseButton extends HTMLElement {
 
     const handleClick = () => {
       const i = inverse(generated.colors.origin)
-      iro.color.hexString = i.background;
+      iro.color.hexString = i?.background || '#000000';
 
       const inversed = myriad(i)
       mutateMyriad(inversed)
