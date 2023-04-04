@@ -2,6 +2,7 @@ import tinycolor from 'tinycolor2'
 import { GenScheme, Myriad } from '../store/types'
 import { foreground } from '../adjust'
 import { moveUntil } from './color'
+import { log } from 'console'
 
 function isGenerated(scheme: GenScheme | Myriad) {
   return scheme.hasOwnProperty('origin') 
@@ -12,7 +13,6 @@ function schemeCleaner(scheme: GenScheme | Myriad) {
     ? (scheme as GenScheme).origin 
     : (scheme as Myriad)
 }
-
 
 function inverseValidator(scheme: Myriad) {
   const fgDark = tinycolor(scheme.foreground).isDark()
@@ -27,9 +27,8 @@ function inverseValidator(scheme: Myriad) {
     }
   }
 
-  //Both are same, so we need to adjust something or return a failure of some kind
-  console.log("same");
-
+  //Both are same, so we need to adjust something 
+  //or return a failure of some kind
   function createInvertedFlippingReadability() {
     const background = tinycolor(scheme.background)
     const foreground = tinycolor(scheme.foreground)
@@ -64,61 +63,17 @@ function basicInverse(scheme: Myriad): Myriad {
 
 function makeInverse(scheme: Myriad): Myriad {
   const inversed = basicInverse(scheme)
-  record.inverse = inversed
   return {...inversed,
-    ...inverseValidator(scheme)
+    ...inverseValidator(scheme),
+    inverse: scheme
   }
 }
 
-const record: { scheme?: Myriad, inverse?: Myriad } = {
-  scheme: undefined,
-  inverse: undefined
-}
-
 export const inverse = (scheme: Myriad) => {
-  //const cleanScheme = schemeCleaner(scheme)
-  record.scheme = scheme
-
-  // //if new scheme === either old/inverse schemes, toggle between them
-  // if(record.inverse) {
-
-  //   const isOldScheme = record.scheme === scheme
-  //   const isInverseScheme = record.inverse === scheme
-
-  //   const schemeExists = isOldScheme || isInverseScheme
-
-  //   console.log('rex: ', {
-  //     isOldScheme,
-  //     isInverseScheme,
-  //     schemeExists
-  //   });
-    
-  //   // if(record.inverse === cleanScheme) {
-  //   //   console.log('toggle scheme: old');
-  //   //   return record.scheme
-  //   // }
-  //   // if(record.scheme === cleanScheme) {
-  //   //   console.log('toggle sheme: inverse');
-  //   //   return record.inverse
-  //   // }
-  // }
-
-  //console.log('create sheme: inverse');
-  //else generate new inverse scheme
-
-  const output = makeInverse(scheme)
-
-  // console.log('rex i: ', {
-  //   output,
-  //   scheme
-  // });
-  
-  // console.log('rex i: ', {
-  //   inversed: i.foreground,
-  //   generated: scheme.foreground,
-  // });
-
-  return output
+  const cleanScheme = schemeCleaner(scheme)
+  const hasInverse = cleanScheme.hasOwnProperty('inverse')
+  if(hasInverse) return scheme.inverse
+  return makeInverse(scheme)
 }
 
 export const isDark = (scheme: GenScheme | Myriad) => {

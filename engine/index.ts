@@ -43,7 +43,6 @@ interface RandomMyriadProps extends MyriadSettings {
   amount: number
 }
 
-
 export function randomScheme(props: RandomMyriadProps = { amount: 1 }) {
   //Generates a random scheme
   const scheme = {

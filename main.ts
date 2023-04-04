@@ -36,6 +36,12 @@ export function mutateMyriad(newMyriad = generated) {
 
 export const iro = new window.iro.ColorPicker("#picker", {
   color: generated.colors.origin.background,
+  layout: [
+    { 
+      component: window.iro.ui.Box,
+      options: {}
+    },
+  ]
 });
 
 function registerComponent() {
