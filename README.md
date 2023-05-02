@@ -24,7 +24,7 @@ npm install @myriadjs/core
 ## :crystal_ball: Usage
 Simple example
 ```ts
-  import { myriad } from "@myriadj/core"
+  import { myriad } from "@myriadjs/core"
 
   myriad({
     background: '#0c0915',
