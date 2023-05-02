@@ -1,5 +1,5 @@
 # Myriad
-- :kissing_cat: ***Simple*** - Just a simple JS function that lets you define youre theme. Nothing more
+- :kissing_cat: ***Simple*** - Just a simple JS function that lets you define your theme
 - :muscle: ***Flexible*** - Flexible primitives underneath that let you build your own logic
 - :telescope: ***Typesafe*** - Written fully in typescript giving you great auto completion even if you dont use TypeScript
 - :hammer_and_wrench: ***Maintainable*** - Enforces a single source of truth for your entire color system
@@ -15,7 +15,7 @@ Test it out yourself. Head over to [MyriadX](https://myriadx.netlify.app/) to ge
  - :sunrise_over_mountains: ***Scale*** - To create more complex themes simply run multiple myriad theme functions on diffirent elements. This lets you infinetly scale up your theme complexity at any point without having to change any of the color assignments becuase all you need to change is the context by reassigning the color variables with new values at the given element scope.
 
 #### :test_tube: Benefits of this approach
-This approach lets you easily adjust or completely change your entire theme from a single place and at a moments notice, making it ideal for both highly dynamic and less dynamic theme requirements. The Myriad pattern also enables you to predict and dictate readability scores and even auto-generate themes or parts of themes. MyriadJS provides a highly customizable and scalable approach to color systems that can accommodate any color theme without the need to change any color assignments.
+This approach lets you easily adjust or completely change your entire theme from a single place and at a moments notice, making it ideal for both highly dynamic and less dynamic theme requirements. The Myriad pattern also enables you to predict and dictate readability scores and even auto-generate themes or parts of themes. Myriad S provides a highly customizable and scalable approach to color systems that can accommodate any color theme without the need to change any color assignments.
 
 ## :package: Installation
 ```bash
@@ -31,6 +31,20 @@ Simple example
     foreground: '#c0aea3',
     accents: ['#c97074'],
   })
+```
+
+Outputted CSS attached to the HTML element
+```css
+  --background: #0c0915;
+  --background-10: #201c26;
+  --background-20: #484349;
+  --foreground: #d5c9c1;
+  --foreground-10: #ada39f;
+  --foreground-20: #71696b;
+  --accent: #e6bebf;
+  --accent-contrast: #0c0915;
+  --accent-10: #ba9a9d;
+  --accent-20: #79646a;
 ```
 
 ## :dna: Primitives
