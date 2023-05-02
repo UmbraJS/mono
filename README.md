@@ -32,6 +32,21 @@ Simple example
     accents: ['#c97074'],
   })
 ```
+Outputted CSS attached to the HTML element
+```css
+  --background: #0c0915;
+  --background-10: #201c26;
+  --background-20: #484349;
+  
+  --foreground: #d5c9c1;
+  --foreground-10: #ada39f;
+  --foreground-20: #71696b;
+  
+  --accent: #e6bebf;
+  --accent-contrast: #0c0915;
+  --accent-10: #ba9a9d;
+  --accent-20: #79646a;
+```
 
 ## :crystal_ball: Usage
 Settings
