@@ -48,6 +48,21 @@ Outputted CSS attached to the HTML element
   --accent-20: #79646a;
 ```
 
+## :crystal_ball: Details
+
+The myriad function is the main function that handles everything. It takes a scheme and a settings object, both of which are optional and whos paramaters all have defaults.
+```ts
+  myriad(scheme, settings)
+```
+
+In other words, both the scheme and the settings can have as many or as few of the avilable parameters on it and the function will fill in the holes with defaults or auto generated values based on what you did passed into it. In this example we are only passing a schema and the scheme only has a foreground color. The rest is left for the system to fill out. This lets you very easily create themes with as few parameters as you have and take more and more control of the theme as you add more parameters. 
+
+```ts
+  myriad({
+   foreground: "#ffffff"
+  })
+```
+
 ## :crystal_ball: Settings
 
 ```ts
