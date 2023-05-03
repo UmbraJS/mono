@@ -21,7 +21,7 @@ This approach lets you easily adjust or completely change your entire theme from
 ```bash
 npm install @myriadjs/core
 ```
-## :crystal_ball: Usage
+## :crystal_ball: Most Common Usage
 Simple example
 ```ts
   import { myriad } from "@myriadjs/core"
@@ -61,6 +61,30 @@ In other words, both the scheme and the settings can have as many or as few of t
   myriad({
    foreground: "#ffffff"
   })
+```
+## :crystal_ball: Scheme
+The scheme itself has multiple color parameters which can be though of in terms of groups. Theres the main color parameters background foreground and accents. The additional custom colors. And subscemes.
+
+```ts 
+  scheme: {
+   background: '#090233',
+   foreground: '#ff5555',
+   accents: ['#5200ff'],
+   custom: {
+     foo: '#00ff00',
+     bar: '#ff0000',
+   },
+   subSchemes: {}
+  }
+```
+These main colors dictate the entire scheme, and more consisley the main focus should be the foreground and the background. These two colors must have some contrast and the myriad system willl ensure this. They effectgivley dictate the available range of colors to be generated. All additional shades get generated as a mix in this range. It is though thinking aboiut colors as background vs foreground that the system manages to understand color readability and context. The accent colors can be though of commonly as brand colors. They are the additional splash of pink, or red, or blue that
+
+```ts 
+  scheme: {
+   background: '#090233',
+   foreground: '#ff5555',
+   accents: ['#5200ff'],
+  }
 ```
 
 ## :crystal_ball: Settings
