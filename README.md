@@ -48,6 +48,17 @@ Outputted CSS attached to the HTML element
   --accent-20: #79646a;
 ```
 
+These variables are available everywhere as long as the element is inside the HTML tag. Heres an example of how to use them. 
+```css
+  .card {
+    background-color: var(--background-20);
+    color: var(--foreground);
+  }
+```
+
+> **Note**
+> if youre unfamiliar with CSS variables [heres the docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) for them
+
 ## :crystal_ball: Details
 
 The myriad function is the main function that handles everything. It takes a scheme and a settings object, both of which are optional and whos paramaters all have defaults.
