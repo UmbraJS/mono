@@ -41,7 +41,6 @@ interface RandomMyriadProps extends MyriadSettings {
 }
 
 export function randomScheme(props: RandomMyriadProps = { amount: 1 }) {
-  //Generates a random scheme
   const scheme = {
     background: randomHex(),
     foreground: randomHex(),
@@ -69,14 +68,9 @@ interface SubSchemeProps extends Props {
 }
 
 export const subScheme = (scheme: Myriad, props: SubSchemeProps) => {
-  //runs the myriad on a subsceme
-  //and attaches it to an element
   let subSchemes = scheme.subSchemes
-  if(subSchemes !== undefined) {
-    return myriad(subSchemes[props.id], props)
-  } else {
-    return null
-  }
+  if(subSchemes === undefined) return null
+  return myriad(subSchemes[props.id], props)
 }
 
 export default myriad
