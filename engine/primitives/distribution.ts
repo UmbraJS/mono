@@ -1,13 +1,13 @@
 import tinycolor from "tinycolor2"
-import { createScheme } from '..'
+import { myriad } from '..'
 import { GenScheme, SchemeKey, GenColor, ColorList, customColor } from '../store/types'
 import  { accent, adjusted } from "../adjust"
 import { ColorObj } from "../generator"
 
 const htmlElement = typeof document === 'undefined' ? null : document.documentElement
 
-export const distributeScheme = (
-  scheme = createScheme().colors,
+export const attach = (
+  scheme = myriad().colors,
   element = htmlElement,
 ) => {
   const { foreground, background, accents } = scheme
@@ -117,4 +117,4 @@ const setAccent = (index = 0, fl: GenColor, element: HTMLElement, name = "accent
   })
 }
 
-export default distributeScheme
+export default attach

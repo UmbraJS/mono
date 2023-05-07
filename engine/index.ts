@@ -1,7 +1,7 @@
 //Configs and Utilities
-import { defaultScheme, changeSettings, settings } from './store'
+import { changeSettings, settings } from './store'
 import { Myriad, MyriadSettings, GenScheme } from './store/types'
-import { distributeScheme } from './primitives/distribution'
+import { attach } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
 //Main functions
@@ -10,32 +10,29 @@ import { generate } from "./generator"
 
 export interface MyriadOutput {
   colors: GenScheme
+  settings?: MyriadSettings
+  attach: (element?: HTMLElement) => void
   isDark: () => boolean
   inverse: () => MyriadOutput
 }
 
-//Composition Functions
-export const createScheme = (scheme?: Myriad): MyriadOutput => {
-  const colors = generate(adjust(scheme))
-  return {
-    colors: colors,
-    isDark: () => isDark(colors),
-    inverse: () => myriad(inverse(colors.origin)),
-  }
-}
 interface Props {
   element?: HTMLElement
   settings?: MyriadSettings
 }
 
-export const myriad = (scheme?: Myriad, settings?: MyriadSettings) => {
+export const myriad = (scheme?: Myriad, settings?: MyriadSettings): MyriadOutput => {
   if(settings) changeSettings(settings)
-  const generated = createScheme(scheme)
-  distributeScheme(generated.colors, settings?.element)
-  return generated
+  const colors = generate(adjust(scheme))
+  return {
+    colors: colors,
+    attach: (element?: HTMLElement) => attach(colors, element),
+    isDark: () => isDark(colors),
+    inverse: () => myriad(inverse(colors.origin)),
+  }
 }
 
-function randomHex() {
+export function randomHex() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
 
@@ -80,21 +77,6 @@ export const subScheme = (scheme: Myriad, props: SubSchemeProps) => {
   } else {
     return null
   }
-}
-
-//For fetching the rootScheme result to use in Javascript elsewhere 
-export const rootScheme = (scheme: Myriad) => {
-  //Creates a root scheme with 
-  //the neccesary root scheme checks
-  let checkedScheme = scheme ? scheme : defaultScheme
-  let warning = 'myriad: No valid root scheme detected. Default scheme enabled. Make sure your passed scheme has a background property'
-  
-  if(!checkedScheme.background) {
-    console.warn(warning)
-    checkedScheme = defaultScheme
-  }
-
-  return createScheme(checkedScheme)
 }
 
 export default myriad
