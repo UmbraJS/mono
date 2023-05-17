@@ -11,7 +11,7 @@ import { generate } from "./generator"
 export interface MyriadOutput {
   colors: GenScheme
   settings?: MyriadSettings
-  attach: (element?: HTMLElement) => void
+  attach: (element?: HTMLElement) => MyriadOutput
   isDark: () => boolean
   inverse: () => MyriadOutput
 }
@@ -21,15 +21,21 @@ interface Props {
   settings?: MyriadSettings
 }
 
-export const myriad = (scheme?: Myriad, settings?: MyriadSettings): MyriadOutput => {
-  if(settings) changeSettings(settings)
-  const colors = generate(adjust(scheme))
+export function myriadOutput(colors: GenScheme): MyriadOutput {
   return {
     colors: colors,
-    attach: (element?: HTMLElement) => attach(colors, element),
+    attach: (element?: HTMLElement): MyriadOutput => {
+      return attach(colors, element)
+    },
     isDark: () => isDark(colors),
     inverse: () => myriad(inverse(colors.origin)),
   }
+}
+
+export const myriad = (scheme?: Myriad, settings?: MyriadSettings) => {
+  if(settings) changeSettings(settings)
+  const colors = generate(adjust(scheme))
+  return myriadOutput(colors)
 }
 
 export function randomHex() {
@@ -63,14 +69,13 @@ export function randomMyriad(props: RandomMyriadProps = { amount: 1 }) {
 
 interface SubSchemeProps extends Props {
   id: string
-  element: HTMLElement
   settings?: MyriadSettings
 }
 
 export const subScheme = (scheme: Myriad, props: SubSchemeProps) => {
   let subSchemes = scheme.subSchemes
   if(subSchemes === undefined) return null
-  return myriad(subSchemes[props.id], props)
+  return myriad(subSchemes[props.id], props.settings)
 }
 
 export default myriad

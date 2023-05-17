@@ -10,16 +10,10 @@ export class InverseButton extends HTMLElement {
       const i = inverse(generated.colors.origin)
       iro.color.hexString = i?.background || '#000000';
 
-      const inversed = myriad(i)
+      const inversed = myriad(i).attach()
       mutateMyriad(inversed)
       handleColorChange(inversed)
-    }
-
-    // const i = inverse(generated.colors.origin)
-    // iro.color.hexString = i.background;
-
-    //console.log('rex i: ', i.background);
-    
+    }    
 
     const handleColorChange = (theme: MyriadOutput) => {
       const doc = this.shadowRoot

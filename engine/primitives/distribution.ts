@@ -1,5 +1,5 @@
 import tinycolor from "tinycolor2"
-import { myriad } from '..'
+import { myriad, myriadOutput } from '..'
 import { GenScheme, SchemeKey, GenColor, ColorList, customColor } from '../store/types'
 import  { accent, adjusted } from "../adjust"
 import { ColorObj } from "../generator"
@@ -11,7 +11,7 @@ export const attach = (
   element = htmlElement,
 ) => {
   const { foreground, background, accents } = scheme
-  if(!background || !element) return
+  if(!background || !element) return myriadOutput(scheme)
 
   setColor('background', {
     color: background, element,
@@ -29,6 +29,7 @@ export const attach = (
 
   //This line makes sure that subschemes change their color if needed
   setProperty('color', 'var(--foreground)', element)
+  return myriadOutput(scheme)
 }
 
 const setProperty = (name: SchemeKey, value: string, element: HTMLElement) => {

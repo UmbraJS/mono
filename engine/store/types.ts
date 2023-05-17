@@ -54,7 +54,6 @@ export interface SettingType {
 }
 
 export interface MyriadSettings {
-  element?: HTMLElement
   readability?: number
   iterations?: number
   foreground?: SettingType
