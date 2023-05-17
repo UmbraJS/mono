@@ -3,7 +3,6 @@ import { Myriad, GenScheme, MyriadSettings, SettingType } from './types'
 export let generated: GenScheme | null = null
 
 export let settings: MyriadSettings = {
-  element: undefined,
   readability: 11,
   iterations: 15,
   foreground: setting({ shade: [20, 50]}),
