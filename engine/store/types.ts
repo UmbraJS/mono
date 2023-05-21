@@ -17,20 +17,20 @@ export interface GenSchemeBasic {
 } 
 
 export interface GenScheme extends GenSchemeBasic {
-  origin: Myriad,
+  origin: MyriadInput,
 }
 
 type subSchemes = {
-  [key: string]: Myriad
+  [key: string]: MyriadInput
 }
 
-export interface Myriad {
+export interface MyriadInput {
   background?: string,
   foreground?: string,
   accents?: string[],
   custom?: ColorList
   subSchemes?: subSchemes,
-  inverse?: Myriad,
+  inverse?: MyriadInput,
 }
 
 interface MyriadAdjusted {
@@ -41,10 +41,10 @@ interface MyriadAdjusted {
 }
 
 export interface AdjustedScheme extends MyriadAdjusted {
-  origin: Myriad,
+  origin: MyriadInput,
 }
 
-export type customColor = string | ((s: Myriad) => string)
+export type customColor = string | ((s: MyriadInput) => string)
 export interface ColorList {
   [key: string]: customColor
 }

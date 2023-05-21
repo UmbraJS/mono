@@ -1,6 +1,6 @@
 //Configs and Utilities
 import { changeSettings, settings } from './store'
-import { Myriad, MyriadSettings, GenScheme } from './store/types'
+import { MyriadInput, MyriadSettings, GenScheme } from './store/types'
 import { attach } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
@@ -24,15 +24,15 @@ interface Props {
 export function myriadOutput(colors: GenScheme): MyriadOutput {
   return {
     colors: colors,
+    isDark: () => isDark(colors),
+    inverse: () => myriad(inverse(colors.origin)),
     attach: (element?: HTMLElement): MyriadOutput => {
       return attach(colors, element)
     },
-    isDark: () => isDark(colors),
-    inverse: () => myriad(inverse(colors.origin)),
   }
 }
 
-export const myriad = (scheme?: Myriad, settings?: MyriadSettings) => {
+export const myriad = (scheme?: MyriadInput, settings?: MyriadSettings) => {
   if(settings) changeSettings(settings)
   const colors = generate(adjust(scheme))
   return myriadOutput(colors)
@@ -72,7 +72,7 @@ interface SubSchemeProps extends Props {
   settings?: MyriadSettings
 }
 
-export const subScheme = (scheme: Myriad, props: SubSchemeProps) => {
+export const subScheme = (scheme: MyriadInput, props: SubSchemeProps) => {
   let subSchemes = scheme.subSchemes
   if(subSchemes === undefined) return null
   return myriad(subSchemes[props.id], props.settings)

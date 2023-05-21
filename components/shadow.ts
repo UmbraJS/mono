@@ -34,7 +34,6 @@ const getArray = (name?: string, index?: number) => {
 function shadeArray(el: Element | null, name?: string, index?: number) {
   if(!name || !el) return
   const shades = getArray(name, index)
-  if(name === 'accent') console.log(shades);
   const pallet = el
   if(!pallet || !shades) return
   shades.forEach((shade) => {

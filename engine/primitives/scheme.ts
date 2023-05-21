@@ -1,19 +1,19 @@
 import tinycolor from 'tinycolor2'
-import { GenScheme, Myriad } from '../store/types'
+import { GenScheme, MyriadInput } from '../store/types'
 import { foreground } from '../adjust'
 import { moveUntil } from './color'
 
-function isGenerated(scheme: GenScheme | Myriad) {
+function isGenerated(scheme: GenScheme | MyriadInput) {
   return scheme.hasOwnProperty('origin') 
 }
 
-function schemeCleaner(scheme: GenScheme | Myriad) {
+function schemeCleaner(scheme: GenScheme | MyriadInput) {
   return isGenerated(scheme)
     ? (scheme as GenScheme).origin 
-    : (scheme as Myriad)
+    : (scheme as MyriadInput)
 }
 
-function inverseValidator(scheme: Myriad) {
+function inverseValidator(scheme: MyriadInput) {
   const fgDark = tinycolor(scheme.foreground).isDark()
   const bgDark = tinycolor(scheme.background).isDark()
 
@@ -52,7 +52,7 @@ function inverseValidator(scheme: Myriad) {
   }
 }
 
-function basicInverse(scheme: Myriad): Myriad {
+function basicInverse(scheme: MyriadInput): MyriadInput {
   return {
     ...scheme, 
     background: scheme.foreground,
@@ -60,7 +60,7 @@ function basicInverse(scheme: Myriad): Myriad {
   }
 }
 
-function makeInverse(scheme: Myriad): Myriad {
+function makeInverse(scheme: MyriadInput): MyriadInput {
   const inversed = basicInverse(scheme)
   return {...inversed,
     ...inverseValidator(scheme),
@@ -68,14 +68,14 @@ function makeInverse(scheme: Myriad): Myriad {
   }
 }
 
-export const inverse = (scheme: Myriad) => {
+export const inverse = (scheme: MyriadInput) => {
   const cleanScheme = schemeCleaner(scheme)
   const hasInverse = cleanScheme.hasOwnProperty('inverse')
   if(hasInverse) return scheme.inverse
   return makeInverse(scheme)
 }
 
-export const isDark = (scheme: GenScheme | Myriad) => {
+export const isDark = (scheme: GenScheme | MyriadInput) => {
   const origin = schemeCleaner(scheme)
   return tinycolor(origin.background).isDark()
 }

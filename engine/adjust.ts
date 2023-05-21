@@ -5,25 +5,25 @@ import tinycolor from "tinycolor2"
 import { invert } from './primitives/utils'
 import { getReadable } from './primitives/color'
 import { defaultScheme, settings } from './store'
-import { Myriad, AdjustedScheme } from './store/types'
+import { MyriadInput, AdjustedScheme } from './store/types'
 
 const fallback = tinycolor.random()
 const defaultBG = tinycolor('white')
 
 //instances
-function bgInstance(scheme: Myriad) {
+function bgInstance(scheme: MyriadInput) {
   return scheme.hasOwnProperty('background')
     ? background(scheme)
     : background(defaultScheme)
 }
 
 //handlers
-export const background = (scheme: Myriad) => {
+export const background = (scheme: MyriadInput) => {
   //Makes sure there exists a backgrund color. Defaults to white
   return scheme.background ? tinycolor(scheme.background) : defaultBG
 }
 
-export const foreground = (scheme: Myriad) => {
+export const foreground = (scheme: MyriadInput) => {
   //Adjusts the foreground and makes sure its readable against the background
   const contrast = bgInstance(scheme)
 
@@ -38,7 +38,7 @@ export const foreground = (scheme: Myriad) => {
     : invert(contrast.clone()))
 }
 
-export const accent = (fl: string, scheme: Myriad) => {
+export const accent = (fl: string, scheme: MyriadInput) => {
   //Adjusts the accent and makes sure its in contrast to BG and FG.
   //If no accent, generate a random one
   const context = {
