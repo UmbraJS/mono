@@ -1,6 +1,6 @@
-import tinycolor from "tinycolor2"
+import type tinycolor from 'tinycolor2'
 
-export type DynamicObject = {[key: number]: string}
+export interface DynamicObject = {[key: number]: string}
 
 export interface GenColor {
   color: string;

@@ -1,15 +1,15 @@
 import tinycolor from 'tinycolor2'
-import { GenScheme, MyriadInput } from '../store/types'
+import type { GenScheme, MyriadInput } from '../store/types'
 import { foreground } from '../adjust'
 import { moveUntil } from './color'
 
 function isGenerated(scheme: GenScheme | MyriadInput) {
-  return scheme.hasOwnProperty('origin') 
+  return scheme.hasOwnProperty('origin')
 }
 
 function schemeCleaner(scheme: GenScheme | MyriadInput) {
   return isGenerated(scheme)
-    ? (scheme as GenScheme).origin 
+    ? (scheme as GenScheme).origin
     : (scheme as MyriadInput)
 }
 
@@ -22,12 +22,12 @@ function inverseValidator(scheme: MyriadInput) {
   if(fg.isDark() !== bgDark) {
     return {
       background: fg.toHexString(),
-      foreground: scheme.background
+      foreground: scheme.background,
     }
   }
 
-  //Both are same, so we need to adjust something 
-  //or return a failure of some kind
+  // Both are same, so we need to adjust something 
+  // or return a failure of some kind
   function createInvertedFlippingReadability() {
     const background = tinycolor(scheme.background)
     const foreground = tinycolor(scheme.foreground)
@@ -45,16 +45,16 @@ function inverseValidator(scheme: MyriadInput) {
       },
     }).toHexString()
   }
-  
+
   return {
     background: createInvertedFlippingReadability(),
-    foreground: scheme.foreground
+    foreground: scheme.foreground,
   }
 }
 
 function basicInverse(scheme: MyriadInput): MyriadInput {
   return {
-    ...scheme, 
+    ...scheme,
     background: scheme.foreground,
     foreground: scheme.background,
   }
@@ -62,9 +62,10 @@ function basicInverse(scheme: MyriadInput): MyriadInput {
 
 function makeInverse(scheme: MyriadInput): MyriadInput {
   const inversed = basicInverse(scheme)
-  return {...inversed,
+  return {
+    ...inversed,
     ...inverseValidator(scheme),
-    inverse: scheme
+    inverse: scheme,
   }
 }
 

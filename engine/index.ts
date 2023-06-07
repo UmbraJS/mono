@@ -1,12 +1,12 @@
-//Configs and Utilities
+// Configs and Utilities
 import { changeSettings, settings } from './store'
-import { MyriadInput, MyriadSettings, GenScheme } from './store/types'
+import type { GenScheme, MyriadInput, MyriadSettings } from './store/types'
 import { attach } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
-//Main functions
-import { adjust } from "./adjust"
-import { generate } from "./generator"
+// Main functions
+import { adjust } from './adjust'
+import { generate } from './generator'
 
 export interface MyriadOutput {
   colors: GenScheme
@@ -23,7 +23,7 @@ interface Props {
 
 export function myriadOutput(colors: GenScheme): MyriadOutput {
   return {
-    colors: colors,
+    colors,
     isDark: () => isDark(colors),
     inverse: () => myriad(inverse(colors.origin)),
     attach: (element?: HTMLElement): MyriadOutput => {
@@ -54,16 +54,16 @@ export function randomScheme(props: RandomMyriadProps = { amount: 1 }) {
   }
 
   return {
-    scheme: scheme,
+    scheme,
     settings: {
       ...settings,
-      ...props
-    }
+      ...props,
+    },
   }
 }
 
 export function randomMyriad(props: RandomMyriadProps = { amount: 1 }) {
-  const {scheme, settings} = randomScheme(props)
+  const { scheme, settings } = randomScheme(props)
   return myriad(scheme, settings)
 }
 
@@ -73,7 +73,7 @@ interface SubSchemeProps extends Props {
 }
 
 export const subScheme = (scheme: MyriadInput, props: SubSchemeProps) => {
-  let subSchemes = scheme.subSchemes
+  const subSchemes = scheme.subSchemes
   if(subSchemes === undefined) return null
   return myriad(subSchemes[props.id], props.settings)
 }
