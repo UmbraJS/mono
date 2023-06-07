@@ -23,7 +23,7 @@ interface Props {
 
 export function myriadOutput(colors: GenScheme): MyriadOutput {
   return {
-    colors,
+    colors, 
     isDark: () => isDark(colors),
     inverse: () => myriad(inverse(colors.origin)),
     attach: (element?: HTMLElement): MyriadOutput => {
@@ -33,7 +33,7 @@ export function myriadOutput(colors: GenScheme): MyriadOutput {
 }
 
 export const myriad = (scheme?: MyriadInput, settings?: MyriadSettings) => {
-  if(settings) changeSettings(settings)
+  if (settings) changeSettings(settings)
   const colors = generate(adjust(scheme))
   return myriadOutput(colors)
 }
@@ -74,7 +74,7 @@ interface SubSchemeProps extends Props {
 
 export const subScheme = (scheme: MyriadInput, props: SubSchemeProps) => {
   const subSchemes = scheme.subSchemes
-  if(subSchemes === undefined) return null
+  if (subSchemes === undefined) return null
   return myriad(subSchemes[props.id], props.settings)
 }
 

@@ -1,3 +1,8 @@
+Todo List
+1 - Reformat output shape
+2 - Add APCA color contrast
+3 - Inverse should contain settings and scheme
+
 # Myriad
 - :kissing_cat: ***Simple*** - Just a simple JS function that lets you define your theme
 - :muscle: ***Flexible*** - Flexible primitives underneath that let you build your own logic
