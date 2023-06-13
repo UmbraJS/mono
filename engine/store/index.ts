@@ -1,4 +1,4 @@
-import { MyriadInput, GenScheme, MyriadSettings, SettingType } from './types'
+import { MyriadInput, MyriadScheme, GenScheme, MyriadSettings, SettingType } from './types'
 
 export let generated: GenScheme | null = null
 
@@ -24,7 +24,7 @@ function setting(passed?: SettingType) {
   }
 }
 
-export const defaultScheme: MyriadInput = {
+export const defaultScheme: MyriadScheme = {
   background: '#090233',
   foreground: '#ff5555',
   accents: ['#5200ff'],
@@ -33,4 +33,10 @@ export const defaultScheme: MyriadInput = {
     error: '#ff0000',
   },
   subSchemes: {}
+}
+
+
+export const defaultTheme: MyriadInput = {
+  scheme: defaultScheme,
+  settings,
 }

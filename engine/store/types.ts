@@ -20,16 +20,21 @@ export interface GenScheme extends GenSchemeBasic {
   origin: MyriadInput,
 }
 
-type subSchemes = {
+type SubSchemes = {
   [key: string]: MyriadInput
 }
 
-export interface MyriadInput {
+export interface MyriadScheme {
   background?: string,
   foreground?: string,
   accents?: string[],
   custom?: ColorList
-  subSchemes?: subSchemes,
+  subSchemes?: SubSchemes,
+}
+
+export interface MyriadInput {
+  scheme: MyriadScheme,
+  settings?: MyriadSettings,
   inversed?: MyriadInput,
 }
 
@@ -37,7 +42,7 @@ interface MyriadAdjusted {
   background?: tinycolor.Instance,
   foreground?: tinycolor.Instance,
   accents?: tinycolor.Instance[],
-  subSchemes?: subSchemes,
+  subSchemes?: SubSchemes,
 }
 
 export interface AdjustedScheme extends MyriadAdjusted {

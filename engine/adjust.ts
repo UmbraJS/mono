@@ -4,26 +4,26 @@ import tinycolor from "tinycolor2"
 //Internal dependencies
 import { invert } from './primitives/utils'
 import { getReadable } from './primitives/color'
-import { defaultScheme, settings } from './store'
-import { MyriadInput, AdjustedScheme } from './store/types'
+import { defaultTheme, defaultScheme, settings } from './store'
+import { MyriadScheme, AdjustedScheme } from './store/types'
 
 const fallback = tinycolor.random()
 const defaultBG = tinycolor('white')
 
 //instances
-function bgInstance(scheme: MyriadInput) {
+function bgInstance(scheme: MyriadScheme) {
   return scheme.hasOwnProperty('background')
     ? background(scheme)
     : background(defaultScheme)
 }
 
 //handlers
-export const background = (scheme: MyriadInput) => {
+export const background = (scheme: MyriadScheme) => {
   //Makes sure there exists a backgrund color. Defaults to white
   return scheme.background ? tinycolor(scheme.background) : defaultBG
 }
 
-export const foreground = (scheme: MyriadInput) => {
+export const foreground = (scheme: MyriadScheme) => {
   //Adjusts the foreground and makes sure its readable against the background
   const contrast = bgInstance(scheme)
 
@@ -38,7 +38,7 @@ export const foreground = (scheme: MyriadInput) => {
     : invert(contrast.clone()))
 }
 
-export const accent = (fl: string, scheme: MyriadInput) => {
+export const accent = (fl: string, scheme: MyriadScheme) => {
   //Adjusts the accent and makes sure its in contrast to BG and FG.
   //If no accent, generate a random one
   const context = {
@@ -52,15 +52,15 @@ export const accent = (fl: string, scheme: MyriadInput) => {
 
 //composer
 export let adjusted: AdjustedScheme | null = null
-export const adjust = (scheme = defaultScheme) => {
+export const adjust = (theme = defaultTheme) => {
   //Gets the config and adjusts the colors according to
   //their relationship to each other so theres enough color contrasts
-  let obj: AdjustedScheme = { origin: scheme }
+  let obj: AdjustedScheme = { origin: theme }
 
-  obj.background = background(scheme)
-  obj.foreground = foreground(scheme)
-  obj.accents = scheme.accents?.map((fl) => accent(fl, scheme))
-  obj.origin = scheme
+  obj.background = background(theme.scheme)
+  obj.foreground = foreground(theme.scheme)
+  obj.accents = theme.scheme.accents?.map((fl) => accent(fl, theme.scheme))
+  obj.origin = theme
   
   adjusted = obj
   return obj

@@ -16,11 +16,6 @@ export interface MyriadOutput {
   inverse: () => MyriadOutput
 }
 
-interface Props {
-  element?: HTMLElement
-  settings?: MyriadSettings
-}
-
 export function myriadOutput(colors: GenScheme): MyriadOutput {
   return {
     colors, 
@@ -32,9 +27,9 @@ export function myriadOutput(colors: GenScheme): MyriadOutput {
   }
 }
 
-export const myriad = (scheme?: MyriadInput, settings?: MyriadSettings) => {
+export const myriad = (input?: MyriadInput) => {
   if (settings) changeSettings(settings)
-  const colors = generate(adjust(scheme))
+  const colors = generate(adjust(input))
   return myriadOutput(colors)
 }
 
@@ -46,7 +41,7 @@ interface RandomMyriadProps extends MyriadSettings {
   amount: number
 }
 
-export function randomScheme(props: RandomMyriadProps = { amount: 1 }) {
+export function randomScheme(props: RandomMyriadProps = { amount: 1 }): MyriadInput {
   const scheme = {
     background: randomHex(),
     foreground: randomHex(),
@@ -63,19 +58,24 @@ export function randomScheme(props: RandomMyriadProps = { amount: 1 }) {
 }
 
 export function randomMyriad(props: RandomMyriadProps = { amount: 1 }) {
-  const { scheme, settings } = randomScheme(props)
-  return myriad(scheme, settings)
+  const theme = randomScheme(props)
+  return myriad(theme)
 }
 
-interface SubSchemeProps extends Props {
+interface SubSchemeProps {
   id: string
   settings?: MyriadSettings
+  element?: HTMLElement
 }
 
-export const subScheme = (scheme: MyriadInput, props: SubSchemeProps) => {
-  const subSchemes = scheme.subSchemes
+export const subScheme = (input: MyriadInput, props: SubSchemeProps) => {
+  const subSchemes = input.scheme.subSchemes
   if (subSchemes === undefined) return null
-  return myriad(subSchemes[props.id], props.settings)
+  const scheme = subSchemes[props.id]
+  return myriad({
+    ...scheme,
+    settings: props.settings || scheme.settings || input.settings,
+  })
 }
 
 export default myriad
