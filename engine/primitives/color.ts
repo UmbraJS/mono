@@ -1,6 +1,8 @@
 import { AdjustedScheme } from '../store/types'
 import { settings } from '../store'
 import tinycolor from "tinycolor2"
+import { APCAcontrast, sRGBtoY, displayP3toY, adobeRGBtoY, alphaBlend, calcAPCA } from 'apca-w3';
+
 export type Color = tinycolor.Instance
 export type Colour = string | Color
 
@@ -11,7 +13,7 @@ type ColorRange = {
   iterations?: number
 }
 
-interface MoveUntil {
+interface increaseContrastUntil {
   color: Color
   contrast?: Color
   max?: number
@@ -29,25 +31,34 @@ const stored = {
   iterations: settings.iterations || 15,
 }
 
-const checkReadability = (col: Colour, bg: Colour) => {
+type RGB = [number, number, number]
+
+function APCAcolor(color: Colour): RGB {
+  const rgba = tinycolor(color).toRgb()
+  return [rgba.r, rgba.g, rgba.b]
+}
+
+export const getReadability = (col: Colour, bg: Colour) => {
+  let contrastLc = calcAPCA(APCAcolor(col), APCAcolor(bg));
+  console.log(contrastLc)
   return tinycolor.readability(col, bg)
 }
 
 export const getReadable = ({color, contrast, readability, iterations}: ColorRange) => {
   const safeReadability = readability || stored.readability
   const max = iterations || stored.iterations
-  return moveUntil({color, contrast, max, condition: (c) => {
-    const current = checkReadability(c, contrast)
+  return increaseContrastUntil({color, contrast, max, condition: (c) => {
+    const current = getReadability(c, contrast)
     return current > safeReadability
   }})
 }
 
-export function moveUntil({ color, contrast, condition, max = 15 }: MoveUntil) {
+export function increaseContrastUntil({ color, contrast, condition, max = 15 }: increaseContrastUntil) {
   let newColor = color
   let iterations = 0
   while (!condition(newColor, iterations) && iterations < max) {
     iterations += 1
-    newColor = moveAwayFromContrast({
+    newColor = increaseContrast({
       val: iterations,
       color: newColor,
       contrast,
@@ -56,7 +67,7 @@ export function moveUntil({ color, contrast, condition, max = 15 }: MoveUntil) {
   return newColor
 }
 
-const moveAwayFromContrast = ({color, contrast, val = 100}: MoveAwayFrom) => {
+const increaseContrast = ({color, contrast, val = 100}: MoveAwayFrom) => {
   const same = contrast ? color.isDark() === contrast.isDark() : true
   return same
     ? color.isDark() ? color.lighten(val) : color.darken(val)

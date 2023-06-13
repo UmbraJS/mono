@@ -30,7 +30,7 @@ export interface MyriadInput {
   accents?: string[],
   custom?: ColorList
   subSchemes?: subSchemes,
-  inverse?: MyriadInput,
+  inversed?: MyriadInput,
 }
 
 interface MyriadAdjusted {

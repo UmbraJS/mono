@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
 import type { GenScheme, MyriadInput } from '../store/types'
 import { foreground } from '../adjust'
-import { moveUntil } from './color'
+import { increaseContrastUntil, getReadability } from './color'
 
 function isGenerated(scheme: GenScheme | MyriadInput) {
   return scheme.hasOwnProperty('origin')
@@ -33,13 +33,13 @@ function inverseValidator(scheme: MyriadInput) {
     const foreground = tinycolor(scheme.foreground)
     const oppositeLightEnd = background.isDark() ? tinycolor('white') : tinycolor('black')
     const currentLightEnd = background.isDark() ? tinycolor('black') : tinycolor('white')
-    const readability = tinycolor.readability(background, currentLightEnd)
+    const readability = getReadability(background, currentLightEnd)
 
-    return moveUntil({
+    return increaseContrastUntil({
       color: background,
       contrast: foreground,
       condition: (c) => {
-        const diff = tinycolor.readability(c, oppositeLightEnd)
+        const diff = getReadability(c, oppositeLightEnd)
         const within = diff < readability
         return within
       },
@@ -65,14 +65,14 @@ function makeInverse(scheme: MyriadInput): MyriadInput {
   return {
     ...inversed,
     ...inverseValidator(scheme),
-    inverse: scheme,
+    inversed: scheme
   }
 }
 
 export const inverse = (scheme: MyriadInput) => {
   const cleanScheme = schemeCleaner(scheme)
   const hasInverse = cleanScheme.hasOwnProperty('inverse')
-  if(hasInverse) return scheme.inverse
+  if(hasInverse) return scheme.inversed
   return makeInverse(scheme)
 }
 

@@ -1,11 +1,6 @@
-//Configs and Utilities
-import tinycolor from "tinycolor2"
 import { GenScheme } from '../store/types'
 import { settings } from '../store'
-
-const readability = (col: string, bg: string) => {
-  return tinycolor.readability(col, bg)
-}
+import { getReadability } from '../primitives/color'
 
 //Composition Functions
 export const colorAlly = (scheme: GenScheme) => {
@@ -18,8 +13,8 @@ export const colorAlly = (scheme: GenScheme) => {
 
   return {
     min: settings.readability,
-    range: readability(bg, fg),
-    accent: readability(ac, acc),
+    range: getReadability(bg, fg),
+    accent: getReadability(ac, acc),
   }
 }
 
