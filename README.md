@@ -1,7 +1,7 @@
 Todo List
 1 - Reformat output shape
 2 - Add APCA color contrast
-3 - Inverse should contain settings and scheme
+3 - decouple settings global
 
 # Myriad
 - :kissing_cat: ***Simple*** - Just a simple JS function that lets you define your theme

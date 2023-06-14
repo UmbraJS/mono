@@ -1,6 +1,6 @@
 // Configs and Utilities
 import { changeSettings, settings, defaultTheme } from './store'
-import type { GenScheme, MyriadInput, MyriadSettings } from './store/types'
+import type { GenScheme, MyriadInput, MyriadScheme, MyriadSettings } from './store/types'
 import { attach } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
@@ -27,8 +27,18 @@ export function myriadOutput(colors: GenScheme): MyriadOutput {
   }
 }
 
-export const myriad = (theme = defaultTheme) => {
-  if (settings) changeSettings(settings)
+function format(theme: MyriadInput | MyriadScheme, settings: MyriadSettings): MyriadInput {
+  const hasScheme = theme.hasOwnProperty('scheme')
+  if(hasScheme) return theme as MyriadInput
+  const scheme = theme as MyriadScheme
+  return { scheme, settings } as MyriadInput
+}
+
+type t = MyriadInput | MyriadScheme
+
+export function myriad(t: t = defaultTheme, s = settings) {
+  const theme = format(t, s)
+  if(theme.settings) changeSettings(theme.settings)
   const colors = generate(adjust(theme))
   return myriadOutput(colors)
 }
