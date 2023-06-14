@@ -14,11 +14,11 @@ const settings: MyriadSettings = {
   }
 }
 
-export let generated = myriad({
+export let generated = myriad({scheme: {
   background: '#373737',
   foreground: '#5e5555',
   accents: ['green'],
-}, settings).attach()
+}, settings}).attach()
 
 export function mutateMyriad(newMyriad = generated) {
   generated = newMyriad

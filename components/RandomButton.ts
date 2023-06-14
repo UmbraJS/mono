@@ -8,7 +8,7 @@ export class RandomButton extends HTMLElement {
 
     const handleClick = () => {
       const { scheme, settings } = randomScheme()
-      mutateMyriad(myriad(scheme, settings).attach())
+      mutateMyriad(myriad({scheme, settings}).attach())
     }
 
     this.addEventListener('click', handleClick)

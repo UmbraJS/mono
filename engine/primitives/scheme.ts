@@ -1,19 +1,9 @@
 import tinycolor from 'tinycolor2'
-import type { GenScheme, MyriadInput } from '../store/types'
+import type { MyriadInput, MyriadScheme } from '../store/types'
 import { foreground } from '../adjust'
 import { increaseContrastUntil, getReadability } from './color'
 
-function isGenerated(scheme: GenScheme | MyriadInput) {
-  return scheme.hasOwnProperty('origin')
-}
-
-function schemeCleaner(scheme: GenScheme | MyriadInput) {
-  return isGenerated(scheme)
-    ? (scheme as GenScheme).origin
-    : (scheme as MyriadInput)
-}
-
-function inverseValidator(scheme: MyriadInput) {
+function inverseValidator(scheme: MyriadScheme): MyriadScheme {
   const fgDark = tinycolor(scheme.foreground).isDark()
   const bgDark = tinycolor(scheme.background).isDark()
 
@@ -52,7 +42,7 @@ function inverseValidator(scheme: MyriadInput) {
   }
 }
 
-function basicInverse(scheme: MyriadInput): MyriadInput {
+function basicInverse(scheme: MyriadScheme): MyriadScheme {
   return {
     ...scheme,
     background: scheme.foreground,
@@ -60,23 +50,24 @@ function basicInverse(scheme: MyriadInput): MyriadInput {
   }
 }
 
-function makeInverse(scheme: MyriadInput): MyriadInput {
-  const inversed = basicInverse(scheme)
+function makeInverse(theme: MyriadInput): MyriadInput {
+  const inversed = basicInverse(theme.scheme)
   return {
-    ...inversed,
-    ...inverseValidator(scheme),
-    inversed: scheme
+    inversed: theme,
+    settings: theme.settings,
+    scheme: {
+      ...inversed,
+      ...inverseValidator(theme.scheme),
+    },
   }
 }
 
-export const inverse = (scheme: MyriadInput) => {
-  const cleanScheme = schemeCleaner(scheme)
-  const hasInverse = cleanScheme.hasOwnProperty('inverse')
-  if(hasInverse) return scheme.inversed
-  return makeInverse(scheme)
+export const inverse = (theme: MyriadInput) => {
+  const hasInverse = theme.hasOwnProperty('inverse')
+  if(hasInverse) return theme.inversed
+  return makeInverse(theme)
 }
 
-export const isDark = (scheme: GenScheme | MyriadInput) => {
-  const origin = schemeCleaner(scheme)
-  return tinycolor(origin.background).isDark()
+export const isDark = (theme: MyriadInput) => {
+  return tinycolor(theme.scheme.background).isDark()
 }

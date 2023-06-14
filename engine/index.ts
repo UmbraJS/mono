@@ -1,5 +1,5 @@
 // Configs and Utilities
-import { changeSettings, settings } from './store'
+import { changeSettings, settings, defaultTheme } from './store'
 import type { GenScheme, MyriadInput, MyriadSettings } from './store/types'
 import { attach } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
@@ -19,7 +19,7 @@ export interface MyriadOutput {
 export function myriadOutput(colors: GenScheme): MyriadOutput {
   return {
     colors, 
-    isDark: () => isDark(colors),
+    isDark: () => isDark(colors.origin),
     inverse: () => myriad(inverse(colors.origin)),
     attach: (element?: HTMLElement): MyriadOutput => {
       return attach(colors, element)
@@ -27,9 +27,9 @@ export function myriadOutput(colors: GenScheme): MyriadOutput {
   }
 }
 
-export const myriad = (input?: MyriadInput) => {
+export const myriad = (theme = defaultTheme) => {
   if (settings) changeSettings(settings)
-  const colors = generate(adjust(input))
+  const colors = generate(adjust(theme))
   return myriadOutput(colors)
 }
 

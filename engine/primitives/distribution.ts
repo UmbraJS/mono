@@ -47,7 +47,7 @@ const makeArray = (obj: ColorList): ColorList[] => {
 }
 
 const setCustom = (scheme: GenScheme, element: HTMLElement) => {
-  const custom = scheme.origin.custom
+  const custom = scheme.origin.scheme.custom
   if(!scheme.foreground || !custom) return
 
   const genCustomColors = (array: ColorList[]) => {

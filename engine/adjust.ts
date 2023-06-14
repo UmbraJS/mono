@@ -5,7 +5,7 @@ import tinycolor from "tinycolor2"
 import { invert } from './primitives/utils'
 import { getReadable } from './primitives/color'
 import { defaultTheme, defaultScheme, settings } from './store'
-import { MyriadScheme, AdjustedScheme } from './store/types'
+import { MyriadScheme, AdjustedScheme, MyriadInput } from './store/types'
 
 const fallback = tinycolor.random()
 const defaultBG = tinycolor('white')
@@ -38,13 +38,13 @@ export const foreground = (scheme: MyriadScheme) => {
     : invert(contrast.clone()))
 }
 
-export const accent = (fl: string, scheme: MyriadScheme) => {
+export const accent = (fl: string, theme: MyriadInput) => {
   //Adjusts the accent and makes sure its in contrast to BG and FG.
   //If no accent, generate a random one
   const context = {
     color: fl ? tinycolor(fl) : fallback,
-    contrast: bgInstance(scheme),
-    readability: settings.readability || 5
+    contrast: bgInstance(theme.scheme),
+    readability: theme.settings?.readability || 5
   }
 
   return tinycolor(getReadable(context))
@@ -57,9 +57,11 @@ export const adjust = (theme = defaultTheme) => {
   //their relationship to each other so theres enough color contrasts
   let obj: AdjustedScheme = { origin: theme }
 
+  console.log('adjusting', theme)
+
   obj.background = background(theme.scheme)
   obj.foreground = foreground(theme.scheme)
-  obj.accents = theme.scheme.accents?.map((fl) => accent(fl, theme.scheme))
+  obj.accents = theme.scheme.accents?.map((fl) => accent(fl, theme))
   obj.origin = theme
   
   adjusted = obj

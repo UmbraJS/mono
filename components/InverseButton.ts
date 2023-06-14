@@ -8,7 +8,9 @@ export class InverseButton extends HTMLElement {
 
     const handleClick = () => {
       const i = inverse(generated.colors.origin)
-      iro.color.hexString = i?.background || '#000000';
+      if(!i) return
+
+      iro.color.hexString = i.scheme.background || '#000000';
 
       const inversed = myriad(i).attach()
       mutateMyriad(inversed)
@@ -20,7 +22,7 @@ export class InverseButton extends HTMLElement {
       if(doc === null) return
       const darkmode = doc.getElementById('darkmode')
       if(darkmode === null) return
-      darkmode.innerText = isDark(theme.colors) ? "dark mode" : "light mode"
+      darkmode.innerText = isDark(theme.colors.origin) ? "dark mode" : "light mode"
     }
 
     this.addEventListener('click', handleClick)
