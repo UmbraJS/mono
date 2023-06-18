@@ -25,7 +25,6 @@ function shade(colors: ColorRange, range = [30, 50]) {
 
 export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range = [20, 50]): GeneratedColor => {
   //Generic color object with all its auto generated color variations
-  
   return {
     color: colors.color.toHexString(),
     shade: shade(colors, range),

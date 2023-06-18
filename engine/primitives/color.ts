@@ -39,6 +39,7 @@ function APCAcolor(color: Colour): RGB {
 }
 
 export const getReadability = (col: Colour, bg: Colour) => {
+  //TODO: use APCA to calculate contrast
   let contrastLc = calcAPCA(APCAcolor(col), APCAcolor(bg));
   console.log(contrastLc)
   return tinycolor.readability(col, bg)

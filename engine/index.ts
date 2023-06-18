@@ -22,9 +22,7 @@ export function myriadOutput(colors: MyriadGenerated): MyriadOutput {
     colors, 
     isDark: () => isDark(theme),
     inverse: () => myriad(inverse(theme).scheme, theme.settings),
-    attach: (element?: HTMLElement) => {
-      return attach(colors, element)
-    },
+    attach: (el?: HTMLElement) => attach(colors, el),
   }
 }
 
