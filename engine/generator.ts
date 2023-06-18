@@ -3,9 +3,9 @@ import { pickContrast, rangeShader } from "./primitives/color"
 import { adjust } from "./adjust"
 import { settings } from "./store"
 import { 
-  AdjustedScheme, 
-  GenScheme, 
-  GenColor, 
+  MyriadAdjusted, 
+  MyriadGenerated, 
+  GeneratedColor, 
   DynamicObject 
 } from "./store/types"
 
@@ -23,7 +23,7 @@ function shade(colors: ColorRange, range = [30, 50]) {
   return shades
 }
 
-export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme, range = [20, 50]): GenColor => {
+export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range = [20, 50]): GeneratedColor => {
   //Generic color object with all its auto generated color variations
   
   return {
@@ -34,7 +34,7 @@ export const ColorObj = (colors: ColorRange, scheme: AdjustedScheme, range = [20
   }
 }
 
-function background(scheme: AdjustedScheme) {
+function background(scheme: MyriadAdjusted) {
   if(!scheme.background) return
   const { background, foreground } = scheme
   return ColorObj({
@@ -43,7 +43,7 @@ function background(scheme: AdjustedScheme) {
   }, scheme, settings?.background?.shade)
 }
 
-function foreground(scheme: AdjustedScheme) {
+function foreground(scheme: MyriadAdjusted) {
   if(!scheme.foreground) return
   const { background, foreground } = scheme
   return ColorObj({
@@ -52,7 +52,7 @@ function foreground(scheme: AdjustedScheme) {
   }, scheme, settings?.foreground?.shade)
 }
 
-function accents(scheme: AdjustedScheme): GenColor[] | undefined {
+function accents(scheme: MyriadAdjusted): GeneratedColor[] | undefined {
   return scheme.accents?.map((color) => {
     const antithesis = tinycolor.mostReadable(color, [
       scheme.background || color,
@@ -62,17 +62,14 @@ function accents(scheme: AdjustedScheme): GenColor[] | undefined {
   }) 
 }
 
-export let generated: GenScheme | null = null
-export const generate = (scheme = adjust()): GenScheme => {
+export const generate = (scheme = adjust()): MyriadGenerated => {
   //Gets the adjusted colors from the wrapper and generates more colors
   //assosiated with the root colors. Like, shadeded variations and accent contrast colors.
-  const obj = {
+  return {
     background: background(scheme),
     foreground: foreground(scheme),
     accents: accents(scheme),
-    origin: scheme.origin,
+    input: scheme.input,
+    adjusted: scheme,
   }
-
-  generated = obj
-  return obj
 }

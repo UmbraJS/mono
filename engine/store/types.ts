@@ -2,7 +2,7 @@ import type tinycolor from 'tinycolor2'
 
 export interface DynamicObject {[key: number]: string}
 
-export interface GenColor {
+export interface GeneratedColor {
   color: string;
   contrast: string;
   shade: DynamicObject;
@@ -10,14 +10,15 @@ export interface GenColor {
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string
 
-export interface GenSchemeBasic {
-  background?: GenColor,
-  foreground?: GenColor,
-  accents?: GenColor[],
+export interface GeneratedScheme {
+  background?: GeneratedColor,
+  foreground?: GeneratedColor,
+  accents?: GeneratedColor[],
 } 
 
-export interface GenScheme extends GenSchemeBasic {
-  origin: MyriadInput,
+export interface MyriadGenerated extends GeneratedScheme {
+  input: MyriadInput,
+  adjusted: MyriadAdjusted,
 }
 
 type SubSchemes = {
@@ -34,19 +35,16 @@ export interface MyriadScheme {
 
 export interface MyriadInput {
   scheme: MyriadScheme,
-  settings?: MyriadSettings,
+  settings: MyriadSettings,
   inversed?: MyriadInput,
 }
 
-interface MyriadAdjusted {
+export interface MyriadAdjusted {
   background?: tinycolor.Instance,
   foreground?: tinycolor.Instance,
   accents?: tinycolor.Instance[],
   subSchemes?: SubSchemes,
-}
-
-export interface AdjustedScheme extends MyriadAdjusted {
-  origin: MyriadInput,
+  input: MyriadInput,
 }
 
 export type customColor = string | ((s: MyriadInput) => string)

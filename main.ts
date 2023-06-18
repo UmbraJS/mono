@@ -25,7 +25,7 @@ export function mutateMyriad(newMyriad = generated) {
 }
 
 export const iro = new (window as any).iro.ColorPicker("#picker", {
-  color: generated.colors.origin.scheme.background,
+  color: generated.colors.input.scheme.background,
   layout: [
     { 
       component: (window as any).iro.ui.Box,

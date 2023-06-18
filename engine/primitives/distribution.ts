@@ -1,7 +1,7 @@
 import tinycolor from "tinycolor2"
 import { myriad, myriadOutput } from '..'
-import { GenScheme, SchemeKey, GenColor, ColorList, customColor } from '../store/types'
-import  { accent, adjusted } from "../adjust"
+import { MyriadGenerated, SchemeKey, GeneratedColor, ColorList, customColor } from '../store/types'
+import  { accent } from "../adjust"
 import { ColorObj } from "../generator"
 
 const htmlElement = typeof document === 'undefined' ? null : document.documentElement
@@ -21,7 +21,7 @@ export const attach = (
     color: foreground, element,
   })
 
-  accents?.forEach((fl: GenColor, index: number) => {
+  accents?.forEach((fl: GeneratedColor, index: number) => {
     setAccent(index, fl, element)
   })
 
@@ -46,8 +46,8 @@ const makeArray = (obj: ColorList): ColorList[] => {
   })
 }
 
-const setCustom = (scheme: GenScheme, element: HTMLElement) => {
-  const custom = scheme.origin.scheme.custom
+const setCustom = (scheme: MyriadGenerated, element: HTMLElement) => {
+  const custom = scheme.input.scheme.custom
   if(!scheme.foreground || !custom) return
 
   const genCustomColors = (array: ColorList[]) => {
@@ -60,7 +60,7 @@ const setCustom = (scheme: GenScheme, element: HTMLElement) => {
 
   const getColorValue = (value: customColor) => {
     let color = value ? value : 'black'
-    const origin = scheme.origin
+    const origin = scheme.input
     typeof value === 'function'
       ? color = value(origin)
       : color = accent(value, origin).toHexString()
@@ -70,20 +70,19 @@ const setCustom = (scheme: GenScheme, element: HTMLElement) => {
   const colorArray = makeArray(custom)
   const customColors = genCustomColors(colorArray)
   customColors.forEach((c) => {
-    if(!adjusted) return
     const key = Object.keys(c)[0]
     const value = Object.values(c)[0]
     const color = {
       color: tinycolor(value),
       antithesis: tinycolor(value)
     }
-    setAccent(0, ColorObj(color, adjusted), element, key)
+    setAccent(0, ColorObj(color, scheme.adjusted), element, key)
   })
 
 }
 
 interface SetProps {
-  color?: GenColor,
+  color?: GeneratedColor,
   element: HTMLElement
 }
 
@@ -110,7 +109,7 @@ function setContrast(name: SchemeKey | string, {color, element}: SetProps) {
   if(!bgfg) setProperty('--' + name + '-contrast', color.contrast, element)
 }
 
-const setAccent = (index = 0, fl: GenColor, element: HTMLElement, name = "accent") => {
+const setAccent = (index = 0, fl: GeneratedColor, element: HTMLElement, name = "accent") => {
   let id = index > 0 ? index : ''
   setColor(name + id, {
     color: fl,

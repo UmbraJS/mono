@@ -1,4 +1,4 @@
-import { AdjustedScheme } from '../store/types'
+import { MyriadAdjusted } from '../store/types'
 import { settings } from '../store'
 import tinycolor from "tinycolor2"
 import { calcAPCA } from 'apca-w3';
@@ -74,7 +74,7 @@ const increaseContrast = ({color, contrast, val = 100}: MoveAwayFrom) => {
     : contrast?.isDark() ? color.lighten(val) : color.darken(val)
 }
 
-export const pickContrast = (c: Color, scheme: AdjustedScheme) => {
+export const pickContrast = (c: Color, scheme: MyriadAdjusted) => {
   //returns either the background or the foreground
   //based on which is more readable against the accent
   const color = c.clone()

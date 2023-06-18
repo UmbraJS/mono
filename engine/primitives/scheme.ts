@@ -3,24 +3,24 @@ import type { MyriadInput, MyriadScheme } from '../store/types'
 import { foreground } from '../adjust'
 import { increaseContrastUntil, getReadability } from './color'
 
-function inverseValidator(scheme: MyriadScheme): MyriadScheme {
-  const fgDark = tinycolor(scheme.foreground).isDark()
-  const bgDark = tinycolor(scheme.background).isDark()
+function inverseValidator(theme: MyriadInput): MyriadScheme {
+  const fgDark = tinycolor(theme.scheme.foreground).isDark()
+  const bgDark = tinycolor(theme.scheme.background).isDark()
 
   if (fgDark !== bgDark) return {}
-  const fg = foreground(scheme)
+  const fg = foreground(theme)
   if(fg.isDark() !== bgDark) {
     return {
       background: fg.toHexString(),
-      foreground: scheme.background,
+      foreground: theme.scheme.background,
     }
   }
 
   // Both are same, so we need to adjust something 
   // or return a failure of some kind
   function createInvertedFlippingReadability() {
-    const background = tinycolor(scheme.background)
-    const foreground = tinycolor(scheme.foreground)
+    const background = tinycolor(theme.scheme.background)
+    const foreground = tinycolor(theme.scheme.foreground)
     const oppositeLightEnd = background.isDark() ? tinycolor('white') : tinycolor('black')
     const currentLightEnd = background.isDark() ? tinycolor('black') : tinycolor('white')
     const readability = getReadability(background, currentLightEnd)
@@ -38,7 +38,7 @@ function inverseValidator(scheme: MyriadScheme): MyriadScheme {
 
   return {
     background: createInvertedFlippingReadability(),
-    foreground: scheme.foreground,
+    foreground: theme.scheme.foreground,
   }
 }
 
@@ -57,14 +57,14 @@ function makeInverse(theme: MyriadInput): MyriadInput {
     settings: theme.settings,
     scheme: {
       ...inversed,
-      ...inverseValidator(theme.scheme),
+      ...inverseValidator(theme),
     },
   }
 }
 
 export const inverse = (theme: MyriadInput) => {
   const hasInverse = theme.hasOwnProperty('inverse')
-  if(hasInverse) return theme.inversed
+  if(hasInverse) return theme.inversed as MyriadInput
   return makeInverse(theme)
 }
 

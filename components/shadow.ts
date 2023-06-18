@@ -1,4 +1,4 @@
-import { GenSchemeBasic } from "../"
+import { GeneratedScheme } from "../"
 import { generated } from "../main"
 
 export function shadowDOM(that: any, template: string) {
@@ -20,7 +20,7 @@ const makeArray = (obj: DynamicObject) => {
 
 const getArray = (name?: string, index?: number) => {
   if(!name) return
-  const myriadBasic: GenSchemeBasic = generated.colors
+  const myriadBasic: GeneratedScheme = generated.colors
   const color = myriadBasic[name as keyof typeof myriadBasic]
 
   if(!color) return []

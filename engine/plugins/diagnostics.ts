@@ -1,9 +1,9 @@
-import { GenScheme } from '../store/types'
+import { MyriadGenerated } from '../store/types'
 import { settings } from '../store'
 import { getReadability } from '../primitives/color'
 
 //Composition Functions
-export const colorAlly = (scheme: GenScheme) => {
+export const colorAlly = (scheme: MyriadGenerated) => {
   const { background, foreground, accents } = scheme
   if(!background || !foreground || !accents) return
   const bg = background.color
