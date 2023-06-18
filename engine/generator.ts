@@ -69,6 +69,6 @@ export const generate = (scheme = adjust()): MyriadGenerated => {
     foreground: foreground(scheme),
     accents: accents(scheme),
     input: scheme.input,
-    adjusted: scheme,
+    adjusted: scheme
   }
 }

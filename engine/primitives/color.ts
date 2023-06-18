@@ -1,7 +1,7 @@
 import { MyriadAdjusted } from '../store/types'
 import { settings } from '../store'
 import tinycolor from "tinycolor2"
-import { calcAPCA } from 'apca-w3';
+import { calcAPCA  } from 'apca-w3';
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color
