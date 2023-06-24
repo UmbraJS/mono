@@ -1,10 +1,10 @@
 import type tinycolor from 'tinycolor2'
 
-export interface DynamicObject {[key: number]: string}
+export interface DynamicObject {[key: number]: tinycolor.Instance}
 
 export interface GeneratedColor {
-  color: string;
-  contrast: string;
+  color: tinycolor.Instance;
+  contrast: tinycolor.Instance;
   shade: DynamicObject;
 }
 

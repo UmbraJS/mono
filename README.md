@@ -1,7 +1,6 @@
 Todo ListS
 2 - Add APCA color contrast
 3 - check if settings are passed properly
-4 - more color return options
 
 # Myriad
 - :kissing_cat: ***Simple*** - Just a simple JS function that lets you define your theme

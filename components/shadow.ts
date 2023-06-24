@@ -1,3 +1,4 @@
+import tinycolor from "tinycolor2";
 import { GeneratedScheme } from "../"
 import { generated } from "../main"
 
@@ -9,7 +10,7 @@ export function shadowDOM(that: any, template: string) {
   return shadow
 }
 
-export type DynamicObject = {[key: number]: string}
+export type DynamicObject = {[key: number]: tinycolor.Instance}
 
 const makeArray = (obj: DynamicObject) => {
   const objArray = Object.entries(obj)

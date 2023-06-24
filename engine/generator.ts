@@ -11,14 +11,14 @@ import {
 
 interface ColorRange {
   color: tinycolor.Instance,
-  antithesis: tinycolor.Instance,
+  contrast: tinycolor.Instance,
 }
 
 function shade(colors: ColorRange, range = [30, 50]) {
-  const { color, antithesis } = colors
+  const { color, contrast } = colors
   let shades: DynamicObject = {}
   range.forEach((val, i) => {
-    shades[i * 10 + 10] = rangeShader(color, antithesis, val)
+    shades[i * 10 + 10] = rangeShader(color, contrast, val)
   })
   return shades
 }
@@ -26,7 +26,7 @@ function shade(colors: ColorRange, range = [30, 50]) {
 export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range = [20, 50]): GeneratedColor => {
   //Generic color object with all its auto generated color variations
   return {
-    color: colors.color.toHexString(),
+    color: colors.color,
     shade: shade(colors, range),
     contrast: pickContrast(colors.color, scheme)
     //add ratings object / or maybe make the rating a function
@@ -38,7 +38,7 @@ function background(scheme: MyriadAdjusted) {
   const { background, foreground } = scheme
   return ColorObj({
     color: background, 
-    antithesis: foreground || background,
+    contrast: foreground || background,
   }, scheme, settings?.background?.shade)
 }
 
@@ -47,17 +47,16 @@ function foreground(scheme: MyriadAdjusted) {
   const { background, foreground } = scheme
   return ColorObj({
     color: foreground, 
-    antithesis: background || foreground
+    contrast: background || foreground
   }, scheme, settings?.foreground?.shade)
 }
 
 function accents(scheme: MyriadAdjusted): GeneratedColor[] | undefined {
   return scheme.accents?.map((color) => {
-    const antithesis = tinycolor.mostReadable(color, [
+    return ColorObj({color, contrast: tinycolor.mostReadable(color, [
       scheme.background || color,
       scheme.foreground || color,
-    ])
-    return ColorObj({color, antithesis }, scheme, settings?.foreground?.shade)
+    ])}, scheme, settings?.foreground?.shade)
   }) 
 }
 

@@ -10,7 +10,6 @@ import { generate } from './generator'
 
 export interface MyriadOutput {
   colors: MyriadGenerated
-  settings?: MyriadSettings
   attach: (element?: HTMLElement) => MyriadOutput
   isDark: () => boolean
   inverse: () => MyriadOutput
@@ -22,7 +21,10 @@ export function myriadOutput(colors: MyriadGenerated): MyriadOutput {
     colors, 
     isDark: () => isDark(theme),
     inverse: () => myriad(inverse(theme).scheme, theme.settings),
-    attach: (el?: HTMLElement) => attach(colors, el),
+    attach: (el?: HTMLElement) => attach({
+      scheme: colors,
+      element: el,
+    }),
   }
 }
 

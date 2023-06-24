@@ -1,7 +1,7 @@
 import { MyriadAdjusted } from '../store/types'
 import { settings } from '../store'
 import tinycolor from "tinycolor2"
-import { calcAPCA  } from 'apca-w3';
+//import { calcAPCA  } from 'apca-w3';
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color
@@ -31,17 +31,16 @@ const stored = {
   iterations: settings.iterations || 15,
 }
 
-type RGB = [number, number, number]
+// type RGB = [number, number, number]
 
-function APCAcolor(color: Colour): RGB {
-  const rgba = tinycolor(color).toRgb()
-  return [rgba.r, rgba.g, rgba.b]
-}
+// function APCAcolor(color: Colour): RGB {
+//   const rgba = tinycolor(color).toRgb()
+//   return [rgba.r, rgba.g, rgba.b]
+// }
 
 export const getReadability = (col: Colour, bg: Colour) => {
   //TODO: use APCA to calculate contrast
-  let contrastLc = calcAPCA(APCAcolor(col), APCAcolor(bg));
-  console.log(contrastLc)
+  //let contrastLc = calcAPCA(APCAcolor(col), APCAcolor(bg));
   return tinycolor.readability(col, bg)
 }
 
@@ -83,9 +82,9 @@ export const pickContrast = (c: Color, scheme: MyriadAdjusted) => {
     scheme.background || tinycolor('white'),
     scheme.foreground || tinycolor('black'),
   ])
-  return mostReadable.toString()
+  return mostReadable
 }
 
 export function rangeShader(color: Color, mixer: Color, percent = 50) {
-  return tinycolor.mix(color, mixer, percent).toHexString()
+  return tinycolor.mix(color, mixer, percent)
 }
