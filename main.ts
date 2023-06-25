@@ -8,16 +8,13 @@ import { RandomButton } from "./components/RandomButton"
 import { InverseButton } from "./components/InverseButton"
 
 const settings: MyriadSettings = {
-  readability: 21,
-  background: {
-    shade: [10, 20]
-  }
+  readability: 4,
 }
 
 export let generated = myriad({
-  background: '#373737',
-  foreground: '#5e5555',
-  accents: ['green'],
+  background: 'white',
+  foreground: 'black',
+  accents: ['#d9accf'],
 }, settings).attach()
 
 export function mutateMyriad(newMyriad = generated) {

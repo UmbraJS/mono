@@ -1,12 +1,13 @@
 import tinycolor from "tinycolor2"
 import { pickContrast, rangeShader } from "./primitives/color"
 import { adjust } from "./adjust"
-import { settings } from "./store"
+
 import { 
   MyriadAdjusted, 
   MyriadGenerated, 
   GeneratedColor, 
-  DynamicObject 
+  DynamicObject,
+  Shade
 } from "./store/types"
 
 interface ColorRange {
@@ -14,16 +15,22 @@ interface ColorRange {
   contrast: tinycolor.Instance,
 }
 
-function shade(colors: ColorRange, range = [30, 50]) {
+const isNumber = (value: string | number) => { 
+  return Boolean(typeof value === 'number')
+}
+
+function shade(colors: ColorRange, range: (number | string)[]) {
   const { color, contrast } = colors
   let shades: DynamicObject = {}
   range.forEach((val, i) => {
-    shades[i * 10 + 10] = rangeShader(color, contrast, val)
+    shades[i * 10 + 10] = isNumber(val) 
+      ? rangeShader(color, contrast, val as number) 
+      : tinycolor(val as string)
   })
   return shades
 }
 
-export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range = [20, 50]): GeneratedColor => {
+export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range: Shade[] = [10, 20, 50]): GeneratedColor => {
   //Generic color object with all its auto generated color variations
   return {
     color: colors.color,
@@ -39,7 +46,7 @@ function background(scheme: MyriadAdjusted) {
   return ColorObj({
     color: background, 
     contrast: foreground || background,
-  }, scheme, settings?.background?.shade)
+  }, scheme, scheme.input.settings?.background?.shade)
 }
 
 function foreground(scheme: MyriadAdjusted) {
@@ -48,7 +55,7 @@ function foreground(scheme: MyriadAdjusted) {
   return ColorObj({
     color: foreground, 
     contrast: background || foreground
-  }, scheme, settings?.foreground?.shade)
+  }, scheme, scheme.input.settings?.foreground?.shade)
 }
 
 function accents(scheme: MyriadAdjusted): GeneratedColor[] | undefined {
@@ -56,7 +63,7 @@ function accents(scheme: MyriadAdjusted): GeneratedColor[] | undefined {
     return ColorObj({color, contrast: tinycolor.mostReadable(color, [
       scheme.background || color,
       scheme.foreground || color,
-    ])}, scheme, settings?.foreground?.shade)
+    ])}, scheme, scheme.input.settings?.foreground?.shade)
   }) 
 }
 

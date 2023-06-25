@@ -52,8 +52,10 @@ export interface ColorList {
   [key: string]: customColor
 }
 
+export type Shade = number | string
+
 export interface SettingType {
-  shade?: number[]
+  shade?: Shade[]
 }
 
 export interface MyriadSettings {
