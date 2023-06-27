@@ -24,7 +24,7 @@ export class AccentPallet extends HTMLElement {
           return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>
-              <div class="contrast pallet" style="background: var(--accent-contrast)"></div>
+              <div id="${fl.contrast.isDark()}" class="contrast pallet" style="background: var(--accent-contrast)"></div>
             </div>
           `
         }))}

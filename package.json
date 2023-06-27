@@ -1,6 +1,6 @@
 {
   "name": "@myriadjs/core",
-  "version": "0.0.9",
+  "version": "0.0.92",
   "description": "MyriadJS is a flexible theme managment library that allows you to create semantic color themes that are easy to change retroactivley",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
