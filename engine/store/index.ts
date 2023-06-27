@@ -5,8 +5,8 @@ export let generated: MyriadGenerated | null = null
 export let settings: MyriadSettings = {
   readability: 21,
   iterations: 15,
-  foreground: setting({ shade: [20, 50]}),
-  background: setting({ shade: [10, 30]}),
+  foreground: setting({ shade: [17, 27, 40]}),
+  background: setting({ shade: [4, 8, 17]}),
   accents: setting(),
 }
 

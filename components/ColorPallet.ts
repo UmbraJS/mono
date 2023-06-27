@@ -18,6 +18,7 @@ export class ColorPallet extends HTMLElement {
           flex-direction: column;
           width: 50px;
           border: 1px solid var(--foreground);
+          box-sizing:border-box
         }
     
         div.pallets.reverse {

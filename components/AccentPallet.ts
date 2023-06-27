@@ -12,10 +12,10 @@ export class AccentPallet extends HTMLElement {
         }
 
         .contrast {
-          display: none;
           height: 50px;
           aspect-ratio: 1 / 1;
           border: 1px solid var(--foreground);
+          border-top: 0px solid var(--foreground);
           box-sizing: border-box;
         }
       </style>
@@ -24,7 +24,7 @@ export class AccentPallet extends HTMLElement {
           return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>
-              <div class="contrast pallet" style="background: ${fl.contrast}"></div>
+              <div class="contrast pallet" style="background: var(--accent-contrast)"></div>
             </div>
           `
         }))}
