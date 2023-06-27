@@ -36,34 +36,37 @@ export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range: Shad
     color: colors.color,
     shade: shade(colors, range),
     contrast: pickContrast(colors.color, scheme)
-    //add ratings object / or maybe make the rating a function
+    //TODO: add ratings object / or maybe make the rating a function
   }
 }
 
 function background(scheme: MyriadAdjusted) {
   if(!scheme.background) return
+  const shades = scheme.input.settings?.background?.shade
   const { background, foreground } = scheme
   return ColorObj({
     color: background, 
     contrast: foreground || background,
-  }, scheme, scheme.input.settings?.background?.shade)
+  }, scheme, shades)
 }
 
 function foreground(scheme: MyriadAdjusted) {
   if(!scheme.foreground) return
+  const shades = scheme.input.settings?.foreground?.shade
   const { background, foreground } = scheme
   return ColorObj({
     color: foreground, 
     contrast: background || foreground
-  }, scheme, scheme.input.settings?.foreground?.shade)
+  }, scheme, shades)
 }
 
 function accents(scheme: MyriadAdjusted): GeneratedColor[] | undefined {
+  const shades = scheme.input.settings?.accents?.shade
   return scheme.accents?.map((color) => {
     return ColorObj({color, contrast: tinycolor.mostReadable(color, [
       scheme.background || color,
       scheme.foreground || color,
-    ])}, scheme, scheme.input.settings?.foreground?.shade)
+    ])}, scheme, shades)
   }) 
 }
 
