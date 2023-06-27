@@ -61,11 +61,6 @@ div.faint {
   transition: .2s;
 }
 
-.range:hover {
-  gap: 1em;
-  outline: solid 3px var(--foreground);
-}
-
 .divider {
   background: var(--foreground-20);
   width: 1px;

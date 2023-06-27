@@ -83,6 +83,7 @@ export const attach = ({
 
   function setAllShades(name: SchemeKey, {color, element}: SetProps) {
     if(!color) return
+    console.log(color.shade)
     Array.from(Object.entries(color.shade)).forEach((shade) => {
       const k = shade[0]
       const value = shade[1]

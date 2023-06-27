@@ -22,6 +22,7 @@ export class ColorPallet extends HTMLElement {
     
         div.pallets.reverse {
           flex-direction: column-reverse;
+          border-top: 0px solid var(--foreground);
         }
     
         div.pallets > div {
@@ -31,12 +32,8 @@ export class ColorPallet extends HTMLElement {
           box-sizing: border-box;
         }
 
-        div.pallets:not(.reverse) .color {
-          border-bottom: 1px solid var(--foreground);
-        }
-
-        div.pallets.reverse .color {
-          border-top: 1px solid var(--foreground);
+        div.pallets:not(.reverse) {
+          border-bottom: 0px solid var(--foreground);
         }
       </style>
       <div class="pallets">

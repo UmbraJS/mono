@@ -61,12 +61,26 @@ function foreground(scheme: MyriadAdjusted) {
 }
 
 function accents(scheme: MyriadAdjusted): GeneratedColor[] | undefined {
-  const shades = scheme.input.settings?.accents?.shade
+  const settings = scheme.input.settings
+  const shades = settings?.accents?.shade || []
+  const foregroundShades = settings?.foreground?.shade || []
+  const backgroundShades = settings?.background?.shade || []
+  const numberOfShades = foregroundShades.length + backgroundShades.length || 6
+  const fraction = 100 / numberOfShades
+
+  const fallbackShades = Array.from({length: numberOfShades}, (_, i) => i * fraction + 10)
+  const newShades = [...shades, ...fallbackShades]
+
+  if(newShades.length > numberOfShades) {
+    const diffirence = Math.abs(newShades.length - numberOfShades)
+    newShades.splice(diffirence, diffirence)
+  }
+
   return scheme.accents?.map((color) => {
     return ColorObj({color, contrast: tinycolor.mostReadable(color, [
       scheme.background || color,
       scheme.foreground || color,
-    ])}, scheme, shades)
+    ])}, scheme, newShades)
   }) 
 }
 
