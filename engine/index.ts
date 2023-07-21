@@ -1,7 +1,7 @@
 // Configs and Utilities
 import { changeSettings, settings, defaultScheme } from './store'
 import type { MyriadGenerated, MyriadInput, MyriadSettings } from './store/types'
-import { attach } from './primitives/distribution'
+import { apply } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
 // Main functions
@@ -10,7 +10,7 @@ import { generate } from './generator'
 
 export interface MyriadOutput {
   colors: MyriadGenerated
-  attach: (element?: HTMLElement) => MyriadOutput
+  apply: (element?: HTMLElement) => MyriadOutput
   isDark: () => boolean
   inverse: () => MyriadOutput
 }
@@ -21,7 +21,7 @@ export function myriadOutput(colors: MyriadGenerated): MyriadOutput {
     colors, 
     isDark: () => isDark(theme),
     inverse: () => myriad(inverse(theme).scheme, theme.settings),
-    attach: (el?: HTMLElement) => attach({
+    apply: (el?: HTMLElement) => apply({
       scheme: colors,
       element: el,
     }),

@@ -3,7 +3,7 @@ import { getReadable } from './engine/primitives/color'
 import { colorAlly } from './engine/plugins/diagnostics'
 import type { MyriadGenerated, GeneratedScheme, MyriadSettings, MyriadScheme, MyriadInput, GeneratedColor } from './engine/store/types'
 import { inverse, isDark } from './engine/primitives/scheme'
-import { attach } from './engine/primitives/distribution'
+import { apply } from './engine/primitives/distribution'
 
 export {
   myriad,
@@ -14,7 +14,7 @@ export {
   colorAlly,
   isDark,
   inverse,
-  attach,
+  apply,
 }
 
 export type {

@@ -15,7 +15,7 @@ function colorFormat(color: tinycolor.Instance) {
   return color.toHexString()
 }
 
-export const attach = ({
+export const apply = ({
   scheme = myriad().colors,
   element = htmlElement,
   format = colorFormat,
@@ -83,7 +83,6 @@ export const attach = ({
 
   function setAllShades(name: SchemeKey, {color, element}: SetProps) {
     if(!color) return
-    console.log(color.shade)
     Array.from(Object.entries(color.shade)).forEach((shade) => {
       const k = shade[0]
       const value = shade[1]
@@ -127,4 +126,4 @@ export const attach = ({
   return myriadOutput(scheme)
 }
 
-export default attach
+export default apply

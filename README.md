@@ -116,7 +116,7 @@ These main colors dictate the entire scheme, and more consisley the main focus s
 
 ### Element
 
-The element the CSS variables should attach to. Defaults to the HTML element
+The element the CSS variables should apply to. Defaults to the HTML element
 
 ### Readability
 

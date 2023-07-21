@@ -15,7 +15,7 @@ export let generated = myriad({
   background: 'white',
   foreground: 'black',
   accents: ['#d9accf'],
-}, settings).attach()
+}, settings).apply()
 
 export function mutateMyriad(newMyriad = generated) {
   generated = newMyriad

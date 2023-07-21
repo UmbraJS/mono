@@ -12,7 +12,7 @@ export class InverseButton extends HTMLElement {
 
       iro.color.hexString = i.scheme.background || '#000000';
 
-      const inversed = myriad(i.scheme, i.settings).attach()
+      const inversed = myriad(i.scheme, i.settings).apply()
       mutateMyriad(inversed)
       handleColorChange(inversed)
     }    
