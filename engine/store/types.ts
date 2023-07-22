@@ -5,7 +5,13 @@ export interface DynamicObject {[key: number]: tinycolor.Instance}
 export interface GeneratedColor {
   color: tinycolor.Instance;
   contrast: tinycolor.Instance;
-  shade: DynamicObject;
+  shades: DynamicObject;
+}
+
+export interface FormatedColor {
+  color: string;
+  contrast: string;
+  shades: string[];
 }
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string

@@ -1,5 +1,5 @@
 import tinycolor from "tinycolor2"
-import { myriad, myriadOutput } from '../..'
+import { myriad } from '../..'
 import { MyriadGenerated, GeneratedColor, ColorList, CustomColor } from '../../store/types'
 import { ColorObj } from "../../generator"
 
@@ -39,27 +39,27 @@ function getCustomColors(scheme: MyriadGenerated, custom?: ColorList, format = c
   return gen.map((c) => {
     const key = Object.keys(c)[0]
     const value = Object.values(c)[0]
-    return {[key]: getColors(value, format)}
+    return getColors(key, value, format)
   })
 }
 
 function getAccentColors(accents: GeneratedColor[], format = colorFormat) {
-  return accents?.map((a) => getColors(a, format))
+  return accents?.map((a) => getColors('accent', a, format))
 }
 
-function getColors(color: GeneratedColor | undefined, format = colorFormat) {
-  const shades = makeTinycolorArray(color?.shade || {})
+function getColors(name: string, color: GeneratedColor | undefined, format = colorFormat) {
+  const shades = makeTinycolorArray(color?.shades || {})
   return {
+    name: name,
     color: format(color?.color || tinycolor('black')),
     contrast: format(color?.contrast || tinycolor('black')),
     shades: shades.map((s) => format(s.value))
   }
 }
 
-function colorFormat(color: tinycolor.Instance) {
+export function colorFormat(color: tinycolor.Instance) {
   return color.toHexString()
 }
-
 
 export const formatOutput = ({
   scheme = myriad().colors,
@@ -67,15 +67,11 @@ export const formatOutput = ({
 }) => {
   const custom = scheme.input.scheme.custom
   const { foreground, background, accents } = scheme
-  if(!background || !foreground || !accents) return myriadOutput(scheme)
-
-
-
-
-  return {
-    foreground: getColors(foreground, format),
-    background: getColors(background, format),
-    accents: getAccentColors(accents, format),
-    custom: getCustomColors(scheme, custom, format),
-  }
+  if(!background || !foreground || !accents) return []
+  return [
+    getColors('foreground', foreground, format),
+    getColors('background', background, format),
+    ...getAccentColors(accents, format),
+    ...getCustomColors(scheme, custom, format),
+  ]
 }

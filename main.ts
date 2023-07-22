@@ -14,9 +14,10 @@ const settings: MyriadSettings = {
 export let generated = myriad({
   background: 'white',
   foreground: 'black',
-  accents: ['#d9accf'],
+  accents: ['#d9accf', '#d9accf', '#d9accf'],
   custom: {
     link: '#d9accf',
+    warning: '#d9accf',
   },
 }, settings).apply()
 

@@ -26,9 +26,9 @@ const getArray = (name?: string, index?: number) => {
 
   if(!color) return []
   if(Array.isArray(color)) {
-    return makeArray(color[index || 0].shade)
+    return makeArray(color[index || 0].shades)
   } else {
-    return makeArray(color.shade)
+    return makeArray(color.shades)
   }
 }
 

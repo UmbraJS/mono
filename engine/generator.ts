@@ -34,7 +34,7 @@ export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range: Shad
   //Generic color object with all its auto generated color variations
   return {
     color: colors.color,
-    shade: shade(colors, range),
+    shades: shade(colors, range),
     contrast: pickContrast(colors.color, scheme)
     //TODO: add ratings object / or maybe make the rating a function
   }
