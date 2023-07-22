@@ -1,12 +1,20 @@
 import tinycolor from "tinycolor2"
-import { myriad, myriadOutput } from '..'
-import { MyriadGenerated, SchemeKey, GeneratedColor, ColorList, customColor } from '../store/types'
-import  { accent } from "../adjust"
-import { ColorObj } from "../generator"
+import { myriad, myriadOutput } from '../..'
+import { MyriadGenerated, SchemeKey, GeneratedColor, ColorList, CustomColor } from '../../store/types'
+import  { accent } from "../../adjust"
+import { ColorObj } from "../../generator"
+import { formatOutput } from "./format"
 
 interface SetProps {
-  color?: GeneratedColor,
-  element: HTMLElement
+  color?: GeneratedColor;
+  element: HTMLElement;
+}
+
+const makeArray = (obj: ColorList): ColorList[] => {
+  const objArray = Object.entries(obj)
+  return objArray.map(([key, value]) => {
+    return {[key]: value}
+  })
 }
 
 const htmlElement = typeof document === 'undefined' ? null : document.documentElement
@@ -21,7 +29,13 @@ export const apply = ({
   format = colorFormat,
 }) => {
   const { foreground, background, accents } = scheme
-  if(!background || !element) return myriadOutput(scheme)
+  if(!background || !foreground || !accents || !element) return myriadOutput(scheme)
+
+  console.log('apply', formatOutput({scheme}))
+
+  //[x]: translate colors to hex
+  //[0]: set colors as css variables
+  //[0]: attach css variables to element
 
   //Methods
 
@@ -30,13 +44,6 @@ export const apply = ({
     //status: https://caniuse.com/mdn-api_document_adoptedstylesheets
     //guide https://stackoverflow.com/questions/707565/how-do-you-add-css-with-javascript
     element.style.setProperty(name, value)
-  }
-
-  const makeArray = (obj: ColorList): ColorList[] => {
-    const objArray = Object.entries(obj)
-    return objArray.map(([key, value]) => {
-      return {[key]: value}
-    })
   }
 
   const setCustom = (scheme: MyriadGenerated, element: HTMLElement) => {
@@ -51,7 +58,7 @@ export const apply = ({
       })
     }
 
-    const getColorValue = (value: customColor) => {
+    const getColorValue = (value: CustomColor) => {
       let color = value ? value : 'black'
       const origin = scheme.input
       typeof value === 'function'
@@ -59,6 +66,7 @@ export const apply = ({
         : color = accent(value, origin).toHexString()
       return color
     }
+
 
     const colorArray = makeArray(custom)
     const customColors = genCustomColors(colorArray)

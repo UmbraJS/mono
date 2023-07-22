@@ -47,9 +47,9 @@ export interface MyriadAdjusted {
   input: MyriadInput,
 }
 
-export type customColor = string | ((s: MyriadInput) => string)
+export type CustomColor = string | ((s: MyriadInput) => string)
 export interface ColorList {
-  [key: string]: customColor
+  [key: string]: CustomColor
 }
 
 export type Shade = number | string
