@@ -9,6 +9,7 @@ export interface GeneratedColor {
 }
 
 export interface FormatedColor {
+  name: string;
   color: string;
   contrast: string;
   shades: string[];

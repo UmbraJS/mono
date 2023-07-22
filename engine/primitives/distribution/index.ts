@@ -1,80 +1,27 @@
 import { myriad, myriadOutput } from '../..'
-import { SchemeKey, FormatedColor } from '../../store/types'
-import { formatOutput, colorFormat } from "./format"
-
-interface SetProps {
-  color?: FormatedColor;
-  element: HTMLElement;
-}
+import { format, hexFormat } from "./format"
+import { attach } from "./attach"
 
 const htmlElement = typeof document === 'undefined' ? null : document.documentElement
 
 export const apply = ({
   scheme = myriad().colors,
   element = htmlElement,
-  format = colorFormat,
+  formater = hexFormat,
 }) => {
+  const output = myriadOutput(scheme)
   const { foreground, background, accents } = scheme
-  if(!background || !foreground || !accents || !element) return myriadOutput(scheme)
+  if(!background || !foreground || !accents || !element) return output
 
   //[x]: translate colors to hex
   //[0]: set colors as css variables
   //[0]: attach css variables to element
 
-  const setProperty = (name: SchemeKey, value: string, element: HTMLElement) => {
-    //TODO: use adoptedStyleSheets when support reaches 90% - current: 75% (2023-03-23) 
-    //status: https://caniuse.com/mdn-api_document_adoptedstylesheets
-    //guide https://stackoverflow.com/questions/707565/how-do-you-add-css-with-javascript
-    element.style.setProperty(name, value)
-  }
+  const formated = format({scheme, formater})
 
-  function setAllShadesx(name: SchemeKey, {color, element}: SetProps) {
-    if(!color) return
-    Array.from(Object.entries(color.shades)).forEach((shade) => {
-      const key = shade[0]
-      const value = shade[1]
-      const token = (+key + 1) * 10
-      const n = '--' + name + '-' + token
-      setProperty(n, value, element)
-    })
-  }
+  attach({formated, element})
 
-  function setContrast(name: SchemeKey | string, {color, element}: SetProps) {
-    if(!color) return
-    const bgfg = name === 'foreground' || name === 'background'
-    if(!bgfg) setProperty('--' + name + '-contrast', color.contrast, element)
-  }
-
-  const setColor = (name: SchemeKey, { color, element }: SetProps) => {
-    if(!color) return
-    if(color instanceof Array) return
-    setProperty('--' + name, color.color, element);
-    setContrast(name, {color, element})
-    setAllShadesx(name, {color, element})
-  }
-
-  let existingAccents = 0
-  function getName(name: string) {
-    if(name === "accent") {
-      existingAccents++
-      if(existingAccents > 1)
-      name = "accent" + existingAccents
-    }
-    return name
-  }
-
-  const fc = formatOutput({scheme, format})
-  fc.forEach((c) => {
-    const name = getName(c.name)
-    setColor(name, {
-      color: c,
-      element,
-    })
-  })
-
-  setProperty('color', 'var(--foreground)', element)
-
-  return myriadOutput(scheme)
+  return output
 }
 
 export default apply

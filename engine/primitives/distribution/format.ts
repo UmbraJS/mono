@@ -6,6 +6,10 @@ import { ColorObj } from "../../generator"
 type DynamicObject = {[key: number]: tinycolor.Instance}
 type TinyColorArray = {name: string, value: tinycolor.Instance}[]
 
+export function hexFormat(color: tinycolor.Instance) {
+  return color.toHexString()
+}
+
 const makeTinycolorArray = (obj: DynamicObject): TinyColorArray => {
   const objArray = Object.entries(obj)
   return objArray.map(([key, value]) => {
@@ -33,45 +37,41 @@ const generateCustomColors = (colors: ColorList, scheme: MyriadGenerated) => {
 }
 
 //Turn tiny colors into actual colors 
-function getCustomColors(scheme: MyriadGenerated, custom?: ColorList, format = colorFormat) {
+function getCustomColors(scheme: MyriadGenerated, custom?: ColorList, formater = hexFormat) {
   if(!custom) return []
   const gen = generateCustomColors(custom, scheme)
   return gen.map((c) => {
     const key = Object.keys(c)[0]
     const value = Object.values(c)[0]
-    return getColors(key, value, format)
+    return getColors(key, value, formater)
   })
 }
 
-function getAccentColors(accents: GeneratedColor[], format = colorFormat) {
-  return accents?.map((a) => getColors('accent', a, format))
+function getAccentColors(accents: GeneratedColor[], formater = hexFormat) {
+  return accents?.map((a) => getColors('accent', a, formater))
 }
 
-function getColors(name: string, color: GeneratedColor | undefined, format = colorFormat) {
+function getColors(name: string, color: GeneratedColor | undefined, formater = hexFormat) {
   const shades = makeTinycolorArray(color?.shades || {})
   return {
     name: name,
-    color: format(color?.color || tinycolor('black')),
-    contrast: format(color?.contrast || tinycolor('black')),
-    shades: shades.map((s) => format(s.value))
+    color: formater(color?.color || tinycolor('black')),
+    contrast: formater(color?.contrast || tinycolor('black')),
+    shades: shades.map((s) => formater(s.value))
   }
 }
 
-export function colorFormat(color: tinycolor.Instance) {
-  return color.toHexString()
-}
-
-export const formatOutput = ({
+export const format = ({
   scheme = myriad().colors,
-  format = colorFormat,
+  formater = hexFormat,
 }) => {
   const custom = scheme.input.scheme.custom
   const { foreground, background, accents } = scheme
   if(!background || !foreground || !accents) return []
   return [
-    getColors('foreground', foreground, format),
-    getColors('background', background, format),
-    ...getAccentColors(accents, format),
-    ...getCustomColors(scheme, custom, format),
+    getColors('foreground', foreground, formater),
+    getColors('background', background, formater),
+    ...getAccentColors(accents, formater),
+    ...getCustomColors(scheme, custom, formater),
   ]
 }
