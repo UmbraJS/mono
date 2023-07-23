@@ -20,7 +20,7 @@ function shadeArray(el: Element | null, name?: string, index?: number) {
   
   if(!pallet) return
 
-  shades.forEach((shade, index) => {
+  shades.forEach((_, index) => {
     if(name === 'accents') name = 'accent'
     const value = `var(--${name}-${index})`
     const div = document.createElement('div')

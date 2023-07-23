@@ -4,6 +4,7 @@ import { MyriadOutput } from '../store/types'
 
 //Composition Functions
 export const colorAlly = (scheme: MyriadOutput) => {
+  console.log(scheme)
   // const bg = background.color
   // const fg = foreground.color
   // const ac = accents[0].color
