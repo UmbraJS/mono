@@ -1,7 +1,6 @@
 import { myriad } from '../..'
 import { format, hexFormat } from "./format"
-
-const htmlElement = typeof document === 'undefined' ? null : document.documentElement
+import { htmlElement } from "./attach"
 
 export const apply = ({
   output = myriad().output,
@@ -9,7 +8,7 @@ export const apply = ({
   formater = hexFormat,
 }) => {
   if(!element) return output
-  format({element, output, formater}).attach()
+  format({output, formater}).attach(element)
   return output
 }
 

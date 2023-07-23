@@ -41,4 +41,3 @@ export type {
   Formater,
   FormatedColor
 }
-

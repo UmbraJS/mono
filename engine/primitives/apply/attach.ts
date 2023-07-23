@@ -1,7 +1,10 @@
 import { SchemeKey } from '../../store/types'
 import { FlattenColor } from './format'
 
-export function attach({flattened, element}: {flattened: FlattenColor[], element: HTMLElement}) {
+export const htmlElement = typeof document === 'undefined' ? null : document.documentElement
+
+export function attach({flattened, element = htmlElement}: {flattened: FlattenColor[], element?: HTMLElement | null}) {
+  if(!element) return flattened
 
   flattened.forEach(({ name, color }) => {
     setProperty(element, { name, color });

@@ -4,6 +4,7 @@ import type { MyriadOutput, MyriadInput, MyriadSettings } from './store/types'
 
 //Primitives
 import { apply } from './primitives/apply'
+import { format, FormatObject, Formater } from './primitives/apply/format'
 import { inverse, isDark } from './primitives/scheme'
 
 // Main functions
@@ -13,8 +14,9 @@ import { generate } from './generator'
 export interface Myriad {
   output: MyriadOutput
   apply: (element?: HTMLElement) => MyriadOutput
+  format: (formater?: Formater) => FormatObject
+  inverse: () => Myriad,
   isDark: () => boolean
-  inverse: () => Myriad
 }
 
 export function myriadObject(generated: MyriadOutput): Myriad {
@@ -29,9 +31,10 @@ export function myriadObject(generated: MyriadOutput): Myriad {
 
   return {
     output,
-    isDark: () => isDark(theme),
+    apply: (element?: HTMLElement, formater?: Formater) => apply({ element, output, formater }),
+    format: (formater?: Formater) => format({ output, formater }),
     inverse: () => myriad(inverse(theme).scheme, theme.settings),
-    apply: (element?: HTMLElement) => apply({ output, element }),
+    isDark: () => isDark(theme)
   }
 }
 

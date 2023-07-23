@@ -8,11 +8,17 @@ export type Formater = (color: tinycolor.Instance) => string
 interface FormatProps {
   output: MyriadOutput;
   formater?: Formater;
-  element: HTMLElement;
+  element?: HTMLElement;
+}
+
+export interface FormatObject {
+  attach: (element?: HTMLElement) => FlattenColor[];
+  flattened: FlattenColor[];
+  formated: FormatedColor[];
+  output: MyriadOutput;
 }
 
 export const format = ({
-  element,
   output = myriad().output,
   formater = hexFormat,
 }: FormatProps) => {
@@ -24,11 +30,11 @@ export const format = ({
   })
 
   return {
-    attach: () => attach({flattened, element}),
+    attach: (element) => attach({flattened, element}),
     flattened,
     formated,
     output
-  }
+  } as FormatObject
 }
 
 //Formating logic
