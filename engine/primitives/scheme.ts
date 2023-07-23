@@ -3,7 +3,7 @@ import type { MyriadInput, MyriadScheme } from '../store/types'
 import { foreground } from '../adjust'
 import { increaseContrastUntil, getReadability } from './color'
 
-function inverseValidator(theme: MyriadInput): MyriadScheme {
+function inverseValidator(theme: MyriadInput) {
   const fgDark = tinycolor(theme.scheme.foreground).isDark()
   const bgDark = tinycolor(theme.scheme.background).isDark()
 

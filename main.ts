@@ -11,7 +11,7 @@ const settings: MyriadSettings = {
   readability: 4,
 }
 
-export let generated = myriad({
+export let output = myriad({
   background: 'white',
   foreground: 'black',
   accents: ['#d9accf', '#d9accf', '#d9accf'],
@@ -21,12 +21,12 @@ export let generated = myriad({
   },
 }, settings).apply()
 
-export function mutateMyriad(newMyriad = generated) {
-  generated = newMyriad
+export function mutateMyriad(newMyriad = output) {
+  output = newMyriad
 }
 
 export const iro = new (window as any).iro.ColorPicker("#picker", {
-  color: generated.colors.input.scheme.background,
+  color: output.input.scheme.background,
   layout: [
     { 
       component: (window as any).iro.ui.Box,

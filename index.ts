@@ -1,7 +1,8 @@
-import { myriad, subScheme, randomMyriad, randomScheme, MyriadOutput } from "./engine/index"
+import { myriad, subScheme, Myriad } from "./engine/index"
+import { randomMyriad, randomScheme } from './engine/primitives/utils'
 import { getReadable } from './engine/primitives/color'
 import { colorAlly } from './engine/plugins/diagnostics'
-import type { MyriadGenerated, GeneratedScheme, MyriadSettings, MyriadScheme, MyriadInput, GeneratedColor } from './engine/store/types'
+import type { MyriadOutput, MyriadSettings, MyriadScheme, MyriadInput, GeneratedColor } from './engine/store/types'
 import { inverse, isDark } from './engine/primitives/scheme'
 import { apply } from './engine/primitives/distribution'
 
@@ -18,11 +19,10 @@ export {
 }
 
 export type {
+  Myriad,
   MyriadInput,
-  MyriadOutput,
   MyriadScheme,
   MyriadSettings,
-  MyriadGenerated,
-  GeneratedScheme,
+  MyriadOutput,
   GeneratedColor,
 }

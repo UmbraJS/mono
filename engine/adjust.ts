@@ -55,7 +55,7 @@ export const adjust = (theme = defaultTheme): MyriadAdjusted => {
   return {
     background: background(theme),
     foreground: foreground(theme),
-    accents: theme.scheme.accents?.map((fl) => accent(fl, theme)),
+    accents: theme.scheme.accents.map((fl) => accent(fl, theme)),
     input: theme,
   }
 }

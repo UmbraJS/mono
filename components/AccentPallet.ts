@@ -1,8 +1,12 @@
 import { shadowDOM, stringMap } from './shadow'
-import { generated } from '../main'
+import { output } from '../main'
 
 export class AccentPallet extends HTMLElement {
   constructor() {
+    const accents = output.generated.filter((c) => c.name === 'accent')
+
+    console.log(accents)
+
     super()
     shadowDOM(this, `
       <style>
@@ -20,7 +24,7 @@ export class AccentPallet extends HTMLElement {
         }
       </style>
       <div class="accents">
-        ${stringMap(generated.colors.accents?.map((fl, index) => {
+        ${stringMap(accents?.map((fl, index) => {
           return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>

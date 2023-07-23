@@ -1,6 +1,8 @@
 // Configs and Utilities
 import { changeSettings, settings, defaultScheme } from './store'
-import type { MyriadGenerated, MyriadInput, MyriadSettings } from './store/types'
+import type { MyriadOutput, MyriadInput, MyriadSettings } from './store/types'
+
+//Primitives
 import { apply } from './primitives/distribution'
 import { inverse, isDark } from './primitives/scheme'
 
@@ -8,63 +10,38 @@ import { inverse, isDark } from './primitives/scheme'
 import { adjust } from './adjust'
 import { generate } from './generator'
 
-export interface MyriadOutput {
-  colors: MyriadGenerated
+export interface Myriad {
+  output: MyriadOutput
   apply: (element?: HTMLElement) => MyriadOutput
   isDark: () => boolean
-  inverse: () => MyriadOutput
+  inverse: () => Myriad
 }
 
-export function myriadOutput(colors: MyriadGenerated): MyriadOutput {
-  const theme = colors.input
+export function myriadObject(generated: MyriadOutput): Myriad {
+  const theme = generated.input
+  
+  const colors = generated.generated
+
+  const output: MyriadOutput = {
+    input: generated.input,
+    adjusted: generated.adjusted,
+    generated: colors,
+  }
+
   return {
-    colors, 
+    output,
     isDark: () => isDark(theme),
     inverse: () => myriad(inverse(theme).scheme, theme.settings),
-    apply: (el?: HTMLElement) => apply({
-      scheme: colors,
-      element: el,
-    }),
+    apply: (element?: HTMLElement) => apply({ output, element }),
   }
 }
 
 export function myriad(scheme = defaultScheme, s = settings) {
   if(s) changeSettings(s)
-  return myriadOutput(generate(adjust({
+  return myriadObject(generate(adjust({
     scheme: scheme,
     settings: s,
   })))
-}
-
-export function randomHex() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`
-}
-
-interface RandomMyriadProps extends MyriadSettings {
-  amount: number
-}
-
-export function randomScheme(props: RandomMyriadProps = { amount: 1 }): MyriadInput {
-  const scheme = {
-    background: randomHex(),
-    foreground: randomHex(),
-    accents: Array.from({ length: props.amount }, () => randomHex()),
-  }
-
-  return {
-    scheme,
-    settings: {
-      ...settings,
-      ...props,
-    },
-  }
-}
-
-export function randomMyriad(props: RandomMyriadProps = { amount: 1 }) {
-  const theme = randomScheme(props)
-  return myriad({
-    ...theme.scheme,
-  })
 }
 
 interface SubSchemeProps {

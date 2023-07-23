@@ -1,5 +1,4 @@
 import { shadowDOM, setColor } from './shadow'
-import { generated } from '../main'
 
 export class ColorPallet extends HTMLElement {
   static properties = {
@@ -42,8 +41,9 @@ export class ColorPallet extends HTMLElement {
       </div>
     `)
 
+
     if(name === 'foreground') setColor(shadow, name)
-    if(name === 'background') setColor(shadow, name)?.reverse()  
-    if(name === 'accents' && generated.colors.accents) setColor(shadow, name, index)
+    if(name === 'background') setColor(shadow, name).reverse()  
+    if(name === 'accents') setColor(shadow, name, index)
   }
 }

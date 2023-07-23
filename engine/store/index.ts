@@ -1,6 +1,6 @@
-import { MyriadInput, MyriadScheme, MyriadGenerated, MyriadSettings, SettingType } from './types'
+import { MyriadInput, MyriadScheme, MyriadOutput, MyriadSettings, SettingType } from './types'
 
-export let generated: MyriadGenerated | null = null
+export let generated: MyriadOutput | null = null
 
 export let settings: MyriadSettings = {
   readability: 21,
