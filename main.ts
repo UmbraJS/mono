@@ -16,8 +16,8 @@ export let output = myriad({
   foreground: 'black',
   accents: ['#d9accf', '#41e980', '#d9accf'],
   custom: {
-    link: '#d9accf',
-    warning: '#d9accf',
+    link: '#03A9F4',
+    warning: '#e91e63',
   },
 }, settings).apply()
 

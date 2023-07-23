@@ -61,9 +61,8 @@ function foreground(scheme: MyriadAdjusted) {
   }, scheme, shades)
 }
 
-function accents(scheme: MyriadAdjusted) {
+export function accentShades(scheme: MyriadAdjusted, shades: Shade[] = []) {
   const settings = scheme.input.settings
-  const shades = settings?.accents?.shade || []
   const foregroundShades = settings?.foreground?.shade || []
   const backgroundShades = settings?.background?.shade || []
   const numberOfShades = foregroundShades.length + backgroundShades.length || 6
@@ -77,6 +76,12 @@ function accents(scheme: MyriadAdjusted) {
     newShades.splice(diffirence, diffirence)
   }
 
+  return newShades
+}
+
+function accents(scheme: MyriadAdjusted) {
+  const shades = scheme.input.settings?.accents?.shade
+  const newShades = accentShades(scheme, shades)
   return scheme.accents.map((color) => {
     return ColorObj({color, contrast: tinycolor.mostReadable(color, [
       scheme.background || color,
@@ -95,13 +100,15 @@ function getCustomColorValue(value: CustomColor, obj: GeneratedObject): string {
 }
 
 const generateCustomColors = (colors: ColorList, obj: GeneratedObject) => {
+  const adjusted = obj.adjusted
+  const shades = accentShades(adjusted)
   const objArray = Object.entries(colors)
   return objArray.map(([key, value]) => {
     let color = getCustomColorValue(value, obj)
     return {name: key, ...ColorObj({
       color: tinycolor(color),
       contrast: tinycolor(color)
-    }, obj.adjusted)}
+    }, adjusted, shades)}
   })
 }
 
