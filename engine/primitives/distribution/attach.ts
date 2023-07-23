@@ -48,6 +48,8 @@ export function attach({formated, element}: {formated: FormatedColor[], element:
     return name
   }
 
+  //TODO: make an array of all css variables. And then use that array to set all variables instead
+
   formated.forEach((c) => {
     const name = getName(c.name)
     setColor(name, {
