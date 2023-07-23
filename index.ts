@@ -1,13 +1,23 @@
-import { myriad, subScheme, Myriad } from "./engine/index"
+import { myriad, myriadObject, subScheme, Myriad } from "./engine/index"
 import { randomMyriad, randomScheme } from './engine/primitives/utils'
+import { format, FlattenColor, Formater } from './engine/primitives/apply/format'
+import { attach } from './engine/primitives/apply/attach'
 import { getReadable } from './engine/primitives/color'
 import { colorAlly } from './engine/plugins/diagnostics'
-import type { MyriadOutput, MyriadSettings, MyriadScheme, MyriadInput, GeneratedColor } from './engine/store/types'
+import type { 
+  MyriadOutput, 
+  MyriadSettings, 
+  MyriadScheme, 
+  MyriadInput, 
+  GeneratedColor, 
+  FormatedColor 
+} from './engine/store/types'
 import { inverse, isDark } from './engine/primitives/scheme'
-import { apply } from './engine/primitives/distribution'
+import { apply } from './engine/primitives/apply'
 
 export {
   myriad,
+  myriadObject,
   subScheme,
   randomMyriad,
   randomScheme,
@@ -16,6 +26,8 @@ export {
   isDark,
   inverse,
   apply,
+  attach,
+  format
 }
 
 export type {
@@ -25,4 +37,8 @@ export type {
   MyriadSettings,
   MyriadOutput,
   GeneratedColor,
+  FlattenColor,
+  Formater,
+  FormatedColor
 }
+

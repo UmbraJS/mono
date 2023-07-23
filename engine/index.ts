@@ -3,7 +3,7 @@ import { changeSettings, settings, defaultScheme } from './store'
 import type { MyriadOutput, MyriadInput, MyriadSettings } from './store/types'
 
 //Primitives
-import { apply } from './primitives/distribution'
+import { apply } from './primitives/apply'
 import { inverse, isDark } from './primitives/scheme'
 
 // Main functions
@@ -19,7 +19,6 @@ export interface Myriad {
 
 export function myriadObject(generated: MyriadOutput): Myriad {
   const theme = generated.input
-  
   const colors = generated.generated
 
   const output: MyriadOutput = {
