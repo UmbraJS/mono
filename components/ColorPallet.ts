@@ -41,7 +41,6 @@ export class ColorPallet extends HTMLElement {
       </div>
     `)
 
-
     if(name === 'foreground') setColor(shadow, name)
     if(name === 'background') setColor(shadow, name).reverse()  
     if(name === 'accents') setColor(shadow, name, index)

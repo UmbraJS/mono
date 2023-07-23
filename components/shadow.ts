@@ -9,14 +9,11 @@ export function shadowDOM(that: any, template: string) {
 }
 
 const getArray = (name: string) => {
-  const genObject = output.generated.filter((c) => c.name === name)
-  return genObject
+  return output.generated.filter((c) => c.name === name)
 }
 
 function shadeArray(el: Element | null, name?: string, index?: number) {
   if(!name || !el) return
-
-  console.log("check", getArray(name), name)
 
   const shades = getArray(name)[index ||0].shades
   const pallet = el
@@ -36,8 +33,8 @@ function shadeArray(el: Element | null, name?: string, index?: number) {
  
 export function setColor(shadow: ShadowRoot, name: string, index?: number) {
   const pallets = shadow.querySelector('.pallets')
-  shadeArray(pallets, name, index)
   if(name === 'accents') name  = 'accent'
+  shadeArray(pallets, name, index)
   
   const colorCSS = `background: var(--${name});`
   shadow.querySelector('.color')?.setAttribute('style', colorCSS)

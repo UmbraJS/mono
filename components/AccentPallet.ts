@@ -4,9 +4,6 @@ import { output } from '../main'
 export class AccentPallet extends HTMLElement {
   constructor() {
     const accents = output.generated.filter((c) => c.name === 'accent')
-
-    console.log(accents)
-
     super()
     shadowDOM(this, `
       <style>
