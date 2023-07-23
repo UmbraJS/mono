@@ -43,26 +43,26 @@ export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range: Shad
 })
 
 //something
-function background(scheme: MyriadAdjusted) {
-  const shades = scheme.input.settings?.background?.shade
-  const { background, foreground } = scheme
+function background(adjusted: MyriadAdjusted) {
+  const shades = adjusted.input.settings?.background?.shade
+  const { background, foreground } = adjusted
   return ColorObj({
     color: background, 
     contrast: foreground || background,
-  }, scheme, shades)
+  }, adjusted, shades)
 }
 
-function foreground(scheme: MyriadAdjusted) {
-  const shades = scheme.input.settings?.foreground?.shade
-  const { background, foreground } = scheme
+function foreground(adjusted: MyriadAdjusted) {
+  const shades = adjusted.input.settings?.foreground?.shade
+  const { background, foreground } = adjusted
   return ColorObj({
     color: foreground, 
     contrast: background || foreground
-  }, scheme, shades)
+  }, adjusted, shades)
 }
 
-export function accentShades(scheme: MyriadAdjusted, shades: Shade[] = []) {
-  const settings = scheme.input.settings
+export function accentShades(adjusted: MyriadAdjusted, shades: Shade[] = []) {
+  const settings = adjusted.input.settings
   const foregroundShades = settings?.foreground?.shade || []
   const backgroundShades = settings?.background?.shade || []
   const numberOfShades = foregroundShades.length + backgroundShades.length || 6
@@ -79,14 +79,14 @@ export function accentShades(scheme: MyriadAdjusted, shades: Shade[] = []) {
   return newShades
 }
 
-function accents(scheme: MyriadAdjusted) {
-  const shades = scheme.input.settings?.accents?.shade
-  const newShades = accentShades(scheme, shades)
-  return scheme.accents.map((color) => {
+function accents(adjusted: MyriadAdjusted) {
+  const shades = adjusted.input.settings?.accents?.shade
+  const newShades = accentShades(adjusted, shades)
+  return adjusted.accents.map((color) => {
     return ColorObj({color, contrast: tinycolor.mostReadable(color, [
-      scheme.background || color,
-      scheme.foreground || color,
-    ])}, scheme, newShades)
+      adjusted.background || color,
+      adjusted.foreground || color,
+    ])}, adjusted, newShades)
   }) 
 }
 
@@ -138,14 +138,15 @@ function formatScheme(obj: GeneratedObject): MyriadOutput  {
   }
 }
 
-export const generate = (scheme = adjust()): MyriadOutput => {
+export const generate = (adjusted = adjust()): MyriadOutput => {
+  const input = adjusted.input
   return formatScheme({
-    input: scheme.input,
-    adjusted: scheme,
+    input,
+    adjusted,
     generated: {
-      background: background(scheme),
-      foreground: foreground(scheme),
-      accents: accents(scheme),
+      background: background(adjusted),
+      foreground: foreground(adjusted),
+      accents: accents(adjusted),
     }
   })
 }
