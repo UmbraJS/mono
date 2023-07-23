@@ -1,6 +1,6 @@
 import { myriad, myriadObject, subScheme, Myriad } from "./engine/index"
 import { randomMyriad, randomScheme } from './engine/primitives/utils'
-import { format, FlattenColor, Formater } from './engine/primitives/apply/format'
+import { format, FlattenColor, Formater, hexFormat, rgbStrippedFormat, hslFormat } from './engine/primitives/apply/format'
 import { attach } from './engine/primitives/apply/attach'
 import { getReadable } from './engine/primitives/color'
 import { colorAlly } from './engine/plugins/diagnostics'
@@ -27,7 +27,10 @@ export {
   inverse,
   apply,
   attach,
-  format
+  format, 
+  hexFormat, 
+  rgbStrippedFormat, 
+  hslFormat
 }
 
 export type {

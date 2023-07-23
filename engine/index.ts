@@ -1,5 +1,5 @@
 // Configs and Utilities
-import { changeSettings, settings, defaultScheme } from './store'
+import { settings, defaultScheme } from './store'
 import type { MyriadOutput, MyriadInput, MyriadSettings } from './store/types'
 
 //Primitives
@@ -39,10 +39,12 @@ export function myriadObject(generated: MyriadOutput): Myriad {
 }
 
 export function myriad(scheme = defaultScheme, s = settings) {
-  if(s) changeSettings(s)
   return myriadObject(generate(adjust({
     scheme: scheme,
-    settings: s,
+    settings: {
+      ...settings,
+      ...s,
+    },
   })))
 }
 

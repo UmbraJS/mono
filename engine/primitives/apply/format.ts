@@ -20,7 +20,7 @@ export interface FormatObject {
 
 export const format = ({
   output = myriad().output,
-  formater = hexFormat,
+  formater = defaultFormater,
 }: FormatProps) => {
   const gen = output.generated
   const formated = gen.map((c) => getColors(c.name, c, formater))
@@ -41,8 +41,20 @@ export const format = ({
 type DynamicObject = {[key: number]: tinycolor.Instance}
 type TinyColorArray = {name: string, value: tinycolor.Instance}[]
 
+
+export const defaultFormater = hexFormat
+
 export function hexFormat(color: tinycolor.Instance) {
   return color.toHexString()
+}
+
+export function rgbStrippedFormat(color: tinycolor.Instance) {
+  const rgba = color.toRgb()
+  return `${rgba.r} ${rgba.g} ${rgba.b}`
+}
+
+export function hslFormat(color: tinycolor.Instance) {
+  return color.toHslString()
 }
 
 const makeTinycolorArray = (obj: DynamicObject): TinyColorArray => {
@@ -52,7 +64,7 @@ const makeTinycolorArray = (obj: DynamicObject): TinyColorArray => {
   })
 }
 
-function getColors(name: string, color: GeneratedColor | undefined, formater = hexFormat) {
+function getColors(name: string, color: GeneratedColor | undefined, formater = defaultFormater) {
   const shades = makeTinycolorArray(color?.shades || {})
   return {
     name: name,
