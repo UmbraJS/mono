@@ -38,12 +38,12 @@ export function myriadObject(generated: MyriadOutput): Myriad {
   }
 }
 
-export function myriad(scheme = defaultScheme, s = settings) {
+export function myriad(scheme = defaultScheme, passedSettings = settings) {
   return myriadObject(generate(adjust({
     scheme: scheme,
     settings: {
       ...settings,
-      ...s,
+      ...passedSettings,
     },
   })))
 }

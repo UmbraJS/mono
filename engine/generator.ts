@@ -22,6 +22,13 @@ const isNumber = (value: string | number) => {
   return Boolean(typeof value === 'number')
 }
 
+function findContrast(color: tinycolor.Instance, adjusted: MyriadAdjusted) {
+  return tinycolor.mostReadable(color, [
+    adjusted.background || color,
+    adjusted.foreground || color,
+  ])
+}
+
 function shade(colors: ColorRange, range: (number | string)[]) {
   const { color, contrast } = colors
   let shades: tinycolor.Instance[] = []
@@ -34,6 +41,7 @@ function shade(colors: ColorRange, range: (number | string)[]) {
 
   return shades
 }
+
 
 export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range: Shade[] = [10, 20, 50]) => ({
   color: colors.color,
@@ -82,21 +90,20 @@ export function accentShades(adjusted: MyriadAdjusted, shades: Shade[] = []) {
 function accents(adjusted: MyriadAdjusted) {
   const shades = adjusted.input.settings?.accents?.shade
   const newShades = accentShades(adjusted, shades)
+
   return adjusted.accents.map((color) => {
-    return ColorObj({color, contrast: tinycolor.mostReadable(color, [
-      adjusted.background || color,
-      adjusted.foreground || color,
-    ])}, adjusted, newShades)
+    const contrast = findContrast(color, adjusted)
+    return ColorObj({color, contrast}, adjusted, newShades)
   }) 
 }
 
 //something
-function getCustomColorValue(value: CustomColor, obj: GeneratedObject): string {
+function getCustomColorValue(value: CustomColor, obj: GeneratedObject) {
   let color = value;
   const origin = obj.input
   const isFunc = typeof value === 'function'
   if(isFunc) color = value(origin)
-  return color as string
+  return tinycolor(color as string)
 }
 
 const generateCustomColors = (colors: ColorList, obj: GeneratedObject) => {
@@ -105,11 +112,11 @@ const generateCustomColors = (colors: ColorList, obj: GeneratedObject) => {
   const objArray = Object.entries(colors)
   return objArray.map(([key, value]) => {
     let color = getCustomColorValue(value, obj)
-    return {name: key, ...ColorObj({
-      color: tinycolor(color),
-      contrast: tinycolor(color)
-    }, adjusted, shades)}
+    const contrast = findContrast(color, adjusted)
+    const object = ColorObj({color, contrast}, adjusted, shades)
+    return {name: key, ...object}
   })
+  
 }
 
 interface GeneratedObject {

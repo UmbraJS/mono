@@ -6,7 +6,13 @@ export const htmlElement = typeof document === 'undefined' ? null : document.doc
 export function attach({flattened, element = htmlElement}: {flattened: FlattenColor[], element?: HTMLElement | null}) {
   if(!element) return flattened
 
+  function invalidColor(name: string) {
+    const regex = /(?:background|foreground).*contrast/i;
+    return regex.test(name);
+  }
+
   flattened.forEach(({ name, color }) => {
+    if(invalidColor(name)) return;
     setProperty(element, { name, color });
   })
 
