@@ -13,7 +13,7 @@ import { generate } from './generator'
 
 export interface Myriad {
   output: MyriadOutput
-  apply: (element?: HTMLElement) => MyriadOutput
+  apply: (element?: HTMLElement, formater?: Formater) => MyriadOutput
   format: (formater?: Formater) => FormatObject
   inverse: () => Myriad,
   isDark: () => boolean
@@ -31,7 +31,7 @@ export function myriadObject(generated: MyriadOutput): Myriad {
 
   return {
     output,
-    apply: (element?: HTMLElement, formater?: Formater) => apply({ element, output, formater }),
+    apply: (element, formater) => apply({ element, output, formater }),
     format: (formater?: Formater) => format({ output, formater }),
     inverse: () => myriad(inverse(theme).scheme, theme.settings),
     isDark: () => isDark(theme)
