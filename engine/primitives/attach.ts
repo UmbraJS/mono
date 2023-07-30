@@ -131,4 +131,3 @@ interface SetProperty {
 const setProperty = (element: HTMLElement, { name, color }: SetProperty) => {
   element.style.setProperty(name, color)
 }
-

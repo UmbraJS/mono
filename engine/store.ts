@@ -8,7 +8,6 @@ export let settings: UmbraSettings = {
   foreground: setting({ shade: [30, 60, 70]}),
   background: setting({ shade: [10, 17, 23]}),
   accents: setting(),
-  aliases: undefined,
 }
 
 function setting(passed?: SettingType) {

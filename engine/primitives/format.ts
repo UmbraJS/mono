@@ -133,5 +133,32 @@ function flattenColors({formated, prefix}: FlattenColors) {
     })
   }
 
-  return flattened
+  return sortFlattened(flattened)
+}
+
+
+function sortFlattened(flattened: FlattenColor[]) {
+  const foregroundPrefix = "--foreground";
+  const backgroundPrefix = "--background";
+  
+  // Extract foreground and background shades from the original array
+  const background = flattened.filter(item => item.name.startsWith(backgroundPrefix));
+  const foreground= flattened.filter(item => item.name.startsWith(foregroundPrefix));
+  const rest = flattened.filter(item => !item.name.startsWith(backgroundPrefix) && !item.name.startsWith(foregroundPrefix));
+    
+  // Combine the sorted foreground and background shades to form the desired order
+  const ordered = [
+    ...background,
+    ...foreground.reverse(),
+    ...rest
+  ];
+
+  const filtered = ordered.filter(({name}) => !invalidColor(name))
+
+  function invalidColor(name: string) {
+    const regex = /(?:background|foreground).*contrast/i;
+    return regex.test(name);
+  }
+  
+  return filtered
 }

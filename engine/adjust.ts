@@ -5,7 +5,7 @@ import tinycolor from "tinycolor2"
 import { invert } from './primitives/utils'
 import { getReadable } from './primitives/color'
 import { defaultTheme } from './store'
-import { UmbraAdjusted, UmbraInput } from './store/types'
+import { UmbraAdjusted, UmbraInput } from './types'
 
 const fallback = tinycolor.random()
 const defaultBG = tinycolor('white')

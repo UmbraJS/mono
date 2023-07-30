@@ -10,7 +10,7 @@ import {
   ColorList,
   UmbraInput,
   ColorObject
-} from "./store/types"
+} from "./types"
 
 interface ColorRange {
   color: tinycolor.Instance,
