@@ -1,7 +1,7 @@
 import tinycolor from "tinycolor2"
 import { settings } from '../store'
 import { umbra } from '../'
-import { UmbraInput, UmbraSettings } from '../store/types'
+import { UmbraInput, UmbraSettings } from '..//types'
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color

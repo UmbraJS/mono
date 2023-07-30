@@ -1,5 +1,5 @@
 import tinycolor from 'tinycolor2'
-import type { UmbraInput, UmbraScheme } from '../store/types'
+import type { UmbraInput, UmbraScheme } from '../types'
 import { foreground } from '../adjust'
 import { increaseContrastUntil, getReadability } from './color'
 
