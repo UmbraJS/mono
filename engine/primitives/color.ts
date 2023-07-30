@@ -1,7 +1,7 @@
 import { UmbraAdjusted } from '../types'
 import { settings } from '../store'
 import tinycolor from "tinycolor2"
-//import { calcAPCA  } from 'apca-w3';
+import { calcAPCA  } from 'apca-w3';
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color
@@ -31,16 +31,21 @@ const stored = {
   iterations: settings.iterations || 15,
 }
 
-// type RGB = [number, number, number]
+type RGB = [number, number, number]
 
-// function APCAcolor(color: Colour): RGB {
-//   const rgba = tinycolor(color).toRgb()
-//   return [rgba.r, rgba.g, rgba.b]
-// }
+function APCAcolor(color: Colour): RGB {
+  const rgba = tinycolor(color).toRgb()
+  return [rgba.r, rgba.g, rgba.b]
+}
+
+export function APCAcontrast(col: Colour, bg: Colour) {
+  return calcAPCA(APCAcolor(col), APCAcolor(bg));
+}
 
 export const getReadability = (col: Colour, bg: Colour) => {
   //TODO: use APCA to calculate contrast
-  //let contrastLc = calcAPCA(APCAcolor(col), APCAcolor(bg));
+  // let contrastLc = APCAcontrast(col, bg)
+  // console.log(contrastLc, tinycolor.readability(col, bg))
   return tinycolor.readability(col, bg)
 }
 
