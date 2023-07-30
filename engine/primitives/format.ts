@@ -115,12 +115,11 @@ function flattenColors({formated, prefix}: FlattenColors) {
     const color = c.color
 
     flattened.push({ name, color })
+    flattened.push(...flattenShades(c.shades, name))
     flattened.push({
       name: name + '-contrast',
       color: c.contrast,
     })
-
-    flattened.push(...flattenShades(c.shades, name))    
   })
 
   function flattenShades(shades: any[], name: string) {
