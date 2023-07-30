@@ -1,9 +1,9 @@
 import tinycolor from 'tinycolor2'
-import type { MyriadInput, MyriadScheme } from '../store/types'
+import type { UmbraInput, UmbraScheme } from '../store/types'
 import { foreground } from '../adjust'
 import { increaseContrastUntil, getReadability } from './color'
 
-function inverseValidator(theme: MyriadInput) {
+function inverseValidator(theme: UmbraInput) {
   const fgDark = tinycolor(theme.scheme.foreground).isDark()
   const bgDark = tinycolor(theme.scheme.background).isDark()
 
@@ -42,7 +42,7 @@ function inverseValidator(theme: MyriadInput) {
   }
 }
 
-function basicInverse(scheme: MyriadScheme): MyriadScheme {
+function basicInverse(scheme: UmbraScheme): UmbraScheme {
   return {
     ...scheme,
     background: scheme.foreground,
@@ -50,7 +50,7 @@ function basicInverse(scheme: MyriadScheme): MyriadScheme {
   }
 }
 
-function makeInverse(theme: MyriadInput): MyriadInput {
+function makeInverse(theme: UmbraInput): UmbraInput {
   const inversed = basicInverse(theme.scheme)
   return {
     inversed: theme,
@@ -62,12 +62,12 @@ function makeInverse(theme: MyriadInput): MyriadInput {
   }
 }
 
-export const inverse = (theme: MyriadInput) => {
+export const inverse = (theme: UmbraInput) => {
   const hasInverse = theme.hasOwnProperty('inverse')
-  if(hasInverse) return theme.inversed as MyriadInput
+  if(hasInverse) return theme.inversed as UmbraInput
   return makeInverse(theme)
 }
 
-export const isDark = (theme: MyriadInput) => {
+export const isDark = (theme: UmbraInput) => {
   return tinycolor(theme.scheme.background).isDark()
 }

@@ -1,35 +1,35 @@
 Todo ListS
 2 - Add APCA color contrast
 
-# Myriad
+# Umbra
 - :kissing_cat: ***Simple*** - Just a simple JS function that lets you define your theme
 - :muscle: ***Flexible*** - Flexible primitives underneath that let you build your own logic
 - :telescope: ***Typesafe*** - Written fully in typescript giving you great auto completion even if you dont use TypeScript
 - :hammer_and_wrench: ***Maintainable*** - Enforces a single source of truth for your entire color system
 - :man_in_manual_wheelchair: ***Accessible*** - Lets you control readability scores, enforce good readability or just help monitor
 
-MyriadJS is a flexible theme managment library that allows you to create semantic color themes based on the Myriad pattern. This pattern defines the relationship between colors as opposed to focusing on the elements the colors belong to. Its a simpler way to ensure readability and consistency across a wide range of themes. By following this convention and taking advantge of the powefull color generator and its underlying color primitives, you can generate both light and dark themes, as well as any other theme in between, with ease.
+UmbraJS is a flexible theme managment library that allows you to create semantic color themes based on the Umbra pattern. This pattern defines the relationship between colors as opposed to focusing on the elements the colors belong to. Its a simpler way to ensure readability and consistency across a wide range of themes. By following this convention and taking advantge of the powefull color generator and its underlying color primitives, you can generate both light and dark themes, as well as any other theme in between, with ease.
 
-Test it out yourself. Head over to [MyriadX](https://myriadx.netlify.app/) to get an idea of whats possible and feel out the performance. 
+Test it out yourself. Head over to [UmbraX](https://umbrax.netlify.app/) to get an idea of whats possible and feel out the performance. 
 
 ## :alembic: How it works
- - :muscle: ***Manage*** - MyriadJS assumes a strict but very simple pattern. Foreground, background, accent. It takes this scheme, adjusts the colors in relationship to each other to ensure reusability. Then it generates a bunch of sub colors in each category - mostly diffirent shades of each color. Then it distributes these colors by assigning them to CSS variables that it attaches to the HTML by default or a given element if passed. 
+ - :muscle: ***Manage*** - UmbraJS assumes a strict but very simple pattern. Foreground, background, accent. It takes this scheme, adjusts the colors in relationship to each other to ensure reusability. Then it generates a bunch of sub colors in each category - mostly diffirent shades of each color. Then it distributes these colors by assigning them to CSS variables that it attaches to the HTML by default or a given element if passed. 
  - :fireworks: ***Update*** - To update the theme simply rerun the function and it will reassign the CSS variables across the entire page. 
- - :sunrise_over_mountains: ***Scale*** - To create more complex themes simply run multiple myriad theme functions on diffirent elements. This lets you infinetly scale up your theme complexity at any point without having to change any of the color assignments becuase all you need to change is the context by reassigning the color variables with new values at the given element scope.
+ - :sunrise_over_mountains: ***Scale*** - To create more complex themes simply run multiple umbra theme functions on diffirent elements. This lets you infinetly scale up your theme complexity at any point without having to change any of the color assignments becuase all you need to change is the context by reassigning the color variables with new values at the given element scope.
 
 #### :test_tube: Benefits of this approach
-This approach lets you easily adjust or completely change your entire theme from a single place and at a moments notice, making it ideal for both highly dynamic and less dynamic theme requirements. The Myriad pattern also enables you to predict and dictate readability scores and even auto-generate themes or parts of themes. Myriad S provides a highly customizable and scalable approach to color systems that can accommodate any color theme without the need to change any color assignments.
+This approach lets you easily adjust or completely change your entire theme from a single place and at a moments notice, making it ideal for both highly dynamic and less dynamic theme requirements. The Umbra pattern also enables you to predict and dictate readability scores and even auto-generate themes or parts of themes. Umbra S provides a highly customizable and scalable approach to color systems that can accommodate any color theme without the need to change any color assignments.
 
 ## :package: Installation
 ```bash
-npm install @myriadjs/core
+npm install @umbrajs/core
 ```
 ## :crystal_ball: Most Common Usage
 Simple example
 ```ts
-  import { myriad } from "@myriadjs/core"
+  import { umbra } from "@umbrajs/core"
 
-  myriad({
+  umbra({
     background: '#0c0915',
     foreground: '#c0aea3',
     accents: ['#c97074'],
@@ -64,15 +64,15 @@ These variables are available everywhere as long as the element is inside the HT
 
 ## :crystal_ball: Details
 
-The myriad function is the main function that handles everything. It takes a scheme and a settings object, both of which are optional and whos paramaters all have defaults.
+The umbra function is the main function that handles everything. It takes a scheme and a settings object, both of which are optional and whos paramaters all have defaults.
 ```ts
-  myriad(scheme, settings)
+  umbra(scheme, settings)
 ```
 
 In other words, both the scheme and the settings can have as many or as few of the avilable parameters on it and the function will fill in the holes with defaults or auto generated values based on what you did passed into it. In this example we are only passing a schema and the scheme only has a foreground color. The rest is left for the system to fill out. This lets you very easily create themes with as few parameters as you have and take more and more control of the theme as you add more parameters. 
 
 ```ts
-  myriad({
+  umbra({
    foreground: "#ffffff"
   })
 ```
@@ -91,7 +91,7 @@ The scheme itself has multiple color parameters which can be though of in terms 
    subSchemes: {}
   }
 ```
-These main colors dictate the entire scheme, and more consisley the main focus should be the foreground and the background. These two colors must have some contrast and the myriad system willl ensure this. They effectgivley dictate the available range of colors to be generated. All additional shades get generated as a mix in this range. It is though thinking aboiut colors as background vs foreground that the system manages to understand color readability and context. The accent colors can be though of commonly as brand colors. They are the additional splash of pink, or red, or blue that
+These main colors dictate the entire scheme, and more consisley the main focus should be the foreground and the background. These two colors must have some contrast and the umbra system willl ensure this. They effectgivley dictate the available range of colors to be generated. All additional shades get generated as a mix in this range. It is though thinking aboiut colors as background vs foreground that the system manages to understand color readability and context. The accent colors can be though of commonly as brand colors. They are the additional splash of pink, or red, or blue that
 
 ```ts 
   scheme: {
@@ -154,9 +154,9 @@ This lets you control the "depth" of colors in your theme by setting how far app
 Notice however that regardless of the shade value the outputted CSS variables will still be counted 10, 20, 40 etc. This is because the purpose of the CSS variable naming is to count the fractions of shades and to keep this naming consistent and easy to modify. Imagine for instance if you named the CSS variables after the exact percentage, assigned these variables all over the place and then wanted to change it? Your theme would break. Keeping the CSS variable naming simple and independent of color percentages allows you to change themes and have multiple temes without anything breaking as long as you keep using the same amount of shades, the value of the shades wont matter.
 
 ```ts
-  import { myriad } from "@myriadj/core"
+  import { umbra } from "@umbraj/core"
 
-  myriad({
+  umbra({
     background: '#0c0915',
     foreground: '#c0aea3',
     accents: ['#c97074'],

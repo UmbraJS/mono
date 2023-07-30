@@ -1,17 +1,17 @@
 import {
-  myriad,
-  MyriadSettings,
+  umbra,
+  UmbraSettings,
 } from "."
 import { ColorPallet } from "./components/ColorPallet"
 import { AccentPallet } from "./components/AccentPallet"
 import { RandomButton } from "./components/RandomButton"
 import { InverseButton } from "./components/InverseButton"
 
-const settings: MyriadSettings = {
+const settings: UmbraSettings = {
   readability: 4,
 }
 
-export let output = myriad({
+export let u = umbra({
   background: 'white',
   foreground: 'black',
   accents: ['#d9accf', '#41e980', '#d9accf'],
@@ -21,12 +21,18 @@ export let output = myriad({
   },
 }, settings).apply()
 
-export function mutateMyriad(newMyriad = output) {
-  output = newMyriad
+// console.log(umbra({
+//   background: 'white',
+//   foreground: 'black',
+//   accents: ['#d9accf'],
+// }, settings).format().attach(document.querySelector('body')!))
+
+export function mutateUmbra(newUmbra = u) {
+  u = newUmbra
 }
 
 export const iro = new (window as any).iro.ColorPicker("#picker", {
-  color: output.input.scheme.background,
+  color: u.output.input.scheme.background,
   layout: [
     { 
       component: (window as any).iro.ui.Box,

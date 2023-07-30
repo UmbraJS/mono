@@ -1,7 +1,7 @@
 import tinycolor from "tinycolor2"
 import { settings } from '../store'
-import { myriad } from '../'
-import { MyriadInput, MyriadSettings } from '../store/types'
+import { umbra } from '../'
+import { UmbraInput, UmbraSettings } from '../store/types'
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color
@@ -37,11 +37,11 @@ export function randomHex() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
 
-interface RandomSettings extends MyriadSettings {
+interface RandomSettings extends UmbraSettings {
   amount: number
 }
 
-export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): MyriadInput {
+export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): UmbraInput {
   const newSettings = { ...settings, ...randomSettings }
   return {
     settings: newSettings,
@@ -53,9 +53,9 @@ export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): My
   }
 }
 
-export function randomMyriad(props: RandomSettings = { amount: 1 }) {
+export function randomUmbra(props: RandomSettings = { amount: 1 }) {
   const theme = randomScheme(props)
-  return myriad({
+  return umbra({
     ...theme.scheme,
   })
 }

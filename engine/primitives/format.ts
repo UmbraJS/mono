@@ -1,25 +1,28 @@
 import tinycolor from "tinycolor2"
-import { myriad } from '../..'
-import { MyriadOutput, GeneratedColor, FormatedColor } from '../../store/types'
+import { umbra } from '../..'
+import { UmbraOutput, GeneratedColor, FormatedColor } from '../types'
 import { attach } from "./attach"
 
 export type Formater = (color: tinycolor.Instance) => string
 
 interface FormatProps {
-  output: MyriadOutput;
+  output: UmbraOutput;
   formater?: Formater;
   element?: HTMLElement;
 }
 
-export interface FormatObject {
-  attach: (element?: HTMLElement) => FlattenColor[];
+export interface Format extends UmbraOutputs {
+  attach: (element?: HTMLElement) => UmbraOutputs;
+}
+
+export interface UmbraOutputs {
   flattened: FlattenColor[];
   formated: FormatedColor[];
-  output: MyriadOutput;
+  output: UmbraOutput;
 }
 
 export const format = ({
-  output = myriad().output,
+  output = umbra().output,
   formater = defaultFormater,
 }: FormatProps) => {
   const gen = output.generated
@@ -29,12 +32,16 @@ export const format = ({
     formated,
   })
 
-  return {
-    attach: (element) => attach({flattened, element}),
+  const outputs: UmbraOutputs = {
     flattened,
     formated,
     output
-  } as FormatObject
+  }
+
+  return {
+    attach: (element) => attach({outputs, element}),
+    ...outputs
+  } as Format
 }
 
 //Formating logic

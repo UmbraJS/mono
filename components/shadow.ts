@@ -1,4 +1,4 @@
-import { output } from "../main"
+import { u } from "../main"
 
 export function shadowDOM(that: any, template: string) {
   const templateNode = document.createElement('template')
@@ -9,7 +9,7 @@ export function shadowDOM(that: any, template: string) {
 }
 
 const getArray = (name: string) => {
-  return output.generated.filter((c) => c.name === name)
+  return u.output.generated.filter((c) => c.name === name)
 }
 
 function shadeArray(el: Element | null, name?: string, index?: number) {

@@ -1,4 +1,6 @@
 import type tinycolor from 'tinycolor2'
+import type { Alias } from './primitives/attach'
+
 export interface FormatedColor {
   name: string;
   color: string;
@@ -16,25 +18,25 @@ export interface GeneratedColor extends ColorObject {
   name: string;
 }
 
-export interface MyriadOutput {
-  input: MyriadInput;
-  adjusted: MyriadAdjusted;
+export interface UmbraOutput {
+  input: UmbraInput;
+  adjusted: UmbraAdjusted;
   generated: GeneratedColor[];
 }
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string
 
-export interface MyriadColors {
+export interface UmbraColors {
   colors: GeneratedColor[];
-  input: MyriadInput,
-  adjusted: MyriadAdjusted,
+  input: UmbraInput,
+  adjusted: UmbraAdjusted,
 }
 
 type SubSchemes = {
-  [key: string]: MyriadInput
+  [key: string]: UmbraInput
 }
 
-export interface MyriadScheme {
+export interface UmbraScheme {
   background: string,
   foreground: string,
   accents: string[],
@@ -42,21 +44,21 @@ export interface MyriadScheme {
   subSchemes?: SubSchemes,
 }
 
-export interface MyriadInput {
-  scheme: MyriadScheme,
-  settings: MyriadSettings,
-  inversed?: MyriadInput,
+export interface UmbraInput {
+  scheme: UmbraScheme,
+  settings: UmbraSettings,
+  inversed?: UmbraInput,
 }
 
-export interface MyriadAdjusted {
+export interface UmbraAdjusted {
   background: tinycolor.Instance,
   foreground: tinycolor.Instance,
   accents: tinycolor.Instance[],
   subSchemes?: SubSchemes,
-  input: MyriadInput,
+  input: UmbraInput,
 }
 
-export type CustomColor = string | ((s: MyriadInput) => string)
+export type CustomColor = string | ((s: UmbraInput) => string)
 export interface ColorList {
   [key: string]: CustomColor
 }
@@ -67,10 +69,11 @@ export interface SettingType {
   shade?: Shade[]
 }
 
-export interface MyriadSettings {
+export interface UmbraSettings {
   readability?: number
   iterations?: number
   foreground?: SettingType
   background?: SettingType
   accents?: SettingType
+  aliases?: Alias | true
 }

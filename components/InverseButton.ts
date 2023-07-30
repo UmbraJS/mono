@@ -1,28 +1,28 @@
 import { shadowDOM } from './shadow'
-import { mutateMyriad, output, iro } from '../main'
-import { isDark, inverse, myriad, MyriadOutput } from "../"
+import { mutateUmbra, u, iro } from '../main'
+import { isDark, inverse, umbra, UmbraOutputs } from "../"
 
 export class InverseButton extends HTMLElement {
   constructor() {
     super()
 
     const handleClick = () => {
-      const i = inverse(output.input)
+      const i = inverse(u.output.input)
       if(!i) return
 
       iro.color.hexString = i.scheme.background || '#000000';
 
-      const inversed = myriad(i.scheme, i.settings).apply()
-      mutateMyriad(inversed)
+      const inversed = umbra(i.scheme, i.settings).apply()
+      mutateUmbra(inversed)
       handleColorChange(inversed)
     }    
 
-    const handleColorChange = (theme: MyriadOutput) => {
+    const handleColorChange = (theme: UmbraOutputs) => {
       const doc = this.shadowRoot
       if(doc === null) return
       const darkmode = doc.getElementById('darkmode')
       if(darkmode === null) return
-      darkmode.innerText = isDark(theme.input) ? "dark mode" : "light mode"
+      darkmode.innerText = isDark(theme.output.input) ? "dark mode" : "light mode"
     }
 
     this.addEventListener('click', handleClick)

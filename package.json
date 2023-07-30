@@ -1,14 +1,14 @@
 {
-  "name": "@myriadjs/core",
-  "version": "0.0.942",
-  "description": "MyriadJS is a flexible theme managment library that allows you to create semantic color themes that are easy to change retroactivley",
+  "name": "@umbrajs/core",
+  "version": "0.0.0",
+  "description": "Umbra is a theme managment library that allows you to create semantic color themes that are easy to change retroactivley",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MyriadJS/core"
+    "url": "https://github.com/UmbraJS/core"
   },
   "bugs": {
-    "url": "https://github.com/MyriadJS/core/issues"
+    "url": "https://github.com/UmbraJS/core/issues"
   },
   "license": "MIT",
   "keywords": [
@@ -16,7 +16,7 @@
     "colours",
     "themes",
     "theming",
-    "myriad",
+    "umbra",
     "customization"
   ],
   "type": "module",

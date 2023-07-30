@@ -3,12 +3,12 @@ import { pickContrast, rangeShader } from "./primitives/color"
 import { adjust } from "./adjust"
 
 import { 
-  MyriadAdjusted, 
-  MyriadOutput, 
+  UmbraAdjusted, 
+  UmbraOutput, 
   Shade,
   CustomColor,
   ColorList,
-  MyriadInput,
+  UmbraInput,
   ColorObject
 } from "./store/types"
 
@@ -22,7 +22,7 @@ const isNumber = (value: string | number) => {
   return Boolean(typeof value === 'number')
 }
 
-function findContrast(color: tinycolor.Instance, adjusted: MyriadAdjusted) {
+function findContrast(color: tinycolor.Instance, adjusted: UmbraAdjusted) {
   return tinycolor.mostReadable(color, [
     adjusted.background || color,
     adjusted.foreground || color,
@@ -43,7 +43,7 @@ function shade(colors: ColorRange, range: (number | string)[]) {
 }
 
 
-export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range: Shade[] = [10, 20, 50]) => ({
+export const ColorObj = (colors: ColorRange, scheme: UmbraAdjusted, range: Shade[] = [10, 20, 50]) => ({
   color: colors.color,
   shades: shade(colors, range),
   contrast: pickContrast(colors.color, scheme)
@@ -51,7 +51,7 @@ export const ColorObj = (colors: ColorRange, scheme: MyriadAdjusted, range: Shad
 })
 
 //something
-function background(adjusted: MyriadAdjusted) {
+function background(adjusted: UmbraAdjusted) {
   const shades = adjusted.input.settings?.background?.shade
   const { background, foreground } = adjusted
   return ColorObj({
@@ -60,7 +60,7 @@ function background(adjusted: MyriadAdjusted) {
   }, adjusted, shades)
 }
 
-function foreground(adjusted: MyriadAdjusted) {
+function foreground(adjusted: UmbraAdjusted) {
   const shades = adjusted.input.settings?.foreground?.shade
   const { background, foreground } = adjusted
   return ColorObj({
@@ -69,7 +69,7 @@ function foreground(adjusted: MyriadAdjusted) {
   }, adjusted, shades)
 }
 
-export function accentShades(adjusted: MyriadAdjusted, shades: Shade[] = []) {
+export function accentShades(adjusted: UmbraAdjusted, shades: Shade[] = []) {
   const settings = adjusted.input.settings
   const foregroundShades = settings?.foreground?.shade || []
   const backgroundShades = settings?.background?.shade || []
@@ -87,7 +87,7 @@ export function accentShades(adjusted: MyriadAdjusted, shades: Shade[] = []) {
   return newShades
 }
 
-function accents(adjusted: MyriadAdjusted) {
+function accents(adjusted: UmbraAdjusted) {
   const shades = adjusted.input.settings?.accents?.shade
   const newShades = accentShades(adjusted, shades)
 
@@ -120,8 +120,8 @@ const generateCustomColors = (colors: ColorList, obj: GeneratedObject) => {
 }
 
 interface GeneratedObject {
-  input: MyriadInput;
-  adjusted: MyriadAdjusted;
+  input: UmbraInput;
+  adjusted: UmbraAdjusted;
   generated: {
     background: ColorObject,
     foreground: ColorObject,
@@ -129,7 +129,7 @@ interface GeneratedObject {
   }
 }
 
-function formatScheme(obj: GeneratedObject): MyriadOutput  {
+function formatScheme(obj: GeneratedObject): UmbraOutput  {
   const gen = obj.generated
   const accents = gen.accents || []
   const custom = obj.input.scheme.custom || {}
@@ -145,7 +145,7 @@ function formatScheme(obj: GeneratedObject): MyriadOutput  {
   }
 }
 
-export const generate = (adjusted = adjust()): MyriadOutput => {
+export const generate = (adjusted = adjust()): UmbraOutput => {
   const input = adjusted.input
   return formatScheme({
     input,

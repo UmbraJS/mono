@@ -1,6 +1,6 @@
 import { shadowDOM } from './shadow'
-import { mutateMyriad, } from '../main'
-import { randomScheme, myriad } from "../"
+import { mutateUmbra, } from '../main'
+import { randomScheme, umbra } from "../"
 
 export class RandomButton extends HTMLElement {
   constructor() {
@@ -8,7 +8,7 @@ export class RandomButton extends HTMLElement {
 
     const handleClick = () => {
       const { scheme, settings } = randomScheme()
-      mutateMyriad(myriad(scheme, settings).apply())
+      mutateUmbra(umbra(scheme, settings).apply())
     }
 
     this.addEventListener('click', handleClick)

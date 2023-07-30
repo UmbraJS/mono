@@ -1,9 +1,9 @@
 import { shadowDOM, stringMap } from './shadow'
-import { output } from '../main'
+import { u } from '../main'
 
 export class AccentPallet extends HTMLElement {
   constructor() {
-    const accents = output.generated.filter((c) => c.name === 'accent')
+    const accents = u.output.generated.filter((c) => c.name === 'accent')
     super()
     shadowDOM(this, `
       <style>
