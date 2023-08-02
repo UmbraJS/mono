@@ -38,6 +38,12 @@ function APCAcolor(color: Colour): RGB {
   return [rgba.r, rgba.g, rgba.b]
 }
 
+
+//take fg. Compare it to black and white. the one with the highest contrast decides if we should lighten or darken it.
+//keep adjusting till lc target is reached
+
+//accent is middle out? At what point in the range is the accent the most like itself? 
+
 export function APCAcontrast(col: Colour, bg: Colour) {
   return calcAPCA(APCAcolor(col), APCAcolor(bg));
 }

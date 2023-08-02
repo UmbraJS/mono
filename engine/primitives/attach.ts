@@ -35,10 +35,12 @@ const defaultAliases = {
   buttonHover: 'accent-20',
   buttonActive: 'accent-10',
 
+  //button borders
   buttonBorder: 'accent',
   buttonBorderHover: 'accent',
   buttonBorderActive: 'accent',
 
+  //button text
   buttonText: 'accent-contrast',
   buttonSubtleText: 'foreground',
   buttonDisabledText: 'foreground',
