@@ -1,7 +1,5 @@
 import tinycolor from "tinycolor2"
-import { SchemeKey } from './types'
 import { pickContrast, colorMix } from "./primitives/color"
-import { adjust } from "./adjust"
 
 import { 
   UmbraAdjusted, 
@@ -10,7 +8,7 @@ import {
   CustomColor,
   ColorList,
   UmbraInput,
-  ColorObject
+  ColorObject,
 } from "./types"
 
 interface ColorRange {
@@ -30,19 +28,8 @@ function findContrast(color: tinycolor.Instance, adjusted: UmbraAdjusted) {
   ])
 }
 
-interface SetProperty {
-  name: SchemeKey; 
-  color: string; 
-}
-
-const setProperty = (element: HTMLElement | HTMLBodyElement | null , { name, color }: SetProperty) => {
-  if(!element) return
-  element.style.setProperty(name, color)
-}
-
 function shade(colors: ColorRange, range: (number | string)[]) {
   const { color, contrast } = colors
-  let shades: tinycolor.Instance[] = []
 
   const gr = getRange({
     from: color.toHexString(),
@@ -54,13 +41,7 @@ function shade(colors: ColorRange, range: (number | string)[]) {
   sheet.replace(`body {${gr.map((value, index) => `--test-${index}: ${value};`).join('')}}`);
   document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
 
-  range.forEach((val, i) => {
-    shades[i * 10 + 10] = isNumber(val) 
-      ? colorMix(color, contrast, val as number) 
-      : tinycolor(val as string)
-  })
-
-  return shades
+  return gr
 }
 
 interface Range { 
@@ -70,16 +51,16 @@ interface Range {
 }
 
 function getRange({ from, to, range }: Range) {
-  const fg = tinycolor(from)
-  const bg = tinycolor(to)
+  const foreground = tinycolor(from)
+  const background = tinycolor(to)
 
   const r = range.map((val) => {
     const isNumber = Boolean(typeof val === 'number')
     if(!isNumber) return tinycolor(val as string)
-    return colorMix(fg, bg, val as number).toHexString()
+    return colorMix(foreground, background, val as number)
   })
 
-  return [fg.toHexString(), ...r, bg.toHexString()]
+  return [foreground, ...r, background]
 
 }
 
@@ -185,7 +166,7 @@ function formatScheme(obj: GeneratedObject): UmbraOutput  {
   }
 }
 
-export const generate = (adjusted = adjust()): UmbraOutput => {
+export const generate = (adjusted: UmbraAdjusted): UmbraOutput => {
   const input = adjusted.input
   return formatScheme({
     input,

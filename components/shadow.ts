@@ -17,16 +17,18 @@ function shadeArray(el: Element | null, name?: string, index?: number) {
 
   const shades = getArray(name)[index ||0].shades
   const pallet = el
-  
+
+  const id = index ? index + 1 : 0
+  const number = id > 1 ? id : ''
+  const n = name === 'accent' ? 'accent' + number : name
+
   if(!pallet) return
 
   shades.forEach((_, index) => {
-    if(name === 'accents') name = 'accent'
-    const value = `var(--${name}-${index})`
+    const value = `var(--${n}-${index * 10 + 10})`
     const div = document.createElement('div')
-    //assign
     div.style.backgroundColor = value
-    div.innerHTML = "" + index || '0'
+    div.innerHTML = "" + (index * 10 + 10) || '0'
     pallet.appendChild(div)
   })
 }
@@ -35,8 +37,12 @@ export function setColor(shadow: ShadowRoot, name: string, index?: number) {
   const pallets = shadow.querySelector('.pallets')
   if(name === 'accents') name  = 'accent'
   shadeArray(pallets, name, index)
-  
-  const colorCSS = `background: var(--${name});`
+
+  const id = index ? index + 1 : 0
+  const number = id > 1 ? id : ''
+  const n = name === 'accent' ? 'accent' + number : name
+
+  const colorCSS = `background: var(--${n});`
   shadow.querySelector('.color')?.setAttribute('style', colorCSS)
   return {
     reverse: () => {

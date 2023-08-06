@@ -14,18 +14,12 @@ const settings: UmbraSettings = {
 export let u = umbra({
   background: 'white',
   foreground: 'black',
-  accents: ['#d9accf', '#41e980', '#d9accf'],
+  accents: ['#d9accf', '#97e8b5', '#e91e63'],
   custom: {
     link: '#03A9F4',
     warning: '#e91e63',
   },
 }, settings).apply()
-
-// console.log(umbra({
-//   background: 'white',
-//   foreground: 'black',
-//   accents: ['#d9accf'],
-// }, settings).format().attach(document.querySelector('body')!))
 
 export function mutateUmbra(newUmbra = u) {
   u = newUmbra

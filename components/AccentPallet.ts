@@ -22,10 +22,14 @@ export class AccentPallet extends HTMLElement {
       </style>
       <div class="accents">
         ${stringMap(accents?.map((fl, index) => {
+          const id = index ? index + 1 : 0
+          const number = id > 1 ? id : ''
+          const name = 'accent' + number
+
           return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>
-              <div id="${fl.contrast.isDark()}" class="contrast pallet" style="background: var(--accent-contrast)"></div>
+              <div id="${fl.contrast.isDark()}" class="contrast pallet" style="background: var(--${name}-contrast)"></div>
             </div>
           `
         }))}

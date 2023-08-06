@@ -1,14 +1,24 @@
-// Configs and Utilities
-import { settings, defaultScheme } from './store'
-import type { UmbraOutput, UmbraInput, UmbraSettings } from './types'
+
+import tinycolor from "tinycolor2"
+
+//Configs and Utilities
+import { settings, defaultScheme, defaultTheme } from './store'
+import type { UmbraOutput, UmbraInput, UmbraSettings, UmbraAdjusted } from './types'
 
 //Primitives
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
+import { getReadable } from './primitives/color'
 
-// Main functions
-import { adjust } from './adjust'
+//Color Range Steps
 import { generate } from './generator'
+
+//Types
+interface SubSchemeProps {
+  id: string
+  settings?: UmbraSettings
+  element?: HTMLElement
+}
 
 export interface Umbra {
   output: UmbraOutput
@@ -18,6 +28,7 @@ export interface Umbra {
   isDark: () => boolean
 }
 
+//Functions
 export function umbraObject(generated: UmbraOutput): Umbra {
   const theme = generated.input
   const colors = generated.generated
@@ -47,10 +58,20 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
   })))
 }
 
-interface SubSchemeProps {
-  id: string
-  settings?: UmbraSettings
-  element?: HTMLElement
+const adjust = (theme = defaultTheme): UmbraAdjusted => {
+  const background = tinycolor(theme.scheme.background)
+  const foreground = tinycolor(theme.scheme.foreground)
+  const accents = theme.scheme.accents
+  const readability = theme.settings.readability || 4
+  return {
+    input: theme,
+    background: background,
+    foreground: getReadable({ foreground, background, readability }),
+    accents: accents.map((fl) => getReadable({
+      foreground: tinycolor(fl),
+      background, readability
+    })),
+  }
 }
 
 export const subScheme = (input: UmbraInput, props: SubSchemeProps) => {
