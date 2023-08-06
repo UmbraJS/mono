@@ -25,7 +25,6 @@ export class AccentPallet extends HTMLElement {
           const id = index ? index + 1 : 0
           const number = id > 1 ? id : ''
           const name = 'accent' + number
-
           return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>

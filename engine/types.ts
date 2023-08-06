@@ -76,4 +76,5 @@ export interface UmbraSettings {
   background?: SettingType
   accents?: SettingType
   aliases?: Alias | true
+  shades: Shade[]
 }

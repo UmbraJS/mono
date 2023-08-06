@@ -16,11 +16,6 @@ interface ColorRange {
   contrast: tinycolor.Instance,
 }
 
-//something
-const isNumber = (value: string | number) => { 
-  return Boolean(typeof value === 'number')
-}
-
 function findContrast(color: tinycolor.Instance, adjusted: UmbraAdjusted) {
   return tinycolor.mostReadable(color, [
     adjusted.background || color,
@@ -32,21 +27,17 @@ function shade(colors: ColorRange, range: (number | string)[]) {
   const { color, contrast } = colors
 
   const gr = getRange({
-    from: color.toHexString(),
-    to: contrast.toHexString(),
+    from: color,
+    to: contrast,
     range: range
   })
-
-  const sheet = new CSSStyleSheet();
-  sheet.replace(`body {${gr.map((value, index) => `--test-${index}: ${value};`).join('')}}`);
-  document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
 
   return gr
 }
 
 interface Range { 
-  from: string, 
-  to: string, 
+  from: tinycolor.Instance, 
+  to: tinycolor.Instance, 
   range: Shade[] 
 }
 
@@ -60,11 +51,10 @@ function getRange({ from, to, range }: Range) {
     return colorMix(foreground, background, val as number)
   })
 
-  return [foreground, ...r, background]
-
+  return r
 }
 
-export const ColorObj = (colors: ColorRange, scheme: UmbraAdjusted, range: Shade[] = [10, 20, 50]) => ({
+const ColorObj = (colors: ColorRange, scheme: UmbraAdjusted, range: Shade[] = [10, 20, 50]) => ({
   color: colors.color,
   shades: shade(colors, range),
   contrast: pickContrast(colors.color, scheme)
@@ -77,7 +67,7 @@ function background(adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
   return ColorObj({
     color: background, 
-    contrast: foreground || background,
+    contrast: foreground,
   }, adjusted, shades)
 }
 
@@ -86,11 +76,12 @@ function foreground(adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
   return ColorObj({
     color: foreground, 
-    contrast: background || foreground
+    contrast: background
   }, adjusted, shades)
 }
 
-export function accentShades(adjusted: UmbraAdjusted, shades: Shade[] = []) {
+export function accentShades(adjusted: UmbraAdjusted) {
+  const shades = adjusted.input.settings?.accents?.shade || []
   const settings = adjusted.input.settings
   const foregroundShades = settings?.foreground?.shade || []
   const backgroundShades = settings?.background?.shade || []
@@ -109,13 +100,27 @@ export function accentShades(adjusted: UmbraAdjusted, shades: Shade[] = []) {
 }
 
 function accents(adjusted: UmbraAdjusted) {
-  const shades = adjusted.input.settings?.accents?.shade
-  const newShades = accentShades(adjusted, shades)
+  const range = accentShades(adjusted)
 
   return adjusted.accents.map((color) => {
-    const contrast = findContrast(color, adjusted)
-    return ColorObj({color, contrast}, adjusted, newShades)
+    const background = adjusted.background
+    return {
+      color,
+      shades: getRange({from: color, to: background, range}),
+      contrast: pickContrast(color, adjusted)
+    }
   }) 
+}
+
+function base(adjusted: UmbraAdjusted) {
+  const range = accentShades(adjusted)
+  const background = adjusted.background
+  const foreground = adjusted.foreground
+  return {
+    background,
+    shades: getRange({from: background, to: foreground, range}),
+    foreground
+  }
 }
 
 //something
@@ -133,8 +138,8 @@ const generateCustomColors = (colors: ColorList, obj: GeneratedObject) => {
   const objArray = Object.entries(colors)
   return objArray.map(([key, value]) => {
     let color = getCustomColorValue(value, obj)
-    const contrast = findContrast(color, adjusted)
-    const object = ColorObj({color, contrast}, adjusted, shades)
+    const background = adjusted.background
+    const object = ColorObj({color, contrast: background}, adjusted, shades)
     return {name: key, ...object}
   })
   
@@ -166,7 +171,19 @@ function formatScheme(obj: GeneratedObject): UmbraOutput  {
   }
 }
 
-export const generate = (adjusted: UmbraAdjusted): UmbraOutput => {
+function newGenerate(adjusted: UmbraAdjusted) {
+  const input = adjusted.input
+  return {
+    input,
+    adjusted,
+    generated: {
+      base: base(adjusted),
+      accents: accents(adjusted),
+    }
+  }
+}
+
+export function generate(adjusted: UmbraAdjusted) {
   const input = adjusted.input
   return formatScheme({
     input,
