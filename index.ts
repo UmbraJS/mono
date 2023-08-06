@@ -8,8 +8,8 @@ import type {
   UmbraSettings, 
   UmbraScheme, 
   UmbraInput, 
-  GeneratedColor, 
-  FormatedColor 
+  RawRange, 
+  FormatedRange 
 } from './engine/types'
 import { inverse, isDark } from './engine/primitives/scheme'
 
@@ -36,8 +36,8 @@ export type {
   UmbraSettings,
   UmbraOutput,
   UmbraOutputs,
-  GeneratedColor,
+  RawRange,
   FlattenColor,
   Formater,
-  FormatedColor
+  FormatedRange
 }

@@ -6,7 +6,7 @@ import { calcAPCA  } from 'apca-w3';
 export type Color = tinycolor.Instance
 export type Colour = string | Color
 
-type ColorRange = {
+type ColorRawRange = {
   foreground: Color
   background: Color
   readability?: number
@@ -54,7 +54,7 @@ export const getReadability = (col: Colour, bg: Colour) => {
   return tinycolor.readability(col, bg)
 }
 
-export const getReadable = ({ foreground, background, readability, iterations }: ColorRange) => {
+export const getReadable = ({ foreground, background, readability, iterations }: ColorRawRange) => {
   const safeReadability = readability || stored.readability
   const max = iterations || stored.iterations
   return increaseContrastUntil({color: foreground, contrast: background, max, condition: (c) => {

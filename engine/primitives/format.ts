@@ -1,6 +1,6 @@
 import tinycolor from "tinycolor2"
 import { umbra } from '../..'
-import { UmbraOutput, GeneratedColor, FormatedColor } from '../types'
+import { UmbraOutput, RawRange, FormatedRange } from '../types'
 import { attach } from "./attach"
 
 export type Formater = (color: tinycolor.Instance) => string
@@ -17,7 +17,7 @@ export interface Format extends UmbraOutputs {
 
 export interface UmbraOutputs {
   flattened: FlattenColor[];
-  formated: FormatedColor[];
+  formated: FormatedRange[];
   output: UmbraOutput;
 }
 
@@ -25,8 +25,9 @@ export const format = ({
   output = umbra().output,
   formater = defaultFormater,
 }: FormatProps) => {
-  const gen = output.generated
-  const formated = gen.map((c) => getColors(c.name, c, formater))
+  const gen = output.ranges
+  const formated = gen.map((c) => getColors(c, formater))
+
   const flattened = flattenColors({
     prefix: '--',
     formated,
@@ -44,11 +45,6 @@ export const format = ({
   } as Format
 }
 
-//Formating logic
-type DynamicObject = {[key: number]: tinycolor.Instance}
-type TinyColorArray = {name: string, value: tinycolor.Instance}[]
-
-
 export const defaultFormater = hexFormat
 
 export function hexFormat(color: tinycolor.Instance) {
@@ -64,37 +60,27 @@ export function hslFormat(color: tinycolor.Instance) {
   return color.toHslString()
 }
 
-const makeTinycolorArray = (obj: DynamicObject): TinyColorArray => {
-  const objArray = Object.entries(obj)
-  return objArray.map(([key, value]) => {
-    return {name: key, value: value}
-  })
-}
-
-function getColors(name: string, color: GeneratedColor | undefined, formater = defaultFormater) {
-  const shades = makeTinycolorArray(color?.shades || {})
+function getColors({ name, foreground, background, shades }: RawRange, formater = defaultFormater) {
   return {
     name: name,
-    color: formater(color?.color || tinycolor('black')),
-    contrast: formater(color?.contrast || tinycolor('black')),
-    shades: shades.map((s) => formater(s.value))
+    background: formater(background),
+    shades: shades.map((c) => formater(c)),
+    foreground: formater(foreground),
   }
 }
 
-//Flatten logic
 export interface FlattenColor {
   name: string;
   color: string;
 }
 
 interface FlattenColors {
-  formated: FormatedColor[];
+  formated: FormatedRange[];
   prefix?: string | false;
 }
 
 function flattenColors({formated, prefix}: FlattenColors) {
   const flattened: FlattenColor[] = []
-
 
   function prefixName(name: string) {
     return prefix ? prefix + name : name
@@ -112,13 +98,11 @@ function flattenColors({formated, prefix}: FlattenColors) {
 
   formated.forEach((c) => {
     const name = getName(c.name)
-    const color = c.color
-
-    flattened.push({ name, color })
+    flattened.push({ name, color: c.background })
     flattened.push(...flattenShades(c.shades, name))
     flattened.push({
-      name: name + '-contrast',
-      color: c.contrast,
+      name: name + '-foreground',
+      color: c.foreground,
     })
   })
 
@@ -140,12 +124,10 @@ function sortFlattened(flattened: FlattenColor[]) {
   const foregroundPrefix = "--foreground";
   const backgroundPrefix = "--background";
   
-  // Extract foreground and background shades from the original array
   const background = flattened.filter(item => item.name.startsWith(backgroundPrefix));
   const foreground= flattened.filter(item => item.name.startsWith(foregroundPrefix));
   const rest = flattened.filter(item => !item.name.startsWith(backgroundPrefix) && !item.name.startsWith(foregroundPrefix));
     
-  // Combine the sorted foreground and background shades to form the desired order
   const ordered = [
     ...background,
     ...foreground.reverse(),
@@ -153,7 +135,6 @@ function sortFlattened(flattened: FlattenColor[]) {
   ];
 
   const filtered = ordered.filter(({name}) => !invalidColor(name))
-
   function invalidColor(name: string) {
     const regex = /(?:background|foreground).*contrast/i;
     return regex.test(name);

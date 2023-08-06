@@ -1,33 +1,30 @@
 import type tinycolor from 'tinycolor2'
 import type { Alias } from './primitives/attach'
 
-export interface FormatedColor {
+export interface RawRange {
   name: string;
-  color: string;
-  contrast: string;
-  shades: string[];
-}
-
-export interface ColorObject {
-  color: tinycolor.Instance;
-  contrast: tinycolor.Instance;
+  background: tinycolor.Instance;
   shades: tinycolor.Instance[];
+  foreground: tinycolor.Instance;
 }
 
-export interface GeneratedColor extends ColorObject {
+export interface FormatedRange {
   name: string;
+  background: string;
+  shades: string[];
+  foreground: string;
 }
 
 export interface UmbraOutput {
   input: UmbraInput;
   adjusted: UmbraAdjusted;
-  generated: GeneratedColor[];
+  ranges: RawRange[];
 }
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string
 
 export interface UmbraColors {
-  colors: GeneratedColor[];
+  colors: RawRange[];
   input: UmbraInput,
   adjusted: UmbraAdjusted,
 }
@@ -59,6 +56,7 @@ export interface UmbraAdjusted {
 }
 
 export type CustomColor = string | ((s: UmbraInput) => string)
+
 export interface ColorList {
   [key: string]: CustomColor
 }

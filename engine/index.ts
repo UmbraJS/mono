@@ -10,7 +10,7 @@ import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
 import { getReadable } from './primitives/color'
 
-//Color Range Steps
+//Color RawRange Steps
 import { generate } from './generator'
 
 //Types
@@ -31,12 +31,11 @@ export interface Umbra {
 //Functions
 export function umbraObject(generated: UmbraOutput): Umbra {
   const theme = generated.input
-  const colors = generated.generated
 
   const output: UmbraOutput = {
     input: generated.input,
     adjusted: generated.adjusted,
-    generated: colors,
+    ranges: generated.ranges,
   }
 
   return {
