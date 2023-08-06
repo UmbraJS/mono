@@ -1,5 +1,6 @@
 import tinycolor from "tinycolor2"
-import { pickContrast, rangeShader } from "./primitives/color"
+import { SchemeKey } from './types'
+import { pickContrast, colorMix } from "./primitives/color"
 import { adjust } from "./adjust"
 
 import { 
@@ -29,19 +30,58 @@ function findContrast(color: tinycolor.Instance, adjusted: UmbraAdjusted) {
   ])
 }
 
+interface SetProperty {
+  name: SchemeKey; 
+  color: string; 
+}
+
+const setProperty = (element: HTMLElement | HTMLBodyElement | null , { name, color }: SetProperty) => {
+  if(!element) return
+  element.style.setProperty(name, color)
+}
+
 function shade(colors: ColorRange, range: (number | string)[]) {
   const { color, contrast } = colors
   let shades: tinycolor.Instance[] = []
 
+  const gr = getRange({
+    from: color.toHexString(),
+    to: contrast.toHexString(),
+    range: range
+  })
+
+  const sheet = new CSSStyleSheet();
+  sheet.replace(`body {${gr.map((value, index) => `--test-${index}: ${value};`).join('')}}`);
+  document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+
   range.forEach((val, i) => {
     shades[i * 10 + 10] = isNumber(val) 
-      ? rangeShader(color, contrast, val as number) 
+      ? colorMix(color, contrast, val as number) 
       : tinycolor(val as string)
   })
 
   return shades
 }
 
+interface Range { 
+  from: string, 
+  to: string, 
+  range: Shade[] 
+}
+
+function getRange({ from, to, range }: Range) {
+  const fg = tinycolor(from)
+  const bg = tinycolor(to)
+
+  const r = range.map((val) => {
+    const isNumber = Boolean(typeof val === 'number')
+    if(!isNumber) return tinycolor(val as string)
+    return colorMix(fg, bg, val as number).toHexString()
+  })
+
+  return [fg.toHexString(), ...r, bg.toHexString()]
+
+}
 
 export const ColorObj = (colors: ColorRange, scheme: UmbraAdjusted, range: Shade[] = [10, 20, 50]) => ({
   color: colors.color,

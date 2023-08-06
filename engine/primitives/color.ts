@@ -7,8 +7,8 @@ export type Color = tinycolor.Instance
 export type Colour = string | Color
 
 type ColorRange = {
-  color: Color
-  contrast: Color
+  foreground: Color
+  background: Color
   readability?: number
   iterations?: number
 }
@@ -38,7 +38,6 @@ function APCAcolor(color: Colour): RGB {
   return [rgba.r, rgba.g, rgba.b]
 }
 
-
 //take fg. Compare it to black and white. the one with the highest contrast decides if we should lighten or darken it.
 //keep adjusting till lc target is reached
 
@@ -55,11 +54,11 @@ export const getReadability = (col: Colour, bg: Colour) => {
   return tinycolor.readability(col, bg)
 }
 
-export const getReadable = ({color, contrast, readability, iterations}: ColorRange) => {
+export const getReadable = ({ foreground, background, readability, iterations }: ColorRange) => {
   const safeReadability = readability || stored.readability
   const max = iterations || stored.iterations
-  return increaseContrastUntil({color, contrast, max, condition: (c) => {
-    const current = getReadability(c, contrast)
+  return increaseContrastUntil({color: foreground, contrast: background, max, condition: (c) => {
+    const current = getReadability(c, background)
     return current > safeReadability
   }})
 }
@@ -86,16 +85,13 @@ const increaseContrast = ({color, contrast, val = 100}: MoveAwayFrom) => {
 }
 
 export const pickContrast = (c: Color, scheme: UmbraAdjusted) => {
-  //returns either the background or the foreground
-  //based on which is more readable against the accent
   const color = c.clone()
-  var mostReadable = tinycolor.mostReadable(color, [
+  return tinycolor.mostReadable(color, [
     scheme.background || tinycolor('white'),
     scheme.foreground || tinycolor('black'),
   ])
-  return mostReadable
 }
 
-export function rangeShader(color: Color, mixer: Color, percent = 50) {
+export function colorMix(color: Color, mixer: Color, percent = 50) {
   return tinycolor.mix(color, mixer, percent)
 }

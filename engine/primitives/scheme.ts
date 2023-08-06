@@ -1,14 +1,17 @@
 import tinycolor from 'tinycolor2'
 import type { UmbraInput, UmbraScheme } from '../types'
-import { foreground } from '../adjust'
-import { increaseContrastUntil, getReadability } from './color'
+import { increaseContrastUntil, getReadability, getReadable } from './color'
 
 function inverseValidator(theme: UmbraInput) {
   const fgDark = tinycolor(theme.scheme.foreground).isDark()
   const bgDark = tinycolor(theme.scheme.background).isDark()
 
+  const background = tinycolor(theme.scheme.background)
+  const foreground = tinycolor(theme.scheme.foreground)
+  const readability = theme.settings?.readability
+
   if (fgDark !== bgDark) return {}
-  const fg = foreground(theme)
+  const fg = getReadable({ foreground, background, readability })
   if(fg.isDark() !== bgDark) {
     return {
       background: fg.toHexString(),
@@ -19,8 +22,6 @@ function inverseValidator(theme: UmbraInput) {
   // Both are same, so we need to adjust something 
   // or return a failure of some kind
   function createInvertedFlippingReadability() {
-    const background = tinycolor(theme.scheme.background)
-    const foreground = tinycolor(theme.scheme.foreground)
     const oppositeLightEnd = background.isDark() ? tinycolor('white') : tinycolor('black')
     const currentLightEnd = background.isDark() ? tinycolor('black') : tinycolor('white')
     const readability = getReadability(background, currentLightEnd)

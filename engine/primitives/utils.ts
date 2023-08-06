@@ -15,7 +15,7 @@ export const getHSLA = (col: string, a = 0.6) => {
 }
 
 //inversion tools
-export const invert = (color: Color, val = 100) => {
+const invert = (color: Color, val = 100) => {
   return color.isDark() ? color.lighten(val) : color.darken(val)
 }
 
