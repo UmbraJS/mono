@@ -1,6 +1,6 @@
 import { shadowDOM } from './shadow'
-import { mutateUmbra, } from '../main'
-import { randomScheme, umbra } from "../"
+import { mutateUmbra } from '../../../main'
+import { randomScheme, umbra } from '../../..'
 
 export class RandomButton extends HTMLElement {
   constructor() {
@@ -13,10 +13,13 @@ export class RandomButton extends HTMLElement {
 
     this.addEventListener('click', handleClick)
 
-    shadowDOM(this, `
+    shadowDOM(
+      this,
+      `
       <button id="random">
         Random Scheme
       </button>
-    `)
+    `
+    )
   }
 }

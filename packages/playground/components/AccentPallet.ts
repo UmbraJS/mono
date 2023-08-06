@@ -1,11 +1,13 @@
 import { shadowDOM, stringMap } from './shadow'
-import { u } from '../main'
+import { u } from '../../../main'
 
 export class AccentPallet extends HTMLElement {
   constructor() {
     const accents = u.output.ranges.filter((c) => c.name === 'accents')
     super()
-    shadowDOM(this, `
+    shadowDOM(
+      this,
+      `
       <style>
         .accents {
           display: flex;
@@ -21,18 +23,21 @@ export class AccentPallet extends HTMLElement {
         }
       </style>
       <div class="accents">
-        ${stringMap(accents?.map((fl, index) => {
-          const id = index ? index + 1 : 0
-          const number = id > 1 ? id : ''
-          const name = 'accent' + number
-          return `
+        ${stringMap(
+          accents?.map((fl, index) => {
+            const id = index ? index + 1 : 0
+            const number = id > 1 ? id : ''
+            const name = 'accent' + number
+            return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>
               <div id="${fl.foreground.isDark()}" class="contrast pallet" style="background: var(--${name}-contrast)"></div>
             </div>
           `
-        }))}
+          })
+        )}
       </div>
-    `)
+    `
+    )
   }
 }

@@ -1,0 +1,21 @@
+{
+  "name": "@umbrajs/playground",
+  "version": "0.0.0",
+  "description": "Umbra playground",
+  "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "license": "MIT",
+  "keywords": [],
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0",
+    "vite-plugin-dts": "^2.1.0"
+  },
+  "dependencies": {
+    "@umbrajs/core": "^0.0.0"
+  }
+}
