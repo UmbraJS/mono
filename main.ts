@@ -1,15 +1,8 @@
-import {
-  umbra,
-  UmbraSettings,
-} from "."
+import { umbra } from "."
 import { ColorPallet } from "./components/ColorPallet"
 import { AccentPallet } from "./components/AccentPallet"
 import { RandomButton } from "./components/RandomButton"
 import { InverseButton } from "./components/InverseButton"
-
-const settings: UmbraSettings = {
-  readability: 4,
-}
 
 export let u = umbra({
   background: 'white',
@@ -19,7 +12,7 @@ export let u = umbra({
     link: '#03A9F4',
     warning: '#e91e63',
   },
-}, settings).apply()
+}).apply()
 
 export function mutateUmbra(newUmbra = u) {
   u = newUmbra

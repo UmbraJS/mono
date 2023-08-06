@@ -95,7 +95,6 @@ function flattenColors({formated, prefix}: FlattenColors) {
     else return prefixed
   }
 
-
   formated.forEach((c) => {
     const name = getName(c.name)
     flattened.push({ name, color: c.background })
@@ -118,7 +117,6 @@ function flattenColors({formated, prefix}: FlattenColors) {
 
   return sortFlattened(flattened)
 }
-
 
 function sortFlattened(flattened: FlattenColor[]) {
   const foregroundPrefix = "--foreground";

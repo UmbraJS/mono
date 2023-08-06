@@ -3,7 +3,7 @@ import { u } from '../main'
 
 export class AccentPallet extends HTMLElement {
   constructor() {
-    const accents = u.output.generated.filter((c) => c.name === 'accent')
+    const accents = u.output.ranges.filter((c) => c.name === 'accents')
     super()
     shadowDOM(this, `
       <style>
@@ -28,7 +28,7 @@ export class AccentPallet extends HTMLElement {
           return `
             <div class="accent-range">
               <color-pallet name="accents" index="${index}"></color-pallet>
-              <div id="${fl.contrast.isDark()}" class="contrast pallet" style="background: var(--${name}-contrast)"></div>
+              <div id="${fl.foreground.isDark()}" class="contrast pallet" style="background: var(--${name}-contrast)"></div>
             </div>
           `
         }))}

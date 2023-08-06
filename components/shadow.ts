@@ -9,13 +9,13 @@ export function shadowDOM(that: any, template: string) {
 }
 
 const getArray = (name: string) => {
-  return u.output.generated.filter((c) => c.name === name)
+  return u.output.ranges.filter((c) => c.name === name)
 }
 
-function shadeArray(el: Element | null, name?: string, index?: number) {
+function shadeArray(el: Element | null, name?: string, index: number = 0) {
   if(!name || !el) return
 
-  const shades = getArray(name)[index ||0].shades
+  const shades = getArray(name)[index].shades
   const pallet = el
 
   const id = index ? index + 1 : 0
