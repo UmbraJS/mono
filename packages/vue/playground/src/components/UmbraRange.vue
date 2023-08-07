@@ -8,7 +8,9 @@ defineProps<{
 </script>
 
 <template>
+  <h2>{{ range.name }}</h2>
   <div class="range">
+    <UmbraPallet :name="range.name" :color="range.background" :index="0" />
     <UmbraPallet
       v-for="(color, index) in range.shades"
       :key="index"
@@ -16,7 +18,12 @@ defineProps<{
       :color="color"
       :index="index"
     />
+    <UmbraPallet :name="range.name" :color="range.foreground" :index="0" />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.range {
+  display: flex;
+}
+</style>

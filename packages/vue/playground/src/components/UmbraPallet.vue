@@ -7,16 +7,19 @@ const props = defineProps<{
   index: number
 }>()
 
+const colorId = computed(() => {
+  return props.index > 0 ? '-' + (props.index * 10 + 10) : ''
+})
+
 const cssVariable = computed(() => {
-  const id = props.index > 0 ? '-' + (props.index * 10 + 10) : ''
-  return `--${props.name}${id}`
+  return `var(--${props.name}${colorId.value})`
 })
 </script>
 
 <template>
   <div class="range">
     <div class="pallet">
-      <p>{{ cssVariable }}</p>
+      <p>{{ colorId }}</p>
     </div>
   </div>
 </template>
@@ -26,6 +29,10 @@ const cssVariable = computed(() => {
   aspect-ratio: 1/1;
   height: 6rem;
   width: 6rem;
-  background-color: rgb(71, 8, 18);
+  background-color: v-bind(cssVariable);
+}
+
+.pallet p {
+  color: var(--base-foreground);
 }
 </style>
