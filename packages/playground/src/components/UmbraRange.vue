@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { FormatedColor } from '@umbrajs/core'
+import type { FormatedRange } from '@umbrajs/core'
 import UmbraPallet from './UmbraPallet.vue'
 
 defineProps<{
-  range: FormatedColor
+  range: FormatedRange
 }>()
 </script>
 
@@ -18,7 +18,7 @@ defineProps<{
       :color="color"
       :index="index"
     />
-    <UmbraPallet :name="range.name" :color="range.foreground" :index="0" />
+    <UmbraPallet :name="range.name" :color="range.foreground" :index="0" prefix="foreground" />
   </div>
 </template>
 
