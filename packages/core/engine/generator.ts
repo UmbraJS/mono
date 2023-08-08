@@ -1,5 +1,5 @@
 import tinycolor from 'tinycolor2'
-import { pickContrast, colorMix } from './primitives/color'
+import { pickContrast, colorMix, getReadability } from './primitives/color'
 
 import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types'
 
@@ -16,25 +16,40 @@ interface GetRawRange {
 function getRange({ from, to, range }: GetRawRange) {
   const foreground = tinycolor(from)
   const background = tinycolor(to)
-
-  const r = range.map((val) => {
+  return range.map((val) => {
     const isNumber = Boolean(typeof val === 'number')
     if (!isNumber) return tinycolor(val as string)
     return colorMix(foreground, background, val as number)
   })
+}
 
-  return r
+function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
+  const background = adjusted.background
+  const foreground = adjusted.foreground
+  const range = adjusted.input.settings.accents?.shade || []
+  const shades = getRange({ from: background, to: foreground, range })
+  const length = shades.length
+
+  const readability = shades.map((shade, index) => ({
+    value: getReadability(shade, accent),
+    index
+  }))
+
+  //get the least readable shade
+  const leastReadable = readability.reduce((prev, curr) => (prev.value < curr.value ? prev : curr))
+
+  console.log('leastReadable', leastReadable, readability)
+
+  return getRange({ from: accent, to: foreground, range })
 }
 
 function accents(adjusted: UmbraAdjusted) {
-  const range = adjusted.input.settings.accents?.shade || []
   return adjusted.accents.map((accent, index) => {
-    const background = adjusted.background
     const name = index === 0 ? 'accent' : `accent${index + 1}`
     return {
       name: name,
       background: accent,
-      shades: getRange({ from: accent, to: background, range }),
+      shades: accentRange(adjusted, accent),
       foreground: pickContrast(accent, adjusted)
     }
   })
@@ -60,15 +75,13 @@ function getColor(value: CustomColor, obj: GeneratedOutput) {
   return tinycolor(color as string)
 }
 
-interface GeneratedObject {
-  base: RawRange
-  accents: RawRange[]
-}
-
 interface GeneratedOutput {
   input: UmbraInput
   adjusted: UmbraAdjusted
-  generated: GeneratedObject
+  generated: {
+    base: RawRange
+    accents: RawRange[]
+  }
 }
 
 export function generate(adjusted: UmbraAdjusted) {

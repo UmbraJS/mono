@@ -1,20 +1,24 @@
 <script setup lang="ts">
+import tinycolor from 'tinycolor2'
 import { computed } from 'vue'
-import { getReadable } from '@umbrajs/core'
+import { findContrast } from '@umbrajs/core'
+import type { UmbraOutputs } from '@umbrajs/core'
 
 const props = defineProps<{
   color: string
   name: string
-  index: number
+  index?: number
   prefix?: string
+  umbra: UmbraOutputs
 }>()
 
 function getIndex() {
+  if (props.index === undefined) return 0
   return props.index * 10 + 10
 }
 
 const colorId = computed(() => {
-  return props.index > 0 ? '-' + getIndex() : ''
+  return props.index !== undefined ? '-' + getIndex() : ''
 })
 
 const cssVariable = computed(() => {
@@ -24,11 +28,7 @@ const cssVariable = computed(() => {
 })
 
 const textColor = computed(() => {
-  return getReadable({
-    background: props.color,
-    foreground: '#000000',
-    readability: 4
-  }).toHexString()
+  return findContrast(tinycolor(props.color), props.umbra.output.adjusted).toHexString()
 })
 </script>
 

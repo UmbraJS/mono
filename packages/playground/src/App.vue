@@ -11,7 +11,7 @@ const u = umbra({
 
 <template>
   <div class="ranges">
-    <UmbraRange v-for="range in u.formated" :key="range.name" :range="range" />
+    <UmbraRange v-for="range in u.formated" :key="range.name" :range="range" :umbra="u" />
   </div>
 </template>
 

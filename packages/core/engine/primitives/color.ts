@@ -117,6 +117,8 @@ export const pickContrast = (c: Color, scheme: UmbraAdjusted) => {
   ])
 }
 
-export function colorMix(color: Color, mixer: Color, percent = 50) {
-  return tinycolor.mix(color, mixer, percent)
+export function colorMix(from: Colour, to: Colour, percent = 50) {
+  const tinyFrom = tinycolor(from)
+  const tinyTo = tinycolor(to)
+  return tinycolor.mix(tinyFrom, tinyTo, percent)
 }
