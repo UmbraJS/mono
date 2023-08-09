@@ -36,6 +36,11 @@ function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
   const leftRange = range.slice(0, leastReadable.index)
   const rightRange = range.slice(leastReadable.index + 1, length)
 
+  const leftLength = leftRange.length
+  const rightLength = rightRange.length
+
+  const percentOfFullRange = 50
+
   const left = getRange({ from: background, to: accent, range: leftRange })
   const right = getRange({ from: accent, to: foreground, range: rightRange })
 

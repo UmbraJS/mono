@@ -3,7 +3,7 @@ import { UmbraInput, UmbraScheme, UmbraOutput, UmbraSettings, SettingType } from
 export let generated: UmbraOutput | null = null
 
 export let settings: UmbraSettings = {
-  readability: 70,
+  readability: 4,
   iterations: 15,
   foreground: setting(),
   background: setting(),

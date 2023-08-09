@@ -56,7 +56,7 @@ export const getReadable = ({ foreground, background, readability, iterations }:
     contrast,
     max,
     condition: (c) => {
-      const current = getReadability(c, background)
+      const current = Math.abs(getReadability(c, background))
       return current > safeReadability
     }
   })
