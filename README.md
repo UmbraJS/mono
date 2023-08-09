@@ -8,7 +8,7 @@
 - :telescope: **Typesafe** - Written fully in typescript giving you great auto completion even if you dont use TypeScript
 - :hammer_and_wrench: **Maintainable** - Enforces a single source of truth for your entire color system
 - :man_in_manual_wheelchair: **Accessible** - Lets you control readability scores, enforce good readability or just help monitor
-- :sunrise_over_mountains: **Noncommital** - If at any point you want to divorce yourself from this dependency all you have to do is just copy paste the output. Then you can delete the entire library without problem and take over the theming however you want from there. Youre never locked in to this library.
+- :sunrise_over_mountains: **Noncommital** - If at any point you want to divorce yourself from this dependency all you have to do is just copy paste the output. Then you can delete the entire library without problem and take over the theming however you want from there. Youre never locked into this library.
 
 UmbraJS is a flexible theme managment library that allows you to create semantic color themes based on the Umbra pattern. This pattern defines the relationship between colors as opposed to focusing on the elements the colors belong to. Its a simpler way to ensure readability and consistency across a wide range of themes. By following this convention and taking advantge of the powefull color generator and its underlying color primitives, you can generate both light and dark themes, as well as any other theme in between, with ease.
 
