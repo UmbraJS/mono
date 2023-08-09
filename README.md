@@ -1,6 +1,6 @@
 # Umbra
 
-> **Note**
+> **Warning**
 > Project Umbra is still in early development and is not yet ready for production use. In fact its not even ready for development use. The API is still changing and the documentation is still being written. If you want to help out or just want to know when its ready, please star the repo and follow me on twitter [@MorkSamuel](https://twitter.com/MorkSamuel)
 
 - :kissing_cat: \*\*\_Simple\*\*\* - Just a simple JS function that lets you define your theme
