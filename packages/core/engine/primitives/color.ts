@@ -44,11 +44,6 @@ export const getReadability = (fg: Colour, bg: Colour, wcag = false) => {
 export const getReadable = ({ foreground, background, readability, iterations }: ColorRawRange) => {
   const color = tinycolor(foreground)
   const contrast = tinycolor(background)
-
-  // function mapRange(value: number, oldMax = 100, newMax = 20) {
-  //   return ((value - 0) / (oldMax - 0)) * (newMax - 0) + 0
-  // }
-
   const safeReadability = readability || stored.readability
   const max = iterations || stored.iterations
   return increaseContrastUntil({
