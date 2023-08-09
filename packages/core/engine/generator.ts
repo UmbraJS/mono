@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
 import { pickContrast, colorMix, getReadability } from './primitives/color'
 
-import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types/types'
+import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types'
 
 interface GetRawRange {
   from: tinycolor.Instance

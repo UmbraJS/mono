@@ -1,4 +1,4 @@
-import { SchemeKey } from '../types/types'
+import { SchemeKey } from '../types'
 import { FlattenColor, UmbraOutputs } from './format'
 
 //Why aliases? 2 reasons:

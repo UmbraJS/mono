@@ -2,7 +2,7 @@ import tinycolor from 'tinycolor2'
 
 //Configs and Utilities
 import { settings, defaultScheme, defaultTheme } from './store'
-import type { UmbraOutput, UmbraInput, UmbraSettings, UmbraAdjusted } from './types/types'
+import type { UmbraOutput, UmbraInput, UmbraSettings, UmbraAdjusted } from './types'
 
 //Primitives
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'

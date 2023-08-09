@@ -1,6 +1,6 @@
 import tinycolor from 'tinycolor2'
 import { umbra } from '../..'
-import { UmbraOutput, RawRange, FormatedRange } from '../types/types'
+import { UmbraOutput, RawRange, FormatedRange } from '../types'
 import { attach } from './attach'
 
 export type Formater = (color: tinycolor.Instance) => string
