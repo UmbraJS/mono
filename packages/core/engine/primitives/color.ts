@@ -13,10 +13,10 @@ type ColorRawRange = {
   iterations?: number
 }
 
-interface increaseContrastUntil {
+interface IncreaseContrastUntil {
   color: Color
   contrast?: Color
-  max?: number
+  iterations?: number
   condition: (newColor: tinycolor.Instance, iterations?: number) => boolean
 }
 
@@ -44,15 +44,13 @@ export const getReadability = (fg: Colour, bg: Colour, wcag = false) => {
 export const getReadable = ({ foreground, background, readability, iterations }: ColorRawRange) => {
   const color = tinycolor(foreground)
   const contrast = tinycolor(background)
-  const safeReadability = readability || stored.readability
-  const max = iterations || stored.iterations
   return increaseContrastUntil({
     color,
     contrast,
-    max,
+    iterations: iterations || stored.iterations,
     condition: (c) => {
       const current = Math.abs(getReadability(c, background))
-      return current > safeReadability
+      return current > (readability || stored.readability)
     }
   })
 }
@@ -61,12 +59,12 @@ export function increaseContrastUntil({
   color,
   contrast,
   condition,
-  max = 15
-}: increaseContrastUntil) {
+  iterations = 15
+}: IncreaseContrastUntil) {
   let newColor = color
-  let iterations = 0
-  while (!condition(newColor, iterations) && iterations < max) {
-    iterations += 1
+  let count = 0
+  while (!condition(newColor, count) && count < iterations) {
+    count += 1
     newColor = increaseContrast({
       val: iterations,
       color: newColor,
