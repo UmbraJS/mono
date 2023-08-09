@@ -11,6 +11,7 @@ defineProps<{
 <template>
   <h2 v-if="false">{{ range.name }}</h2>
   <div class="range">
+    <UmbraPallet variable="accent" text="base-foreground" />
     <UmbraPallet variable="base" text="base-foreground" />
     <UmbraPallet
       v-for="(color, index) in range.shades"

@@ -27,7 +27,7 @@ function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
   const length = shades.length
 
   const readability = shades.map((shade, index) => ({
-    value: getReadability(shade, accent),
+    value: Math.abs(getReadability(shade, accent)),
     index
   }))
 
