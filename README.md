@@ -3,11 +3,11 @@
 > **Warning**
 > Project Umbra is still in early development and is not yet ready for production use. In fact its not even ready for development use. The API is still changing and the documentation is still being written. If you want to help out or just want to know when its ready, please star the repo and follow me on twitter [@MorkSamuel](https://twitter.com/MorkSamuel)
 
-- :kissing_cat: \*\*\_Simple\*\*\* - Just a simple JS function that lets you define your theme
+- :kissing_cat: **_Simple*** - Just a simple JS function that lets you define your theme
 - :muscle: **_Flexible_** - Flexible primitives underneath that let you build your own logic
 - :telescope: **_Typesafe_** - Written fully in typescript giving you great auto completion even if you dont use TypeScript
-- :hammer_and_wrench: \*\*\_Maintainable\*\*\* - Enforces a single source of truth for your entire color system
-- :man_in_manual_wheelchair: \*\*\_Accessible\*\*\* - Lets you control readability scores, enforce good readability or just help monitor
+- :hammer_and_wrench: **_Maintainable*** - Enforces a single source of truth for your entire color system
+- :man_in_manual_wheelchair: **_Accessible*** - Lets you control readability scores, enforce good readability or just help monitor
 
 UmbraJS is a flexible theme managment library that allows you to create semantic color themes based on the Umbra pattern. This pattern defines the relationship between colors as opposed to focusing on the elements the colors belong to. Its a simpler way to ensure readability and consistency across a wide range of themes. By following this convention and taking advantge of the powefull color generator and its underlying color primitives, you can generate both light and dark themes, as well as any other theme in between, with ease.
 
