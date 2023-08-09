@@ -1,5 +1,5 @@
 import tinycolor from 'tinycolor2'
-import type { UmbraInput, UmbraScheme, UmbraAdjusted } from '../types'
+import type { UmbraInput, UmbraScheme, UmbraAdjusted } from '../types/types'
 import { increaseContrastUntil, getReadability, getReadable } from './color'
 
 function inverseValidator(theme: UmbraInput) {

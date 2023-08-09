@@ -18,7 +18,7 @@ import type {
   UmbraInput,
   RawRange,
   FormatedRange
-} from './engine/types'
+} from './engine/types/types'
 import { inverse, isDark, findContrast } from './engine/primitives/scheme'
 
 export {

@@ -1,36 +1,33 @@
-import tinycolor from "tinycolor2"
+import tinycolor from 'tinycolor2'
 import { umbra } from '../..'
-import { UmbraOutput, RawRange, FormatedRange } from '../types'
-import { attach } from "./attach"
+import { UmbraOutput, RawRange, FormatedRange } from '../types/types'
+import { attach } from './attach'
 
 export type Formater = (color: tinycolor.Instance) => string
 
 interface FormatProps {
-  output: UmbraOutput;
-  formater?: Formater;
-  element?: HTMLElement;
+  output: UmbraOutput
+  formater?: Formater
+  element?: HTMLElement
 }
 
 export interface Format extends UmbraOutputs {
-  attach: (element?: HTMLElement) => UmbraOutputs;
+  attach: (element?: HTMLElement) => UmbraOutputs
 }
 
 export interface UmbraOutputs {
-  flattened: FlattenColor[];
-  formated: FormatedRange[];
-  output: UmbraOutput;
+  flattened: FlattenColor[]
+  formated: FormatedRange[]
+  output: UmbraOutput
 }
 
-export const format = ({
-  output = umbra().output,
-  formater = defaultFormater,
-}: FormatProps) => {
+export const format = ({ output = umbra().output, formater = defaultFormater }: FormatProps) => {
   const gen = output.ranges
   const formated = gen.map((c) => getColors(c, formater))
 
   const flattened = flattenColors({
     prefix: '--',
-    formated,
+    formated
   })
 
   const outputs: UmbraOutputs = {
@@ -40,7 +37,7 @@ export const format = ({
   }
 
   return {
-    attach: (element) => attach({outputs, element}),
+    attach: (element) => attach({ outputs, element }),
     ...outputs
   } as Format
 }
@@ -65,21 +62,21 @@ function getColors({ name, foreground, background, shades }: RawRange, formater 
     name: name,
     background: formater(background),
     shades: shades.map((c) => formater(c)),
-    foreground: formater(foreground),
+    foreground: formater(foreground)
   }
 }
 
 export interface FlattenColor {
-  name: string;
-  color: string;
+  name: string
+  color: string
 }
 
 interface FlattenColors {
-  formated: FormatedRange[];
-  prefix?: string | false;
+  formated: FormatedRange[]
+  prefix?: string | false
 }
 
-function flattenColors({formated, prefix}: FlattenColors) {
+function flattenColors({ formated, prefix }: FlattenColors) {
   const flattened: FlattenColor[] = []
 
   function prefixName(name: string) {
@@ -89,9 +86,9 @@ function flattenColors({formated, prefix}: FlattenColors) {
   let existingAccents = 0
   function getName(name: string) {
     const prefixed = prefixName(name)
-    if(name !== "accent") return prefixed
+    if (name !== 'accent') return prefixed
     existingAccents++
-    if(existingAccents > 1) return prefixed + existingAccents
+    if (existingAccents > 1) return prefixed + existingAccents
     else return prefixed
   }
 
@@ -101,16 +98,16 @@ function flattenColors({formated, prefix}: FlattenColors) {
     flattened.push(...flattenShades(c.shades, name))
     flattened.push({
       name: name + '-foreground',
-      color: c.foreground,
+      color: c.foreground
     })
   })
 
   function flattenShades(shades: any[], name: string) {
     return shades.map((shade, i) => {
       const token = (+i + 1) * 10
-       return {
+      return {
         name: name + '-' + token,
-        color: shade,
+        color: shade
       }
     })
   }
@@ -119,24 +116,22 @@ function flattenColors({formated, prefix}: FlattenColors) {
 }
 
 function sortFlattened(flattened: FlattenColor[]) {
-  const foregroundPrefix = "--foreground";
-  const backgroundPrefix = "--background";
-  
-  const background = flattened.filter(item => item.name.startsWith(backgroundPrefix));
-  const foreground= flattened.filter(item => item.name.startsWith(foregroundPrefix));
-  const rest = flattened.filter(item => !item.name.startsWith(backgroundPrefix) && !item.name.startsWith(foregroundPrefix));
-    
-  const ordered = [
-    ...background,
-    ...foreground.reverse(),
-    ...rest
-  ];
+  const foregroundPrefix = '--foreground'
+  const backgroundPrefix = '--background'
 
-  const filtered = ordered.filter(({name}) => !invalidColor(name))
+  const background = flattened.filter((item) => item.name.startsWith(backgroundPrefix))
+  const foreground = flattened.filter((item) => item.name.startsWith(foregroundPrefix))
+  const rest = flattened.filter(
+    (item) => !item.name.startsWith(backgroundPrefix) && !item.name.startsWith(foregroundPrefix)
+  )
+
+  const ordered = [...background, ...foreground.reverse(), ...rest]
+
+  const filtered = ordered.filter(({ name }) => !invalidColor(name))
   function invalidColor(name: string) {
-    const regex = /(?:background|foreground).*contrast/i;
-    return regex.test(name);
+    const regex = /(?:background|foreground).*contrast/i
+    return regex.test(name)
   }
-  
+
   return filtered
 }

@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
 import { pickContrast, colorMix, getReadability } from './primitives/color'
 
-import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types'
+import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types/types'
 
 interface GetRawRange {
   from: tinycolor.Instance
@@ -18,6 +18,10 @@ function getRange({ from, to, range }: GetRawRange) {
     return colorMix(foreground, background, val as number)
   })
 }
+
+//TODO: Normalize mixed percentages accross range stops
+//TODO: Enable multiple range stops
+//TODO: Add support for custom accent colors
 
 function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
   const background = adjusted.background

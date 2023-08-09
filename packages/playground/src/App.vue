@@ -3,8 +3,8 @@ import { umbra } from '@umbrajs/core'
 import UmbraRange from './components/UmbraRange.vue'
 
 const u = umbra({
-  background: 'black',
-  foreground: 'white',
+  background: 'white',
+  foreground: 'black',
   accents: ['#a94d94', '#1c7d40', '#e91e63', '#4f0820']
 }).apply()
 </script>

@@ -1,32 +1,32 @@
 import type tinycolor from 'tinycolor2'
-import type { Alias } from './primitives/attach'
+import type { Alias } from '../primitives/attach'
 
 export interface RawRange {
-  name: string;
-  background: tinycolor.Instance;
-  shades: tinycolor.Instance[];
-  foreground: tinycolor.Instance;
+  name: string
+  background: tinycolor.Instance
+  shades: tinycolor.Instance[]
+  foreground: tinycolor.Instance
 }
 
 export interface FormatedRange {
-  name: string;
-  background: string;
-  shades: string[];
-  foreground: string;
+  name: string
+  background: string
+  shades: string[]
+  foreground: string
 }
 
 export interface UmbraOutput {
-  input: UmbraInput;
-  adjusted: UmbraAdjusted;
-  ranges: RawRange[];
+  input: UmbraInput
+  adjusted: UmbraAdjusted
+  ranges: RawRange[]
 }
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string
 
 export interface UmbraColors {
-  colors: RawRange[];
-  input: UmbraInput,
-  adjusted: UmbraAdjusted,
+  colors: RawRange[]
+  input: UmbraInput
+  adjusted: UmbraAdjusted
 }
 
 type SubSchemes = {
@@ -34,25 +34,25 @@ type SubSchemes = {
 }
 
 export interface UmbraScheme {
-  background: string,
-  foreground: string,
-  accents: string[],
+  background: string
+  foreground: string
+  accents: string[]
   custom?: ColorList
-  subSchemes?: SubSchemes,
+  subSchemes?: SubSchemes
 }
 
 export interface UmbraInput {
-  scheme: UmbraScheme,
-  settings: UmbraSettings,
-  inversed?: UmbraInput,
+  scheme: UmbraScheme
+  settings: UmbraSettings
+  inversed?: UmbraInput
 }
 
 export interface UmbraAdjusted {
-  background: tinycolor.Instance,
-  foreground: tinycolor.Instance,
-  accents: tinycolor.Instance[],
-  subSchemes?: SubSchemes,
-  input: UmbraInput,
+  background: tinycolor.Instance
+  foreground: tinycolor.Instance
+  accents: tinycolor.Instance[]
+  subSchemes?: SubSchemes
+  input: UmbraInput
 }
 
 export type CustomColor = string | ((s: UmbraInput) => string)
@@ -74,5 +74,5 @@ export interface UmbraSettings {
   background?: SettingType
   accents?: SettingType
   aliases?: Alias | true
-  shades: Shade[]
+  shades?: Shade[]
 }

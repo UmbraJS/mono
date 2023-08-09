@@ -1,16 +1,16 @@
-import tinycolor from "tinycolor2"
+import tinycolor from 'tinycolor2'
 import { settings } from '../store'
 import { umbra } from '../'
-import { UmbraInput, UmbraSettings } from '..//types'
+import { UmbraInput, UmbraSettings } from '../types/types'
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color
 
 export const getHSLA = (col: string, a = 0.6) => {
-  const color = tinycolor(col);
-  const alpha = color.setAlpha(a);
-  const HSL = alpha.toHsl();
-  const string = alpha.toHslString();
+  const color = tinycolor(col)
+  const alpha = color.setAlpha(a)
+  const HSL = alpha.toHsl()
+  const string = alpha.toHslString()
   return { string, HSL }
 }
 
@@ -48,14 +48,14 @@ export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): Um
     scheme: {
       background: randomHex(),
       foreground: randomHex(),
-      accents: Array.from({ length: randomSettings.amount }, () => randomHex()),
-    },
+      accents: Array.from({ length: randomSettings.amount }, () => randomHex())
+    }
   }
 }
 
 export function randomUmbra(props: RandomSettings = { amount: 1 }) {
   const theme = randomScheme(props)
   return umbra({
-    ...theme.scheme,
+    ...theme.scheme
   })
 }
