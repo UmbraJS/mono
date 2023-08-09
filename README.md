@@ -1,10 +1,13 @@
 # Umbra
 
-- :kissing_cat: **_Simple_** - Just a simple JS function that lets you define your theme
+> **Note**
+> Project Umbra is still in early development and is not yet ready for production use. In fact its not even ready for development use. The API is still changing and the documentation is still being written. If you want to help out or just want to know when its ready, please star the repo and follow me on twitter [@MorkSamuel](https://twitter.com/MorkSamuel)
+
+- :kissing*cat: \*\*\_Simple*\*\* - Just a simple JS function that lets you define your theme
 - :muscle: **_Flexible_** - Flexible primitives underneath that let you build your own logic
 - :telescope: **_Typesafe_** - Written fully in typescript giving you great auto completion even if you dont use TypeScript
-- :hammer_and_wrench: **_Maintainable_** - Enforces a single source of truth for your entire color system
-- :man_in_manual_wheelchair: **_Accessible_** - Lets you control readability scores, enforce good readability or just help monitor
+- :hammer*and_wrench: \*\*\_Maintainable*\*\* - Enforces a single source of truth for your entire color system
+- :man*in_manual_wheelchair: \*\*\_Accessible*\*\* - Lets you control readability scores, enforce good readability or just help monitor
 
 UmbraJS is a flexible theme managment library that allows you to create semantic color themes based on the Umbra pattern. This pattern defines the relationship between colors as opposed to focusing on the elements the colors belong to. Its a simpler way to ensure readability and consistency across a wide range of themes. By following this convention and taking advantge of the powefull color generator and its underlying color primitives, you can generate both light and dark themes, as well as any other theme in between, with ease.
 
@@ -14,7 +17,7 @@ Test it out yourself. Head over to [UmbraX](https://umbrax.netlify.app/) to get 
 
 - :muscle: **_Manage_** - UmbraJS assumes a strict but very simple pattern. Foreground, background, accent. It takes this scheme, adjusts the colors in relationship to each other to ensure reusability. Then it generates a bunch of sub colors in each category - mostly diffirent shades of each color. Then it distributes these colors by assigning them to CSS variables that it attaches to the HTML by default or a given element if passed.
 - :fireworks: **_Update_** - To update the theme simply rerun the function and it will reassign the CSS variables across the entire page.
-- :sunrise_over_mountains: **_Scale_** - To create more complex themes simply run multiple umbra theme functions on diffirent elements. This lets you infinetly scale up your theme complexity at any point without having to change any of the color assignments becuase all you need to change is the context by reassigning the color variables with new values at the given element scope.
+- :sunrise*over_mountains: \*\*\_Scale*\*\* - To create more complex themes simply run multiple umbra theme functions on diffirent elements. This lets you infinetly scale up your theme complexity at any point without having to change any of the color assignments becuase all you need to change is the context by reassigning the color variables with new values at the given element scope.
 
 #### :test_tube: Benefits of this approach
 
