@@ -1,7 +1,7 @@
+import tinycolor from 'tinycolor2'
+import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import { UmbraAdjusted } from '../types'
 import { settings } from '../store'
-import tinycolor from 'tinycolor2'
-import { calcAPCA } from 'apca-w3'
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color
@@ -31,27 +31,14 @@ const stored = {
   iterations: settings.iterations || 15
 }
 
-type RGB = [number, number, number]
-
-function APCAcolor(color: Colour): RGB {
-  const rgba = tinycolor(color).toRgb()
-  return [rgba.r, rgba.g, rgba.b]
+function apcaContrast(fg: Colour, bg: Colour) {
+  const fgc = tinycolor(fg).toRgb()
+  const bgc = tinycolor(bg).toRgb()
+  return APCAcontrast(sRGBtoY([fgc.r, fgc.g, fgc.b]), sRGBtoY([bgc.r, bgc.g, bgc.b]))
 }
 
-//take fg. Compare it to black and white. the one with the highest contrast decides if we should lighten or darken it.
-//keep adjusting till lc target is reached
-
-//accent is middle out? At what point in the range is the accent the most like itself?
-
-export function APCAcontrast(col: Colour, bg: Colour) {
-  return calcAPCA(APCAcolor(col), APCAcolor(bg))
-}
-
-export const getReadability = (col: Colour, bg: Colour) => {
-  //TODO: use APCA to calculate contrast
-  // let contrastLc = APCAcontrast(col, bg)
-  // console.log(contrastLc, tinycolor.readability(col, bg))
-  return tinycolor.readability(col, bg)
+export const getReadability = (fg: Colour, bg: Colour, wcag = true) => {
+  return wcag ? tinycolor.readability(fg, bg) : apcaContrast(fg, bg)
 }
 
 export const getReadable = ({ foreground, background, readability, iterations }: ColorRawRange) => {

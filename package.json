@@ -1,6 +1,9 @@
 {
   "name": "umbrajs",
   "private": true,
+  "scripts": {
+    "dev": "cd packages/playground && npm run dev"
+  },
   "workspaces": [
     "packages/core"
   ]

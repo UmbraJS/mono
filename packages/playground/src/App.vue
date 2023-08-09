@@ -19,6 +19,6 @@ const u = umbra({
 .ranges {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0rem;
 }
 </style>

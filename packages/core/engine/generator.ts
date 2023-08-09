@@ -3,10 +3,6 @@ import { pickContrast, colorMix, getReadability } from './primitives/color'
 
 import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types'
 
-function findContrast(color: tinycolor.Instance, adjusted: UmbraAdjusted) {
-  return tinycolor.mostReadable(color, [adjusted.background || color, adjusted.foreground || color])
-}
-
 interface GetRawRange {
   from: tinycolor.Instance
   to: tinycolor.Instance
@@ -35,12 +31,15 @@ function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
     index
   }))
 
-  //get the least readable shade
   const leastReadable = readability.reduce((prev, curr) => (prev.value < curr.value ? prev : curr))
 
-  console.log('leastReadable', leastReadable, readability)
+  const leftRange = range.slice(0, leastReadable.index)
+  const rightRange = range.slice(leastReadable.index + 1, length)
 
-  return getRange({ from: accent, to: foreground, range })
+  const left = getRange({ from: background, to: accent, range: leftRange })
+  const right = getRange({ from: accent, to: foreground, range: rightRange })
+
+  return [...left, accent, ...right]
 }
 
 function accents(adjusted: UmbraAdjusted) {
