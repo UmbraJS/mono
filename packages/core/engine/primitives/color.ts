@@ -81,15 +81,6 @@ export function increaseContrastUntil({
   return newColor
 }
 
-// function lightReverse(color: Color, val: number) {
-//   return color?.isDark() ? color.lighten(val) : color.darken(val)
-// }
-
-// const increaseContrast = ({ color, contrast, val = 100 }: MoveAwayFrom) => {
-//   const same = contrast ? color.isDark() === contrast.isDark() : true
-//   return same ? lightReverse(color, val) : lightReverse(contrast || color, val)
-// }
-
 const increaseContrast = ({ color, contrast, val = 100 }: MoveAwayFrom) => {
   const same = contrast ? color.isDark() === contrast.isDark() : true
   return same
