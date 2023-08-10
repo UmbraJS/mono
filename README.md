@@ -83,7 +83,7 @@ umbra({
 }).apply(document.body)
 ```
 
-The apply function is just a shorthand. Under the hood it actually just chains togheter two other functions. The format and the attach. The format function takes the colors and formats them however you want. It formats it to hex colors by default . The attach function takes that string and attaches it to the given element.
+The apply function is just a shorthand. Under the hood it chains togheter two other functions. The format and the attach. The format function takes the colors and formats them however you want. It formats it to hex colors by default . The attach function takes that string and attaches it to the given element.
 
 ```ts
 import { umbra } from '@umbrajs/core'
@@ -113,6 +113,8 @@ umbra({
 
 The attach function takes the formated color strings and attaches them it to the given element. By default it just makes a new stylesheet for the colors but if you pass an element to the attach function it will attach the colors to that element instead. This is useful if you want to scope the colors to a specific element.
 
+The apply shorthand can also take the element and the formater as passed props.
+
 ```ts
 import { umbra } from '@umbrajs/core'
 
@@ -135,7 +137,7 @@ umbra({
 }).apply(document.querySelector('.footer'))
 ```
 
-The apply shorthand can also take the element and the formater as passed props. By using multiple umbra functions like this you can create really complex themes. You can attribute diffirent themes to diffirent sections/elements. That way you can infinetly scale. Because you can just keep adding more and more themes to diffirent elements and they will all work together without any of the underlying css tokens having to be changed. Scale up the amount of complexity at any time without having to change any of the color assignments. Or scale down just the same. Client suddenly wants the sidebar colors to be customisable? No problem. Takes you 5 min to add a new umbra function that attaches to the sidebar and store the sidebar theme somewhere.
+By using multiple umbra functions like this you can create really complex themes. You can attribute diffirent themes to diffirent sections/elements. That way you can infinetly scale. Because you can just keep adding more and more themes to diffirent elements and they will all work together without any of the underlying css tokens having to be changed. Scale up the amount of complexity at any time without having to change any of the color assignments. Or scale down just the same. Client suddenly wants the sidebar colors to be customisable? No problem. Takes you 5 min to add a new umbra function that attaches to the sidebar. Now you can change the background, foreground, accents, and shades of the sidebar. Next step is just to figure out where to store the themes for the sidebar - that part is up to you to figure out.
 
 ## :crystal_ball: Details
 
@@ -145,39 +147,10 @@ The umbra function is the main function that handles everything. It takes a sche
 umbra(scheme, settings)
 ```
 
-In other words, both the scheme and the settings can have as many or as few of the avilable parameters on it and the function will fill in the holes with defaults or auto generated values based on what you did passed into it. In this example we are only passing a schema and the scheme only has a foreground color. The rest is left for the system to fill out. This lets you very easily create themes with as few parameters as you have and take more and more control of the theme as you add more parameters.
+In other words, both the scheme and the settings can have as many or as few of the available parameters on it and the function will fill in the holes with defaults or auto generated values based on what you did passed into it. In this example we are only passing a schema and the scheme only has a foreground color. The rest is left for the system to fill out. This lets you very easily create themes with as few parameters as you have and take more and more control of the theme as you add more parameters.
 
 ```ts
-umbra({
-  foreground: '#ffffff'
-})
-```
-
-## :crystal_ball: Scheme
-
-The scheme itself has multiple color parameters which can be though of in terms of groups. Theres the main color parameters background foreground and accents. The additional custom colors. And subscemes.
-
-```ts
-  scheme: {
-   background: '#090233',
-   foreground: '#ff5555',
-   accents: ['#5200ff'],
-   custom: {
-     foo: '#00ff00',
-     bar: '#ff0000',
-   },
-   subSchemes: {}
-  }
-```
-
-These main colors dictate the entire scheme, and more consisley the main focus should be the foreground and the background. These two colors must have some contrast and the umbra system willl ensure this. They effectgivley dictate the available range of colors to be generated. All additional shades get generated as a mix in this range. It is though thinking aboiut colors as background vs foreground that the system manages to understand color readability and context. The accent colors can be though of commonly as brand colors. They are the additional splash of pink, or red, or blue that
-
-```ts
-  scheme: {
-   background: '#090233',
-   foreground: '#ff5555',
-   accents: ['#5200ff'],
-  }
+umbra({ foreground: '#ffffff' })
 ```
 
 ## :crystal_ball: Settings
