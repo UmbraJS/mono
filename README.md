@@ -45,18 +45,25 @@ umbra({
 Outputted CSS inserted into :root as a stylesheet
 
 ```css
---background: #0c0915;
---background-10: #201c26;
---background-20: #484349;
+:root {
+  --base: #ffffff;
+  --base-10: #a6a6a6;
+  --base-20: #8c8c8c;
+  --base-30: #737373;
+  --base-40: #595959;
+  --base-50: #404040;
+  --base-60: #262626;
+  --base-foreground: #000000;
 
---foreground: #d5c9c1;
---foreground-10: #ada39f;
---foreground-20: #71696b;
-
---accent: #e6bebf;
---accent-contrast: #0c0915;
---accent-10: #ba9a9d;
---accent-20: #79646a;
+  --accent: #a94d94;
+  --accent-10: #e1c1da;
+  --accent-20: #d8afcf;
+  --accent-30: #a94d94;
+  --accent-40: #3b1b34;
+  --accent-50: #2a1325;
+  --accent-60: #190c16;
+  --accent-foreground: #ffffff;
+}
 ```
 
 These variables are available everywhere. Heres an example of how to use them.
@@ -137,7 +144,9 @@ umbra({
 }).apply(document.querySelector('.footer'))
 ```
 
-By using multiple umbra functions like this you can create really complex themes. You can attribute diffirent themes to diffirent sections/elements. That way you can infinetly scale. Because you can just keep adding more and more themes to diffirent elements and they will all work together without any of the underlying css tokens having to be changed. Scale up the amount of complexity at any time without having to change any of the color assignments. Or scale down just the same. Client suddenly wants the sidebar colors to be customisable? No problem. Takes you 5 min to add a new umbra function that attaches to the sidebar. Now you can change the background, foreground, accents, and shades of the sidebar. Next step is just to figure out where to store the themes for the sidebar - that part is up to you to figure out.
+By using multiple umbra functions like this you can create really complex themes. You can attribute diffirent themes to diffirent sections/elements. That way you can infinetly scale. Because you can just keep adding more and more themes to diffirent elements and they will all work together without any of the underlying css tokens having to be changed. Scale up the amount of complexity at any time without having to change any of the color assignments. Or scale down just the same.
+
+Client suddenly wants the sidebar colors to be customisable? No problem. Takes you 5 min to add a new umbra function that attaches to the sidebar. Now you can change the background, foreground, accents, and shades of the sidebar. Next step is just to figure out where to store the themes for the sidebar - that part is up to you to figure out.
 
 ## :crystal_ball: Details
 
