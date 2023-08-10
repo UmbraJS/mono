@@ -71,6 +71,72 @@ These variables are available everywhere. Heres an example of how to use them.
 > **Note**
 > If you're unfamiliar with CSS variables [heres the docs](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) for them
 
+## :crystal_ball: Take more control
+
+```ts
+import { umbra } from '@umbrajs/core'
+
+umbra({
+  background: '#0c0915',
+  foreground: '#c0aea3',
+  accents: ['#c97074']
+}).apply(document.body)
+```
+
+The apply function is just a shorthand. Under the hood it actually just chains togheter two other functions. The format and the attach. The format function takes the colors and formats them however you want. It formats it to hex colors by default . The attach function takes that string and attaches it to the given element.
+
+```ts
+import { umbra } from '@umbrajs/core'
+
+umbra({
+  background: 'white',
+  foreground: 'black',
+  accents: ['#a94d94']
+})
+  .format((color) => color.toHslString())
+  .attach()
+```
+
+The format function takes the colors and formats them however you want. It formats it to hex colors by default. But heres an example of how to format it to HSL colors instead. You could do whatever you want with the value. Whatever you return from this function will be passed to the attach function and be attached as the value of the CSS variables.
+
+```ts
+import { umbra } from '@umbrajs/core'
+
+umbra({
+  background: 'white',
+  foreground: 'black',
+  accents: ['#a94d94']
+})
+  .format()
+  .attach(document.querySelector('.header'))
+```
+
+The attach function takes the formated color strings and attaches them it to the given element. By default it just makes a new stylesheet for the colors but if you pass an element to the attach function it will attach the colors to that element instead. This is useful if you want to scope the colors to a specific element.
+
+```ts
+import { umbra } from '@umbrajs/core'
+
+umbra({
+  background: 'white',
+  foreground: 'black',
+  accents: ['#a94d94']
+}).apply(document.querySelector('.header'))
+
+umbra({
+  background: 'pink',
+  foreground: 'black',
+  accents: ['#a94d94']
+}).apply(document.querySelector('.cards'))
+
+umbra({
+  background: 'black',
+  foreground: 'white',
+  accents: ['#a94d94']
+}).apply(document.querySelector('.footer'))
+```
+
+The apply shorthand can also take the element and the formater as passed props. By using multiple umbra functions like this you can create really complex themes. You can attribute diffirent themes to diffirent sections/elements. That way you can infinetly scale. Because you can just keep adding more and more themes to diffirent elements and they will all work together without any of the underlying css tokens having to be changed. Scale up the amount of complexity at any time without having to change any of the color assignments. Or scale down just the same. Client suddenly wants the sidebar colors to be customisable? No problem. Takes you 5 min to add a new umbra function that attaches to the sidebar and store the sidebar theme somewhere.
+
 ## :crystal_ball: Details
 
 The umbra function is the main function that handles everything. It takes a scheme and a settings object, both of which are optional and whos paramaters all have defaults.
