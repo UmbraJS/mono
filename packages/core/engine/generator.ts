@@ -23,10 +23,63 @@ function getRange({ from, to, range }: GetRawRange) {
 //TODO: Enable multiple range stops
 //TODO: Add support for custom accent colors
 
+//60% of 100% is x% of 50%
+function calculateX({ percentage = 60, of = 50 }): number {
+  const leftSide = (percentage / 100) * 1.0
+  const rightSide = of / 100
+  return (leftSide / rightSide) * 100
+}
+
+function adjustPercentagesxx(
+  percentages: (number | string)[],
+  newShade: { value: number; index: number }
+) {
+  return percentages.map((percentage, i) => {
+    if (!isNumber(percentage)) return percentage
+    if (i < newShade.index) {
+      return calculateX({
+        percentage,
+        of: newShade.value
+      })
+    } else {
+      return (
+        calculateX({
+          percentage,
+          of: 100 - newShade.value
+        }) - 100
+      )
+    }
+  })
+}
+
+function isNumber(value: any): value is number {
+  return typeof value === 'number'
+}
+
+interface NewRange {
+  range: Shade[]
+  leastReadable: { value: number; index: number }
+  length: number
+}
+
+function newRange({ range, leastReadable, length }: NewRange) {
+  const selectedPercent = range[leastReadable.index]
+  //what about hex values?
+  const newRange = adjustPercentagesxx(range, {
+    value: selectedPercent as number,
+    index: leastReadable.index
+  })
+
+  return {
+    left: newRange.slice(0, leastReadable.index),
+    right: newRange.slice(leastReadable.index + 1, length)
+  }
+}
+
 function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
   const background = adjusted.background
   const foreground = adjusted.foreground
-  const range = adjusted.input.settings.accents?.shade || []
+  const range = [35, 45, 55, 65, 75, 85] //adjusted.input.settings.accents?.shade || []
   const shades = getRange({ from: background, to: foreground, range })
   const length = shades.length
 
@@ -40,14 +93,12 @@ function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
   const leftRange = range.slice(0, leastReadable.index)
   const rightRange = range.slice(leastReadable.index + 1, length)
 
-  const leftLength = leftRange.length
-  const rightLength = rightRange.length
+  const r = newRange({ range, leastReadable, length })
 
-  const percentOfFullRange = 50
+  const left = getRange({ from: background, to: accent, range: r.left })
+  const right = getRange({ from: accent, to: foreground, range: r.right })
 
-  const left = getRange({ from: background, to: accent, range: leftRange })
-  const right = getRange({ from: accent, to: foreground, range: rightRange })
-
+  //console.log({ leastReadable, readability })
   return [...left, accent, ...right]
 }
 
