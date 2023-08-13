@@ -19,7 +19,10 @@ function getRange({ from, to, range }: GetRawRange) {
 }
 
 //TODO: Enable multiple range stops
+//TODO: Enable hex shades
+//TODO: Enable function shades
 //TODO: Add support for custom accent colors
+//TODO: Switch from tinycolor2 to colord
 
 //60% of 100% is x% of 50%
 function calculateX({ percentage = 60, of = 50 }): number {
@@ -28,21 +31,21 @@ function calculateX({ percentage = 60, of = 50 }): number {
   return (leftSide / rightSide) * 100
 }
 
-function adjustPercentagesxx(
-  percentages: (number | string)[],
-  newShade: { value: number; index: number }
-) {
-  return percentages.map((percentage, i) => {
+type Range = (number | string)[]
+type Stop = {
+  value: number
+  index: number
+}
+
+function adjustPercentage(range: Range, stop: Stop) {
+  return range.map((percentage, i) => {
     if (!isNumber(percentage)) return percentage
-    if (percentage === newShade.value) return percentage
-    if (i < newShade.index) {
-      return calculateX({
-        percentage,
-        of: newShade.value
-      })
-    } else {
-      return percentage - newShade.value
-    }
+    if (percentage === stop.value) return percentage
+    if (i > stop.index) return percentage - stop.value
+    return calculateX({
+      percentage,
+      of: stop.value
+    })
   })
 }
 
@@ -61,11 +64,10 @@ function normalizeRange({ range, shades, accent }: NewRange) {
   const leastReadable = getLeastReadable({ shades, accent })
   const selectedPercent = range[leastReadable.index]
   //what about hex values?
-  const newRange = adjustPercentagesxx(range, {
+  const newRange = adjustPercentage(range, {
     value: selectedPercent as number,
     index: leastReadable.index
   })
-
   return {
     left: newRange.slice(0, leastReadable.index),
     right: newRange.slice(leastReadable.index + 1, length)
@@ -77,13 +79,19 @@ interface LeastReadable {
   accent: tinycolor.Instance
 }
 
-function getLeastReadable({ shades, accent }: LeastReadable) {
-  const readability = shades.map((shade, index) => ({
-    value: Math.abs(getReadability(shade, accent)),
-    index
-  }))
+const shadeReadability = (
+  shade: tinycolor.Instance,
+  accent: tinycolor.Instance,
+  index: number
+) => ({
+  value: Math.abs(getReadability(shade, accent)),
+  index
+})
 
-  return readability.reduce((prev, curr) => (prev.value < curr.value ? prev : curr))
+function getLeastReadable({ shades, accent }: LeastReadable) {
+  return shades
+    .map((shade, index) => shadeReadability(shade, accent, index))
+    .reduce((a, b) => (a.value < b.value ? a : b))
 }
 
 function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
@@ -94,8 +102,6 @@ function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
 
   const normalizedRange = normalizeRange({ range, shades, accent })
 
-  console.log(normalizedRange.right)
-
   const left = getRange({ from: background, to: accent, range: normalizedRange.left })
   const right = getRange({ from: accent, to: foreground, range: normalizedRange.right })
 
@@ -103,12 +109,13 @@ function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
 }
 
 function accents(adjusted: UmbraAdjusted) {
-  return adjusted.accents.map((accent, index) => {
+  return adjusted.accents.map((accent) => {
+    const name = accent.name ? accent.name : `accent`
     return {
-      name: index === 0 ? 'accent' : `accent${index + 1}`,
-      background: accent,
-      shades: accentRange(adjusted, accent),
-      foreground: pickContrast(accent, adjusted)
+      name: name,
+      background: accent.value,
+      shades: accentRange(adjusted, accent.value),
+      foreground: pickContrast(accent.value, adjusted)
     }
   })
 }

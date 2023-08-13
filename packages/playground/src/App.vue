@@ -5,7 +5,18 @@ import UmbraRange from './components/UmbraRange.vue'
 const u = umbra({
   background: 'white',
   foreground: 'black',
-  accents: ['#1c7d40', '#e91e63', '#4f0820', '#c88ebb', '#ed477f', '#a94d94']
+  accents: [
+    {
+      name: 'success',
+      value: '#1c7d40'
+    },
+    '#e91e63',
+    '#4f0820',
+    {
+      name: 'royal',
+      value: '#a94d94'
+    }
+  ]
 }).apply()
 </script>
 
