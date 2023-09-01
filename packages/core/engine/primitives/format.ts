@@ -32,10 +32,16 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
     else return name
   }
 
-  const formated = gen.map((c) => {
-    c.name = getName(c.name)
-    return getColors(c, formater)
-  })
+  function getColors(c: RawRange, formater = defaultFormater) {
+    return {
+      name: getName(c.name),
+      background: formater(c.background),
+      shades: c.shades.map((s) => formater(s)),
+      foreground: formater(c.foreground)
+    }
+  }
+
+  const formated = gen.map((c) => getColors(c, formater))
 
   const flattened = flattenColors({
     prefix: '--',
@@ -69,15 +75,6 @@ export function hslFormat(color: tinycolor.Instance) {
   return color.toHslString()
 }
 
-function getColors({ name, foreground, background, shades }: RawRange, formater = defaultFormater) {
-  return {
-    name: name,
-    background: formater(background),
-    shades: shades.map((c) => formater(c)),
-    foreground: formater(foreground)
-  }
-}
-
 export interface FlattenColor {
   name: string
   color: string
@@ -91,12 +88,8 @@ interface FlattenColors {
 function flattenColors({ formated, prefix }: FlattenColors) {
   const flattened: FlattenColor[] = []
 
-  function prefixName(name: string) {
-    return prefix ? prefix + name : name
-  }
-
   formated.forEach((c) => {
-    const name = prefixName(c.name)
+    const name = prefix ? prefix + c.name : c.name
     flattened.push({ name, color: c.background })
     flattened.push(...flattenShades(c.shades, name))
     flattened.push({
