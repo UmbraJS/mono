@@ -97,7 +97,6 @@ function invalidColor(name: string) {
 
 //attach colors
 function setColors(flattened: FlattenColor[], element?: HTMLElement | null) {
-  console.log('setColors', flattened)
   const filtered = flattened.filter(({ name }) => !invalidColor(name))
   element ? setElementColors(element, filtered) : setColorSheet(filtered)
 }

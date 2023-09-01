@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { umbra } from '@umbrajs/core'
 import UmbraRange from './components/UmbraRange.vue'
 
@@ -18,6 +19,10 @@ const u = umbra({
     }
   ]
 }).apply()
+
+onMounted(() => {
+  console.log('rex: ', u)
+})
 </script>
 
 <template>
