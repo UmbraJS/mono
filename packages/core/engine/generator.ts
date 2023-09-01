@@ -114,7 +114,7 @@ function accents(adjusted: UmbraAdjusted) {
     return {
       name: name,
       background: accent.value,
-      shades: accentRange(adjusted, accent.value),
+      shades: accentRange(adjusted, accent.value), //look - why does this produce accurate shades
       foreground: pickContrast(accent.value, adjusted)
     }
   })
@@ -127,7 +127,7 @@ function base(adjusted: UmbraAdjusted) {
   return {
     name: 'base',
     background,
-    shades: getRange({ from: background, to: foreground, range }),
+    shades: getRange({ from: background, to: foreground, range }), //look - but not this
     foreground
   }
 }
