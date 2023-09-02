@@ -95,9 +95,8 @@ function getLeastReadable({ shades, accent }: LeastReadable) {
 }
 
 function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
-  const background = adjusted.background
-  const foreground = adjusted.foreground
-  const range = adjusted.input.settings.accents?.shade || []
+  const { background, foreground } = adjusted
+  const range = adjusted.input.settings.shades || []
   const shades = getRange({ from: background, to: foreground, range })
 
   const normalizedRange = normalizeRange({ range, shades, accent })
@@ -121,9 +120,8 @@ function accents(adjusted: UmbraAdjusted) {
 }
 
 function base(adjusted: UmbraAdjusted) {
-  const range = adjusted.input.settings.background?.shade || []
-  const background = adjusted.background
-  const foreground = adjusted.foreground
+  const { background, foreground } = adjusted
+  const range = adjusted.input.settings.shades || []
   return {
     name: 'base',
     background,

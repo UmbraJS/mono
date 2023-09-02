@@ -76,16 +76,9 @@ export interface ColorList {
 
 export type Shade = number | string
 
-export interface SettingType {
-  shade?: Shade[]
-}
-
 export interface UmbraSettings {
   readability?: number
   iterations?: number
-  foreground?: SettingType
-  background?: SettingType
-  accents?: SettingType
   aliases?: Alias | true
   shades?: Shade[]
 }

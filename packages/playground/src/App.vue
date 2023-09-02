@@ -3,21 +3,21 @@ import { onMounted } from 'vue'
 import { umbra } from '@umbrajs/core'
 import UmbraRange from './components/UmbraRange.vue'
 
+const success = {
+  name: 'success',
+  value: '#1c7d40'
+}
+
+const royal = {
+  name: 'royal',
+  value: '#a94d94',
+  shades: []
+}
+
 const u = umbra({
   background: 'white',
   foreground: 'black',
-  accents: [
-    {
-      name: 'success',
-      value: '#1c7d40'
-    },
-    '#e91e63',
-    '#4f0820',
-    {
-      name: 'royal',
-      value: '#a94d94'
-    }
-  ]
+  accents: [success, '#e91e63', '#4f0820', royal]
 }).apply()
 
 onMounted(() => {

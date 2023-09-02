@@ -1,20 +1,11 @@
-import { UmbraInput, UmbraScheme, UmbraOutput, UmbraSettings, SettingType } from './types'
+import { UmbraInput, UmbraScheme, UmbraOutput, UmbraSettings } from './types'
 
 export let generated: UmbraOutput | null = null
 
 export let settings: UmbraSettings = {
   readability: 10,
   iterations: 15,
-  foreground: setting(),
-  background: setting(),
-  accents: setting()
-}
-
-function setting(passed?: SettingType) {
-  return {
-    shade: [35, 45, 55, 65, 75, 100],
-    ...passed
-  }
+  shades: [35, 45, 55, 65, 75, 90]
 }
 
 export const defaultScheme: UmbraScheme = {
