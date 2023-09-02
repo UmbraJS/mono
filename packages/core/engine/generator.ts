@@ -21,7 +21,6 @@ function getRange({ from, to, range }: GetRawRange) {
 //TODO: Enable multiple range stops
 //TODO: Enable hex shades
 //TODO: Enable function shades
-//TODO: Add support for custom accent colors
 //TODO: Switch from tinycolor2 to colord
 
 //60% of 100% is x% of 50%
@@ -113,7 +112,7 @@ function accents(adjusted: UmbraAdjusted) {
     return {
       name: name,
       background: accent.value,
-      shades: accentRange(adjusted, accent.value), //look - why does this produce accurate shades
+      shades: accentRange(adjusted, accent.value),
       foreground: pickContrast(accent.value, adjusted)
     }
   })
@@ -125,7 +124,7 @@ function base(adjusted: UmbraAdjusted) {
   return {
     name: 'base',
     background,
-    shades: getRange({ from: background, to: foreground, range }), //look - but not this
+    shades: getRange({ from: background, to: foreground, range }),
     foreground
   }
 }
