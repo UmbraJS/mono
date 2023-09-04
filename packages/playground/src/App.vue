@@ -10,8 +10,7 @@ const success = {
 
 const royal = {
   name: 'royal',
-  value: '#a94d94',
-  shades: []
+  value: [35, 45, '#a94d94', 65, '#87533e', 90]
 }
 
 const u = umbra({

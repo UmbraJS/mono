@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
 import { pickContrast, colorMix, getReadability } from './primitives/color'
 
-import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types'
+import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange, AccentRange } from './types'
 
 interface GetRawRange {
   from: tinycolor.Instance
@@ -93,7 +93,13 @@ function getLeastReadable({ shades, accent }: LeastReadable) {
     .reduce((a, b) => (a.value < b.value ? a : b))
 }
 
-function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
+function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
+  const isString = typeof c === 'string'
+  const accent = tinycolor(isString ? c : firstShade(c))
+
+  //if c is a string do the below. If its an array, find the hex in the array and use the numbers as the shaders and the placement of the hex to form the range around it
+  // if the array has multiple hexes find a way to chain multiple ranges between them
+
   const { background, foreground } = adjusted
   const range = adjusted.input.settings.shades || []
   const shades = getRange({ from: background, to: foreground, range })
@@ -106,15 +112,48 @@ function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
   return [...left, accent, ...right]
 }
 
+function firstShade(value: (string | number)[]) {
+  const f = value.find((x) => typeof x === 'string') as string | undefined
+  return f ? f : '#000000'
+}
+
 function accents(adjusted: UmbraAdjusted) {
   return adjusted.accents.map((accent) => {
-    const name = accent.name ? accent.name : `accent`
-    return {
-      name: name,
-      background: accent.value,
-      shades: accentRange(adjusted, accent.value),
-      foreground: pickContrast(accent.value, adjusted)
+    const isString = typeof accent === 'string'
+
+    let string = null
+
+    if (isString) {
+      string = {
+        name: 'accent',
+        background: tinycolor(accent),
+        shades: accentRange(adjusted, accent),
+        foreground: pickContrast(tinycolor(accent), adjusted)
+      }
+    } else {
+      const v = accent.value
+      const isString = typeof v === 'string'
+
+      if (isString) {
+        const c = tinycolor(v)
+        string = {
+          name: accent.name ? accent.name : `accent`,
+          background: tinycolor(c),
+          shades: accentRange(adjusted, v),
+          foreground: pickContrast(c, adjusted)
+        }
+      } else {
+        const value = firstShade(v)
+        string = {
+          name: accent.name ? accent.name : `accent`,
+          background: tinycolor(value),
+          shades: accentRange(adjusted, v),
+          foreground: pickContrast(tinycolor(value), adjusted)
+        }
+      }
     }
+
+    return string
   })
 }
 

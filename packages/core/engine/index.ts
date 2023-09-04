@@ -2,14 +2,7 @@ import tinycolor from 'tinycolor2'
 
 //Configs and Utilities
 import { settings, defaultScheme, defaultTheme } from './store'
-import type {
-  UmbraOutput,
-  UmbraInput,
-  UmbraSettings,
-  UmbraAdjusted,
-  Accent,
-  AdjustedAccent
-} from './types'
+import type { UmbraOutput, UmbraInput, UmbraSettings, UmbraAdjusted } from './types'
 
 //Primitives
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
@@ -67,27 +60,26 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
   )
 }
 
-interface AdjustAccent {
-  accent: string | Accent
-  background: tinycolor.Instance
-  readability: number
-}
+// interface AdjustAccent {
+//   accent: string | Accent
+//   background: tinycolor.Instance
+//   readability: number
+// }
 
-function adjustAccent({ accent, background, readability }: AdjustAccent): AdjustedAccent {
-  const isString = typeof accent === 'string'
-  const color = tinycolor(isString ? accent : accent.value)
-  const read = !isString && accent.readability ? accent.readability : readability
-  return {
-    name: !isString ? accent.name : undefined,
-    shades: !isString ? accent.shades : undefined,
-    readability: read,
-    value: getReadable({
-      foreground: color,
-      background,
-      readability: read
-    })
-  }
-}
+// function adjustAccent({ accent, background, readability }: AdjustAccent): AdjustedAccent {
+//   const isString = typeof accent === 'string'
+//   const color = tinycolor(isString ? accent : accent.value)
+//   const read = !isString && accent.readability ? accent.readability : readability
+//   return {
+//     name: !isString ? accent.name : undefined,
+//     readability: read,
+//     value: getReadable({
+//       foreground: color,
+//       background,
+//       readability: read
+//     })
+//   }
+// }
 
 const adjust = (theme = defaultTheme): UmbraAdjusted => {
   const background = tinycolor(theme.scheme.background)
@@ -98,13 +90,7 @@ const adjust = (theme = defaultTheme): UmbraAdjusted => {
     input: theme,
     background: background,
     foreground: getReadable({ foreground, background, readability }),
-    accents: accents.map((accent) =>
-      adjustAccent({
-        accent,
-        background,
-        readability
-      })
-    )
+    accents: accents
   }
 }
 
