@@ -98,7 +98,7 @@ function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
   const accent = tinycolor(isString ? c : firstShade(c))
 
   //if c is a string do the below. If its an array, find the hex in the array and use the numbers as the shaders and the placement of the hex to form the range around it
-  // if the array has multiple hexes find a way to chain multiple ranges between them
+  //if the array has multiple hexes find a way to chain multiple ranges between them
 
   const { background, foreground } = adjusted
   const range = adjusted.input.settings.shades || []

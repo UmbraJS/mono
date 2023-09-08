@@ -60,27 +60,6 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
   )
 }
 
-// interface AdjustAccent {
-//   accent: string | Accent
-//   background: tinycolor.Instance
-//   readability: number
-// }
-
-// function adjustAccent({ accent, background, readability }: AdjustAccent): AdjustedAccent {
-//   const isString = typeof accent === 'string'
-//   const color = tinycolor(isString ? accent : accent.value)
-//   const read = !isString && accent.readability ? accent.readability : readability
-//   return {
-//     name: !isString ? accent.name : undefined,
-//     readability: read,
-//     value: getReadable({
-//       foreground: color,
-//       background,
-//       readability: read
-//     })
-//   }
-// }
-
 const adjust = (theme = defaultTheme): UmbraAdjusted => {
   const background = tinycolor(theme.scheme.background)
   const foreground = tinycolor(theme.scheme.foreground)
