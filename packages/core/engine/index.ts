@@ -47,30 +47,30 @@ export function umbraObject(generated: UmbraOutput): Umbra {
 }
 
 export function umbra(scheme = defaultScheme, passedSettings = settings) {
-  return umbraObject(
-    generate(
-      adjust({
-        scheme: scheme,
-        settings: {
-          ...settings,
-          ...passedSettings
-        }
-      })
-    )
-  )
-}
-
-const adjust = (theme = defaultTheme): UmbraAdjusted => {
-  const background = tinycolor(theme.scheme.background)
-  const foreground = tinycolor(theme.scheme.foreground)
-  const accents = theme.scheme.accents
-  const readability = theme.settings.readability || 4
-  return {
-    input: theme,
-    background: background,
-    foreground: getReadable({ foreground, background, readability }),
-    accents: accents
+  const input = {
+    scheme: scheme,
+    settings: {
+      ...settings,
+      ...passedSettings
+    }
   }
+
+  const readability = input.settings.readability || 4
+  const background = tinycolor(scheme.background)
+  const foreground = getReadable({
+    foreground: tinycolor(scheme.foreground),
+    background,
+    readability
+  })
+
+  return umbraObject(
+    generate({
+      input,
+      background,
+      foreground,
+      accents: scheme.accents
+    })
+  )
 }
 
 export const subScheme = (input: UmbraInput, props: SubSchemeProps) => {
