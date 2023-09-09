@@ -1,8 +1,8 @@
 import tinycolor from 'tinycolor2'
 
 //Configs and Utilities
-import { settings, defaultScheme, defaultTheme } from './store'
-import type { UmbraOutput, UmbraInput, UmbraSettings, UmbraAdjusted } from './types'
+import { settings, defaultScheme } from './store'
+import type { UmbraOutput } from './types'
 
 //Primitives
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
@@ -11,13 +11,6 @@ import { getReadable } from './primitives/color'
 
 //Color RawRange Steps
 import { generate } from './generator'
-
-//Types
-interface SubSchemeProps {
-  id: string
-  settings?: UmbraSettings
-  element?: HTMLElement
-}
 
 export interface Umbra {
   output: UmbraOutput
@@ -48,7 +41,7 @@ export function umbraObject(generated: UmbraOutput): Umbra {
 
 export function umbra(scheme = defaultScheme, passedSettings = settings) {
   const input = {
-    scheme: scheme,
+    scheme,
     settings: {
       ...settings,
       ...passedSettings
@@ -71,13 +64,6 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
       accents: scheme.accents
     })
   )
-}
-
-export const subScheme = (input: UmbraInput, props: SubSchemeProps) => {
-  const subSchemes = input.scheme.subSchemes
-  if (subSchemes === undefined) return null
-  const theme = subSchemes[props.id]
-  return umbra(theme.scheme, props.settings || theme.settings || input.settings)
 }
 
 export default umbra

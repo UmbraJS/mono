@@ -1,7 +1,15 @@
 import tinycolor from 'tinycolor2'
 import { pickContrast, colorMix, getReadability } from './primitives/color'
 
-import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange, AccentRange } from './types'
+import {
+  UmbraAdjusted,
+  Shade,
+  CustomColor,
+  UmbraInput,
+  RawRange,
+  AccentRange,
+  Accent
+} from './types'
 
 interface GetRawRange {
   from: tinycolor.Instance
@@ -55,12 +63,12 @@ function isNumber(value: any): value is number {
 interface NewRange {
   range: Shade[]
   shades: tinycolor.Instance[]
-  accent: tinycolor.Instance
+  color: tinycolor.Instance
 }
 
-function normalizeRange({ range, shades, accent }: NewRange) {
+function normalizeRange({ range, shades, color }: NewRange) {
   const length = shades.length
-  const leastReadable = getLeastReadable({ shades, accent })
+  const leastReadable = getLeastReadable({ shades, color })
   const selectedPercent = range[leastReadable.index]
   //what about hex values?
   const newRange = adjustPercentage(range, {
@@ -75,7 +83,7 @@ function normalizeRange({ range, shades, accent }: NewRange) {
 
 interface LeastReadable {
   shades: tinycolor.Instance[]
-  accent: tinycolor.Instance
+  color: tinycolor.Instance
 }
 
 const shadeReadability = (
@@ -87,15 +95,15 @@ const shadeReadability = (
   index
 })
 
-function getLeastReadable({ shades, accent }: LeastReadable) {
+function getLeastReadable({ shades, color }: LeastReadable) {
   return shades
-    .map((shade, index) => shadeReadability(shade, accent, index))
+    .map((shade, index) => shadeReadability(shade, color, index))
     .reduce((a, b) => (a.value < b.value ? a : b))
 }
 
 function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
   const isString = typeof c === 'string'
-  const accent = tinycolor(isString ? c : firstShade(c))
+  const color = tinycolor(isString ? c : firstShade(c))
 
   //if c is a string do the below. If its an array, find the hex in the array and use the numbers as the shaders and the placement of the hex to form the range around it
   //if the array has multiple hexes find a way to chain multiple ranges between them
@@ -103,57 +111,69 @@ function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
   const { background, foreground } = adjusted
   const range = adjusted.input.settings.shades || []
   const shades = getRange({ from: background, to: foreground, range })
+  const normalizedRange = normalizeRange({ range, shades, color })
 
-  const normalizedRange = normalizeRange({ range, shades, accent })
+  return makeRange({
+    color,
+    adjusted,
+    range: normalizedRange
+  })
+}
 
-  const left = getRange({ from: background, to: accent, range: normalizedRange.left })
-  const right = getRange({ from: accent, to: foreground, range: normalizedRange.right })
+interface MakeRange {
+  adjusted: UmbraAdjusted
+  color: tinycolor.Instance
+  range: {
+    left: (string | number)[]
+    right: (string | number)[]
+  }
+}
 
-  return [...left, accent, ...right]
+function makeRange({ adjusted, color, range }: MakeRange) {
+  const { background, foreground } = adjusted
+  const left = getRange({ from: background, to: color, range: range.left })
+  const right = getRange({ from: color, to: foreground, range: range.right })
+  return [...left, color, ...right]
 }
 
 function firstShade(value: (string | number)[]) {
   const f = value.find((x) => typeof x === 'string') as string | undefined
-  return f ? f : '#000000'
+  return tinycolor(f ? f : '#000000')
+}
+
+function objectAccentShades(v: (number | string)[], adjusted: UmbraAdjusted, name?: string) {
+  const value = firstShade(v)
+  return {
+    name: name ? name : `accent`,
+    background: value,
+    shades: accentRange(adjusted, v),
+    foreground: pickContrast(value, adjusted)
+  }
+}
+
+function objectAccent(accent: Accent, adjusted: UmbraAdjusted) {
+  const v = accent.value
+  const isString = typeof v === 'string'
+  if (!isString) return objectAccentShades(v, adjusted, accent.name)
+  const c = tinycolor(v)
+  return {
+    name: accent.name ? accent.name : `accent`,
+    background: c,
+    shades: accentRange(adjusted, v),
+    foreground: pickContrast(c, adjusted)
+  }
 }
 
 function accents(adjusted: UmbraAdjusted) {
   return adjusted.accents.map((accent) => {
     const isString = typeof accent === 'string'
-
-    let string = null
-
-    if (isString) {
-      string = {
-        name: 'accent',
-        background: tinycolor(accent),
-        shades: accentRange(adjusted, accent),
-        foreground: pickContrast(tinycolor(accent), adjusted)
-      }
-    } else {
-      const v = accent.value
-      const isString = typeof v === 'string'
-
-      if (isString) {
-        const c = tinycolor(v)
-        string = {
-          name: accent.name ? accent.name : `accent`,
-          background: tinycolor(c),
-          shades: accentRange(adjusted, v),
-          foreground: pickContrast(c, adjusted)
-        }
-      } else {
-        const value = firstShade(v)
-        string = {
-          name: accent.name ? accent.name : `accent`,
-          background: tinycolor(value),
-          shades: accentRange(adjusted, v),
-          foreground: pickContrast(tinycolor(value), adjusted)
-        }
-      }
+    if (!isString) return objectAccent(accent, adjusted)
+    return {
+      name: 'accent',
+      background: tinycolor(accent),
+      shades: accentRange(adjusted, accent),
+      foreground: pickContrast(tinycolor(accent), adjusted)
     }
-
-    return string
   })
 }
 

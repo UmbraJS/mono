@@ -15,8 +15,7 @@ export const defaultScheme: UmbraScheme = {
   custom: {
     success: '#00ff00',
     error: '#ff0000'
-  },
-  subSchemes: {}
+  }
 }
 
 export const defaultTheme: UmbraInput = {
