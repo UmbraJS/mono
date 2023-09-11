@@ -113,6 +113,52 @@ function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
   const shades = getRange({ from: background, to: foreground, range })
   const normalizedRange = normalizeRange({ range, shades, color })
 
+  //split c on each string
+  function splitArray(arr: (string | number)[], adjusted: UmbraAdjusted) {
+    const result = []
+    let array = []
+    let lastHex = adjusted.background.toHexString()
+
+    for (const item of arr) {
+      if (typeof item === 'number') {
+        if (array.length === 0) {
+          array.push(lastHex)
+        }
+        array.push(item)
+      } else if (typeof item === 'string' && array.length > 0) {
+        lastHex = item
+        array.push(item)
+        result.push(array)
+        array = []
+      }
+    }
+
+    // Add the last subarray if it ends with a number
+    if (array.length > 0) {
+      const bg = adjusted.foreground.toHexString()
+      array.push(bg)
+      result.push(array)
+    }
+
+    return result
+  }
+
+  const splitResult = splitArray(c, adjusted)
+  console.log('re: ', c)
+  console.log('test: ', splitResult)
+
+  // const left = getRange({ from: background, to: color, range: range.left })
+
+  const newer = splitResult.map((x, i) => {
+    if (i === 0) {
+      return getRange({ from: background, to: color, range: x })
+    } else {
+      return getRange({ from: color, to: foreground, range: x })
+    }
+  })
+
+  console.log('newer: ', newer)
+
   return makeRange({
     color,
     adjusted,
