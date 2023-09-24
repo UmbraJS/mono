@@ -1,4 +1,4 @@
-import { umbra, umbraObject, subScheme, Umbra } from './engine/index'
+import { umbra, umbraObject, Umbra } from './engine/index'
 import { randomUmbra, randomScheme } from './engine/primitives/utils'
 import {
   format,
@@ -24,7 +24,6 @@ import { inverse, isDark, findContrast } from './engine/primitives/scheme'
 export {
   umbra,
   umbraObject,
-  subScheme,
   randomUmbra,
   randomScheme,
   getReadable,

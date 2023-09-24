@@ -29,16 +29,25 @@ export interface UmbraColors {
   adjusted: UmbraAdjusted
 }
 
-type SubSchemes = {
-  [key: string]: UmbraInput
+export type AccentRange = string | (number | string)[]
+
+export interface Accent {
+  name?: string
+  value: AccentRange
+  readability?: number
 }
 
+export interface AdjustedAccent {
+  name?: string
+  value: tinycolor.Instance
+  shades?: Shade[]
+  readability: number
+}
 export interface UmbraScheme {
   background: string
   foreground: string
-  accents: string[]
+  accents: (Accent | string)[]
   custom?: ColorList
-  subSchemes?: SubSchemes
 }
 
 export interface UmbraInput {
@@ -50,8 +59,7 @@ export interface UmbraInput {
 export interface UmbraAdjusted {
   background: tinycolor.Instance
   foreground: tinycolor.Instance
-  accents: tinycolor.Instance[]
-  subSchemes?: SubSchemes
+  accents: (Accent | string)[]
   input: UmbraInput
 }
 
@@ -63,16 +71,9 @@ export interface ColorList {
 
 export type Shade = number | string
 
-export interface SettingType {
-  shade?: Shade[]
-}
-
 export interface UmbraSettings {
   readability?: number
   iterations?: number
-  foreground?: SettingType
-  background?: SettingType
-  accents?: SettingType
   aliases?: Alias | true
   shades?: Shade[]
 }

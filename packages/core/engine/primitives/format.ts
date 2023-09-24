@@ -23,6 +23,24 @@ export interface UmbraOutputs {
 
 export const format = ({ output = umbra().output, formater = defaultFormater }: FormatProps) => {
   const gen = output.ranges
+
+  let existingAccents = 0
+  function getName(name: string) {
+    if (name !== 'accent') return name
+    existingAccents++
+    if (existingAccents > 1) return name + existingAccents
+    else return name
+  }
+
+  function getColors(c: RawRange, formater = defaultFormater) {
+    return {
+      name: getName(c.name),
+      background: formater(c.background),
+      shades: c.shades.map((s) => formater(s)),
+      foreground: formater(c.foreground)
+    }
+  }
+
   const formated = gen.map((c) => getColors(c, formater))
 
   const flattened = flattenColors({
@@ -57,15 +75,6 @@ export function hslFormat(color: tinycolor.Instance) {
   return color.toHslString()
 }
 
-function getColors({ name, foreground, background, shades }: RawRange, formater = defaultFormater) {
-  return {
-    name: name,
-    background: formater(background),
-    shades: shades.map((c) => formater(c)),
-    foreground: formater(foreground)
-  }
-}
-
 export interface FlattenColor {
   name: string
   color: string
@@ -79,21 +88,8 @@ interface FlattenColors {
 function flattenColors({ formated, prefix }: FlattenColors) {
   const flattened: FlattenColor[] = []
 
-  function prefixName(name: string) {
-    return prefix ? prefix + name : name
-  }
-
-  let existingAccents = 0
-  function getName(name: string) {
-    const prefixed = prefixName(name)
-    if (name !== 'accent') return prefixed
-    existingAccents++
-    if (existingAccents > 1) return prefixed + existingAccents
-    else return prefixed
-  }
-
   formated.forEach((c) => {
-    const name = getName(c.name)
+    const name = prefix ? prefix + c.name : c.name
     flattened.push({ name, color: c.background })
     flattened.push(...flattenShades(c.shades, name))
     flattened.push({

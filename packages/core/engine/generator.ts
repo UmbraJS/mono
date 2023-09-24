@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
-import { pickContrast, colorMix, getReadability } from './primitives/color'
-
-import { UmbraAdjusted, Shade, CustomColor, UmbraInput, RawRange } from './types'
+import { pickContrast, colorMix } from './primitives/color'
+import { UmbraAdjusted, Shade, AccentRange, Accent } from './types'
+import { isNumber, normalizeRange, firstShade, nextAccent, getStrings } from './utils'
 
 interface GetRawRange {
   from: tinycolor.Instance
@@ -18,127 +18,118 @@ function getRange({ from, to, range }: GetRawRange) {
   })
 }
 
-//TODO: Enable multiple range stops
-//TODO: Add support for custom accent colors
+//TODO: Generator should be extendable
+//TODO: Enable hex shades
+//TODO: Enable function shades
+//TODO: Switch from tinycolor2 to colord
 
-//60% of 100% is x% of 50%
-function calculateX({ percentage = 60, of = 50 }): number {
-  const leftSide = (percentage / 100) * 1.0
-  const rightSide = of / 100
-  return (leftSide / rightSide) * 100
+function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
+  const isString = typeof c === 'string'
+  if (isString) return singleAccentRange(adjusted, c)
+  return chainedAccentRange(adjusted, c)
 }
 
-function adjustPercentagesxx(
-  percentages: (number | string)[],
-  newShade: { value: number; index: number }
-) {
-  return percentages.map((percentage, i) => {
-    if (!isNumber(percentage)) return percentage
-    if (percentage === newShade.value) return percentage
-    if (i < newShade.index) {
-      return calculateX({
-        percentage,
-        of: newShade.value
-      })
+function chainedAccentRange(adjusted: UmbraAdjusted, range: (number | string)[]) {
+  const foreground = tinycolor(adjusted.foreground)
+  const background = tinycolor(adjusted.background)
+
+  const accents = getStrings(range)
+  let lastColor = background
+  let nextColor = accents.length > 0 ? tinycolor(accents[0] as string) : foreground
+
+  const colorRange = range.map((val) => {
+    if (typeof val === 'string') {
+      const color = tinycolor(val)
+      lastColor = color
+      accents.shift()
+      return color
     } else {
-      return percentage - newShade.value
+      nextColor = nextAccent(accents, adjusted)
+      const newColor = colorMix(lastColor, nextColor, val as number)
+      lastColor = newColor
+      return newColor
     }
   })
+
+  return colorRange
 }
 
-function isNumber(value: any): value is number {
-  return typeof value === 'number'
-}
+function singleAccentRange(adjusted: UmbraAdjusted, c: AccentRange) {
+  const isString = typeof c === 'string'
+  const color = tinycolor(isString ? c : firstShade(c))
 
-interface NewRange {
-  range: Shade[]
-  shades: tinycolor.Instance[]
-  accent: tinycolor.Instance
-}
+  const { background, foreground } = adjusted
+  const range = adjusted.input.settings.shades || []
+  const shades = getRange({ from: background, to: foreground, range })
+  const normalizedRange = normalizeRange({ range, shades, color })
 
-function normalizeRange({ range, shades, accent }: NewRange) {
-  const length = shades.length
-  const leastReadable = getLeastReadable({ shades, accent })
-  const selectedPercent = range[leastReadable.index]
-  //what about hex values?
-  const newRange = adjustPercentagesxx(range, {
-    value: selectedPercent as number,
-    index: leastReadable.index
+  return makeRange({
+    color,
+    adjusted,
+    range: normalizedRange
   })
+}
 
-  return {
-    left: newRange.slice(0, leastReadable.index),
-    right: newRange.slice(leastReadable.index + 1, length)
+interface MakeRange {
+  adjusted: UmbraAdjusted
+  color: tinycolor.Instance
+  range: {
+    left: (string | number)[]
+    right: (string | number)[]
   }
 }
 
-interface LeastReadable {
-  shades: tinycolor.Instance[]
-  accent: tinycolor.Instance
+function makeRange({ adjusted, color, range }: MakeRange) {
+  const { background, foreground } = adjusted
+  const left = getRange({ from: background, to: color, range: range.left })
+  const right = getRange({ from: color, to: foreground, range: range.right })
+  return [...left, color, ...right]
 }
 
-function getLeastReadable({ shades, accent }: LeastReadable) {
-  const readability = shades.map((shade, index) => ({
-    value: Math.abs(getReadability(shade, accent)),
-    index
-  }))
-
-  return readability.reduce((prev, curr) => (prev.value < curr.value ? prev : curr))
+function accentObjectShades(v: (number | string)[], adjusted: UmbraAdjusted, name?: string) {
+  const value = firstShade(v)
+  return {
+    name: name ? name : `accent`,
+    background: value,
+    shades: accentRange(adjusted, v),
+    foreground: pickContrast(value, adjusted)
+  }
 }
 
-function accentRange(adjusted: UmbraAdjusted, accent: tinycolor.Instance) {
-  const background = adjusted.background
-  const foreground = adjusted.foreground
-  const range = adjusted.input.settings.accents?.shade || []
-  const shades = getRange({ from: background, to: foreground, range })
-
-  const normalizedRange = normalizeRange({ range, shades, accent })
-
-  console.log(normalizedRange.right)
-
-  const left = getRange({ from: background, to: accent, range: normalizedRange.left })
-  const right = getRange({ from: accent, to: foreground, range: normalizedRange.right })
-
-  return [...left, accent, ...right]
+function accentObject(accent: Accent, adjusted: UmbraAdjusted) {
+  const v = accent.value
+  const isString = typeof v === 'string'
+  if (!isString) return accentObjectShades(v, adjusted, accent.name)
+  const c = tinycolor(v)
+  return {
+    name: accent.name ? accent.name : `accent`,
+    background: c,
+    shades: accentRange(adjusted, v),
+    foreground: pickContrast(c, adjusted)
+  }
 }
 
 function accents(adjusted: UmbraAdjusted) {
-  return adjusted.accents.map((accent, index) => {
+  return adjusted.accents.map((accent) => {
+    const isString = typeof accent === 'string'
+    if (!isString) return accentObject(accent, adjusted)
     return {
-      name: index === 0 ? 'accent' : `accent${index + 1}`,
-      background: accent,
+      name: 'accent',
+      background: tinycolor(accent),
       shades: accentRange(adjusted, accent),
-      foreground: pickContrast(accent, adjusted)
+      foreground: pickContrast(tinycolor(accent), adjusted)
     }
   })
 }
 
 function base(adjusted: UmbraAdjusted) {
-  const range = adjusted.input.settings.background?.shade || []
-  const background = adjusted.background
-  const foreground = adjusted.foreground
+  const { background, foreground } = adjusted
+  const range = adjusted.input.settings.shades || []
   return {
     name: 'base',
     background,
     shades: getRange({ from: background, to: foreground, range }),
     foreground
-  }
-}
-
-function getColor(value: CustomColor, obj: GeneratedOutput) {
-  let color = value
-  const origin = obj.input
-  const isFunc = typeof value === 'function'
-  if (isFunc) color = value(origin)
-  return tinycolor(color as string)
-}
-
-interface GeneratedOutput {
-  input: UmbraInput
-  adjusted: UmbraAdjusted
-  generated: {
-    base: RawRange
-    accents: RawRange[]
   }
 }
 

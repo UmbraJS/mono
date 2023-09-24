@@ -90,13 +90,14 @@ const makeAliasArray = (obj: Alias): AliasObject[] => {
   })
 }
 
+function invalidColor(name: string) {
+  const regex = /(?:background|foreground).*contrast/i
+  return regex.test(name)
+}
+
 //attach colors
 function setColors(flattened: FlattenColor[], element?: HTMLElement | null) {
   const filtered = flattened.filter(({ name }) => !invalidColor(name))
-  function invalidColor(name: string) {
-    const regex = /(?:background|foreground).*contrast/i
-    return regex.test(name)
-  }
   element ? setElementColors(element, filtered) : setColorSheet(filtered)
 }
 
