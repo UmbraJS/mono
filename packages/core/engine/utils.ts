@@ -128,20 +128,3 @@ export function getStrings(range: (number | string)[]) {
     return acc
   }, [] as string[])
 }
-
-// function getColor(value: CustomColor, obj: GeneratedOutput) {
-//   let color = value
-//   const origin = obj.input
-//   const isFunc = typeof value === 'function'
-//   if (isFunc) color = value(origin)
-//   return tinycolor(color as string)
-// }
-
-// interface GeneratedOutput {
-//   input: UmbraInput
-//   adjusted: UmbraAdjusted
-//   generated: {
-//     base: RawRange
-//     accents: RawRange[]
-//   }
-// }

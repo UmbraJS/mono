@@ -18,9 +18,6 @@ function getRange({ from, to, range }: GetRawRange) {
   })
 }
 
-//TODO: Generator should be extendable
-//TODO: Enable hex shades
-//TODO: Enable function shades
 //TODO: Switch from tinycolor2 to colord
 
 function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
@@ -37,7 +34,7 @@ function chainedAccentRange(adjusted: UmbraAdjusted, range: (number | string)[])
   let lastColor = background
   let nextColor = accents.length > 0 ? tinycolor(accents[0] as string) : foreground
 
-  const colorRange = range.map((val) => {
+  return range.map((val) => {
     if (typeof val === 'string') {
       const color = tinycolor(val)
       lastColor = color
@@ -50,8 +47,6 @@ function chainedAccentRange(adjusted: UmbraAdjusted, range: (number | string)[])
       return newColor
     }
   })
-
-  return colorRange
 }
 
 function singleAccentRange(adjusted: UmbraAdjusted, c: AccentRange) {
