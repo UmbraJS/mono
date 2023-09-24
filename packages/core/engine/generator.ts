@@ -20,11 +20,18 @@ function getRange({ from, to, range }: GetRawRange) {
 
 function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
   const isString = typeof c === 'string'
-  if (isString) return singleAccentRange(adjusted, c)
-  return chainedAccentRange(adjusted, c)
+  if (!isString) return chainedRange(adjusted, c)
+  const color = tinycolor(isString ? c : firstShade(c))
+
+  const { background, foreground } = adjusted
+  const range = adjusted.input.settings.shades || []
+  const shades = getRange({ from: background, to: foreground, range })
+  const normalizedRange = normalizeRange({ range, shades, color })
+
+  return chainedRange(adjusted, normalizedRange)
 }
 
-function chainedAccentRange(adjusted: UmbraAdjusted, range: (number | string)[]) {
+function chainedRange(adjusted: UmbraAdjusted, range: (number | string)[]) {
   const foreground = tinycolor(adjusted.foreground)
   const background = tinycolor(adjusted.background)
 
@@ -47,25 +54,13 @@ function chainedAccentRange(adjusted: UmbraAdjusted, range: (number | string)[])
   })
 }
 
-function singleAccentRange(adjusted: UmbraAdjusted, c: AccentRange) {
-  const isString = typeof c === 'string'
-  const color = tinycolor(isString ? c : firstShade(c))
-
-  const { background, foreground } = adjusted
-  const range = adjusted.input.settings.shades || []
-  const shades = getRange({ from: background, to: foreground, range })
-  const normalizedRange = normalizeRange({ range, shades, color })
-
-  return chainedAccentRange(adjusted, normalizedRange)
-}
-
 function accentObjectShades(v: (number | string)[], adjusted: UmbraAdjusted, name?: string) {
   const value = firstShade(v)
   return {
     name: name ? name : `accent`,
     background: value,
-    shades: accentRange(adjusted, v),
-    foreground: pickContrast(value, adjusted)
+    foreground: pickContrast(value, adjusted),
+    shades: accentRange(adjusted, v)
   }
 }
 
@@ -77,8 +72,8 @@ function accentObject(accent: Accent, adjusted: UmbraAdjusted) {
   return {
     name: accent.name ? accent.name : `accent`,
     background: c,
-    shades: accentRange(adjusted, v),
-    foreground: pickContrast(c, adjusted)
+    foreground: pickContrast(c, adjusted),
+    shades: accentRange(adjusted, v)
   }
 }
 
@@ -89,8 +84,8 @@ function accents(adjusted: UmbraAdjusted) {
     return {
       name: 'accent',
       background: tinycolor(accent),
-      shades: accentRange(adjusted, accent),
-      foreground: pickContrast(tinycolor(accent), adjusted)
+      foreground: pickContrast(tinycolor(accent), adjusted),
+      shades: accentRange(adjusted, accent)
     }
   })
 }
@@ -101,8 +96,8 @@ function base(adjusted: UmbraAdjusted) {
   return {
     name: 'base',
     background,
-    shades: chainedAccentRange(adjusted, range),
-    foreground
+    foreground,
+    shades: chainedRange(adjusted, range)
   }
 }
 
