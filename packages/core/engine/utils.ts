@@ -16,7 +16,7 @@ function calculateX({ percentage = 60, of = 50 }): number {
   return (leftSide / rightSide) * 100
 }
 
-export function adjustPercentage(range: Range, stop: Stop) {
+function adjustPercentage(range: Range, stop: Stop) {
   return range.map((percentage, i) => {
     if (!isNumber(percentage)) return percentage
     if (percentage === stop.value) return percentage
@@ -24,16 +24,6 @@ export function adjustPercentage(range: Range, stop: Stop) {
     return calculateX({
       percentage,
       of: stop.value
-    })
-  })
-}
-
-export function adjustPercentagex(range: Range, value: number) {
-  return range.map((percentage) => {
-    if (!isNumber(percentage)) return percentage
-    return calculateX({
-      percentage,
-      of: value
     })
   })
 }
