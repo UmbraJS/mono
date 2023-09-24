@@ -18,8 +18,6 @@ function getRange({ from, to, range }: GetRawRange) {
   })
 }
 
-//TODO: Switch from tinycolor2 to colord
-
 function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
   const isString = typeof c === 'string'
   if (isString) return singleAccentRange(adjusted, c)
