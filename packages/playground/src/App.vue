@@ -13,7 +13,7 @@ const royal = {
   value: [25, 35, 25, '#87533e', 25, 25]
 }
 
-const u = umbra({
+const theme = umbra({
   background: 'white',
   foreground: 'black',
   accents: ['#4f0820', '#e91e63', success, royal]
@@ -26,7 +26,7 @@ onMounted(() => {
 
 <template>
   <div class="ranges">
-    <UmbraRange v-for="range in u.formated" :key="range.name" :range="range" :umbra="u" />
+    <UmbraRange v-for="range in theme.formated" :key="range.name" :range="range" :umbra="theme" />
   </div>
 </template>
 

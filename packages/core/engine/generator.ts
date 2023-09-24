@@ -101,7 +101,7 @@ function base(adjusted: UmbraAdjusted) {
   return {
     name: 'base',
     background,
-    shades: getRange({ from: background, to: foreground, range }),
+    shades: chainedAccentRange(adjusted, range),
     foreground
   }
 }
