@@ -3,31 +3,6 @@ import { getReadability } from './primitives/color'
 
 import { UmbraAdjusted, Shade } from './types'
 
-type Range = (number | string)[]
-type Stop = {
-  value: number
-  index: number
-}
-
-//60% of 100% is x% of 50%
-function calculateX({ percentage = 60, of = 50 }): number {
-  const leftSide = (percentage / 100) * 1.0
-  const rightSide = of / 100
-  return (leftSide / rightSide) * 100
-}
-
-function adjustPercentage(range: Range, stop: Stop) {
-  return range.map((percentage, i) => {
-    if (!isNumber(percentage)) return percentage
-    if (percentage === stop.value) return percentage
-    if (i > stop.index) return percentage - stop.value
-    return calculateX({
-      percentage,
-      of: stop.value
-    })
-  })
-}
-
 export function isNumber(value: any): value is number {
   return typeof value === 'number'
 }
@@ -39,19 +14,10 @@ interface NewRange {
 }
 
 export function normalizeRange({ range, shades, color }: NewRange) {
-  const length = shades.length
   const leastReadable = getLeastReadable({ shades, color })
-  const selectedPercent = range[leastReadable.index] as number
-
-  const newRange = adjustPercentage(range, {
-    value: selectedPercent,
-    index: leastReadable.index
-  })
-
-  return {
-    left: newRange.slice(0, leastReadable.index),
-    right: newRange.slice(leastReadable.index + 1, length)
-  }
+  const aaw = [...range]
+  aaw[leastReadable.index] = color.toHexString()
+  return aaw
 }
 
 interface LeastReadable {

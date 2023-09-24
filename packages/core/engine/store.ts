@@ -5,7 +5,7 @@ export let generated: UmbraOutput | null = null
 export let settings: UmbraSettings = {
   readability: 10,
   iterations: 15,
-  shades: [35, 45, 55, 65, 75, 90]
+  shades: [25, 25, 25, 25, 25, 25]
 }
 
 export const defaultScheme: UmbraScheme = {

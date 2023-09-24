@@ -58,27 +58,7 @@ function singleAccentRange(adjusted: UmbraAdjusted, c: AccentRange) {
   const shades = getRange({ from: background, to: foreground, range })
   const normalizedRange = normalizeRange({ range, shades, color })
 
-  return makeRange({
-    color,
-    adjusted,
-    range: normalizedRange
-  })
-}
-
-interface MakeRange {
-  adjusted: UmbraAdjusted
-  color: tinycolor.Instance
-  range: {
-    left: (string | number)[]
-    right: (string | number)[]
-  }
-}
-
-function makeRange({ adjusted, color, range }: MakeRange) {
-  const { background, foreground } = adjusted
-  const left = getRange({ from: background, to: color, range: range.left })
-  const right = getRange({ from: color, to: foreground, range: range.right })
-  return [...left, color, ...right]
+  return chainedAccentRange(adjusted, normalizedRange)
 }
 
 function accentObjectShades(v: (number | string)[], adjusted: UmbraAdjusted, name?: string) {
