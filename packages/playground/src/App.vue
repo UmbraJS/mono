@@ -5,22 +5,22 @@ import UmbraRange from './components/UmbraRange.vue'
 
 const success = {
   name: 'success',
-  value: '#1c7d40'
+  value: [25, 35, 25, '#a94d94', 25, 35]
 }
 
 const royal = {
   name: 'royal',
-  value: [35, 45, '#a94d94', 65, '#87533e', 90]
+  value: [25, 35, 25, '#87533e', 25, 25]
 }
 
 const u = umbra({
   background: 'white',
   foreground: 'black',
-  accents: [success, '#e91e63', '#4f0820', royal]
+  accents: ['#4f0820', '#e91e63', success, royal]
 }).apply()
 
 onMounted(() => {
-  console.log('rex: ', u)
+  //console.log('rex: ', u)
 })
 </script>
 
