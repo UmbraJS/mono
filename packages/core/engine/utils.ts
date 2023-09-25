@@ -13,11 +13,6 @@ export function normalizeRange({ range, shades, color }: NewRange) {
   return range
 }
 
-export function firstShade(value: (string | number)[]) {
-  const f = value.find((x) => typeof x === 'string') as string | undefined
-  return tinycolor(f ? f : '#000000')
-}
-
 export function nextAccent(accents: string[], adjusted: UmbraAdjusted) {
   const foreground = tinycolor(adjusted.foreground)
   return accents.length > 0 ? tinycolor(accents[0] as string) : foreground
