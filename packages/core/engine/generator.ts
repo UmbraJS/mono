@@ -54,12 +54,14 @@ function chainedRange(adjusted: UmbraAdjusted, range: (number | string)[]) {
   })
 }
 
-function accentShape(
-  accent: string,
-  range: (number | string)[] | string,
-  adjusted: UmbraAdjusted,
+interface AccentShape {
+  adjusted: UmbraAdjusted
   name?: string
-) {
+  accent: string
+  range: (number | string)[] | string
+}
+
+function accentShape({ accent, range, adjusted, name }: AccentShape) {
   const isString = typeof range === 'string'
   const color = tinycolor(accent)
   return {
@@ -72,17 +74,16 @@ function accentShape(
 
 function accents(adjusted: UmbraAdjusted) {
   return adjusted.accents.map((accent) => {
-    if (typeof accent === 'string') return accentShape(accent, accent, adjusted)
+    if (typeof accent === 'string') return accentShape({ adjusted, accent, range: accent })
     const range = accent.value
-    const name = accent.name
-
     const defaultShades = adjusted.input.settings.shades || []
     const isString = typeof range === 'string'
-
-    const color = isString ? range : getStrings(range)[0]
-    const shades = isString ? defaultShades : range
-
-    return accentShape(color, shades, adjusted, name)
+    return accentShape({
+      adjusted,
+      name: accent.name,
+      accent: isString ? range : getStrings(range)[0],
+      range: isString ? defaultShades : range
+    })
   })
 }
 
