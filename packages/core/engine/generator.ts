@@ -18,15 +18,15 @@ function getRange({ from, to, range }: GetRawRange) {
   })
 }
 
-function accentRange(adjusted: UmbraAdjusted, c: AccentRange) {
-  const isString = typeof c === 'string'
-  if (!isString) return chainedRange(adjusted, c)
-  const color = tinycolor(isString ? c : getStrings(c)[0])
+function accentRange(adjusted: UmbraAdjusted, range: AccentRange) {
+  const isString = typeof range === 'string'
+  if (!isString) return chainedRange(adjusted, range)
+  const color = tinycolor(isString ? range : getStrings(range)[0])
 
   const { background, foreground } = adjusted
-  const range = adjusted.input.settings.shades || []
-  const shades = getRange({ from: background, to: foreground, range })
-  const normalizedRange = normalizeRange({ range, shades, color })
+  const defaultRange = adjusted.input.settings.shades || []
+  const shades = getRange({ from: background, to: foreground, range: defaultRange })
+  const normalizedRange = normalizeRange({ range: defaultRange, shades, color })
 
   return chainedRange(adjusted, normalizedRange)
 }
