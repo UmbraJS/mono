@@ -1,5 +1,5 @@
 import { umbra, umbraObject, Umbra } from './engine/index'
-import { randomUmbra, randomScheme } from './engine/primitives/utils'
+import { randomScheme } from './engine/primitives/utils'
 import {
   format,
   FlattenColor,
@@ -24,7 +24,6 @@ import { inverse, isDark, findContrast } from './engine/primitives/scheme'
 export {
   umbra,
   umbraObject,
-  randomUmbra,
   randomScheme,
   getReadable,
   colorMix,

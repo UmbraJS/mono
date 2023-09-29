@@ -1,7 +1,7 @@
 import { colord, Colord } from 'colord'
-import { pickContrast, colorMix } from './primitives/color'
 import { UmbraAdjusted, AccentRange } from './types'
-import { normalizeRange, nextAccent, getStrings } from './utils'
+import { pickContrast, colorMix } from './primitives/color'
+import { normalizeRange, nextAccent, getStrings } from './primitives/utils'
 
 interface GetRange {
   from: Colord

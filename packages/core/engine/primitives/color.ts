@@ -101,5 +101,5 @@ export const pickContrast = (color: Colord, scheme: UmbraAdjusted) => {
 export function colorMix(from: string | Colord, to: string | Colord, percent = 50) {
   const tinyFrom = colord(from)
   const tinyTo = colord(to)
-  return colord(tinyFrom).mix(tinyTo, percent)
+  return colord(tinyFrom).mix(tinyTo, percent / 100)
 }
