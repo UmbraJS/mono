@@ -1,5 +1,6 @@
 import tinycolor from 'tinycolor2'
-import { UmbraAdjusted, Shade } from './types'
+import { Shade } from './types'
+import { getReadability } from './primitives/color'
 
 interface NewRange {
   range: Shade[]
@@ -7,18 +8,18 @@ interface NewRange {
   color: tinycolor.Instance
 }
 
-export function normalizeRange({ range, shades, color }: NewRange) {
-  const rangeInstance = [...range]
-  const leastReadable = shades.map((shade, index) => index).reduce((a, b) => (a < b ? a : b))
-  rangeInstance[leastReadable] = color.toHexString()
+function getReadable(shade: tinycolor.Instance, color: tinycolor.Instance, index: number) {
+  const readability = Math.abs(getReadability(shade, color))
+  return { readability, index }
+}
 
-  console.log('lol: ', {
-    rangeInstance,
-    leastReadable,
-    shades: shades.map((shade) => shade.toHexString()),
-    color: color.toHexString(),
-    range
-  })
+export function normalizeRange({ range, shades, color }: NewRange) {
+  const leastReadable = shades
+    .map((shade, index) => getReadable(shade, color, index))
+    .reduce((a, b) => (a.readability < b.readability ? a : b))
+
+  const rangeInstance = [...range]
+  rangeInstance[leastReadable.index] = color.toHexString()
   return rangeInstance
 }
 
