@@ -1,15 +1,10 @@
-import tinycolor from 'tinycolor2'
-
-//Configs and Utilities
+import { colord } from 'colord'
 import { settings, defaultScheme } from './defaults'
 import type { UmbraOutput } from './types'
 
-//Primitives
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
 import { getReadable } from './primitives/color'
-
-//Color RawRange Steps
 import { generate } from './generator'
 
 export interface Umbra {
@@ -20,7 +15,6 @@ export interface Umbra {
   isDark: () => boolean
 }
 
-//Functions
 export function umbraObject(generated: UmbraOutput): Umbra {
   const theme = generated.input
 
@@ -49,9 +43,9 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
   }
 
   const readability = input.settings.readability || 4
-  const background = tinycolor(scheme.background)
+  const background = colord(scheme.background)
   const foreground = getReadable({
-    foreground: tinycolor(scheme.foreground),
+    foreground: colord(scheme.foreground),
     background,
     readability
   })
@@ -65,5 +59,3 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
     })
   )
 }
-
-export default umbra

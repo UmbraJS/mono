@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "apca-w3": "^0.1.9",
+    "colord": "^2.9.3",
     "colorparsley": "^0.1.8",
     "tinycolor2": "^1.4.2"
   }

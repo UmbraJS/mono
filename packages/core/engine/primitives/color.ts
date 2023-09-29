@@ -1,28 +1,28 @@
-import tinycolor from 'tinycolor2'
+import { colord, Colord, extend } from 'colord'
+import mixPlugin from 'colord/plugins/mix'
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import { UmbraAdjusted } from '../types'
 import { settings } from '../defaults'
 
-export type Color = tinycolor.Instance
-export type Colour = string | Color
+extend([mixPlugin])
 
 type ColorRawRange = {
-  foreground: Colour
-  background: Colour
+  foreground: string | Colord
+  background: string | Colord
   readability?: number
   iterations?: number
 }
 
 interface IncreaseContrastUntil {
-  color: Color
-  contrast?: Color
+  color: Colord
+  contrast?: Colord
   iterations?: number
-  condition: (newColor: tinycolor.Instance, iterations?: number) => boolean
+  condition: (newColor: Colord, iterations?: number) => boolean
 }
 
 interface MoveAwayFrom {
-  color: Color
-  contrast?: Color
+  color: Colord
+  contrast?: Colord
   val: number
 }
 
@@ -31,19 +31,19 @@ const stored = {
   iterations: settings.iterations || 15
 }
 
-function apcaContrast(fg: Colour, bg: Colour) {
-  const fgc = tinycolor(fg).toRgb()
-  const bgc = tinycolor(bg).toRgb()
+function apcaContrast(fg: string | Colord, bg: string | Colord) {
+  const fgc = colord(fg).toRgb()
+  const bgc = colord(bg).toRgb()
   return APCAcontrast(sRGBtoY([fgc.r, fgc.g, fgc.b]), sRGBtoY([bgc.r, bgc.g, bgc.b]))
 }
 
-export const getReadability = (fg: Colour, bg: Colour, wcag = false) => {
-  return wcag ? tinycolor.readability(fg, bg) : apcaContrast(fg, bg)
+export const getReadability = (fg: string | Colord, bg: string | Colord) => {
+  return apcaContrast(fg, bg)
 }
 
 export const getReadable = ({ foreground, background, readability, iterations }: ColorRawRange) => {
-  const color = tinycolor(foreground)
-  const contrast = tinycolor(background)
+  const color = colord(foreground)
+  const contrast = colord(background)
   return increaseContrastUntil({
     color,
     contrast,
@@ -85,16 +85,21 @@ const increaseContrast = ({ color, contrast, val = 100 }: MoveAwayFrom) => {
     : color.darken(val)
 }
 
-export const pickContrast = (c: Color, scheme: UmbraAdjusted) => {
-  const color = c.clone()
-  return tinycolor.mostReadable(color, [
-    scheme.background || tinycolor('white'),
-    scheme.foreground || tinycolor('black')
+export function mostReadable(color: Colord, colors: Colord[]) {
+  const readable = colors.map((c) => getReadability(color, c))
+  const index = readable.indexOf(Math.max(...readable))
+  return colors[index]
+}
+
+export const pickContrast = (color: Colord, scheme: UmbraAdjusted) => {
+  return mostReadable(color, [
+    scheme.background || colord('white'),
+    scheme.foreground || colord('black')
   ])
 }
 
-export function colorMix(from: Colour, to: Colour, percent = 50) {
-  const tinyFrom = tinycolor(from)
-  const tinyTo = tinycolor(to)
-  return tinycolor.mix(tinyFrom, tinyTo, percent)
+export function colorMix(from: string | Colord, to: string | Colord, percent = 50) {
+  const tinyFrom = colord(from)
+  const tinyTo = colord(to)
+  return colord(tinyFrom).mix(tinyTo, percent)
 }

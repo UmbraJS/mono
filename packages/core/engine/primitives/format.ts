@@ -1,9 +1,9 @@
-import tinycolor from 'tinycolor2'
+import { Colord } from 'colord'
 import { umbra } from '../..'
 import { UmbraOutput, RawRange, FormatedRange } from '../types'
 import { attach } from './attach'
 
-export type Formater = (color: tinycolor.Instance) => string
+export type Formater = (color: Colord) => string
 
 interface FormatProps {
   output: UmbraOutput
@@ -62,16 +62,16 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
 
 export const defaultFormater = hexFormat
 
-export function hexFormat(color: tinycolor.Instance) {
-  return color.toHexString()
+export function hexFormat(color: Colord) {
+  return color.toRgbString()
 }
 
-export function rgbStrippedFormat(color: tinycolor.Instance) {
+export function rgbStrippedFormat(color: Colord) {
   const rgba = color.toRgb()
   return `${rgba.r} ${rgba.g} ${rgba.b}`
 }
 
-export function hslFormat(color: tinycolor.Instance) {
+export function hslFormat(color: Colord) {
   return color.toHslString()
 }
 

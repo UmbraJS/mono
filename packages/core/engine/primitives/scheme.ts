@@ -1,20 +1,20 @@
-import tinycolor from 'tinycolor2'
+import { colord, Colord } from 'colord'
 import type { UmbraInput, UmbraScheme, UmbraAdjusted } from '../types'
-import { increaseContrastUntil, getReadability, getReadable } from './color'
+import { increaseContrastUntil, getReadability, getReadable, mostReadable } from './color'
 
 function inverseValidator(theme: UmbraInput) {
-  const fgDark = tinycolor(theme.scheme.foreground).isDark()
-  const bgDark = tinycolor(theme.scheme.background).isDark()
+  const fgDark = colord(theme.scheme.foreground).isDark()
+  const bgDark = colord(theme.scheme.background).isDark()
 
-  const background = tinycolor(theme.scheme.background)
-  const foreground = tinycolor(theme.scheme.foreground)
+  const background = colord(theme.scheme.background)
+  const foreground = colord(theme.scheme.foreground)
   const readability = theme.settings?.readability
 
   if (fgDark !== bgDark) return {}
   const fg = getReadable({ foreground, background, readability })
   if (fg.isDark() !== bgDark) {
     return {
-      background: fg.toHexString(),
+      background: fg.toRgbString(),
       foreground: theme.scheme.background
     }
   }
@@ -22,8 +22,8 @@ function inverseValidator(theme: UmbraInput) {
   // Both are same, so we need to adjust something
   // or return a failure of some kind
   function createInvertedFlippingReadability() {
-    const oppositeLightEnd = background.isDark() ? tinycolor('white') : tinycolor('black')
-    const currentLightEnd = background.isDark() ? tinycolor('black') : tinycolor('white')
+    const oppositeLightEnd = background.isDark() ? colord('white') : colord('black')
+    const currentLightEnd = background.isDark() ? colord('black') : colord('white')
     const readability = getReadability(background, currentLightEnd)
 
     return increaseContrastUntil({
@@ -34,7 +34,7 @@ function inverseValidator(theme: UmbraInput) {
         const within = diff < readability
         return within
       }
-    }).toHexString()
+    }).toRgbString()
   }
 
   return {
@@ -70,9 +70,9 @@ export const inverse = (theme: UmbraInput) => {
 }
 
 export const isDark = (theme: UmbraInput) => {
-  return tinycolor(theme.scheme.background).isDark()
+  return colord(theme.scheme.background).isDark()
 }
 
-export function findContrast(color: tinycolor.Instance, adjusted: UmbraAdjusted) {
-  return tinycolor.mostReadable(color, [adjusted.background || color, adjusted.foreground || color])
+export function findContrast(color: Colord, adjusted: UmbraAdjusted) {
+  return mostReadable(color, [adjusted.background || color, adjusted.foreground || color])
 }

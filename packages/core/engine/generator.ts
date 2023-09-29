@@ -1,18 +1,18 @@
-import tinycolor from 'tinycolor2'
+import { colord, Colord } from 'colord'
 import { pickContrast, colorMix } from './primitives/color'
 import { UmbraAdjusted, AccentRange } from './types'
 import { normalizeRange, nextAccent, getStrings } from './utils'
 
 interface GetRange {
-  from: tinycolor.Instance
-  to: tinycolor.Instance
+  from: Colord
+  to: Colord
   range: (number | string)[]
 }
 
 function accentRange(adjusted: UmbraAdjusted, range: AccentRange) {
   const isString = typeof range === 'string'
   if (!isString) return getRange({ from: adjusted.background, to: adjusted.foreground, range })
-  const color = tinycolor(isString ? range : getStrings(range)[0])
+  const color = colord(isString ? range : getStrings(range)[0])
 
   const { background, foreground } = adjusted
   const defaultRange = adjusted.input.settings.shades || []
@@ -25,11 +25,11 @@ function accentRange(adjusted: UmbraAdjusted, range: AccentRange) {
 function getRange({ from, to, range }: GetRange) {
   const accents = getStrings(range)
   let lastColor = from
-  let nextColor = accents.length > 0 ? tinycolor(accents[0] as string) : to
+  let nextColor = accents.length > 0 ? colord(accents[0] as string) : to
 
   return range.map((val) => {
     if (typeof val === 'string') {
-      const color = tinycolor(val)
+      const color = colord(val)
       lastColor = color
       accents.shift()
       return color
@@ -51,7 +51,7 @@ interface AccentShape {
 
 function accentShape({ accent, range, adjusted, name }: AccentShape) {
   const isString = typeof range === 'string'
-  const color = tinycolor(accent)
+  const color = colord(accent)
   return {
     name: name ? name : `accent`,
     background: color,
