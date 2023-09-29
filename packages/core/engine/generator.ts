@@ -3,7 +3,7 @@ import { pickContrast, colorMix } from './primitives/color'
 import { UmbraAdjusted, AccentRange } from './types'
 import { normalizeRange, nextAccent, getStrings } from './utils'
 
-interface GetRawRange {
+interface GetRange {
   from: tinycolor.Instance
   to: tinycolor.Instance
   range: (number | string)[]
@@ -22,7 +22,7 @@ function accentRange(adjusted: UmbraAdjusted, range: AccentRange) {
   return getRange({ from: background, to: foreground, range: normalizedRange })
 }
 
-function getRange({ from, to, range }: GetRawRange) {
+function getRange({ from, to, range }: GetRange) {
   const accents = getStrings(range)
   let lastColor = from
   let nextColor = accents.length > 0 ? tinycolor(accents[0] as string) : to
