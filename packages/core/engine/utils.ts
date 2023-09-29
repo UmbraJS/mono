@@ -8,9 +8,10 @@ interface NewRange {
 }
 
 export function normalizeRange({ range, shades, color }: NewRange) {
+  const rangeInstance = [...range]
   const leastReadable = shades.map((shade, index) => index).reduce((a, b) => (a < b ? a : b))
-  range[leastReadable] = color.toHexString()
-  return range
+  rangeInstance[leastReadable] = color.toHexString()
+  return rangeInstance
 }
 
 export function nextAccent(accents: string[], adjusted: UmbraAdjusted) {
