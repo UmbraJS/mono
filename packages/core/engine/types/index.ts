@@ -1,11 +1,10 @@
-import type tinycolor from 'tinycolor2'
+import type { Colord } from 'colord'
 import type { Alias } from '../primitives/attach'
-
 export interface RawRange {
   name: string
-  background: tinycolor.Instance
-  shades: tinycolor.Instance[]
-  foreground: tinycolor.Instance
+  background: Colord
+  shades: Colord[]
+  foreground: Colord
 }
 
 export interface FormatedRange {
@@ -39,7 +38,7 @@ export interface Accent {
 
 export interface AdjustedAccent {
   name?: string
-  value: tinycolor.Instance
+  value: Colord
   shades?: Shade[]
   readability: number
 }
@@ -57,8 +56,8 @@ export interface UmbraInput {
 }
 
 export interface UmbraAdjusted {
-  background: tinycolor.Instance
-  foreground: tinycolor.Instance
+  background: Colord
+  foreground: Colord
   accents: (Accent | string)[]
   input: UmbraInput
 }

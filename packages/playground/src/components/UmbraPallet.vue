@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import tinycolor from 'tinycolor2'
+import { colord } from 'colord'
 import { computed } from 'vue'
 import { findContrast } from '@umbrajs/core'
 import type { UmbraOutputs } from '@umbrajs/core'
@@ -43,7 +43,7 @@ const textColor = computed(() => {
   if (props.text) return `var(--${props.text})`
   if (!props.color) return 'var(--base-foreground)'
   if (!props.umbra) return 'var(--base-foreground)'
-  return findContrast(tinycolor(props.color), props.umbra.output.adjusted).toHexString()
+  return findContrast(colord(props.color), props.umbra.output.adjusted).toRgbString()
 })
 
 const size = computed(() => {
