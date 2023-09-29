@@ -56,8 +56,6 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
     readability
   })
 
-  console.log('lol2', settings)
-
   return umbraObject(
     generate({
       input,

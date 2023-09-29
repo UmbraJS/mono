@@ -1,45 +1,31 @@
 import tinycolor from 'tinycolor2'
 import { pickContrast, colorMix } from './primitives/color'
-import { UmbraAdjusted, Shade, AccentRange } from './types'
-import { isNumber, normalizeRange, nextAccent, getStrings } from './utils'
+import { UmbraAdjusted, AccentRange } from './types'
+import { normalizeRange, nextAccent, getStrings } from './utils'
 
 interface GetRawRange {
   from: tinycolor.Instance
   to: tinycolor.Instance
-  range: Shade[]
-}
-
-function getRange({ from, to, range }: GetRawRange) {
-  const foreground = tinycolor(from)
-  const background = tinycolor(to)
-  return range.map((val) => {
-    if (!isNumber(val)) return tinycolor(val as string)
-    return colorMix(foreground, background, val as number)
-  })
+  range: (number | string)[]
 }
 
 function accentRange(adjusted: UmbraAdjusted, range: AccentRange) {
   const isString = typeof range === 'string'
-  if (!isString) return chainedRange(adjusted, range)
+  if (!isString) return getRange({ from: adjusted.background, to: adjusted.foreground, range })
   const color = tinycolor(isString ? range : getStrings(range)[0])
 
   const { background, foreground } = adjusted
   const defaultRange = adjusted.input.settings.shades || []
   const shades = getRange({ from: background, to: foreground, range: defaultRange })
-
-  console.log('lol: ', adjusted.input.settings.shades)
   const normalizedRange = normalizeRange({ range: defaultRange, shades, color })
 
-  return chainedRange(adjusted, normalizedRange)
+  return getRange({ from: background, to: foreground, range: normalizedRange })
 }
 
-function chainedRange(adjusted: UmbraAdjusted, range: (number | string)[]) {
-  const foreground = tinycolor(adjusted.foreground)
-  const background = tinycolor(adjusted.background)
-
+function getRange({ from, to, range }: GetRawRange) {
   const accents = getStrings(range)
-  let lastColor = background
-  let nextColor = accents.length > 0 ? tinycolor(accents[0] as string) : foreground
+  let lastColor = from
+  let nextColor = accents.length > 0 ? tinycolor(accents[0] as string) : to
 
   return range.map((val) => {
     if (typeof val === 'string') {
@@ -48,7 +34,7 @@ function chainedRange(adjusted: UmbraAdjusted, range: (number | string)[]) {
       accents.shift()
       return color
     } else {
-      nextColor = nextAccent(accents, adjusted)
+      nextColor = nextAccent(accents, to)
       const newColor = colorMix(lastColor, nextColor, val as number)
       lastColor = newColor
       return newColor
@@ -70,7 +56,9 @@ function accentShape({ accent, range, adjusted, name }: AccentShape) {
     name: name ? name : `accent`,
     background: color,
     foreground: pickContrast(color, adjusted),
-    shades: isString ? accentRange(adjusted, range) : chainedRange(adjusted, range)
+    shades: isString
+      ? accentRange(adjusted, range)
+      : getRange({ from: adjusted.background, to: adjusted.foreground, range })
   }
 }
 
@@ -96,7 +84,7 @@ function base(adjusted: UmbraAdjusted) {
     name: 'base',
     background,
     foreground,
-    shades: chainedRange(adjusted, range)
+    shades: getRange({ from: background, to: foreground, range })
   }
 }
 
