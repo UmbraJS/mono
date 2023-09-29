@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
 
 //Configs and Utilities
-import { settings, defaultScheme } from './store'
+import { settings, defaultScheme } from './defaults'
 import type { UmbraOutput } from './types'
 
 //Primitives
@@ -55,6 +55,8 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
     background,
     readability
   })
+
+  console.log('lol2', settings)
 
   return umbraObject(
     generate({

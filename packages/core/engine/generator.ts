@@ -26,6 +26,8 @@ function accentRange(adjusted: UmbraAdjusted, range: AccentRange) {
   const { background, foreground } = adjusted
   const defaultRange = adjusted.input.settings.shades || []
   const shades = getRange({ from: background, to: foreground, range: defaultRange })
+
+  console.log('lol: ', adjusted.input.settings.shades)
   const normalizedRange = normalizeRange({ range: defaultRange, shades, color })
 
   return chainedRange(adjusted, normalizedRange)

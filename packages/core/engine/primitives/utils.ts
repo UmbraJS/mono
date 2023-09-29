@@ -1,5 +1,5 @@
 import tinycolor from 'tinycolor2'
-import { settings } from '../store'
+import { settings } from '../defaults'
 import { umbra } from '../'
 import { UmbraInput, UmbraSettings } from '../types'
 
@@ -42,9 +42,8 @@ interface RandomSettings extends UmbraSettings {
 }
 
 export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): UmbraInput {
-  const newSettings = { ...settings, ...randomSettings }
   return {
-    settings: newSettings,
+    settings: { ...settings, ...randomSettings },
     scheme: {
       background: randomHex(),
       foreground: randomHex(),

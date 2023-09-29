@@ -1,7 +1,7 @@
 import tinycolor from 'tinycolor2'
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import { UmbraAdjusted } from '../types'
-import { settings } from '../store'
+import { settings } from '../defaults'
 
 export type Color = tinycolor.Instance
 export type Colour = string | Color
