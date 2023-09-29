@@ -1,6 +1,6 @@
 {
   "name": "@umbrajs/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Umbra is a theme managment library that allows you to create semantic color themes that are easy to change retroactivley",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@types/node": "^18.15.3",
-    "@types/tinycolor2": "^1.4.3",
     "typescript": "^4.9.3",
     "vite": "^4.1.0",
     "vite-plugin-dts": "^2.1.0"
@@ -46,7 +45,6 @@
   "dependencies": {
     "apca-w3": "^0.1.9",
     "colord": "^2.9.3",
-    "colorparsley": "^0.1.8",
-    "tinycolor2": "^1.4.2"
+    "colorparsley": "^0.1.8"
   }
 }
