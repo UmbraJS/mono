@@ -15,8 +15,8 @@ const royal = {
 const theme = umbra({
   background: 'white',
   foreground: 'black',
-  accents: ['#4f0820', '#e91e63', success, royal]
-}).apply()
+  accents: ['#4f0820', '#e91e63', success, royal, '#e1cebf']
+}).apply({ alias: true })
 </script>
 
 <template>

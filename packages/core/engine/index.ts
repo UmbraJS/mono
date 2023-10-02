@@ -4,12 +4,19 @@ import type { UmbraOutput } from './types'
 
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
+import type { Alias } from './primitives/attach'
 import { getReadable } from './primitives/color'
 import { generate } from './generator'
 
+interface ApplyProps {
+  element?: HTMLElement
+  formater?: Formater
+  alias?: Alias | boolean
+}
+
 export interface Umbra {
   output: UmbraOutput
-  apply: (element?: HTMLElement, formater?: Formater) => UmbraOutputs
+  apply: (props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
   inverse: () => Umbra
   isDark: () => boolean
@@ -24,9 +31,13 @@ export function umbraObject(generated: UmbraOutput): Umbra {
     ranges: generated.ranges
   }
 
+  function apply({ element, formater, alias }: ApplyProps = {}) {
+    return format({ output, formater }).attach(element, alias)
+  }
+
   return {
     output,
-    apply: (element, formater) => format({ output, formater }).attach(element),
+    apply,
     format: (formater?: Formater) => format({ output, formater }),
     inverse: () => umbra(inverse(theme).scheme, theme.settings),
     isDark: () => isDark(theme)

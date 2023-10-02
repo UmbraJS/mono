@@ -1,7 +1,7 @@
 import { Colord } from 'colord'
 import { umbra } from '../..'
 import { UmbraOutput, RawRange, FormatedRange } from '../types'
-import { attach } from './attach'
+import { attach, Alias } from './attach'
 
 export type Formater = (color: Colord) => string
 
@@ -12,7 +12,7 @@ interface FormatProps {
 }
 
 export interface Format extends UmbraOutputs {
-  attach: (element?: HTMLElement) => UmbraOutputs
+  attach: (element?: HTMLElement, alias?: Alias | boolean) => UmbraOutputs
 }
 
 export interface UmbraOutputs {
@@ -55,7 +55,7 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
   }
 
   return {
-    attach: (element) => attach({ outputs, element }),
+    attach: (element, alias) => attach({ outputs, element, alias }),
     ...outputs
   } as Format
 }
@@ -63,7 +63,7 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
 export const defaultFormater = hexFormat
 
 export function hexFormat(color: Colord) {
-  return color.toRgbString()
+  return color.toHex()
 }
 
 export function rgbStrippedFormat(color: Colord) {

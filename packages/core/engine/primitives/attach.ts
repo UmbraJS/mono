@@ -10,6 +10,19 @@ export type Alias = {
 }
 
 const defaultAliases = {
+  //FG/BG
+  background: 'base',
+  'background-10': 'base-10',
+  'background-20': 'base-20',
+  'background-30': 'base-30',
+
+  'foreground-30': 'base-40',
+  'foreground-20': 'base-50',
+  'foreground-10': 'base-60',
+  foreground: 'base-foreground'
+}
+
+const ActionAliases = {
   //backgrounds
   backgroundSubtle: 'background-10',
   panelSubtle: 'background-10',
@@ -45,18 +58,18 @@ const defaultAliases = {
   buttonDisabledText: 'foreground'
 }
 
-//main
-export function attach({
-  outputs,
-  element
-}: {
+interface Attach {
   outputs: UmbraOutputs
   element?: HTMLElement | null
-}) {
+  alias?: Alias | boolean
+}
+
+//main
+export function attach({ outputs, element, alias }: Attach) {
   if (!document) return outputs
 
   setColors(outputs.flattened, element)
-  setAliases(outputs.output.input.settings.aliases, element)
+  setAliases(alias || outputs.output.input.settings.aliases, element)
 
   if (!element) return outputs
   //Ensure that the foreground color is always set to the attached element
