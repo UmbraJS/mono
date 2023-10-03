@@ -17,7 +17,7 @@ export interface FormatedRange {
 export interface UmbraOutput {
   input: UmbraInput
   adjusted: UmbraAdjusted
-  ranges: RawRange[]
+  generated: RawRange[]
 }
 
 export type SchemeKey = 'foreground' | 'background' | 'accents' | string

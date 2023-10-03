@@ -22,13 +22,12 @@ export interface Umbra {
   isDark: () => boolean
 }
 
-export function umbraObject(generated: UmbraOutput): Umbra {
-  const theme = generated.input
-
+export function umbraObject(props: UmbraOutput): Umbra {
+  const theme = props.input
   const output: UmbraOutput = {
-    input: generated.input,
-    adjusted: generated.adjusted,
-    ranges: generated.ranges
+    input: props.input,
+    adjusted: props.adjusted,
+    generated: props.generated
   }
 
   function apply({ element, formater, alias }: ApplyProps = {}) {

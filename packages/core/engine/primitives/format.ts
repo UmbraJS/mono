@@ -22,8 +22,6 @@ export interface UmbraOutputs {
 }
 
 export const format = ({ output = umbra().output, formater = defaultFormater }: FormatProps) => {
-  const gen = output.ranges
-
   let existingAccents = 0
   function getName(name: string) {
     if (name !== 'accent') return name
@@ -41,8 +39,7 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
     }
   }
 
-  const formated = gen.map((c) => getColors(c, formater))
-
+  const formated = output.generated.map((c) => getColors(c, formater))
   const flattened = flattenColors({
     prefix: '--',
     formated

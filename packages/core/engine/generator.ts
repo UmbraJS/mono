@@ -93,6 +93,6 @@ export function generate(adjusted: UmbraAdjusted) {
   return {
     input,
     adjusted,
-    ranges: [base(adjusted), ...accents(adjusted)]
+    generated: [base(adjusted), ...accents(adjusted)]
   }
 }

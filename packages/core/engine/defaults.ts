@@ -3,7 +3,7 @@ import { UmbraInput, UmbraScheme, UmbraSettings } from './types'
 export const settings: UmbraSettings = {
   readability: 10,
   iterations: 15,
-  shades: [25, 25, 25, 25, 25, 25]
+  shades: [5, 10, 15, 35, 35, 55]
 }
 
 export const defaultScheme: UmbraScheme = {
