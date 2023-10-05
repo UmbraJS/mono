@@ -13,13 +13,19 @@ const royal = {
 }
 
 const something = {
-  color: '#4f0820'
+  color: '#4f0820',
+  shades: [35, 55, 25, 15, 20, 25]
+}
+
+const another = {
+  color: '#e91e63',
+  shades: [25, 25, 45, 25, 25, 25]
 }
 
 const theme = umbra({
   background: 'white',
   foreground: 'black',
-  accents: [something, '#4f0820', '#e91e63', success, royal, '#e1cebf']
+  accents: [royal]
 }).apply({ alias: true })
 </script>
 

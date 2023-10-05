@@ -38,8 +38,12 @@ export function normalizeRange({ range, shades, color }: NewRange) {
     .map((shade, index) => getReadable(shade, color, index))
     .reduce((a, b) => (a.readability < b.readability ? a : b))
 
+  console.log(range)
+
   const rangeInstance = [...range]
   rangeInstance[leastReadable.index] = color.toRgbString()
+
+  console.log(rangeInstance)
   return rangeInstance
 }
 

@@ -9,16 +9,6 @@ interface GetRange {
   range: (number | string)[]
 }
 
-function accentRange(adjusted: UmbraAdjusted, range: (number | string)[], color?: Colord) {
-  const { background, foreground } = adjusted
-  if (!color) return getRange({ from: background, to: foreground, range })
-
-  const defaultRange = adjusted.input.settings.shades || []
-  const shades = getRange({ from: background, to: foreground, range: defaultRange })
-  const normalizedRange = normalizeRange({ range: defaultRange, shades, color })
-  return getRange({ from: background, to: foreground, range: normalizedRange })
-}
-
 function getRange({ from, to, range }: GetRange) {
   const accents = getStrings(range)
   let lastColor = from
@@ -39,6 +29,16 @@ function getRange({ from, to, range }: GetRange) {
   })
 }
 
+function accentRange(adjusted: UmbraAdjusted, range: (number | string)[], color?: string) {
+  const { background, foreground } = adjusted
+  if (!color) return getRange({ from: background, to: foreground, range })
+
+  const defaultRange = adjusted.input.settings.shades || []
+  const shades = getRange({ from: background, to: foreground, range: defaultRange })
+  const normalizedRange = normalizeRange({ range: range, shades, color: colord(color) })
+  return getRange({ from: background, to: foreground, range: normalizedRange })
+}
+
 function accents(adjusted: UmbraAdjusted) {
   const defaultShades = adjusted.input.settings.shades || []
   return adjusted.accents.map((accent) => {
@@ -54,7 +54,7 @@ function accents(adjusted: UmbraAdjusted) {
       name: name ? name : `accent`,
       background: fallback,
       foreground: pickContrast(fallback, adjusted),
-      shades: accentRange(adjusted, range, c)
+      shades: accentRange(adjusted, range, plainColor)
     }
   })
 }
