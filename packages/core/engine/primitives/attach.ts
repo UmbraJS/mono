@@ -15,9 +15,13 @@ const defaultAliases = {
   'background-20': 'base-20',
   'background-30': 'base-30',
 
-  'foreground-30': 'base-40',
-  'foreground-20': 'base-50',
-  'foreground-10': 'base-60',
+  'midground-40': 'base-40',
+  'midground-50': 'base-50',
+  'foreground-60': 'base-60',
+
+  'foreground-70': 'base-40',
+  'foreground-80': 'base-50',
+  'foreground-90': 'base-60',
   foreground: 'base-foreground'
 }
 
