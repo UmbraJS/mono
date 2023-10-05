@@ -59,6 +59,11 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
 
 export const defaultFormater = hexFormat
 
+export function strippedRGBFormat(color: Colord) {
+  const rgb = color.toRgb()
+  return `${rgb.r} ${rgb.g} ${rgb.b}`
+}
+
 export function hexFormat(color: Colord) {
   return color.toHex()
 }

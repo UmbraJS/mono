@@ -1,4 +1,3 @@
-import { SchemeKey } from '../types'
 import { FlattenColor, UmbraOutputs } from './format'
 
 //Why aliases? 2 reasons:
@@ -83,7 +82,7 @@ export function attach({ outputs, element, alias }: Attach) {
 
 //utils
 interface SetProperty {
-  name: SchemeKey
+  name: 'foreground' | 'background' | 'accents' | string
   color: string
 }
 

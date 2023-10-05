@@ -53,6 +53,7 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
   }
 
   const readability = input.settings.readability || 4
+  const accents = scheme.accents || []
   const background = colord(scheme.background)
   const foreground = getReadable({
     foreground: colord(scheme.foreground),
@@ -60,12 +61,5 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
     readability
   })
 
-  return umbraObject(
-    generate({
-      input,
-      background,
-      foreground,
-      accents: scheme.accents
-    })
-  )
+  return umbraObject(generate({ input, background, foreground, accents: accents }))
 }

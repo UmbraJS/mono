@@ -1,5 +1,5 @@
 import { colord, Colord } from 'colord'
-import { UmbraAdjusted, AccentRange } from './types'
+import { UmbraAdjusted } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { normalizeRange, nextAccent, getStrings } from './primitives/utils'
 
@@ -9,16 +9,15 @@ interface GetRange {
   range: (number | string)[]
 }
 
-function accentRange(adjusted: UmbraAdjusted, range: AccentRange) {
-  const isString = typeof range === 'string'
-  if (!isString) return getRange({ from: adjusted.background, to: adjusted.foreground, range })
-  const color = colord(isString ? range : getStrings(range)[0])
-
+function accentRange(adjusted: UmbraAdjusted, range: (number | string)[], c?: string) {
   const { background, foreground } = adjusted
+  const color = c ? colord(c) : undefined
+
+  if (!color) return getRange({ from: background, to: foreground, range })
+
   const defaultRange = adjusted.input.settings.shades || []
   const shades = getRange({ from: background, to: foreground, range: defaultRange })
   const normalizedRange = normalizeRange({ range: defaultRange, shades, color })
-
   return getRange({ from: background, to: foreground, range: normalizedRange })
 }
 
@@ -45,35 +44,29 @@ function getRange({ from, to, range }: GetRange) {
 interface AccentShape {
   adjusted: UmbraAdjusted
   name?: string
-  accent: string
-  range: (number | string)[] | string
+  color?: string
+  range: (number | string)[]
 }
 
-function accentShape({ accent, range, adjusted, name }: AccentShape) {
-  const isString = typeof range === 'string'
-  const color = colord(accent)
+function accentShape({ color, range, adjusted, name }: AccentShape) {
+  const c = colord(color || '#ffffff')
   return {
     name: name ? name : `accent`,
-    background: color,
-    foreground: pickContrast(color, adjusted),
-    shades: isString
-      ? accentRange(adjusted, range)
-      : getRange({ from: adjusted.background, to: adjusted.foreground, range })
+    background: c,
+    foreground: pickContrast(c, adjusted),
+    shades: accentRange(adjusted, range, color)
   }
 }
 
 function accents(adjusted: UmbraAdjusted) {
+  const defaultShades = adjusted.input.settings.shades || []
   return adjusted.accents.map((accent) => {
-    if (typeof accent === 'string') return accentShape({ adjusted, accent, range: accent })
-    const range = accent.value
-    const defaultShades = adjusted.input.settings.shades || []
-    const isString = typeof range === 'string'
-    return accentShape({
-      adjusted,
-      name: accent.name,
-      accent: isString ? range : getStrings(range)[0],
-      range: isString ? defaultShades : range
-    })
+    const plainColor = typeof accent === 'string' ? accent : accent.color
+    const plainRange = typeof accent === 'string' ? defaultShades : accent.shades
+    const color = plainColor ? plainColor : plainRange ? getStrings(plainRange)[0] : undefined
+    const range = plainRange ? plainRange : defaultShades
+    const name = typeof accent === 'string' ? undefined : accent.name
+    return accentShape({ adjusted, name, color, range })
   })
 }
 

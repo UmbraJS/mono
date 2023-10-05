@@ -20,33 +20,20 @@ export interface UmbraOutput {
   generated: RawRange[]
 }
 
-export type SchemeKey = 'foreground' | 'background' | 'accents' | string
-
-export interface UmbraColors {
-  colors: RawRange[]
-  input: UmbraInput
-  adjusted: UmbraAdjusted
-}
-
-export type AccentRange = string | (number | string)[]
-
-export interface Accent {
+interface Accent {
   name?: string
-  value: AccentRange
+  color?: string
+  shades?: (number | string)[]
   readability?: number
 }
 
-export interface AdjustedAccent {
-  name?: string
-  value: Colord
-  shades?: Shade[]
-  readability: number
-}
 export interface UmbraScheme {
   background: string
   foreground: string
   accents: (Accent | string)[]
-  custom?: ColorList
+  custom?: {
+    [key: string]: string | ((s: UmbraInput) => string)
+  }
 }
 
 export interface UmbraInput {
@@ -62,17 +49,9 @@ export interface UmbraAdjusted {
   input: UmbraInput
 }
 
-export type CustomColor = string | ((s: UmbraInput) => string)
-
-export interface ColorList {
-  [key: string]: CustomColor
-}
-
-export type Shade = number | string
-
 export interface UmbraSettings {
   readability?: number
   iterations?: number
   aliases?: Alias | true
-  shades?: Shade[]
+  shades?: (number | string)[]
 }

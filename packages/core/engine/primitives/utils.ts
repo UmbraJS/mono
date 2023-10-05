@@ -1,5 +1,5 @@
 import { colord, Colord } from 'colord'
-import { Shade, UmbraInput, UmbraSettings } from '../types'
+import { UmbraInput, UmbraSettings } from '../types'
 import { getReadability } from './color'
 import { settings } from '../defaults'
 
@@ -8,7 +8,7 @@ interface RandomSettings extends UmbraSettings {
 }
 
 interface NewRange {
-  range: Shade[]
+  range: (number | string)[]
   shades: Colord[]
   color: Colord
 }
