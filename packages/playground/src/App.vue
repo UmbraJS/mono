@@ -31,7 +31,8 @@ const theme = umbra({
   accents: [another, success, royal, something]
 }).apply({ alias: true })
 
-const size = ref('6rem')
+const width = ref('6rem')
+const height = ref('8rem')
 </script>
 
 <template>
@@ -43,7 +44,8 @@ const size = ref('6rem')
       :key="range.name"
       :range="range"
       :umbra="theme"
-      :width="size"
+      :width="width"
+      :height="height"
     />
 
     <ActionLabels />
