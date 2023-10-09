@@ -22,44 +22,44 @@ const defaultAliases = {
   'foreground-70': 'base-40',
   'foreground-80': 'base-50',
   'foreground-90': 'base-60',
-  foreground: 'base-foreground'
+  foreground: 'base-contrast'
 }
 
-// const ActionAliases = {
-//   //backgrounds
-//   backgroundSubtle: 'background-10',
-//   panelSubtle: 'background-10',
-//   panel: 'background-20',
-//   panelActive: 'background-30',
+const ActionAliases = {
+  //backgrounds
+  backgroundSubtle: 'base-10',
+  panelSubtle: 'base-10',
+  panel: 'base-20',
+  panelActive: 'base-30',
 
-//   //borders
-//   borderSubtle: 'background-30',
-//   border: 'foreground-30',
-//   borderHover: 'foreground-20',
-//   borderActive: 'foreground-10',
+  //borders
+  borderSubtle: 'base-30',
+  border: 'foreground-30',
+  borderHover: 'foreground-20',
+  borderActive: 'foreground-10',
 
-//   //foregrounds
-//   text: 'foreground',
-//   textSubtle: 'foreground-30',
-//   textDisabled: 'background-30',
+  //foregrounds
+  text: 'foreground',
+  textSubtle: 'foreground-30',
+  textDisabled: 'background-30',
 
-//   //buttons
-//   buttonDisabled: 'background-30',
-//   buttonSubtle: 'accent-60',
-//   button: 'accent',
-//   buttonHover: 'accent-20',
-//   buttonActive: 'accent-10',
+  //buttons
+  buttonDisabled: 'background-30',
+  buttonSubtle: 'accent-60',
+  button: 'accent',
+  buttonHover: 'accent-20',
+  buttonActive: 'accent-10',
 
-//   //button borders
-//   buttonBorder: 'accent',
-//   buttonBorderHover: 'accent',
-//   buttonBorderActive: 'accent',
+  //button borders
+  buttonBorder: 'accent',
+  buttonBorderHover: 'accent',
+  buttonBorderActive: 'accent',
 
-//   //button text
-//   buttonText: 'accent-contrast',
-//   buttonSubtleText: 'foreground',
-//   buttonDisabledText: 'foreground'
-// }
+  //button text
+  buttonText: 'accent-contrast',
+  buttonSubtleText: 'foreground',
+  buttonDisabledText: 'foreground'
+}
 
 interface Attach {
   outputs: UmbraOutputs

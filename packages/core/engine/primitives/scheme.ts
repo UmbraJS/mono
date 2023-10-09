@@ -74,5 +74,6 @@ export const isDark = (theme: UmbraInput) => {
 }
 
 export function findContrast(color: Colord, adjusted: UmbraAdjusted) {
+  console.log('findContrast', color.toHex(), adjusted)
   return mostReadable(color, [adjusted.background || color, adjusted.foreground || color])
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { colord } from 'colord'
 import { computed } from 'vue'
-import { findContrast } from '@umbrajs/core'
+import { mostReadable } from '@umbrajs/core'
 import type { UmbraOutputs } from '@umbrajs/core'
 
 export interface Props {
@@ -12,14 +12,15 @@ export interface Props {
   index?: number
   prefix?: string
   umbra?: UmbraOutputs
-  meta?: string
+  meta?: boolean
   width?: string
   height?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   width: '6rem',
-  height: undefined
+  height: undefined,
+  meta: false
 })
 
 function getIndex() {
@@ -41,9 +42,17 @@ const cssVariable = computed(() => {
 
 const textColor = computed(() => {
   if (props.text) return `var(--${props.text})`
-  if (!props.color) return 'var(--base-foreground)'
-  if (!props.umbra) return 'var(--base-foreground)'
-  return findContrast(colord(props.color), props.umbra.output.adjusted).toRgbString()
+  if (!props.color) return 'var(--base-contrast)'
+  if (!props.umbra) return 'var(--base-contrast)'
+
+  const black = colord('#000000')
+  const white = colord('#ffffff')
+
+  const x = mostReadable(black, [black, white]).toHex()
+
+  console.log(x)
+
+  return 'var(--base-contrast)'
 })
 
 const size = computed(() => {
@@ -57,7 +66,9 @@ const size = computed(() => {
 <template>
   <div class="range">
     <div class="pallet" :style="{ color: textColor }">
-      <p v-if="meta">{{ getIndex() }}</p>
+      <p v-if="meta" :style="{ color: textColor }">
+        {{ getIndex() }}
+      </p>
       <p v-if="meta">{{ color }}</p>
     </div>
   </div>
@@ -67,7 +78,6 @@ const size = computed(() => {
 .pallet {
   padding: 0.2rem 0.5rem;
   height: v-bind('size.height');
-  width: v-bind('size.width');
   background-color: v-bind(cssVariable);
 }
 </style>

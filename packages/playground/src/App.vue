@@ -4,59 +4,89 @@ import { umbra } from '@umbrajs/core'
 import UmbraRange from './components/UmbraRange.vue'
 import LabelsGroups from './components/ToneLabels.vue'
 import ActionLabels from './components/ActionLabels.vue'
+import PlayGround from './components/PlayGround.vue'
 
 const success = {
   name: 'success',
-  shades: [25, 25, 25, 25, '#a94d94', 35, 25, 25, 25]
+  shades: [25, 25, 25, 25, '#4caf50', 25, 25, 25, 25]
 }
 
 const royal = {
   name: 'royal',
+  shades: [25, 25, 25, 25, '#a94d94', 35, 25, 25, 25]
+}
+
+const brown = {
+  name: 'brown',
   shades: [25, 25, 25, 25, '#87533e', 25, 25, 25, 25]
 }
 
 const something = {
   //color: '#4f0820',
-  shades: [35, 55, 25, 15, '#4f0820', 25, 25, 25, 25]
+  shades: [10, 15, 35, 35, '#4f0820', 15, 15, 15, 25]
 }
 
-const another = {
-  color: '#e91e63',
+const accent = {
+  color: '#ff0157',
   shades: [25, 25, 45, 25, 25, 25, 25, 25, 25]
 }
 
 const theme = umbra({
-  background: 'white',
-  foreground: 'black',
-  accents: [another, success, royal, something]
-}).apply({ alias: true })
+  background: '#000000',
+  foreground: '#ffffff',
+  accents: [accent, something, success]
+})
+
+const output = theme.apply({ alias: true })
+
+function inverse() {
+  const lol = theme.inverse()
+  console.log(lol)
+  lol.apply({ alias: true })
+}
 
 const width = ref('6rem')
 const height = ref('8rem')
 </script>
 
 <template>
-  <div class="ranges">
-    <LabelsGroups />
-
-    <UmbraRange
-      v-for="range in theme.formated"
-      :key="range.name"
-      :range="range"
-      :umbra="theme"
-      :width="width"
-      :height="height"
-    />
-
-    <ActionLabels />
+  <div class="page container">
+    <h1 class="display">Umbra</h1>
+    <button @click="() => inverse()">Invert</button>
+    <div class="ranges">
+      <LabelsGroups />
+      <UmbraRange
+        v-for="range in output.formated"
+        :key="range.name"
+        :range="range"
+        :umbra="output"
+        :width="width"
+        :height="height"
+      />
+      <ActionLabels />
+    </div>
+    <PlayGround />
   </div>
 </template>
 
-<style scoped>
+<style lang="scss">
+@import './css';
+
+.container {
+  display: flex;
+  gap: var(--space-m);
+  flex-direction: column;
+  padding-top: var(--space-m);
+  padding-bottom: var(--space-m);
+}
+
 .ranges {
   display: flex;
   flex-direction: column;
   gap: 0rem;
+
+  width: 100%;
+  margin: auto;
 }
 
 .labels {

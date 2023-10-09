@@ -12,8 +12,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "vue": "^3.3.4",
-    "@umbrajs/core": "file:packages/core"
+    "@umbrajs/core": "file:packages/core",
+    "sass": "^1.69.0",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.3.2",

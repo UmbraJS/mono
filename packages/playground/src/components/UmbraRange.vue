@@ -16,9 +16,9 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div class="range">
+  <div class="rangec">
     <h2 v-if="true">{{ range.name }}</h2>
-    <UmbraPallet variable="base" text="base-foreground" :width="width" :height="height" />
+    <UmbraPallet variable="base" text="base-contrast" :width="width" :height="height" />
     <UmbraPallet
       v-for="(color, index) in range.shades"
       :key="index"
@@ -28,8 +28,9 @@ withDefaults(defineProps<Props>(), {
       :umbra="umbra"
       :width="width"
       :height="height"
+      :meta="true"
     />
-    <UmbraPallet variable="base-foreground" text="base" :width="width" :height="height" />
+    <UmbraPallet variable="base-contrast" text="base" :width="width" :height="height" />
   </div>
 </template>
 
@@ -40,8 +41,11 @@ h2 {
   font-size: 16px;
 }
 
-.range {
-  display: flex;
+.rangec {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  display: grid;
   grid-template-columns: repeat(11, 1fr);
 }
 </style>

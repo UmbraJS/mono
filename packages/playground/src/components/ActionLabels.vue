@@ -1,26 +1,40 @@
+<script setup lang="ts">
+import ActionLabels2 from './ActionLabels2.vue'
+</script>
+
 <template>
-  <div class="labels">
-    <div class="shade-group" :style="{ gridColumn: 'span 2' }">
-      <p>root</p>
-      <div class="bracket"></div>
+  <div class="labelsx">
+    <div class="labels">
+      <div class="shade-group" :style="{ gridColumn: 'span 2' }">
+        <p>root</p>
+        <div class="bracket"></div>
+      </div>
+      <div class="shade-group" :style="{ gridColumn: 'span 3' }">
+        <p>panel</p>
+        <div class="bracket"></div>
+      </div>
+      <div class="shade-group" :style="{ gridColumn: 'span 3' }">
+        <p>border</p>
+        <div class="bracket"></div>
+      </div>
+      <div class="shade-group" :style="{ gridColumn: 'span 3' }">
+        <p>text</p>
+        <div class="bracket"></div>
+      </div>
     </div>
-    <div class="shade-group" :style="{ gridColumn: 'span 3' }">
-      <p>panel</p>
-      <div class="bracket"></div>
-    </div>
-    <div class="shade-group" :style="{ gridColumn: 'span 3' }">
-      <p>button</p>
-      <div class="bracket"></div>
-    </div>
-    <div class="shade-group" :style="{ gridColumn: 'span 3' }">
-      <p>text</p>
-      <div class="bracket"></div>
-    </div>
+
+    <!-- <ActionLabels2 /> -->
   </div>
 </template>
 
 <style scoped>
+.labelsx {
+  position: relative;
+  background: red;
+}
+
 .labels {
+  position: absolute;
   --offset: 19px;
   display: grid;
   grid-template-columns: repeat(11, 1fr);

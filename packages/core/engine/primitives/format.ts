@@ -95,7 +95,7 @@ function flattenColors({ formated, prefix }: FlattenColors) {
     flattened.push({ name, color: c.background })
     flattened.push(...flattenShades(c.shades, name))
     flattened.push({
-      name: name + '-foreground',
+      name: name + '-contrast',
       color: c.foreground
     })
   })

@@ -10,7 +10,7 @@ import {
   hslFormat
 } from './engine/primitives/format'
 import { attach } from './engine/primitives/attach'
-import { getReadable, colorMix } from './engine/primitives/color'
+import { mostReadable, colorMix } from './engine/primitives/color'
 import type {
   UmbraOutput,
   UmbraSettings,
@@ -25,7 +25,7 @@ export {
   umbra,
   umbraObject,
   randomScheme,
-  getReadable,
+  mostReadable,
   colorMix,
   isDark,
   inverse,
