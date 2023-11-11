@@ -17,7 +17,7 @@
   position: absolute;
   --offset: 19px;
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
+  grid-template-columns: repeat(14, 1fr);
   gap: 0rem;
   height: 3rem;
   width: 100%;

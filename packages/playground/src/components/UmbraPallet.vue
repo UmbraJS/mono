@@ -6,7 +6,6 @@ import type { UmbraOutputs } from '@umbrajs/core'
 
 export interface Props {
   variable?: string
-  text?: string
   color?: string
   name?: string
   index?: number
@@ -41,43 +40,51 @@ const cssVariable = computed(() => {
 })
 
 const textColor = computed(() => {
-  if (props.text) return `var(--${props.text})`
-  if (!props.color) return 'var(--base-contrast)'
-  if (!props.umbra) return 'var(--base-contrast)'
-
   const black = colord('#000000')
   const white = colord('#ffffff')
-
-  const x = mostReadable(black, [black, white]).toHex()
-
-  console.log(x)
-
-  return 'var(--base-contrast)'
+  if (!props.color) return black
+  const c = colord(props.color)
+  const x = mostReadable(c, [black, white]).toHex()
+  return x
 })
 
-const size = computed(() => {
-  return {
-    width: props.width,
-    height: props.height ? props.height : props.width
-  }
-})
+const size = computed(() => ({
+  width: props.width,
+  height: props.height ? props.height : props.width
+}))
 </script>
 
 <template>
   <div class="range">
-    <div class="pallet" :style="{ color: textColor }">
-      <p v-if="meta" :style="{ color: textColor }">
-        {{ getIndex() }}
-      </p>
-      <p v-if="meta">{{ color }}</p>
+    <div class="pallet">
+      <div class="text">
+        <p v-if="meta">
+          {{ getIndex() }}
+        </p>
+        <p v-if="meta">{{ color }}</p>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .pallet {
+  position: relative;
+  overflow: hidden;
   padding: 0.2rem 0.5rem;
   height: v-bind('size.height');
+  //min-width: v-bind('size.width');
   background-color: v-bind(cssVariable);
+}
+
+.pallet .text {
+  position: absolute;
+}
+
+.pallet p {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: v-bind(textColor);
 }
 </style>

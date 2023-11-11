@@ -1,14 +1,14 @@
 <template>
   <div class="labels">
-    <div class="shade-group" :style="{ gridColumn: 'span 4' }">
+    <div class="shade-group" :style="{ gridColumn: 'span 5' }">
       <p>background</p>
       <div class="bracket"></div>
     </div>
-    <div class="shade-group" :style="{ gridColumn: 'span 3' }">
+    <div class="shade-group" :style="{ gridColumn: 'span 4' }">
       <p>midground</p>
       <div class="bracket"></div>
     </div>
-    <div class="shade-group" :style="{ gridColumn: 'span 4' }">
+    <div class="shade-group" :style="{ gridColumn: 'span 5' }">
       <p>foreground</p>
       <div class="bracket"></div>
     </div>
@@ -19,7 +19,7 @@
 .labels {
   --offset: 19px;
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
+  grid-template-columns: repeat(14, 1fr);
   gap: 0rem;
   height: 3rem;
   width: 100%;

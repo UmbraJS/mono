@@ -8,41 +8,42 @@ import PlayGround from './components/PlayGround.vue'
 
 const success = {
   name: 'success',
-  shades: [25, 25, 25, 25, '#4caf50', 25, 25, 25, 25]
+  shades: [25, 25, 25, 25, 25, '#4caf50', 25, 25, 25, 25, 25, 25]
 }
 
 const royal = {
   name: 'royal',
-  shades: [25, 25, 25, 25, '#a94d94', 35, 25, 25, 25]
+  shades: [25, 25, 25, 25, 25, '#a94d94', 35, 25, 25, 25, 25, 25]
 }
 
 const brown = {
   name: 'brown',
-  shades: [25, 25, 25, 25, '#87533e', 25, 25, 25, 25]
+  shades: [25, 25, 25, 25, 25, '#87533e', 25, 25, 25, 25, 25, 25]
 }
 
 const something = {
-  //color: '#4f0820',
-  shades: [10, 15, 35, 35, '#4f0820', 15, 15, 15, 25]
+  shades: [10, 15, 25, 35, 35, '#4f0820', 15, 15, 15, 15, 15, 25]
 }
 
 const accent = {
   color: '#ff0157',
-  shades: [25, 25, 45, 25, 25, 25, 25, 25, 25]
+  shades: [25, 25, 25, 45, 25, 25, 25, 25, 25, 25, 25, 25]
 }
 
 const theme = umbra({
   background: '#000000',
   foreground: '#ffffff',
-  accents: [accent, something, success]
+  accents: [accent, something, success, royal, brown]
 })
 
-const output = theme.apply({ alias: true })
+const t = ref(theme)
+
+const output = t.value.apply({ alias: true })
 
 function inverse() {
-  const lol = theme.inverse()
-  console.log(lol)
-  lol.apply({ alias: true })
+  const inv = t.value.inverse()
+  t.value = inv
+  inv.apply({ alias: true })
 }
 
 const width = ref('6rem')
@@ -92,7 +93,7 @@ const height = ref('8rem')
 .labels {
   --offset: 19px;
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
+  grid-template-columns: repeat(14, 1fr);
   gap: 0rem;
   height: 3rem;
   width: 100%;

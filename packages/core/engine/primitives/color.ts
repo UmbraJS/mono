@@ -86,7 +86,7 @@ const increaseContrast = ({ color, contrast, val = 100 }: MoveAwayFrom) => {
 }
 
 export function mostReadable(color: Colord, colors: Colord[]) {
-  const readable = colors.map((c) => getReadability(color, c))
+  const readable = colors.map((c) => Math.abs(getReadability(color, c)))
   const index = readable.indexOf(Math.max(...readable))
   return colors[index]
 }
