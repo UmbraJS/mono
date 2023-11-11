@@ -6,12 +6,24 @@ import LabelsGroups from './components/ToneLabels.vue'
 import ActionLabels from './components/ActionLabels.vue'
 import PlayGround from './components/PlayGround.vue'
 
-import { blue, blueDark } from '@radix-ui/colors'
+import { blue, blueDark, red, redDark, yellow, yellowDark } from '@radix-ui/colors'
 
 const radixBlue = {
   name: 'blue',
   shades: Object.values(blueDark),
   tints: Object.values(blue)
+}
+
+const radixRed = {
+  name: 'red',
+  shades: Object.values(redDark),
+  tints: Object.values(red)
+}
+
+const radixYellow = {
+  name: 'yellow',
+  shades: Object.values(yellowDark),
+  tints: Object.values(yellow)
 }
 
 const success = {
@@ -41,7 +53,7 @@ const accent = {
 const theme = umbra({
   background: '#ffffff',
   foreground: '#000000',
-  accents: [radixBlue]
+  accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
 })
 
 const t = ref(theme)
