@@ -40,10 +40,10 @@ function accentRange(adjusted: UmbraAdjusted, range: (number | string)[], color?
 }
 
 function accents(adjusted: UmbraAdjusted) {
-  const defaultShades = adjusted.input.settings.shades || []
+  const defaultShades = rangeValues(adjusted, adjusted.input.settings)
   return adjusted.accents.map((accent) => {
     const plainColor = typeof accent === 'string' ? accent : accent.color
-    const plainRange = typeof accent === 'string' ? defaultShades : accent.shades
+    const plainRange = typeof accent === 'string' ? defaultShades : rangeValues(adjusted, accent)
     const color = plainColor ? plainColor : plainRange ? getStrings(plainRange)[0] : undefined
     const range = plainRange ? plainRange : defaultShades
     const name = typeof accent === 'string' ? undefined : accent.name
@@ -59,9 +59,21 @@ function accents(adjusted: UmbraAdjusted) {
   })
 }
 
+interface RangeValues {
+  shades?: (number | string)[]
+  tints?: (number | string)[]
+}
+
+function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues) {
+  const { background } = adjusted
+  const shades = scheme?.shades || []
+  const tints = scheme?.tints || shades
+  return background.isDark() ? shades : tints
+}
+
 function base(adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
-  const range = adjusted.input.settings.shades || []
+  const range = rangeValues(adjusted, adjusted.input.settings)
   return {
     name: 'base',
     background,

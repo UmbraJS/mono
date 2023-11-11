@@ -54,4 +54,5 @@ export interface UmbraSettings {
   iterations?: number
   aliases?: Alias | true
   shades?: (number | string)[]
+  tints?: (number | string)[]
 }
