@@ -12,6 +12,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@radix-ui/colors": "^3.0.0",
     "@umbrajs/core": "file:packages/core",
     "sass": "^1.69.0",
     "vue": "^3.3.4"

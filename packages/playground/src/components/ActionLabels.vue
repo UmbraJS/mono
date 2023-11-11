@@ -5,7 +5,7 @@ import ActionLabels2 from './ActionLabels2.vue'
 <template>
   <div class="labelsx">
     <div class="labels">
-      <div class="shade-group" :style="{ gridColumn: 'span 4' }">
+      <div class="shade-group" :style="{ gridColumn: 'span 2' }">
         <p>root</p>
         <div class="bracket"></div>
       </div>
@@ -13,7 +13,7 @@ import ActionLabels2 from './ActionLabels2.vue'
         <p>panel</p>
         <div class="bracket"></div>
       </div>
-      <div class="shade-group" :style="{ gridColumn: 'span 3' }">
+      <div class="shade-group" :style="{ gridColumn: 'span 5' }">
         <p>border</p>
         <div class="bracket"></div>
       </div>
