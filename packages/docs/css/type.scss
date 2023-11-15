@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --font-bold: "wght" 900, "wdth" 100;
+  --font-semibold: "wght" 800, "wdth" 100;
+  --font-medium: "wght" 700, "wdth" 100;
+  --font-regular: "wght" 200, "wdth" 100;
+  --font-light: "wght" 100, "wdth" 100;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Inter", "Flexa", sans-serif;
+  font-size: clamp(16px, 1vw, 24px);
+}
+
+body {
+  line-height: 1.5;
+}
+
+h1, .h1,
+h2, .h2, 
+h3, .h3, 
+button {
+  max-width: clamp(100px, 100vw, 55ch);
+  text-transform: capitalize;
+  text-wrap: balance;
+  transition: color .4s ease-in-out;
+}
+
+h1, .h1 {
+  --size: clamp(2.4rem, 5vw, 5rem);
+  font-size: var(--size);
+  line-height: var(--size);
+  font-variation-settings: var(--font-bold);
+}
+
+h2, .h2 {
+  --size: clamp(1.8rem, 4vw, 3rem);
+  font-size: var(--size);
+  line-height: var(--size);
+  font-variation-settings: var(--font-bold);
+}
+
+h3, .h3 {
+  --size: clamp(1rem, 4vw, 1.5rem);
+  font-size: var(--size);
+  line-height: var(--size);
+  letter-spacing: -0.5px;
+  font-variation-settings: var(--font-bold);
+}
+
+::-moz-selection,
+::-webkit-selection,
+::selection { 
+  color: var(--accent) !important;
+  background: var(--accent-20) !important;
+}
+
+p, button, .bodycopy, blockquote {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0px;
+  max-width: clamp(300px, 100vw, 1000px);
+  font-variation-settings: var(--font-regular);
+  color: var(--foreground);
+  transition: color .4s ease-in-out;
+
+
+  @media (max-width: 2000px) {
+    max-width: clamp(300px, 100vw, 700px);
+  }
+
+  span,
+  strong {
+    font-variation-settings: var(--font-bold);
+  }
+  &.slugline {
+    font-size: 1.3rem;
+    line-height: 1.2;
+    font-variation-settings: var(--font-bold);
+  }
+  &.caption {
+    font-size: 1rem;
+    line-height: 1rem;
+    font-variation-settings: var(--font-light);
+  }
+}
+
+button {
+  font-variation-settings: var(--font-semibold);
+  font-weight: 900;
+  text-transform: lowercase;
+}
