@@ -1,4 +1,5 @@
 import { umbra, umbraHydrate, Umbra } from './engine/index'
+import { umbraGenerate } from './engine/generator'
 import { randomScheme } from './engine/primitives/utils'
 import {
   format,
@@ -23,6 +24,7 @@ import { inverse, isDark, findContrast } from './engine/primitives/scheme'
 
 export {
   umbra,
+  umbraGenerate,
   umbraHydrate,
   randomScheme,
   mostReadable,
