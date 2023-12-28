@@ -60,6 +60,8 @@ const t = ref(theme)
 
 const output = t.value.apply({ alias: true })
 
+console.log('rex: ', theme)
+
 function inverse() {
   const inv = t.value.inverse()
   t.value = inv

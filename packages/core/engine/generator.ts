@@ -82,7 +82,7 @@ function base(adjusted: UmbraAdjusted) {
   }
 }
 
-export function generate(adjusted: UmbraAdjusted) {
+export function umbraGenerate(adjusted: UmbraAdjusted) {
   const input = adjusted.input
   return {
     input,

@@ -6,7 +6,7 @@ import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
 import type { Alias } from './primitives/attach'
 import { getReadable } from './primitives/color'
-import { generate } from './generator'
+import { umbraGenerate } from './generator'
 
 interface ApplyProps {
   element?: HTMLElement
@@ -18,18 +18,12 @@ export interface Umbra {
   output: UmbraOutput
   apply: (props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
-  inverse: () => Umbra
   isDark: () => boolean
+  inverse: () => Umbra
 }
 
-export function umbraObject(props: UmbraOutput): Umbra {
-  const theme = props.input
-  const output: UmbraOutput = {
-    input: props.input,
-    adjusted: props.adjusted,
-    generated: props.generated
-  }
-
+export function umbraHydrate(output: UmbraOutput) {
+  const input = output.input
   function apply({ element, formater, alias }: ApplyProps = {}) {
     return format({ output, formater }).attach(element, alias)
   }
@@ -37,9 +31,9 @@ export function umbraObject(props: UmbraOutput): Umbra {
   return {
     output,
     apply,
+    isDark: () => isDark(input),
     format: (formater?: Formater) => format({ output, formater }),
-    inverse: () => umbra(inverse(theme).scheme, theme.settings),
-    isDark: () => isDark(theme)
+    inverse: () => umbra(inverse(input).scheme, input.settings)
   }
 }
 
@@ -61,5 +55,12 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
     readability
   })
 
-  return umbraObject(generate({ input, background, foreground, accents: accents }))
+  return umbraHydrate(
+    umbraGenerate({
+      input,
+      background,
+      foreground,
+      accents
+    })
+  )
 }
