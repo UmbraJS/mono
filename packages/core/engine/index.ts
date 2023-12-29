@@ -1,6 +1,6 @@
 import { colord } from 'colord'
-import { settings, defaultScheme } from './defaults'
-import type { UmbraOutput } from './types'
+import { defaultSettings, defaultScheme } from './defaults'
+import type { UmbraOutput, UmbraScheme, UmbraSettings, UmbraInput } from './types'
 
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
@@ -22,6 +22,50 @@ export interface Umbra {
   inverse: () => Umbra
 }
 
+interface RootSettings extends UmbraSettings {
+  inversed?: UmbraInput
+}
+
+export function umbra(scheme = defaultScheme, settings?: RootSettings) {
+  const input = umbraInput({ scheme, settings })
+  const adjusted = umbraAdjust(input.settings, scheme)
+  const generated = umbraGenerate(input, adjusted)
+  return umbraHydrate(generated)
+}
+
+function umbraInput({
+  scheme = defaultScheme,
+  settings
+}: {
+  scheme?: UmbraScheme
+  settings?: RootSettings
+}): UmbraInput {
+  const { inversed, ...rest } = settings || {}
+  return {
+    scheme,
+    inversed: inversed,
+    settings: {
+      ...defaultSettings,
+      ...rest
+    }
+  }
+}
+
+function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
+  const background = colord(scheme.background)
+  const foreground = getReadable({
+    readability: settings.readability || 4,
+    foreground: colord(scheme.foreground),
+    background
+  })
+
+  return {
+    accents: scheme.accents,
+    background,
+    foreground
+  }
+}
+
 export function umbraHydrate(output: UmbraOutput) {
   const input = output.input
   function apply({ element, formater, alias }: ApplyProps = {}) {
@@ -30,35 +74,9 @@ export function umbraHydrate(output: UmbraOutput) {
 
   return {
     apply,
-    isDark: () => isDark(input),
+    output,
+    isDark: () => isDark(input.scheme),
     format: (formater?: Formater) => format({ output, formater }),
-    inverse: () => umbra(inverse(input).scheme, input.settings),
-    output
+    inverse: () => umbra(inverse(input).scheme, input.settings)
   }
-}
-
-export function umbra(scheme = defaultScheme, passedSettings = settings) {
-  const input = {
-    scheme,
-    settings: {
-      ...settings,
-      ...passedSettings
-    }
-  }
-
-  const accents = scheme.accents
-  const background = colord(scheme.background)
-  const foreground = getReadable({
-    readability: input.settings.readability || 4,
-    foreground: colord(scheme.foreground),
-    background
-  })
-
-  const generated = umbraGenerate(input, {
-    background,
-    foreground,
-    accents
-  })
-
-  return umbraHydrate(generated)
 }

@@ -69,8 +69,8 @@ export const inverse = (theme: UmbraInput) => {
   return makeInverse(theme)
 }
 
-export const isDark = (theme: UmbraInput) => {
-  return colord(theme.scheme.background).isDark()
+export const isDark = (theme: UmbraScheme) => {
+  return colord(theme.background).isDark()
 }
 
 export function findContrast(color: Colord, adjusted: UmbraAdjusted) {

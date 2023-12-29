@@ -31,9 +31,6 @@ export interface UmbraScheme {
   background: string
   foreground: string
   accents: (Accent | string)[]
-  custom?: {
-    [key: string]: string | ((s: UmbraInput) => string)
-  }
 }
 
 export interface UmbraInput {
