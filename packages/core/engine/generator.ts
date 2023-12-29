@@ -1,5 +1,5 @@
 import { colord, Colord } from 'colord'
-import { UmbraAdjusted } from './types'
+import { UmbraAdjusted, UmbraInput } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { normalizeRange, nextAccent, getStrings } from './primitives/utils'
 
@@ -29,18 +29,23 @@ function getRange({ from, to, range }: GetRange) {
   })
 }
 
-function accentRange(adjusted: UmbraAdjusted, range: (number | string)[], color?: string) {
+function accentRange(
+  input: UmbraInput,
+  adjusted: UmbraAdjusted,
+  range: (number | string)[],
+  color?: string
+) {
   const { background, foreground } = adjusted
   if (!color) return getRange({ from: background, to: foreground, range })
 
-  const defaultRange = adjusted.input.settings.shades || []
+  const defaultRange = input.settings.shades || []
   const shades = getRange({ from: background, to: foreground, range: defaultRange })
   const normalizedRange = normalizeRange({ range: range, shades, color: colord(color) })
   return getRange({ from: background, to: foreground, range: normalizedRange })
 }
 
-function accents(adjusted: UmbraAdjusted) {
-  const defaultShades = rangeValues(adjusted, adjusted.input.settings)
+function accents(input: UmbraInput, adjusted: UmbraAdjusted) {
+  const defaultShades = rangeValues(adjusted, input.settings)
   return adjusted.accents.map((accent) => {
     const plainColor = typeof accent === 'string' ? accent : accent.color
     const plainRange = typeof accent === 'string' ? defaultShades : rangeValues(adjusted, accent)
@@ -54,7 +59,7 @@ function accents(adjusted: UmbraAdjusted) {
       name: name ? name : `accent`,
       background: fallback,
       foreground: pickContrast(fallback, adjusted),
-      shades: accentRange(adjusted, range, plainColor)
+      shades: accentRange(input, adjusted, range, plainColor)
     }
   })
 }
@@ -71,9 +76,9 @@ function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues) {
   return background.isDark() ? shades : tints
 }
 
-function base(adjusted: UmbraAdjusted) {
+function base(input: UmbraInput, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
-  const range = rangeValues(adjusted, adjusted.input.settings)
+  const range = rangeValues(adjusted, input.settings)
   return {
     name: 'base',
     background,
@@ -82,11 +87,10 @@ function base(adjusted: UmbraAdjusted) {
   }
 }
 
-export function umbraGenerate(adjusted: UmbraAdjusted) {
-  const input = adjusted.input
+export function umbraGenerate(input: UmbraInput, adjusted: UmbraAdjusted) {
   return {
     input,
     adjusted,
-    generated: [base(adjusted), ...accents(adjusted)]
+    generated: [base(input, adjusted), ...accents(input, adjusted)]
   }
 }

@@ -29,11 +29,11 @@ export function umbraHydrate(output: UmbraOutput) {
   }
 
   return {
-    output,
     apply,
     isDark: () => isDark(input),
     format: (formater?: Formater) => format({ output, formater }),
-    inverse: () => umbra(inverse(input).scheme, input.settings)
+    inverse: () => umbra(inverse(input).scheme, input.settings),
+    output
   }
 }
 
@@ -46,21 +46,19 @@ export function umbra(scheme = defaultScheme, passedSettings = settings) {
     }
   }
 
-  const readability = input.settings.readability || 4
-  const accents = scheme.accents || []
+  const accents = scheme.accents
   const background = colord(scheme.background)
   const foreground = getReadable({
+    readability: input.settings.readability || 4,
     foreground: colord(scheme.foreground),
-    background,
-    readability
+    background
   })
 
-  return umbraHydrate(
-    umbraGenerate({
-      input,
-      background,
-      foreground,
-      accents
-    })
-  )
+  const generated = umbraGenerate(input, {
+    background,
+    foreground,
+    accents
+  })
+
+  return umbraHydrate(generated)
 }

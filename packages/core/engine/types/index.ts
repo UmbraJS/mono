@@ -20,7 +20,7 @@ export interface UmbraOutput {
   generated: RawRange[]
 }
 
-interface Accent {
+export interface Accent {
   name?: string
   color?: string
   shades?: (number | string)[]
@@ -45,6 +45,12 @@ export interface UmbraInput {
 export interface UmbraAdjusted {
   background: Colord
   foreground: Colord
+  accents: (Accent | string)[]
+}
+
+export interface DehydratedAdjusted {
+  background: string
+  foreground: string
   accents: (Accent | string)[]
   input: UmbraInput
 }

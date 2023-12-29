@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { colord } from 'colord'
 import { umbra } from '@umbrajs/core'
 import UmbraRange from './components/UmbraRange.vue'
 import LabelsGroups from './components/ToneLabels.vue'
@@ -60,7 +61,22 @@ const t = ref(theme)
 
 const output = t.value.apply({ alias: true })
 
-console.log('rex: ', theme)
+const color = colord('#ff0157')
+const stringifiedColor = JSON.parse(JSON.stringify(color))
+const rehydrated = rehydrate(stringifiedColor.parsed)
+
+function rehydrate(stringed: { r: number; g: number; b: number; a: number }) {
+  const rgba = `rgb(${stringed.r}, ${stringed.g}, ${stringed.b})`
+  return colord(rgba)
+}
+
+const rehydratedColor = colord(rehydrated)
+
+console.log('rex: ', {
+  color,
+  stringifiedColor,
+  rehydrated
+})
 
 function inverse() {
   const inv = t.value.inverse()
