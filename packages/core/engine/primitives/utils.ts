@@ -1,7 +1,7 @@
 import { colord, Colord } from 'colord'
 import { UmbraInput, UmbraSettings } from '../types'
 import { getReadability } from './color'
-import { settings } from '../defaults'
+import { defaultSettings } from '../defaults'
 
 interface RandomSettings extends UmbraSettings {
   amount: number
@@ -19,7 +19,7 @@ function randomHex() {
 
 export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): UmbraInput {
   return {
-    settings: { ...settings, ...randomSettings },
+    settings: { ...defaultSettings, ...randomSettings },
     scheme: {
       background: randomHex(),
       foreground: randomHex(),

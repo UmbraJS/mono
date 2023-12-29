@@ -2,7 +2,7 @@ import { colord, Colord, extend } from 'colord'
 import mixPlugin from 'colord/plugins/mix'
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import { UmbraAdjusted } from '../types'
-import { settings } from '../defaults'
+import { defaultSettings } from '../defaults'
 
 extend([mixPlugin])
 
@@ -27,8 +27,8 @@ interface MoveAwayFrom {
 }
 
 const stored = {
-  readability: settings.readability || 11,
-  iterations: settings.iterations || 15
+  readability: defaultSettings.readability || 11,
+  iterations: defaultSettings.iterations || 15
 }
 
 function apcaContrast(fg: string | Colord, bg: string | Colord) {
