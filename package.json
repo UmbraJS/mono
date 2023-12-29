@@ -7,5 +7,8 @@
     "build": "cd packages/core && tsc && vite build && copy package.json dist && copy README.md dist",
     "publish": "cd packages/core/dist && npm publish",
     "tree": "tree -I 'node_modules|dist'"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10"
   }
 }
