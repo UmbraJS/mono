@@ -20,6 +20,7 @@ export interface UmbraOutputs {
   flattened: FlattenColor[]
   formated: FormatedRange[]
   output: RawRange[]
+  input: UmbraInput
 }
 
 export const format = ({
@@ -53,14 +54,16 @@ export const format = ({
   const outputs: UmbraOutputs = {
     flattened,
     formated,
-    output
+    output,
+    input
   }
 
   return {
-    input,
     ...outputs,
-    attach: (element?: HTMLElement, alias?: Alias | boolean) =>
-      attach({ input, outputs, element, alias })
+    attach: (element?: HTMLElement, alias?: Alias | boolean) => {
+      if (!document) return outputs
+      return attach({ input, outputs, element, alias })
+    }
   }
 }
 

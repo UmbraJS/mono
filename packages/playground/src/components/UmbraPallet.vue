@@ -2,7 +2,6 @@
 import { colord } from 'colord'
 import { computed } from 'vue'
 import { mostReadable } from '@umbrajs/core'
-import type { UmbraOutputs } from '@umbrajs/core'
 
 export interface Props {
   variable?: string
@@ -10,7 +9,6 @@ export interface Props {
   name?: string
   index?: number
   prefix?: string
-  umbra?: UmbraOutputs
   meta?: boolean
   width?: string
   height?: string
@@ -73,7 +71,6 @@ const size = computed(() => ({
   overflow: hidden;
   padding: 0.2rem 0.5rem;
   height: v-bind('size.height');
-  //min-width: v-bind('size.width');
   background-color: v-bind(cssVariable);
 }
 

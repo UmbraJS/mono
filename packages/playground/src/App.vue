@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { umbra, dehydrateOutput, hydrateOutput, umbraHydrate } from '@umbrajs/core'
+import { umbra } from '@umbrajs/core'
 import UmbraRange from './components/UmbraRange.vue'
 import LabelsGroups from './components/ToneLabels.vue'
 import ActionLabels from './components/ActionLabels.vue'
@@ -54,15 +54,14 @@ const theme = umbra({
   background: '#000000',
   foreground: '#ffffff',
   accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
-})
+}).apply({ alias: true })
 
-const t = ref(theme)
-const output = t.value.apply({ alias: true })
+const t = ref(theme.input)
+const formated = ref(theme.formated)
 
 function inverse() {
-  const inv = t.value.inverse()
-  t.value = inv
-  inv.apply({ alias: true })
+  const newTheme = umbra(t.value.scheme).inverse().apply({ alias: true })
+  t.value = newTheme.input
 }
 
 const width = ref('6rem')
@@ -76,10 +75,9 @@ const height = ref('8rem')
     <div class="ranges">
       <LabelsGroups />
       <UmbraRange
-        v-for="range in output.formated"
+        v-for="range in formated"
         :key="range.name"
         :range="range"
-        :umbra="output"
         :width="width"
         :height="height"
       />

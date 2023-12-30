@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import type { FormatedRange, UmbraOutputs } from '@umbrajs/core'
+import type { FormatedRange } from '@umbrajs/core'
 import UmbraPallet from './UmbraPallet.vue'
 
 interface Props {
   range: FormatedRange
-  umbra: UmbraOutputs
   width?: string
   height?: string
 }
@@ -25,7 +24,6 @@ withDefaults(defineProps<Props>(), {
       :name="range.name"
       :color="color"
       :index="index"
-      :umbra="umbra"
       :width="width"
       :height="height"
       :meta="true"

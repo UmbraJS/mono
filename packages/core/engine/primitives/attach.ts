@@ -10,19 +10,21 @@ export type Alias = {
 }
 
 const defaultAliases = {
-  //FG/BG
   background: 'base',
   'background-10': 'base-10',
   'background-20': 'base-20',
   'background-30': 'base-30',
+  'background-40': 'base-40',
 
-  'midground-40': 'base-40',
-  'midground-50': 'base-50',
-  'foreground-60': 'base-60',
+  'midground-50': 'base-40',
+  'midground-60': 'base-50',
+  'midground-70': 'base-60',
+  'midground-80': 'base-70',
 
-  'foreground-70': 'base-40',
-  'foreground-80': 'base-50',
-  'foreground-90': 'base-60',
+  'foreground-90': 'base-70',
+  'foreground-100': 'base-80',
+  'foreground-110': 'base-90',
+  'foreground-120': 'base-100',
   foreground: 'base-contrast'
 }
 
@@ -71,8 +73,6 @@ interface Attach {
 
 //main
 export function attach({ input, outputs, element, alias }: Attach) {
-  if (!document) return outputs
-
   setColors(outputs.flattened, element)
   setAliases(alias || input.settings.aliases, element)
 
