@@ -14,14 +14,6 @@ interface ApplyProps {
   alias?: Alias | boolean
 }
 
-export interface Umbra {
-  output: UmbraOutput
-  apply: (props?: ApplyProps) => UmbraOutputs
-  format: (formater?: Formater) => Format
-  isDark: () => boolean
-  inverse: () => Umbra
-}
-
 interface RootSettings extends UmbraSettings {
   inversed?: UmbraInput
 }
@@ -66,7 +58,16 @@ function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
   }
 }
 
-export function umbraHydrate(input: UmbraInput, output: RawRange[]) {
+export interface Umbra {
+  output: RawRange[]
+  input: UmbraInput
+  apply: (props?: ApplyProps) => UmbraOutputs
+  format: (formater?: Formater) => Format
+  isDark: () => boolean
+  inverse: () => Umbra
+}
+
+export function umbraHydrate(input: UmbraInput, output: RawRange[]): Umbra {
   const apply = ({ element, formater, alias }: ApplyProps = {}) =>
     format({ output, formater, input }).attach(element, alias)
   return {

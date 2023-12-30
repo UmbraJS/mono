@@ -1,6 +1,6 @@
 {
   "name": "@umbrajs/core",
-  "version": "0.0.3332",
+  "version": "0.0.3333",
   "description": "Umbra is a theme managment library that allows you to create semantic color themes that are easy to dynamically customize, change retroactively and scale progressively",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
