@@ -88,9 +88,5 @@ function base(input: UmbraInput, adjusted: UmbraAdjusted) {
 }
 
 export function umbraGenerate(input: UmbraInput, adjusted: UmbraAdjusted) {
-  return {
-    input,
-    adjusted,
-    generated: [base(input, adjusted), ...accents(input, adjusted)]
-  }
+  return [base(input, adjusted), ...accents(input, adjusted)]
 }

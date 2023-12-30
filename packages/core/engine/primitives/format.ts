@@ -1,12 +1,12 @@
 import { Colord } from 'colord'
 import { umbra } from '../..'
-import { UmbraOutput, RawRange, FormatedRange } from '../types'
+import { RawRange, FormatedRange } from '../types'
 import { attach, Alias } from './attach'
 
 export type Formater = (color: Colord) => string
 
 interface FormatProps {
-  output: UmbraOutput
+  output: RawRange[]
   formater?: Formater
   element?: HTMLElement
 }
@@ -18,7 +18,7 @@ export interface Format extends UmbraOutputs {
 export interface UmbraOutputs {
   flattened: FlattenColor[]
   formated: FormatedRange[]
-  output: UmbraOutput
+  output: RawRange[]
 }
 
 export const format = ({ output = umbra().output, formater = defaultFormater }: FormatProps) => {
@@ -39,7 +39,7 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
     }
   }
 
-  const formated = output.generated.map((c) => getColors(c, formater))
+  const formated = output.map((c) => getColors(c, formater))
   const flattened = flattenColors({
     prefix: '--',
     formated

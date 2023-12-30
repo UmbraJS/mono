@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraOutput, UmbraScheme, UmbraSettings, UmbraInput } from './types'
+import type { UmbraOutput, UmbraScheme, UmbraSettings, UmbraInput, RawRange } from './types'
 
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
@@ -28,9 +28,9 @@ interface RootSettings extends UmbraSettings {
 
 export function umbra(scheme = defaultScheme, settings?: RootSettings) {
   const input = umbraInput({ scheme, settings })
-  const adjusted = umbraAdjust(input.settings, scheme)
-  const generated = umbraGenerate(input, adjusted)
-  return umbraHydrate(generated)
+  const adjustment = umbraAdjust(input.settings, scheme)
+  const output = umbraGenerate(input, adjustment)
+  return umbraHydrate(input, output)
 }
 
 function umbraInput({
@@ -66,14 +66,12 @@ function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
   }
 }
 
-export function umbraHydrate(output: UmbraOutput) {
-  const input = output.input
-  function apply({ element, formater, alias }: ApplyProps = {}) {
-    return format({ output, formater }).attach(element, alias)
-  }
-
+export function umbraHydrate(input: UmbraInput, output: RawRange[]) {
+  const apply = ({ element, formater, alias }: ApplyProps = {}) =>
+    format({ output, formater }).attach(element, alias)
   return {
     apply,
+    input,
     output,
     isDark: () => isDark(input.scheme),
     format: (formater?: Formater) => format({ output, formater }),
