@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraOutput, UmbraScheme, UmbraSettings, UmbraInput, RawRange } from './types'
+import type { UmbraScheme, UmbraSettings, UmbraInput, RawRange } from './types'
 
 import { format, Format, Formater, UmbraOutputs } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
