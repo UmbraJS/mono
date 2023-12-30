@@ -6,13 +6,14 @@ import { attach, Alias } from './attach'
 export type Formater = (color: Colord) => string
 
 interface FormatProps {
+  input: UmbraInput
   output: RawRange[]
   formater?: Formater
   element?: HTMLElement
 }
 
 export interface Format extends UmbraOutputs {
-  attach: (input: UmbraInput, element?: HTMLElement, alias?: Alias | boolean) => UmbraOutputs
+  attach: (element?: HTMLElement, alias?: Alias | boolean) => UmbraOutputs
 }
 
 export interface UmbraOutputs {
@@ -21,7 +22,11 @@ export interface UmbraOutputs {
   output: RawRange[]
 }
 
-export const format = ({ output = umbra().output, formater = defaultFormater }: FormatProps) => {
+export const format = ({
+  input,
+  output = umbra().output,
+  formater = defaultFormater
+}: FormatProps) => {
   let existingAccents = 0
   function getName(name: string) {
     if (name !== 'accent') return name
@@ -52,9 +57,11 @@ export const format = ({ output = umbra().output, formater = defaultFormater }: 
   }
 
   return {
-    attach: (input, element, alias) => attach({ input, outputs, element, alias }),
-    ...outputs
-  } as Format
+    input,
+    ...outputs,
+    attach: (element?: HTMLElement, alias?: Alias | boolean) =>
+      attach({ input, outputs, element, alias })
+  }
 }
 
 export const defaultFormater = hexFormat

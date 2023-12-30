@@ -68,13 +68,13 @@ function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
 
 export function umbraHydrate(input: UmbraInput, output: RawRange[]) {
   const apply = ({ element, formater, alias }: ApplyProps = {}) =>
-    format({ output, formater }).attach(input, element, alias)
+    format({ output, formater, input }).attach(element, alias)
   return {
     apply,
     input,
     output,
     isDark: () => isDark(input.scheme),
-    format: (formater?: Formater) => format({ output, formater }),
+    format: (formater?: Formater) => format({ input, output, formater }),
     inverse: () => umbra(inverse(input).scheme, input.settings)
   }
 }
