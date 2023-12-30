@@ -1,3 +1,4 @@
+import { UmbraInput } from '../..'
 import { FlattenColor, UmbraOutputs } from './format'
 
 //Why aliases? 2 reasons:
@@ -62,17 +63,18 @@ const defaultAliases = {
 // }
 
 interface Attach {
+  input: UmbraInput
   outputs: UmbraOutputs
   element?: HTMLElement | null
   alias?: Alias | boolean
 }
 
 //main
-export function attach({ outputs, element, alias }: Attach) {
+export function attach({ input, outputs, element, alias }: Attach) {
   if (!document) return outputs
 
   setColors(outputs.flattened, element)
-  setAliases(alias || outputs.output.input.settings.aliases, element)
+  setAliases(alias || input.settings.aliases, element)
 
   if (!element) return outputs
   //Ensure that the foreground color is always set to the attached element

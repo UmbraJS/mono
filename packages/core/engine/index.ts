@@ -68,7 +68,7 @@ function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
 
 export function umbraHydrate(input: UmbraInput, output: RawRange[]) {
   const apply = ({ element, formater, alias }: ApplyProps = {}) =>
-    format({ output, formater }).attach(element, alias)
+    format({ output, formater }).attach(input, element, alias)
   return {
     apply,
     input,
