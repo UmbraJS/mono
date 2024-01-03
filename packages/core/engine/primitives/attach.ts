@@ -122,7 +122,7 @@ function setColors(flattened: FlattenColor[], element?: HTMLElement | null) {
 function setColorSheet(flattened: FlattenColor[]) {
   const sheet = new CSSStyleSheet()
   sheet.replace(`:root {${flattened.map(({ name, color }) => `${name}: ${color};`).join('')}}`)
-  document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet]
+  document.adoptedStyleSheets = [sheet]
 }
 
 function setElementColors(element: HTMLElement, colors: FlattenColor[]) {
