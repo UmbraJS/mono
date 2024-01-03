@@ -60,7 +60,7 @@ export const format = ({
 
   return {
     ...outputs,
-    attach: (element?: HTMLElement, alias?: Alias | boolean) => {
+    attach: (element?: HTMLElement | string, alias?: Alias | boolean) => {
       if (!document) return outputs
       return attach({ input, outputs, element, alias })
     }

@@ -9,7 +9,7 @@ import { getReadable } from './primitives/color'
 import { umbraGenerate } from './generator'
 
 interface ApplyProps {
-  element?: HTMLElement
+  element?: HTMLElement | string
   formater?: Formater
   alias?: Alias | boolean
 }

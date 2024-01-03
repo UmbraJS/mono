@@ -67,16 +67,17 @@ const defaultAliases = {
 interface Attach {
   input: UmbraInput
   outputs: UmbraOutputs
-  element?: HTMLElement | null
+  element?: string | HTMLElement | null
   alias?: Alias | boolean
 }
 
 //main
 export function attach({ input, outputs, element, alias }: Attach) {
   setColors(outputs.flattened, element)
-  setAliases(alias || input.settings.aliases, element)
+  //setAliases(alias || input.settings.aliases, element)
 
   if (!element) return outputs
+  if (typeof element === 'string') return outputs
   //Ensure that the foreground color is always set to the attached element
   setProperty(element, {
     name: 'color',
@@ -114,46 +115,50 @@ function invalidColor(name: string) {
 }
 
 //attach colors
-function setColors(flattened: FlattenColor[], element?: HTMLElement | null) {
+function setColors(flattened: FlattenColor[], element?: string | HTMLElement | null) {
   const filtered = flattened.filter(({ name }) => !invalidColor(name))
-  element ? setElementColors(element, filtered) : setColorSheet(filtered)
+  const notHTMLElement = typeof element !== 'object'
+  notHTMLElement ? setColorSheet(element, filtered) : setElementColors(element, filtered)
 }
 
-function setColorSheet(flattened: FlattenColor[]) {
+function setColorSheet(element = ':root', flattened: FlattenColor[]) {
   const sheet = new CSSStyleSheet()
-  sheet.replace(`:root {${flattened.map(({ name, color }) => `${name}: ${color};`).join('')}}`)
+  sheet.replace(`${element} {${flattened.map(({ name, color }) => `${name}: ${color};`).join('')}}`)
   document.adoptedStyleSheets = [sheet]
 }
 
-function setElementColors(element: HTMLElement, colors: FlattenColor[]) {
+function setElementColors(element: HTMLElement | null, colors: FlattenColor[]) {
+  if (!element) return
   colors.forEach(({ name, color }) => {
     setProperty(element, { name, color })
   })
 }
 
 //attach aliases
-function setAliases(aliases?: Alias | true, element?: HTMLElement | null) {
+function setAliases(aliases?: Alias | true, element?: string | HTMLElement | null) {
   if (!aliases) return
   const ali = aliases === true ? defaultAliases : aliases
   const aliasesArray = makeAliasArray(ali)
-  element ? setElementAliases(element, aliasesArray) : setAliasesSheet(aliasesArray)
+  const notHTMLElement = typeof element !== 'object'
+  notHTMLElement ? setAliasesSheet(element, aliasesArray) : setElementAliases(element, aliasesArray)
 }
 
-function setAliasesSheet(aliases: AliasObject[]) {
+function setAliasesSheet(element = ':root', aliases: AliasObject[]) {
   function camelToVariable(name: string) {
     return '--' + name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
   }
 
   const sheet = new CSSStyleSheet()
   sheet.replace(
-    `:root {${aliases
+    `:${element} {${aliases
       .map(({ name, value }) => `${camelToVariable(name)}: var(--${value});`)
       .join('')}}`
   )
-  document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet]
+  document.adoptedStyleSheets = [sheet]
 }
 
-function setElementAliases(element: HTMLElement, aliases: AliasObject[]) {
+function setElementAliases(element: HTMLElement | null, aliases: AliasObject[]) {
+  if (!element) return
   aliases.forEach(({ name, value }) => {
     setProperty(element, {
       name: name,

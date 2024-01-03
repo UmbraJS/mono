@@ -54,7 +54,7 @@ const theme = umbra({
   background: '#000000',
   foreground: '#ffffff',
   accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
-}).apply({ alias: true })
+}).apply({ element: 'html' })
 
 const t = ref(theme.input)
 const formated = ref(theme.formated)
