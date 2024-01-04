@@ -1,5 +1,6 @@
 import { UmbraInput } from '../..'
 import { FlattenColor, UmbraOutputs } from './format'
+import { setSheet, umbraSheet } from './sheet'
 
 //Why aliases? 2 reasons:
 //1 - People seem to be better at understanding direct instructions rather than logic.
@@ -121,10 +122,17 @@ function setColors(flattened: FlattenColor[], element?: string | HTMLElement | n
   notHTMLElement ? setColorSheet(element, filtered) : setElementColors(element, filtered)
 }
 
+let iterations = 0
+
 function setColorSheet(element = ':root', flattened: FlattenColor[]) {
+  iterations++
   const sheet = new CSSStyleSheet()
-  sheet.replace(`${element} {${flattened.map(({ name, color }) => `${name}: ${color};`).join('')}}`)
-  document.adoptedStyleSheets = [sheet]
+  sheet.replace(
+    `theme-${iterations}, ${element} {${flattened
+      .map(({ name, color }) => `${name}: ${color};`)
+      .join('')}}`
+  )
+  setSheet(sheet)
 }
 
 function setElementColors(element: HTMLElement | null, colors: FlattenColor[]) {
