@@ -2,18 +2,17 @@ import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
 import type { UmbraScheme, UmbraSettings, UmbraInput, RawRange } from './types'
 
-import { format, Format, Formater, UmbraOutputs } from './primitives/format'
+import { format, Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
-import type { Alias } from './primitives/attach'
 import { getReadable } from './primitives/color'
 import { umbraGenerate } from './generator'
 
+import type { Alias } from './primitives/attach'
+
 interface ApplyProps {
-  element?: HTMLElement | string
   formater?: Formater
   alias?: Alias | boolean
 }
-
 interface RootSettings extends UmbraSettings {
   inversed?: UmbraInput
 }
@@ -58,24 +57,41 @@ function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
   }
 }
 
+interface Format extends UmbraOutputs {
+  attach: (props: AttachProps) => UmbraOutputs
+}
+
 export interface Umbra {
   output: RawRange[]
   input: UmbraInput
-  apply: (props?: ApplyProps) => UmbraOutputs
+  apply: (target?: string | HTMLElement | null, props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
   isDark: () => boolean
   inverse: () => Umbra
 }
 
 export function umbraHydrate(input: UmbraInput, output: RawRange[]): Umbra {
-  const apply = ({ element, formater, alias }: ApplyProps = {}) =>
-    format({ output, formater, input }).attach(element, alias)
+  const apply = (target?: string | HTMLElement | null, props?: ApplyProps) => {
+    const { alias, formater } = props || {}
+    const targetIsString = typeof target === 'string'
+    const targetIsElement = target instanceof HTMLElement || target === null
+    return format({ output, formater, input }).attach({
+      alias,
+      target: target
+        ? {
+            element: targetIsElement ? target : undefined,
+            selector: targetIsString ? target : undefined
+          }
+        : undefined
+    })
+  }
+
   return {
-    apply,
     input,
     output,
     isDark: () => isDark(input.scheme),
-    format: (formater?: Formater) => format({ input, output, formater }),
-    inverse: () => umbra(inverse(input).scheme, input.settings)
+    format: (formater?: Formater) => format({ output, formater, input }),
+    inverse: () => umbra(inverse(input).scheme, input.settings),
+    apply
   }
 }

@@ -1,6 +1,4 @@
-import { UmbraInput } from '../..'
 import { FlattenColor, UmbraOutputs } from './format'
-import { setSheet, umbraSheet } from './sheet'
 
 //Why aliases? 2 reasons:
 //1 - People seem to be better at understanding direct instructions rather than logic.
@@ -65,30 +63,32 @@ const defaultAliases = {
 //   buttonDisabledText: 'foreground'
 // }
 
+interface Targets {
+  element?: HTMLElement | null
+  selector?: string
+}
+
 interface Attach {
-  input: UmbraInput
   outputs: UmbraOutputs
-  element?: string | HTMLElement | null
+  target: Targets
   alias?: Alias | boolean
 }
 
-//main
-export function attach({ input, outputs, element, alias }: Attach) {
-  setColors(outputs.flattened, element)
-  //setAliases(alias || input.settings.aliases, element)
+export function attach({ outputs, target, alias }: Attach) {
+  const filtered = outputs.flattened.filter(({ name }) => !invalidColor(name))
+  if (target.element) setElementColors(target.element, filtered)
+  if (target.selector) setColorSheet(target.selector, filtered)
 
-  if (!element) return outputs
-  if (typeof element === 'string') return outputs
-  //Ensure that the foreground color is always set to the attached element
-  setProperty(element, {
-    name: 'color',
-    color: 'var(--foreground)'
-  })
+  if (alias) {
+    const ali = alias === true ? defaultAliases : alias
+    const aliasesArray = makeAliasArray(ali)
+    if (target.element) setElementAliases(target.element, aliasesArray)
+    if (target.selector) setAliasesSheet(target.selector, aliasesArray)
+  }
 
   return outputs
 }
 
-//utils
 interface SetProperty {
   name: 'foreground' | 'background' | 'accents' | string
   color: string
@@ -115,13 +115,6 @@ function invalidColor(name: string) {
   return regex.test(name)
 }
 
-//attach colors
-function setColors(flattened: FlattenColor[], element?: string | HTMLElement | null) {
-  const filtered = flattened.filter(({ name }) => !invalidColor(name))
-  const notHTMLElement = typeof element !== 'object'
-  notHTMLElement ? setColorSheet(element, filtered) : setElementColors(element, filtered)
-}
-
 let iterations = 0
 
 function setColorSheet(element = ':root', flattened: FlattenColor[]) {
@@ -137,18 +130,12 @@ function setColorSheet(element = ':root', flattened: FlattenColor[]) {
 
 function setElementColors(element: HTMLElement | null, colors: FlattenColor[]) {
   if (!element) return
-  colors.forEach(({ name, color }) => {
-    setProperty(element, { name, color })
+  colors.forEach(({ name, color }) => setProperty(element, { name, color }))
+  //Ensure that the foreground color is always set to the attached element
+  setProperty(element, {
+    name: 'color',
+    color: 'var(--foreground)'
   })
-}
-
-//attach aliases
-function setAliases(aliases?: Alias | true, element?: string | HTMLElement | null) {
-  if (!aliases) return
-  const ali = aliases === true ? defaultAliases : aliases
-  const aliasesArray = makeAliasArray(ali)
-  const notHTMLElement = typeof element !== 'object'
-  notHTMLElement ? setAliasesSheet(element, aliasesArray) : setElementAliases(element, aliasesArray)
 }
 
 function setAliasesSheet(element = ':root', aliases: AliasObject[]) {
@@ -162,7 +149,8 @@ function setAliasesSheet(element = ':root', aliases: AliasObject[]) {
       .map(({ name, value }) => `${camelToVariable(name)}: var(--${value});`)
       .join('')}}`
   )
-  document.adoptedStyleSheets = [sheet]
+
+  setSheet(sheet)
 }
 
 function setElementAliases(element: HTMLElement | null, aliases: AliasObject[]) {
@@ -173,4 +161,14 @@ function setElementAliases(element: HTMLElement | null, aliases: AliasObject[]) 
       color: `var(--${value})`
     })
   })
+}
+
+function setSheet(sheet: CSSStyleSheet) {
+  //this is only possible because of ...spreading the adoptedStylesheets.
+  //Normally, you can't access the cssRules of an adopted stylesheet
+  const filtered = [...document.adoptedStyleSheets].filter((sheet) => {
+    const includesUmbra = sheet.cssRules[0].cssText.includes('theme')
+    return !includesUmbra
+  })
+  document.adoptedStyleSheets = [...filtered, sheet]
 }

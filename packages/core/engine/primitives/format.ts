@@ -9,11 +9,7 @@ interface FormatProps {
   input: UmbraInput
   output: RawRange[]
   formater?: Formater
-  element?: HTMLElement
-}
-
-export interface Format extends UmbraOutputs {
-  attach: (element?: HTMLElement, alias?: Alias | boolean) => UmbraOutputs
+  target?: HTMLElement | null | string
 }
 
 export interface UmbraOutputs {
@@ -21,6 +17,16 @@ export interface UmbraOutputs {
   formated: FormatedRange[]
   output: RawRange[]
   input: UmbraInput
+}
+
+export interface Target {
+  element?: HTMLElement | null
+  selector?: string
+}
+
+export interface AttachProps {
+  alias?: Alias | boolean
+  target?: Target
 }
 
 export const format = ({
@@ -60,9 +66,15 @@ export const format = ({
 
   return {
     ...outputs,
-    attach: (element?: HTMLElement | string, alias?: Alias | boolean) => {
+    attach: ({ target, alias }: AttachProps) => {
       if (!document) return outputs
-      return attach({ input, outputs, element, alias })
+      return attach({
+        outputs,
+        alias,
+        target: target || {
+          selector: ':root'
+        }
+      })
     }
   }
 }
