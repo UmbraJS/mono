@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraScheme, UmbraSettings, UmbraInput, RawRange } from './types'
+import type { UmbraScheme, UmbraSettings, UmbraInput, UmbraRange } from './types'
 
 import { format, Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
@@ -62,7 +62,7 @@ interface Format extends UmbraOutputs {
 }
 
 export interface Umbra {
-  output: RawRange[]
+  output: UmbraRange[]
   input: UmbraInput
   apply: (target?: string | HTMLElement | null, props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
@@ -70,7 +70,7 @@ export interface Umbra {
   inverse: () => Umbra
 }
 
-export function umbraHydrate(input: UmbraInput, output: RawRange[]): Umbra {
+export function umbraHydrate(input: UmbraInput, output: UmbraRange[]): Umbra {
   const apply = (target?: string | HTMLElement | null, props?: ApplyProps) => {
     const { alias, formater } = props || {}
     const targetIsString = typeof target === 'string'

@@ -1,9 +1,9 @@
 import type { Colord } from 'colord'
 import type { Alias } from '../primitives/attach'
-export interface RawRange {
+export interface UmbraRange {
   name: string
   background: Colord
-  shades: Colord[]
+  range: Colord[]
   foreground: Colord
 }
 
@@ -17,7 +17,7 @@ export interface FormatedRange {
 export interface UmbraOutput {
   input: UmbraInput
   adjusted: UmbraAdjusted
-  generated: RawRange[]
+  generated: UmbraRange[]
 }
 
 export interface Accent {

@@ -17,7 +17,7 @@ import type {
   UmbraSettings,
   UmbraScheme,
   UmbraInput,
-  RawRange,
+  UmbraRange,
   FormatedRange
 } from './engine/types'
 import { inverse, isDark, findContrast } from './engine/primitives/scheme'
@@ -49,7 +49,7 @@ export type {
   UmbraSettings,
   UmbraOutput,
   UmbraOutputs,
-  RawRange,
+  UmbraRange,
   FlattenColor,
   Formater,
   FormatedRange

@@ -1,13 +1,13 @@
 import { Colord } from 'colord'
 import { umbra } from '../..'
-import { RawRange, FormatedRange, UmbraInput } from '../types'
+import { UmbraRange, FormatedRange, UmbraInput } from '../types'
 import { attach, Alias } from './attach'
 
 export type Formater = (color: Colord) => string
 
 interface FormatProps {
   input: UmbraInput
-  output: RawRange[]
+  output: UmbraRange[]
   formater?: Formater
   target?: HTMLElement | null | string
 }
@@ -15,7 +15,7 @@ interface FormatProps {
 export interface UmbraOutputs {
   flattened: FlattenColor[]
   formated: FormatedRange[]
-  output: RawRange[]
+  output: UmbraRange[]
   input: UmbraInput
 }
 
@@ -42,11 +42,11 @@ export const format = ({
     else return name
   }
 
-  function getColors(c: RawRange, formater = defaultFormater) {
+  function getColors(c: UmbraRange, formater = defaultFormater) {
     return {
       name: getName(c.name),
       background: formater(c.background),
-      shades: c.shades.map((s) => formater(s)),
+      shades: c.range.map((s) => formater(s)),
       foreground: formater(c.foreground)
     }
   }

@@ -63,7 +63,7 @@ function accents(input: UmbraInput, adjusted: UmbraAdjusted) {
       name: name ? name : `accent`,
       background: fallback,
       foreground: pickContrast(fallback, adjusted),
-      shades: accentRange(input, adjusted, range, plainColor)
+      range: accentRange(input, adjusted, range, plainColor)
     }
   })
 }
@@ -87,7 +87,7 @@ function base(input: UmbraInput, adjusted: UmbraAdjusted) {
     name: 'base',
     background,
     foreground,
-    shades: getRange({ from: background, to: foreground, range })
+    range: getRange({ from: background, to: foreground, range })
   }
 }
 
