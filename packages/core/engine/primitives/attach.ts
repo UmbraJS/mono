@@ -102,7 +102,7 @@ export function attach({ outputs, target, alias }: Attach) {
 
   if (alias) {
     const aliases = Object.entries(alias === true ? defaultAliases : alias)
-    const array = aliases.map(([key, value]) => ({ name: '--' + key, color: `var(${value})` }))
+    const array = aliases.map(([key, value]) => ({ name: '--' + key, color: `var(--${value})` }))
     if (target.element) setElementAliases(target.element, array)
     if (target.selector) setAliasSheet(target.selector, array, meta)
   }
@@ -127,6 +127,8 @@ function makeThemeSheet(
   colors: FlattenColor[],
   { selector = ':root', meta = '1', marker = 'theme' }: MTS
 ) {
+  console.log('makeThemeSheet', colors, { selector, meta, marker })
+
   const sheet = new CSSStyleSheet()
   sheet.replace(
     `${marker}-${meta}, ${selector} {${colors
@@ -143,7 +145,7 @@ function setColorSheet(selector = ':root', colors: FlattenColor[], meta?: string
 }
 
 function setAliasSheet(selector = ':root', colors: FlattenColor[], meta?: string) {
-  const marker = 'theme-alias'
+  const marker = 'alias'
   const sheet = makeThemeSheet(colors, { meta, marker, selector })
   setSheet(sheet, selector, marker)
 }
@@ -152,10 +154,9 @@ function setSheet(sheet: CSSStyleSheet, selector: string, marker = 'theme') {
   //this is only possible because of ...spreading the adoptedStylesheets.
   //Normally, you can't access the cssRules of an adopted stylesheet
   const filtered = [...document.adoptedStyleSheets].filter((sheet) => {
-    console.log(sheet)
-    const includesUmbra = sheet.cssRules[0].cssText.includes(marker)
+    const includesMarker = sheet.cssRules[0].cssText.includes(marker)
     const sameTarget = sheet.cssRules[0].cssText.includes(selector)
-    return !includesUmbra || !sameTarget
+    return !includesMarker || !sameTarget
   })
   document.adoptedStyleSheets = [...filtered, sheet]
 }
