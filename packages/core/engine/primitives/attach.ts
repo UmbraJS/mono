@@ -96,19 +96,71 @@ function getMeta(selector?: string) {
 export function attach({ outputs, target, alias }: Attach) {
   const meta = getMeta(target.selector)
 
-  const filtered = outputs.flattened.filter(({ name }) => !invalidColor(name))
-  if (target.element) setElementColors(target.element, filtered)
-  if (target.selector) setColorSheet(target.selector, filtered, meta)
+  const colors = outputs.flattened.filter(({ name }) => !invalidColor(name))
+  if (target.element) setElementColors(target.element, colors)
+  if (target.selector) setColorSheet(target.selector, colors, meta)
 
   if (alias) {
-    const ali = alias === true ? defaultAliases : alias
-    const aliasesArray = makeAliasArray(ali)
-    if (target.element) setElementAliases(target.element, aliasesArray)
-    if (target.selector) setAliasesSheet(target.selector, aliasesArray, meta)
+    const aliases = Object.entries(alias === true ? defaultAliases : alias)
+    const array = aliases.map(([key, value]) => ({ name: '--' + key, color: `var(${value})` }))
+    if (target.element) setElementAliases(target.element, array)
+    if (target.selector) setAliasSheet(target.selector, array, meta)
   }
 
   return outputs
 }
+
+function invalidColor(name: string) {
+  const regex = /(?:background|foreground).*contrast/i
+  return regex.test(name)
+}
+
+//sheet functions
+
+interface MTS {
+  meta?: string
+  marker?: string
+  selector?: string
+}
+
+function makeThemeSheet(
+  colors: FlattenColor[],
+  { selector = ':root', meta = '1', marker = 'theme' }: MTS
+) {
+  const sheet = new CSSStyleSheet()
+  sheet.replace(
+    `${marker}-${meta}, ${selector} {${colors
+      .map(({ name, color }) => `${name}: ${color};`)
+      .join('')}}`
+  )
+  return sheet
+}
+
+function setColorSheet(selector = ':root', colors: FlattenColor[], meta?: string) {
+  const marker = 'theme'
+  const sheet = makeThemeSheet(colors, { meta, marker, selector })
+  setSheet(sheet, selector, marker)
+}
+
+function setAliasSheet(selector = ':root', colors: FlattenColor[], meta?: string) {
+  const marker = 'theme-alias'
+  const sheet = makeThemeSheet(colors, { meta, marker, selector })
+  setSheet(sheet, selector, marker)
+}
+
+function setSheet(sheet: CSSStyleSheet, selector: string, marker = 'theme') {
+  //this is only possible because of ...spreading the adoptedStylesheets.
+  //Normally, you can't access the cssRules of an adopted stylesheet
+  const filtered = [...document.adoptedStyleSheets].filter((sheet) => {
+    console.log(sheet)
+    const includesUmbra = sheet.cssRules[0].cssText.includes(marker)
+    const sameTarget = sheet.cssRules[0].cssText.includes(selector)
+    return !includesUmbra || !sameTarget
+  })
+  document.adoptedStyleSheets = [...filtered, sheet]
+}
+
+//element functions
 
 interface SetProperty {
   name: 'foreground' | 'background' | 'accents' | string
@@ -119,75 +171,16 @@ const setProperty = (element: HTMLElement, { name, color }: SetProperty) => {
   element.style.setProperty(name, color)
 }
 
-type AliasObject = {
-  name: string
-  value: string
-}
-
-const makeAliasArray = (obj: Alias): AliasObject[] => {
-  const objArray = Object.entries(obj)
-  return objArray.map(([key, value]) => {
-    return { name: key, value: value }
-  })
-}
-
-function invalidColor(name: string) {
-  const regex = /(?:background|foreground).*contrast/i
-  return regex.test(name)
-}
-
-function setColorSheet(selector = ':root', flattened: FlattenColor[], meta?: string) {
-  const sheet = new CSSStyleSheet()
-  sheet.replace(
-    `theme-${meta}, ${selector} {${flattened
-      .map(({ name, color }) => `${name}: ${color};`)
-      .join('')}}`
-  )
-  setSheet(sheet, selector)
-}
-
 function setElementColors(element: HTMLElement | null, colors: FlattenColor[]) {
   if (!element) return
   colors.forEach(({ name, color }) => setProperty(element, { name, color }))
   //Ensure that the foreground color is always set to the attached element
   setProperty(element, {
     name: 'color',
-    color: 'var(--foreground)'
+    color: 'var(--base-contrast)'
   })
 }
 
-function setAliasesSheet(selector = ':root', aliases: AliasObject[], meta?: string) {
-  function camelToVariable(name: string) {
-    return '--' + name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
-  }
-
-  const sheet = new CSSStyleSheet()
-  sheet.replace(
-    `theme-alias-${meta}, :${selector} {${aliases
-      .map(({ name, value }) => `${camelToVariable(name)}: var(--${value});`)
-      .join('')}}`
-  )
-
-  setSheet(sheet, selector)
-}
-
-function setElementAliases(element: HTMLElement | null, aliases: AliasObject[]) {
-  if (!element) return
-  aliases.forEach(({ name, value }) => {
-    setProperty(element, {
-      name: name,
-      color: `var(--${value})`
-    })
-  })
-}
-
-function setSheet(sheet: CSSStyleSheet, selector: string) {
-  //this is only possible because of ...spreading the adoptedStylesheets.
-  //Normally, you can't access the cssRules of an adopted stylesheet
-  const filtered = [...document.adoptedStyleSheets].filter((sheet) => {
-    const includesUmbra = sheet.cssRules[0].cssText.includes('theme')
-    const sameTarget = sheet.cssRules[0].cssText.includes(selector)
-    return !includesUmbra || !sameTarget
-  })
-  document.adoptedStyleSheets = [...filtered, sheet]
+function setElementAliases(element: HTMLElement | null, aliases: FlattenColor[]) {
+  element && aliases.forEach((p) => setProperty(element, p))
 }

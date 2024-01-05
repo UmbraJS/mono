@@ -54,31 +54,17 @@ const theme = umbra({
   background: '#000000',
   foreground: '#ffffff',
   accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
-}).apply('html')
-
-umbra({
-  background: '#000000',
-  foreground: '#ffffff',
-  accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
-}).apply()
-
-umbra({
-  background: '#000000',
-  foreground: '#ffffff',
-  accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
-}).apply('body')
-
-umbra({
-  background: '#000000',
-  foreground: '#ffffff',
-  accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
-}).apply('.umbra')
+}).apply('html', {
+  alias: true
+})
 
 const t = ref(theme.input)
 const formated = ref(theme.formated)
 
 function inverse() {
-  const newTheme = umbra(t.value.scheme).inverse().apply('body')
+  const newTheme = umbra(t.value.scheme).inverse().apply('body', {
+    alias: true
+  })
   t.value = newTheme.input
 }
 
