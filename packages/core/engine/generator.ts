@@ -2,6 +2,7 @@ import { colord, Colord } from 'colord'
 import { UmbraAdjusted, UmbraInput } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { normalizeRange, nextAccent, getStrings } from './primitives/utils'
+import { defaultSettings } from './defaults'
 
 interface GetRange {
   from: Colord
@@ -32,10 +33,13 @@ function getRange({ from, to, range }: GetRange) {
 function accentRange(
   input: UmbraInput,
   adjusted: UmbraAdjusted,
-  range: (number | string)[],
+  passedRange: (number | string)[],
   color?: string
 ) {
   const { background, foreground } = adjusted
+  const settingsRange = background.isDark() ? defaultSettings.shades : defaultSettings.tints
+  const range = passedRange.length > 0 ? passedRange : settingsRange || []
+
   if (!color) return getRange({ from: background, to: foreground, range })
 
   const defaultRange = input.settings.shades || []

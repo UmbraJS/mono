@@ -46,14 +46,34 @@ const something = {
 }
 
 const accent = {
+  shades: [10, 10, 25, 25, 25, 25, 25, 25, '#ff0157', 10, 25, 25]
+}
+
+const accent2 = {
   color: '#ff0157',
-  shades: [25, 25, 25, 45, 25, 25, 25, 25, 25, 25, 25, 25]
+  shades: [10, 10, 25, 25, 25, 25, 25, 25, 25, 10, 25, 25]
+}
+
+const accent3 = {
+  color: '#e5484d'
 }
 
 const theme = umbra({
   background: '#000000',
   foreground: '#ffffff',
-  accents: [radixBlue, radixRed, radixYellow, success, royal, brown, something, accent]
+  accents: [
+    radixRed,
+    radixYellow,
+    radixBlue,
+    accent,
+    accent2,
+    accent3,
+    radixRed,
+    success,
+    royal,
+    brown,
+    something
+  ]
 }).apply('body', {
   alias: true
 })

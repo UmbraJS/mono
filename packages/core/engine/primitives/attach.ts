@@ -127,8 +127,6 @@ function makeThemeSheet(
   colors: FlattenColor[],
   { selector = ':root', meta = '1', marker = 'theme' }: MTS
 ) {
-  console.log('makeThemeSheet', colors, { selector, meta, marker })
-
   const sheet = new CSSStyleSheet()
   sheet.replace(
     `${marker}-${meta}, ${selector} {${colors
