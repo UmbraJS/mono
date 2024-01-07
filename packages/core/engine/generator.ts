@@ -60,7 +60,7 @@ function replaceAtIndex(array: (number | string)[], index: number, value: string
 function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, input: UmbraInput) {
   const isString = typeof accent === 'string'
   const color = isString ? accent : accent.color
-  const insertion = input.settings.insertion
+  const insertion = input.settings?.insertion
 
   const fallback = rangeValues(adjusted, input.settings) || []
   const range = isString ? fallback : rangeValues(adjusted, accent) || fallback

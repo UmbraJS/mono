@@ -27,16 +27,11 @@ export interface Accent {
   readability?: number
 }
 
-export interface UmbraScheme {
+export interface UmbraInput {
   background: string
   foreground: string
   accents: (Accent | string)[]
-}
-
-export interface UmbraInput {
-  scheme: UmbraScheme
-  settings: UmbraSettings
-  inversed?: UmbraInput
+  settings?: UmbraSettings
 }
 
 export interface UmbraAdjusted {

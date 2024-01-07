@@ -1,4 +1,4 @@
-import { UmbraScheme, UmbraSettings } from './types'
+import { UmbraInput, UmbraSettings } from './types'
 
 export const defaultSettings: UmbraSettings = {
   readability: 10,
@@ -8,8 +8,9 @@ export const defaultSettings: UmbraSettings = {
   tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25]
 }
 
-export const defaultScheme: UmbraScheme = {
+export const defaultScheme: UmbraInput = {
   background: '#090233',
   foreground: '#ff5555',
-  accents: ['#5200ff']
+  accents: ['#5200ff'],
+  settings: defaultSettings
 }

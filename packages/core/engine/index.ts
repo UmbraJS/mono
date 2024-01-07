@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraScheme, UmbraSettings, UmbraInput, UmbraRange } from './types'
+import type { UmbraSettings, UmbraInput, UmbraRange } from './types'
 
 import { format, Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
@@ -13,31 +13,23 @@ interface ApplyProps {
   formater?: Formater
   alias?: Alias | boolean
 }
-interface RootSettings extends UmbraSettings {
-  inversed?: UmbraInput
-}
 
-export function umbra(scheme = defaultScheme, settings?: RootSettings) {
-  const input = umbraInput({ scheme, settings })
+export function umbra(scheme = defaultScheme, inversedScheme?: UmbraInput) {
+  const input = umbraInput(scheme)
   const adjustment = umbraAdjust(input.settings, scheme)
-  const output = umbraGenerate(input, adjustment)
-  return umbraHydrate(input, output)
+  return umbraHydrate({
+    input,
+    output: umbraGenerate(input, adjustment),
+    inversed: umbraInput(inversedScheme)
+  })
 }
 
-function umbraInput({
-  scheme = defaultScheme,
-  settings
-}: {
-  scheme?: UmbraScheme
-  settings?: RootSettings
-}): UmbraInput {
-  const { inversed, ...rest } = settings || {}
+function umbraInput(scheme = defaultScheme) {
   return {
-    scheme,
-    inversed: inversed,
+    ...scheme,
     settings: {
       ...defaultSettings,
-      ...rest
+      ...scheme.settings
     }
   }
 }
@@ -70,28 +62,40 @@ export interface Umbra {
   inverse: () => Umbra
 }
 
-export function umbraHydrate(input: UmbraInput, output: UmbraRange[]): Umbra {
+function getTarget(target?: string | HTMLElement | null) {
+  const targetIsString = typeof target === 'string'
+  const targetIsElement = target instanceof HTMLElement || target === null
+  return target
+    ? {
+        element: targetIsElement ? target : undefined,
+        selector: targetIsString ? target : undefined
+      }
+    : undefined
+}
+
+export function umbraHydrate({
+  input,
+  output,
+  inversed
+}: {
+  input: UmbraInput
+  output: UmbraRange[]
+  inversed?: UmbraInput
+}): Umbra {
   const apply = (target?: string | HTMLElement | null, props?: ApplyProps) => {
     const { alias, formater } = props || {}
-    const targetIsString = typeof target === 'string'
-    const targetIsElement = target instanceof HTMLElement || target === null
     return format({ output, formater, input }).attach({
       alias,
-      target: target
-        ? {
-            element: targetIsElement ? target : undefined,
-            selector: targetIsString ? target : undefined
-          }
-        : undefined
+      target: getTarget(target)
     })
   }
 
   return {
     input,
     output,
-    isDark: () => isDark(input.scheme),
+    isDark: () => isDark(input),
     format: (formater?: Formater) => format({ output, formater, input }),
-    inverse: () => umbra(inverse(input).scheme, input.settings),
+    inverse: () => umbra(inverse(input, inversed), input),
     apply
   }
 }

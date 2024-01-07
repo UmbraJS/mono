@@ -1,21 +1,26 @@
 import { colord, Colord } from 'colord'
-import type { UmbraInput, UmbraScheme, UmbraAdjusted } from '../types'
+import type { UmbraInput, UmbraAdjusted } from '../types'
 import { increaseContrastUntil, getReadability, getReadable, mostReadable } from './color'
 
 function inverseValidator(theme: UmbraInput) {
-  const fgDark = colord(theme.scheme.foreground).isDark()
-  const bgDark = colord(theme.scheme.background).isDark()
+  const fgDark = colord(theme.foreground).isDark()
+  const bgDark = colord(theme.background).isDark()
 
-  const background = colord(theme.scheme.background)
-  const foreground = colord(theme.scheme.foreground)
+  const background = colord(theme.background)
+  const foreground = colord(theme.foreground)
   const readability = theme.settings?.readability
 
-  if (fgDark !== bgDark) return {}
+  if (fgDark !== bgDark)
+    return {
+      background: theme.foreground,
+      foreground: theme.background
+    }
+
   const fg = getReadable({ foreground, background, readability })
   if (fg.isDark() !== bgDark) {
     return {
       background: fg.toRgbString(),
-      foreground: theme.scheme.background
+      foreground: theme.background
     }
   }
 
@@ -39,37 +44,19 @@ function inverseValidator(theme: UmbraInput) {
 
   return {
     background: createInvertedFlippingReadability(),
-    foreground: theme.scheme.foreground
+    foreground: theme.foreground
   }
 }
 
-function basicInverse(scheme: UmbraScheme): UmbraScheme {
+export const inverse = (theme: UmbraInput, inversed?: UmbraInput) => {
+  if (inversed) return inversed
   return {
-    ...scheme,
-    background: scheme.foreground,
-    foreground: scheme.background
+    ...theme,
+    ...inverseValidator(theme)
   }
 }
 
-function makeInverse(theme: UmbraInput): UmbraInput {
-  const inversed = basicInverse(theme.scheme)
-  return {
-    inversed: theme,
-    settings: theme.settings,
-    scheme: {
-      ...inversed,
-      ...inverseValidator(theme)
-    }
-  }
-}
-
-export const inverse = (theme: UmbraInput) => {
-  const hasInverse = theme.hasOwnProperty('inverse')
-  if (hasInverse) return theme.inversed as UmbraInput
-  return makeInverse(theme)
-}
-
-export const isDark = (theme: UmbraScheme) => {
+export const isDark = (theme: UmbraInput) => {
   return colord(theme.background).isDark()
 }
 

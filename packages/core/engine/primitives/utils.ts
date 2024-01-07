@@ -19,12 +19,10 @@ function randomHex() {
 
 export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): UmbraInput {
   return {
-    settings: { ...defaultSettings, ...randomSettings },
-    scheme: {
-      background: randomHex(),
-      foreground: randomHex(),
-      accents: Array.from({ length: randomSettings.amount }, () => randomHex())
-    }
+    background: randomHex(),
+    foreground: randomHex(),
+    accents: Array.from({ length: randomSettings.amount }, () => randomHex()),
+    settings: { ...defaultSettings, ...randomSettings }
   }
 }
 

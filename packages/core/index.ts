@@ -15,7 +15,6 @@ import { mostReadable, colorMix } from './engine/primitives/color'
 import type {
   UmbraOutput,
   UmbraSettings,
-  UmbraScheme,
   UmbraInput,
   UmbraRange,
   FormatedRange
@@ -45,7 +44,6 @@ export {
 export type {
   Umbra,
   UmbraInput,
-  UmbraScheme,
   UmbraSettings,
   UmbraOutput,
   UmbraOutputs,

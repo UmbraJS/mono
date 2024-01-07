@@ -41,10 +41,6 @@ const brown = {
   color: '#87533e'
 }
 
-const something = {
-  shades: [5, 5, 5, 5, 15, 10, 10, 25, '#e5484d', 25, 25, 25]
-}
-
 const accent = {
   color: '#ff0157'
 }
@@ -53,22 +49,17 @@ const accent3 = {
   color: '#e5484d'
 }
 
-const theme = umbra({
+const theme2 = umbra({
   background: '#000000',
   foreground: '#ffffff',
-  accents: [
-    royal,
-    accent,
-    radixRed,
-    radixYellow,
-    radixBlue,
-    accent3,
-    radixRed,
-    success,
-    brown,
-    something
-  ]
-}).apply('body', {
+  accents: [royal, accent, radixRed, radixYellow, radixBlue, accent3, radixRed, success, brown]
+})
+
+const theme = umbra({
+  foreground: '#ffffff',
+  background: '#000000',
+  accents: ['#ff88ff']
+}).apply(undefined, {
   alias: true
 })
 
@@ -76,7 +67,7 @@ const t = ref(theme.input)
 const formated = ref(theme.formated)
 
 function inverse() {
-  const newTheme = umbra(t.value.scheme).inverse().apply('body')
+  const newTheme = umbra(t.value).inverse().apply('body')
   t.value = newTheme.input
 }
 
