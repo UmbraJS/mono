@@ -59,7 +59,7 @@ const theme = umbra({
   foreground: '#ffffff',
   background: '#000000',
   accents: ['#ff88ff']
-}).apply(undefined, {
+}).apply({
   alias: true
 })
 
@@ -67,7 +67,7 @@ const t = ref(theme.input)
 const formated = ref(theme.formated)
 
 function inverse() {
-  const newTheme = umbra(t.value).inverse().apply('body')
+  const newTheme = umbra(t.value).inverse().apply({ target: 'body' })
   t.value = newTheme.input
 }
 

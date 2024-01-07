@@ -12,6 +12,20 @@ import type { Alias } from './primitives/attach'
 interface ApplyProps {
   formater?: Formater
   alias?: Alias | boolean
+  target?: string | HTMLElement | null
+}
+
+interface Format extends UmbraOutputs {
+  attach: (props: AttachProps) => UmbraOutputs
+}
+
+export interface Umbra {
+  output: UmbraRange[]
+  input: UmbraInput
+  apply: (props: ApplyProps) => UmbraOutputs
+  format: (formater?: Formater) => Format
+  isDark: () => boolean
+  inverse: () => Umbra
 }
 
 export function umbra(scheme = defaultScheme, inversedScheme?: UmbraInput) {
@@ -49,28 +63,14 @@ function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
   }
 }
 
-interface Format extends UmbraOutputs {
-  attach: (props: AttachProps) => UmbraOutputs
-}
-
-export interface Umbra {
-  output: UmbraRange[]
-  input: UmbraInput
-  apply: (target?: string | HTMLElement | null, props?: ApplyProps) => UmbraOutputs
-  format: (formater?: Formater) => Format
-  isDark: () => boolean
-  inverse: () => Umbra
-}
-
 function getTarget(target?: string | HTMLElement | null) {
+  if (!target) return undefined
   const targetIsString = typeof target === 'string'
   const targetIsElement = target instanceof HTMLElement || target === null
-  return target
-    ? {
-        element: targetIsElement ? target : undefined,
-        selector: targetIsString ? target : undefined
-      }
-    : undefined
+  return {
+    element: targetIsElement ? target : undefined,
+    selector: targetIsString ? target : undefined
+  }
 }
 
 export function umbraHydrate({
@@ -81,21 +81,19 @@ export function umbraHydrate({
   input: UmbraInput
   output: UmbraRange[]
   inversed?: UmbraInput
-}): Umbra {
-  const apply = (target?: string | HTMLElement | null, props?: ApplyProps) => {
-    const { alias, formater } = props || {}
-    return format({ output, formater, input }).attach({
-      alias,
-      target: getTarget(target)
-    })
-  }
-
+}) {
   return {
     input,
     output,
     isDark: () => isDark(input),
     format: (formater?: Formater) => format({ output, formater, input }),
     inverse: () => umbra(inverse(input, inversed), input),
-    apply
+    apply: ({ alias, formater, target }: ApplyProps) => {
+      const formated = format({ output, formater, input })
+      return formated.attach({
+        alias,
+        target: getTarget(target)
+      })
+    }
   }
 }
