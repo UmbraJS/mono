@@ -28,30 +28,29 @@ const radixYellow = {
 
 const success = {
   name: 'success',
-  shades: [25, 25, 25, 25, 25, '#4caf50', 25, 25, 25, 25, 25, 25]
+  color: '#4caf50'
 }
 
 const royal = {
   name: 'royal',
-  shades: [25, 25, 25, 25, 25, '#a94d94', 35, 25, 25, 25, 25, 25]
+  color: '#4d4da9'
 }
 
 const brown = {
   name: 'brown',
-  shades: [25, 25, 25, 25, 25, '#87533e', 25, 25, 25, 25, 25, 25]
+  color: '#87533e'
 }
 
 const something = {
-  shades: [10, 15, 25, 35, 35, '#4f0820', 15, 15, 15, 15, 15, 25]
+  shades: [5, 5, 5, 5, 15, 10, 10, 25, '#e5484d', 25, 25, 25]
 }
 
 const accent = {
-  shades: [10, 10, 25, 25, 25, 25, 25, 25, '#ff0157', 10, 25, 25]
+  color: '#ff0157'
 }
 
 const accent2 = {
-  color: '#ff0157',
-  shades: [10, 10, 25, 25, 25, 25, 25, 25, 25, 10, 25, 25]
+  color: '#ff0157'
 }
 
 const accent3 = {
@@ -62,6 +61,7 @@ const theme = umbra({
   background: '#000000',
   foreground: '#ffffff',
   accents: [
+    royal,
     radixRed,
     radixYellow,
     radixBlue,
@@ -70,7 +70,6 @@ const theme = umbra({
     accent3,
     radixRed,
     success,
-    royal,
     brown,
     something
   ]

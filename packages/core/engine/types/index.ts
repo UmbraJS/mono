@@ -55,6 +55,7 @@ export interface DehydratedAdjusted {
 export interface UmbraSettings {
   readability?: number
   iterations?: number
+  insertion?: number
   aliases?: Alias | true
   shades?: (number | string)[]
   tints?: (number | string)[]

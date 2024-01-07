@@ -33,7 +33,7 @@ function getReadable(shade: Colord, color: Colord, index: number) {
   return { readability, index }
 }
 
-export function normalizeRange({ range, shades, color }: NewRange) {
+export function insertColorIntoRange({ range, shades, color }: NewRange) {
   const leastReadable = shades
     .map((shade, index) => getReadable(shade, color, index))
     .reduce((a, b) => (a.readability < b.readability ? a : b))
