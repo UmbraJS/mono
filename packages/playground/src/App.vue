@@ -49,10 +49,6 @@ const accent = {
   color: '#ff0157'
 }
 
-const accent2 = {
-  color: '#ff0157'
-}
-
 const accent3 = {
   color: '#e5484d'
 }
@@ -62,11 +58,10 @@ const theme = umbra({
   foreground: '#ffffff',
   accents: [
     royal,
+    accent,
     radixRed,
     radixYellow,
     radixBlue,
-    accent,
-    accent2,
     accent3,
     radixRed,
     success,
