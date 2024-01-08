@@ -103,7 +103,8 @@ export function umbraHydrate({
     isDark: () => isDark(input),
     format: (formater?: Formater) => format({ output, formater, input }),
     inverse: () => umbra(inverse(input, inversed)),
-    apply: ({ alias, formater, target }: ApplyProps) => {
+    apply: (props?: ApplyProps) => {
+      const { alias, formater, target } = props || {}
       const formated = format({ output, formater, input })
       return formated.attach({
         alias,
