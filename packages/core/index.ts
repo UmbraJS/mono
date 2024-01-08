@@ -20,7 +20,6 @@ import type {
   FormatedRange
 } from './engine/types'
 import { inverse, isDark, findContrast } from './engine/primitives/scheme'
-import { dehydrateOutput, hydrateOutput } from './engine/hydration'
 
 export {
   umbra,
@@ -36,9 +35,7 @@ export {
   format,
   hexFormat,
   rgbStrippedFormat,
-  hslFormat,
-  dehydrateOutput,
-  hydrateOutput
+  hslFormat
 }
 
 export type {

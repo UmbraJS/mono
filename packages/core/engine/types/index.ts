@@ -41,13 +41,6 @@ export interface UmbraAdjusted {
   accents: (Accent | string)[]
 }
 
-export interface DehydratedAdjusted {
-  background: string
-  foreground: string
-  accents: (Accent | string)[]
-  input: UmbraInput
-}
-
 export interface UmbraSettings {
   readability?: number
   iterations?: number
