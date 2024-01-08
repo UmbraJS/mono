@@ -32,6 +32,7 @@ export interface UmbraInput {
   foreground: string
   accents: (Accent | string)[]
   settings?: UmbraSettings
+  inversed?: UmbraInput
 }
 
 export interface UmbraAdjusted {

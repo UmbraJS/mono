@@ -12,5 +12,6 @@ export const defaultScheme: UmbraInput = {
   background: '#090233',
   foreground: '#ff5555',
   accents: ['#5200ff'],
-  settings: defaultSettings
+  settings: defaultSettings,
+  inversed: undefined
 }

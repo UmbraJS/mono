@@ -49,16 +49,21 @@ const accent3 = {
   color: '#e5484d'
 }
 
-const theme2 = umbra({
-  background: '#000000',
-  foreground: '#ffffff',
-  accents: [royal, accent, radixRed, radixYellow, radixBlue, accent3, radixRed, success, brown]
-})
+// const theme2 = umbra({
+//   background: '#000000',
+//   foreground: '#ffffff',
+//   accents: [royal, accent, radixRed, radixYellow, radixBlue, accent3, radixRed, success, brown]
+// })
 
 const theme = umbra({
   foreground: '#ffffff',
   background: '#000000',
-  accents: ['#ff88ff']
+  accents: ['#ff88ff'],
+  inversed: {
+    foreground: '#002200',
+    background: '#ffffff',
+    accents: ['#872455']
+  }
 }).apply({
   alias: true
 })
@@ -68,6 +73,7 @@ const formated = ref(theme.formated)
 
 function inverse() {
   const newTheme = umbra(t.value).inverse().apply({ target: 'body' })
+  console.log(t.value.accents[0], newTheme.input)
   t.value = newTheme.input
 }
 

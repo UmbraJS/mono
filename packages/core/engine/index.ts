@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraSettings, UmbraInput, UmbraRange } from './types'
+import type { UmbraInput, UmbraRange } from './types'
 
 import { format, Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
@@ -28,30 +28,45 @@ export interface Umbra {
   inverse: () => Umbra
 }
 
-export function umbra(scheme = defaultScheme, inversedScheme?: UmbraInput) {
-  const input = umbraInput(scheme)
-  const adjustment = umbraAdjust(input.settings, scheme)
+export function umbra(scheme = defaultScheme) {
+  const input = insertFallbacks(scheme)
+  const adjustment = umbraAdjust(input)
   return umbraHydrate({
     input,
     output: umbraGenerate(input, adjustment),
-    inversed: umbraInput(inversedScheme)
+    inversed: scheme.inversed ? insertFallbacks(scheme.inversed) : undefined
   })
 }
 
-function umbraInput(scheme = defaultScheme) {
-  return {
-    ...scheme,
+function insertFallbacks(scheme = defaultScheme): UmbraInput {
+  const settingsFallback = {
     settings: {
       ...defaultSettings,
       ...scheme.settings
+    },
+    inversed: {
+      ...defaultSettings,
+      ...scheme.settings,
+      ...scheme.inversed?.settings
     }
+  }
+
+  const inversed = scheme.inversed && {
+    ...scheme.inversed,
+    settings: settingsFallback.inversed
+  }
+
+  return {
+    ...scheme,
+    settings: settingsFallback.settings,
+    inversed: inversed
   }
 }
 
-function umbraAdjust(settings: UmbraSettings, scheme = defaultScheme) {
+function umbraAdjust(scheme = defaultScheme) {
   const background = colord(scheme.background)
   const foreground = getReadable({
-    readability: settings.readability || 4,
+    readability: scheme.settings?.readability || 4,
     foreground: colord(scheme.foreground),
     background
   })
@@ -87,7 +102,7 @@ export function umbraHydrate({
     output,
     isDark: () => isDark(input),
     format: (formater?: Formater) => format({ output, formater, input }),
-    inverse: () => umbra(inverse(input, inversed), input),
+    inverse: () => umbra(inverse(input, inversed)),
     apply: ({ alias, formater, target }: ApplyProps) => {
       const formated = format({ output, formater, input })
       return formated.attach({

@@ -49,10 +49,15 @@ function inverseValidator(theme: UmbraInput) {
 }
 
 export const inverse = (theme: UmbraInput, inversed?: UmbraInput) => {
-  if (inversed) return inversed
+  if (inversed)
+    return {
+      ...inversed,
+      inversed: theme
+    }
   return {
     ...theme,
-    ...inverseValidator(theme)
+    ...inverseValidator(theme),
+    inversed: theme
   }
 }
 
