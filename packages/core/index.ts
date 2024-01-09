@@ -1,15 +1,7 @@
 import { umbra, umbraHydrate, Umbra } from './engine/index'
 import { umbraGenerate } from './engine/generator'
 import { randomScheme } from './engine/primitives/utils'
-import {
-  format,
-  FlattenColor,
-  Formater,
-  UmbraOutputs,
-  hexFormat,
-  rgbStrippedFormat,
-  hslFormat
-} from './engine/primitives/format'
+import { format, FlattenColor, Formater, UmbraOutputs, hex, rgb } from './engine/primitives/format'
 import { attach } from './engine/primitives/attach'
 import { mostReadable, colorMix } from './engine/primitives/color'
 import type {
@@ -33,9 +25,8 @@ export {
   findContrast,
   attach,
   format,
-  hexFormat,
-  rgbStrippedFormat,
-  hslFormat
+  hex,
+  rgb
 }
 
 export type {

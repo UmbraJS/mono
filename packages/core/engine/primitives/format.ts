@@ -82,24 +82,15 @@ export const format = ({
   }
 }
 
-export const defaultFormater = hexFormat
+export const defaultFormater = hex
 
-export function strippedRGBFormat(color: Colord) {
-  const rgb = color.toRgb()
-  return `${rgb.r} ${rgb.g} ${rgb.b}`
-}
-
-export function hexFormat(color: Colord) {
+export function hex(color: Colord) {
   return color.toHex()
 }
 
-export function rgbStrippedFormat(color: Colord) {
+export function rgb(color: Colord) {
   const rgba = color.toRgb()
   return `${rgba.r} ${rgba.g} ${rgba.b}`
-}
-
-export function hslFormat(color: Colord) {
-  return color.toHslString()
 }
 
 export interface FlattenColor {

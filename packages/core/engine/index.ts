@@ -30,6 +30,7 @@ export interface Umbra {
 
 interface DefaultSettings extends UmbraSettings {
   callback?: (props: UmbraOutputs) => void
+  formater?: Formater
 }
 
 export function umbra(scheme = defaultScheme, settings?: DefaultSettings): Umbra {
@@ -39,7 +40,8 @@ export function umbra(scheme = defaultScheme, settings?: DefaultSettings): Umbra
     input,
     output: umbraGenerate(input, adjustment),
     inversed: scheme.inversed ? insertFallbacks(scheme.inversed, settings) : undefined,
-    callback: settings?.callback
+    callback: settings?.callback,
+    defaultFormater: settings?.formater
   })
 }
 
@@ -101,23 +103,30 @@ export function umbraHydrate({
   input,
   output,
   inversed,
-  callback
+  callback,
+  defaultFormater
 }: {
   input: UmbraInput
   output: UmbraRange[]
   inversed?: UmbraInput
-  callback?: (props: any) => void
+  callback?: (props: UmbraOutputs) => void
+  defaultFormater?: Formater
 }) {
+  function getFormat(passedFormater?: Formater) {
+    const formater = passedFormater || defaultFormater
+    return format({ output, formater, input, callback })
+  }
+
   return {
     input,
     output,
     isDark: () => isDark(input),
-    format: (formater?: Formater) => format({ output, formater, input, callback }),
-    inverse: () => umbra(inverse(input, inversed)),
+    format: (formater?: Formater) => getFormat(formater),
+    inverse: () => umbra(inverse(input, inversed)) as Umbra,
     apply: (props?: ApplyProps) => {
       const { alias, formater } = props || {}
       const target = getTarget(props?.target)
-      const formated = format({ output, formater, input })
+      const formated = getFormat(formater)
       const outputs = formated.attach({ alias, target })
       callback && callback(outputs)
       return outputs
