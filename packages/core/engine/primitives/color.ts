@@ -11,12 +11,14 @@ type ColorRawRange = {
   background: string | Colord
   readability?: number
   iterations?: number
+  power?: number
 }
 
 interface IncreaseContrastUntil {
   color: Colord
   contrast?: Colord
   iterations?: number
+  power?: number
   condition: (newColor: Colord, iterations?: number) => boolean
 }
 
@@ -28,7 +30,8 @@ interface MoveAwayFrom {
 
 const stored = {
   readability: defaultSettings.readability || 11,
-  iterations: defaultSettings.iterations || 15
+  iterations: defaultSettings.iterations || 15,
+  power: defaultSettings.power || 15
 }
 
 function apcaContrast(fg: string | Colord, bg: string | Colord) {
@@ -41,15 +44,22 @@ export const getReadability = (fg: string | Colord, bg: string | Colord) => {
   return apcaContrast(fg, bg)
 }
 
-export const getReadable = ({ foreground, background, readability, iterations }: ColorRawRange) => {
+export const getReadable = ({
+  foreground,
+  background,
+  readability,
+  iterations,
+  power
+}: ColorRawRange) => {
   const color = colord(foreground)
   const contrast = colord(background)
   return increaseContrastUntil({
     color,
     contrast,
     iterations: iterations || stored.iterations,
+    power: power || stored.power,
     condition: (c) => {
-      const current = Math.abs(getReadability(c, background))
+      const current = Math.abs(getReadability(c, contrast))
       return current > (readability || stored.readability)
     }
   })
@@ -59,14 +69,15 @@ export function increaseContrastUntil({
   color,
   contrast,
   condition,
-  iterations = 15
+  iterations = 15,
+  power = 15
 }: IncreaseContrastUntil) {
   let newColor = color
   let count = 0
   while (!condition(newColor, count) && count < iterations) {
     count += 1
     newColor = increaseContrast({
-      val: iterations,
+      val: power,
       color: newColor,
       contrast
     })

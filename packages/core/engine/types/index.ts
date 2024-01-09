@@ -42,8 +42,9 @@ export interface UmbraAdjusted {
 }
 
 export interface UmbraSettings {
-  readability?: number
+  power?: number
   iterations?: number
+  readability?: number
   insertion?: number
   aliases?: Alias | true
   shades?: (number | string)[]

@@ -1,8 +1,9 @@
 import { UmbraInput, UmbraSettings } from './types'
 
 export const defaultSettings: UmbraSettings = {
-  readability: 10,
+  power: 0.15,
   iterations: 15,
+  readability: 70,
   insertion: 9,
   shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25],
   tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25]

@@ -74,6 +74,8 @@ function umbraAdjust(scheme = defaultScheme) {
   const background = colord(scheme.background)
   const foreground = getReadable({
     readability: scheme.settings?.readability || 4,
+    iterations: scheme.settings?.iterations || 15,
+    power: scheme.settings?.power || 15,
     foreground: colord(scheme.foreground),
     background
   })

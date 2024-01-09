@@ -49,19 +49,11 @@ const accent3 = {
   color: '#e5484d'
 }
 
-const theme = umbra(
-  {
-    background: '#ffffff',
-    foreground: '#ffffff',
-    accents: [royal, accent, radixRed, radixYellow, radixBlue, accent3, radixRed, success, brown],
-    settings: {
-      readability: 2
-    }
-  }
-  // {
-  //   readability: 90
-  // }
-).apply({ alias: true })
+const theme = umbra({
+  background: '#000000',
+  foreground: '#ffffff',
+  accents: [royal, accent, radixRed, radixYellow, radixBlue, accent3, radixRed, success, brown]
+}).apply({})
 
 // const theme = umbra({
 //   foreground: '#ffffff',
