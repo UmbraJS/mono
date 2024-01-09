@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraInput, UmbraRange } from './types'
+import type { UmbraInput, UmbraRange, UmbraSettings } from './types'
 
 import { format, Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
@@ -28,24 +28,31 @@ export interface Umbra {
   inverse: () => Umbra
 }
 
-export function umbra(scheme = defaultScheme) {
-  const input = insertFallbacks(scheme)
+interface DefaultSettings extends UmbraSettings {
+  callback?: (props: UmbraOutputs) => void
+}
+
+export function umbra(scheme = defaultScheme, settings?: DefaultSettings): Umbra {
+  const input = insertFallbacks(scheme, settings)
   const adjustment = umbraAdjust(input)
   return umbraHydrate({
     input,
     output: umbraGenerate(input, adjustment),
-    inversed: scheme.inversed ? insertFallbacks(scheme.inversed) : undefined
+    inversed: scheme.inversed ? insertFallbacks(scheme.inversed, settings) : undefined,
+    callback: settings?.callback
   })
 }
 
-function insertFallbacks(scheme = defaultScheme): UmbraInput {
+function insertFallbacks(scheme = defaultScheme, passedDefault?: DefaultSettings): UmbraInput {
   const settingsFallback = {
     settings: {
       ...defaultSettings,
+      ...passedDefault,
       ...scheme.settings
     },
     inversed: {
       ...defaultSettings,
+      ...passedDefault,
       ...scheme.settings,
       ...scheme.inversed?.settings
     }
@@ -91,25 +98,27 @@ function getTarget(target?: string | HTMLElement | null) {
 export function umbraHydrate({
   input,
   output,
-  inversed
+  inversed,
+  callback
 }: {
   input: UmbraInput
   output: UmbraRange[]
   inversed?: UmbraInput
+  callback?: (props: any) => void
 }) {
   return {
     input,
     output,
     isDark: () => isDark(input),
-    format: (formater?: Formater) => format({ output, formater, input }),
+    format: (formater?: Formater) => format({ output, formater, input, callback }),
     inverse: () => umbra(inverse(input, inversed)),
     apply: (props?: ApplyProps) => {
-      const { alias, formater, target } = props || {}
+      const { alias, formater } = props || {}
+      const target = getTarget(props?.target)
       const formated = format({ output, formater, input })
-      return formated.attach({
-        alias,
-        target: getTarget(target)
-      })
+      const outputs = formated.attach({ alias, target })
+      callback && callback(outputs)
+      return outputs
     }
   }
 }

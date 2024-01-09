@@ -10,6 +10,7 @@ interface FormatProps {
   output: UmbraRange[]
   formater?: Formater
   target?: HTMLElement | null | string
+  callback?: (outputs: UmbraOutputs) => void
 }
 
 export interface UmbraOutputs {
@@ -32,7 +33,8 @@ export interface AttachProps {
 export const format = ({
   input,
   output = umbra().output,
-  formater = defaultFormater
+  formater = defaultFormater,
+  callback
 }: FormatProps) => {
   let existingAccents = 0
   function getName(name: string) {
@@ -68,6 +70,7 @@ export const format = ({
     ...outputs,
     attach: ({ target, alias }: AttachProps) => {
       if (!document) return outputs
+      callback && callback(outputs)
       return attach({
         outputs,
         alias,
