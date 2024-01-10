@@ -49,11 +49,20 @@ const accent3 = {
   color: '#e5484d'
 }
 
-const theme = umbra({
-  background: '#000000',
-  foreground: '#ffffff',
-  accents: [royal, accent, radixRed, radixYellow, radixBlue, accent3, radixRed, success, brown]
-}).apply({})
+const theme = umbra(
+  {
+    background: '#000000',
+    foreground: '#ffffff',
+    accents: [royal, accent, radixRed, radixYellow, radixBlue, accent3, radixRed, success, brown]
+  },
+  {
+    formater: (color) => {
+      return color.toHslString()
+    }
+  }
+)
+  .inverse()
+  .apply({})
 
 // const theme = umbra({
 //   foreground: '#ffffff',

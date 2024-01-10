@@ -22,7 +22,7 @@ interface Format extends UmbraOutputs {
 export interface Umbra {
   output: UmbraRange[]
   input: UmbraInput
-  apply: (props: ApplyProps) => UmbraOutputs
+  apply: (props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
   isDark: () => boolean
   inverse: () => Umbra
@@ -38,10 +38,9 @@ export function umbra(scheme = defaultScheme, settings?: DefaultSettings): Umbra
   const adjustment = umbraAdjust(input)
   return umbraHydrate({
     input,
+    settings,
     output: umbraGenerate(input, adjustment),
-    inversed: scheme.inversed ? insertFallbacks(scheme.inversed, settings) : undefined,
-    callback: settings?.callback,
-    defaultFormater: settings?.formater
+    inversed: scheme.inversed ? insertFallbacks(scheme.inversed, settings) : undefined
   })
 }
 
@@ -103,18 +102,16 @@ export function umbraHydrate({
   input,
   output,
   inversed,
-  callback,
-  defaultFormater
+  settings
 }: {
   input: UmbraInput
   output: UmbraRange[]
   inversed?: UmbraInput
-  callback?: (props: UmbraOutputs) => void
-  defaultFormater?: Formater
+  settings?: DefaultSettings
 }) {
   function getFormat(passedFormater?: Formater) {
-    const formater = passedFormater || defaultFormater
-    return format({ output, formater, input, callback })
+    const formater = passedFormater || settings?.formater
+    return format({ output, formater, input, callback: settings?.callback })
   }
 
   return {
@@ -122,13 +119,13 @@ export function umbraHydrate({
     output,
     isDark: () => isDark(input),
     format: (formater?: Formater) => getFormat(formater),
-    inverse: () => umbra(inverse(input, inversed)) as Umbra,
+    inverse: () => umbra(inverse(input, inversed), settings) as Umbra,
     apply: (props?: ApplyProps) => {
       const { alias, formater } = props || {}
       const target = getTarget(props?.target)
       const formated = getFormat(formater)
       const outputs = formated.attach({ alias, target })
-      callback && callback(outputs)
+      settings?.callback && settings.callback(outputs)
       return outputs
     }
   }
