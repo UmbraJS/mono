@@ -1,5 +1,5 @@
 import { colord, Colord } from 'colord'
-import { UmbraInput, UmbraSettings } from '../types'
+import { UmbraScheme, UmbraSettings } from '../types'
 import { getReadability } from './color'
 import { defaultSettings } from '../defaults'
 
@@ -17,7 +17,7 @@ function randomHex() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
 
-export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): UmbraInput {
+export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): UmbraScheme {
   return {
     background: randomHex(),
     foreground: randomHex(),

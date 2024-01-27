@@ -1,8 +1,8 @@
 import { colord, Colord } from 'colord'
-import type { UmbraInput, UmbraAdjusted } from '../types'
+import type { UmbraScheme, UmbraAdjusted } from '../types'
 import { increaseContrastUntil, getReadability, getReadable, mostReadable } from './color'
 
-function inverseValidator(theme: UmbraInput) {
+function inverseValidator(theme: UmbraScheme) {
   const fgDark = colord(theme.foreground).isDark()
   const bgDark = colord(theme.background).isDark()
 
@@ -48,7 +48,7 @@ function inverseValidator(theme: UmbraInput) {
   }
 }
 
-export const inverse = (theme: UmbraInput, inversed?: UmbraInput) => {
+export const inverse = (theme: UmbraScheme, inversed?: UmbraScheme) => {
   if (inversed)
     return {
       ...inversed,
@@ -61,7 +61,7 @@ export const inverse = (theme: UmbraInput, inversed?: UmbraInput) => {
   }
 }
 
-export const isDark = (theme: UmbraInput) => {
+export const isDark = (theme: UmbraScheme) => {
   return colord(theme.background).isDark()
 }
 

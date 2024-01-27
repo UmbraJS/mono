@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraInput, UmbraRange, UmbraSettings } from './types'
+import type { UmbraInput, UmbraScheme, UmbraRange, UmbraSettings } from './types'
 
 import { format, Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
@@ -33,7 +33,7 @@ interface DefaultSettings extends UmbraSettings {
   formater?: Formater
 }
 
-export function umbra(scheme = defaultScheme, settings?: DefaultSettings): Umbra {
+export function umbra(scheme: UmbraInput = defaultScheme, settings?: DefaultSettings): Umbra {
   const input = insertFallbacks(scheme, settings)
   const adjustment = umbraAdjust(input)
   return umbraHydrate({
@@ -44,7 +44,10 @@ export function umbra(scheme = defaultScheme, settings?: DefaultSettings): Umbra
   })
 }
 
-function insertFallbacks(scheme = defaultScheme, passedDefault?: DefaultSettings): UmbraInput {
+function insertFallbacks(
+  scheme: UmbraInput = defaultScheme,
+  passedDefault?: DefaultSettings
+): UmbraScheme {
   const settingsFallback = {
     settings: {
       ...defaultSettings,
@@ -65,6 +68,7 @@ function insertFallbacks(scheme = defaultScheme, passedDefault?: DefaultSettings
   }
 
   return {
+    ...defaultScheme,
     ...scheme,
     settings: settingsFallback.settings,
     inversed: inversed
@@ -104,9 +108,9 @@ export function umbraHydrate({
   inversed,
   settings
 }: {
-  input: UmbraInput
+  input: UmbraScheme
   output: UmbraRange[]
-  inversed?: UmbraInput
+  inversed?: UmbraScheme
   settings?: DefaultSettings
 }) {
   function getFormat(passedFormater?: Formater) {

@@ -28,10 +28,18 @@ export interface Accent {
 }
 
 export interface UmbraInput {
+  background?: string
+  foreground?: string
+  accents?: (Accent | string)[]
+  settings?: UmbraSettings
+  inversed?: UmbraInput
+}
+
+export interface UmbraScheme {
   background: string
   foreground: string
   accents: (Accent | string)[]
-  settings?: UmbraSettings
+  settings: UmbraSettings
   inversed?: UmbraInput
 }
 

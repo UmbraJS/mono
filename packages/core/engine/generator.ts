@@ -1,5 +1,5 @@
 import { colord, Colord } from 'colord'
-import { UmbraAdjusted, UmbraInput, Accent } from './types'
+import { UmbraAdjusted, UmbraScheme, Accent } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils'
 
@@ -30,7 +30,7 @@ function getRange({ from, to, range }: GetRange) {
 }
 
 interface RangeProps {
-  input: UmbraInput
+  input: UmbraScheme
   adjusted: UmbraAdjusted
   range: (number | string)[]
   color?: string
@@ -57,7 +57,7 @@ function replaceAtIndex(array: (number | string)[], index: number, value: string
   return newArray
 }
 
-function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, input: UmbraInput) {
+function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, input: UmbraScheme) {
   const isString = typeof accent === 'string'
   const color = isString ? accent : accent.color
   const insertion = input.settings?.insertion
@@ -70,7 +70,7 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   return range
 }
 
-function accents(input: UmbraInput, adjusted: UmbraAdjusted) {
+function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
   return adjusted.accents.map((accent) => {
     const isString = typeof accent === 'string'
@@ -97,7 +97,7 @@ function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues) {
   return adjusted.background.isDark() ? scheme?.shades : scheme?.tints
 }
 
-function base(input: UmbraInput, adjusted: UmbraAdjusted) {
+function base(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
   const range = rangeValues(adjusted, input.settings) || []
   return {
@@ -108,6 +108,6 @@ function base(input: UmbraInput, adjusted: UmbraAdjusted) {
   }
 }
 
-export function umbraGenerate(input: UmbraInput, adjusted: UmbraAdjusted) {
+export function umbraGenerate(input: UmbraScheme, adjusted: UmbraAdjusted) {
   return [base(input, adjusted), ...accents(input, adjusted)]
 }
