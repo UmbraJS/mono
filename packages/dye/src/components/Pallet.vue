@@ -1,5 +1,5 @@
 <script setup lang="ts">
-//import { umbra } from '@umbrajs/core'
+import { umbra } from '@umbrajs/core'
 import { ref, watch } from 'vue'
 
 const emit = defineEmits(['edit'])
@@ -19,9 +19,9 @@ watch(
   () => props.color,
   (color) => {
     if (!pallet.value) return
-    // myriad({
-    //   background: color.value,
-    // }).attach(pallet.value);
+    umbra({
+      background: color.value
+    }).apply({ target: pallet.value })
   }
 )
 
@@ -50,9 +50,9 @@ function handleClick() {
       <p class="h3 name">{{ color.name }}</p>
     </div>
 
-    <div class="shade" style="background: var(--background)"></div>
-    <div class="shade" style="background: var(--background-10)"></div>
-    <div class="shade" style="background: var(--background-20)"></div>
+    <div class="shade" style="background: var(--base)"></div>
+    <div class="shade" style="background: var(--base-10)"></div>
+    <div class="shade" style="background: var(--base-20)"></div>
 
     <div class="cap">
       <p>{{ copied ? 'copied' : 'copy' }}</p>
@@ -72,8 +72,8 @@ function handleClick() {
   justify-content: center;
   align-items: center;
 
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--base);
+  color: var(--base-120);
   height: 75px;
   user-select: none;
   cursor: pointer;
@@ -104,16 +104,16 @@ function handleClick() {
 }
 
 .pallet.copied .cap {
-  background-color: var(--background-20);
+  background-color: var(--base-20);
   animation: flash 0.6s ease-in-out;
 }
 
 @keyframes flash {
   0% {
-    background-color: var(--foreground-20);
+    background-color: var(--base-100);
   }
   100% {
-    background-color: var(--background-20);
+    background-color: var(--base-20);
   }
 }
 
@@ -135,7 +135,7 @@ function handleClick() {
   border-radius: var(--radius);
   position: absolute;
   right: var(--space-s);
-  background-color: var(--background-20);
+  background-color: var(--base-20);
   padding: var(--space-s);
   min-width: 60px;
 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 defineProps<{
   color: {
-    value: string;
-    name: string;
-  };
+    value: string
+    name: string
+  }
   position: {
-    x: number;
-    y: number;
+    x: number
+    y: number
   }
 }>()
 </script>
@@ -26,14 +26,14 @@ defineProps<{
   width: var(--size);
   aspect-ratio: 1/1;
   pointer-events: none;
-  top: calc(v-bind("position.y") * 1px - var(--size) / 2);
-  left: calc(v-bind("position.x") * 1px - var(--size) / 2);
+  top: calc(v-bind('position.y') * 1px - var(--size) / 2);
+  left: calc(v-bind('position.x') * 1px - var(--size) / 2);
 }
 
 .handle {
-  background-color: v-bind("color.value");
+  background-color: v-bind('color.value');
   border-radius: 50%;
-  border: solid 3px var(--foreground, #fff);
+  border: solid 3px var(--base-120, #fff);
   aspect-ratio: 1/1;
 }
 </style>
