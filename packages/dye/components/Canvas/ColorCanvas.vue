@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue'
-import tinycolor from 'tinycolor2'
+import { colord } from 'colord'
 import {
   hexType,
   offCanvas,
@@ -48,8 +48,8 @@ const { mouseOn } = outsideCanvas({
 })
 
 function getHue(color: string = props.color.value) {
-  const hsv = tinycolor(color).toHsv()
-  return tinycolor({ h: hsv.h, s: 100, v: 100 }).toHexString()
+  const hsv = colord(color).toHsv()
+  return colord({ h: hsv.h, s: 100, v: 100 }).toHex()
 }
 
 const { width, height } = responsiveCanvas({
@@ -71,7 +71,7 @@ function getPercent(percent: number, height?: number) {
 }
 
 watch(width, () => {
-  var color = tinycolor(props.color.value)
+  var color = colord(props.color.value)
   const hsl = color.toHsl()
   position.value = {
     x: getPercent(hsl.s * 100, width.value),

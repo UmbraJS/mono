@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import tinycolor from 'tinycolor2'
+import { colord } from 'colord'
 import { ref, onMounted, Ref, watch } from 'vue'
 import { getDimentions } from '../../composables/canvas'
 import {
@@ -44,8 +44,9 @@ function hueGradient(
   hsl: Hsl = { h: 0, s: 1, l: 0.5 }
 ) {
   const gradient = ctx.createLinearGradient(0, 0, 0, height)
+  console.log('rex: ', hsl)
   for (var hue = 0; hue <= 360; hue++) {
-    var hslColor = `hsl(${hue}, ${hsl.s * 100}%, ${hsl.l * 100}%)`
+    var hslColor = `hsl(${hue}, ${hsl.s}%, ${hsl.l}%)`
     gradient.addColorStop(hue / 360, hslColor)
   }
   return gradient
@@ -57,7 +58,7 @@ function fillHueCanvas(color: string = props.color.value) {
   if (ctx === null) return
   const { height, width } = getDimentions(hueCanvas.value)
 
-  const hsl = tinycolor(color).toHsl()
+  const hsl = colord(color).toHsl()
   ctx.fillStyle = hueGradient(ctx, height, hsl)
   ctx.fillRect(0, 0, width, height)
 }
@@ -115,7 +116,7 @@ onMounted(() => {
   fillHueCanvas()
   setCenterHandle()
 
-  var color = tinycolor(props.color.value)
+  var color = colord(props.color.value)
   const hsl = color.toHsl()
 
   updateCanvas({

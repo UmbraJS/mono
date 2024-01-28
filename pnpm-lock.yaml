@@ -40,7 +40,7 @@ importers:
   packages/dye:
     dependencies:
       '@umbrajs/core':
-        specifier: ^0.0.453
+        specifier: link:../core
         version: link:../core
       '@vueuse/components':
         specifier: ^10.1.2
@@ -48,12 +48,12 @@ importers:
       '@vueuse/core':
         specifier: ^10.1.2
         version: 10.1.2(vue@3.3.4)
+      colord:
+        specifier: ^2.9.3
+        version: 2.9.3
       nearest-color:
         specifier: ^0.4.4
         version: 0.4.4
-      tinycolor2:
-        specifier: ^1.6.0
-        version: 1.6.0
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -61,9 +61,6 @@ importers:
       '@types/node':
         specifier: ^20.2.1
         version: 20.2.1
-      '@types/tinycolor2':
-        specifier: ^1.4.3
-        version: 1.4.3
       '@vitejs/plugin-vue':
         specifier: ^4.0.0
         version: 4.2.3(vite@4.4.6)(vue@3.3.4)
@@ -94,6 +91,9 @@ importers:
       '@umbrajs/core':
         specifier: link:../core
         version: link:../core
+      '@umbrajs/dye':
+        specifier: link:../dye
+        version: link:../dye
       colord:
         specifier: ^2.9.3
         version: 2.9.3
@@ -970,10 +970,6 @@ packages:
 
   /@types/semver@7.5.5:
     resolution: {integrity: sha512-+d+WYC1BxJ6yVOgUgzK8gWvp5qF8ssV5r4nsDcZWKRWcDQLQ619tvWAxJQYGgBrO1MnLJC7a5GtiYsAoQ47dJg==}
-    dev: true
-
-  /@types/tinycolor2@1.4.3:
-    resolution: {integrity: sha512-Kf1w9NE5HEgGxCRyIcRXR/ZYtDv0V8FVPtYHwLxl0O+maGX0erE77pQlD0gpP+/KByMZ87mOA79SjifhSB3PjQ==}
     dev: true
 
   /@types/web-bluetooth@0.0.17:
@@ -3323,10 +3319,6 @@ packages:
   /text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
     dev: true
-
-  /tinycolor2@1.6.0:
-    resolution: {integrity: sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==}
-    dev: false
 
   /titleize@3.0.0:
     resolution: {integrity: sha512-KxVu8EYHDPBdUYdKZdKtU2aj2XfEx9AfjXxE/Aj0vT06w2icA09Vus1rh6eSu1y01akYg6BjIK/hxyLJINoMLQ==}

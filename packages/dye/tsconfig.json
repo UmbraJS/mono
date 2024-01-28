@@ -13,10 +13,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "emitDeclarationOnly": true,
-    
+
     "outDir": "dist",
     "declaration": true,
-    
 
     /* Linting */
     "strict": true,
@@ -27,10 +26,10 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["./components/*"],
-      "@composables/*": ["./composables/*"],
+      "@composables/*": ["./composables/*"]
     }
   },
-  "exclude": ["src/App.vue", "src/main.ts"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/components/*.vue"],
+  "exclude": [],
+  "include": ["**/*.ts", "**/*.d.ts", "**/*.tsx", "components/*.vue", "components/canvas/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

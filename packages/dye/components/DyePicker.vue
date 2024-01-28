@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import tinycolor from "tinycolor2"
+import { colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
 
 import { ref } from 'vue'
-import { colorName } from "../composables/colorName"
+import { colorName } from '../composables/colorName'
 import { hexType } from '../composables/canvas'
-import Pallet from "./Pallet.vue";
-import ColorCanvas from "./Canvas/ColorCanvas.vue";
-import HueCanvas from "./Canvas/HueCanvas.vue";
+import Pallet from './Pallet.vue'
+import ColorCanvas from './Canvas/ColorCanvas.vue'
+import HueCanvas from './Canvas/HueCanvas.vue'
 
 const emit = defineEmits(['change'])
 const props = defineProps<{
-  default: string;
+  default: string
 }>()
 
 const pallet = ref<HTMLElement | null>(null)
@@ -27,7 +27,7 @@ function setRef(el: HTMLCanvasElement) {
 
 const color = ref({
   name: 'red',
-  value: props.default,
+  value: props.default
 })
 
 function handleChange(hex?: hexType) {
@@ -38,7 +38,7 @@ function handleChange(hex?: hexType) {
 
   emit('change', {
     name,
-    value: tinycolor(value),
+    value: colord(value),
     position: hex.position
   })
 }
@@ -49,41 +49,45 @@ const hueWidth = ref(25)
 </script>
 
 <template>
-  <div 
-    class="dyepicker-wrapper" 
-    :class="{ compact }"
-    v-on-click-outside="() => compact = true"
-  >
-    <div 
-      ref="pallet" 
-      class="pallet-wrapper"
-    >
-      <slot :color="color" >
+  <div class="dyepicker-wrapper" :class="{ compact }" v-on-click-outside="() => (compact = true)">
+    <div ref="pallet" class="pallet-wrapper">
+      <slot :color="color">
         <Pallet
           :color="color"
           :hueWidth="hueWidth"
           :compact="compact"
           :compactSize="compactSize"
-          @edit="() => compact = false"
+          @edit="() => (compact = false)"
         />
       </slot>
     </div>
-    <ColorCanvas
-      @change="handleChange"
-      :getRef="getRef"
-      :setRef="setRef"
-      :color="color"
-    />
-    <HueCanvas
-      @change="handleChange"
-      :colorCanvas="getRef"
-      :color="color"
-      :width="hueWidth"
-    />
+    <ColorCanvas @change="handleChange" :getRef="getRef" :setRef="setRef" :color="color" />
+    <HueCanvas @change="handleChange" :colorCanvas="getRef" :color="color" :width="hueWidth" />
   </div>
 </template>
 
 <style lang="scss" scoped>
+$mobile: 360px;
+$phablet: 540px;
+$tablet: 850px;
+$desktop: 1200px;
+
+.dyepicker-wrapper {
+  --radius: 5px;
+  --space-xs: calc(var(--space) / 4);
+  --space-s: calc(var(--space) / 2);
+  --space: 25px;
+  --space-m: calc(2 * var(--space));
+  --space-l: calc(4 * var(--space));
+  --space-xl: calc(8 * var(--space));
+  @media only screen and (max-width: $tablet) {
+    --space: 12px;
+  }
+  @media only screen and (max-width: $mobile) {
+    --space: 6px;
+  }
+}
+
 .dyepicker-wrapper {
   --hueWidth: calc(v-bind(hueWidth) * 1px);
 
@@ -99,7 +103,7 @@ const hueWidth = ref(25)
   border-radius: var(--radius);
   overflow: hidden;
 
-  transition: .4s;
+  transition: 0.4s;
   .pallet-wrapper {
     grid-column: span 2;
   }

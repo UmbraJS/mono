@@ -5,6 +5,8 @@ import UmbraRange from './components/UmbraRange.vue'
 import LabelsGroups from './components/ToneLabels.vue'
 import ActionLabels from './components/ActionLabels.vue'
 import PlayGround from './components/PlayGround.vue'
+import { DyePicker } from '@umbrajs/dye'
+//import '@umbrajs/dye/style.css'
 
 import { blue, blueDark, red, redDark, yellow, yellowDark } from '@radix-ui/colors'
 
@@ -90,6 +92,7 @@ const height = ref('8rem')
 <template>
   <div class="page container">
     <h1 class="display">Umbra</h1>
+    <DyePicker default="#36576a" />
     <button @click="() => inverse()">Invert</button>
     <div class="ranges">
       <LabelsGroups />
