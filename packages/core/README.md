@@ -54,8 +54,8 @@ Outputted CSS attached to the HTML element
 These variables are available everywhere as long as the element is inside the HTML tag. Heres an example of how to use them. 
 ```css
   .card {
-    background-color: var(--background-20);
-    color: var(--foreground);
+    background-color: var(--base-20);
+    color: var(--base-120);
   }
 ```
 

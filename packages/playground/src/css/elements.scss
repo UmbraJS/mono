@@ -12,9 +12,9 @@ button {
 }
 
 button:not(.plain) {
-  background: var(--background-10);
+  background: var(--base-10);
   border-radius: var(--radius);
-  border: 0px var(--border-style) var(--foreground-20);
+  border: 0px var(--border-style) var(--base-100);
 
   min-width: var(--block-inner-size);
   min-height: var(--block-inner-size);
@@ -33,8 +33,8 @@ button.active {
 }
 
 button:disabled {
-  background: var(--foreground-10);
-  color: var(--foreground-20);
+  background: var(--base-110);
+  color: var(--base-100);
   cursor: not-allowed;
   pointer-events: none;
 }

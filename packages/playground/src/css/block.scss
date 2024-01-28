@@ -3,7 +3,7 @@
   --block-inner-size: calc(var(--block-size) - var(--space-s));
 
   --border-size: 1px;
-  --border-color: var(--foreground);
+  --border-color: var(--base-120);
   --border-style: solid;
   --border: var(--border-size) var(--border-style) var(--border-color);
 }
@@ -38,13 +38,13 @@
 .panel {
   border-radius: var(--radius);
   //padding: var(--space-m);
-  background-color: var(--background-10);
+  background-color: var(--base-10);
 }
 
 .compact-panel {
   border-radius: var(--radius);
   padding: var(--space-s);
-  background-color: var(--background-10);
+  background-color: var(--base-10);
 }
 
 .post-flex {

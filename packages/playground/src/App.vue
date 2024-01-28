@@ -6,7 +6,7 @@ import LabelsGroups from './components/ToneLabels.vue'
 import ActionLabels from './components/ActionLabels.vue'
 import PlayGround from './components/PlayGround.vue'
 import { DyePicker } from '@umbrajs/dye'
-//import '@umbrajs/dye/style.css'
+import '@umbrajs/dye/dist/style.css'
 
 import { blue, blueDark, red, redDark, yellow, yellowDark } from '@radix-ui/colors'
 

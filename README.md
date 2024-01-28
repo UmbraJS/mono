@@ -70,8 +70,8 @@ These variables are available everywhere. Heres an example of how to use them.
 
 ```css
 .card {
-  background-color: var(--background-20);
-  color: var(--foreground);
+  background-color: var(--base-20);
+  color: var(--base-120);
 }
 ```
 

@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@radix-ui/colors": "^3.0.0",
-    "@umbrajs/dye": "link:../dye",
-    "@umbrajs/core": "link:../core",
+    "@umbrajs/core": "workspace:*",
+    "@umbrajs/dye": "workspace:*",
     "colord": "^2.9.3",
     "sass": "^1.69.0",
     "vue": "^3.3.4"

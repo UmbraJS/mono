@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/MyriadJS/dye"
+    "url": "https://github.com/umbrajs/dye"
   },
   "type": "module",
   "files": [
@@ -22,6 +22,7 @@
   "main": "./dist/dye.umd.cjs",
   "module": "./dist/dye.js",
   "types": "./dist/types/index.d.ts",
+  "style": "./dist/style.css",
   "exports": {
     ".": {
       "import": "./dist/dye.js",
@@ -36,7 +37,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@umbrajs/core": "link:../core",
+    "@umbrajs/core": "workspace:*",
     "@vueuse/components": "^10.1.2",
     "@vueuse/core": "^10.1.2",
     "colord": "^2.9.3",

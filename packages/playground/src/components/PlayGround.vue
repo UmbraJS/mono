@@ -21,26 +21,26 @@ interface Props {
 
 withDefaults(defineProps<Props>(), {
   border: 'var(--base-40)',
-  text: 'var(--foreground)',
+  text: 'var(--base-120)',
   button: 'var(--base-20)',
-  buttonText: 'var(--foreground)',
+  buttonText: 'var(--base-120)',
   buttonHover: 'var(--base-30)',
-  buttonHoverText: 'var(--foreground)',
+  buttonHoverText: 'var(--base-120)',
   buttonActive: 'var(--base-40)',
-  buttonActiveText: 'var(--foreground)',
+  buttonActiveText: 'var(--base-120)',
   buttonDisabled: 'var(--base-10)',
-  buttonDisabledText: 'var(--foreground)',
+  buttonDisabledText: 'var(--base-120)',
   panel: 'var(--base-20)',
   panelHeader: 'var(--base-30)',
-  panelText: 'var(--foreground)',
+  panelText: 'var(--base-120)',
   panelActive: 'var(--base-40)',
-  panelActiveText: 'var(--foreground)'
+  panelActiveText: 'var(--base-120)'
 })
 </script>
 
 <template>
   <div class="test">
-    <PlayComponents border="var(--base-40)" text="var(--foreground)" button="var(--base-20)" />
+    <PlayComponents border="var(--base-40)" text="var(--base-120)" button="var(--base-20)" />
     <PlayComponents
       border="var(--accent-40)"
       text="var(--accent-contrast)"
