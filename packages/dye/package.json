@@ -1,14 +1,15 @@
 {
   "name": "@umbrajs/dye",
   "private": false,
-  "version": "0.0.6996",
-  "description": "Color picker in a Vue component",
+  "version": "0.0.0",
+  "description": "Vue color picker using umbra",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "license": "MIT",
   "keywords": [
     "vue",
     "color",
-    "picker"
+    "picker",
+    "umbra"
   ],
   "repository": {
     "type": "git",
@@ -20,7 +21,7 @@
   ],
   "main": "./dist/dye.umd.cjs",
   "module": "./dist/dye.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/dye.js",

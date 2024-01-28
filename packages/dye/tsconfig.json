@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "emitDeclarationOnly": true,
 
-    "outDir": "dist",
+    "outDir": "dist/types",
     "declaration": true,
 
     /* Linting */
