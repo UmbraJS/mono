@@ -20,7 +20,10 @@ interface Hsl {
   l: number
 }
 
-const emit = defineEmits(['change'])
+const emit = defineEmits<{
+  (e: 'change', props: { hex: hexType; mounted: boolean }): void
+}>()
+
 const props = defineProps<{
   width: number
   colorCanvas: () => Ref<HTMLCanvasElement | null>
@@ -44,7 +47,6 @@ function hueGradient(
   hsl: Hsl = { h: 0, s: 1, l: 0.5 }
 ) {
   const gradient = ctx.createLinearGradient(0, 0, 0, height)
-  console.log('rex: ', hsl)
   for (var hue = 0; hue <= 360; hue++) {
     var hslColor = `hsl(${hue}, ${hsl.s}%, ${hsl.l}%)`
     gradient.addColorStop(hue / 360, hslColor)
@@ -79,9 +81,9 @@ function hueChange(e: MouseEvent, click = false) {
   mouseOn.value = true
 }
 
-function updateCanvas(hex: hexType) {
+function updateCanvas(hex: hexType, mounted = false) {
   if (!hex) return
-  emit('change', hex)
+  emit('change', { hex, mounted })
   fillColorCanvas({ hue: hex.color }, props.colorCanvas().value)
   position.value = {
     x: position.value.x,
@@ -116,16 +118,17 @@ onMounted(() => {
   fillHueCanvas()
   setCenterHandle()
 
-  var color = colord(props.color.value)
+  const color = colord(props.color.value)
   const hsl = color.toHsl()
-
-  updateCanvas({
+  const hex = {
     color: props.color.value,
     position: {
       x: 0,
       y: huePercent(hsl.h, canvasHeight.value)
     }
-  })
+  }
+
+  updateCanvas(hex, true)
 })
 </script>
 

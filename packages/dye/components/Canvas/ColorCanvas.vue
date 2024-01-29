@@ -13,7 +13,10 @@ import {
 import { fillColorCanvas } from '../../composables/gradient'
 import Handle from '../Handle.vue'
 
-const emit = defineEmits(['change'])
+const emit = defineEmits<{
+  (e: 'change', hex: hexType): void
+}>()
+
 const props = defineProps<{
   getRef: () => Ref<HTMLCanvasElement | null>
   setRef: (el: any) => void

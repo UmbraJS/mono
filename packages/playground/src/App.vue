@@ -92,7 +92,14 @@ const height = ref('8rem')
 <template>
   <div class="page container">
     <h1 class="display">Umbra</h1>
-    <DyePicker default="#36576a" />
+    <DyePicker
+      default="#36576a"
+      @change="
+        (value) => {
+          console.log(value.name)
+        }
+      "
+    />
     <button @click="() => inverse()">Invert</button>
     <div class="ranges">
       <LabelsGroups />

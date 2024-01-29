@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { colord } from 'colord'
+import type { Colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
 
 import { ref } from 'vue'
@@ -9,10 +10,30 @@ import Pallet from './Pallet.vue'
 import ColorCanvas from './Canvas/ColorCanvas.vue'
 import HueCanvas from './Canvas/HueCanvas.vue'
 
-const emit = defineEmits(['change'])
-const props = defineProps<{
-  default: string
+const emit = defineEmits<{
+  (
+    e: 'change',
+    color: {
+      name: string
+      value: Colord
+      position: { x: number; y: number }
+    }
+  ): void
 }>()
+
+interface Props {
+  default: string
+  compact: boolean
+  compactSize: number
+  hueWidth: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  default: '#ff0000',
+  compact: true,
+  compactSize: 50,
+  hueWidth: 25
+})
 
 const pallet = ref<HTMLElement | null>(null)
 const colorCanvas = ref<HTMLCanvasElement | null>(null)
@@ -30,12 +51,13 @@ const color = ref({
   value: props.default
 })
 
-function handleChange(hex?: hexType) {
+function handleChange(hex?: hexType, mounted = false) {
   if (!hex) return
   const get = colorName(hex.color)
   const { name, value } = get()
   color.value = { name, value }
 
+  if (mounted) return
   emit('change', {
     name,
     value: colord(value),
@@ -43,9 +65,9 @@ function handleChange(hex?: hexType) {
   })
 }
 
-const compact = ref(true)
-const compactSize = ref(50)
-const hueWidth = ref(25)
+const compact = ref(props.compact)
+const compactSize = ref(props.compactSize)
+const hueWidth = ref(props.hueWidth)
 </script>
 
 <template>
@@ -62,7 +84,12 @@ const hueWidth = ref(25)
       </slot>
     </div>
     <ColorCanvas @change="handleChange" :getRef="getRef" :setRef="setRef" :color="color" />
-    <HueCanvas @change="handleChange" :colorCanvas="getRef" :color="color" :width="hueWidth" />
+    <HueCanvas
+      @change="(props) => handleChange(props.hex, props.mounted)"
+      :colorCanvas="getRef"
+      :color="color"
+      :width="hueWidth"
+    />
   </div>
 </template>
 
