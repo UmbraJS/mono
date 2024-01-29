@@ -1,7 +1,7 @@
 {
   "name": "@umbrajs/dye",
   "private": false,
-  "version": "0.0.002",
+  "version": "0.0.0021",
   "description": "Vue color picker using umbra",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "license": "MIT",
@@ -37,7 +37,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@umbrajs/core": "workspace:*",
+    "@umbrajs/core": "^0.0.454",
     "@vueuse/components": "^10.1.2",
     "@vueuse/core": "^10.1.2",
     "colord": "^2.9.3",
