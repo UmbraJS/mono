@@ -7,7 +7,7 @@ import { mostReadable, colorMix } from './engine/primitives/color'
 import type {
   UmbraOutput,
   UmbraSettings,
-  UmbraInput,
+  UmbraScheme,
   UmbraRange,
   FormatedRange
 } from './engine/types'
@@ -31,12 +31,12 @@ export {
 
 export type {
   Umbra,
-  UmbraInput,
+  UmbraScheme,
   UmbraSettings,
   UmbraOutput,
   UmbraOutputs,
   UmbraRange,
-  FlattenColor,
   Formater,
+  FlattenColor,
   FormatedRange
 }
