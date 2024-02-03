@@ -122,6 +122,8 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
     setCanvas()
   })
 
+  //look into unmounting the observer
+
   return { width, height }
 }
 
