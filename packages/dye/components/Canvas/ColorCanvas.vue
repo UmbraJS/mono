@@ -110,6 +110,6 @@ canvas.color-canvas {
   aspect-ratio: 1/1;
   width: 100%;
   height: 100%;
-  background-color: var(--base-20, rgb(30, 0, 64));
+  background-color: var(--base-20, rgb(64, 0, 0));
 }
 </style>

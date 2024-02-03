@@ -31,7 +31,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   default: '#ff0000',
-  compact: true,
+  compact: false,
   compactSize: 50,
   hueWidth: 25
 })
