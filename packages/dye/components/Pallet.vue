@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { umbra } from '@umbrajs/core'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 const emit = defineEmits(['edit'])
 const props = defineProps<{
@@ -12,18 +11,6 @@ const props = defineProps<{
     value: string
   }
 }>()
-
-const pallet = ref<HTMLElement>()
-
-watch(
-  () => props.color,
-  (color) => {
-    if (!pallet.value) return
-    umbra({
-      background: color.value
-    }).apply({ target: pallet.value })
-  }
-)
 
 const copied = ref(false)
 
@@ -40,7 +27,7 @@ function handleClick() {
 </script>
 
 <template>
-  <div ref="pallet" class="pallet" :class="{ copied }" @click="handleClick">
+  <div class="pallet" :class="{ copied }" @click="handleClick">
     <div class="edit" v-if="compact">
       <p>Edit</p>
     </div>

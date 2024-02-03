@@ -57,15 +57,11 @@ function getHue(color: string = props.color.value) {
 
 const { width, height } = responsiveCanvas({
   canvas: props.getRef(),
-  updateCanvas: () =>
-    fillColorCanvas(
-      {
-        hue: getHue(),
-        saturation: 100,
-        lightness: 100
-      },
-      props.getRef().value
-    )
+  updateCanvas: () => {
+    const hue = getHue()
+    const data = { hue, saturation: 100, lightness: 100 }
+    fillColorCanvas(data, props.getRef().value)
+  }
 })
 
 function getPercent(percent: number, height?: number) {
@@ -114,6 +110,6 @@ canvas.color-canvas {
   aspect-ratio: 1/1;
   width: 100%;
   height: 100%;
-  background-color: var(--base-20, rgb(64, 0, 0));
+  background-color: var(--base-20, rgb(30, 0, 64));
 }
 </style>

@@ -3,7 +3,8 @@ import { colord } from 'colord'
 import type { Colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
 
-import { ref } from 'vue'
+import { umbra } from '@umbrajs/core'
+import { ref, watch } from 'vue'
 import { colorName } from '../composables/colorName'
 import { hexType } from '../composables/canvas'
 import Pallet from './Pallet.vue'
@@ -22,10 +23,10 @@ const emit = defineEmits<{
 }>()
 
 interface Props {
-  default: string
-  compact: boolean
-  compactSize: number
-  hueWidth: number
+  default?: string
+  compact?: boolean
+  compactSize?: number
+  hueWidth?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -35,8 +36,20 @@ const props = withDefaults(defineProps<Props>(), {
   hueWidth: 25
 })
 
-const pallet = ref<HTMLElement | null>(null)
+const pickerRef = ref<HTMLElement | null>(null)
 const colorCanvas = ref<HTMLCanvasElement | null>(null)
+
+const color = ref({
+  name: 'red',
+  value: props.default
+})
+
+watch(color, (c) => {
+  if (!pickerRef.value) return
+  umbra({
+    background: c.value
+  }).apply({ target: pickerRef.value })
+})
 
 function getRef() {
   return colorCanvas
@@ -45,11 +58,6 @@ function getRef() {
 function setRef(el: HTMLCanvasElement) {
   colorCanvas.value = el
 }
-
-const color = ref({
-  name: 'red',
-  value: props.default
-})
 
 function handleChange(hex?: hexType, mounted = false) {
   if (!hex) return
@@ -71,18 +79,19 @@ const hueWidth = ref(props.hueWidth)
 </script>
 
 <template>
-  <div class="dyepicker-wrapper" :class="{ compact }" v-on-click-outside="() => (compact = true)">
-    <div ref="pallet" class="pallet-wrapper">
-      <slot :color="color">
-        <Pallet
-          :color="color"
-          :hueWidth="hueWidth"
-          :compact="compact"
-          :compactSize="compactSize"
-          @edit="() => (compact = false)"
-        />
-      </slot>
-    </div>
+  <div
+    ref="pickerRef"
+    class="dyepicker-wrapper"
+    :class="{ compact }"
+    v-on-click-outside="() => (compact = true)"
+  >
+    <Pallet
+      :color="color"
+      :hueWidth="hueWidth"
+      :compact="compact"
+      :compactSize="compactSize"
+      @edit="() => (compact = false)"
+    />
     <ColorCanvas @change="handleChange" :getRef="getRef" :setRef="setRef" :color="color" />
     <HueCanvas
       @change="(props) => handleChange(props.hex, props.mounted)"
@@ -131,7 +140,7 @@ $desktop: 1200px;
   overflow: hidden;
 
   transition: 0.4s;
-  .pallet-wrapper {
+  .pallet {
     grid-column: span 2;
   }
 }
