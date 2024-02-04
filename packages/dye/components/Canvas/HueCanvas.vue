@@ -70,15 +70,16 @@ function fillHueCanvas(color: string = props.color.hex) {
   ctx.fillRect(0, 0, width, height)
 }
 
+const { setMouseDown, offCanvas, isActiveCanvas } = useDyeStore()
+
 watch(
   () => props.color.hex,
   (color) => {
-    console.log('color', mouseOn)
-    //fillHueCanvas(color)
+    const isActive = isActiveCanvas(hueCanvas.value)
+    if (!isActive) return
+    fillHueCanvas(color)
   }
 )
-
-const { setMouseDown, offCanvas, isActiveCanvas } = useDyeStore()
 
 function hueChange(e: MouseEvent, click = false) {
   if (click) setMouseDown(true)
