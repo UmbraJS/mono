@@ -14,7 +14,6 @@ import DyeWrapper from './DyeWrapper.vue'
 interface Dye {
   name: string
   color: Colord
-  position: { x: number; y: number }
 }
 
 const emit = defineEmits<{
@@ -28,29 +27,31 @@ interface DyeProps {
 
 const props = withDefaults(defineProps<DyeProps>(), {
   default: '#ff0000',
-  compact: true
+  compact: false
 })
 
 // Logic
 const compact = ref(props.compact)
-const { color, colorCanvas, setColorCanvas, paintComponent, wrapper } = useDye(props.default)
+const { color, colorCanvas, setColorCanvas, wrapper } = useDye(props.default)
 
 function change(dye: OutputColor) {
-  if (dye.mounted) return
-
   color.value = dye
-  paintComponent(dye.hex)
-
   emit('change', {
     name: dye.name,
-    color: colord(dye.hex),
-    position: dye.position
+    color: colord(dye.hex)
   })
+}
+
+function clickOutside() {
+  color.value = {
+    hex: '#ff0000',
+    name: 'ccool'
+  }
 }
 </script>
 
 <template>
-  <DyeWrapper ref="wrapper" :compact="compact" v-on-click-outside="() => (compact = true)">
+  <DyeWrapper ref="wrapper" :compact="compact" v-on-click-outside="clickOutside">
     <Pallet :color="color" :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas
       @change="change"

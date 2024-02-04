@@ -2,9 +2,9 @@ import { useMousePressed, useMouse } from '@vueuse/core'
 import { computed, watch, ref, Ref, onMounted, onUnmounted } from 'vue'
 import { rgbToHex, clamp } from './utils'
 
-export interface OutputColor extends HexType {
+export interface OutputColor {
   name: string
-  mounted: boolean
+  hex: string
 }
 
 export interface HexType {

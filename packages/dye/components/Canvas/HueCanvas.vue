@@ -88,18 +88,16 @@ function hueChange(e: MouseEvent, click = false) {
 }
 
 function updateCanvas(color?: HexType, mounted = false) {
-  if (!color) return
-  const { name } = colorName(color.hex)
-  emit('change', {
-    name,
-    mounted,
-    ...color
-  })
+  if (!color || mounted) return
   fillColorCanvas({ hue: color.hex }, props.colorCanvas().value)
   position.value = {
     x: position.value.x,
     y: color.position.y
   }
+  emit('change', {
+    name: colorName(color.hex).name,
+    ...color
+  })
 }
 
 const { width: canvasWidth, height: canvasHeight } = responsiveCanvas({

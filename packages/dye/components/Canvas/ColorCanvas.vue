@@ -15,13 +15,8 @@ import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import Handle from '../Handle.vue'
 
-interface CCE extends OutputColor {
-  name: string
-  mounted: boolean
-}
-
 const emit = defineEmits<{
-  (e: 'change', props: CCE): void
+  (e: 'change', props: OutputColor): void
 }>()
 
 const props = defineProps<{
@@ -39,9 +34,8 @@ function updateCanvas(color?: HexType) {
   if (!color) return
   const { name } = colorName(color.hex)
   emit('change', {
-    name,
-    mounted: false,
-    ...color
+    ...color,
+    name
   })
   position.value = color.position
 }
