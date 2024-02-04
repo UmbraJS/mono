@@ -77,7 +77,6 @@ export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   const posPixel = computed(() => ({ x: x.value, y: y.value }))
   watch(posPixel, (pos) => {
     if (!condition() && canvas.value) return
-    console.log('outside', clampedPos(pos))
     updateCanvas(clampedPos(pos))
   })
 
