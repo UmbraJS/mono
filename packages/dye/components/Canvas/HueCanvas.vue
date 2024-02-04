@@ -14,6 +14,7 @@ import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import { useDebounce } from '../../composables/utils'
 import Handle from '../Handle.vue'
+import { log } from 'console'
 
 interface Hsl {
   h: number
@@ -82,6 +83,7 @@ watch(
 )
 
 function hueChange(e: MouseEvent, click = false) {
+  console.log('hueChange')
   if (click) setMouseDown(true)
   if (offCanvas(e, click)) return
   if (isActiveCanvas(e.target)) return
