@@ -3,14 +3,12 @@ import { colord } from 'colord'
 import { ref, onMounted, Ref, watch } from 'vue'
 import { getDimentions } from '../../composables/canvas'
 import {
-  offCanvas,
-  canvasPixelColor,
-  isActiveCanvas,
-  mousedown,
-  outsideCanvas,
-  OutputColor,
   HexType,
-  responsiveCanvas
+  OutputColor,
+  outsideCanvas,
+  canvasPixelColor,
+  responsiveCanvas,
+  useDyeStore
 } from '../../composables/canvas'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
@@ -74,11 +72,16 @@ function fillHueCanvas(color: string = props.color.hex) {
 
 watch(
   () => props.color.hex,
-  (color) => fillHueCanvas(color)
+  (color) => {
+    console.log('color', mouseOn)
+    //fillHueCanvas(color)
+  }
 )
 
+const { setMouseDown, offCanvas, isActiveCanvas } = useDyeStore()
+
 function hueChange(e: MouseEvent, click = false) {
-  if (click) mousedown.value = true
+  if (click) setMouseDown(true)
   if (offCanvas(e, click)) return
   if (isActiveCanvas(e.target)) return
   const hex = canvasPixelColor(e, hueCanvas.value)

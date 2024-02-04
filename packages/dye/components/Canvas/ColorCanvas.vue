@@ -4,12 +4,10 @@ import { colord } from 'colord'
 import {
   HexType,
   OutputColor,
-  offCanvas,
   canvasPixelColor,
-  isActiveCanvas,
-  mousedown,
   outsideCanvas,
-  responsiveCanvas
+  responsiveCanvas,
+  useDyeStore
 } from '../../composables/canvas'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
@@ -39,9 +37,11 @@ function updateCanvas(color?: HexType) {
   position.value = color.position
 }
 
+const { setMouseDown, offCanvas, isActiveCanvas } = useDyeStore()
+
 //Update color while dragging inside canvas
 function colorChange(e: MouseEvent, click = false) {
-  if (click) mousedown.value = true
+  if (click) setMouseDown(true)
   if (offCanvas(e, click)) return
   if (isActiveCanvas(e.target)) return
   const hex = canvasPixelColor(e, props.colorCanvas().value)

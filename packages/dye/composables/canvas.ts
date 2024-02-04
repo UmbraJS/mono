@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia'
 import { useMousePressed, useMouse } from '@vueuse/core'
 import { computed, watch, ref, Ref, onMounted, onUnmounted } from 'vue'
 import { rgbToHex, clamp } from './utils'
@@ -41,25 +42,33 @@ export function pixelColor(
   return { hex: rgbToHex(rgba), position }
 }
 
-export function offCanvas(e: MouseEvent, click: boolean) {
-  const returnCondition = !mousedown.value && !click
-  if (!mousedown.value) activeCanvas.value = e.target
-  if (activeCanvas.value === null) activeCanvas.value = e.target
-  return returnCondition
-}
+export const useDyeStore = defineStore('dye', () => {
+  const mousedown = ref(false)
+  const activeCanvas = ref<EventTarget | null>(null)
 
-export function isActiveCanvas(target?: EventTarget | HTMLCanvasElement | null) {
-  return activeCanvas.value !== target
-}
+  const { pressed } = useMousePressed()
+  watch(pressed, (value: boolean) => {
+    if (value) return
+    activeCanvas.value = null
+    mousedown.value = value
+  })
 
-export let mousedown = ref(false)
-let activeCanvas = ref<EventTarget | null>(null)
+  function offCanvas(e: MouseEvent, click: boolean) {
+    const returnCondition = !mousedown.value && !click
+    if (!mousedown.value) activeCanvas.value = e.target
+    if (activeCanvas.value === null) activeCanvas.value = e.target
+    return returnCondition
+  }
 
-const { pressed } = useMousePressed()
-watch(pressed, (value: boolean) => {
-  if (value) return
-  activeCanvas.value = null
-  mousedown.value = value
+  function setMouseDown(value: boolean) {
+    mousedown.value = value
+  }
+
+  function isActiveCanvas(target?: EventTarget | HTMLCanvasElement | null) {
+    return activeCanvas.value !== target
+  }
+
+  return { mousedown, setMouseDown, activeCanvas, isActiveCanvas, offCanvas }
 })
 
 interface OCP {
@@ -69,10 +78,11 @@ interface OCP {
 
 export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   const mouseOn = ref(false)
+  const { mousedown, isActiveCanvas } = useDyeStore()
 
   function condition() {
     //activeOutside
-    return !mouseOn.value && mousedown.value && !isActiveCanvas(canvas.value)
+    return !mouseOn.value && mousedown && !isActiveCanvas(canvas.value)
   }
 
   //Update color while dragging outside canvas
@@ -134,6 +144,7 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
     if (!observer) return
     observer.disconnect()
   })
+
   return { width, height }
 }
 

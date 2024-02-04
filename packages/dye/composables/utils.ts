@@ -18,7 +18,7 @@ export function clamp(num: number, min: number, max: number) {
 export function useDebounce(
   callback: (dye: OutputColor) => void
 ): ReturnType<typeof useDebounceFn> {
-  return useDebounceFn((dye: OutputColor) => callback(dye), 5, {
+  return useDebounceFn((dye: OutputColor) => callback(dye), 4, {
     maxWait: 200
   })
 }
