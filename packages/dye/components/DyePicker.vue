@@ -40,18 +40,18 @@ const color = ref({
 const [colorCanvas, setColorCanvas] = useColorCanvas()
 const pickerRef = ref<HTMLElement | null>(null)
 
-function applyPaint(background: string) {
+function paintComponent(background: string) {
   if (!pickerRef.value) return
   umbra({ background }).apply({ target: pickerRef.value })
 }
 
-onMounted(() => applyPaint(color.value.hex))
+onMounted(() => paintComponent(color.value.hex))
 
 function change(dye: OutputColor) {
   color.value = dye
   if (dye.mounted) return
 
-  applyPaint(dye.hex)
+  paintComponent(dye.hex)
 
   emit('change', {
     name: dye.name,
