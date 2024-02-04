@@ -14,6 +14,7 @@ import {
 } from '../../composables/canvas'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
+import { useDebounce } from '../../composables/utils'
 import Handle from '../Handle.vue'
 
 interface Hsl {
@@ -73,9 +74,7 @@ function fillHueCanvas(color: string = props.color.hex) {
 
 watch(
   () => props.color.hex,
-  (color) => {
-    fillHueCanvas(color)
-  }
+  (color) => fillHueCanvas(color)
 )
 
 function hueChange(e: MouseEvent, click = false) {
@@ -87,17 +86,22 @@ function hueChange(e: MouseEvent, click = false) {
   mouseOn.value = true
 }
 
+const change = useDebounce((dye: OutputColor) => {
+  fillColorCanvas({ hue: dye.hex }, props.colorCanvas().value)
+  emit('change', dye)
+})
+
 function updateCanvas(color?: HexType, mounted = false) {
   if (!color || mounted) return
-  fillColorCanvas({ hue: color.hex }, props.colorCanvas().value)
+  change({
+    name: colorName(color.hex).name,
+    ...color
+  })
+
   position.value = {
     x: position.value.x,
     y: color.position.y
   }
-  emit('change', {
-    name: colorName(color.hex).name,
-    ...color
-  })
 }
 
 const { width: canvasWidth, height: canvasHeight } = responsiveCanvas({

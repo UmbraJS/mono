@@ -1,3 +1,6 @@
+import { useDebounceFn } from '@vueuse/core'
+import { OutputColor } from './canvas'
+
 export function rgbToHex(orig: any) {
   var rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
     hex = rgb
@@ -10,4 +13,12 @@ export function rgbToHex(orig: any) {
 
 export function clamp(num: number, min: number, max: number) {
   return num <= min ? min : num >= max ? max : num
+}
+
+export function useDebounce(
+  callback: (dye: OutputColor) => void
+): ReturnType<typeof useDebounceFn> {
+  return useDebounceFn((dye: OutputColor) => callback(dye), 5, {
+    maxWait: 200
+  })
 }

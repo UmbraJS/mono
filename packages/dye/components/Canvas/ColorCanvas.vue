@@ -13,6 +13,7 @@ import {
 } from '../../composables/canvas'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
+import { useDebounce } from '../../composables/utils'
 import Handle from '../Handle.vue'
 
 const emit = defineEmits<{
@@ -29,14 +30,12 @@ const props = defineProps<{
 }>()
 
 let position = ref({ x: 0, y: 0 })
+const change = useDebounce((dye) => emit('change', dye))
 
 function updateCanvas(color?: HexType) {
   if (!color) return
   const { name } = colorName(color.hex)
-  emit('change', {
-    ...color,
-    name
-  })
+  change({ ...color, name })
   position.value = color.position
 }
 
