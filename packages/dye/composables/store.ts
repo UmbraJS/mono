@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useMousePressed } from '@vueuse/core'
-import { computed, watch, ref } from 'vue'
+import { watch, ref } from 'vue'
 
 export const useDyeStore = defineStore('dye', () => {
   const holding = ref(false)
