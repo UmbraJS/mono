@@ -85,11 +85,13 @@ export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   function clampedPos(pos: { x: number; y: number }) {
     const box = canvas.value?.getBoundingClientRect()
     if (!box) return
-    const position = {
-      x: clamp(pos.x, box.left, box.right),
-      y: clamp(pos.y, box.top, box.bottom)
-    }
-    return pixelColor(position, canvas.value)
+    return pixelColor(
+      {
+        x: clamp(pos.x - (box.left + window.scrollX), 0, box.width - 2),
+        y: clamp(pos.y - (box.top + window.scrollY), 0, box.height - 2)
+      },
+      canvas.value
+    )
   }
 
   return { mouseOn, clampedPos }
