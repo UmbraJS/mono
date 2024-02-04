@@ -39,7 +39,6 @@ export function pixelColor(
 }
 
 export function offCanvas(e: MouseEvent, click: boolean) {
-  console.log('offCanvas')
   const returnCondition = !mousedown.value && !click
   if (!mousedown.value) activeCanvas.value = e.target
   if (activeCanvas.value === null) activeCanvas.value = e.target
