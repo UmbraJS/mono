@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
-import { useMousePressed, useMouse } from '@vueuse/core'
+import { useMouse } from '@vueuse/core'
 import { computed, watch, ref, Ref, onMounted, onUnmounted } from 'vue'
 import { rgbToHex, clamp } from './utils'
+import { useDyeStore } from './store'
 
 export interface OutputColor {
   name: string
@@ -42,47 +42,24 @@ export function pixelColor(
   return { hex: rgbToHex(rgba), position }
 }
 
-export const useDyeStore = defineStore('dye', () => {
-  const mousedown = ref(false)
-  const activeCanvas = ref<EventTarget | null>(null)
-
-  const { pressed } = useMousePressed()
-  watch(pressed, (value: boolean) => {
-    if (value) return
-    activeCanvas.value = null
-    mousedown.value = value
-  })
-
-  function offCanvas(e: MouseEvent, click: boolean) {
-    const returnCondition = !mousedown.value && !click
-    if (!mousedown.value) activeCanvas.value = e.target
-    if (activeCanvas.value === null) activeCanvas.value = e.target
-    return returnCondition
-  }
-
-  function setMouseDown(value: boolean) {
-    mousedown.value = value
-  }
-
-  function isActiveCanvas(target?: EventTarget | HTMLCanvasElement | null) {
-    return activeCanvas.value !== target
-  }
-
-  return { mousedown, setMouseDown, activeCanvas, isActiveCanvas, offCanvas }
-})
-
 interface OCP {
   canvas: RefCanvas
   updateCanvas: posFunc
+  debug?: boolean
 }
 
-export function outsideCanvas({ canvas, updateCanvas }: OCP) {
-  const mouseOn = ref(false)
-  const { mousedown, isActiveCanvas } = useDyeStore()
+export function outsideCanvas({ canvas, updateCanvas, debug = false }: OCP) {
+  const inside = ref(false)
+  const store = useDyeStore()
 
   function condition() {
     //activeOutside
-    return !mouseOn.value && mousedown && !isActiveCanvas(canvas.value)
+    const outside = !inside.value
+    const inactive = !store.isActiveCanvas(canvas.value)
+
+    debug && console.log('outsideCanvas', { outside, holding: store.holding, inactive })
+
+    return outside && store.holding && inactive
   }
 
   //Update color while dragging outside canvas
@@ -90,6 +67,7 @@ export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   const posPixel = computed(() => ({ x: x.value, y: y.value }))
   watch(posPixel, (pos) => {
     if (!condition() && canvas.value) return
+    console.log('outsideCanvas', pos)
     updateCanvas(clampedPos(pos))
   })
 
@@ -106,7 +84,7 @@ export function outsideCanvas({ canvas, updateCanvas }: OCP) {
     )
   }
 
-  return { mouseOn, clampedPos }
+  return { inside, clampedPos }
 }
 
 interface RCP {

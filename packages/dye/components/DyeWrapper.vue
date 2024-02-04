@@ -26,7 +26,7 @@ withDefaults(defineProps<DyeProps>(), {
   max-width: 400px;
 
   border-radius: var(--radius);
-  overflow: hidden;
+  //overflow: hidden;
 
   transition: 0.2s ease-in-out;
   .pallet {

@@ -6,9 +6,9 @@ import {
   OutputColor,
   canvasPixelColor,
   outsideCanvas,
-  responsiveCanvas,
-  useDyeStore
+  responsiveCanvas
 } from '../../composables/canvas'
+import { useDyeStore } from '../../composables/store'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import { useDebounce } from '../../composables/utils'
@@ -37,20 +37,20 @@ function updateCanvas(color?: HexType) {
   position.value = color.position
 }
 
-const { setMouseDown, offCanvas, isActiveCanvas } = useDyeStore()
+const store = useDyeStore()
 
 //Update color while dragging inside canvas
 function colorChange(e: MouseEvent, click = false) {
-  if (click) setMouseDown(true)
-  if (offCanvas(e, click)) return
-  if (isActiveCanvas(e.target)) return
+  if (click) store.setHolding(true)
+  if (store.offCanvas(e, click)) return
+  if (store.isActiveCanvas(e.target)) return
   const hex = canvasPixelColor(e, props.colorCanvas().value)
   updateCanvas(hex)
-  mouseOn.value = true
+  inside.value = true
 }
 
 //when outside canvas
-const { mouseOn } = outsideCanvas({
+const { inside } = outsideCanvas({
   canvas: props.colorCanvas(),
   updateCanvas
 })
@@ -94,7 +94,7 @@ watch(width, () => {
       :height="height"
       @mousedown="(e) => colorChange(e, true)"
       @mousemove="(e) => colorChange(e)"
-      @mouseleave="() => (mouseOn = false)"
+      @mouseleave="() => (inside = false)"
     >
     </canvas>
   </div>

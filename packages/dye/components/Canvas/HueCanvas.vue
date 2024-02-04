@@ -7,14 +7,13 @@ import {
   OutputColor,
   outsideCanvas,
   canvasPixelColor,
-  responsiveCanvas,
-  useDyeStore
+  responsiveCanvas
 } from '../../composables/canvas'
+import { useDyeStore } from '../../composables/store'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import { useDebounce } from '../../composables/utils'
 import Handle from '../Handle.vue'
-import { log } from 'console'
 
 interface Hsl {
   h: number
@@ -42,9 +41,10 @@ const props = withDefaults(defineProps<Props>(), {
 const hueCanvas = ref<HTMLCanvasElement | null>(null)
 const position = ref({ x: 30, y: 70 })
 
-const { mouseOn } = outsideCanvas({
+const { inside } = outsideCanvas({
   canvas: hueCanvas,
-  updateCanvas
+  updateCanvas,
+  debug: true
 })
 
 function hueGradient(
@@ -71,25 +71,24 @@ function fillHueCanvas(color: string = props.color.hex) {
   ctx.fillRect(0, 0, width, height)
 }
 
-const { setMouseDown, offCanvas, isActiveCanvas } = useDyeStore()
+const store = useDyeStore()
 
 watch(
   () => props.color.hex,
   (color) => {
-    const isActive = isActiveCanvas(hueCanvas.value)
+    const isActive = store.isActiveCanvas(hueCanvas.value)
     if (!isActive) return
     fillHueCanvas(color)
   }
 )
 
 function hueChange(e: MouseEvent, click = false) {
-  console.log('hueChange')
-  if (click) setMouseDown(true)
-  if (offCanvas(e, click)) return
-  if (isActiveCanvas(e.target)) return
+  if (click) store.setHolding(true)
+  if (store.offCanvas(e, click)) return
+  if (store.isActiveCanvas(e.target)) return
   const hex = canvasPixelColor(e, hueCanvas.value)
   updateCanvas(hex)
-  mouseOn.value = true
+  inside.value = true
 }
 
 const change = useDebounce((dye: OutputColor) => {
@@ -160,7 +159,7 @@ onMounted(() => {
       :height="canvasHeight"
       @mousedown="(e) => hueChange(e, true)"
       @mousemove="(e) => hueChange(e)"
-      @mouseleave="() => (mouseOn = false)"
+      @mouseleave="() => (inside = false)"
     >
     </canvas>
   </div>
@@ -170,7 +169,7 @@ onMounted(() => {
 .hue-canvas-wrapper {
   position: relative;
   user-select: none;
-  overflow: hidden;
+  //overflow: hidden;
   width: 100%;
   height: 100%;
 }
@@ -178,7 +177,7 @@ onMounted(() => {
 canvas.hue-canvas {
   width: calc(v-bind(width) * 1px);
   height: 100%;
-  overflow: hidden;
+  //overflow: hidden;
   background-color: var(--base-20, rgb(64, 0, 0));
 }
 </style>
