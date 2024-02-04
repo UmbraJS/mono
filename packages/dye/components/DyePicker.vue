@@ -4,9 +4,9 @@ import type { Colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
 
 import { umbra } from '@umbrajs/core'
-import { Ref, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { colorName } from '../composables/colorName'
-import { hexType } from '../composables/canvas'
+import { hexType, useColorCanvas } from '../composables/canvas'
 import Pallet from './Pallet.vue'
 import ColorCanvas from './Canvas/ColorCanvas.vue'
 import HueCanvas from './Canvas/HueCanvas.vue'
@@ -34,9 +34,8 @@ const props = withDefaults(defineProps<Props>(), {
   compactSize: 50
 })
 
+const [colorCanvas, setColorCanvas] = useColorCanvas()
 const pickerRef = ref<HTMLElement | null>(null)
-const colorCanvas = ref<HTMLCanvasElement | null>(null)
-
 const color = ref({
   name: 'red',
   value: props.default
@@ -49,18 +48,9 @@ watch(color, (c) => {
   }).apply({ target: pickerRef.value })
 })
 
-function getRef(): Ref<HTMLCanvasElement | null> {
-  return colorCanvas
-}
-
-function setRef(el: HTMLCanvasElement) {
-  colorCanvas.value = el
-}
-
 function handleChange(hex?: hexType, mounted = false) {
   if (!hex) return
-  const get = colorName(hex.color)
-  const { name, value } = get()
+  const { name, value } = colorName(hex.color)()
   color.value = { name, value }
 
   if (mounted) return
@@ -83,10 +73,15 @@ const compactSize = ref(props.compactSize)
     v-on-click-outside="() => (compact = true)"
   >
     <Pallet :color="color" :compact="compact" @click="() => (compact = false)" />
-    <ColorCanvas @change="handleChange" :getRef="getRef" :setRef="setRef" :color="color" />
+    <ColorCanvas
+      @change="handleChange"
+      :colorCanvas="colorCanvas"
+      :setColorCanvas="setColorCanvas"
+      :color="color"
+    />
     <HueCanvas
       @change="(props) => handleChange(props.hex, props.mounted)"
-      :colorCanvas="getRef"
+      :colorCanvas="colorCanvas"
       :color="color"
     />
   </div>

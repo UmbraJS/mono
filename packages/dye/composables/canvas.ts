@@ -169,3 +169,9 @@ export function getDimentions(canvas: HTMLCanvasElement, frame = { height: 100, 
     }
   }
 }
+
+type UCCP = [() => Ref<HTMLCanvasElement | null>, (el: HTMLCanvasElement) => void]
+export function useColorCanvas(): UCCP {
+  const colorCanvas = ref<HTMLCanvasElement | null>(null)
+  return [() => colorCanvas, (el: HTMLCanvasElement) => (colorCanvas.value = el)]
+}

@@ -18,8 +18,8 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps<{
-  getRef: () => Ref<HTMLCanvasElement | null>
-  setRef: (el: any) => void
+  colorCanvas: () => Ref<HTMLCanvasElement | null>
+  setColorCanvas: (el: any) => void
   color: {
     value: string
     name: string
@@ -39,14 +39,14 @@ function colorChange(e: MouseEvent, click = false) {
   if (click) mousedown.value = true
   if (offCanvas(e, click)) return
   if (isActiveCanvas(e.target)) return
-  const hex = canvasPixelColor(e, props.getRef().value)
+  const hex = canvasPixelColor(e, props.colorCanvas().value)
   updateCanvas(hex)
   mouseOn.value = true
 }
 
 //when outside canvas
 const { mouseOn } = outsideCanvas({
-  canvas: props.getRef(),
+  canvas: props.colorCanvas(),
   updateCanvas
 })
 
@@ -56,11 +56,11 @@ function getHue(color: string = props.color.value) {
 }
 
 const { width, height } = responsiveCanvas({
-  canvas: props.getRef(),
+  canvas: props.colorCanvas(),
   updateCanvas: () => {
     const hue = getHue()
     const data = { hue, saturation: 100, lightness: 100 }
-    fillColorCanvas(data, props.getRef().value)
+    fillColorCanvas(data, props.colorCanvas().value)
   }
 })
 
@@ -83,7 +83,7 @@ watch(width, () => {
   <div class="color-canvas-wrapper">
     <Handle :position="position" :color="color" />
     <canvas
-      :ref="setRef"
+      :ref="setColorCanvas"
       class="color-canvas"
       :width="width"
       :height="height"
