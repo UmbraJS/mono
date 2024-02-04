@@ -2,7 +2,8 @@
 import { ref, Ref, watch } from 'vue'
 import { colord } from 'colord'
 import {
-  hexType,
+  HexType,
+  OutputColor,
   offCanvas,
   canvasPixelColor,
   isActiveCanvas,
@@ -10,28 +11,39 @@ import {
   outsideCanvas,
   responsiveCanvas
 } from '../../composables/canvas'
+import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import Handle from '../Handle.vue'
 
+interface CCE extends OutputColor {
+  name: string
+  mounted: boolean
+}
+
 const emit = defineEmits<{
-  (e: 'change', hex: hexType): void
+  (e: 'change', props: CCE): void
 }>()
 
 const props = defineProps<{
   colorCanvas: () => Ref<HTMLCanvasElement | null>
   setColorCanvas: (el: any) => void
   color: {
-    value: string
+    hex: string
     name: string
   }
 }>()
 
 let position = ref({ x: 0, y: 0 })
 
-function updateCanvas(hex: hexType) {
-  if (!hex) return
-  emit('change', hex)
-  position.value = hex.position
+function updateCanvas(color?: HexType) {
+  if (!color) return
+  const { name } = colorName(color.hex)
+  emit('change', {
+    name,
+    mounted: false,
+    ...color
+  })
+  position.value = color.position
 }
 
 //Update color while dragging inside canvas
@@ -50,7 +62,7 @@ const { mouseOn } = outsideCanvas({
   updateCanvas
 })
 
-function getHue(color: string = props.color.value) {
+function getHue(color: string = props.color.hex) {
   const hsv = colord(color).toHsv()
   return colord({ h: hsv.h, s: 100, v: 100 }).toHex()
 }
@@ -70,7 +82,7 @@ function getPercent(percent: number, height?: number) {
 }
 
 watch(width, () => {
-  var color = colord(props.color.value)
+  var color = colord(props.color.hex)
   const hsl = color.toHsl()
   position.value = {
     x: getPercent(hsl.s * 100, width.value),

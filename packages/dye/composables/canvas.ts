@@ -2,15 +2,18 @@ import { useMousePressed, useMouse } from '@vueuse/core'
 import { computed, watch, ref, Ref, onMounted } from 'vue'
 import { rgbToHex, clamp } from './utils'
 
-export type hexType =
-  | {
-      color: string
-      position: { x: number; y: number }
-    }
-  | undefined
+export interface OutputColor extends HexType {
+  name: string
+  mounted: boolean
+}
+
+export interface HexType {
+  hex: string
+  position: { x: number; y: number }
+}
 
 type RefCanvas = Ref<HTMLCanvasElement | undefined | null>
-type posFunc = (pos: hexType) => void
+type posFunc = (pos?: HexType) => void
 
 function getMousePos(canvas: HTMLCanvasElement, evt: MouseEvent) {
   const rect = canvas.getBoundingClientRect()
@@ -28,14 +31,14 @@ export function canvasPixelColor(evt: MouseEvent, canvas?: HTMLCanvasElement | n
 export function pixelColor(
   position: { x: number; y: number },
   canvas?: HTMLCanvasElement | null
-): hexType {
+): HexType | undefined {
   if (!canvas) return
   const ctx = canvas.getContext('2d', { willReadFrequently: true })
   if (ctx === null) return
   const pixel = ctx.getImageData(position.x, position.y, 1, 1)
   const data = pixel.data
   const rgba = `rgba(${data[0]}, ${data[1]}, ${data[2]}, ${data[3]})`
-  return { color: rgbToHex(rgba), position }
+  return { hex: rgbToHex(rgba), position }
 }
 
 export function offCanvas(e: MouseEvent, click: boolean) {

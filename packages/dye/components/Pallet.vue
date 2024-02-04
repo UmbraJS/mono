@@ -9,7 +9,7 @@ interface Props {
   compact: boolean
   color: {
     name: string
-    value: string
+    hex: string
   }
 }
 
@@ -22,7 +22,7 @@ const copied = ref(false)
 
 function copyToClipboard() {
   if (!navigator?.clipboard) return
-  navigator.clipboard.writeText(props.color.value)
+  navigator.clipboard.writeText(props.color.hex)
   copied.value = true
   setTimeout(() => (copied.value = false), 800)
 }
@@ -39,7 +39,7 @@ function handleClick() {
     </div>
 
     <div class="content">
-      <p>{{ color.value }}</p>
+      <p>{{ color.hex }}</p>
       <p class="h3 name">{{ color.name }}</p>
     </div>
 

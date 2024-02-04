@@ -8,9 +8,11 @@ import {
   isActiveCanvas,
   mousedown,
   outsideCanvas,
-  hexType,
+  OutputColor,
+  HexType,
   responsiveCanvas
 } from '../../composables/canvas'
+import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import Handle from '../Handle.vue'
 
@@ -21,14 +23,14 @@ interface Hsl {
 }
 
 const emit = defineEmits<{
-  (e: 'change', props: { hex: hexType; mounted: boolean }): void
+  (e: 'change', props: OutputColor): void
 }>()
 
 interface Props {
   width?: number
   colorCanvas: () => Ref<HTMLCanvasElement | null>
   color: {
-    value: string
+    hex: string
     name: string
   }
 }
@@ -58,7 +60,7 @@ function hueGradient(
   return gradient
 }
 
-function fillHueCanvas(color: string = props.color.value) {
+function fillHueCanvas(color: string = props.color.hex) {
   if (!hueCanvas.value) return
   const ctx = hueCanvas.value?.getContext('2d')
   if (ctx === null) return
@@ -70,7 +72,7 @@ function fillHueCanvas(color: string = props.color.value) {
 }
 
 watch(
-  () => props.color.value,
+  () => props.color.hex,
   (color) => {
     fillHueCanvas(color)
   }
@@ -85,13 +87,18 @@ function hueChange(e: MouseEvent, click = false) {
   mouseOn.value = true
 }
 
-function updateCanvas(hex: hexType, mounted = false) {
-  if (!hex) return
-  emit('change', { hex, mounted })
-  fillColorCanvas({ hue: hex.color }, props.colorCanvas().value)
+function updateCanvas(color?: HexType, mounted = false) {
+  if (!color) return
+  const { name } = colorName(color.hex)
+  emit('change', {
+    name,
+    mounted,
+    ...color
+  })
+  fillColorCanvas({ hue: color.hex }, props.colorCanvas().value)
   position.value = {
     x: position.value.x,
-    y: hex.position.y
+    y: color.position.y
   }
 }
 
@@ -122,17 +129,16 @@ onMounted(() => {
   fillHueCanvas()
   setCenterHandle()
 
-  const color = colord(props.color.value)
-  const hsl = color.toHsl()
-  const hex = {
-    color: props.color.value,
+  const hsl = colord(props.color.hex).toHsl()
+  const color = {
+    hex: props.color.hex,
     position: {
       x: 0,
       y: huePercent(hsl.h, canvasHeight.value)
     }
   }
 
-  updateCanvas(hex, true)
+  updateCanvas(color, true)
 })
 </script>
 

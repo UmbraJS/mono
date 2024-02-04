@@ -5,66 +5,58 @@ import { vOnClickOutside } from '@vueuse/components'
 
 import { umbra } from '@umbrajs/core'
 import { ref, onMounted } from 'vue'
-import { colorName } from '../composables/colorName'
-import { hexType, useColorCanvas } from '../composables/canvas'
+import { OutputColor, useColorCanvas } from '../composables/canvas'
 import Pallet from './Pallet.vue'
 import ColorCanvas from './Canvas/ColorCanvas.vue'
 import HueCanvas from './Canvas/HueCanvas.vue'
 
+interface Dye {
+  name: string
+  color: Colord
+  position: { x: number; y: number }
+}
+
 const emit = defineEmits<{
-  (
-    e: 'change',
-    color: {
-      name: string
-      value: Colord
-      position: { x: number; y: number }
-    }
-  ): void
+  (e: 'change', dye: Dye): void
 }>()
 
-interface Props {
+interface DyeProps {
   default?: string
   compact?: boolean
   compactSize?: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<DyeProps>(), {
   default: '#ff0000',
   compact: false,
   compactSize: 50
 })
 
-const [colorCanvas, setColorCanvas] = useColorCanvas()
-const pickerRef = ref<HTMLElement | null>(null)
 const color = ref({
   name: 'red',
-  value: props.default
+  hex: props.default
 })
 
-onMounted(() => {
+const [colorCanvas, setColorCanvas] = useColorCanvas()
+const pickerRef = ref<HTMLElement | null>(null)
+
+function applyPaint(background: string) {
   if (!pickerRef.value) return
-  umbra({
-    background: color.value.value
-  }).apply({ target: pickerRef.value })
-})
+  umbra({ background }).apply({ target: pickerRef.value })
+}
 
-function handleChange(hex?: hexType, mounted = false) {
-  if (!hex) return
-  //this is a bit awkward
-  const { name, value } = colorName(hex.color)()
-  color.value = { name, value }
-  //this is a bit awkward
+onMounted(() => applyPaint(color.value.hex))
 
-  if (mounted) return
+function change(dye: OutputColor) {
+  color.value = dye
+  if (dye.mounted) return
 
-  umbra({
-    background: color.value.value
-  }).apply({ target: pickerRef.value })
+  applyPaint(dye.hex)
 
   emit('change', {
-    name,
-    value: colord(value),
-    position: hex.position
+    name: dye.name,
+    color: colord(dye.hex),
+    position: dye.position
   })
 }
 
@@ -81,16 +73,12 @@ const compactSize = ref(props.compactSize)
   >
     <Pallet :color="color" :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas
-      @change="handleChange"
+      @change="change"
       :colorCanvas="colorCanvas"
       :setColorCanvas="setColorCanvas"
       :color="color"
     />
-    <HueCanvas
-      @change="(props) => handleChange(props.hex, props.mounted)"
-      :colorCanvas="colorCanvas"
-      :color="color"
-    />
+    <HueCanvas @change="change" :colorCanvas="colorCanvas" :color="color" />
   </div>
 </template>
 

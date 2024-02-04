@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
   color: {
-    value: string
+    hex: string
     name: string
   }
   position: {
@@ -31,7 +31,7 @@ defineProps<{
 }
 
 .handle {
-  background-color: v-bind('color.value');
+  background-color: v-bind('color.hex');
   border-radius: 50%;
   border: solid 3px var(--base-120, #fff);
   aspect-ratio: 1/1;
