@@ -80,13 +80,11 @@ export function outsideCanvas(props: { canvas: RefCanvas; updateCanvas: posFunc 
   function clampedPos(pos: { x: number; y: number }) {
     const box = canvas.value?.getBoundingClientRect()
     if (!box) return
-    return pixelColor(
-      {
-        x: clamp(pos.x - (box.left + window.scrollX), 0, box.width - 2),
-        y: clamp(pos.y - (box.top + window.scrollY), 0, box.height - 2)
-      },
-      canvas.value
-    )
+    const position = {
+      x: clamp(pos.x, box.left, box.right),
+      y: clamp(pos.y, box.top, box.bottom)
+    }
+    return pixelColor(position, canvas.value)
   }
 
   return { mouseOn, clampedPos }
@@ -123,18 +121,18 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
   })
 
   //look into unmounting the observer
-
   return { width, height }
 }
 
-//Handler for canvas dimentions
-function getPercent(props: {
+interface GPP {
   height: number
   width: number
   heightLimit: number
   widthLimit: number
-}) {
-  const { height, width, heightLimit, widthLimit } = props
+}
+
+//Handler for canvas dimentions
+function getPercent({ height, width, heightLimit, widthLimit }: GPP) {
   const height100 = height / 100
   const h1 = (100 - Math.abs(heightLimit)) * height100
   const width100 = width / 100

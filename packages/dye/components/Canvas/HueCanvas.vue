@@ -134,9 +134,7 @@ onMounted(() => {
 
 <template>
   <div class="hue-canvas-wrapper">
-    <slot :position="position">
-      <Handle :position="position" :color="color" />
-    </slot>
+    <Handle :position="position" :color="color" />
     <canvas
       ref="hueCanvas"
       class="hue-canvas"

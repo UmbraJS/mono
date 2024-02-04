@@ -4,7 +4,7 @@ import type { Colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
 
 import { umbra } from '@umbrajs/core'
-import { ref, watch } from 'vue'
+import { Ref, ref, watch } from 'vue'
 import { colorName } from '../composables/colorName'
 import { hexType } from '../composables/canvas'
 import Pallet from './Pallet.vue'
@@ -51,7 +51,7 @@ watch(color, (c) => {
   }).apply({ target: pickerRef.value })
 })
 
-function getRef() {
+function getRef(): Ref<HTMLCanvasElement | null> {
   return colorCanvas
 }
 

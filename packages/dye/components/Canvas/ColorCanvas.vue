@@ -81,9 +81,7 @@ watch(width, () => {
 
 <template>
   <div class="color-canvas-wrapper">
-    <slot :position="position">
-      <Handle :position="position" :color="color" />
-    </slot>
+    <Handle :position="position" :color="color" />
     <canvas
       :ref="setRef"
       class="color-canvas"
