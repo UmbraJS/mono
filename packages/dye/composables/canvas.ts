@@ -59,8 +59,12 @@ watch(pressed, (value: boolean) => {
   mousedown.value = value
 })
 
-export function outsideCanvas(props: { canvas: RefCanvas; updateCanvas: posFunc }) {
-  const { canvas, updateCanvas } = props
+interface OCP {
+  canvas: RefCanvas
+  updateCanvas: posFunc
+}
+
+export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   const mouseOn = ref(false)
 
   function condition() {
@@ -73,6 +77,7 @@ export function outsideCanvas(props: { canvas: RefCanvas; updateCanvas: posFunc 
   const posPixel = computed(() => ({ x: x.value, y: y.value }))
   watch(posPixel, (pos) => {
     if (!condition() && canvas.value) return
+    console.log('outside', clampedPos(pos))
     updateCanvas(clampedPos(pos))
   })
 
