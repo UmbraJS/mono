@@ -104,12 +104,18 @@ interface RCP {
   updateCanvas: () => void
 }
 
+function resizeObserver(callback: () => void) {
+  if (!('ResizeObserver' in window)) return null
+  const observer = new ResizeObserver(callback)
+  return observer
+}
+
 export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
   const size = 100
   const width = ref(size)
   const height = ref(size)
 
-  const observer = new ResizeObserver(() => setCanvas())
+  const observer = resizeObserver(() => setCanvas())
 
   function setCanvas() {
     const box = canvas.value?.getBoundingClientRect()
@@ -119,12 +125,15 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
   }
 
   onMounted(() => {
-    if (!canvas.value) return
+    if (!canvas.value || !observer) return
     observer.observe(canvas.value)
     setCanvas()
   })
 
-  onUnmounted(() => observer.disconnect())
+  onUnmounted(() => {
+    if (!observer) return
+    observer.disconnect()
+  })
   return { width, height }
 }
 
