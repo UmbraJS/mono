@@ -1,7 +1,7 @@
-import { colorName } from "./colorName"
+import { colorName } from './colorName'
 
 function getColor(hex: string) {
-  colorName(hex)()
+  colorName(hex)
 }
 
 function notSupported() {
@@ -16,11 +16,14 @@ function notSupported() {
 const dropper = new window.EyeDropper()
 
 function openDropper(fn = getColor) {
-  dropper.open().then((result: {sRGBHex: string}) => fn(result.sRGBHex))
+  dropper.open().then((result: { sRGBHex: string }) => fn(result.sRGBHex))
 }
 
 export function eyeDropper(fn = getColor) {
-  if(notSupported()) return
-  try { openDropper(fn) } 
-  catch (err) { console.log(err) }
+  if (notSupported()) return
+  try {
+    openDropper(fn)
+  } catch (err) {
+    console.log(err)
+  }
 }

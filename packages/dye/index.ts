@@ -1,5 +1,5 @@
 import DyePicker from './components/DyePicker.vue'
-import DyeWrapper from '@components/DyeWrapper.vue'
+import DyeWrapper from '/components/DyeWrapper.vue'
 import Pallet from './components/Pallet.vue'
 import ColorCanvas from './components/Canvas/ColorCanvas.vue'
 import HueCanvas from './components/Canvas/HueCanvas.vue'
