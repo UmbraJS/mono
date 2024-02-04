@@ -50,8 +50,10 @@ onMounted(() => {
 
 function handleChange(hex?: hexType, mounted = false) {
   if (!hex) return
+  //this is a bit awkward
   const { name, value } = colorName(hex.color)()
   color.value = { name, value }
+  //this is a bit awkward
 
   if (mounted) return
 
@@ -127,7 +129,7 @@ $desktop: 1200px;
   border-radius: var(--radius);
   overflow: hidden;
 
-  transition: 0.4s;
+  transition: 0.2s ease-in-out;
   .pallet {
     grid-column: span 2;
   }
