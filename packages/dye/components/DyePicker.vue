@@ -9,6 +9,7 @@ import { OutputColor, useColorCanvas } from '../composables/canvas'
 import Pallet from './Pallet.vue'
 import ColorCanvas from './Canvas/ColorCanvas.vue'
 import HueCanvas from './Canvas/HueCanvas.vue'
+import DyeWrapper from './DyeWrapper.vue'
 
 interface Dye {
   name: string
@@ -23,13 +24,11 @@ const emit = defineEmits<{
 interface DyeProps {
   default?: string
   compact?: boolean
-  compactSize?: number
 }
 
 const props = withDefaults(defineProps<DyeProps>(), {
   default: '#ff0000',
-  compact: false,
-  compactSize: 50
+  compact: false
 })
 
 const color = ref({
@@ -42,15 +41,16 @@ const pickerRef = ref<HTMLElement | null>(null)
 
 function paintComponent(background: string) {
   if (!pickerRef.value) return
+  console.log('lolers', pickerRef.value)
   umbra({ background }).apply({ target: pickerRef.value })
 }
 
 onMounted(() => paintComponent(color.value.hex))
 
 function change(dye: OutputColor) {
-  color.value = dye
   if (dye.mounted) return
 
+  color.value = dye
   paintComponent(dye.hex)
 
   emit('change', {
@@ -61,16 +61,10 @@ function change(dye: OutputColor) {
 }
 
 const compact = ref(props.compact)
-const compactSize = ref(props.compactSize)
 </script>
 
 <template>
-  <div
-    ref="pickerRef"
-    class="dyepicker-wrapper"
-    :class="{ compact }"
-    v-on-click-outside="() => (compact = true)"
-  >
+  <DyeWrapper ref="pickerRef" :compact="compact" v-on-click-outside="() => (compact = true)">
     <Pallet :color="color" :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas
       @change="change"
@@ -79,31 +73,10 @@ const compactSize = ref(props.compactSize)
       :color="color"
     />
     <HueCanvas @change="change" :colorCanvas="colorCanvas" :color="color" />
-  </div>
+  </DyeWrapper>
 </template>
 
 <style lang="scss" scoped>
-$mobile: 360px;
-$phablet: 540px;
-$tablet: 850px;
-$desktop: 1200px;
-
-.dyepicker-wrapper {
-  --radius: 5px;
-  --space-xs: calc(var(--space) / 4);
-  --space-s: calc(var(--space) / 2);
-  --space: 25px;
-  --space-m: calc(2 * var(--space));
-  --space-l: calc(4 * var(--space));
-  --space-xl: calc(8 * var(--space));
-  @media only screen and (max-width: $tablet) {
-    --space: 12px;
-  }
-  @media only screen and (max-width: $mobile) {
-    --space: 6px;
-  }
-}
-
 .dyepicker-wrapper {
   display: grid;
   grid-template-columns: 1fr 25px;
@@ -124,7 +97,7 @@ $desktop: 1200px;
 }
 
 .dyepicker-wrapper.compact {
-  --compactSize: calc(v-bind(compactSize) * 1px);
+  --compactSize: 50px;
   max-height: var(--compactSize);
   max-width: var(--compactSize);
 }

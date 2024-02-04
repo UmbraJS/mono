@@ -1,5 +1,5 @@
 import { useMousePressed, useMouse } from '@vueuse/core'
-import { computed, watch, ref, Ref, onMounted } from 'vue'
+import { computed, watch, ref, Ref, onMounted, onUnmounted } from 'vue'
 import { rgbToHex, clamp } from './utils'
 
 export interface OutputColor extends HexType {
@@ -99,13 +99,6 @@ export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   return { mouseOn, clampedPos }
 }
 
-function observeCanvas(el: RefCanvas, onResize: () => void) {
-  if (!el.value) return
-  if (!ResizeObserver) return
-  const observer = new ResizeObserver(() => onResize())
-  observer.observe(el.value)
-}
-
 interface RCP {
   canvas: RefCanvas
   updateCanvas: () => void
@@ -116,6 +109,8 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
   const width = ref(size)
   const height = ref(size)
 
+  const observer = new ResizeObserver(() => setCanvas())
+
   function setCanvas() {
     const box = canvas.value?.getBoundingClientRect()
     width.value = box?.width || size
@@ -125,11 +120,11 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
 
   onMounted(() => {
     if (!canvas.value) return
-    observeCanvas(canvas, setCanvas)
+    observer.observe(canvas.value)
     setCanvas()
   })
 
-  //look into unmounting the observer
+  onUnmounted(() => observer.disconnect())
   return { width, height }
 }
 
