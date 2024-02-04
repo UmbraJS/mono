@@ -4,7 +4,7 @@ import type { Colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
 
 import { umbra } from '@umbrajs/core'
-import { ref, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { colorName } from '../composables/colorName'
 import { hexType, useColorCanvas } from '../composables/canvas'
 import Pallet from './Pallet.vue'
@@ -41,10 +41,10 @@ const color = ref({
   value: props.default
 })
 
-watch(color, (c) => {
+onMounted(() => {
   if (!pickerRef.value) return
   umbra({
-    background: c.value
+    background: color.value.value
   }).apply({ target: pickerRef.value })
 })
 
@@ -54,6 +54,11 @@ function handleChange(hex?: hexType, mounted = false) {
   color.value = { name, value }
 
   if (mounted) return
+
+  umbra({
+    background: color.value.value
+  }).apply({ target: pickerRef.value })
+
   emit('change', {
     name,
     value: colord(value),
