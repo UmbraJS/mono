@@ -26,14 +26,12 @@ interface Props {
   default?: string
   compact?: boolean
   compactSize?: number
-  hueWidth?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   default: '#ff0000',
   compact: false,
-  compactSize: 50,
-  hueWidth: 25
+  compactSize: 50
 })
 
 const pickerRef = ref<HTMLElement | null>(null)
@@ -75,7 +73,6 @@ function handleChange(hex?: hexType, mounted = false) {
 
 const compact = ref(props.compact)
 const compactSize = ref(props.compactSize)
-const hueWidth = ref(props.hueWidth)
 </script>
 
 <template>
@@ -85,19 +82,12 @@ const hueWidth = ref(props.hueWidth)
     :class="{ compact }"
     v-on-click-outside="() => (compact = true)"
   >
-    <Pallet
-      :color="color"
-      :hueWidth="hueWidth"
-      :compact="compact"
-      :compactSize="compactSize"
-      @edit="() => (compact = false)"
-    />
+    <Pallet :color="color" :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas @change="handleChange" :getRef="getRef" :setRef="setRef" :color="color" />
     <HueCanvas
       @change="(props) => handleChange(props.hex, props.mounted)"
       :colorCanvas="getRef"
       :color="color"
-      :width="hueWidth"
     />
   </div>
 </template>
@@ -125,10 +115,8 @@ $desktop: 1200px;
 }
 
 .dyepicker-wrapper {
-  --hueWidth: calc(v-bind(hueWidth) * 1px);
-
   display: grid;
-  grid-template-columns: 1fr var(--hueWidth);
+  grid-template-columns: 1fr 25px;
 
   height: 400px;
   width: auto;

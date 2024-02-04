@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const emit = defineEmits(['edit'])
-const props = defineProps<{
-  hueWidth: number
+const emit = defineEmits(['click'])
+
+interface Props {
+  fade?: number
+  square?: number
   compact: boolean
-  compactSize: number
   color: {
     name: string
     value: string
   }
-}>()
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  square: 50,
+  fade: 25
+})
 
 const copied = ref(false)
 
@@ -22,7 +28,7 @@ function copyToClipboard() {
 }
 
 function handleClick() {
-  props.compact ? emit('edit') : copyToClipboard()
+  props.compact ? emit('click') : copyToClipboard()
 }
 </script>
 
@@ -51,11 +57,11 @@ function handleClick() {
 .pallet {
   position: relative;
   display: grid;
-  --hueWidth: calc(v-bind(hueWidth) * 1px);
+  --fade: calc(v-bind(fade) * 1px);
   grid-template-columns:
     1fr
-    var(--hueWidth)
-    var(--hueWidth);
+    var(--fade)
+    var(--fade);
   justify-content: center;
   align-items: center;
 
@@ -109,7 +115,7 @@ function handleClick() {
   justify-content: center;
   align-items: center;
 
-  --size: calc(v-bind(compactSize) * 1px);
+  --size: calc(v-bind(square) * 1px);
   width: var(--size);
   height: var(--size);
 

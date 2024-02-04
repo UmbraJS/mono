@@ -24,14 +24,18 @@ const emit = defineEmits<{
   (e: 'change', props: { hex: hexType; mounted: boolean }): void
 }>()
 
-const props = defineProps<{
-  width: number
+interface Props {
+  width?: number
   colorCanvas: () => Ref<HTMLCanvasElement | null>
   color: {
     value: string
     name: string
   }
-}>()
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  width: 25
+})
 
 const hueCanvas = ref<HTMLCanvasElement | null>(null)
 const position = ref({ x: 30, y: 70 })

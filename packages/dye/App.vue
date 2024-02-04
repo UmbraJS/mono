@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import DyePicker from './components/DyePicker.vue'
-import ColorCanvas from './components/Canvas/ColorCanvas.vue'
 </script>
 
 <template>
