@@ -14,7 +14,7 @@ withDefaults(defineProps<DyeProps>(), {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dyepicker-wrapper {
   display: grid;
   grid-template-columns: 1fr 25px;

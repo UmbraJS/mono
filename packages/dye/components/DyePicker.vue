@@ -2,15 +2,15 @@
 import { colord } from 'colord'
 import type { Colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
-
-import { umbra } from '@umbrajs/core'
-import { ref, onMounted } from 'vue'
-import { OutputColor, useColorCanvas } from '../composables/canvas'
+import { ref } from 'vue'
+import { OutputColor } from '../composables/canvas'
+import { useDye } from '../composables/useDye'
 import Pallet from './Pallet.vue'
 import ColorCanvas from './Canvas/ColorCanvas.vue'
 import HueCanvas from './Canvas/HueCanvas.vue'
 import DyeWrapper from './DyeWrapper.vue'
 
+// Props
 interface Dye {
   name: string
   color: Colord
@@ -28,24 +28,12 @@ interface DyeProps {
 
 const props = withDefaults(defineProps<DyeProps>(), {
   default: '#ff0000',
-  compact: false
+  compact: true
 })
 
-const color = ref({
-  name: 'red',
-  hex: props.default
-})
-
-const [colorCanvas, setColorCanvas] = useColorCanvas()
-const pickerRef = ref<HTMLElement | null>(null)
-
-function paintComponent(background: string) {
-  if (!pickerRef.value) return
-  console.log('lolers', pickerRef.value)
-  umbra({ background }).apply({ target: pickerRef.value })
-}
-
-onMounted(() => paintComponent(color.value.hex))
+// Logic
+const compact = ref(props.compact)
+const { color, colorCanvas, setColorCanvas, paintComponent, wrapper } = useDye(props.default)
 
 function change(dye: OutputColor) {
   if (dye.mounted) return
@@ -59,12 +47,10 @@ function change(dye: OutputColor) {
     position: dye.position
   })
 }
-
-const compact = ref(props.compact)
 </script>
 
 <template>
-  <DyeWrapper ref="pickerRef" :compact="compact" v-on-click-outside="() => (compact = true)">
+  <DyeWrapper ref="wrapper" :compact="compact" v-on-click-outside="() => (compact = true)">
     <Pallet :color="color" :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas
       @change="change"
@@ -75,30 +61,3 @@ const compact = ref(props.compact)
     <HueCanvas @change="change" :colorCanvas="colorCanvas" :color="color" />
   </DyeWrapper>
 </template>
-
-<style lang="scss" scoped>
-.dyepicker-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 25px;
-
-  height: 400px;
-  width: auto;
-
-  max-height: 400px;
-  max-width: 400px;
-
-  border-radius: var(--radius);
-  overflow: hidden;
-
-  transition: 0.2s ease-in-out;
-  .pallet {
-    grid-column: span 2;
-  }
-}
-
-.dyepicker-wrapper.compact {
-  --compactSize: 50px;
-  max-height: var(--compactSize);
-  max-width: var(--compactSize);
-}
-</style>
