@@ -32,10 +32,12 @@ const props = withDefaults(defineProps<DyeProps>(), {
 
 // Logic
 const compact = ref(props.compact)
-const { color, colorCanvas, setColorCanvas, wrapper } = useDye(props.default)
+const store = useDye()
+
+store.setColor({ hex: props.default, name: 'default' })
 
 function change(dye: OutputColor) {
-  color.value = dye
+  store.setColor(dye)
   emit('change', {
     name: dye.name,
     color: colord(dye.hex)
@@ -43,22 +45,17 @@ function change(dye: OutputColor) {
 }
 
 function clickOutside() {
-  color.value = {
+  store.setColor({
     hex: '#ff0000',
     name: 'ccool'
-  }
+  })
 }
 </script>
 
 <template>
   <DyeWrapper ref="wrapper" :compact="compact" v-on-click-outside="clickOutside">
-    <Pallet :color="color" :compact="compact" @click="() => (compact = false)" />
-    <ColorCanvas
-      @change="change"
-      :colorCanvas="colorCanvas"
-      :setColorCanvas="setColorCanvas"
-      :color="color"
-    />
-    <HueCanvas @change="change" :colorCanvas="colorCanvas" :color="color" />
+    <Pallet :compact="compact" @click="() => (compact = false)" />
+    <ColorCanvas @change="change" />
+    <HueCanvas @change="change" />
   </DyeWrapper>
 </template>

@@ -8,16 +8,22 @@ type dimentionsType = {
   bottom: number
 }
 
-type sizesType = {
+type Sizes = {
   height: number
   width: number
   dimentions: dimentionsType
 }
 
-type colorWheelType = {
-  hue?: string
-  saturation?: number
-  lightness?: number
+type ColorWheel = {
+  color: {
+    hue?: string
+    saturation?: number
+    lightness?: number
+  }
+  options?: {
+    max?: number
+    min?: number
+  }
 }
 
 //shared canvas functions
@@ -25,14 +31,29 @@ export function fillRect(ctx: CanvasRenderingContext2D, dimentions: dimentionsTy
   ctx.fillRect(dimentions.left, dimentions.top, dimentions.right, dimentions.bottom)
 }
 
-function draw(hue: string, ctx: CanvasRenderingContext2D, sizes: sizesType) {
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
+}
+
+interface Draw {
+  hue: string
+  ctx: CanvasRenderingContext2D
+  sizes: Sizes
+  options?: {
+    max?: number
+    min?: number
+  }
+}
+
+function draw({ hue, ctx, sizes, options }: Draw) {
   const { width, height, dimentions } = sizes
   var color = colord(hue)
   const hsl = color.toHsl()
   for (var row = 0; row < 100; row++) {
     var grad = ctx.createLinearGradient(0, 0, width, 0)
-    grad.addColorStop(0, 'hsl(' + hsl.h + ', 0%, ' + (100 - row) + '%)')
-    grad.addColorStop(1, 'hsl(' + hsl.h + ', 100%, ' + (100 - row) + '%)')
+    const lightness = clamp(100 - row, options?.min || 0, options?.max || 100)
+    grad.addColorStop(0, `hsl(${hsl.h}, 0%, ${lightness}%)`)
+    grad.addColorStop(1, `hsl(${hsl.h}, 100%, ${lightness}%)`)
     ctx.fillStyle = grad
     fillRect(ctx, {
       left: dimentions.left,
@@ -44,17 +65,16 @@ function draw(hue: string, ctx: CanvasRenderingContext2D, sizes: sizesType) {
 }
 
 //composition
-export function fillColorCanvas(props?: colorWheelType, canvas?: HTMLCanvasElement | null) {
+export function fillColorCanvas(props: ColorWheel, canvas?: HTMLCanvasElement | null) {
   if (!canvas) return
-  const { hue = 'red', saturation = 100, lightness = 100 } = props || {}
 
   const ctx = canvas.getContext('2d')
   if (ctx === null) return
 
   const sizes = getDimentions(canvas, {
-    height: lightness,
-    width: saturation
+    height: props.color.lightness || 100,
+    width: props.color.saturation || 100
   })
 
-  draw(hue, ctx, sizes)
+  draw({ hue: props.color.hue || 'red', ctx, sizes, options: props?.options })
 }

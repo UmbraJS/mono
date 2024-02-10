@@ -1,7 +1,7 @@
 import { useMouse } from '@vueuse/core'
 import { computed, watch, ref, Ref, onMounted, onUnmounted } from 'vue'
 import { rgbToHex, clamp } from './utils'
-import { useDyeStore } from './store'
+import { useDyeStore } from './useDye'
 
 export interface OutputColor {
   name: string
@@ -45,10 +45,9 @@ export function pixelColor(
 interface OCP {
   canvas: RefCanvas
   updateCanvas: posFunc
-  debug?: boolean
 }
 
-export function outsideCanvas({ canvas, updateCanvas, debug = false }: OCP) {
+export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   const inside = ref(false)
   const store = useDyeStore()
 
@@ -56,9 +55,6 @@ export function outsideCanvas({ canvas, updateCanvas, debug = false }: OCP) {
     //activeOutside
     const outside = !inside.value
     const inactive = !store.isActiveCanvas(canvas.value)
-
-    debug && console.log('outsideCanvas', { outside, holding: store.holding, inactive })
-
     return outside && store.holding && inactive
   }
 
@@ -67,7 +63,6 @@ export function outsideCanvas({ canvas, updateCanvas, debug = false }: OCP) {
   const posPixel = computed(() => ({ x: x.value, y: y.value }))
   watch(posPixel, (pos) => {
     if (!condition() && canvas.value) return
-    console.log('outsideCanvas', pos)
     updateCanvas(clampedPos(pos))
   })
 

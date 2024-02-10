@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { colord } from 'colord'
 import {
   HexType,
@@ -8,7 +8,7 @@ import {
   outsideCanvas,
   responsiveCanvas
 } from '../../composables/canvas'
-import { useDyeStore } from '../../composables/store'
+import { useDye, useDyeStore, useColorCanvas } from '../../composables/useDye'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import { useDebounce } from '../../composables/utils'
@@ -18,14 +18,8 @@ const emit = defineEmits<{
   (e: 'change', props: OutputColor): void
 }>()
 
-const props = defineProps<{
-  colorCanvas: () => Ref<HTMLCanvasElement | null>
-  setColorCanvas: (el: any) => void
-  color: {
-    hex: string
-    name: string
-  }
-}>()
+const canvas = useColorCanvas()
+const dye = useDye()
 
 let position = ref({ x: 0, y: 0 })
 const change = useDebounce((dye) => emit('change', dye))
@@ -44,29 +38,31 @@ function colorChange(e: MouseEvent, click = false) {
   if (click) store.setHolding(true)
   if (store.offCanvas(e, click)) return
   if (store.isActiveCanvas(e.target)) return
-  const hex = canvasPixelColor(e, props.colorCanvas().value)
+  const hex = canvasPixelColor(e, canvas.colorCanvas().value)
   updateCanvas(hex)
   inside.value = true
 }
 
 //when outside canvas
 const { inside } = outsideCanvas({
-  canvas: props.colorCanvas(),
+  canvas: canvas.colorCanvas(),
   updateCanvas
 })
 
-function getHue(color: string = props.color.hex) {
+function getHue(color: string = dye.color.hex) {
   const hsv = colord(color).toHsv()
   return colord({ h: hsv.h, s: 100, v: 100 }).toHex()
 }
 
+function changeHue() {
+  const hue = getHue()
+  const color = { hue, saturation: 100, lightness: 100 }
+  fillColorCanvas({ color }, canvas.colorCanvas().value)
+}
+
 const { width, height } = responsiveCanvas({
-  canvas: props.colorCanvas(),
-  updateCanvas: () => {
-    const hue = getHue()
-    const data = { hue, saturation: 100, lightness: 100 }
-    fillColorCanvas(data, props.colorCanvas().value)
-  }
+  canvas: canvas.colorCanvas(),
+  updateCanvas: () => changeHue()
 })
 
 function getPercent(percent: number, height?: number) {
@@ -75,7 +71,7 @@ function getPercent(percent: number, height?: number) {
 }
 
 watch(width, () => {
-  var color = colord(props.color.hex)
+  var color = colord(dye.color.hex)
   const hsl = color.toHsl()
   position.value = {
     x: getPercent(hsl.s * 100, width.value),
@@ -86,9 +82,9 @@ watch(width, () => {
 
 <template>
   <div class="color-canvas-wrapper">
-    <Handle :position="position" :color="color" />
+    <Handle :position="position" :color="dye.color" />
     <canvas
-      :ref="setColorCanvas"
+      :ref="(el) => canvas.setColorCanvas(el as HTMLCanvasElement)"
       class="color-canvas"
       :width="width"
       :height="height"

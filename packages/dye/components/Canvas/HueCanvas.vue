@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { colord } from 'colord'
-import { ref, onMounted, Ref, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { getDimentions } from '../../composables/canvas'
 import {
   HexType,
@@ -9,7 +9,7 @@ import {
   canvasPixelColor,
   responsiveCanvas
 } from '../../composables/canvas'
-import { useDyeStore } from '../../composables/store'
+import { useDye, useDyeStore, useColorCanvas } from '../../composables/useDye'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import { useDebounce } from '../../composables/utils'
@@ -27,24 +27,22 @@ const emit = defineEmits<{
 
 interface Props {
   width?: number
-  colorCanvas: () => Ref<HTMLCanvasElement | null>
-  color: {
-    hex: string
-    name: string
-  }
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   width: 25
 })
 
 const hueCanvas = ref<HTMLCanvasElement | null>(null)
 const position = ref({ x: 30, y: 70 })
 
+const dye = useDye()
+const store = useDyeStore()
+const canvas = useColorCanvas()
+
 const { inside } = outsideCanvas({
   canvas: hueCanvas,
-  updateCanvas,
-  debug: true
+  updateCanvas
 })
 
 function hueGradient(
@@ -60,7 +58,7 @@ function hueGradient(
   return gradient
 }
 
-function fillHueCanvas(color: string = props.color.hex) {
+function fillHueCanvas(color: string = dye.color.hex) {
   if (!hueCanvas.value) return
   const ctx = hueCanvas.value?.getContext('2d')
   if (ctx === null) return
@@ -71,10 +69,8 @@ function fillHueCanvas(color: string = props.color.hex) {
   ctx.fillRect(0, 0, width, height)
 }
 
-const store = useDyeStore()
-
 watch(
-  () => props.color.hex,
+  () => dye.color.hex,
   (color) => {
     const isActive = store.isActiveCanvas(hueCanvas.value)
     if (!isActive) return
@@ -92,7 +88,8 @@ function hueChange(e: MouseEvent, click = false) {
 }
 
 const change = useDebounce((dye: OutputColor) => {
-  fillColorCanvas({ hue: dye.hex }, props.colorCanvas().value)
+  const color = { hue: dye.hex }
+  fillColorCanvas({ color }, canvas.colorCanvas().value)
   emit('change', dye)
 })
 
@@ -136,9 +133,9 @@ onMounted(() => {
   fillHueCanvas()
   setCenterHandle()
 
-  const hsl = colord(props.color.hex).toHsl()
+  const hsl = colord(dye.color.hex).toHsl()
   const color = {
-    hex: props.color.hex,
+    hex: dye.color.hex,
     position: {
       x: 0,
       y: huePercent(hsl.h, canvasHeight.value)
@@ -151,7 +148,7 @@ onMounted(() => {
 
 <template>
   <div class="hue-canvas-wrapper">
-    <Handle :position="position" :color="color" />
+    <Handle :position="position" :color="dye.color" />
     <canvas
       ref="hueCanvas"
       class="hue-canvas"

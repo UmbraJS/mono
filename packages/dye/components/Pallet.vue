@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useDye } from '../composables/useDye'
 
 const emit = defineEmits(['click'])
 
@@ -7,10 +8,6 @@ interface Props {
   fade?: number
   square?: number
   compact: boolean
-  color: {
-    name: string
-    hex: string
-  }
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -18,11 +15,12 @@ const props = withDefaults(defineProps<Props>(), {
   fade: 25
 })
 
+const dye = useDye()
 const copied = ref(false)
 
 function copyToClipboard() {
   if (!navigator?.clipboard) return
-  navigator.clipboard.writeText(props.color.hex)
+  navigator.clipboard.writeText(dye.color.hex)
   copied.value = true
   setTimeout(() => (copied.value = false), 800)
 }
@@ -39,8 +37,8 @@ function handleClick() {
     </div>
 
     <div class="content">
-      <p>{{ color.hex }}</p>
-      <p class="h3 name">{{ color.name }}</p>
+      <p>{{ dye.color.hex }}</p>
+      <p class="h3 name">{{ dye.color.name }}</p>
     </div>
 
     <div class="shade" style="background: var(--base)"></div>
