@@ -18,6 +18,16 @@ const emit = defineEmits<{
   (e: 'change', props: OutputColor): void
 }>()
 
+interface Props {
+  min: number
+  max: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  min: 0,
+  max: 100
+})
+
 const canvas = useColorCanvas()
 const store = useDyeStore()
 const dye = useDye()
@@ -53,11 +63,20 @@ function getHue(color: string = dye.color.hex) {
   return colord({ h: hsv.h, s: 100, v: 100 }).toHex()
 }
 
-function changeHue() {
+interface ChangeHue {
+  min: number
+  max: number
+}
+
+function changeHue(options: ChangeHue = props) {
   const hue = getHue()
   const color = { hue, saturation: 100, lightness: 100 }
-  fillColorCanvas({ color }, canvas.colorCanvas().value)
+  fillColorCanvas({ color, options }, canvas.colorCanvas().value)
 }
+
+watch([() => props.max, () => props.min], () => {
+  changeHue()
+})
 
 const { width, height } = responsiveCanvas({
   canvas: canvas.colorCanvas(),

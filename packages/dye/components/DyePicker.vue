@@ -61,7 +61,7 @@ function clickOutside() {
 <template>
   <DyeWrapper :compact="compact" v-on-click-outside="clickOutside">
     <Pallet :compact="compact" @click="() => (compact = false)" />
-    <ColorCanvas @change="change" />
+    <ColorCanvas @change="change" :min="0" :max="100" />
     <HueCanvas @change="change" />
   </DyeWrapper>
 </template>
