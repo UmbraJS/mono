@@ -3,7 +3,6 @@ import { useMousePressed } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { umbra } from '@umbrajs/core'
 import { colorName } from './colorName'
-import DyeWrapper from '../components/DyeWrapper.vue'
 import { OutputColor } from '../composables/canvas'
 
 interface UCC {
@@ -50,7 +49,7 @@ export const useDye = defineStore('dye', () => {
     return wrapper
   }
 
-  function setWrapper(el: InstanceType<typeof DyeWrapper>) {
+  function setWrapper(el: HTMLDivElement) {
     wrapper.value = el
   }
 

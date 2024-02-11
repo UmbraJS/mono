@@ -19,10 +19,11 @@ const emit = defineEmits<{
 }>()
 
 const canvas = useColorCanvas()
+const store = useDyeStore()
 const dye = useDye()
 
 let position = ref({ x: 0, y: 0 })
-const change = useDebounce((dye) => emit('change', dye))
+const change = useDebounce((dye) => emit('change', dye), 0)
 
 function updateCanvas(color?: HexType) {
   if (!color) return
@@ -30,8 +31,6 @@ function updateCanvas(color?: HexType) {
   change({ ...color, name })
   position.value = color.position
 }
-
-const store = useDyeStore()
 
 //Update color while dragging inside canvas
 function colorChange(e: MouseEvent, click = false) {
