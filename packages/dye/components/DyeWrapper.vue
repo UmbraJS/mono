@@ -1,15 +1,24 @@
 <script setup lang="ts">
-interface DyeProps {
-  compact?: boolean
-}
+import { useDye } from '../composables/useDye'
 
-withDefaults(defineProps<DyeProps>(), {
-  compact: false
-})
+withDefaults(
+  defineProps<{
+    compact?: boolean
+  }>(),
+  {
+    compact: false
+  }
+)
+
+const dye = useDye()
 </script>
 
 <template>
-  <div class="dyepicker-wrapper" :class="{ compact }">
+  <div
+    class="dyepicker-wrapper"
+    :class="{ compact }"
+    :ref="(el) => dye.setWrapper(el as HTMLDivElement)"
+  >
     <slot />
   </div>
 </template>

@@ -32,7 +32,7 @@ export const useColorCanvas = defineStore('color-canvas', () => {
 
 export const useDye = defineStore('dye', () => {
   const hex = '#000'
-  const wrapper = ref<InstanceType<typeof DyeWrapper> | null>(null)
+  const wrapper = ref<HTMLDivElement | null>(null)
   const color = ref({ name: colorName(hex).name, hex })
 
   function setColor(value: OutputColor) {
@@ -43,15 +43,34 @@ export const useDye = defineStore('dye', () => {
   paintComponent(color.value.hex)
   function paintComponent(background: string) {
     if (!wrapper.value) return
-    umbra({ background }).apply({ target: wrapper.value.$el })
+    umbra({ background }).apply({ target: wrapper.value })
   }
 
-  return {
+  function getWrapper() {
+    return wrapper
+  }
+
+  function setWrapper(el: InstanceType<typeof DyeWrapper>) {
+    wrapper.value = el
+  }
+
+  const cr: {
+    color: Ref<OutputColor>
+    setColor: (value: OutputColor) => void
+    paintComponent: (background: string) => void
+    wrapper: Ref<HTMLDivElement | null>
+    getWrapper: () => Ref<HTMLDivElement | null>
+    setWrapper: (el: HTMLDivElement) => void
+  } = {
     color,
     setColor,
     paintComponent,
-    wrapper
+    wrapper,
+    getWrapper,
+    setWrapper
   }
+
+  return cr
 })
 
 export const useDyeStore = defineStore('dye-store', () => {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { colord } from 'colord'
 import type { Colord } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
@@ -32,20 +33,25 @@ const props = withDefaults(defineProps<DyeProps>(), {
 
 // Logic
 const compact = ref(props.compact)
-const store = useDye()
+const dye = useDye()
 
-store.setColor({ hex: props.default, name: 'default' })
+onMounted(() => {
+  dye.setColor({
+    hex: props.default,
+    name: 'default'
+  })
+})
 
-function change(dye: OutputColor) {
-  store.setColor(dye)
+function change(color: OutputColor) {
+  dye.setColor(color)
   emit('change', {
-    name: dye.name,
-    color: colord(dye.hex)
+    name: color.name,
+    color: colord(color.hex)
   })
 }
 
 function clickOutside() {
-  store.setColor({
+  dye.setColor({
     hex: '#ff0000',
     name: 'ccool'
   })
@@ -53,7 +59,7 @@ function clickOutside() {
 </script>
 
 <template>
-  <DyeWrapper ref="wrapper" :compact="compact" v-on-click-outside="clickOutside">
+  <DyeWrapper :compact="compact" v-on-click-outside="clickOutside">
     <Pallet :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas @change="change" />
     <HueCanvas @change="change" />
