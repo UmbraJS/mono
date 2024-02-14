@@ -35,9 +35,7 @@ const props = withDefaults(defineProps<DyeProps>(), {
 const compact = ref(props.compact)
 const dye = useDye()
 
-onMounted(() => {
-  dye.setColor(props.default)
-})
+onMounted(() => dye.setColor(props.default, true))
 
 function change(color: OutputColor) {
   dye.setColor(color)
@@ -48,7 +46,7 @@ function change(color: OutputColor) {
 }
 
 function clickOutside() {
-  dye.setColor('#00eeff', true)
+  dye.setColor('#50b7be', true)
 }
 </script>
 
