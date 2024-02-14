@@ -36,10 +36,7 @@ const compact = ref(props.compact)
 const dye = useDye()
 
 onMounted(() => {
-  dye.setColor({
-    hex: props.default,
-    name: 'default'
-  })
+  dye.setColor(props.default)
 })
 
 function change(color: OutputColor) {
@@ -51,16 +48,13 @@ function change(color: OutputColor) {
 }
 
 function clickOutside() {
-  dye.setColor({
-    hex: '#ff0000',
-    name: 'ccool'
-  })
+  dye.setColor('#00eeff', true)
 }
 </script>
 
 <template>
   <DyeWrapper :compact="compact" v-on-click-outside="clickOutside">
-    <Pallet :compact="compact" @click="() => (compact = false)" />
+    <Pallet :compact="compact" @click="() => (compact = !compact)" />
     <ColorCanvas @change="change" :min="0" :max="100" />
     <HueCanvas @change="change" />
   </DyeWrapper>

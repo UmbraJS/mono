@@ -33,10 +33,24 @@ export const useDye = defineStore('dye', () => {
   const hex = '#000'
   const wrapper = ref<HTMLDivElement | null>(null)
   const color = ref({ name: colorName(hex).name, hex })
+  const handleUpdates = ref(0)
 
-  function setColor(value: OutputColor) {
-    color.value = value
-    paintComponent(value.hex)
+  function setColor(value: OutputColor | string, updateHandle = false) {
+    const isString = typeof value === 'string'
+
+    const hex = isString ? value : value.hex
+
+    if (isString) {
+      const name = colorName(value).name
+      color.value = { name, hex }
+
+      console.log('string', { name, hex })
+    } else {
+      color.value = value
+    }
+
+    paintComponent(hex)
+    if (updateHandle) handleUpdates.value++
   }
 
   paintComponent(color.value.hex)
@@ -55,18 +69,20 @@ export const useDye = defineStore('dye', () => {
 
   const cr: {
     color: Ref<OutputColor>
-    setColor: (value: OutputColor) => void
+    setColor: (value: OutputColor | string, updateHandle?: boolean) => void
     paintComponent: (background: string) => void
     wrapper: Ref<HTMLDivElement | null>
     getWrapper: () => Ref<HTMLDivElement | null>
     setWrapper: (el: HTMLDivElement) => void
+    handleUpdates: Ref<number>
   } = {
     color,
     setColor,
     paintComponent,
     wrapper,
     getWrapper,
-    setWrapper
+    setWrapper,
+    handleUpdates
   }
 
   return cr

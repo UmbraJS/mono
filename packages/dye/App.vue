@@ -3,7 +3,7 @@ import DyePicker from './components/DyePicker.vue'
 </script>
 
 <template>
-  <DyePicker default="#FF7FA6" />
+  <DyePicker default="#50b7be" />
 </template>
 
 <style lang="scss">

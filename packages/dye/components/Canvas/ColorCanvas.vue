@@ -88,14 +88,24 @@ function getPercent(percent: number, height?: number) {
   return (height / 100) * percent
 }
 
-watch(width, () => {
+function updateHandle() {
   var color = colord(dye.color.hex)
   const hsl = color.toHsl()
   position.value = {
-    x: getPercent(hsl.s * 100, width.value),
-    y: height.value - getPercent(hsl.l * 100, height.value)
+    x: getPercent(hsl.s, width.value),
+    y: height.value - getPercent(hsl.l, height.value)
   }
-})
+}
+
+watch(width, () => updateHandle())
+
+watch(
+  () => dye.handleUpdates,
+  () => {
+    changeHue()
+    updateHandle()
+  }
+)
 </script>
 
 <template>

@@ -26,7 +26,8 @@ function copyToClipboard() {
 }
 
 function handleClick() {
-  props.compact ? emit('click') : copyToClipboard()
+  emit('click')
+  //props.compact ? emit('click') : copyToClipboard()
 }
 </script>
 

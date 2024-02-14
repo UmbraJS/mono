@@ -83,6 +83,7 @@ function hueChange(e: MouseEvent, click = false) {
   if (store.offCanvas(e, click)) return
   if (store.isActiveCanvas(e.target)) return
   const hex = canvasPixelColor(e, hueCanvas.value)
+  updateHandle(hex)
   updateCanvas(hex)
   inside.value = true
 }
@@ -93,17 +94,19 @@ const change = useDebounce((dye: OutputColor) => {
   emit('change', dye)
 })
 
-function updateCanvas(color?: HexType, mounted = false) {
-  if (!color || mounted) return
-  change({
-    name: colorName(color.hex).name,
-    ...color
-  })
-
+function updateHandle(color?: HexType) {
+  if (!color) return
   position.value = {
     x: position.value.x,
     y: color.position.y
   }
+}
+
+function updateCanvas(color?: HexType) {
+  change({
+    name: colorName(color?.hex).name,
+    ...color
+  })
 }
 
 const { width: canvasWidth, height: canvasHeight } = responsiveCanvas({
@@ -123,27 +126,38 @@ function setCenterHandle(y = 0) {
   }
 }
 
-function huePercent(hue: number, height?: number) {
-  if (!height) return 0
+function huePercent(hue: number, height: number) {
   const percent = (hue / 360) * 100
-  return height * (percent / 100)
+  return (height / 100) * percent
+}
+
+function getHandlePosition() {
+  const hue = colord(dye.color.hex).toHsl().h
+  return {
+    y: huePercent(hue, canvasHeight.value),
+    x: 0
+  }
 }
 
 onMounted(() => {
   fillHueCanvas()
   setCenterHandle()
 
-  const hsl = colord(dye.color.hex).toHsl()
-  const color = {
+  updateHandle({
     hex: dye.color.hex,
-    position: {
-      x: 0,
-      y: huePercent(hsl.h, canvasHeight.value)
-    }
-  }
-
-  updateCanvas(color, true)
+    position: getHandlePosition()
+  })
 })
+
+watch(
+  () => dye.handleUpdates,
+  () => {
+    updateHandle({
+      hex: dye.color.hex,
+      position: getHandlePosition()
+    })
+  }
+)
 </script>
 
 <template>
@@ -166,7 +180,6 @@ onMounted(() => {
 .hue-canvas-wrapper {
   position: relative;
   user-select: none;
-  //overflow: hidden;
   width: 100%;
   height: 100%;
 }
@@ -174,7 +187,6 @@ onMounted(() => {
 canvas.hue-canvas {
   width: calc(v-bind(width) * 1px);
   height: 100%;
-  //overflow: hidden;
   background-color: var(--base-20, rgb(64, 0, 0));
 }
 </style>
