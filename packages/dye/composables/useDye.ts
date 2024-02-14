@@ -43,8 +43,6 @@ export const useDye = defineStore('dye', () => {
     if (isString) {
       const name = colorName(value).name
       color.value = { name, hex }
-
-      console.log('string', { name, hex })
     } else {
       color.value = value
     }

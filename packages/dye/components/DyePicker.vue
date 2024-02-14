@@ -28,7 +28,7 @@ interface DyeProps {
 
 const props = withDefaults(defineProps<DyeProps>(), {
   default: '#ff0000',
-  compact: false
+  compact: true
 })
 
 // Logic
@@ -44,15 +44,11 @@ function change(color: OutputColor) {
     color: colord(color.hex)
   })
 }
-
-function clickOutside() {
-  dye.setColor('#50b7be', true)
-}
 </script>
 
 <template>
-  <DyeWrapper :compact="compact" v-on-click-outside="clickOutside">
-    <Pallet :compact="compact" @click="() => (compact = !compact)" />
+  <DyeWrapper :compact="compact" v-on-click-outside="() => (compact = true)">
+    <Pallet :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas @change="change" :min="0" :max="100" />
     <HueCanvas @change="change" />
   </DyeWrapper>
