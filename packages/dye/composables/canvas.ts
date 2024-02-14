@@ -69,6 +69,8 @@ export function outsideCanvas({ canvas, updateCanvas }: OCP) {
   //confines handle pos to inside the canvas element
   function clampedPos(pos: { x: number; y: number }) {
     const box = canvas.value?.getBoundingClientRect()
+
+    if (!window) return
     if (!box) return
     return pixelColor(
       {
