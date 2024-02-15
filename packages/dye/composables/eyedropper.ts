@@ -5,6 +5,7 @@ function getColor(hex: string) {
 }
 
 function notSupported() {
+  if (!window) return true
   if (!('EyeDropper' in window)) {
     console.log('EyeDropper API not supported')
     return true

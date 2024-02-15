@@ -90,6 +90,7 @@ interface RCP {
 }
 
 function resizeObserver(callback: () => void) {
+  if (!window) return null
   if (!('ResizeObserver' in window)) return null
   const observer = new ResizeObserver(callback)
   return observer
