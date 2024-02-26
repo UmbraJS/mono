@@ -1,5 +1,6 @@
 import { useMouse } from '@vueuse/core'
-import { computed, watch, ref, Ref, onMounted, onUnmounted } from 'vue'
+import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
+import type { Ref } from 'vue'
 import { rgbToHex, clamp } from './utils'
 import { useDyeStore } from './useDye'
 
@@ -118,6 +119,7 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
   const height = ref(size)
 
   function setCanvas() {
+    console.log('setCanvas')
     if (!canvas.value) return
     const box = canvas.value.getBoundingClientRect()
     width.value = box?.width || size
@@ -127,6 +129,7 @@ export function responsiveCanvas({ canvas, updateCanvas }: RCP) {
 
   onMounted(() => setCanvas())
   if (window) useObserver({ canvas, updateCanvas: setCanvas })
+
   return { width, height }
 }
 
