@@ -1,4 +1,5 @@
-import { colord, Colord } from 'colord'
+import { colord } from 'colord'
+import type { Colord } from 'colord'
 import type { UmbraScheme, UmbraAdjusted } from '../types'
 import { increaseContrastUntil, getReadability, getReadable, mostReadable } from './color'
 

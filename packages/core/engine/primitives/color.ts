@@ -1,7 +1,8 @@
-import { colord, Colord, extend } from 'colord'
+import { colord, extend } from 'colord'
+import type { Colord } from 'colord'
 import mixPlugin from 'colord/plugins/mix'
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
-import { UmbraAdjusted } from '../types'
+import type { UmbraAdjusted } from '../types'
 import { defaultSettings } from '../defaults'
 
 extend([mixPlugin])

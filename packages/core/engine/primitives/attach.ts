@@ -1,4 +1,4 @@
-import { FlattenColor, UmbraOutputs } from './format'
+import type { FlattenColor, UmbraOutputs } from './format'
 
 //Why aliases? 2 reasons:
 //1 - People seem to be better at understanding direct instructions rather than logic.

@@ -1,7 +1,10 @@
-import { umbra, umbraHydrate, Umbra } from './engine/index'
+import { umbra, umbraHydrate } from './engine/index'
+import type { Umbra } from './engine/index'
 import { umbraGenerate } from './engine/generator'
 import { randomScheme } from './engine/primitives/utils'
-import { format, FlattenColor, Formater, UmbraOutputs, hex, rgb } from './engine/primitives/format'
+import { format, hex, rgb } from './engine/primitives/format'
+import type { FlattenColor, Formater, UmbraOutputs } from './engine/primitives/format'
+
 import { attach } from './engine/primitives/attach'
 import { mostReadable, colorMix } from './engine/primitives/color'
 import type {

@@ -1,7 +1,8 @@
-import { Colord } from 'colord'
+import type { Colord } from 'colord'
 import { umbra } from '../..'
-import { UmbraRange, FormatedRange, UmbraInput } from '../types'
-import { attach, Alias } from './attach'
+import type { UmbraRange, FormatedRange, UmbraInput } from '../types'
+import { attach } from './attach'
+import type { Alias } from './attach'
 
 export type Formater = (color: Colord) => string
 

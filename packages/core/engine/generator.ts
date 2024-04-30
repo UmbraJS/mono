@@ -1,5 +1,6 @@
-import { colord, Colord } from 'colord'
-import { UmbraAdjusted, UmbraScheme, Accent } from './types'
+import { colord } from 'colord'
+import type { Colord } from 'colord'
+import type { UmbraAdjusted, UmbraScheme, Accent } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils'
 

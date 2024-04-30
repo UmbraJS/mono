@@ -1,4 +1,4 @@
-import { UmbraScheme, UmbraSettings } from './types'
+import type { UmbraScheme, UmbraSettings } from './types'
 
 export const defaultSettings: UmbraSettings = {
   power: 0.15,

@@ -5,7 +5,7 @@ import UmbraRange from './components/UmbraRange.vue'
 import LabelsGroups from './components/ToneLabels.vue'
 import ActionLabels from './components/ActionLabels.vue'
 import PlayGround from './components/PlayGround.vue'
-import { DyePicker } from '@umbrajs/dye'
+import type { DyePicker } from '@umbrajs/dye' //TODO: Fix this - type is wrong
 import '@umbrajs/dye/dist/style.css'
 
 import { blue, blueDark, red, redDark, yellow, yellowDark } from '@radix-ui/colors'
