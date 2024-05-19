@@ -1,13 +1,13 @@
 import type { Colord } from 'colord'
 import { umbra } from '../..'
-import type { UmbraRange, FormatedRange, UmbraInput } from '../types'
+import type { UmbraRange, FormatedRange, UmbraScheme } from '../types'
 import { attach } from './attach'
 import type { Alias } from './attach'
 
 export type Formater = (color: Colord) => string
 
 interface FormatProps {
-  input: UmbraInput
+  input: Partial<UmbraScheme>
   output: UmbraRange[]
   formater?: Formater
   target?: HTMLElement | null | string
@@ -18,7 +18,7 @@ export interface UmbraOutputs {
   flattened: FlattenColor[]
   formated: FormatedRange[]
   output: UmbraRange[]
-  input: UmbraInput
+  input: Partial<UmbraScheme>
 }
 
 export interface Target {

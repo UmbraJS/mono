@@ -1,5 +1,6 @@
 import type { Colord } from 'colord'
 import type { Alias } from '../primitives/attach'
+import type { Formater, UmbraOutputs } from '../primitives/format'
 export interface UmbraRange {
   name: string
   background: Colord
@@ -15,7 +16,7 @@ export interface FormatedRange {
 }
 
 export interface UmbraOutput {
-  input: UmbraInput
+  input: Partial<UmbraScheme>
   adjusted: UmbraAdjusted
   generated: UmbraRange[]
 }
@@ -26,21 +27,12 @@ export interface Accent {
   shades?: (number | string)[]
   readability?: number
 }
-
-export interface UmbraInput {
-  background?: string
-  foreground?: string
-  accents?: (Accent | string)[]
-  settings?: UmbraSettings
-  inversed?: UmbraInput
-}
-
 export interface UmbraScheme {
   background: string
   foreground: string
   accents: (Accent | string)[]
   settings: UmbraSettings
-  inversed?: UmbraInput
+  inversed?: UmbraScheme
 }
 
 export interface UmbraAdjusted {
@@ -57,4 +49,6 @@ export interface UmbraSettings {
   aliases?: Alias | true
   shades?: (number | string)[]
   tints?: (number | string)[]
+  callback?: (props: UmbraOutputs) => void
+  formater?: Formater
 }

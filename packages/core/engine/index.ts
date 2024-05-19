@@ -1,6 +1,6 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraInput, UmbraScheme, UmbraRange, UmbraSettings } from './types'
+import type { UmbraScheme, UmbraRange, UmbraSettings } from './types'
 
 import { format } from './primitives/format'
 import type { Formater, UmbraOutputs, AttachProps } from './primitives/format'
@@ -22,42 +22,31 @@ interface Format extends UmbraOutputs {
 
 export interface Umbra {
   output: UmbraRange[]
-  input: UmbraInput
+  input: Partial<UmbraScheme>
   apply: (props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
   isDark: () => boolean
   inverse: () => Umbra
 }
 
-interface DefaultSettings extends UmbraSettings {
-  callback?: (props: UmbraOutputs) => void
-  formater?: Formater
-}
-
-export function umbra(scheme: UmbraInput = defaultScheme, settings?: DefaultSettings): Umbra {
-  const input = insertFallbacks(scheme, settings)
+export function umbra(scheme: Partial<UmbraScheme> = defaultScheme): Umbra {
+  const input = insertFallbacks(scheme)
   const adjustment = umbraAdjust(input)
   return umbraHydrate({
     input,
-    settings,
     output: umbraGenerate(input, adjustment),
-    inversed: scheme.inversed ? insertFallbacks(scheme.inversed, settings) : undefined
+    inversed: input.inversed
   })
 }
 
-function insertFallbacks(
-  scheme: UmbraInput = defaultScheme,
-  passedDefault?: DefaultSettings
-): UmbraScheme {
+function insertFallbacks(scheme: Partial<UmbraScheme> = defaultScheme): UmbraScheme {
   const settingsFallback = {
     settings: {
       ...defaultSettings,
-      ...passedDefault,
       ...scheme.settings
     },
     inversed: {
       ...defaultSettings,
-      ...passedDefault,
       ...scheme.settings,
       ...scheme.inversed?.settings
     }
@@ -112,7 +101,7 @@ export function umbraHydrate({
   input: UmbraScheme
   output: UmbraRange[]
   inversed?: UmbraScheme
-  settings?: DefaultSettings
+  settings?: UmbraSettings
 }) {
   function getFormat(passedFormater?: Formater) {
     const formater = passedFormater || settings?.formater
@@ -124,7 +113,7 @@ export function umbraHydrate({
     output,
     isDark: () => isDark(input),
     format: (formater?: Formater) => getFormat(formater),
-    inverse: () => umbra(inverse(input, inversed), settings) as Umbra,
+    inverse: () => umbra(inverse(input, inversed)) as Umbra,
     apply: (props?: ApplyProps) => {
       const { alias, formater } = props || {}
       const target = getTarget(props?.target)
