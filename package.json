@@ -12,6 +12,6 @@
     "tree": "tree -I 'node_modules|dist'"
   },
   "devDependencies": {
-    "vite": "^5.0.10"
+    "vite": "^5.4.3"
   }
 }
