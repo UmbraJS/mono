@@ -1,12 +1,13 @@
 import { colord } from 'colord'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraScheme, UmbraRange, UmbraSettings } from './types'
+import type { UmbraInput, UmbraScheme, UmbraRange } from './types'
 
 import { format } from './primitives/format'
 import type { Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
-import { getReadable } from './primitives/color'
+import { getReadable, getReadability } from './primitives/color'
 import { umbraGenerate } from './generator'
+import { fallback } from './primitives/utils'
 
 import type { Alias } from './primitives/attach'
 
@@ -22,14 +23,14 @@ interface Format extends UmbraOutputs {
 
 export interface Umbra {
   output: UmbraRange[]
-  input: Partial<UmbraScheme>
+  input: UmbraInput
   apply: (props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
   isDark: () => boolean
   inverse: () => Umbra
 }
 
-export function umbra(scheme: Partial<UmbraScheme> = defaultScheme): Umbra {
+export function umbra(scheme: UmbraInput = defaultScheme): Umbra {
   const input = insertFallbacks(scheme)
   const adjustment = umbraAdjust(input)
   return umbraHydrate({
@@ -39,15 +40,16 @@ export function umbra(scheme: Partial<UmbraScheme> = defaultScheme): Umbra {
   })
 }
 
-function insertFallbacks(scheme: Partial<UmbraScheme> = defaultScheme): UmbraScheme {
+function insertFallbacks(scheme: UmbraInput = defaultScheme): UmbraScheme {
+  const schemeSettings = {
+    ...defaultSettings,
+    ...scheme.settings
+  }
+
   const settingsFallback = {
-    settings: {
-      ...defaultSettings,
-      ...scheme.settings
-    },
+    settings: schemeSettings,
     inversed: {
-      ...defaultSettings,
-      ...scheme.settings,
+      ...schemeSettings,
       ...scheme.inversed?.settings
     }
   }
@@ -68,15 +70,14 @@ function insertFallbacks(scheme: Partial<UmbraScheme> = defaultScheme): UmbraSch
 function umbraAdjust(scheme = defaultScheme) {
   const background = colord(scheme.background)
   const foreground = getReadable({
-    readability: scheme.settings?.readability || 4,
-    iterations: scheme.settings?.iterations || 15,
-    power: scheme.settings?.power || 15,
+    readability: fallback({ number: scheme.settings?.readability, fallback: 4 }),
     foreground: colord(scheme.foreground),
     background
   })
 
+  const accents = Array.isArray(scheme.accents) ? scheme.accents : [scheme.accents]
   return {
-    accents: scheme.accents,
+    accents,
     background,
     foreground
   }
@@ -95,23 +96,21 @@ function getTarget(target?: string | HTMLElement | null) {
 export function umbraHydrate({
   input,
   output,
-  inversed,
-  settings
+  inversed
 }: {
   input: UmbraScheme
   output: UmbraRange[]
-  inversed?: UmbraScheme
-  settings?: UmbraSettings
+  inversed?: UmbraInput
 }) {
   function getFormat(passedFormater?: Formater) {
-    const formater = passedFormater || settings?.formater
-    return format({ output, formater, input, callback: settings?.callback })
+    const formater = passedFormater || input.settings?.formater
+    return format({ output, formater, input, callback: input.settings?.callback })
   }
 
   return {
     input,
     output,
-    isDark: () => isDark(input),
+    isDark: () => isDark(input.background),
     format: (formater?: Formater) => getFormat(formater),
     inverse: () => umbra(inverse(input, inversed)) as Umbra,
     apply: (props?: ApplyProps) => {
@@ -119,7 +118,7 @@ export function umbraHydrate({
       const target = getTarget(props?.target)
       const formated = getFormat(formater)
       const outputs = formated.attach({ alias, target })
-      settings?.callback && settings.callback(outputs)
+      input.settings?.callback && input.settings.callback(outputs)
       return outputs
     }
   }

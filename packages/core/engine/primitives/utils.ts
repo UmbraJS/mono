@@ -28,7 +28,7 @@ export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): Um
 }
 
 function getReadable(shade: Colord, color: Colord, index: number) {
-  const readability = Math.abs(getReadability(shade, color))
+  const readability = getReadability(shade, color)
   return { readability, index }
 }
 
@@ -52,4 +52,15 @@ export function getStrings(range: (number | string)[]) {
     if (typeof val === 'string') acc.push(val)
     return acc
   }, [] as string[])
+}
+
+interface Fallback {
+  fallback: number
+  number?: number
+}
+
+export function fallback({ number, fallback }: Fallback) {
+  const isUndefined = typeof number === 'undefined'
+  if (isUndefined) return fallback
+  return number
 }

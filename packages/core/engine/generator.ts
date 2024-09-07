@@ -73,7 +73,8 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
 
 function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
-  return adjusted.accents.map((accent) => {
+
+  function gen(accent: string | Accent) {
     const isString = typeof accent === 'string'
 
     const name = isString ? undefined : accent.name
@@ -86,7 +87,9 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
       foreground: pickContrast(background, adjusted),
       range: getRange({ from: background, to: foreground, range })
     }
-  })
+  }
+
+  return adjusted.accents.map((accent) => gen(accent))
 }
 
 interface RangeValues {

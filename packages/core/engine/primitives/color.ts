@@ -4,6 +4,7 @@ import mixPlugin from 'colord/plugins/mix'
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import type { UmbraAdjusted } from '../types'
 import { defaultSettings } from '../defaults'
+import { fallback } from './utils'
 
 extend([mixPlugin])
 
@@ -11,28 +12,22 @@ type ColorRawRange = {
   foreground: string | Colord
   background: string | Colord
   readability?: number
-  iterations?: number
-  power?: number
 }
 
 interface IncreaseContrastUntil {
   color: Colord
-  contrast?: Colord
-  iterations?: number
-  power?: number
+  contrast: Colord
   condition: (newColor: Colord, iterations?: number) => boolean
 }
 
-interface MoveAwayFrom {
+interface IncreaseContrast {
   color: Colord
-  contrast?: Colord
-  val: number
+  contrast: Colord
+  power: number
 }
 
 const stored = {
-  readability: defaultSettings.readability || 11,
-  iterations: defaultSettings.iterations || 15,
-  power: defaultSettings.power || 15
+  readability: defaultSettings.readability || 11
 }
 
 function apcaContrast(fg: string | Colord, bg: string | Colord) {
@@ -42,59 +37,57 @@ function apcaContrast(fg: string | Colord, bg: string | Colord) {
 }
 
 export const getReadability = (fg: string | Colord, bg: string | Colord) => {
-  return apcaContrast(fg, bg)
+  return Math.abs(apcaContrast(fg, bg))
 }
 
-export const getReadable = ({
-  foreground,
-  background,
-  readability,
-  iterations,
-  power
-}: ColorRawRange) => {
-  const color = colord(foreground)
-  const contrast = colord(background)
+export const getReadable = (props: ColorRawRange) => {
+  const foreground = colord(props.foreground)
+  const background = colord(props.background)
+
   return increaseContrastUntil({
-    color,
-    contrast,
-    iterations: iterations || stored.iterations,
-    power: power || stored.power,
-    condition: (c) => {
-      const current = Math.abs(getReadability(c, contrast))
-      return current > (readability || stored.readability)
+    color: foreground,
+    contrast: background,
+    condition: (color) => {
+      const current = getReadability(color, background)
+      const readability = fallback({
+        fallback: stored.readability,
+        number: props.readability
+      })
+      return current >= readability
     }
   })
 }
 
-export function increaseContrastUntil({
-  color,
-  contrast,
-  condition,
-  iterations = 15,
-  power = 15
-}: IncreaseContrastUntil) {
+export function increaseContrastUntil({ color, contrast, condition }: IncreaseContrastUntil) {
+  const iterations = 120 // Number of time it will try to reach the condition
+  const power = 0.01 // How much it will increase the contrast each time
   let newColor = color
   let count = 0
+  if (condition(newColor, count)) return newColor
   while (!condition(newColor, count) && count < iterations) {
     count += 1
     newColor = increaseContrast({
-      val: power,
+      power,
       color: newColor,
       contrast
     })
   }
+
   return newColor
 }
 
-const increaseContrast = ({ color, contrast, val = 100 }: MoveAwayFrom) => {
-  const same = contrast ? color.isDark() === contrast.isDark() : true
-  return same
-    ? color.isDark()
-      ? color.lighten(val)
-      : color.darken(val)
-    : contrast?.isDark()
-    ? color.lighten(val)
-    : color.darken(val)
+const increaseContrast = ({ color, contrast, power }: IncreaseContrast) => {
+  const sameLightness = color.isDark() === contrast.isDark()
+
+  function onSameLightness() {
+    return color.isDark() ? color.lighten(power) : color.darken(power)
+  }
+
+  function onDiffLightness() {
+    return contrast.isDark() ? color.lighten(power) : color.darken(power)
+  }
+
+  return sameLightness ? onSameLightness() : onDiffLightness()
 }
 
 export function mostReadable(color: Colord, colors: Colord[]) {
