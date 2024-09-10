@@ -3,8 +3,6 @@ import { ref } from 'vue'
 
 import { useRoute } from 'vue-router'
 
-// ...
-
 import IconHome from './components/Icons/IconHome.vue'
 import IconWidth from './components/Icons/IconWidth.vue'
 import IconPaint from './components/Icons/IconPaint.vue'

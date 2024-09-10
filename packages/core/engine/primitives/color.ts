@@ -37,7 +37,10 @@ function apcaContrast(fg: string | Colord, bg: string | Colord) {
 }
 
 export const getReadability = (fg: string | Colord, bg: string | Colord) => {
-  return Math.abs(apcaContrast(fg, bg))
+  const foreground = colord(fg);
+  const background = colord(bg);
+  const contrast = apcaContrast(foreground, background);
+  return Math.abs(Number(contrast));
 }
 
 export const getReadable = (props: ColorRawRange) => {
