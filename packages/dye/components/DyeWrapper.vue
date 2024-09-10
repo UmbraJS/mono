@@ -15,9 +15,9 @@ const dye = useDye()
 
 <template>
   <div
+    :ref="(el) => dye.setWrapper(el as HTMLDivElement)"
     class="dyepicker-wrapper"
     :class="{ compact }"
-    :ref="(el) => dye.setWrapper(el as HTMLDivElement)"
   >
     <slot />
   </div>

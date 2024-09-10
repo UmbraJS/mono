@@ -2,13 +2,8 @@
 import { colord } from 'colord'
 import { ref, onMounted, watch } from 'vue'
 import { getDimentions } from '../../composables/canvas'
-import {
-  HexType,
-  OutputColor,
-  outsideCanvas,
-  canvasPixelColor,
-  responsiveCanvas
-} from '../../composables/canvas'
+import { outsideCanvas, canvasPixelColor, responsiveCanvas } from '../../composables/canvas'
+import type { HexType, OutputColor } from '../../composables/canvas'
 import { useDye, useDyeStore, useColorCanvas } from '../../composables/useDye'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
@@ -27,10 +22,14 @@ const emit = defineEmits<{
 
 interface Props {
   width?: number
+  min: number
+  max: number
 }
 
-withDefaults(defineProps<Props>(), {
-  width: 25
+const props = withDefaults(defineProps<Props>(), {
+  width: 25,
+  max: 100,
+  min: 0
 })
 
 const hueCanvas = ref<HTMLCanvasElement | null>(null)
@@ -51,8 +50,8 @@ function hueGradient(
   hsl: Hsl = { h: 0, s: 1, l: 0.5 }
 ) {
   const gradient = ctx.createLinearGradient(0, 0, 0, height)
-  for (var hue = 0; hue <= 360; hue++) {
-    var hslColor = `hsl(${hue}, ${hsl.s}%, ${hsl.l}%)`
+  for (let hue = 0; hue <= 360; hue++) {
+    const hslColor = `hsl(${hue}, ${hsl.s}%, ${hsl.l}%)`
     gradient.addColorStop(hue / 360, hslColor)
   }
   return gradient
@@ -60,7 +59,7 @@ function hueGradient(
 
 function fillHueCanvas(color: string = dye.color.hex) {
   if (!hueCanvas.value) return
-  const ctx = hueCanvas.value?.getContext('2d')
+  const ctx = hueCanvas.value?.getContext('2d', { willReadFrequently: true })
   if (ctx === null) return
   const { height, width } = getDimentions(hueCanvas.value)
 
@@ -90,7 +89,7 @@ function hueChange(e: MouseEvent, click = false) {
 
 const change = useDebounce((dye: OutputColor) => {
   const color = { hue: dye.hex }
-  fillColorCanvas({ color }, canvas.colorCanvas().value)
+  fillColorCanvas({ color, options: props }, canvas.colorCanvas().value)
   emit('change', dye)
 })
 
@@ -171,8 +170,7 @@ watch(
       @mousedown="(e) => hueChange(e, true)"
       @mousemove="(e) => hueChange(e)"
       @mouseleave="() => (inside = false)"
-    >
-    </canvas>
+    />
   </div>
 </template>
 

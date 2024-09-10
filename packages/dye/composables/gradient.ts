@@ -68,7 +68,7 @@ function draw({ hue, ctx, sizes, options }: Draw) {
 export function fillColorCanvas(props: ColorWheel, canvas?: HTMLCanvasElement | null) {
   if (!canvas) return
 
-  const ctx = canvas.getContext('2d')
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })
   if (ctx === null) return
 
   const sizes = getDimentions(canvas, {

@@ -1,5 +1,6 @@
 import { useMouse } from '@vueuse/core'
-import { computed, watch, ref, Ref, onMounted, onUnmounted } from 'vue'
+import { computed, watch, ref, onMounted, onUnmounted } from 'vue'
+import type { Ref } from 'vue'
 import { rgbToHex, clamp } from './utils'
 import { useDyeStore } from './useDye'
 

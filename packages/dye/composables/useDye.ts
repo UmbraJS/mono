@@ -1,14 +1,10 @@
-import { ref, Ref, watch } from 'vue'
+import { ref, watch } from 'vue'
+import type { Ref } from 'vue'
 import { useMousePressed } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { umbra } from '@umbrajs/core'
 import { colorName } from './colorName'
-import { OutputColor } from '../composables/canvas'
-
-interface UCC {
-  colorCanvas: () => Ref<HTMLCanvasElement | null>
-  setColorCanvas: (el: HTMLCanvasElement) => void
-}
+import type { OutputColor } from './canvas'
 
 export const useColorCanvas = defineStore('color-canvas', () => {
   const colorCanvas = ref<HTMLCanvasElement | null>(null)
@@ -21,12 +17,10 @@ export const useColorCanvas = defineStore('color-canvas', () => {
     colorCanvas.value = el
   }
 
-  const cr: UCC = {
+  return {
     colorCanvas: getColorCanvas,
     setColorCanvas
   }
-
-  return cr
 })
 
 export const useDye = defineStore('dye', () => {
@@ -37,15 +31,12 @@ export const useDye = defineStore('dye', () => {
 
   function setColor(value: OutputColor | string, updateHandle = false) {
     const isString = typeof value === 'string'
-
     const hex = isString ? value : value.hex
 
     if (isString) {
       const name = colorName(value).name
       color.value = { name, hex }
-    } else {
-      color.value = value
-    }
+    } else color.value = value
 
     paintComponent(hex)
     if (updateHandle) handleUpdates.value++
@@ -65,15 +56,7 @@ export const useDye = defineStore('dye', () => {
     wrapper.value = el
   }
 
-  const cr: {
-    color: Ref<OutputColor>
-    setColor: (value: OutputColor | string, updateHandle?: boolean) => void
-    paintComponent: (background: string) => void
-    wrapper: Ref<HTMLDivElement | null>
-    getWrapper: () => Ref<HTMLDivElement | null>
-    setWrapper: (el: HTMLDivElement) => void
-    handleUpdates: Ref<number>
-  } = {
+  return {
     color,
     setColor,
     paintComponent,
@@ -82,8 +65,6 @@ export const useDye = defineStore('dye', () => {
     setWrapper,
     handleUpdates
   }
-
-  return cr
 })
 
 export const useDyeStore = defineStore('dye-store', () => {

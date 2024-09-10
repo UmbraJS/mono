@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { colord } from 'colord'
-import {
-  HexType,
-  OutputColor,
-  canvasPixelColor,
-  outsideCanvas,
-  responsiveCanvas
-} from '../../composables/canvas'
+import { canvasPixelColor, outsideCanvas, responsiveCanvas } from '../../composables/canvas'
+
+import type { HexType, OutputColor } from '../../composables/canvas'
 import { useDye, useDyeStore, useColorCanvas } from '../../composables/useDye'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
@@ -32,7 +28,7 @@ const canvas = useColorCanvas()
 const store = useDyeStore()
 const dye = useDye()
 
-let position = ref({ x: 0, y: 0 })
+const position = ref({ x: 0, y: 0 })
 const change = useDebounce((dye) => emit('change', dye), 0)
 
 function updateCanvas(color?: HexType) {
@@ -58,25 +54,18 @@ const { inside } = outsideCanvas({
   updateCanvas
 })
 
-function getHue(color: string = dye.color.hex) {
+function getHue(color = dye.color.hex) {
   const hsv = colord(color).toHsv()
   return colord({ h: hsv.h, s: 100, v: 100 }).toHex()
 }
 
-interface ChangeHue {
-  min: number
-  max: number
-}
-
-function changeHue(options: ChangeHue = props) {
+function changeHue(options = props) {
   const hue = getHue()
   const color = { hue, saturation: 100, lightness: 100 }
   fillColorCanvas({ color, options }, canvas.colorCanvas().value)
 }
 
-watch([() => props.max, () => props.min], () => {
-  changeHue()
-})
+watch([() => props.max, () => props.min], () => changeHue())
 
 const { width, height } = responsiveCanvas({
   canvas: canvas.colorCanvas(),
@@ -89,7 +78,7 @@ function getPercent(percent: number, height?: number) {
 }
 
 function updateHandle() {
-  var color = colord(dye.color.hex)
+  const color = colord(dye.color.hex)
   const hsl = color.toHsl()
   position.value = {
     x: getPercent(hsl.s, width.value),
@@ -119,8 +108,7 @@ watch(
       @mousedown="(e) => colorChange(e, true)"
       @mousemove="(e) => colorChange(e)"
       @mouseleave="() => (inside = false)"
-    >
-    </canvas>
+    />
   </div>
 </template>
 
@@ -131,6 +119,7 @@ watch(
   overflow: hidden;
   width: 100%;
   height: 100%;
+  height: 150px;
 }
 
 canvas.color-canvas {

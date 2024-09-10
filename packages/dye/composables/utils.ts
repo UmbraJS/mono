@@ -1,5 +1,5 @@
 import { useDebounceFn } from '@vueuse/core'
-import { OutputColor } from './canvas'
+import type { OutputColor } from './canvas'
 
 export function rgbToHex(orig: any) {
   var rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
