@@ -34,7 +34,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && copy package.json dist && copy README.md dist",
+    "buildall": "tsc && vite build && cp package.json dist && cp README.md dist",
+    "build": "tsc && vite build",
     "publish": "cd dist && npm publish"
   },
   "dependencies": {

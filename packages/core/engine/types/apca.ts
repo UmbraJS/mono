@@ -114,9 +114,9 @@ declare module 'apca-w3' {
   ): number | string
 }
 
-export function reverseAPCA(
-  contrast?: number,
-  knownY?: number,
-  knownType?: string,
-  returnAs?: string
-): string | number | false | (string | number)[]
+// export function reverseAPCA(
+//   contrast?: number,
+//   knownY?: number,
+//   knownType?: string,
+//   returnAs?: string
+// ): string | number | false | (string | number)[]

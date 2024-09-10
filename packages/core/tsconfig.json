@@ -18,8 +18,6 @@
     "declaration": true,
     "paths": {
       "@/*": ["./engine/*"],
-      "apca-w3": ["./engine/types/apca.d.ts"],
-      "colorparsley": ["./engine/colorparsley.d.ts"]
     }
   }
 }
