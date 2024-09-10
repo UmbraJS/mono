@@ -16,7 +16,6 @@ import { umbra } from '@umbrajs/core'
 
 const route = useRoute()
 
-
 const inversed = ref(true)
 
 const warningAccent = {
