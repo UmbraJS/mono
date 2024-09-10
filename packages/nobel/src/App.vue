@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import { useRoute } from 'vue-router'
+
+// ...
+
 import IconHome from './components/Icons/IconHome.vue'
 import IconWidth from './components/Icons/IconWidth.vue'
 import IconPaint from './components/Icons/IconPaint.vue'
@@ -11,6 +15,9 @@ import ButtonGroup from './components/ui/Button/ButtonGroup.vue'
 import TextScreen from './components/TextScreen.vue'
 
 import { umbra } from '@umbrajs/core'
+
+const route = useRoute()
+
 
 const inversed = ref(true)
 
@@ -40,7 +47,7 @@ function toggleTheme() {
 
 <template>
   <header>
-    <TextScreen>{{ $route.fullPath }}</TextScreen>
+    <TextScreen>{{ route.fullPath }}</TextScreen>
     <nav>
       <ButtonGroup>
         <RouterLink to="/" class="button focus small" activeClass="primary">
@@ -66,7 +73,7 @@ function toggleTheme() {
     </nav>
   </header>
   <main>
-    <router-view :key="$route.path"></router-view>
+    <router-view :key="route.path"></router-view>
   </main>
 </template>
 

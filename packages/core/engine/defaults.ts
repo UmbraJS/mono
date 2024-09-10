@@ -7,10 +7,20 @@ export const defaultSettings: UmbraSettings = {
   tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25]
 }
 
+const warningAccent = {
+  name: 'warning',
+  color: '#ff0000'
+}
+
+const successAccent = {
+  name: 'success',
+  color: '#00ff00'
+}
+
 export const defaultScheme: UmbraScheme = {
   background: '#090233',
   foreground: '#ff5555',
-  accents: ['#5200ff'],
+  accents: ["#ffffff", warningAccent, successAccent],
   settings: defaultSettings,
   inversed: {
     background: '#ff5555',

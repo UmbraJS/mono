@@ -39,13 +39,13 @@ export interface UmbraScheme extends UmbraColors {
 export interface UmbraColors {
   background: string
   foreground: string
-  accents: string | string[]
+  accents: string | (string | Partial<Accent>)[]
 }
 
 export interface UmbraAdjusted {
   background: Colord
   foreground: Colord
-  accents: string[]
+  accents: (string | Partial<Accent>)[]
 }
 
 export interface UmbraSettings {
