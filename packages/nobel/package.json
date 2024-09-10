@@ -1,5 +1,5 @@
 {
-  "name": "CarbonFiber",
+  "name": "nobel",
   "version": "0.0.1a",
   "private": true,
   "type": "module",
@@ -13,7 +13,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@umbrajs/core": "^0.0.456",
+    "@umbrajs/core": "workspace:*",
+    "@umbrajs/dye": "workspace:*",
+    "@nobel/ui": "workspace:*",
+    "@carbonfiber": "workspace:*",
     "@vueuse/components": "^11.0.3",
     "@vueuse/core": "^11.0.3",
     "colord": "^2.9.3",

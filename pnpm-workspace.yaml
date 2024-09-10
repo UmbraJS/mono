@@ -4,4 +4,4 @@ packages:
   - packages/docs
   - packages/dye
   - packages/nobel
-  - packages/carbonfiber
+  - packages/carbon
