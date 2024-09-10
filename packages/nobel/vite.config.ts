@@ -10,9 +10,12 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
+	build: {
+		lib: {
+			name: 'Lib',
+			entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+			formats: ['es'],
+		},
+		minify: false,
+	},
 })

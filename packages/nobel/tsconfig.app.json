@@ -5,8 +5,11 @@
   "compilerOptions": {
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
+    "outDir": "dist",
+    "declarationDir": "types",
+    "allowJs": true,
     "baseUrl": ".",
+    "rootDir": "src",
     "paths": {
       "@/*": ["./src/*"]
     }

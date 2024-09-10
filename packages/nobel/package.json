@@ -14,17 +14,24 @@
     "ui"
   ],
   "type": "module",
-  "main": "./index.umd.cjs",
-  "module": "./index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "require": "./index.umd.cjs",
-      "import": "./index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     },
     "./*": "./*"
   },
+  "typings": "types/index.d.ts",
+	"files": [
+		"dist",
+		"src",
+		"types",
+		"README.md"
+	],
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -34,6 +41,9 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
+  "peerDependencies": {
+    "vue": "^3.5.3"
+  },
   "dependencies": {
     "@umbrajs/core": "workspace:*",
     "@vueuse/components": "^11.0.3",
@@ -41,7 +51,6 @@
     "colord": "^2.9.3",
     "gsap": "^3.12.5",
     "gsap-trial": "^3.12.5",
-    "vue": "^3.5.3",
     "vue-router": "4"
   },
   "devDependencies": {
