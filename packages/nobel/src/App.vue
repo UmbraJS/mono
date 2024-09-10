@@ -13,17 +13,18 @@ import ButtonGroup from './components/ui/Button/ButtonGroup.vue'
 import TextScreen from './components/TextScreen.vue'
 
 import { umbra } from '@umbrajs/core'
+import type { Accent } from '@umbrajs/core'
 
 const route = useRoute()
 
 const inversed = ref(true)
 
-const warningAccent = {
+const warningAccent: Accent = {
   name: 'warning',
   color: '#ff0000'
 }
 
-const successAccent = {
+const successAccent: Accent = {
   name: 'success',
   color: '#00ff00'
 }

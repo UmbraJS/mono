@@ -23,10 +23,11 @@ export interface UmbraOutput {
 }
 
 export interface Accent {
-  name: string
+  name?: string
   color: string
-  shades: (number | string)[]
-  readability: number
+  shades?: (number | string)[]
+  tints?: (number | string)[]
+  readability?: number
 }
 
 export type UmbraInput = Partial<UmbraScheme>
@@ -39,13 +40,13 @@ export interface UmbraScheme extends UmbraColors {
 export interface UmbraColors {
   background: string
   foreground: string
-  accents: string | (string | Partial<Accent>)[]
+  accents: string | (string | Accent)[]
 }
 
 export interface UmbraAdjusted {
   background: Colord
   foreground: Colord
-  accents: (string | Partial<Accent>)[]
+  accents: (string | Accent)[]
 }
 
 export interface UmbraSettings {

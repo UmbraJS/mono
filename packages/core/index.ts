@@ -8,6 +8,7 @@ import type { FlattenColor, Formater, UmbraOutputs } from './engine/primitives/f
 import { attach } from './engine/primitives/attach'
 import { mostReadable, getReadability, colorMix } from './engine/primitives/color'
 import type {
+  Accent,
   UmbraScheme,
   UmbraInput,
   UmbraOutput,
@@ -35,6 +36,7 @@ export {
 }
 
 export type {
+  Accent,
   Umbra,
   UmbraScheme,
   UmbraSettings,

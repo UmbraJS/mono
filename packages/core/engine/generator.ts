@@ -58,7 +58,7 @@ function replaceAtIndex(array: (number | string)[], index: number, value: string
   return newArray
 }
 
-function putAccentInRange(adjusted: UmbraAdjusted, accent: Partial<Accent> | string, input: UmbraScheme) {
+function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, input: UmbraScheme) {
   const isString = typeof accent === 'string'
   const color = isString ? accent : accent.color
   const insertion = input.settings?.insertion
@@ -74,7 +74,7 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Partial<Accent> | str
 function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
 
-  function gen(accent: string | Partial<Accent>) {
+  function gen(accent: string | Accent) {
     const isString = typeof accent === 'string'
 
     const name = isString ? undefined : accent.name
