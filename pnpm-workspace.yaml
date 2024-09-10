@@ -3,3 +3,5 @@ packages:
   - packages/playground
   - packages/docs
   - packages/dye
+  - packages/nobel
+  - packages/carbonfiber
