@@ -1,0 +1,76 @@
+{
+  "name": "nobel",
+  "version": "0.0.1a",
+  "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UmbraJS/core"
+  },
+  "bugs": {
+    "url": "https://github.com/UmbraJS/core/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ui"
+  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./*": "./*"
+  },
+  "typings": "types/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "types",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build --force",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.3"
+  },
+  "dependencies": {
+    "nobel": "workspace:*",
+    "@umbrajs/core": "workspace:*",
+    "@vueuse/components": "^11.0.3",
+    "@vueuse/core": "^11.0.3",
+    "colord": "^2.9.3",
+    "gsap": "^3.12.5",
+    "gsap-trial": "^3.12.5",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^22.5.4",
+    "@vitejs/plugin-vue": "^5.1.3",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.28.0",
+    "npm-run-all2": "^6.2.2",
+    "prettier": "^3.3.3",
+    "sass": "^1.78.0",
+    "typescript": "~5.5.4",
+    "vite": "^5.4.3",
+    "vite-plugin-vue-devtools": "^7.4.4",
+    "vue-tsc": "^2.1.6",
+    "vite-plugin-dts": "^4.2.1"
+  }
+}
