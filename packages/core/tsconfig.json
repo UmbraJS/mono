@@ -14,7 +14,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "outDir": "dist",
+    "outDir": "dist/types",
     "declaration": true,
     "paths": {
       "@/*": ["./engine/*"],
