@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [vue(), dts(), vueDevTools()],
   build: {
     lib: {
-      entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+      entry: fileURLToPath(new URL('./index.ts', import.meta.url)),
       formats: ['es'],
       name: 'Nobel'
     },
@@ -19,7 +19,7 @@ export default defineConfig({
       external: ['vue'],
       output: {
         globals: {
-          Vue: 'vue'
+          vue: 'vue'
         }
       }
     }

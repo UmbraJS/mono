@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from '../components/ui/Button/Button.vue'
+import { Button } from '@nobel/core'
 </script>
 
 <template>

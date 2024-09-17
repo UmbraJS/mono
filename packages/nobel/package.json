@@ -1,6 +1,6 @@
 {
-  "name": "nobel",
-  "version": "0.0.1a",
+  "name": "@nobel/core",
+  "version": "1.0.0",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "repository": {
     "type": "git",
@@ -14,14 +14,14 @@
     "ui"
   ],
   "type": "module",
-  "main": "dist/index.cjs",
+  "main": "index.ts",
   "module": "dist/index.mjs",
-  "types": "./types/index.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/core.js",
+      "require": "./dist/core.js"
     },
     "./*": "./*"
   },

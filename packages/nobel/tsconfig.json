@@ -1,11 +1,19 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "exclude": ["./**/__tests__/*"],
+  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.vue", "index.ts"],
+  "compilerOptions": {
+    //...
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "declaration": true,
+    "outDir": "dist",
+    "declarationDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
     }
-  ]
+  }
 }

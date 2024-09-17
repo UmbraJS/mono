@@ -45,7 +45,7 @@
     "vue": "^3.5.3"
   },
   "dependencies": {
-    "nobel": "workspace:*",
+    "@nobel/core": "workspace:*",
     "@umbrajs/core": "workspace:*",
     "@vueuse/components": "^11.0.3",
     "@vueuse/core": "^11.0.3",

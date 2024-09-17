@@ -1,19 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-
 import { useRoute } from 'vue-router'
-
-import stuff from 'nobel'
-
-import IconHome from './components/Icons/IconHome.vue'
-import IconWidth from './components/Icons/IconWidth.vue'
-import IconPaint from './components/Icons/IconPaint.vue'
-import IconText from './components/Icons/IconText.vue'
-import IconUI from './components/Icons/IconUI.vue'
-import Button from './components/ui/Button/Button.vue'
-import ButtonGroup from './components/ui/Button/ButtonGroup.vue'
+import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText, IconUI } from '@nobel/core'
 import TextScreen from './components/TextScreen.vue'
-
 import { umbra } from '@umbrajs/core'
 import type { Accent } from '@umbrajs/core'
 

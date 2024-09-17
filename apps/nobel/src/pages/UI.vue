@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import ButtonGroup from '../components/ui/Button/ButtonGroup.vue'
-import Button from '../components/ui/Button/Button.vue'
-import ButtonToggle from '../components/ui/Button/Toggle.vue'
-import Chip from '../components/ui/Chip/Chip.vue'
-import Radio from '../components/ui/Radio/Radio.vue'
-import IconHome from '../components/Icons/IconHome.vue'
-import IconPaint from '../components/Icons/IconPaint.vue'
-import Slider from '../components/ui/Slider/Slider.vue'
+import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, IconHome, IconPaint } from '@nobel/core'
 </script>
 
 <template>
@@ -63,14 +56,14 @@ import Slider from '../components/ui/Slider/Slider.vue'
     </ButtonGroup>
 
     <section>
-      <ButtonToggle>
+      <Toggle>
         <template #active>
           <IconHome />
         </template>
         <template #inactive>
           <IconPaint />
         </template>
-      </ButtonToggle>
+      </Toggle>
     </section>
 
     <Slider />
