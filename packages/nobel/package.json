@@ -20,8 +20,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/core.js",
-      "require": "./dist/core.js"
+      "import": "./index.js",
+      "require": "./index.js"
     },
     "./*": "./*"
   },

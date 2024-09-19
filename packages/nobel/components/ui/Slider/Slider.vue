@@ -16,7 +16,7 @@ const value = ref(50)
 
 <style scoped lang="scss">
 .slider-wrapper {
-  --handle-size: 1.5rem;
+  --handle-size: calc(var(--block) - var(--space-atom));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,41 +28,59 @@ const value = ref(50)
 }
 
 .slider-wrapper input {
+  opacity: 0;
+  cursor: pointer;
   position: absolute;
+  z-index: 3;
   width: calc(100% - var(--handle-size));
+  height: var(--block);
+}
+input[type='range'] {
+  -webkit-appearance: none; /* Chrome and Safari */
+  -moz-appearance: none; /* Firefox */
+  appearance: none; /* Standard */
 }
 
-/* Special styling for WebKit/Blink */
-.slider-wrapper input::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
-  height: 6px;
-  width: 6px;
-  border-radius: 0px;
-  background: #ffffff;
-  cursor: pointer;
-  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+  height: 5px;
+  width: 0px;
+  border: none;
+  background: blue;
+}
+
+input[type='range']::-moz-range-thumb {
+  height: 5px;
+  width: 0px;
+  border: none;
+  background: blue;
 }
 
 .slider-wrapper .slider {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
-  height: var(--block-inner);
+  height: var(--block);
   width: 100%;
   background: var(--accent-100);
   border-radius: var(--radius);
 }
 
 .slider-wrapper .slider .fill {
+  position: relative;
   display: flex;
   align-items: center;
   justify-self: flex-end;
-  height: var(--block-inner);
+  height: var(--block);
   width: calc(v-bind(value) * 1%);
   background: var(--accent-20);
   border-radius: var(--radius);
 }
 
 .slider-wrapper .slider .fill .handle {
+  position: absolute;
+  right: calc(0px - var(--handle-size) / 2);
   height: var(--handle-size);
   aspect-ratio: 1 / 1;
   background: var(--base-100);

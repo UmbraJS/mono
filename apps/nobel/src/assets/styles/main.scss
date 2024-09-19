@@ -18,6 +18,12 @@ $desktop: 1200px;
   --block-shell: calc(var(--block) + var(--space-atom) * 2);
   --block: calc(var(--paragraph) + var(--space-atom) * 2);
   --block-inner: calc(var(--paragraph) + var(--space-atom));
+
+  // --block-xbig: calc(var(--block-big) + var(--space-atom) * 2);
+  // --block-big: calc(var(--paragraph) + var(--space-atom) * 2);
+  // --block: calc(var(--paragraph) + var(--space-atom));
+  // --block-small: calc(var(--paragraph) + var(--space-atom));
+
   --space-atom: calc(var(--paragraph) * 0.7);
   --space-quark: calc(var(--space-atom) / 2);
 }
