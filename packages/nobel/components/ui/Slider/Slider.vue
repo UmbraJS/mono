@@ -16,7 +16,7 @@ const value = ref(50)
 
 <style scoped lang="scss">
 .slider-wrapper {
-  --handle-size: calc(var(--block-big) - var(--space-atom));
+  --handle-size: var(--block-small);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,6 +35,7 @@ const value = ref(50)
   width: calc(100% - var(--handle-size));
   height: var(--block-big);
 }
+
 input[type='range'] {
   -webkit-appearance: none; /* Chrome and Safari */
   -moz-appearance: none; /* Firefox */
@@ -42,7 +43,6 @@ input[type='range'] {
 }
 
 input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
   height: 5px;
   width: 0px;
   border: none;
@@ -61,7 +61,7 @@ input[type='range']::-moz-range-thumb {
   z-index: 1;
   display: flex;
   align-items: center;
-  height: var(--block-big);
+  height: var(--block);
   width: 100%;
   background: var(--accent-100);
   border-radius: var(--radius);
@@ -72,10 +72,9 @@ input[type='range']::-moz-range-thumb {
   display: flex;
   align-items: center;
   justify-self: flex-end;
-  height: var(--block-big);
+  height: var(--block);
   width: calc(v-bind(value) * 1%);
   background: var(--accent-20);
-  border-radius: var(--radius);
 }
 
 .slider-wrapper .slider .fill .handle {
@@ -84,5 +83,6 @@ input[type='range']::-moz-range-thumb {
   height: var(--handle-size);
   aspect-ratio: 1 / 1;
   background: var(--base-100);
+  border-radius: var(--radius);
 }
 </style>

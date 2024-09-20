@@ -15,7 +15,7 @@ $desktop: 1200px;
   --border-size: 1px;
   --border: solid var(--border-size) var(--base-30);
 
-  --block-xbig: calc(var(--block-big) + var(--space-atom) * 2);
+  --block-shell: calc(var(--block-big) + var(--space-atom) * 2);
   --block-big: calc(var(--paragraph) + var(--space-atom) * 2);
   --block: calc(var(--paragraph) + var(--space-atom));
   --block-small: var(--paragraph);
