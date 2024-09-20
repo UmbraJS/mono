@@ -15,9 +15,11 @@ $desktop: 1200px;
   --border-size: 1px;
   --border: solid var(--border-size) var(--base-30);
 
-  --block-shell: calc(var(--block) + var(--space-atom) * 2);
-  --block: calc(var(--paragraph) + var(--space-atom) * 2);
-  --block-inner: calc(var(--paragraph) + var(--space-atom));
+  --block-xbig: calc(var(--block-big) + var(--space-atom) * 2);
+  --block-big: calc(var(--paragraph) + var(--space-atom) * 2);
+  --block: calc(var(--paragraph) + var(--space-atom));
+  --block-small: var(--paragraph);
+
   --space-atom: calc(var(--paragraph) * 0.7);
   --space-quark: calc(var(--space-atom) / 2);
 }
@@ -26,13 +28,13 @@ $desktop: 1200px;
   --space-1: calc(var(--paragraph) / 2);
   --space-2: var(--paragraph);
   --space-3: calc(var(--paragraph) + var(--space-atom));
-  --space-4: var(--block);
-  --space-5: calc(var(--block) + var(--space-atom) * 2);
-  --space-6: calc(var(--block) + var(--space-atom) * 4);
-  --space-7: calc(var(--block) + var(--space-atom) * 6);
-  --space-8: calc(var(--block) + var(--space-atom) * 8);
-  --space-9: calc(var(--block) + var(--space-atom) * 10);
-  --space-10: calc(var(--block) + var(--space-atom) * 12);
+  --space-4: var(--block-big);
+  --space-5: calc(var(--block-big) + var(--space-atom) * 2);
+  --space-6: calc(var(--block-big) + var(--space-atom) * 4);
+  --space-7: calc(var(--block-big) + var(--space-atom) * 6);
+  --space-8: calc(var(--block-big) + var(--space-atom) * 8);
+  --space-9: calc(var(--block-big) + var(--space-atom) * 10);
+  --space-10: calc(var(--block-big) + var(--space-atom) * 12);
 }
 
 :root {

@@ -24,7 +24,7 @@ const checked = ref(false)
   cursor: pointer;
   position: relative;
   display: grid;
-  grid-template-columns: var(--block-inner) 1fr;
+  grid-template-columns: var(--block) 1fr;
   justify-items: center;
   padding-right: var(--space-2);
 }

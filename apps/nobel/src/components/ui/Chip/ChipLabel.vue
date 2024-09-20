@@ -12,7 +12,7 @@ import Button from '../Button/Button.vue'
 <style scoped>
 .chip .content {
   padding: 0px var(--space-1);
-  height: var(--block-inner);
+  height: var(--block);
 }
 
 .chip p {

@@ -1,4 +1,4 @@
-import './assets/styles/main.scss'
+import '@nobel/core/styles/main.scss'
 
 import { createApp } from 'vue'
 import router from './router'

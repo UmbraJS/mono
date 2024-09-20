@@ -68,14 +68,14 @@ const genericColors = computed(() => {
 
 <style lang="scss">
 @mixin button-medium {
-  height: var(--block);
-  min-width: var(--block);
+  height: var(--block-big);
+  min-width: var(--block-big);
   padding: 0px var(--space-quark);
 }
 
 @mixin button-small {
-  height: var(--block-inner);
-  min-width: var(--block-inner);
+  height: var(--block);
+  min-width: var(--block);
   padding: 0px var(--space-quark);
 }
 

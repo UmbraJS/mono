@@ -29,7 +29,7 @@
 }
 
 .checkbox.checked .checkmark {
-  height: var(--block-inner);
+  height: var(--block);
 }
 
 .checkbox.checked .checkmark .mark {

@@ -21,7 +21,7 @@ const value = ref(50)
   align-items: center;
   justify-content: center;
   position: relative;
-  height: var(--block);
+  height: var(--block-big);
   background: var(--base-40);
   border-radius: var(--radius);
   padding: 0px calc(var(--handle-size) / 2);
@@ -46,7 +46,7 @@ const value = ref(50)
 .slider-wrapper .slider {
   display: flex;
   align-items: center;
-  height: var(--block-inner);
+  height: var(--block);
   width: 100%;
   background: var(--accent-100);
   border-radius: var(--radius);
@@ -56,7 +56,7 @@ const value = ref(50)
   display: flex;
   align-items: center;
   justify-self: flex-end;
-  height: var(--block-inner);
+  height: var(--block);
   width: calc(v-bind(value) * 1%);
   background: var(--accent-20);
   border-radius: var(--radius);

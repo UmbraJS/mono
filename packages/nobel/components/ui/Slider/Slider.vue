@@ -16,12 +16,12 @@ const value = ref(50)
 
 <style scoped lang="scss">
 .slider-wrapper {
-  --handle-size: calc(var(--block) - var(--space-atom));
+  --handle-size: calc(var(--block-big) - var(--space-atom));
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  height: var(--block);
+  height: var(--block-big);
   background: var(--base-40);
   border-radius: var(--radius);
   padding: 0px calc(var(--handle-size) / 2);
@@ -33,7 +33,7 @@ const value = ref(50)
   position: absolute;
   z-index: 3;
   width: calc(100% - var(--handle-size));
-  height: var(--block);
+  height: var(--block-big);
 }
 input[type='range'] {
   -webkit-appearance: none; /* Chrome and Safari */
@@ -61,7 +61,7 @@ input[type='range']::-moz-range-thumb {
   z-index: 1;
   display: flex;
   align-items: center;
-  height: var(--block);
+  height: var(--block-big);
   width: 100%;
   background: var(--accent-100);
   border-radius: var(--radius);
@@ -72,7 +72,7 @@ input[type='range']::-moz-range-thumb {
   display: flex;
   align-items: center;
   justify-self: flex-end;
-  height: var(--block);
+  height: var(--block-big);
   width: calc(v-bind(value) * 1%);
   background: var(--accent-20);
   border-radius: var(--radius);

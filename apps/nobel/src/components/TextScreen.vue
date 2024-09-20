@@ -14,7 +14,7 @@ import { ref } from 'vue'
   justify-content: center;
   align-items: center;
   border-radius: var(--radius);
-  height: var(--block-inner);
+  height: var(--block);
   background: var(--base-20);
   width: 150px;
 }

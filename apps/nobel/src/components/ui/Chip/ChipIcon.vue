@@ -13,7 +13,7 @@ import IconClose from '../../Icons/IconClose.vue'
   display: flex;
   justify-content: center;
   align-items: center;
-  height: var(--block-inner);
+  height: var(--block);
   aspect-ratio: 1 / 1;
   background-color: var(--warning-60);
   transition: var(--slow);

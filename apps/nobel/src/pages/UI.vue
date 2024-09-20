@@ -89,7 +89,7 @@ section {
 }
 
 section#chips {
-  height: var(--block);
+  height: var(--block-big);
   border: solid var(--border-size) var(--base-50);
 }
 

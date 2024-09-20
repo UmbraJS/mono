@@ -17,9 +17,9 @@ import { Button } from '@nobel/core'
       <div class="size" style="height: var(--space-10)"></div>
     </div>
     <div class="blocks">
-      <div class="block" style="height: var(--block-shell)"></div>
+      <div class="block" style="height: var(--block-xbig)"></div>
+      <div class="block" style="height: var(--block-big)"></div>
       <div class="block" style="height: var(--block)"></div>
-      <div class="block" style="height: var(--block-inner)"></div>
     </div>
     <div class="test">
       <div class="fig">
@@ -46,7 +46,7 @@ import { Button } from '@nobel/core'
   gap: var(--space-3);
   justify-content: center;
   background-color: var(--accent-40);
-  height: var(--block-shell);
+  height: var(--block-xbig);
   aspect-ratio: 1 / 1;
 
   border-radius: var(--outer-radius);
@@ -56,14 +56,14 @@ import { Button } from '@nobel/core'
   display: flex;
   justify-content: center;
   align-items: center;
-  height: var(--block);
+  height: var(--block-big);
   aspect-ratio: 1 / 1;
   background-color: var(--accent-60);
   border-radius: var(--radius);
 }
 
 .radius .inner {
-  height: var(--block-inner);
+  height: var(--block);
   aspect-ratio: 1 / 1;
   background-color: var(--accent-40);
   border-radius: var(--inner-radius);
