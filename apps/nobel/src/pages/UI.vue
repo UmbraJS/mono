@@ -32,14 +32,14 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, IconHome, IconPaint }
     </Button>
 
     <section class="buttons">
-      <Button variant="primary" size="small">
-        <IconHome />
+      <Button variant="primary" size="mini">
+        <IconHome size="mini" />
       </Button>
-      <Button variant="secondary">
-        <IconHome />
+      <Button variant="secondary" size="small">
+        <IconHome size="small" />
       </Button>
       <Button>
-        <IconHome />
+        <IconHome size="medium" />
       </Button>
     </section>
 
@@ -52,6 +52,18 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, IconHome, IconPaint }
       </Button>
       <Button size="small">
         <IconHome />
+      </Button>
+    </ButtonGroup>
+
+    <ButtonGroup>
+      <Button size="mini">
+        <IconHome size="mini"></IconHome>
+      </Button>
+      <Button size="mini">
+        <IconHome size="mini"></IconHome>
+      </Button>
+      <Button size="mini">
+        <IconHome size="mini"></IconHome>
       </Button>
     </ButtonGroup>
 

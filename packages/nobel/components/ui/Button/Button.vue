@@ -19,12 +19,11 @@ const {
 } = defineProps<{
   variant?: keyof typeof components
   disabled?: boolean
-  size?: 'small' | 'medium'
+  size?: 'medium' | 'small' | 'mini'
   type?: 'warning' | 'success' | 'default'
 }>()
 
 const ButtonVariant = computed(() => (disabled ? components.base : components[variant]))
-const buttonSize = computed(() => size)
 
 const buttonTypes = {
   default: '--accent',
@@ -57,7 +56,7 @@ const genericColors = computed(() => {
   <component
     tabindex="1"
     class="button focus"
-    :class="buttonSize"
+    :class="size"
     :is="ButtonVariant"
     :disabled="disabled"
     :style="genericColors"
@@ -77,6 +76,12 @@ const genericColors = computed(() => {
   height: var(--block);
   min-width: var(--block);
   padding: 0px var(--space-quark);
+}
+
+@mixin button-mini {
+  height: var(--block-small);
+  min-width: var(--block-small);
+  padding: 0px;
 }
 
 @mixin button-base-theme {
@@ -123,12 +128,16 @@ const genericColors = computed(() => {
   @include button-base-structure;
 }
 
+.button.medium {
+  @include button-medium;
+}
+
 .button.small {
   @include button-small;
 }
 
-.button.medium {
-  @include button-medium;
+.button.mini {
+  @include button-mini;
 }
 
 .button:hover {
