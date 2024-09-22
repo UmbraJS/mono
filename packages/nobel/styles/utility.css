@@ -4,12 +4,14 @@
   outline: solid 0px var(--focus-color);
 }
 
-.focus:focus {
+.focus:focus,
+.focus:has(*:focus) {
   z-index: 3; /* Makes sure the outline goes on top of sibling elements */
   outline: solid var(--space-quark) var(--focus-color);
 }
 
-.focus:active {
+.focus:active,
+.focus:has(*:active) {
   outline: solid var(--border-size) var(--base-10);
 }
 

@@ -13,7 +13,8 @@ $desktop: 1200px;
   --outer-radius: calc(var(--radius) + var(--space-atom));
 
   --border-size: 1px;
-  --border: solid var(--border-size) var(--base-30);
+  --border-color: var(--base-30);
+  --border: solid var(--border-size) var(--border-color);
 
   --block-shell: calc(var(--block-big) + var(--space-atom) * 2);
   --block-big: calc(var(--paragraph) + var(--space-atom) * 2);
