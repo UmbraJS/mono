@@ -36,7 +36,7 @@ watch(pressed, (isPressed) => {
         <SliderHandle variant="primary" side="right" />
       </div>
 
-      <SnapPoints :value="size" :snapPoints="snapPoints" />
+      <SnapPoints :value="size + left" :snapPoints="snapPoints" />
     </div>
   </div>
 </template>
