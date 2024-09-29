@@ -25,25 +25,34 @@ watch(pressed, (isPressed) => {
 <template>
   <p>{{ left }}</p>
   <p>{{ size }}</p>
-  <SliderRuler :value="size" :max="100" :snapPoints="snapPoints" />
-  <div
-    ref="slider"
-    tabindex="1"
-    class="slider-wrapper border focus"
-    @mousedown="() => updateSlider()"
-  >
-    <div ref="track" class="track">
-      <div class="range">
-        <SliderHandle @mousedown="leftHandleClicked = true" variant="secondary" side="left" />
-        <SliderHandle variant="primary" side="right" />
-      </div>
+  <div class="slider-container">
+    <SliderRuler :value="size" :min="0" :max="100" :snapPoints="snapPoints" :pressed="pressed" />
+    <div
+      ref="slider"
+      tabindex="1"
+      class="slider-wrapper border focus"
+      @mousedown="() => updateSlider()"
+    >
+      <div ref="track" class="track">
+        <div class="range">
+          <SliderHandle @mousedown="leftHandleClicked = true" variant="secondary" side="left" />
+          <SliderHandle variant="primary" side="right" />
+        </div>
 
-      <SnapPoints :value="size + left" :snapPoints="snapPoints" />
+        <SnapPoints :value="size + left" :snapPoints="snapPoints" />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.slider-container {
+  --handle-size: var(--block-small);
+  --track-height: calc(var(--block-small) / 2);
+  --padding-sides: calc(var(--space-2) + var(--track-height) / 2.5);
+  --padding: var(--space-2) var(--padding-sides);
+}
+
 .slider-wrapper {
   display: flex;
   align-items: center;
@@ -51,11 +60,8 @@ watch(pressed, (isPressed) => {
   position: relative;
   cursor: pointer;
 
-  --handle-size: var(--block-small);
-  --track-height: calc(var(--block-small) / 2);
-
+  padding: var(--padding);
   height: var(--block-big);
-  padding: var(--space-2) calc(var(--space-2) + var(--track-height) / 2.5);
   border-radius: var(--radius);
   background: var(--base-10);
 }
