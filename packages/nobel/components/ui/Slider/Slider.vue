@@ -4,6 +4,7 @@ import { useSliderKeys } from './useSliderKeys'
 import { useSliderValue } from './useSliderValue'
 import SnapPoints from './SnapPoints.vue'
 import SliderHandle from './SliderHandle.vue'
+import SliderRuler from './SliderRuler.vue'
 
 const slider = useTemplateRef<HTMLDivElement>('slider')
 const track = useTemplateRef<HTMLDivElement>('track')
@@ -24,6 +25,7 @@ watch(pressed, (isPressed) => {
 <template>
   <p>{{ left }}</p>
   <p>{{ size }}</p>
+  <SliderRuler :value="size" :max="100" :snapPoints="snapPoints" />
   <div
     ref="slider"
     tabindex="1"
