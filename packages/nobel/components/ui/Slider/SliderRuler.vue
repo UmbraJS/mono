@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import type { Ref } from 'vue'
 const props = defineProps<{
   value: number
   max: number
@@ -9,7 +8,7 @@ const props = defineProps<{
   pressed: boolean
 }>()
 
-const zoom = ref(10)
+const zoom = ref(2)
 const inverseZoom = computed(() => inverseScale(zoom.value))
 
 const clampedValue = computed(() => {
