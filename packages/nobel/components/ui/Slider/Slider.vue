@@ -9,7 +9,7 @@ import SliderRuler from './SliderRuler.vue'
 const slider = useTemplateRef<HTMLDivElement>('slider')
 const track = useTemplateRef<HTMLDivElement>('track')
 
-const { size, left, pressed, updateSlider, leftHandleClicked, snapPoints } = useSliderValue({
+const { size, left, zoom, pressed, updateSlider, leftHandleClicked, snapPoints } = useSliderValue({
   slider,
   track
 })
@@ -26,7 +26,14 @@ watch(pressed, (isPressed) => {
   <p>{{ left }}</p>
   <p>{{ size }}</p>
   <div class="slider-container">
-    <SliderRuler :value="size" :min="0" :max="100" :snapPoints="snapPoints" :pressed="pressed" />
+    <SliderRuler
+      :value="size"
+      :min="0"
+      :max="100"
+      :snapPoints="snapPoints"
+      :pressed="pressed"
+      :zoom="zoom"
+    />
     <div
       ref="slider"
       tabindex="1"

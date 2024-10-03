@@ -12,12 +12,19 @@ interface UseSliderValue {
 export function useSliderValue({ slider, track }: UseSliderValue) {
   const leftHandleClicked = ref(false)
 
-  const { x } = useMouse()
+  const { x, y } = useMouse()
   const { pressed } = useMousePressed({ target: slider })
 
   const value = ref(50)
   const size = ref(50)
   const left = ref(0)
+
+  const zoom = computed(() => {
+    if (!pressed.value) return 1
+    const trackBox = track.value?.getBoundingClientRect()
+    if (!trackBox) return 1
+    return clamp(1 + (y.value - trackBox.top) / trackBox.height, 0, 40)
+  })
 
   const cursor = computed(() => {
     // Cursor position as a percentage of the slider width
@@ -79,6 +86,7 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
   return {
     size,
     left,
+    zoom,
     cursor,
     pressed,
     leftHandleClicked,

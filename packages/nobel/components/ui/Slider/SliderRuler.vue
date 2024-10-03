@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 const props = defineProps<{
   value: number
   max: number
   min: number
   snapPoints: number[]
   pressed: boolean
+  zoom: number
 }>()
 
-const zoom = ref(2)
-const inverseZoom = computed(() => inverseScale(zoom.value))
+const inverseZoom = computed(() => inverseScale(props.zoom))
 
 const clampedValue = computed(() => {
   return Math.min(props.max, Math.max(props.min, props.value))
