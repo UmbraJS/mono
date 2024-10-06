@@ -3,6 +3,7 @@ import type { ShallowRef } from 'vue'
 import { useMouse, useMousePressed } from '@vueuse/core'
 import { clamp, gsapTo } from './utils'
 import { nearestSnapPoint } from './utils'
+import { useSliderZoom } from './useSliderZoom'
 
 interface UseSliderValue {
   slider: Readonly<ShallowRef<HTMLDivElement | null>>
@@ -19,12 +20,7 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
   const size = ref(50)
   const left = ref(0)
 
-  const zoom = computed(() => {
-    if (!pressed.value) return 1
-    const trackBox = track.value?.getBoundingClientRect()
-    if (!trackBox) return 1
-    return clamp(1 + (y.value - trackBox.top) / trackBox.height, 0, 40)
-  })
+  const zoom = useSliderZoom({ track, y, pressed })
 
   const cursor = computed(() => {
     // Cursor position as a percentage of the slider width
@@ -84,6 +80,7 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
   })
 
   return {
+    y,
     size,
     left,
     zoom,

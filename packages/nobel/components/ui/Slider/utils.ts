@@ -18,6 +18,16 @@ export function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max)
 }
 
+export function remap(
+  value: number,
+  fromMin: number,
+  fromMax: number,
+  toMin: number,
+  toMax: number
+) {
+  return ((value - fromMin) * (toMax - toMin)) / (fromMax - fromMin) + toMin
+}
+
 interface gsapTo {
   value: Ref<number>
   to: number
