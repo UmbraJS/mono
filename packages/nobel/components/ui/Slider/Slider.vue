@@ -23,7 +23,6 @@ watch(pressed, (isPressed) => {
 </script>
 
 <template>
-  <p>{{ zoom }}</p>
   <div class="slider-container">
     <SliderRuler
       :value="size"

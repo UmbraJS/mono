@@ -9,22 +9,23 @@ interface UseSliderZoom {
 }
 
 export function useSliderZoom({ track, y, pressed }: UseSliderZoom) {
+  const maxPixelDist = 40
+  const maxScale = 6
+  const minScale = 1
+  const margin = 40
+
   const zoom = ref(1)
 
   function getZoom(y: number) {
-    const max = 40
-    const min = 1
-    const margin = 40
-    const trackBoxTop = track.value?.getBoundingClientRect().top || min
+    const trackBoxTop = track.value?.getBoundingClientRect().top || minScale
     const yDist = trackBoxTop - y - margin
-    if (!pressed.value) return min
-    if (yDist > margin) return remap(max, min, max, min, 2)
-    const distFromTop = clamp(yDist, min, max)
-    return remap(distFromTop, min, max, min, 2)
+    if (!pressed.value) return minScale
+    if (yDist > margin) return remap(maxPixelDist, minScale, maxPixelDist, minScale, maxScale)
+    const distFromTop = clamp(yDist, minScale, maxPixelDist)
+    return remap(distFromTop, minScale, maxPixelDist, minScale, maxScale)
   }
 
   let resetZoom = true
-
   watch(y, (y) => {
     if (pressed.value) {
       resetZoom = true
