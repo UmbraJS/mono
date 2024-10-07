@@ -35,25 +35,34 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
     return percent - left.value
   }
 
-  function updateSize2(left: number) {
-    return value.value - left
+  function clampLeft(percent = cursor.value) {
+    // Clamp left handle between start and right handle
+    return clamp(percent, 0, value.value - minSize)
   }
 
-  function updateLeft(percent = cursor.value) {
-    return clamp(percent, 0, value.value)
+  function moveLeftHandle(percent = cursor.value) {
+    // Bar size
+    const leftValue = clampLeft(percent)
+    const newSize = value.value - leftValue
+    size.value = clamp(newSize, minSize, 100)
+
+    // Bar start
+    const hasNotMovedLeftHandle = leftValue === 0
+    if (!hasNotMovedLeftHandle && newSize === minSize) return
+    left.value = leftValue
+  }
+
+  function moveRightHandle(percent = cursor.value) {
+    const newSize = updateSize(percent)
+    const clampedSize = clamp(newSize, minSize, 100)
+    size.value = left.value > 1 ? clampedSize : newSize
   }
 
   function updateSlider(percent = cursor.value) {
     if (leftHandleClicked.value) {
-      const leftValue = updateLeft(percent)
-      const newSize = updateSize2(leftValue)
-      const newSizeClamped = clamp(newSize, minSize, 100)
-      leftValue === 0 ? (size.value = newSize) : (size.value = newSizeClamped)
-      const hasNotMovedLeftHandle = leftValue === 0
-      if (!hasNotMovedLeftHandle && newSize === minSize) return
-      left.value = leftValue
+      moveLeftHandle(percent)
     } else {
-      size.value = clamp(updateSize(percent), minSize, 100)
+      moveRightHandle(percent)
     }
   }
 
@@ -63,8 +72,8 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
 
   function updateSlider2() {
     if (leftHandleClicked.value) {
-      const leftValue = updateLeft(nearestStartSnap.value)
-      const sizeValue = updateSize2(leftValue)
+      const leftValue = clampLeft(nearestStartSnap.value)
+      const sizeValue = value.value - leftValue
       gsapTo({ value: left, to: leftValue })
       gsapTo({ value: size, to: sizeValue })
     } else {
