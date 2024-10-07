@@ -27,7 +27,12 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
   const cursor = computed(() => {
     // Cursor position as a percentage of the slider width
     const trackBox = track.value?.getBoundingClientRect()
-    return trackBox ? Math.round(((x.value - trackBox.left) / trackBox.width) * 100) : 0
+
+    if (!trackBox) return 0
+    const elWidth = zoom.value * trackBox.width
+    const elStart = trackBox.left + (trackBox.width - elWidth) / 2
+    const mouseXdistFromTrackLeft = (x.value - elStart) / elWidth
+    return Math.round(mouseXdistFromTrackLeft * 100)
   })
 
   function updateSize(percent = cursor.value) {
@@ -36,7 +41,7 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
   }
 
   function clampLeft(percent = cursor.value) {
-    // Clamp left handle between start and right handle
+    // Clamp left handle between start and min proximity to right handle
     return clamp(percent, 0, value.value - minSize)
   }
 
