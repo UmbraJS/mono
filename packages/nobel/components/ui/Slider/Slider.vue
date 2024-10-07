@@ -52,10 +52,19 @@ watch(pressed, (isPressed) => {
 
 <style scoped lang="scss">
 .slider-container {
+  position: relative;
   --handle-size: var(--block-small);
   --track-height: calc(var(--block-small) / 2);
   --padding-sides: calc(var(--space-2) + var(--track-height) / 2.5);
   --padding: var(--space-2) var(--padding-sides);
+}
+
+.slider-container .slider-ruler {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .slider-wrapper {

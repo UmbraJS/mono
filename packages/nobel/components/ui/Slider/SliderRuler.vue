@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { nearestSnapPoint } from './utils'
+
 const props = defineProps<{
   value: number
   max: number
@@ -31,7 +33,10 @@ function inverseScale(scale: number) {
         v-for="tick in max + 1"
         :key="tick"
         class="tick"
-        :class="{ mark: snapPoints.includes(tick - 1) }"
+        :class="{
+          mark: snapPoints.includes(tick - 1),
+          active: nearestSnapPoint(value, snapPoints) === tick - 1
+        }"
       ></div>
     </div>
   </div>
@@ -42,6 +47,8 @@ function inverseScale(scale: number) {
   overflow: hidden;
   height: var(--block-big);
   padding: 0 var(--padding-sides);
+  backdrop-filter: blur(7px);
+  opacity: 0.9;
   --pos: calc(v-bind(clampedValue) * 1%);
   --offset: calc(var(--space-quark) / 2);
   --handle-pos: calc(var(--pos) - var(--offset));
@@ -63,11 +70,17 @@ function inverseScale(scale: number) {
   height: 25%;
   width: 0.2px;
   background: var(--base-80);
+  transition: var(--slow);
 }
 
 .slider-ruler .tick.mark {
   background: var(--base-120);
   height: 50%;
+}
+
+.slider-ruler .tick.mark.active {
+  background: var(--accent-100);
+  height: 75%;
 }
 
 .slider-ruler .handle-range {

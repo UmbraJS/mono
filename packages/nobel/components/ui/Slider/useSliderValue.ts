@@ -71,7 +71,7 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
     }
   }
 
-  const snapPoints = ref([])
+  const snapPoints = ref([0, 25, 50, 75, 100])
   const nearestStartSnap = computed(() => nearestSnapPoint(left.value, snapPoints.value))
   const nearestEndSnap = computed(() => nearestSnapPoint(size.value + left.value, snapPoints.value))
 
