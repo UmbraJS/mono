@@ -25,7 +25,7 @@ watch(pressed, (isPressed) => {
 <template>
   <div class="slider-container">
     <SliderRuler
-      :value="size"
+      :value="leftHandleClicked ? left : size + left"
       :min="0"
       :max="100"
       :snapPoints="snapPoints"

@@ -40,7 +40,7 @@ function inverseScale(scale: number) {
 <style lang="scss" scoped>
 .slider-ruler {
   overflow: hidden;
-  height: var(--block);
+  height: var(--block-big);
   padding: 0 var(--padding-sides);
   --pos: calc(v-bind(clampedValue) * 1%);
   --offset: calc(var(--space-quark) / 2);

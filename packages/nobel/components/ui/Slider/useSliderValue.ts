@@ -16,6 +16,8 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
   const { x, y } = useMouse()
   const { pressed } = useMousePressed({ target: slider })
 
+  const minSize = 10
+
   const value = ref(50)
   const size = ref(50)
   const left = ref(0)
@@ -44,14 +46,18 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
   function updateSlider(percent = cursor.value) {
     if (leftHandleClicked.value) {
       const leftValue = updateLeft(percent)
+      const newSize = updateSize2(leftValue)
+      const newSizeClamped = clamp(newSize, minSize, 100)
+      leftValue === 0 ? (size.value = newSize) : (size.value = newSizeClamped)
+      const hasNotMovedLeftHandle = leftValue === 0
+      if (!hasNotMovedLeftHandle && newSize === minSize) return
       left.value = leftValue
-      size.value = updateSize2(leftValue)
     } else {
-      size.value = updateSize(percent)
+      size.value = clamp(updateSize(percent), minSize, 100)
     }
   }
 
-  const snapPoints = ref([0, 25, 50, 75, 100])
+  const snapPoints = ref([])
   const nearestStartSnap = computed(() => nearestSnapPoint(left.value, snapPoints.value))
   const nearestEndSnap = computed(() => nearestSnapPoint(size.value + left.value, snapPoints.value))
 
