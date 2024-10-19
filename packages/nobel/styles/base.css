@@ -72,3 +72,13 @@ button {
   outline: none;
   padding: 0;
 }
+
+a {
+  color: var(--accent-60);
+  text-decoration: none;
+  transition: var(--time);
+}
+
+a:hover {
+  color: var(--accent-100);
+}
