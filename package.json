@@ -7,11 +7,13 @@
     "ui": "cd packages/nobel && pnpm run dev",
     "dye": "cd packages/dye && pnpm run dev",
     "team": "cd apps/team && pnpm run dev",
+    "hub": "cd apps/hub && pnpm run dev",
     "dye:build": "cd packages/dye && pnpm run build",
     "dye:publish": "cd packages/dye && npm publish",
     "build": "cd packages/core && tsc && vite build && copy package.json dist && copy README.md dist",
     "publish": "cd packages/core/dist && npm publish",
-    "tree": "tree -I 'node_modules|dist'"
+    "tree": "tree -I 'node_modules|dist'",
+    "db:generate": "cd apps/hub && pnpm run drizzle-kit generate"
   },
   "devDependencies": {
     "vite": "^5.4.3"
