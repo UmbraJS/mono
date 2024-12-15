@@ -1,6 +1,6 @@
-@import './base.css';
-@import './utility.css';
-@import './typography.scss';
+@use './base';
+@use './utility';
+@use './typography';
 
 $mobile: 360px;
 $phablet: 540px;

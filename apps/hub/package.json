@@ -13,6 +13,8 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@nobel/core": "workspace:*",
+    "@umbrajs/core": "workspace:*",
     "@nuxt/eslint": "^0.6.1",
     "@nuxthub/core": "^0.8.5",
     "better-auth": "^1.0.19",

@@ -14,12 +14,18 @@ importers:
 
   apps/hub:
     dependencies:
+      '@nobel/core':
+        specifier: workspace:*
+        version: link:../../packages/nobel
       '@nuxt/eslint':
         specifier: ^0.6.1
         version: 0.6.2(eslint@9.17.0(jiti@2.4.1))(magicast@0.3.5)(rollup@4.28.1)(typescript@5.7.2)(vite@5.4.11(@types/node@22.5.4)(sass@1.83.0)(terser@5.36.0))
       '@nuxthub/core':
         specifier: ^0.8.5
         version: 0.8.8(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.28.1)(vite@5.4.11(@types/node@22.5.4)(sass@1.83.0)(terser@5.36.0))
+      '@umbrajs/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       better-auth:
         specifier: ^1.0.19
         version: 1.0.20
