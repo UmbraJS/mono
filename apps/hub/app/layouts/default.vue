@@ -33,7 +33,7 @@ onKeyStroke('Escape', () => {
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .layout {
   --header-height: 60px;
   --sidebar-width: calc(100dvw / 3);
@@ -125,5 +125,9 @@ onKeyStroke('Escape', () => {
 
 .layout.reveal > .content {
   transform: translateY(var(--header-height)) translateX(calc(0px - var(--sidebar-width) + 1px));
+  @media (max-width: 800px) {
+    transform: translateY(0) translateX(calc(0px - var(--sidebar-width) + 1px));
+    transition: var(--slower);
+  }
 }
 </style>
