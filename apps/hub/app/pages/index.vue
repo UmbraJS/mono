@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import PostFeed from '~/components/PostFeed.vue'
+</script>
 
 <template>
   <main class="page">
@@ -6,6 +8,7 @@
       <h1>Welcome to the NuxtHub Starter</h1>
       <p>A Nuxt template to build your full-stack application on the edge.</p>
     </div>
+    <PostFeed />
   </main>
 </template>
 
@@ -14,6 +17,7 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
+  gap: var(--space-2);
   padding: var(--space-2);
   background-color: var(--base-20);
 }

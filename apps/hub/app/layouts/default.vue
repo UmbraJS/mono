@@ -36,15 +36,24 @@ onKeyStroke('Escape', () => {
 <style>
 .layout {
   --header-height: 60px;
-  --sidebar-width: 300px;
+  --sidebar-width: calc(100dvw / 3);
+  position: relative;
+  width: 100dvw;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    --sidebar-width: 100dvw;
+  }
 }
 
 .underbar {
   position: fixed;
+  z-index: -1;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100dvh;
+  width: 100dvw;
   background: var(--base-10);
 
   display: grid;
@@ -61,12 +70,12 @@ onKeyStroke('Escape', () => {
 
   grid-column: span 2;
   grid-area: header;
-  padding: var(--space-1);
+  padding: var(--space-1) var(--space-2);
 }
 
 .layout .burger {
   position: fixed;
-  right: 0;
+  right: 17px;
   z-index: 2;
   width: 60px;
   height: 60px;
@@ -115,7 +124,6 @@ onKeyStroke('Escape', () => {
 }
 
 .layout.reveal > .content {
-  transform: translateY(var(--header-height))
-    translateX(calc(0px - var(--sidebar-width) + var(--space-2) + 1px));
+  transform: translateY(var(--header-height)) translateX(calc(0px - var(--sidebar-width) + 1px));
 }
 </style>
