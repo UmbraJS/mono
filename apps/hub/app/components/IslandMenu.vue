@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText, IconUI } from '@nobel/core'
+import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText } from '@nobel/core'
 
 import '@nobel/core/styles/main.scss'
 import { ref } from 'vue'
