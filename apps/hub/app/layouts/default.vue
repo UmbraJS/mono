@@ -76,15 +76,13 @@ onKeyStroke('Escape', () => {
   max-width: 1900px;
   gap: var(--space-4);
 
-  transform: translateY(0px) translateX(0px);
-
-  width: 100dvw;
-  overflow: hidden;
   min-height: 100vh;
   padding-bottom: var(--space-5);
   background-color: var(--base-20);
 
-  transition: var(--slow);
+  @media (max-width: 800px) {
+    width: 100dvw;
+  }
 }
 
 .layout .content-layer .vignet {

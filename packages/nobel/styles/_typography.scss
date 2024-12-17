@@ -43,6 +43,7 @@ button {
   word-break: break-all;
   white-space: pre-wrap;
   text-transform: capitalize;
+  text-align: center;
 }
 
 h1.display,
@@ -54,6 +55,7 @@ h1.display,
 
 h1,
 .h1 {
+  text-align: left;
   font-size: var(--h1-size);
   line-height: var(--h1-size);
   font-variation-settings: var(--font-bold);
