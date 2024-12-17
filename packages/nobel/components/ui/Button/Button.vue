@@ -8,14 +8,14 @@ import ButtonBase from './variants/ButtonBase.vue'
 const components = {
   primary: ButtonPrimary,
   secondary: ButtonSecondary,
-  base: ButtonBase
+  base: ButtonBase,
 }
 
 const {
   type = 'default',
   variant = 'base',
   disabled = false,
-  size = 'medium'
+  size = 'medium',
 } = defineProps<{
   variant?: keyof typeof components
   disabled?: boolean
@@ -28,7 +28,7 @@ const ButtonVariant = computed(() => (disabled ? components.base : components[va
 const buttonTypes = {
   default: '--accent',
   success: '--success',
-  warning: '--warning'
+  warning: '--warning',
 }
 
 const genericColors = computed(() => {
@@ -47,7 +47,7 @@ const genericColors = computed(() => {
     '--color-100': `var(${buttonTypes[type]}-100)`,
     '--color-110': `var(${buttonTypes[type]}-110)`,
     '--color-120': `var(${buttonTypes[type]}-120)`,
-    '--color-contrast': `var(${buttonTypes[type]}-contrast)`
+    '--color-contrast': `var(${buttonTypes[type]}-contrast)`,
   }
 })
 </script>

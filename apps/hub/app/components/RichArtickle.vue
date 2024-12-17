@@ -1,27 +1,32 @@
 <script setup lang="ts">
 import { EditorContent } from '@tiptap/vue-3'
-import { useTiptap } from '../composables/useTiptap'
+import { useEditor, useTitleEditor } from '../composables/useTiptap'
 
-const editor = useTiptap({
-  limit: 4000,
+const titleEditor = useTitleEditor({
+  content: `<h1 class="display">THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY</h1>`,
+})
+
+const contentEditor = useEditor({
   placeholder: 'Write your post here...',
+  content: `
+    <p>Nuxt layers are a powerful feature that you can use to share and reuse <strong>partial</strong> Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
+    <p class="slugline">Nuxt applications within a monorepo, or from a git repository or npm package. Nuxt applications within a monorepo, or from a git repository or npm package</p>
+    <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
+    <h1>Title</h1>
+    <p>The Rubik's Cube is the World’s best selling puzzle toy</p>
+    <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
+    <h2>THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY</h2>
+    <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
+    <h3>THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY</h3>
+    <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
+  `,
 })
 </script>
 
 <template>
   <div class="content post">
-    <textarea
-      type="text"
-      id="title"
-      class="h1 display"
-      name="title"
-      minlength="4"
-      maxlength="120"
-      required
-      placeholder="Title"
-      value="THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY"
-    />
-    <EditorContent :editor="editor" />
+    <EditorContent :editor="titleEditor" />
+    <EditorContent :editor="contentEditor" />
     <!-- <TextMenuFloating :editor="editor" />
       <TextMenuBubble :editor="editor" /> -->
   </div>
@@ -29,20 +34,9 @@ const editor = useTiptap({
 
 <style lang="scss">
 .content.post {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: var(--space-3);
-}
-
-.content.post textarea {
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  resize: none;
-  field-sizing: content;
-  background-color: transparent;
-  border: none;
-  color: var(--foreground-100);
+  align-items: center;
 }
 
 .ProseMirror {
