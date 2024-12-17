@@ -2,7 +2,7 @@
 import { onKeyStroke } from '@vueuse/core'
 
 const classObject = reactive({
-  reveal: true,
+  reveal: false,
 })
 
 function toggleReveal() {
@@ -91,14 +91,21 @@ onKeyStroke('Escape', () => {
 
 .underbar .content {
   grid-area: content;
-  background-color: var(--base-30);
+  background-color: var(--base-20);
 }
 
 .layout > .content {
+  display: grid;
+  justify-content: center;
   position: relative;
-  z-index: 1;
+  z-index: 0;
   transform: translateY(0px) translateX(0px);
+  background-color: var(--base-20);
   transition: var(--slow);
+  width: 100dvw;
+  overflow: hidden;
+  min-height: 100vh;
+  padding-bottom: var(--space-5);
 }
 
 .layout .content .vignet {
@@ -107,10 +114,12 @@ onKeyStroke('Escape', () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: black;
+  background: var(--accent);
   opacity: 0;
+  z-index: 1;
   pointer-events: none;
   transition: opacity var(--slow);
+  border-radius: var(--radius);
 }
 
 .layout.reveal .content .vignet {

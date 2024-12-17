@@ -5,8 +5,7 @@ import PostFeed from '~/components/PostFeed.vue'
 <template>
   <main class="page">
     <div class="artickle">
-      <h1>Welcome to the NuxtHub Starter</h1>
-      <p>A Nuxt template to build your full-stack application on the edge.</p>
+      <RichText />
     </div>
     <PostFeed />
   </main>
@@ -14,21 +13,25 @@ import PostFeed from '~/components/PostFeed.vue'
 
 <style scoped>
 .page {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   place-items: center;
-  min-height: 100vh;
+
+  width: 100dvw;
+  max-width: 60em;
   gap: var(--space-2);
-  padding: var(--space-2);
-  background-color: var(--base-20);
 }
 
 .artickle {
+  margin-top: 200px;
+
   display: grid;
   gap: var(--space-1);
-  padding: var(--space-2);
-  padding-bottom: var(--space-3);
+  padding: var(--space-3);
+  padding-bottom: var(--space-4);
   border-radius: var(--radius);
   background-color: var(--base-10);
-  width: max-content;
+  width: 100%;
+  /* border: solid var(--border-size) var(--base-40); */
 }
 </style>

@@ -6,7 +6,7 @@ import { ref } from 'vue'
 import { umbra } from '@umbrajs/core'
 import type { Accent } from '@umbrajs/core'
 
-const inversed = ref(false)
+const inversed = ref(true)
 
 const warningAccent: Accent = {
   name: 'warning',
