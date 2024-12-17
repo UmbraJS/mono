@@ -2,25 +2,28 @@
 
 <template>
   <div class="feed">
-    <div>feed</div>
     <div v-for="i in 10" :key="i" class="card">
       <p>some text</p>
     </div>
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .feed {
   display: grid;
-  gap: var(--space-2);
-  background-color: var(--base-50);
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
   width: 100%;
+  @media screen and (max-width: 1300px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .card {
   display: grid;
   justify-content: center;
-  padding: var(--space-2);
+  grid-column: span 2;
+  padding: var(--space-4);
   background: var(--base-10);
   border-radius: var(--radius);
 }

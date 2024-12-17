@@ -10,6 +10,17 @@ const editor = useTiptap({
 
 <template>
   <div class="content post">
+    <textarea
+      type="text"
+      id="title"
+      class="h1 display"
+      name="title"
+      minlength="4"
+      maxlength="120"
+      required
+      placeholder="Title"
+      value="THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY"
+    />
     <EditorContent :editor="editor" />
     <!-- <TextMenuFloating :editor="editor" />
       <TextMenuBubble :editor="editor" /> -->
@@ -17,6 +28,23 @@ const editor = useTiptap({
 </template>
 
 <style lang="scss">
+.content.post {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.content.post textarea {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  resize: none;
+  field-sizing: content;
+  background-color: transparent;
+  border: none;
+  color: var(--foreground-100);
+}
+
 .ProseMirror {
   display: flex;
   flex-direction: column;

@@ -25,7 +25,6 @@ export function useTiptap({
 }: useTiptapProps) {
   const editor = tiptap({
     content: `
-      <h1>THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY</h1>
       <p>Nuxt layers are a powerful feature that you can use to share and reuse <strong>partial</strong> Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
       <p class="slugline">Nuxt applications within a monorepo, or from a git repository or npm package. Nuxt applications within a monorepo, or from a git repository or npm package</p>
       <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>

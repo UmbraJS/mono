@@ -5,7 +5,7 @@ import PostFeed from '~/components/PostFeed.vue'
 <template>
   <main class="page">
     <div class="artickle">
-      <RichText />
+      <RichArtickle />
     </div>
     <PostFeed />
   </main>
@@ -18,8 +18,8 @@ import PostFeed from '~/components/PostFeed.vue'
   place-items: center;
 
   width: 100dvw;
-  max-width: 60em;
-  gap: var(--space-2);
+  max-width: 1300px;
+  gap: var(--space-4);
 }
 
 .artickle {
@@ -28,7 +28,7 @@ import PostFeed from '~/components/PostFeed.vue'
   display: grid;
   gap: var(--space-1);
   padding: var(--space-3);
-  padding-bottom: var(--space-4);
+  padding-bottom: var(--space-6);
   border-radius: var(--radius);
   background-color: var(--base-10);
   width: 100%;
