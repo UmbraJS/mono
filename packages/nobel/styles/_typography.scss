@@ -8,6 +8,17 @@
   --font-light: 'wght' 200, 'wdth' 100;
 }
 
+:root {
+  --paragraph: 1.2rem;
+  --h1-display-size: clamp(2.4rem, 5vw, 5rem);
+  --h1-size: clamp(2rem, 2.9vw, 5rem);
+  --h2-size: clamp(1.8rem, 2vw, 3rem);
+  --h3-size: clamp(1rem, 1.6vw, 2rem);
+  --h4-size: clamp(1rem, 1.3vw, 1.5rem);
+  --h5-size: clamp(1rem, 1.2vw, 1.2rem);
+  --h6-size: clamp(1rem, 1vw, 1rem);
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -36,57 +47,50 @@ button {
 
 h1.display,
 .h1.display {
-  --size: clamp(2.4rem, 5vw, 5rem);
-  font-size: var(--size);
-  line-height: var(--size);
+  font-size: var(--h1-display-size);
+  line-height: var(--h1-display-size);
   font-variation-settings: var(--font-bold);
 }
 
 h1,
 .h1 {
-  --size: clamp(2rem, 2.9vw, 5rem);
-  font-size: var(--size);
-  line-height: var(--size);
+  font-size: var(--h1-size);
+  line-height: var(--h1-size);
   font-variation-settings: var(--font-bold);
 }
 
 h2,
 .h2 {
-  --size: clamp(1.8rem, 2vw, 3rem);
-  font-size: var(--size);
-  line-height: var(--size);
+  font-size: var(--h2-size);
+  line-height: var(--h2-size);
   font-variation-settings: var(--font-bold);
 }
 
 h3,
 .h3 {
-  --size: clamp(1rem, 1.6vw, 2rem);
-  font-size: var(--size);
-  line-height: var(--size);
+  font-size: var(--h3-size);
+  line-height: var(--h3-size);
   font-variation-settings: var(--font-bold);
 }
 
 h4,
 .h4 {
-  --size: clamp(1rem, 1.3vw, 1.5rem);
-  font-size: var(--size);
-  line-height: var(--size);
+  font-size: var(--h4-size);
+  line-height: var(--h4-size);
   font-variation-settings: var(--font-bold);
 }
 
 h5,
 .h5 {
-  --size: clamp(1rem, 1.2vw, 1.2rem);
-  font-size: var(--size);
-  line-height: var(--size);
+  font-size: var(--h5-size);
+  line-height: var(--h5-size);
   font-variation-settings: var(--font-bold);
 }
 
 h6,
 .h6 {
-  --size: clamp(1rem, 1vw, 1rem);
-  font-size: var(--size);
-  line-height: var(--size);
+  font-size: var(--h6-size);
+  line-height: var(--h6-size);
   font-variation-settings: var(--font-bold);
 }
 
@@ -95,10 +99,6 @@ h6,
 ::selection {
   color: var(--accent) !important;
   background: var(--accent-20) !important;
-}
-
-:root {
-  --paragraph: 1.2rem;
 }
 
 p,

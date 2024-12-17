@@ -18,8 +18,13 @@ html {
 html,
 body {
   height: 100%;
-  overflow-x: hidden;
+  overflow: auto;
+  overflow: initial;
   transition: background 0.2s;
+}
+
+body {
+  overflow-x: hidden;
 }
 /*
     6. Improve media defaults

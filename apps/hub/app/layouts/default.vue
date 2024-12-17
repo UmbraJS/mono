@@ -17,9 +17,11 @@ onKeyStroke('Escape', () => {
 <template>
   <div class="layout" :class="classObject">
     <div class="burger" @click="toggleReveal" />
-    <div class="content">
+    <div class="content-layer">
       <div class="vignet" @click="toggleReveal" />
-      <slot />
+      <main class="page">
+        <slot />
+      </main>
     </div>
     <div class="underbar">
       <header>
@@ -35,10 +37,11 @@ onKeyStroke('Escape', () => {
 
 <style lang="scss">
 .layout {
-  --header-height: 60px;
+  --header-height: calc(var(--h1-display-size) + var(--space-2));
   --sidebar-width: calc(100dvw / 3);
   position: relative;
   width: 100dvw;
+  background: red;
 }
 
 @media (max-width: 800px) {
@@ -47,9 +50,79 @@ onKeyStroke('Escape', () => {
   }
 }
 
+.layout .content-layer {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  place-items: center;
+
+  padding-bottom: var(--space-5);
+  background-color: var(--base-20);
+
+  transform: translateY(0px) translateX(0px);
+  transition: var(--slow);
+}
+
+.layout .content-layer main.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  place-items: center;
+
+  width: 80dvw;
+  max-width: 1900px;
+  gap: var(--space-4);
+
+  transform: translateY(0px) translateX(0px);
+
+  width: 100dvw;
+  overflow: hidden;
+  min-height: 100vh;
+  padding-bottom: var(--space-5);
+  background-color: var(--base-20);
+
+  transition: var(--slow);
+}
+
+.layout .content-layer .vignet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--accent);
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity var(--slow);
+  border-radius: var(--radius);
+}
+
+.layout.reveal .content-layer .vignet {
+  opacity: 0.7;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.layout.reveal .content-layer .vignet:hover {
+  opacity: 0.3;
+}
+
+.layout.reveal .content-layer {
+  pointer-events: none;
+  transform: translateY(var(--header-height)) translateX(calc(0px - var(--sidebar-width) + 1px));
+  @media (max-width: 800px) {
+    transform: translateY(0) translateX(calc(0px - var(--sidebar-width) + 1px));
+    transition: var(--slower);
+  }
+}
+
 .underbar {
   position: fixed;
-  z-index: -1;
+  z-index: 0;
   top: 0;
   left: 0;
   height: 100dvh;
@@ -67,6 +140,7 @@ onKeyStroke('Escape', () => {
 .underbar header {
   display: grid;
   grid-template-columns: 1fr auto;
+  align-items: center;
 
   grid-column: span 2;
   grid-area: header;
@@ -75,7 +149,7 @@ onKeyStroke('Escape', () => {
 
 .layout .burger {
   position: fixed;
-  right: 17px;
+  right: 0px;
   z-index: 2;
   width: 60px;
   height: 60px;
@@ -92,51 +166,5 @@ onKeyStroke('Escape', () => {
 .underbar .content {
   grid-area: content;
   background-color: var(--base-20);
-}
-
-.layout > .content {
-  display: grid;
-  justify-content: center;
-  position: relative;
-  z-index: 0;
-  transform: translateY(0px) translateX(0px);
-  background-color: var(--base-20);
-  transition: var(--slow);
-  width: 100dvw;
-  overflow: hidden;
-  min-height: 100vh;
-  padding-bottom: var(--space-5);
-}
-
-.layout .content .vignet {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--accent);
-  opacity: 0;
-  z-index: 1;
-  pointer-events: none;
-  transition: opacity var(--slow);
-  border-radius: var(--radius);
-}
-
-.layout.reveal .content .vignet {
-  opacity: 0.7;
-  cursor: pointer;
-  pointer-events: all;
-}
-
-.layout.reveal .content .vignet:hover {
-  opacity: 0.3;
-}
-
-.layout.reveal > .content {
-  transform: translateY(var(--header-height)) translateX(calc(0px - var(--sidebar-width) + 1px));
-  @media (max-width: 800px) {
-    transform: translateY(0) translateX(calc(0px - var(--sidebar-width) + 1px));
-    transition: var(--slower);
-  }
 }
 </style>
