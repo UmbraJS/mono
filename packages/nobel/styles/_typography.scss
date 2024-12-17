@@ -27,8 +27,11 @@ h3,
 .h3,
 button {
   max-width: clamp(100px, 100vw, 55ch);
-  text-wrap: balance;
   letter-spacing: 0em;
+  text-wrap: balance;
+  word-break: break-all;
+  white-space: pre-wrap;
+  text-transform: capitalize;
 }
 
 h1.display,

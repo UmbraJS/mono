@@ -46,12 +46,17 @@ const contentEditor = useEditor({
   gap: var(--space-2);
 }
 
+.ProseMirror .is-editor-empty {
+  color: var(--base-60);
+}
+
 .ProseMirror:focus {
   outline: none !important;
   border: none !important;
 }
 
-.ProseMirror p.is-editor-empty:first-child::before {
+.ProseMirror p.is-editor-empty:first-child::before,
+.ProseMirror h1.is-editor-empty:first-child::before {
   color: var(--foreground-20);
   content: attr(data-placeholder);
   float: left;

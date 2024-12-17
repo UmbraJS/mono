@@ -1,4 +1,4 @@
-import { useEditor as tiptap } from '@tiptap/vue-3'
+import { useEditor as useTiptap } from '@tiptap/vue-3'
 import type { Editor } from '@tiptap/core'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
@@ -9,8 +9,9 @@ import Heading from '@tiptap/extension-heading'
 import History from '@tiptap/extension-history'
 import CharacterCount from '@tiptap/extension-character-count'
 import Placeholder from '@tiptap/extension-placeholder'
-import { Overflow, validateOverflow } from './Overflow'
-import { Slugline } from './Slugline'
+import { Overflow, validateOverflow } from './extensions/Overflow'
+import { Slugline } from './extensions/Slugline'
+import { DisplayHeader } from './extensions/DisplayHeader'
 
 interface useTiptapProps {
   limit?: number
@@ -25,16 +26,18 @@ export function useTitleEditor({
   content,
   onChange = () => {},
 }: useTiptapProps) {
-  const editor = tiptap({
+  const editor = useTiptap({
     content,
     onUpdate: ({ editor }) => onChange(editor),
     extensions: [
       Document,
       Text,
       Heading,
-      Paragraph,
+      DisplayHeader,
       CharacterCount.configure({ limit }),
-      Placeholder.configure({ placeholder }),
+      Placeholder.configure({
+        placeholder: placeholder,
+      }),
     ],
   })
 
@@ -52,7 +55,7 @@ export function useEditor({
   content,
   onChange = () => {},
 }: useTiptapProps) {
-  const editor = tiptap({
+  const editor = useTiptap({
     content,
     onUpdate,
     extensions: [
