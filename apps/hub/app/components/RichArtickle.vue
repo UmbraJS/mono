@@ -63,4 +63,11 @@ const contentEditor = useEditor({
   height: 0;
   pointer-events: none;
 }
+
+// Oveflowing text
+
+.ProseMirror p span.overflow {
+  color: var(--warning-100);
+  text-decoration: line-through;
+}
 </style>

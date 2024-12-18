@@ -1,8 +1,8 @@
-import TextStyle from '@tiptap/extension-placeholder'
+import Bold from '@tiptap/extension-bold'
 import { mergeAttributes } from '@tiptap/core'
 import type { Editor } from '@tiptap/core'
 
-export const Overflow = TextStyle.extend({
+export const Overflow = Bold.extend({
   name: 'overflow',
   renderHTML({ HTMLAttributes }) {
     return ['span', mergeAttributes(HTMLAttributes, { class: 'overflow' }), 0]
@@ -38,6 +38,8 @@ export function validateOverflow(editor: Editor, props: { limit: number }) {
   const atLimit = current.size >= props.limit
   const limit = current.start + props.limit
   const inner = Math.min(current.end, limit)
+
+  console.log('current', schema.marks)
 
   const overflowMark = schema.marks.overflow.create()
 

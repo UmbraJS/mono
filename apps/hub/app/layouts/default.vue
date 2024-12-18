@@ -71,14 +71,11 @@ onKeyStroke('Escape', () => {
   flex-direction: column;
   justify-content: center;
   place-items: center;
+  gap: var(--space-4);
 
   width: 80dvw;
   max-width: 1900px;
-  gap: var(--space-4);
-
   min-height: 100vh;
-  padding-bottom: var(--space-5);
-  background-color: var(--base-20);
 
   @media (max-width: 800px) {
     width: 100dvw;
