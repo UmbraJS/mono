@@ -56,13 +56,6 @@ h3,
   font-variation-settings: var(--font-medium);
 }
 
-::-moz-selection,
-::-webkit-selection,
-::selection {
-  color: var(--accent) !important;
-  background: var(--accent-20) !important;
-}
-
 p,
 button,
 .bodycopy,

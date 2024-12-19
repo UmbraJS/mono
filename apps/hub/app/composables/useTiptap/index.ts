@@ -21,7 +21,7 @@ interface useTiptapProps {
 }
 
 export function useTitleEditor({
-  limit = 280,
+  limit = 120,
   placeholder = 'Write a title...',
   content,
   onChange = () => {},

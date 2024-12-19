@@ -96,13 +96,6 @@ h6,
   font-variation-settings: var(--font-bold);
 }
 
-::-moz-selection,
-::-webkit-selection,
-::selection {
-  color: var(--accent) !important;
-  background: var(--accent-20) !important;
-}
-
 p,
 button,
 .bodycopy,

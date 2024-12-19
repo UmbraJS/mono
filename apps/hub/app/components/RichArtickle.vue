@@ -2,6 +2,8 @@
 import { EditorContent } from '@tiptap/vue-3'
 import { useEditor, useTitleEditor } from '../composables/useTiptap'
 
+const { data } = await useFetch('/api/thread')
+
 const titleEditor = useTitleEditor({
   content: `<h1 class="display">THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY</h1>`,
 })
@@ -21,6 +23,7 @@ const contentEditor = useEditor({
     <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
   `,
 })
+console.log('rex: ', data.value)
 </script>
 
 <template>
@@ -65,7 +68,6 @@ const contentEditor = useEditor({
 }
 
 // Oveflowing text
-
 .ProseMirror p span.overflow {
   color: var(--warning-100);
   text-decoration: line-through;

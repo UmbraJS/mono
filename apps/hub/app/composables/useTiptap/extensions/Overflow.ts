@@ -1,6 +1,6 @@
 import Bold from '@tiptap/extension-bold'
 import { mergeAttributes } from '@tiptap/core'
-import type { Editor } from '@tiptap/core'
+import type { Editor, Mark } from '@tiptap/core'
 
 export const Overflow = Bold.extend({
   name: 'overflow',
@@ -24,11 +24,11 @@ export function validateOverflow(editor: Editor, props: { limit: number }) {
   const dispatch = view.dispatch
   const transaction = state.tr
 
-  function removeMark(from: number, to: number, mark: any) {
+  function removeMark(from: number, to: number, mark: Mark) {
     return dispatch(transaction.removeMark(from, to, mark))
   }
 
-  function addMark(from: number, to: number, mark: any) {
+  function addMark(from: number, to: number, mark: Mark) {
     return dispatch(transaction.addMark(from, to, mark))
   }
 
