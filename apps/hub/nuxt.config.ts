@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // https://nuxt.com/modules
-  modules: ['@nuxthub/core', '@nuxt/eslint'],
+  modules: ['@nuxthub/core', '@nuxt/eslint', '@pinia/nuxt'],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
@@ -30,6 +30,8 @@ export default defineNuxtConfig({
     config: {
       stylistic: {
         quotes: 'single',
+        arrowParens: false,
+        semi: true,
       },
     },
   },

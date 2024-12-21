@@ -41,7 +41,7 @@ function toggleTheme() {
 </script>
 
 <template>
-  <nav id="island-menu">
+  <nav id="island-menu" class="invert-theme">
     <ButtonGroup>
       <RouterLink to="/" class="button focus small" activeClass="primary">
         <IconHome />

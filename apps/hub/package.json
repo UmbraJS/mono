@@ -10,12 +10,14 @@
     "deploy": "npx nuxthub deploy",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@nobel/core": "workspace:*",
     "@nuxt/eslint": "^0.6.1",
     "@nuxthub/core": "^0.8.5",
+    "@pinia/nuxt": "0.9.0",
     "@tiptap/core": "^2.10.3",
     "@tiptap/extension-bold": "^2.10.3",
     "@tiptap/extension-character-count": "^2.10.3",
@@ -34,6 +36,7 @@
     "better-auth": "^1.0.19",
     "drizzle-orm": "^0.36.4",
     "nuxt": "^3.14.0",
+    "pinia": "^2.3.0",
     "sass": "^1.81.0",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
