@@ -12,7 +12,7 @@ async function uploadImage(e: Event) {
       form.reset()
       await refresh()
     })
-    .catch((err) => alert('Failed to upload image:\n'+ err.data?.message))
+    .catch((err) => alert('Failed to upload image:\n' + err.data?.message))
 }
 
 async function deleteImage(pathname: string) {
@@ -25,10 +25,11 @@ async function deleteImage(pathname: string) {
   <div>
     <h3>Images</h3>
     <form @submit.prevent="uploadImage">
-      <label>Upload an image: <input type="file" name="image" accept="image/jpg,image/png"></label>
-      <button type="submit">
-        Upload
-      </button>
+      <label>
+        Upload an image:
+        <input type="file" name="image" accept="image/jpg,image/png" />
+      </label>
+      <button type="submit">Upload</button>
     </form>
     <p>
       <img
@@ -38,7 +39,7 @@ async function deleteImage(pathname: string) {
         :src="`/images/${image.pathname}`"
         :alt="image.pathname"
         @dblclick="deleteImage(image.pathname)"
-      >
+      />
     </p>
     <p v-if="images?.length">
       <i>Tip: delete an image by double-clicking on it.</i>

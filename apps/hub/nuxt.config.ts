@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // https://nuxt.com/modules
@@ -31,7 +33,7 @@ export default defineNuxtConfig({
       stylistic: {
         quotes: 'single',
         arrowParens: false,
-        semi: true,
+        semi: false,
       },
     },
   },

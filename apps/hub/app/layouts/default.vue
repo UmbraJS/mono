@@ -23,7 +23,7 @@ onKeyStroke('Escape', () => {
         <slot />
       </main>
     </div>
-    <div class="underbar">
+    <div class="underbar inverted-theme">
       <header>
         <h1>title</h1>
       </header>
@@ -36,6 +36,10 @@ onKeyStroke('Escape', () => {
 </template>
 
 <style lang="scss">
+.inverted-theme {
+  color: var(--base-120);
+}
+
 .layout {
   --header-height: calc(var(--h1-display-size) + var(--space-2));
   --sidebar-width: calc(100dvw / 3);
@@ -61,6 +65,7 @@ onKeyStroke('Escape', () => {
 
   padding-bottom: var(--space-5);
   background-color: var(--base-20);
+  border-radius: var(--radius);
 
   transform: translateY(0px) translateX(0px);
   transition: var(--slow);

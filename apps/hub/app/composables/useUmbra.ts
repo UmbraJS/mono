@@ -1,16 +1,26 @@
-import { useDebounceFn } from '@vueuse/core'
+import { set, useDebounceFn } from '@vueuse/core'
 import type { Promisify } from '@vueuse/core'
-import type { UmbraInput, FormatedRange, UmbraOutputs, UmbraSettings } from '@umbrajs/core'
-import { umbra, rgb, isDark, getReadability } from '@umbrajs/core'
+import type { UmbraInput, FormatedRange, UmbraOutputs, UmbraSettings, Accent } from '@umbrajs/core'
+import { umbra, isDark, getReadability } from '@umbrajs/core'
+
+const warningAccent: Accent = {
+  name: 'warning',
+  color: '#ff0000',
+}
+
+const successAccent: Accent = {
+  name: 'success',
+  color: '#00ff00',
+}
 
 const themeInput: UmbraInput = {
-  foreground: '#ffffff',
-  background: '#000000',
-  accents: ['#9999ff'],
+  foreground: '#16121f',
+  background: '#f3f6ea',
+  accents: ['#9999ff', warningAccent, successAccent],
   inversed: {
-    foreground: '#000000',
-    background: '#ffffff',
-    accents: ['#ff0000'],
+    foreground: '#f3f6ea',
+    background: '#16121f',
+    accents: ['#9999ff', warningAccent, successAccent],
   },
 }
 
@@ -20,9 +30,9 @@ interface UseUmbra {
   isDark: globalThis.Ref<boolean>
   readability: globalThis.Ref<{ target: number; output: number; input: number }>
   setReadability: (value: number) => { target: number; output: number; input: number }
-  inverse: () => UmbraOutputs
+  inverse: (props?: { element?: HTMLElement }) => UmbraOutputs
   change: (scheme: UmbraInput) => Promisify<UmbraOutputs>
-  apply: (scheme?: UmbraInput) => UmbraOutputs
+  apply: (props?: { scheme?: UmbraInput; element?: HTMLElement }) => UmbraOutputs
 }
 
 export const useUmbra = defineStore('umbra', () => {
@@ -38,7 +48,6 @@ export const useUmbra = defineStore('umbra', () => {
 
   let settings: UmbraSettings = {
     readability: readability.value.target,
-    formater: rgb,
   }
 
   function stringableInput(input: UmbraInput) {
@@ -67,7 +76,7 @@ export const useUmbra = defineStore('umbra', () => {
     return theme
   }
 
-  function apply(scheme?: UmbraInput) {
+  function apply({ scheme, element }: { scheme?: UmbraInput; element?: HTMLElement } = {}) {
     const schemeInput = {
       ...input.value, // previous input
       ...scheme, // new input
@@ -83,7 +92,16 @@ export const useUmbra = defineStore('umbra', () => {
       settings: schemeSettings,
     })
 
-    const output = theme.apply()
+    const output = theme.apply({
+      target: element,
+    })
+
+    setTimeout(() => {
+      theme.inverse().apply({
+        target: '.inverted-theme',
+      })
+    }, 0)
+
     return store(output)
   }
 
@@ -91,12 +109,20 @@ export const useUmbra = defineStore('umbra', () => {
     maxWait: 200,
   })
 
-  function inverse() {
+  function inverse({ element }: { element?: HTMLElement } = {}) {
     const theme = umbra({
       settings: settings,
       ...input.value,
-    }).inverse()
-    const output = theme.apply()
+    })
+    const inverse = theme.inverse()
+    const output = inverse.apply({
+      target: element,
+    })
+    setTimeout(() => {
+      theme.apply({
+        target: '.inverted-theme',
+      })
+    }, 0)
     return store(output)
   }
 
@@ -119,7 +145,7 @@ export const useUmbra = defineStore('umbra', () => {
       readability: value,
     }
     detectReadability(value)
-    apply({ settings })
+    apply({ scheme: { settings } })
     return readability.value
   }
 
@@ -131,6 +157,6 @@ export const useUmbra = defineStore('umbra', () => {
     setReadability,
     inverse,
     change: (scheme: UmbraInput) => debounced(scheme),
-    apply: (scheme?: UmbraInput) => apply(scheme),
+    apply: (props?: { scheme?: UmbraInput; element?: HTMLElement }) => apply(props),
   } as UseUmbra
 })

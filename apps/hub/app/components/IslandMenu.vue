@@ -1,47 +1,16 @@
 <script setup lang="ts">
+import '@nobel/core/styles/main.scss'
 import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText } from '@nobel/core'
 
-import '@nobel/core/styles/main.scss'
-import { ref } from 'vue'
-import { umbra } from '@umbrajs/core'
-import type { Accent } from '@umbrajs/core'
+const ttt = useUmbra()
 
-const inversed = ref(true)
-
-const warningAccent: Accent = {
-  name: 'warning',
-  color: '#ff0000',
-}
-
-const successAccent: Accent = {
-  name: 'success',
-  color: '#00ff00',
-}
-
-const theme = umbra({
-  background: '#f3f6ea',
-  foreground: '#16121f',
-  accents: ['#8888ff', warningAccent, successAccent],
+onMounted(() => {
+  ttt.apply()
 })
-
-function applyTheme() {
-  if (inversed.value) {
-    theme.inverse().apply()
-  } else {
-    theme.apply()
-  }
-}
-
-applyTheme()
-
-function toggleTheme() {
-  applyTheme()
-  inversed.value = !inversed.value
-}
 </script>
 
 <template>
-  <nav id="island-menu" class="invert-theme">
+  <nav id="island-menu" class="inverted-theme">
     <ButtonGroup>
       <RouterLink to="/" class="button focus small" activeClass="primary">
         <IconHome />
@@ -55,7 +24,7 @@ function toggleTheme() {
         <IconWidth />
       </RouterLink>
 
-      <Button variant="primary" size="small" @click="toggleTheme">
+      <Button variant="primary" size="small" @click="ttt.inverse()">
         <IconPaint />
       </Button>
     </ButtonGroup>
