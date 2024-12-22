@@ -2,10 +2,10 @@
 import '@nobel/core/styles/main.scss'
 import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText } from '@nobel/core'
 
-const ttt = useUmbra()
+const theme = useUmbra()
 
 onMounted(() => {
-  ttt.apply()
+  theme.apply()
 })
 </script>
 
@@ -24,7 +24,7 @@ onMounted(() => {
         <IconWidth />
       </RouterLink>
 
-      <Button variant="primary" size="small" @click="ttt.inverse()">
+      <Button variant="primary" size="small" @click="theme.inverse()">
         <IconPaint />
       </Button>
     </ButtonGroup>

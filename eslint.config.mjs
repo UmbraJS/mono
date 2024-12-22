@@ -7,6 +7,7 @@ export default withNuxt().overrideRules({
   'vue/no-multiple-template-root': 'off',
   'vue/multi-word-component-names': 'off',
   'vue/attribute-hyphenation': 'off',
+  'vue/html-self-closing': 'off',
   '@stylistic/arrow-parens': 'off',
   '@stylistic/semi': 'off',
   '@stylistic/comma-dangle': 'off',

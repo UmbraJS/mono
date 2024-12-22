@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { RichText } from '@nobel/richtext'
 import PostFeed from '~/components/PostFeed.vue'
 </script>
 
 <template>
   <div class="artickle">
-    <RichArtickle />
+    <RichText />
   </div>
   <PostFeed />
 </template>
