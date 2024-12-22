@@ -17,6 +17,14 @@ onKeyStroke('Escape', () => {
 <template>
   <div class="layout" :class="classObject">
     <div class="burger" @click="toggleReveal" />
+    <div class="frost">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
     <div class="content-layer">
       <div class="vignet" @click="toggleReveal" />
       <main class="page">
@@ -166,5 +174,109 @@ onKeyStroke('Escape', () => {
 .underbar .content {
   grid-area: content;
   background-color: var(--base-20);
+}
+
+.layout .frost {
+  --blur-contrast: 1.3;
+  --blur-brightness: 0.9;
+
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+
+  height: 15dvh;
+  width: 100dvw;
+  pointer-events: none;
+
+  & > div,
+  &::before,
+  &::after {
+    position: absolute;
+    inset: 0;
+  }
+  &::before {
+    content: '';
+    z-index: 1;
+    backdrop-filter: blur(0.5px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 12.5%,
+      rgba(0, 0, 0, 1) 25%,
+      rgba(0, 0, 0, 0) 37.5%
+    );
+  }
+  & > div:nth-of-type(1) {
+    z-index: 2;
+    backdrop-filter: blur(1px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 12.5%,
+      rgba(0, 0, 0, 1) 25%,
+      rgba(0, 0, 0, 1) 37.5%,
+      rgba(0, 0, 0, 0) 50%
+    );
+  }
+  & > div:nth-of-type(2) {
+    z-index: 3;
+    backdrop-filter: blur(2px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 1) 37.5%,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(0, 0, 0, 0) 62.5%
+    );
+  }
+  & > div:nth-of-type(3) {
+    z-index: 4;
+    backdrop-filter: blur(4px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 37.5%,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(0, 0, 0, 1) 62.5%,
+      rgba(0, 0, 0, 0) 75%
+    );
+  }
+  & > div:nth-of-type(4) {
+    z-index: 5;
+    backdrop-filter: blur(8px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 1) 62.5%,
+      rgba(0, 0, 0, 1) 75%,
+      rgba(0, 0, 0, 0) 87.5%
+    );
+  }
+  & > div:nth-of-type(5) {
+    z-index: 6;
+    backdrop-filter: blur(16px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 62.5%,
+      rgba(0, 0, 0, 1) 75%,
+      rgba(0, 0, 0, 1) 87.5%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+  & > div:nth-of-type(6) {
+    z-index: 7;
+    backdrop-filter: blur(32px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 75%,
+      rgba(0, 0, 0, 1) 87.5%,
+      rgba(0, 0, 0, 1) 100%
+    );
+  }
+  &::after {
+    content: '';
+    z-index: 8;
+    backdrop-filter: blur(64px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
+    mask: linear-gradient(to bottom, rgba(0, 0, 0, 0) 87.5%, rgba(0, 0, 0, 1) 100%);
+  }
 }
 </style>
