@@ -22,6 +22,11 @@
   --blur-brightness: 1.2;
 }
 
+.layout.reveal .frost-layers {
+  --blur-contrast: 1;
+  --blur-brightness: 1;
+}
+
 .frost-layers {
   --layers: 5;
 

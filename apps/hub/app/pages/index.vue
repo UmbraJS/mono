@@ -21,7 +21,9 @@ import PostFeed from '~/components/PostFeed.vue'
   border-radius: var(--radius);
   background-color: var(--base-10);
   width: 100%;
-  /* border: solid var(--border-size) var(--base-40); */
+  border: solid var(--border-size) var(--base-30);
+  box-shadow: 0px 0px 20px 10px var(--base-20);
+  transition: 0.4s;
 
   h2 {
     margin: var(--space-6);

@@ -26,5 +26,6 @@
   padding: var(--space-4);
   background: var(--base-10);
   border-radius: var(--radius);
+  border: solid var(--border-size) var(--base-30);
 }
 </style>

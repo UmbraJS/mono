@@ -146,6 +146,7 @@ onKeyStroke('Escape', () => {
   grid-template-areas:
     'header header'
     'content sidebar';
+  transition: background-color var(--slower);
 }
 
 .underbar header {
