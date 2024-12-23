@@ -25,6 +25,7 @@ const theme = useUmbra()
       </Button>
     </ButtonGroup>
   </nav>
+  <div class="haze island-position"></div>
 </template>
 
 <style scoped>
@@ -49,5 +50,23 @@ const theme = useUmbra()
   margin: auto;
   left: 0;
   right: 0;
+}
+
+.island-position {
+  position: fixed;
+  bottom: var(--space-1);
+  margin: auto;
+  left: 0;
+  right: 0;
+}
+
+.haze {
+  height: var(--block-big);
+  width: 123px;
+  background: var(--accent);
+  box-shadow: -0px 22px 105px 18px var(--accent);
+  border-radius: var(--radius);
+  z-index: 99;
+  opacity: 1;
 }
 </style>
