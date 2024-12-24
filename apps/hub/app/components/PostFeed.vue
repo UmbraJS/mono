@@ -19,7 +19,7 @@
   }
 }
 
-.card {
+.feed .card {
   display: grid;
   justify-content: center;
   grid-column: span 2;
@@ -27,5 +27,6 @@
   background: var(--base-10);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-30);
+  transition: var(--slower);
 }
 </style>

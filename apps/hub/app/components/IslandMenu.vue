@@ -3,10 +3,19 @@ import '@nobel/core/styles/main.scss'
 import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText } from '@nobel/core'
 
 const theme = useUmbra()
+const hover = ref(false)
+const hazeStrength = computed(() => {
+  return hover.value ? '58px' : '28px'
+})
 </script>
 
 <template>
-  <nav id="island-menu" class="inverted-theme">
+  <nav
+    id="island-menu"
+    class="inverted-theme"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+  >
     <ButtonGroup>
       <RouterLink to="/" class="button focus small" activeClass="primary">
         <IconHome />
@@ -64,9 +73,11 @@ const theme = useUmbra()
   height: var(--block-big);
   width: 123px;
   background: var(--accent);
-  box-shadow: -0px 22px 105px 18px var(--accent);
+  box-shadow: -0px 22px 115px v-bind(hazeStrength) var(--accent);
   border-radius: var(--radius);
   z-index: 99;
   opacity: 1;
+  transition: var(--slow);
+  pointer-events: none;
 }
 </style>

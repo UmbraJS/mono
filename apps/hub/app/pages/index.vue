@@ -5,6 +5,9 @@ import PostFeed from '~/components/PostFeed.vue'
 
 <template>
   <div class="artickle">
+    <Premise />
+  </div>
+  <div class="artickle">
     <RichText />
   </div>
   <PostFeed />
