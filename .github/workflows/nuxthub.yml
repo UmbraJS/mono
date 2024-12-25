@@ -37,5 +37,5 @@ jobs:
         uses: nuxt-hub/action@v1
         id: deploy
         with:
-          project-key: mono-nt1o
+          project-key: mono-3qvl
           directory: apps/hub/dist
