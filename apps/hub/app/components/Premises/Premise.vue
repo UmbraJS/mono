@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{
+  type?: 'infavor' | 'inopposition'
+}>()
+</script>
 
 <template>
   <div class="premise">
@@ -14,6 +18,6 @@
   background: var(--base-10);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-60);
-  transition: var(--slower);
+  transition: var(--time);
 }
 </style>
