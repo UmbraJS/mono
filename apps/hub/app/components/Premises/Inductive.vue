@@ -2,20 +2,19 @@
 
 <template>
   <Premises class="inductive">
-    <PremisesPremise>
+    <PremisesPremise type="infavor">
       <p>All men are mortal</p>
     </PremisesPremise>
-    <PremisesPremise>
+    <PremisesPremise type="inopposition">
       <p>Socrates is a man</p>
     </PremisesPremise>
-
-    <div class="inductive premises">
-      <div class="premise infavor card">
-        <p>All men are mortal</p>
-      </div>
-      <div class="premise inopposition card">
-        <p>Socrates is a man</p>
-      </div>
-    </div>
   </Premises>
 </template>
+
+<style>
+.premises.inductive {
+  display: grid;
+  gap: var(--space-1);
+  grid-template-columns: 1fr 1fr;
+}
+</style>
