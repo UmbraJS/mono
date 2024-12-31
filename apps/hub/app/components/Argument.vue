@@ -1,18 +1,28 @@
 <script setup lang="ts">
+import type { Reason } from '../types/reasons'
+import ReasonMeta from './ReasonMeta.vue'
+
 const props = defineProps<{
-  reasoning: 'Deductive Reasoning' | 'Inductive Reasoning'
-  conclution: string
+  reason: Reason
 }>()
 </script>
 
 <template>
   <div class="argument">
-    <div class="meta">
-      <p>{{ props.reasoning }}</p>
-    </div>
+    <!-- <NuxtImg
+      src="https://images.unsplash.com/photo-1731331131233-4f73c93ae693?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      alt=""
+    /> -->
     <div class="conclution card">
-      <p>{{ props.conclution }}</p>
+      <p>{{ props.reason.conclution }}</p>
+      <div class="label">
+        <p>
+          {{ props.reason.credibility.level }}
+          <span>{{ props.reason.credibility.value }}</span>
+        </p>
+      </div>
     </div>
+    <!-- <ReasonMeta :reason="props.reason" /> -->
     <slot />
   </div>
 </template>
@@ -30,7 +40,6 @@ const props = defineProps<{
 }
 
 .argument .card {
-  padding: var(--space-2);
   padding-left: var(--space-3);
   background: var(--base-10);
   border-radius: var(--radius);
@@ -38,23 +47,18 @@ const props = defineProps<{
   transition: var(--slower);
 }
 
-.argument .meta {
+.conclution {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  position: absolute;
-  top: calc(0px - var(--block-big) + var(--space-2));
-  left: calc(var(--space-2));
-  left: calc(0px - var(--border-size));
+}
+
+.conclution .label {
   background: var(--base-20);
   color: var(--base-120);
-  border-radius: var(--radius);
-  padding: 0px var(--space-1);
-  width: max-content;
-  height: var(--block-big);
-  border: solid var(--border-size) var(--base-60);
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border-bottom: 0px;
-  transition: color var(--slower);
+  border-top-right-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  padding: var(--space-1) var(--space-2);
+  border-left: solid var(--border-size) var(--base-60);
 }
 </style>

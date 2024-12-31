@@ -13,7 +13,7 @@ const props = defineProps<{
 <style>
 .premise {
   position: relative;
-  padding: var(--space-2);
+  padding: var(--space-1);
   padding-left: var(--space-3);
   background: var(--base-10);
   border-radius: var(--radius);

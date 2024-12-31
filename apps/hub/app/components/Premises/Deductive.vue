@@ -1,15 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Reason } from '../../types/reasons'
+const props = defineProps<{
+  reason: Reason
+}>()
+</script>
 
 <template>
   <Premises>
     <div class="gutter"></div>
-    <PremisesPremise>
-      <PremisesPremiseId id="01" />
-      <p>All men are mortal</p>
-    </PremisesPremise>
-    <PremisesPremise>
-      <PremisesPremiseId id="02" />
-      <p>Socrates is a man</p>
+    <PremisesPremise v-for="(premise, index) in props.reason.premises" :key="premise.id">
+      <PremisesPremiseId :id="index + 1 + ''" />
+      <p>{{ premise.text }}</p>
     </PremisesPremise>
   </Premises>
 </template>
