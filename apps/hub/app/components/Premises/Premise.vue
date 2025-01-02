@@ -12,19 +12,22 @@ const props = defineProps<{
 
 <style>
 .premise {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-1);
+  align-items: center;
   position: relative;
-  padding: var(--space-1);
-  padding-left: var(--space-3);
   background: var(--base-10);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-60);
-  transition: var(--time);
+  min-height: var(--block-big);
+  padding-left: var(--space-quark);
 }
 
 .premise.infavor {
-  background: var(--success-40);
   color: var(--success-120);
   border: solid var(--border-size) var(--success-120);
+  background: var(--success-40);
 }
 
 .premise.inopposition {

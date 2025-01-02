@@ -5,7 +5,7 @@ import PostFeed from '~/components/PostFeed.vue'
 
 <template>
   <div class="artickle">
-    <Reasons />
+    <ReasonList />
   </div>
   <div class="artickle">
     <RichText />

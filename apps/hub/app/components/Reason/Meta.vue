@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Reason } from '../types/reasons'
+import type { Reason } from '../../types/reasons'
 
 const props = defineProps<{
   reason: Reason

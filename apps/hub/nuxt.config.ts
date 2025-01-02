@@ -30,11 +30,12 @@ export default defineNuxtConfig({
   // https://eslint.nuxt.com
   eslint: {
     config: {
-      stylistic: {
-        quotes: 'single',
-        arrowParens: false,
-        semi: false,
-      },
+      stylistic: false,
+      // {
+      //   quotes: 'single',
+      //   arrowParens: false,
+      //   semi: false,
+      // }
     },
   },
 })

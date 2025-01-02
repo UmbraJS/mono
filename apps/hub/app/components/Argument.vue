@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Reason } from '../types/reasons'
-import ReasonConclution from './ReasonConclution.vue'
-import ReasonMeta from './ReasonMeta.vue'
+import ReasonConclution from './Reason/Conclution.vue'
+import ReasonMeta from './Reason/Meta.vue'
 
 const props = defineProps<{
   reason: Reason
@@ -10,11 +10,13 @@ const props = defineProps<{
 
 <template>
   <div class="argument bodycopy">
-    <header>
+    <header :class="{ hasImage: props.reason.background }">
       <ReasonConclution :reason="props.reason" />
       <NuxtImg
-        src="https://images.unsplash.com/photo-1731331131233-4f73c93ae693?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt=""
+        v-if="props.reason.background"
+        :src="props.reason.background.url"
+        :alt="props.reason.background.alt"
+        :style="{ objectPosition: props.reason.background.offset }"
       />
     </header>
     <div class="argument-content">
@@ -44,7 +46,7 @@ const props = defineProps<{
 }
 
 .argument .card {
-  padding-left: var(--space-3);
+  padding-left: var(--space-1);
   background: var(--base-10);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-60);
@@ -57,9 +59,13 @@ const props = defineProps<{
   flex-direction: column;
   gap: var(--space-1);
   padding: var(--space-2);
-  padding-top: var(--space-4);
+  padding-top: 0px;
   padding-bottom: 0px;
   border-bottom: solid var(--border-size) var(--base-60);
+}
+
+.argument header.hasImage {
+  padding-top: var(--space-4);
 }
 
 .argument header img {

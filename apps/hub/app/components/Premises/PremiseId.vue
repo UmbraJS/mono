@@ -9,16 +9,15 @@ const { id = '01' } = defineProps({
     <div class="circle">
       {{ id }}
     </div>
-    <div class="cutout"></div>
   </div>
 </template>
 
 <style>
 .premise-id {
-  position: absolute;
-  z-index: 2;
-  left: calc(0px - var(--block) / 2);
-  margin-bottom: var(--space-1);
+  /* position: absolute; */
+  /* z-index: 2; */
+  /* left: calc(0px - var(--block) / 2); */
+  /* padding: var(--space-1); */
 }
 
 .premise-id .circle {
@@ -29,6 +28,7 @@ const { id = '01' } = defineProps({
   justify-content: center;
   align-items: center;
   border-radius: 100%;
+  border-radius: var(--radius);
 
   background-color: var(--accent-60);
   color: var(--accent-120);
@@ -38,22 +38,5 @@ const { id = '01' } = defineProps({
   aspect-ratio: 1 / 1;
 
   font-weight: bold;
-}
-
-.premise-id .cutout {
-  --outline: var(--space-1);
-  position: absolute;
-  z-index: 1;
-  top: calc(0px - var(--outline));
-  left: calc(0px - var(--outline));
-
-  background-color: var(--base-20);
-  border: solid var(--border-size) var(--base-60);
-  border-radius: 100%;
-
-  aspect-ratio: 1 / 1;
-  height: calc(var(--block) + var(--outline) * 2);
-
-  transform: scale(1 + 1px);
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Reason } from '../types/reasons'
+import type { Reason } from '../../types/reasons'
 
 const props = defineProps<{
   reason: Reason
@@ -9,12 +9,7 @@ const props = defineProps<{
 <template>
   <div class="conclution card">
     <p>{{ props.reason.conclution }}</p>
-    <div class="label">
-      <p>
-        {{ props.reason.credibility.level }}
-        <span>{{ props.reason.credibility.value }}</span>
-      </p>
-    </div>
+    <ReasonCredibility :credibility="props.reason.credibility" />
   </div>
 </template>
 
@@ -26,6 +21,7 @@ const props = defineProps<{
   position: relative;
   z-index: 1;
   transform: translateY(50%);
+  min-height: var(--block-big);
 }
 
 .conclution .label {
