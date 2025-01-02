@@ -7,29 +7,17 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="conclution card">
+  <PremisesPremise class="conclution card">
+    <PremisesPremiseId>
+      <Icon name="pixelarticons:lightbulb" />
+    </PremisesPremiseId>
     <p>{{ props.reason.conclution }}</p>
     <ReasonCredibility :credibility="props.reason.credibility" />
-  </div>
+  </PremisesPremise>
 </template>
 
-<style>
-.conclution {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+<style scoped>
+.conclution.card {
   z-index: 1;
-  transform: translateY(50%);
-  min-height: var(--block-big);
-}
-
-.conclution .label {
-  background: var(--base-20);
-  color: var(--base-120);
-  border-top-right-radius: var(--radius);
-  border-bottom-right-radius: var(--radius);
-  padding: var(--space-1) var(--space-2);
-  border-left: solid var(--border-size) var(--base-60);
 }
 </style>

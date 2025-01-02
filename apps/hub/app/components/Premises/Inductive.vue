@@ -23,4 +23,8 @@ const props = defineProps<{
   gap: var(--space-1);
   grid-template-columns: 1fr 1fr;
 }
+
+.premises.inductive .premise {
+  padding-left: var(--space-1);
+}
 </style>

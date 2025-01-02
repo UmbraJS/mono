@@ -80,6 +80,41 @@ const reasons = ref<Reason[]>([
       },
     ],
   },
+  {
+    id: '3',
+    reasoning: 'inductive',
+    conclution: 'Democrazy is good',
+    moralValue: 'Neutral',
+    type: 'Descriptive',
+    background: undefined,
+    credibility: {
+      value: 0.8,
+      level: 'solid',
+      votes: [],
+    },
+    premises: [
+      {
+        id: '1',
+        type: 'infavor',
+        text: 'Lots of mortal men',
+        credibility: {
+          value: 0.8,
+          level: 'solid',
+          votes: [],
+        },
+      },
+      {
+        id: '2',
+        type: 'inopposition',
+        text: 'Budda',
+        credibility: {
+          value: 0.8,
+          level: 'weak',
+          votes: [],
+        },
+      },
+    ],
+  },
 ])
 </script>
 

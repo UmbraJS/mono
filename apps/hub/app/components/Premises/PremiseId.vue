@@ -1,42 +1,30 @@
 <script setup lang="ts">
-const { id = '01' } = defineProps({
-  id: String,
-})
+const { id = 1 } = defineProps<{
+  id?: number
+}>()
 </script>
 
 <template>
-  <div class="premise-id">
-    <div class="circle">
-      {{ id }}
-    </div>
-  </div>
+  <p class="premise-id">
+    <slot>
+      <span> 0{{ id }} </span>
+    </slot>
+  </p>
 </template>
 
 <style>
 .premise-id {
-  /* position: absolute; */
-  /* z-index: 2; */
-  /* left: calc(0px - var(--block) / 2); */
-  /* padding: var(--space-1); */
-}
-
-.premise-id .circle {
   position: relative;
-  z-index: 2;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 100%;
-  border-radius: var(--radius);
+  border-right: solid var(--border-size) var(--base-60);
 
-  background-color: var(--accent-60);
+  background-color: var(--accent-40);
   color: var(--accent-120);
-  border: solid var(--border-size) var(--accent-120);
 
-  height: var(--block);
+  height: var(--block-big);
   aspect-ratio: 1 / 1;
-
-  font-weight: bold;
 }
 </style>

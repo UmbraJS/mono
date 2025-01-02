@@ -42,15 +42,12 @@ const props = defineProps<{
   flex-direction: column;
   gap: var(--space-1);
   padding: var(--space-2);
-  padding-top: var(--space-3);
 }
 
 .argument .card {
-  padding-left: var(--space-1);
   background: var(--base-10);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-60);
-  transition: var(--slower);
 }
 
 .argument header {
@@ -59,13 +56,13 @@ const props = defineProps<{
   flex-direction: column;
   gap: var(--space-1);
   padding: var(--space-2);
-  padding-top: 0px;
   padding-bottom: 0px;
-  border-bottom: solid var(--border-size) var(--base-60);
 }
 
 .argument header.hasImage {
-  padding-top: var(--space-4);
+  background-color: var(--accent);
+  border-bottom: solid var(--border-size) var(--base-60);
+  padding: var(--space-2);
 }
 
 .argument header img {
@@ -80,5 +77,6 @@ const props = defineProps<{
   border-radius: var(--radius);
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
+  opacity: 0.4;
 }
 </style>
