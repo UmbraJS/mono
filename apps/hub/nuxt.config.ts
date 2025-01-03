@@ -30,6 +30,10 @@ export default defineNuxtConfig({
   // https://eslint.nuxt.com
   eslint: {
     config: {
+      // parserOptions: {
+      //   parser: '@typescript-eslint/parser',
+      //   sourType: 'module',
+      // },
       stylistic: false,
       // {
       //   quotes: 'single',

@@ -24,7 +24,8 @@ const { id = 1 } = defineProps<{
   background-color: var(--accent-40);
   color: var(--accent-120);
 
-  height: var(--block-big);
-  aspect-ratio: 1 / 1;
+  height: 100%;
+  min-height: var(--block-big);
+  width: var(--block-big);
 }
 </style>

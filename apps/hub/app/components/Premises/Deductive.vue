@@ -9,7 +9,7 @@ const props = defineProps<{
   <Premises>
     <div class="gutter"></div>
     <PremisesPremise v-for="(premise, index) in props.reason.premises" :key="premise.id">
-      <PremisesPremiseId :id="index + 1 + ''" />
+      <PremisesPremiseId :id="index + 1" />
       <p>{{ premise.text }}</p>
       <ReasonCredibility :credibility="premise.credibility" />
     </PremisesPremise>
