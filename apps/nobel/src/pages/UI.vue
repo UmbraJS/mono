@@ -1,9 +1,21 @@
 <script setup lang="ts">
-import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, IconHome, IconPaint } from '@nobel/core'
+import {
+  Select,
+  Button,
+  ButtonGroup,
+  Toggle,
+  Chip,
+  Radio,
+  Slider,
+  IconHome,
+  IconPaint,
+} from '@nobel/core'
 </script>
 
 <template>
   <div class="ui-wrapper">
+    <Slider />
+
     <section id="chips">
       <h2>Chip</h2>
       <Chip />
@@ -30,6 +42,8 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, IconHome, IconPaint }
       <IconHome />
       <p>Disabled</p>
     </Button>
+
+    <Select />
 
     <section class="buttons">
       <Button variant="primary" size="mini">
@@ -77,8 +91,6 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, IconHome, IconPaint }
         </template>
       </Toggle>
     </section>
-
-    <Slider />
   </div>
 </template>
 

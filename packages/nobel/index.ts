@@ -1,5 +1,6 @@
 import './styles/main.scss'
 
+import Select from './components/ui/Select.vue'
 import Button from './components/ui/Button/Button.vue'
 import ButtonGroup from './components/ui/Button/ButtonGroup.vue'
 import Toggle from './components/ui/Button/Toggle.vue'
@@ -21,4 +22,4 @@ import IconWidth from './components/Icons/IconWidth.vue'
 import SVG from './components/Icons/SVG.vue'
 
 export { IconAdd, IconClose, IconHome, IconPaint, IconText, IconUI, IconWidth, SVG }
-export { Button, ButtonGroup, Toggle, AddButton, Chip, Radio, Slider }
+export { Button, ButtonGroup, Select, Toggle, AddButton, Chip, Radio, Slider }

@@ -10,7 +10,6 @@ const conclution = ref<string>(props.reason.conclution)
 </script>
 
 <template>
-  <p>{{ conclution }}</p>
   <PremisesPremise class="conclution card">
     <PremisesPremiseId>
       <Icon name="pixelarticons:lightbulb" />
@@ -19,13 +18,6 @@ const conclution = ref<string>(props.reason.conclution)
       v-model.trim="conclution"
       placeholder="State a clear position which can be true or false"
     />
-
-    <!-- <p>{{ props.reason.concldddddddddddddddddddution }}</p> -->
-    <!-- <textarea
-      v-model="conclution"
-      @input="conclutionTrimer"
-      placeholder="State a clear position which can be true or false"
-    /> -->
     <ReasonCredibility :credibility="props.reason.credibility" />
   </PremisesPremise>
 </template>
@@ -33,15 +25,5 @@ const conclution = ref<string>(props.reason.conclution)
 <style scoped>
 .conclution.card {
   z-index: 1;
-}
-
-textarea {
-  resize: none;
-  overflow: hidden;
-  field-sizing: content;
-  background: transparent;
-  color: var(--base-120);
-  border: none;
-  outline: none;
 }
 </style>

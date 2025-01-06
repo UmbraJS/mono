@@ -3,6 +3,10 @@ html {
   color: var(--base-120);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */
@@ -88,7 +92,8 @@ a:hover {
   color: var(--accent-100);
 }
 
-::-moz-selection { /* Code for Firefox */
+::-moz-selection {
+  /* Code for Firefox */
   color: var(--accent-constrast);
   background: var(--accent);
 }

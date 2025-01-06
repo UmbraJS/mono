@@ -86,7 +86,7 @@ const genericColors = computed(() => {
 
 @mixin button-base-theme {
   color: var(--base-120);
-  background-color: var(--base);
+  background-color: var(--base-10);
   border: solid var(--border-size) var(--base-60);
 }
 

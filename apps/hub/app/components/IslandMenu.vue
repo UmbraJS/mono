@@ -17,19 +17,19 @@ const hazeStrength = computed(() => {
     @mouseleave="hover = false"
   >
     <ButtonGroup>
-      <RouterLink to="/" class="button focus small" activeClass="primary">
+      <Button variant="base" size="small" @click="theme.inverse()">
         <IconHome />
-      </RouterLink>
+      </Button>
 
-      <RouterLink to="/type" class="button focus small" activeClass="primary">
-        <IconText />
-      </RouterLink>
-
-      <RouterLink to="/sizes" class="button focus small" activeClass="primary">
+      <Button variant="base" size="small" @click="theme.inverse()">
         <IconWidth />
-      </RouterLink>
+      </Button>
 
-      <Button variant="primary" size="small" @click="theme.inverse()">
+      <Button variant="base" size="small" @click="theme.inverse()">
+        <IconText />
+      </Button>
+
+      <Button :variant="theme.isDark ? 'primary' : 'base'" size="small" @click="theme.inverse()">
         <IconPaint />
       </Button>
     </ButtonGroup>
@@ -53,7 +53,7 @@ const hazeStrength = computed(() => {
   border-radius: var(--radius);
   background-color: var(--base-10);
   border: solid var(--border-size) var(--base-50);
-  border-radius: var(--radius);
+  border-radius: var(--outer-radius);
 
   bottom: var(--space-1);
   margin: auto;
@@ -74,7 +74,7 @@ const hazeStrength = computed(() => {
   width: 123px;
   background: var(--accent);
   box-shadow: -0px 22px 115px v-bind(hazeStrength) var(--accent);
-  border-radius: var(--radius);
+  border-radius: var(--outer-radius);
   z-index: 99;
   opacity: 1;
   transition: var(--slow);

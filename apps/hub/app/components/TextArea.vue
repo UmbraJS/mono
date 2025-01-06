@@ -24,7 +24,6 @@ function conclutionTrimer(value: string) {
   if (newValue.endsWith('\n ') || newValue.endsWith('\r ')) {
     newValue = newValue.slice(0, -1)
   }
-
   //Prevents multiple spaces in a row
   if (newValue.includes('  ')) {
     newValue = newValue.replace(/  /g, ' ')

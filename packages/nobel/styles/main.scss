@@ -10,7 +10,7 @@ $desktop: 1200px;
 :root {
   --inner-radius: calc(var(--radius) - var(--space-quark) / 2);
   --radius: 5px;
-  --outer-radius: calc(var(--radius) + var(--space-atom));
+  --outer-radius: calc(var(--radius) + var(--space-quark));
 
   --border-size: 1px;
   --border-color: var(--base-30);

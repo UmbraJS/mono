@@ -2,10 +2,14 @@
 import type { Reason } from '../types/reasons'
 import ReasonConclution from './Reason/Conclution.vue'
 import ReasonMeta from './Reason/Meta.vue'
+import { Button, ButtonGroup } from '@nobel/core'
 
 const props = defineProps<{
   reason: Reason
 }>()
+
+const bookmarked = ref(false)
+const edit = ref(false)
 </script>
 
 <template>
@@ -18,10 +22,30 @@ const props = defineProps<{
         :alt="props.reason.background.alt"
         :style="{ objectPosition: props.reason.background.offset }"
       />
+      <ButtonGroup class="controls">
+        <Button
+          size="small"
+          :variant="bookmarked ? 'primary' : 'base'"
+          @click="bookmarked = !bookmarked"
+        >
+          <Icon v-if="bookmarked" name="material-symbols:bookmark" size="0.8em" />
+          <Icon v-else name="material-symbols:bookmark-add-outline-rounded" size="0.8em" />
+        </Button>
+        <Button size="small" variant="base">
+          <Icon name="mdi:cogs" size="0.8em" />
+        </Button>
+        <Button size="small" :variant="edit ? 'primary' : 'base'" @click="edit = !edit">
+          <Icon v-if="edit" name="pixelarticons:edit" size="0.8em" />
+          <Icon v-else name="pixelarticons:edit" size="0.8em" />
+        </Button>
+      </ButtonGroup>
     </header>
     <div class="argument-content">
       <!-- <ReasonMeta :reason="props.reason" /> -->
       <slot />
+      <Button v-if="edit" size="small" variant="base">
+        <Icon name="material-symbols:add-2" size="0.8em" />
+      </Button>
     </div>
   </div>
 </template>
@@ -56,13 +80,21 @@ const props = defineProps<{
   flex-direction: column;
   gap: var(--space-1);
   padding: var(--space-2);
-  padding-bottom: 0px;
+  /* padding-bottom: 0px; */
+  border-bottom: solid var(--border-size) var(--base-60);
 }
 
 .argument header.hasImage {
   background-color: var(--accent);
-  border-bottom: solid var(--border-size) var(--base-60);
-  padding: var(--space-2);
+  /* border-bottom: solid var(--border-size) var(--base-60);
+  padding: var(--space-2); */
+}
+
+.argument header .controls {
+  position: absolute;
+  bottom: calc(0px - var(--block) / 2);
+  right: var(--space-2);
+  z-index: 1;
 }
 
 .argument header img {
