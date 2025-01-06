@@ -23,8 +23,6 @@ CREATE TABLE `session` (
 CREATE TABLE `user` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
-	`firstName` text,
-	`lastName` text,
 	`email` text NOT NULL,
 	`emailVerified` integer NOT NULL,
 	`image` text,
