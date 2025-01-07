@@ -95,7 +95,7 @@ const genericColors = computed(() => {
   justify-content: center;
   align-items: center;
   /* If it has more than one child */
-  &:has(:nth-child(2)) {
+  &:has(> :nth-child(2)) {
     gap: var(--space-1);
     grid-template-columns: auto 1fr;
   }
@@ -160,5 +160,12 @@ button:disabled {
   pointer-events: none;
   color: var(--base-50);
   background: var(--base-10);
+}
+
+button,
+button p,
+button .bodycopy {
+  font-variation-settings: var(--font-medium);
+  line-height: 1;
 }
 </style>

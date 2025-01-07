@@ -43,7 +43,6 @@ button {
   word-break: break-all;
   white-space: pre-wrap;
   text-transform: capitalize;
-  text-align: center;
 }
 
 h1.display,
@@ -125,11 +124,4 @@ blockquote {
     line-height: 1rem;
     font-variation-settings: var(--font-light);
   }
-}
-
-button,
-button p,
-button .bodycopy {
-  font-variation-settings: var(--font-medium);
-  line-height: 1;
 }
