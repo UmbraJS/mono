@@ -93,7 +93,8 @@ function handleClick() {
   right: 0;
   transition: 0.1s;
   height: var(--block-big);
-  height: auto;
+  /* height: auto; */
+  overflow: hidden;
 }
 
 .SelectRoot.open .SelectListWrapper {
