@@ -16,13 +16,23 @@ function getStep() {
   return listWrapperHeight / numberOfItems
 }
 
-const itemOffset = computed(() => {
-  if (!value.value) return 0
-  return getStep() * values.value.indexOf(value.value)
-})
+const itemOffset = ref(0)
+
+// const itemOffset = computed(() => {
+//   if (!value.value) return 0
+//   return getStep() * values.value.indexOf(value.value)
+// })
 
 function handleClick() {
-  open.value = !open.value
+  // open.value = !open.value
+}
+
+function handleItemClick(v: string, event: MouseEvent) {
+  value.value = v
+  const listWrapperTop = listWrapper.value?.getBoundingClientRect().top || 0
+  const itemClicked = event.currentTarget as HTMLDivElement
+  const itemClickedTop = itemClicked.offsetTop
+  itemOffset.value = itemClickedTop
 }
 </script>
 
@@ -35,13 +45,14 @@ function handleClick() {
           :key="v"
           class="SelectOption"
           :class="{ active: value === v }"
-          @click="value = v"
+          @click="(e) => handleItemClick(v, e)"
         >
           <Icon icon="radix-icons:chevron-down" />
           <p>{{ v }}</p>
         </div>
       </div>
     </div>
+    <div class="frame"></div>
   </button>
 </template>
 
@@ -92,12 +103,21 @@ function handleClick() {
   left: 0;
   right: 0;
   transition: 0.1s;
-  height: var(--block-big);
-  /* height: auto; */
-  overflow: hidden;
+  /* height: var(--block-big); */
+  height: auto;
 }
 
-.SelectRoot.open .SelectListWrapper {
+/* .SelectRoot.open .SelectListWrapper {
   height: auto;
+} */
+
+.frame {
+  position: absolute;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: solid 1px red;
 }
 </style>
