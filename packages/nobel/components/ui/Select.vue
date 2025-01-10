@@ -10,46 +10,33 @@ const open = ref(false)
 const listWrapper = useTemplateRef<HTMLDivElement>('listWrapper')
 const button = useTemplateRef<HTMLButtonElement>('button')
 
-function getStep() {
-  const listWrapperHeight = listWrapper.value?.clientHeight || 0
-  const numberOfItems = values.value.length
-  return listWrapperHeight / numberOfItems
-}
-
-const itemOffset = ref(0)
-
-// const itemOffset = computed(() => {
-//   if (!value.value) return 0
-//   return getStep() * values.value.indexOf(value.value)
-// })
+const itemOffsetTop = ref(0)
+const itemOffsetBottom = ref(0)
 
 function handleClick() {
-  // open.value = !open.value
+  open.value = !open.value
 }
 
 function handleItemClick(v: string, event: MouseEvent) {
   value.value = v
-  const listWrapperTop = listWrapper.value?.getBoundingClientRect().top || 0
   const itemClicked = event.currentTarget as HTMLDivElement
-  const itemClickedTop = itemClicked.offsetTop
-  itemOffset.value = itemClickedTop
+  itemOffsetTop.value = itemClicked.offsetTop
+  itemOffsetBottom.value = itemClicked.offsetTop + itemClicked.clientHeight
 }
 </script>
 
 <template>
   <button ref="button" class="SelectRoot" :class="{ open: open }" @click="handleClick">
-    <div ref="listWrapper" class="SelectListWrapper">
-      <div class="SelectList">
-        <div
-          v-for="v in values"
-          :key="v"
-          class="SelectOption"
-          :class="{ active: value === v }"
-          @click="(e) => handleItemClick(v, e)"
-        >
-          <Icon icon="radix-icons:chevron-down" />
-          <p>{{ v }}</p>
-        </div>
+    <div ref="listWrapper" class="SelectList">
+      <div
+        v-for="v in values"
+        :key="v"
+        class="SelectOption"
+        :class="{ active: value === v }"
+        @click="(e) => handleItemClick(v, e)"
+      >
+        <Icon icon="radix-icons:chevron-down" />
+        <p>{{ v }}</p>
       </div>
     </div>
     <div class="frame"></div>
@@ -67,6 +54,8 @@ function handleItemClick(v: string, event: MouseEvent) {
   color: var(--base-120);
   background: var(--base-10);
   border-radius: var(--radius);
+
+  --option-height: var(--block-big);
 }
 
 .SelectRoot p {
@@ -74,50 +63,54 @@ function handleItemClick(v: string, event: MouseEvent) {
 }
 
 .SelectList {
+  position: absolute;
+  top: calc(v-bind(itemOffsetTop) * -1px);
+  right: 0;
+  left: 0;
+  z-index: 2;
+
   display: flex;
   flex-direction: column;
+  border: solid var(--border-size) var(--accent-100);
+
   background: var(--base-10);
-  border-radius: var(--radius);
-  border: solid var(--border-size) var(--base-60);
-  overflow: hidden;
-  margin-top: calc(v-bind(itemOffset) * -1px);
-  transition: 0.1s;
+  clip-path: rect(
+    calc(v-bind(itemOffsetTop) * 1px) 100% calc(v-bind(itemOffsetTop) * 1px + var(--option-height))
+      0% round var(--radius)
+  );
+  transition: 0.4s;
+}
+
+.SelectRoot.open .SelectList {
+  clip-path: rect(0% 100% 100% 0% round var(--radius)) !important;
 }
 
 .SelectList .SelectOption {
   display: flex;
   gap: var(--space-1);
   align-items: center;
-  padding: var(--space-1);
-  height: var(--block-big);
+  padding: 0px var(--space-1);
+  height: var(--option-height);
 }
 
-.SelectList .SelectOption.active {
+.SelectRoot.open .SelectOption.active {
   background: var(--accent-40);
 }
 
-.SelectListWrapper {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  right: 0;
-  transition: 0.1s;
-  /* height: var(--block-big); */
-  height: auto;
+.SelectRoot.open .frame {
+  opacity: 0;
 }
 
-/* .SelectRoot.open .SelectListWrapper {
-  height: auto;
-} */
-
 .frame {
+  pointer-events: none;
   position: absolute;
   z-index: 99;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  border: solid 1px red;
+  border: solid var(--border-size) var(--base-60);
+  border-radius: var(--radius);
+  transition: 0.4s;
 }
 </style>
