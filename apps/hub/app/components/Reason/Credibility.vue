@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Select } from '@nobel/core'
 import type { Reason } from '../../types/reasons'
 const props = defineProps<{
   credibility: Reason['credibility']
@@ -7,10 +8,11 @@ const props = defineProps<{
 
 <template>
   <div class="reason-credibility">
-    <p>
+    <!-- <p>
       {{ props.credibility.level }}
       <span>{{ props.credibility.value }}</span>
-    </p>
+    </p> -->
+    <Select />
   </div>
 </template>
 
