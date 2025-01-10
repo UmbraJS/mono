@@ -55,7 +55,7 @@ const genericColors = computed(() => {
 <template>
   <component
     tabindex="1"
-    class="button focus"
+    class="button buttonHover buttonActive buttonFocus focus"
     :class="size"
     :is="ButtonVariant"
     :disabled="disabled"
@@ -140,31 +140,48 @@ const genericColors = computed(() => {
   @include button-mini;
 }
 
-.button:hover {
+.buttonHover:hover {
   @include button-hover;
 }
 
-.button:active,
-.button.active {
+.buttonActive:active,
+.buttonActive.active {
   @include button-active;
   filter: blur(1px);
 }
 
-.button:focus {
+.button.buttonFocus:focus {
   @include button-focus;
 }
 
+.buttonFocus:focus {
+  position: relative;
+  --focus-color: var(--color-100);
+  outline: solid 0px var(--focus-color);
+}
+
+.buttonFocus:focus,
+.buttonFocus:has(*:focus) {
+  z-index: 3; /* Makes sure the outline goes on top of sibling elements */
+  outline: solid var(--space-quark) var(--focus-color);
+}
+
+.buttonFocus:active,
+.buttonFocus:has(*:active) {
+  outline: solid var(--border-size) var(--color-10);
+}
+
 /* Disabled */
-button:disabled {
+.button:disabled {
   cursor: not-allowed;
   pointer-events: none;
   color: var(--base-50);
   background: var(--base-10);
 }
 
-button,
-button p,
-button .bodycopy {
+.button,
+.button p,
+.button .bodycopy {
   font-variation-settings: var(--font-medium);
   line-height: 1;
 }

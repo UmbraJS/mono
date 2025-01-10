@@ -6,7 +6,7 @@ const checked = ref(false)
 
 <template>
   <div class="checkbox button medium" :class="{ checked }">
-    <input type="checkbox" class="focus" tabindex="0" v-model="checked" />
+    <input type="checkbox" class="buttonFocus" tabindex="0" v-model="checked" />
     <CheckMark />
     <p><slot></slot></p>
   </div>

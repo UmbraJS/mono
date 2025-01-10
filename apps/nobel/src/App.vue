@@ -12,18 +12,18 @@ const inversed = ref(true)
 
 const warningAccent: Accent = {
   name: 'warning',
-  color: '#ff0000'
+  color: '#ff0000',
 }
 
 const successAccent: Accent = {
   name: 'success',
-  color: '#00ff00'
+  color: '#00ff00',
 }
 
 const theme = umbra({
   background: '#ffffff',
   foreground: '#000000',
-  accents: ['#8888ff', warningAccent, successAccent]
+  accents: ['#8888ff', warningAccent, successAccent],
 })
 
 inversed.value ? theme.inverse().apply() : theme.apply()
@@ -39,19 +39,19 @@ function toggleTheme() {
     <TextScreen>{{ route.fullPath }}</TextScreen>
     <nav>
       <ButtonGroup>
-        <RouterLink to="/" class="button focus small" activeClass="primary">
+        <RouterLink to="/" class="button buttonFocus small" activeClass="primary">
           <IconHome />
         </RouterLink>
 
-        <RouterLink to="/type" class="button focus small" activeClass="primary">
+        <RouterLink to="/type" class="button buttonFocus small" activeClass="primary">
           <IconText />
         </RouterLink>
 
-        <RouterLink to="/sizes" class="button focus small" activeClass="primary">
+        <RouterLink to="/sizes" class="button buttonFocus small" activeClass="primary">
           <IconWidth />
         </RouterLink>
 
-        <RouterLink to="/ui" class="button focus small" activeClass="primary">
+        <RouterLink to="/ui" class="button buttonFocus small" activeClass="primary">
           <IconUI />
         </RouterLink>
 

@@ -1,20 +1,3 @@
-.focus {
-  position: relative;
-  --focus-color: var(--accent-100);
-  outline: solid 0px var(--focus-color);
-}
-
-.focus:focus,
-.focus:has(*:focus) {
-  z-index: 3; /* Makes sure the outline goes on top of sibling elements */
-  outline: solid var(--space-quark) var(--focus-color);
-}
-
-.focus:active,
-.focus:has(*:active) {
-  outline: solid var(--border-size) var(--base-10);
-}
-
 .border {
   border-radius: var(--radius);
   border: var(--border-size) solid var(--base-60);

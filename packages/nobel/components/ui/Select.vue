@@ -26,20 +26,27 @@ function handleItemClick(v: string, event: MouseEvent) {
 </script>
 
 <template>
-  <button ref="button" class="SelectRoot" :class="{ open: open }" @click="handleClick">
+  <button
+    ref="button"
+    class="SelectRoot button buttonFocus buttonHover"
+    :class="{ open: open }"
+    @click="handleClick"
+  >
     <div ref="listWrapper" class="SelectList">
       <div
         v-for="v in values"
         :key="v"
-        class="SelectOption"
+        class="SelectOption buttonFocus buttonHover"
         :class="{ active: value === v }"
         @click="(e) => handleItemClick(v, e)"
       >
-        <Icon icon="radix-icons:chevron-down" />
+        <Icon :icon="value === v ? `` : ``" />
         <p>{{ v }}</p>
       </div>
     </div>
-    <div class="frame"></div>
+    <div class="frame">
+      <Icon icon="pixelarticons:chevron-down" />
+    </div>
   </button>
 </template>
 
@@ -50,7 +57,6 @@ function handleItemClick(v: string, event: MouseEvent) {
   height: var(--block-big);
   min-width: var(--block-big);
   grid-template-columns: 1fr;
-  border: solid 0px var(--base-60);
   color: var(--base-120);
   background: var(--base-10);
   border-radius: var(--radius);
@@ -72,12 +78,14 @@ function handleItemClick(v: string, event: MouseEvent) {
   display: flex;
   flex-direction: column;
   border: solid var(--border-size) var(--accent-100);
+  border-radius: var(--radius);
 
   background: var(--base-10);
   clip-path: rect(
     calc(v-bind(itemOffsetTop) * 1px) 100% calc(v-bind(itemOffsetTop) * 1px + var(--option-height))
       0% round var(--radius)
   );
+  box-shadow: 10px 10px 10000px 10000px black;
   transition: 0.4s;
 }
 
@@ -90,18 +98,23 @@ function handleItemClick(v: string, event: MouseEvent) {
   gap: var(--space-1);
   align-items: center;
   padding: 0px var(--space-1);
-  height: var(--option-height);
+  height: calc(var(--option-height) - var(--border-size));
+  border-radius: var(--radius);
 }
 
 .SelectRoot.open .SelectOption.active {
   background: var(--accent-40);
 }
 
-.SelectRoot.open .frame {
-  opacity: 0;
+.SelectRoot.open .frame svg {
+  transform: rotate(-90deg);
 }
 
 .frame {
+  display: flex;
+  align-items: center;
+  padding-left: vaR(--space-1);
+
   pointer-events: none;
   position: absolute;
   z-index: 99;
@@ -111,6 +124,11 @@ function handleItemClick(v: string, event: MouseEvent) {
   bottom: 0;
   border: solid var(--border-size) var(--base-60);
   border-radius: var(--radius);
-  transition: 0.4s;
+  transition: 0.2s;
+}
+
+.frame svg {
+  transform: rotate(0deg);
+  transition: 0.2s;
 }
 </style>
