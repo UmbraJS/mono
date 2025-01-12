@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Reason } from '../types/reasons'
 import ReasonConclution from './Reason/Conclution.vue'
-import ReasonMeta from './Reason/Meta.vue'
 import { Button, ButtonGroup } from '@nobel/core'
 
 const props = defineProps<{

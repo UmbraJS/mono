@@ -21,7 +21,6 @@ const props = defineProps<{
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-60);
   min-height: var(--block-big);
-  overflow: hidden;
 }
 
 .premise.infavor {

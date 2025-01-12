@@ -55,7 +55,7 @@ const genericColors = computed(() => {
 <template>
   <component
     tabindex="1"
-    class="button buttonHover buttonActive buttonFocus focus"
+    class="button buttonText buttonHover buttonActive buttonFocus focus"
     :class="size"
     :is="ButtonVariant"
     :disabled="disabled"
@@ -179,9 +179,7 @@ const genericColors = computed(() => {
   background: var(--base-10);
 }
 
-.button,
-.button p,
-.button .bodycopy {
+.buttonText {
   font-variation-settings: var(--font-medium);
   line-height: 1;
 }

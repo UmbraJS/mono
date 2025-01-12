@@ -44,6 +44,7 @@ import {
     </Button>
 
     <Select />
+    <Select />
 
     <section class="buttons">
       <Button variant="primary" size="mini">

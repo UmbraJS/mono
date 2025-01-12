@@ -24,6 +24,6 @@ const conclution = ref<string>(props.reason.conclution)
 
 <style scoped>
 .conclution.card {
-  z-index: 1;
+  z-index: 2;
 }
 </style>

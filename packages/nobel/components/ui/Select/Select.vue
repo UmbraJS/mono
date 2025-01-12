@@ -1,0 +1,79 @@
+<script setup lang="ts">
+import { useTemplateRef, computed, ref, getCurrentInstance } from 'vue'
+import SelectOptions from './SelectOptions.vue'
+
+const value = ref<string>('Blueberry')
+const values = ref(['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple'])
+const open = ref(false)
+
+const button = useTemplateRef<HTMLButtonElement>('button')
+
+const itemOffsetTop = ref(0)
+const itemOffsetBottom = ref(0)
+
+const longestValue = computed(() => {
+  return values.value.reduce((a, b) => (a.length > b.length ? a : b))
+})
+
+function handleClick() {
+  open.value = !open.value
+  setTimeout(() => {
+    methodThatForcesUpdate()
+  }, 1000)
+}
+
+const methodThatForcesUpdate = () => {
+  const instance = getCurrentInstance()
+  if (!instance?.proxy) return
+  instance.proxy.$forceUpdate()
+}
+
+function handleItemClick(props: { value: string; event: MouseEvent }) {
+  value.value = props.value
+  const itemClicked = props.event.currentTarget as HTMLDivElement
+  itemOffsetTop.value = itemClicked.offsetTop
+  itemOffsetBottom.value = itemClicked.offsetTop + itemClicked.clientHeight
+}
+</script>
+
+<template>
+  <button
+    ref="button"
+    class="SelectRoot button buttonFocus buttonHover"
+    :class="{ open: open }"
+    @click="handleClick"
+  >
+    <div class="value-spacer">
+      <p>{{ longestValue }}</p>
+    </div>
+    <SelectOptions
+      :open="open"
+      :value="value"
+      :values="values"
+      :itemOffsetTop="itemOffsetTop"
+      @optionClick="handleItemClick"
+    />
+  </button>
+</template>
+
+<style>
+button.SelectRoot {
+  position: relative;
+  height: var(--block-big);
+  min-width: var(--block-big);
+  grid-template-columns: 1fr;
+  color: var(--base-120);
+  background: var(--base-10);
+  border-radius: var(--radius);
+  min-width: 150px;
+  --option-height: var(--block-big);
+}
+
+.button.SelectRoot:focus {
+  z-index: 8;
+}
+
+button.SelectRoot p {
+  font-variation-settings: var(--font-regular);
+}
+</style>
