@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
 import { useTemplateRef, computed, ref, getCurrentInstance } from 'vue'
 import SelectOptions from './SelectOptions.vue'
 
@@ -9,7 +10,10 @@ const open = ref(false)
 const button = useTemplateRef<HTMLButtonElement>('button')
 
 const itemOffsetTop = ref(0)
-const itemOffsetBottom = ref(0)
+
+onClickOutside(button, () => {
+  open.value = false
+})
 
 const longestValue = computed(() => {
   return values.value.reduce((a, b) => (a.length > b.length ? a : b))
@@ -32,20 +36,19 @@ function handleItemClick(props: { value: string; event: MouseEvent }) {
   value.value = props.value
   const itemClicked = props.event.currentTarget as HTMLDivElement
   itemOffsetTop.value = itemClicked.offsetTop
-  itemOffsetBottom.value = itemClicked.offsetTop + itemClicked.clientHeight
 }
 </script>
 
 <template>
   <button
     ref="button"
-    class="SelectRoot button buttonFocus buttonHover"
+    class="SelectRoot buttonFocus buttonHover"
     :class="{ open: open }"
     @click="handleClick"
   >
-    <div class="value-spacer">
+    <!-- <div class="value-spacer">
       <p>{{ longestValue }}</p>
-    </div>
+    </div> -->
     <SelectOptions
       :open="open"
       :value="value"

@@ -21,7 +21,7 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <div class="SelectList" :class="{ open: open }">
+  <!-- <div class="SelectList" :class="{ open: open }">
     <div
       v-for="v in values"
       :key="v"
@@ -29,11 +29,11 @@ const emits = defineEmits<{
       :class="{ active: value === v }"
       @click="(e) => emits('optionClick', { value: v, event: e })"
     >
-      <Icon :icon="value === v ? `` : ``" />
+      <Icon :icon="value === v ? '' : ''" />
       <p>{{ v }}</p>
     </div>
-  </div>
-  <div class="frame">
+  </div> -->
+  <div class="frame buttonFocus buttonHover">
     <Icon icon="pixelarticons:chevron-down" />
   </div>
 </template>
@@ -41,9 +41,9 @@ const emits = defineEmits<{
 <style>
 .SelectList {
   position: absolute;
-  top: calc(v-bind(itemOffsetTop) * -1px);
-  right: 0;
-  left: 0;
+  top: calc(v-bind(itemOffsetTop) * -1px - var(--border-size) * 2);
+  right: calc(0px - var(--border-size));
+  left: calc(0px - var(--border-size));
   z-index: v-bind(index);
 
   display: flex;
@@ -86,14 +86,14 @@ const emits = defineEmits<{
   align-items: center;
   padding-left: vaR(--space-1);
 
-  pointer-events: none;
   position: absolute;
   z-index: calc(v-bind(index) + 1);
 
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: calc(0px - (var(--border-size) * 0.5));
+  left: calc(0px - (var(--border-size) * 0.5));
+  width: calc(100% + (var(--border-size) * 0.7));
+  height: calc(100% + (var(--border-size) * 1.2));
+
   border: solid var(--border-size) var(--base-60);
   border-radius: var(--radius);
   transition: 0.2s;
