@@ -7,21 +7,27 @@ const value = ref<string>('Blueberry')
 const values = ref(['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple'])
 const open = ref(false)
 
-const listWrapper = useTemplateRef<HTMLDivElement>('listWrapper')
-const button = useTemplateRef<HTMLButtonElement>('button')
+const ListContent = useTemplateRef<HTMLDivElement>('ListContent')
 
 const itemOffsetTop = ref(0)
-const itemOffsetBottom = ref(0)
+
+const longestValue = computed(() => values.value.reduce((a, b) => (a.length > b.length ? a : b)))
 
 function handleClick() {
   open.value = !open.value
 }
 
-function handleItemClick(v: string, event: MouseEvent) {
+function handleItemClick(v: string, index: number, event: MouseEvent) {
   value.value = v
   const itemClicked = event.currentTarget as HTMLDivElement
-  itemOffsetTop.value = itemClicked.offsetTop
-  itemOffsetBottom.value = itemClicked.offsetTop + itemClicked.clientHeight
+  if (!ListContent.value) return
+
+  const listContentHeight = ListContent.value.clientHeight
+  const amountOfItems = values.value.length
+
+  const distanceFromTopToItemAtIndex = (listContentHeight / amountOfItems) * index - 1
+
+  itemOffsetTop.value = distanceFromTopToItemAtIndex
 }
 </script>
 
@@ -32,16 +38,19 @@ function handleItemClick(v: string, event: MouseEvent) {
     :class="{ open: open }"
     @click="handleClick"
   >
-    <div ref="listWrapper" class="SelectList">
-      <div
-        v-for="v in values"
-        :key="v"
-        class="SelectOption buttonFocus buttonHover"
-        :class="{ active: value === v }"
-        @click="(e) => handleItemClick(v, e)"
-      >
-        <Icon :icon="value === v ? `` : ``" />
-        <p>{{ v }}</p>
+    <p class="space-value">{{ longestValue }}</p>
+    <div class="SelectList">
+      <div ref="ListContent" class="SelectList-content">
+        <div
+          v-for="(v, index) in values"
+          :key="v"
+          class="SelectOption buttonFocus buttonHover"
+          :class="{ active: value === v }"
+          @click="(e) => handleItemClick(v, index, e)"
+        >
+          <Icon :icon="value === v ? `` : ``" />
+          <p>{{ v }}</p>
+        </div>
       </div>
     </div>
     <div class="frame">
@@ -70,10 +79,13 @@ function handleItemClick(v: string, event: MouseEvent) {
 
 .SelectList {
   position: absolute;
-  top: calc(v-bind(itemOffsetTop) * -1px);
+  top: 0;
   right: 0;
   left: 0;
   z-index: 2;
+
+  height: var(--option-height);
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -81,16 +93,22 @@ function handleItemClick(v: string, event: MouseEvent) {
   border-radius: var(--radius);
 
   background: var(--base-10);
-  clip-path: rect(
-    calc(v-bind(itemOffsetTop) * 1px) 100% calc(v-bind(itemOffsetTop) * 1px + var(--option-height))
-      0% round var(--radius)
-  );
-  box-shadow: 10px 10px 10000px 10000px black;
+  box-shadow: 10px 10px 50px 50px red;
   transition: 0.4s;
 }
 
 .SelectRoot.open .SelectList {
-  clip-path: rect(0% 100% 100% 0% round var(--radius)) !important;
+  top: calc(v-bind(itemOffsetTop) * -2px);
+  height: auto;
+}
+
+.SelectList-content {
+  margin-top: calc(v-bind(itemOffsetTop) * -1px);
+  transition: 0.4s;
+}
+
+.SelectRoot.open .SelectList .SelectList-content {
+  margin-top: 0;
 }
 
 .SelectList .SelectOption {

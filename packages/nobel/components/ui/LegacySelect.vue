@@ -1,160 +1,137 @@
 <script setup lang="ts">
+import { useTemplateRef, computed } from 'vue'
 import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
-import {
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectItemText,
-  SelectLabel,
-  SelectPortal,
-  SelectRoot,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectTrigger,
-  SelectValue,
-  SelectViewport,
-} from 'reka-ui'
 
-const fruit = ref()
-
-const options = ['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple']
+const value = ref<string>('Blueberry')
+const values = ref(['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple'])
 const open = ref(false)
+
+const listWrapper = useTemplateRef<HTMLDivElement>('listWrapper')
+const button = useTemplateRef<HTMLButtonElement>('button')
+
+const itemOffsetTop = ref(0)
+const itemOffsetBottom = ref(0)
+
+const longestValue = computed(() => values.value.reduce((a, b) => (a.length > b.length ? a : b)))
+
+function handleClick() {
+  open.value = !open.value
+}
+
+function handleItemClick(v: string, event: MouseEvent) {
+  value.value = v
+  const itemClicked = event.currentTarget as HTMLDivElement
+  itemOffsetTop.value = itemClicked.offsetTop
+  itemOffsetBottom.value = itemClicked.offsetTop + itemClicked.clientHeight
+}
 </script>
 
 <template>
-  <SelectRoot v-model="fruit" v-model:open="open">
-    <SelectTrigger class="SelectTrigger button focus" aria-label="Customise options">
-      <Icon icon="radix-icons:chevron-down" />
-      <SelectValue placeholder="Select a fruit..." />
-    </SelectTrigger>
-
-    <SelectPortal>
-      <SelectContent v-if="true" class="SelectContent">
-        <SelectScrollUpButton class="SelectScrollButton">
-          <Icon icon="radix-icons:chevron-up" />
-        </SelectScrollUpButton>
-
-        <SelectViewport class="SelectViewport">
-          <SelectLabel class="SelectLabel"> Fruits </SelectLabel>
-          <SelectGroup class="SelectGroup">
-            <SelectItem
-              v-for="(option, index) in options"
-              :key="index"
-              class="SelectItem"
-              :value="option"
-            >
-              <Icon icon="radix-icons:chevron-down" />
-              <SelectItemText as="p">
-                {{ option }}
-              </SelectItemText>
-            </SelectItem>
-          </SelectGroup>
-        </SelectViewport>
-
-        <SelectScrollDownButton class="SelectScrollButton">
-          <Icon icon="radix-icons:chevron-down" />
-        </SelectScrollDownButton>
-      </SelectContent>
-    </SelectPortal>
-  </SelectRoot>
+  <button
+    ref="button"
+    class="SelectRoot button buttonFocus buttonHover"
+    :class="{ open: open }"
+    @click="handleClick"
+  >
+    <p class="space-value">{{ longestValue }}</p>
+    <div ref="listWrapper" class="SelectList">
+      <div
+        v-for="v in values"
+        :key="v"
+        class="SelectOption buttonFocus buttonHover"
+        :class="{ active: value === v }"
+        @click="(e) => handleItemClick(v, e)"
+      >
+        <Icon :icon="value === v ? `` : ``" />
+        <p>{{ v }}</p>
+      </div>
+    </div>
+    <div class="frame">
+      <Icon icon="pixelarticons:chevron-down" />
+    </div>
+  </button>
 </template>
 
 <style>
-body {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.SelectTrigger {
-  display: grid;
-  grid-template-columns: 1em 1fr !important;
-  border-radius: var(--radius);
-  padding: 0 var(--space-1);
-  height: var(--block-big);
-  gap: var(--space-1);
-  border: solid var(--border-size) var(--base-60);
-  background-color: var(--base-10);
-}
-
-.SelectTrigger[data-placeholder] {
-  color: var(--base-80);
-}
-
-.SelectTrigger span {
-  font-variation-settings: var(--font-regular);
-  width: max-content;
-}
-
-.SelectIcon {
-  color: red;
-}
-
-.SelectContent {
-  overflow: hidden;
-  background-color: var(--base-10);
-  border-radius: var(--radius);
-  border: solid var(--border-size) var(--base-60);
-}
-
-.SelectViewport {
-  padding: var(--space-1);
-}
-
-.SelectItem {
-  display: grid;
-  align-items: center;
-  justify-content: center;
-  grid-template-columns: 1em 1fr;
-
-  border-radius: var(--radius);
-
-  padding: 0 var(--space-1);
-  height: var(--block-big);
-  gap: var(--space-1);
-
+.SelectRoot {
   position: relative;
-  user-select: none;
-  cursor: pointer;
+  z-index: 1;
+  height: var(--block-big);
+  min-width: var(--block-big);
+  grid-template-columns: 1fr;
+  color: var(--base-120);
+  background: var(--base-10);
+  border-radius: var(--radius);
+
+  --option-height: var(--block-big);
 }
 
-.SelectItem[data-disabled] {
-  color: var(--base-80);
-  background-color: var(--base-20);
-  pointer-events: none;
+.SelectRoot p {
+  font-variation-settings: var(--font-regular);
 }
 
-.SelectItem[data-highlighted] {
-  outline: none;
-  background-color: var(--accent-40);
-  color: var(--accent-120);
+.SelectList {
+  position: absolute;
+  top: calc(v-bind(itemOffsetTop) * -1px);
+  right: 0;
+  left: 0;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  border: solid var(--border-size) var(--accent-100);
+  border-radius: var(--radius);
+
+  background: var(--base-10);
+  clip-path: rect(
+    calc(v-bind(itemOffsetTop) * 1px) 100% calc(v-bind(itemOffsetTop) * 1px + var(--option-height))
+      0% round var(--radius)
+  );
+  box-shadow: 10px 10px 10000px 10000px black;
+  transition: 0.4s;
 }
 
-.SelectLabel {
+.SelectRoot.open .SelectList {
+  clip-path: rect(0% 100% 100% 0% round var(--radius)) !important;
+}
+
+.SelectList .SelectOption {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
   padding: 0px var(--space-1);
-  height: var(--block);
-  color: var(--accent-120);
-  border-bottom: solid var(--border-size) var(--base-40);
+  height: calc(var(--option-height) - var(--border-size));
+  border-radius: var(--radius);
 }
 
-.SelectSeparator {
-  height: 1px;
-  background-color: var(--accent-120);
-  margin: 5px;
+.SelectRoot.open .SelectOption.active {
+  background: var(--accent-40);
 }
 
-.SelectGroup {
-  padding-bottom: var(--space-2);
+.SelectRoot.open .frame svg {
+  transform: rotate(-90deg);
 }
 
-.SelectScrollButton {
+.frame {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-top: solid var(--border-size) var(--base-60);
-  height: var(--block-big);
-  background-color: var(--base-20);
-  color: var(--base-120);
-  cursor: default;
+  padding-left: vaR(--space-1);
+
+  pointer-events: none;
+  position: absolute;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: solid var(--border-size) var(--base-60);
+  border-radius: var(--radius);
+  transition: 0.2s;
+}
+
+.frame svg {
+  transform: rotate(0deg);
+  transition: 0.2s;
 }
 </style>
