@@ -21,7 +21,7 @@ const emits = defineEmits<{
 </script>
 
 <template>
-  <!-- <div class="SelectList" :class="{ open: open }">
+  <div class="SelectList" :class="{ open: open }">
     <div
       v-for="v in values"
       :key="v"
@@ -32,7 +32,7 @@ const emits = defineEmits<{
       <Icon :icon="value === v ? '' : ''" />
       <p>{{ v }}</p>
     </div>
-  </div> -->
+  </div>
   <div class="frame buttonFocus buttonHover">
     <Icon icon="pixelarticons:chevron-down" />
   </div>
