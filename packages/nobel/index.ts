@@ -1,6 +1,6 @@
 import './styles/main.scss'
 
-import Select from './components/ui/Select/Select.vue'
+import Select from './components/ui/Select.vue'
 import Button from './components/ui/Button/Button.vue'
 import ButtonGroup from './components/ui/Button/ButtonGroup.vue'
 import Toggle from './components/ui/Button/Toggle.vue'

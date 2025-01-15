@@ -4,12 +4,23 @@ import { Icon } from '@iconify/vue'
 import { ref } from 'vue'
 
 const value = ref<string>('Blueberry')
-const values = ref(['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple'])
+const values = ref([
+  'Apple',
+  'Banana',
+  'Blueberry',
+  'Grapes',
+  'Pineapple',
+  'Strawberry',
+  'Watermelon',
+  'Kiwi',
+  'Orange',
+])
 const open = ref(false)
 
 const ListContent = useTemplateRef<HTMLDivElement>('ListContent')
 
 const itemOffsetTop = ref(0)
+const itemOffsetBottom = ref(0)
 
 const longestValue = computed(() => values.value.reduce((a, b) => (a.length > b.length ? a : b)))
 
@@ -20,14 +31,18 @@ function handleClick() {
 function handleItemClick(v: string, index: number, event: MouseEvent) {
   value.value = v
   const itemClicked = event.currentTarget as HTMLDivElement
+  const itemClickedHeight = itemClicked.clientHeight
   if (!ListContent.value) return
 
   const listContentHeight = ListContent.value.clientHeight
   const amountOfItems = values.value.length
 
   const distanceFromTopToItemAtIndex = (listContentHeight / amountOfItems) * index - 1
+  const distanceFromBottomToItemAtIndex =
+    listContentHeight - distanceFromTopToItemAtIndex - itemClickedHeight
 
   itemOffsetTop.value = distanceFromTopToItemAtIndex
+  itemOffsetBottom.value = distanceFromBottomToItemAtIndex
 }
 </script>
 
@@ -80,6 +95,7 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
 .SelectList {
   position: absolute;
   top: 0;
+  bottom: 0;
   right: 0;
   left: 0;
   z-index: 2;
@@ -94,17 +110,21 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
 
   background: var(--base-10);
   box-shadow: 10px 10px 50px 50px red;
-  transition: 0.4s;
+  transition:
+    all 0.4s linear,
+    height 0.4s linear;
+  interpolate-size: allow-keywords;
 }
 
 .SelectRoot.open .SelectList {
-  top: calc(v-bind(itemOffsetTop) * -2px);
+  bottom: calc(v-bind(itemOffsetBottom) * -1px);
+  top: calc(v-bind(itemOffsetTop) * -1px);
   height: auto;
 }
 
 .SelectList-content {
   margin-top: calc(v-bind(itemOffsetTop) * -1px);
-  transition: 0.4s;
+  transition: 0.4s linear;
 }
 
 .SelectRoot.open .SelectList .SelectList-content {

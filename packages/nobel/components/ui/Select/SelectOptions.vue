@@ -16,18 +16,18 @@ const {
 }>()
 
 const emits = defineEmits<{
-  (e: 'optionClick', props: { value: string; event: MouseEvent }): void
+  (e: 'optionClick', props: { value: string; index: number; event: MouseEvent }): void
 }>()
 </script>
 
 <template>
   <div class="SelectList" :class="{ open: open }">
     <div
-      v-for="v in values"
+      v-for="(v, index) in values"
       :key="v"
       class="SelectOption buttonFocus buttonHover"
       :class="{ active: value === v }"
-      @click="(e) => emits('optionClick', { value: v, event: e })"
+      @click="(e) => emits('optionClick', { value: v, index, event: e })"
     >
       <Icon :icon="value === v ? '' : ''" />
       <p>{{ v }}</p>

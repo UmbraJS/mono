@@ -7,11 +7,11 @@ const value = ref<string>('Blueberry')
 const values = ref(['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple'])
 const open = ref(false)
 
-const button = useTemplateRef<HTMLButtonElement>('button')
+const ListContent = useTemplateRef<HTMLDivElement>('ListContent')
 
 const itemOffsetTop = ref(0)
 
-onClickOutside(button, () => {
+onClickOutside(ListContent, () => {
   open.value = false
 })
 
@@ -21,31 +21,24 @@ const longestValue = computed(() => {
 
 function handleClick() {
   open.value = !open.value
-  setTimeout(() => {
-    methodThatForcesUpdate()
-  }, 1000)
 }
 
-const methodThatForcesUpdate = () => {
-  const instance = getCurrentInstance()
-  if (!instance?.proxy) return
-  instance.proxy.$forceUpdate()
-}
-
-function handleItemClick(props: { value: string; event: MouseEvent }) {
+function handleItemClick(props: { value: string; index: number; event: MouseEvent }) {
   value.value = props.value
   const itemClicked = props.event.currentTarget as HTMLDivElement
-  itemOffsetTop.value = itemClicked.offsetTop
+  if (!ListContent.value) return
+
+  const listContentHeight = ListContent.value.clientHeight
+  const amountOfItems = values.value.length
+
+  const distanceFromTopToItemAtIndex = (listContentHeight / amountOfItems) * props.index - 1
+
+  itemOffsetTop.value = distanceFromTopToItemAtIndex
 }
 </script>
 
 <template>
-  <button
-    ref="button"
-    class="SelectRoot buttonFocus buttonHover"
-    :class="{ open: open }"
-    @click="handleClick"
-  >
+  <button class="SelectRoot buttonFocus buttonHover" :class="{ open: open }" @click="handleClick">
     <!-- <div class="value-spacer">
       <p>{{ longestValue }}</p>
     </div> -->
