@@ -110,9 +110,7 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
 
   background: var(--base-10);
   box-shadow: 10px 10px 50px 50px red;
-  transition:
-    all 0.4s linear,
-    height 0.4s linear;
+  transition: 0.4s;
   interpolate-size: allow-keywords;
 }
 
