@@ -84,7 +84,7 @@ const edit = ref(false)
 }
 
 .argument header.hasImage {
-  background-color: var(--accent);
+  background-color: var(--accent-30);
   /* border-bottom: solid var(--border-size) var(--base-60);
   padding: var(--space-2); */
 }
@@ -108,6 +108,6 @@ const edit = ref(false)
   border-radius: var(--radius);
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
-  opacity: 0.4;
+  opacity: 0.6;
 }
 </style>

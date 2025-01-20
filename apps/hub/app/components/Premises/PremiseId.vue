@@ -20,6 +20,8 @@ const { id = 1 } = defineProps<{
   justify-content: center;
   align-items: center;
   border-right: solid var(--border-size) var(--base-60);
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
 
   background-color: var(--accent-40);
   color: var(--accent-120);

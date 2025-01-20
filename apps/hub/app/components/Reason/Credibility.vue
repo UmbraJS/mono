@@ -8,11 +8,11 @@ const props = defineProps<{
 
 <template>
   <div class="reason-credibility">
-    <!-- <p>
+    <p>
       {{ props.credibility.level }}
       <span>{{ props.credibility.value }}</span>
-    </p> -->
-    <Select />
+    </p>
+    <!-- <Select /> -->
   </div>
 </template>
 
