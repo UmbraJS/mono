@@ -16,6 +16,7 @@ const values = ref([
   'Orange',
 ])
 const open = ref(false)
+const activeItemAboveCenter = ref(false)
 
 const ListContent = useTemplateRef<HTMLDivElement>('ListContent')
 
@@ -28,11 +29,28 @@ function handleClick() {
   open.value = !open.value
 }
 
+// setInterval(() => {
+//   open.value = !open.value
+// }, 1000)
+
+const transitionMax = 0.4
+const transitionMin = transitionMax / 2
+const transition = ref(transitionMax)
+
 function handleItemClick(v: string, index: number, event: MouseEvent) {
   value.value = v
   const itemClicked = event.currentTarget as HTMLDivElement
   const itemClickedHeight = itemClicked.clientHeight
   if (!ListContent.value) return
+
+  const numberOfItems = values.value.length
+  const halfWay = numberOfItems / 2
+
+  if (index < halfWay) {
+    activeItemAboveCenter.value = true
+  } else {
+    activeItemAboveCenter.value = false
+  }
 
   const listContentHeight = ListContent.value.clientHeight
   const amountOfItems = values.value.length
@@ -50,8 +68,9 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
   <button
     ref="button"
     class="SelectRoot button buttonFocus buttonHover"
-    :class="{ open: open }"
+    :class="{ open: open, aboveHalf: activeItemAboveCenter }"
     @click="handleClick"
+    anchor="select"
   >
     <p class="space-value">{{ longestValue }}</p>
     <div class="SelectList">
@@ -100,7 +119,6 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
   left: 0;
   z-index: 2;
 
-  height: var(--option-height);
   overflow: hidden;
 
   display: flex;
@@ -110,24 +128,42 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
 
   background: var(--base-10);
   box-shadow: 10px 10px 50px 50px red;
-  transition: 0.4s;
+  transition: 1s;
   interpolate-size: allow-keywords;
 }
 
 .SelectRoot.open .SelectList {
   bottom: calc(v-bind(itemOffsetBottom) * -1px);
   top: calc(v-bind(itemOffsetTop) * -1px);
-  height: auto;
+  right: 0;
+  left: 0;
+  width: 100%;
 }
 
 .SelectList-content {
-  margin-top: calc(v-bind(itemOffsetTop) * -1px);
-  transition: 0.4s linear;
+  position: fixed;
+
+  bottom: anchor(center);
+
+  width: 100%;
+  transition: 1s linear;
+}
+/* 
+.SelectRoot.aboveHalf .SelectList-content {
+  top: calc(v-bind(itemOffsetTop) * -1px);
 }
 
-.SelectRoot.open .SelectList .SelectList-content {
-  margin-top: 0;
+.SelectRoot.aboveHalf.open .SelectList-content {
+  top: 0;
 }
+
+.SelectRoot:not(.aboveHalf) .SelectList-content {
+  bottom: calc(v-bind(itemOffsetBottom) * -1px);
+}
+
+.SelectRoot:not(.aboveHalf).open .SelectList-content {
+  bottom: 0;
+} */
 
 .SelectList .SelectOption {
   display: flex;
