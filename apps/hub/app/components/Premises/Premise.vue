@@ -13,8 +13,7 @@ const props = defineProps<{
 <style>
 .premise {
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: var(--space-1);
+  grid-template-columns: auto 1fr 100px;
   align-items: center;
   position: relative;
   background: var(--base-10);

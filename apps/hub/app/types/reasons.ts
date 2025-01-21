@@ -76,6 +76,7 @@ interface Premise {
   id: string
   type: string
   text: string
+  source?: string
   credibility: Credibility
 }
 

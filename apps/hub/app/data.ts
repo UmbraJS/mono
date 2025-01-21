@@ -51,7 +51,7 @@ const reasons: Reason[] = [
   },
   {
     id: '2',
-    reasoning: 'inductive',
+    reasoning: 'deductive',
     conclution: 'Democrazy is good',
     moralValue: 'Neutral',
     type: 'Descriptive',
@@ -69,7 +69,8 @@ const reasons: Reason[] = [
       {
         id: '1',
         type: 'infavor',
-        text: 'Lots of mortal men',
+        text: 'Nuxt layers are a powerful feature that you can use to share and reuse partial Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.',
+        source: 'https://github.com/equinor/petec-well-experience/pull/1610',
         credibility: {
           value: 0.8,
           level: 'solid',
@@ -79,10 +80,10 @@ const reasons: Reason[] = [
       {
         id: '2',
         type: 'inopposition',
-        text: 'Budda',
+        text: 'Nuxt applications within a monorepo, or from a git repository or npm package. Nuxt applications within a monorepo, or from a git repository or npm package',
         credibility: {
           value: 0.8,
-          level: 'weak',
+          level: 'solid',
           votes: [],
         },
       },
@@ -115,6 +116,7 @@ const reasons: Reason[] = [
         id: '2',
         type: 'inopposition',
         text: 'Budda',
+        source: 'Plato',
         credibility: {
           value: 0.8,
           level: 'weak',
