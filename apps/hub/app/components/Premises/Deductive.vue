@@ -45,8 +45,7 @@ function getNameOfWebsiteFromURL(url?: string) {
 
 .PremiseContentSource {
   padding: var(--space-1);
-  border-top: solid var(--border-size) var(--base-60);
+  padding-top: 0px;
   display: flex;
-  justify-content: end;
 }
 </style>
