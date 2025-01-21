@@ -23,19 +23,19 @@ const edit = ref(false)
       />
       <ButtonGroup class="controls">
         <Button
-          size="small"
+          size="medium"
           :variant="bookmarked ? 'primary' : 'base'"
           @click="bookmarked = !bookmarked"
         >
-          <Icon v-if="bookmarked" name="material-symbols:bookmark" size="0.8em" />
-          <Icon v-else name="material-symbols:bookmark-add-outline-rounded" size="0.8em" />
+          <Icon v-if="bookmarked" name="material-symbols:bookmark" size="1em" />
+          <Icon v-else name="material-symbols:bookmark-add-outline-rounded" size="1em" />
         </Button>
-        <Button size="small" variant="base">
-          <Icon name="mdi:cogs" size="0.8em" />
+        <Button size="medium" variant="base">
+          <Icon name="mdi:cogs" size="1em" />
         </Button>
-        <Button size="small" :variant="edit ? 'primary' : 'base'" @click="edit = !edit">
-          <Icon v-if="edit" name="pixelarticons:edit" size="0.8em" />
-          <Icon v-else name="pixelarticons:edit" size="0.8em" />
+        <Button size="medium" :variant="edit ? 'primary' : 'base'" @click="edit = !edit">
+          <Icon v-if="edit" name="pixelarticons:edit" size="1em" />
+          <Icon v-else name="pixelarticons:edit" size="1em" />
         </Button>
       </ButtonGroup>
     </header>
@@ -51,8 +51,7 @@ const edit = ref(false)
 
 <style>
 .argument {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   background-color: var(--base-20);
   border: solid var(--border-size) var(--base-60);
   border-radius: var(--radius);
@@ -75,11 +74,11 @@ const edit = ref(false)
 
 .argument header {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
   gap: var(--space-1);
   padding: var(--space-2);
-  /* padding-bottom: 0px; */
   border-bottom: solid var(--border-size) var(--base-60);
 }
 
@@ -90,10 +89,8 @@ const edit = ref(false)
 }
 
 .argument header .controls {
-  position: absolute;
-  bottom: calc(0px - var(--block) / 2);
-  right: var(--space-2);
-  z-index: 1;
+  position: relative;
+  z-index: 0;
 }
 
 .argument header img {

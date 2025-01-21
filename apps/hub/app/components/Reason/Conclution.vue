@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Reason } from '../../types/reasons'
-import TextArea from '../TextArea.vue'
 
 const props = defineProps<{
   reason: Reason
@@ -10,20 +9,8 @@ const conclution = ref<string>(props.reason.conclution)
 </script>
 
 <template>
-  <!-- <PremisesPremise class="conclution card">
-    <PremisesPremiseId>
-      <Icon name="pixelarticons:lightbulb" />
-    </PremisesPremiseId>
-    <TextArea
-      v-model.trim="conclution"
-      placeholder="State a clear position which can be true or false"
-    />
-    <ReasonCredibility :credibility="props.reason.credibility" />
-  </PremisesPremise> -->
-
   <div class="conclution-wrapper">
     <div class="icons">
-      <!-- <p>?</p> -->
       <Icon v-if="true" name="pixelarticons:plus" />
       <Icon v-else name="pixelarticons:minus" />
     </div>
@@ -49,7 +36,7 @@ const conclution = ref<string>(props.reason.conclution)
   justify-content: center;
   background-color: var(--accent-50);
   color: var(--accent-120);
-  height: var(--block);
+  height: var(--block-big);
   aspect-ratio: 1 / 1;
   border-radius: var(--radius);
   border: solid var(--border-size) var(--accent-120);

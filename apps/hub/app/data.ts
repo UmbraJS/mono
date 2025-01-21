@@ -87,6 +87,17 @@ const reasons: Reason[] = [
           votes: [],
         },
       },
+      {
+        id: '3',
+        type: 'infavor',
+        text: 'Nuxt layers are a powerful feature that you can use to share and reuse partial Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.',
+        source: 'https://github.com/equinor/petec-well-experience/pull/1610',
+        credibility: {
+          value: 0.8,
+          level: 'solid',
+          votes: [],
+        },
+      },
     ],
   },
   {

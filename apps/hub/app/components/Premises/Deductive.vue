@@ -14,24 +14,30 @@ function getNameOfWebsiteFromURL(url?: string) {
 <template>
   <Premises>
     <div class="gutter"></div>
-    <PremisesPremise v-for="(premise, index) in props.reason.premises" :key="premise.id">
-      <PremisesPremiseId :id="index + 1" />
-      <div class="PremiseContentWrapper">
-        <p class="PremiseContent">{{ premise.text }}</p>
-        <div class="PremiseContentSource" v-if="premise.source">
-          <a :href="premise.source">
-            <p>{{ getNameOfWebsiteFromURL(premise.source) }}</p>
-          </a>
+    <div class="Deductive-Premises">
+      <PremisesPremise v-for="(premise, index) in props.reason.premises" :key="premise.id">
+        <PremisesPremiseId :id="index + 1" />
+        <div class="PremiseContentWrapper">
+          <p class="PremiseContent">{{ premise.text }}</p>
+          <div class="PremiseContentSource" v-if="premise.source">
+            <a :href="premise.source">
+              <p>{{ getNameOfWebsiteFromURL(premise.source) }}</p>
+            </a>
+          </div>
         </div>
-      </div>
-      <ReasonCredibility :credibility="premise.credibility" />
-    </PremisesPremise>
+        <ReasonCredibility :credibility="premise.credibility" />
+      </PremisesPremise>
+    </div>
   </Premises>
 </template>
 
 <style>
+.Deductive-Premises {
+  display: grid;
+  gap: var(--space-1);
+}
+
 .gutter {
-  grid-row: 1 / span 2;
   background-color: var(--base-10);
   width: var(--space-4);
   border-radius: var(--radius);
