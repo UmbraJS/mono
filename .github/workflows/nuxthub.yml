@@ -11,14 +11,17 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    defaults:
+      run:
+        working-directory: ./apps/hub
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-          with:
-            version: 9
+        with:
+          version: 9
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -36,4 +39,5 @@ jobs:
         uses: nuxt-hub/action@v1
         id: deploy
         with:
-          project-key: mono-w1nm
+          project-key: mono-itci
+          directory: ./apps/hub/dist
