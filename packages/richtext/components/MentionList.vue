@@ -1,19 +1,3 @@
-<template>
-  <div class="dropdown-menu">
-    <template v-if="items.length">
-      <button
-        :class="{ 'is-selected': index === selectedIndex }"
-        v-for="(item, index) in items"
-        :key="index"
-        @click="selectItem(index)"
-      >
-        {{ item }}
-      </button>
-    </template>
-    <div class="item" v-else>No result</div>
-  </div>
-</template>
-
 <script>
 export default {
   props: {
@@ -21,7 +5,6 @@ export default {
       type: Array,
       required: true,
     },
-
     command: {
       type: Function,
       required: true,
@@ -83,36 +66,32 @@ export default {
 }
 </script>
 
+<template>
+  <div class="dropdown-menu">
+    {{ selectedIndex }}
+    <template v-if="items.length">
+      <button
+        v-for="item in items"
+        :key="item"
+        :class="{ 'is-selected': index === selectedIndex }"
+        @click="selectItem(index)"
+      >
+        {{ item }}
+      </button>
+    </template>
+    <div v-else class="item">No result</div>
+  </div>
+</template>
+
 <style lang="scss">
-/* Dropdown menu */
 .dropdown-menu {
-  background: var(--white);
-  border: 1px solid var(--gray-1);
-  border-radius: 0.7rem;
-  box-shadow: var(--shadow);
+  background: var(--base-10);
+  border: solid var(--border-size) var(--base-60);
+  border-radius: var(--radius);
+  padding: var(--space-1);
+
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  overflow: auto;
-  padding: 0.4rem;
-  position: relative;
-
-  button {
-    align-items: center;
-    background-color: transparent;
-    display: flex;
-    gap: 0.25rem;
-    text-align: left;
-    width: 100%;
-
-    &:hover,
-    &:hover.is-selected {
-      background-color: var(--gray-3);
-    }
-
-    &.is-selected {
-      background-color: var(--gray-2);
-    }
-  }
 }
 </style>

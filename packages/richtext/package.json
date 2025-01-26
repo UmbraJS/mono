@@ -45,6 +45,7 @@
     "vue": "^3.5.3"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.1.6",
     "@nobel/core": "workspace:*",
     "@tiptap/core": "^2.10.3",
     "@tiptap/extension-bold": "^2.10.3",

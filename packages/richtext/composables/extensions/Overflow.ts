@@ -39,8 +39,6 @@ export function validateOverflow(editor: Editor, props: { limit: number }) {
   const limit = current.start + props.limit
   const inner = Math.min(current.end, limit)
 
-  console.log('current', schema.marks)
-
   const overflowMark = schema.marks.overflow.create()
 
   removeMark(current.start, inner, overflowMark)

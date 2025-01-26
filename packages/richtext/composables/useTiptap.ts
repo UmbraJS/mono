@@ -15,7 +15,6 @@ import { DisplayHeader } from './extensions/DisplayHeader'
 // import Reference from './extensions/Reference'
 // import Extension from './extensions/Extension'
 import { Mention } from './extensions/Mention'
-import suggestion from './extensions/Suggestion'
 import { ref, onBeforeUnmount } from 'vue'
 
 interface useTiptapProps {
@@ -77,12 +76,7 @@ export function useEditor({
       CharacterCount.configure({ limit }),
       // Reference,
       // Extension,
-      Mention.configure({
-        HTMLAttributes: {
-          class: 'mention',
-        },
-        suggestion,
-      }),
+      Mention,
     ],
   })
 

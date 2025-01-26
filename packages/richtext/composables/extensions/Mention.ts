@@ -4,6 +4,13 @@ import type { DOMOutputSpec } from '@tiptap/pm/model'
 import { PluginKey } from '@tiptap/pm/state'
 import Suggestion from '@tiptap/suggestion'
 import type { SuggestionOptions } from '@tiptap/suggestion'
+import { ref } from 'vue'
+import { useFloating } from '@floating-ui/vue'
+import { VueRenderer } from '@tiptap/vue-3'
+import tippy from 'tippy.js'
+import type { Instance, Props } from 'tippy.js'
+
+import MentionList from '../../components/MentionList.vue'
 
 // See `addAttributes` below
 export interface MentionNodeAttrs {
@@ -84,27 +91,29 @@ export type MentionOptions<
  */
 export const MentionPluginKey = new PluginKey('mention')
 
+function mentionText({ options, node }: { options: MentionOptions; node: ProseMirrorNode }) {
+  return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
+}
+
 /**
  * This extension allows you to insert mentions into the editor.
  * @see https://www.tiptap.dev/api/extensions/mention
  */
 export const Mention = Node.create<MentionOptions>({
   name: 'mention',
-
   priority: 101,
-
   addOptions() {
     return {
-      HTMLAttributes: {},
-      renderText({ options, node }) {
-        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`
-      },
+      HTMLAttributes: { class: 'mention' },
       deleteTriggerWithBackspace: false,
+      renderText({ options, node }) {
+        return mentionText({ options, node })
+      },
       renderHTML({ options, node }) {
         return [
           'span',
           mergeAttributes(this.HTMLAttributes, options.HTMLAttributes),
-          `${options.suggestion.char}${node.attrs.label ?? node.attrs.id}`,
+          mentionText({ options, node }),
         ]
       },
       suggestion: {
@@ -145,16 +154,107 @@ export const Mention = Node.create<MentionOptions>({
 
           return allow
         },
+        items: ({ query }) => {
+          return [
+            'Lea Thompson',
+            'Cyndi Lauper',
+            'Tom Cruise',
+            'Madonna',
+            'Jerry Hall',
+            'Joan Collins',
+            'Winona Ryder',
+            'Christina Applegate',
+            'Alyssa Milano',
+            'Molly Ringwald',
+            'Ally Sheedy',
+            'Debbie Harry',
+            'Olivia Newton-John',
+            'Elton John',
+            'Michael J. Fox',
+            'Axl Rose',
+            'Emilio Estevez',
+            'Ralph Macchio',
+            'Rob Lowe',
+            'Jennifer Grey',
+            'Mickey Rourke',
+            'John Cusack',
+            'Matthew Broderick',
+            'Justine Bateman',
+            'Lisa Bonet',
+          ]
+            .filter((item) => item.toLowerCase().startsWith(query.toLowerCase()))
+            .slice(0, 5)
+        },
+
+        render: () => {
+          let component: VueRenderer
+          let popup: Instance<Props>[] & Instance<Props>
+
+          return {
+            onStart: (props) => {
+              component = new VueRenderer(MentionList, {
+                props,
+                editor: props.editor,
+              })
+
+              if (!props.clientRect) {
+                return
+              }
+
+              const reference = ref(null)
+              const floating = ref(null)
+              const body = document.body
+
+              const e = props.clientRect()
+
+              if (!e) return
+
+              const { floatingStyles } = useFloating(e, floating)
+
+              popup = tippy(body, {
+                getReferenceClientRect: props.clientRect,
+                appendTo: () => document.body,
+                content: component.element,
+                showOnCreate: true,
+                interactive: true,
+                trigger: 'manual',
+                placement: 'bottom-start',
+              })
+            },
+
+            onUpdate(props) {
+              component.updateProps(props)
+
+              if (!props.clientRect) return
+
+              popup[0].setProps({
+                getReferenceClientRect: props.clientRect,
+              })
+            },
+
+            onKeyDown(props) {
+              if (props.event.key === 'Escape') {
+                popup[0].hide()
+
+                return true
+              }
+
+              return component.ref?.onKeyDown(props)
+            },
+
+            onExit() {
+              popup[0].destroy()
+              component.destroy()
+            },
+          }
+        },
       },
     }
   },
 
   group: 'inline',
-
   inline: true,
-
   selectable: false,
-
   atom: true,
 
   addAttributes() {
@@ -163,13 +263,8 @@ export const Mention = Node.create<MentionOptions>({
         default: null,
         parseHTML: (element) => element.getAttribute('data-id'),
         renderHTML: (attributes) => {
-          if (!attributes.id) {
-            return {}
-          }
-
-          return {
-            'data-id': attributes.id,
-          }
+          if (!attributes.id) return {}
+          return { 'data-id': attributes.id }
         },
       },
 
@@ -177,24 +272,15 @@ export const Mention = Node.create<MentionOptions>({
         default: null,
         parseHTML: (element) => element.getAttribute('data-label'),
         renderHTML: (attributes) => {
-          if (!attributes.label) {
-            return {}
-          }
-
-          return {
-            'data-label': attributes.label,
-          }
+          if (!attributes.label) return {}
+          return { 'data-label': attributes.label }
         },
       },
     }
   },
 
   parseHTML() {
-    return [
-      {
-        tag: `span[data-type="${this.name}"]`,
-      },
-    ]
+    return [{ tag: `span[data-type="${this.name}"]` }]
   },
 
   renderHTML({ node, HTMLAttributes }) {
@@ -253,9 +339,7 @@ export const Mention = Node.create<MentionOptions>({
           const { selection } = state
           const { empty, anchor } = selection
 
-          if (!empty) {
-            return false
-          }
+          if (!empty) return false
 
           state.doc.nodesBetween(anchor - 1, anchor, (node, pos) => {
             if (node.type.name === this.name) {
