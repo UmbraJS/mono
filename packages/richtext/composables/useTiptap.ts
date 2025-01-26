@@ -12,6 +12,10 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { Overflow, validateOverflow } from './extensions/Overflow'
 import { Slugline } from './extensions/Slugline'
 import { DisplayHeader } from './extensions/DisplayHeader'
+// import Reference from './extensions/Reference'
+// import Extension from './extensions/Extension'
+import { Mention } from './extensions/Mention'
+import suggestion from './extensions/Suggestion'
 import { ref, onBeforeUnmount } from 'vue'
 
 interface useTiptapProps {
@@ -71,6 +75,14 @@ export function useEditor({
       Overflow,
       Placeholder.configure({ placeholder }),
       CharacterCount.configure({ limit }),
+      // Reference,
+      // Extension,
+      Mention.configure({
+        HTMLAttributes: {
+          class: 'mention',
+        },
+        suggestion,
+      }),
     ],
   })
 

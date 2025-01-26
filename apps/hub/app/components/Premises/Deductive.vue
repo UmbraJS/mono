@@ -13,6 +13,12 @@ function getNameOfWebsiteFromURL(url?: string) {
 
 <template>
   <Premises>
+    <p>
+      1 Nuxt layers are a <Reference id="0">powerful</Reference> feature that you can use to share
+      and reuse partial Nuxt applications within a monorepo, or from a git repository or npm
+      package. The layers structure is almost identical to a standard Nuxt application, which makes
+      them easy to author and maintain.
+    </p>
     <div class="gutter"></div>
     <div class="Deductive-Premises">
       <PremisesPremise v-for="(premise, index) in props.reason.premises" :key="premise.id">
