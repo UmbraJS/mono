@@ -3,7 +3,14 @@ import { defineNuxtConfig } from 'nuxt/config'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // https://nuxt.com/modules
-  modules: ['@nuxthub/core', '@nuxt/eslint', '@pinia/nuxt', '@nuxt/image', '@nuxt/icon'],
+  modules: [
+    '@nuxthub/core',
+    '@nuxt/eslint',
+    '@pinia/nuxt',
+    '@nuxt/image',
+    '@nuxt/icon',
+    '@nuxt/content',
+  ],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },

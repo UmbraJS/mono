@@ -16,6 +16,7 @@
   "dependencies": {
     "@nobel/core": "workspace:*",
     "@nobel/richtext": "workspace:*",
+    "@nuxt/content": "^3.0.1",
     "@nuxt/eslint": "^0.6.1",
     "@nuxt/icon": "1.10.3",
     "@nuxt/image": "1.8.1",
