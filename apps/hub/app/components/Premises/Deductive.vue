@@ -56,7 +56,7 @@ function getNameOfWebsiteFromURL(url?: string) {
 }
 
 .PremiseContentSource {
-  padding: var(--space-1);
+  padding: var(--space-quark);
   padding-top: 0px;
   display: flex;
 }
