@@ -4,7 +4,7 @@ import { onKeyStroke } from '@vueuse/core'
 const theme = useUmbra()
 
 onMounted(() => {
-  theme.apply()
+  theme.inverse()
 })
 
 const reveal = ref(false)

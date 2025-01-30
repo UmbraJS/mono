@@ -38,7 +38,7 @@ interface UseUmbra {
 export const useUmbra = defineStore('umbra', () => {
   const input = ref<UmbraInput>(themeInput)
   const formated = ref<FormatedRange[]>([])
-  const dark = ref<boolean>(true)
+  const dark = ref<boolean>(false)
 
   const readability = ref({
     target: 50,
@@ -148,6 +148,11 @@ export const useUmbra = defineStore('umbra', () => {
     apply({ scheme: { settings } })
     return readability.value
   }
+
+  watch(dark, (value) => {
+    // document.documentElement.classList.toggle('dark', value)
+    document.querySelector('html')?.classList.toggle('dark', value)
+  })
 
   return {
     input,

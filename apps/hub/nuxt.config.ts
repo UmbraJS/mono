@@ -49,4 +49,26 @@ export default defineNuxtConfig({
       // }
     },
   },
+
+  content: {
+    build: {
+      markdown: {
+        highlight: {
+          theme: {
+            // TODO: Figure out why this doesn't work
+            default: 'dracula',
+            dark: 'dracula',
+          },
+        },
+        remarkPlugins: {
+          // Override remark-emoji options
+          'remark-emoji': {
+            options: {
+              emoticon: true,
+            },
+          },
+        },
+      },
+    },
+  },
 })

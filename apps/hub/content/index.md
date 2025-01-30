@@ -4,13 +4,18 @@ date: 2020-11-11
 
 # Foo
 
-This is Foo blog post of some kind _some_ **some**
+This is Foo blog post of some kind
 
 ## Bar
 
-This is Bar blog post of some kind _some_ **some**
+This is Bar blog post of some kind :)
 
-```python
-def foo():
-    print('foo')
+### Code
+
+```ts
+const foo = 'foo'
+
+function getBeer() {
+  return 'beer' + foo
+}
 ```
