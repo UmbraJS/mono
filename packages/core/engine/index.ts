@@ -36,34 +36,34 @@ export function umbra(scheme: UmbraInput = defaultScheme): Umbra {
   return umbraHydrate({
     input,
     output: umbraGenerate(input, adjustment),
-    inversed: input.inversed
+    inversed: input.inversed,
   })
 }
 
 function insertFallbacks(scheme: UmbraInput = defaultScheme): UmbraScheme {
   const schemeSettings = {
     ...defaultSettings,
-    ...scheme.settings
+    ...scheme.settings,
   }
 
   const settingsFallback = {
     settings: schemeSettings,
     inversed: {
       ...schemeSettings,
-      ...scheme.inversed?.settings
-    }
+      ...scheme.inversed?.settings,
+    },
   }
 
   const inversed = scheme.inversed && {
     ...scheme.inversed,
-    settings: settingsFallback.inversed
+    settings: settingsFallback.inversed,
   }
 
   return {
     ...defaultScheme,
     ...scheme,
     settings: settingsFallback.settings,
-    inversed: inversed
+    inversed: inversed,
   }
 }
 
@@ -72,14 +72,14 @@ function umbraAdjust(scheme = defaultScheme) {
   const foreground = getReadable({
     readability: fallback({ number: scheme.settings?.readability, fallback: 4 }),
     foreground: colord(scheme.foreground),
-    background
+    background,
   })
 
   const accents = Array.isArray(scheme.accents) ? scheme.accents : [scheme.accents]
   return {
     accents,
     background,
-    foreground
+    foreground,
   }
 }
 
@@ -89,14 +89,14 @@ function getTarget(target?: string | HTMLElement | null) {
   const targetIsElement = target instanceof HTMLElement || target === null
   return {
     element: targetIsElement ? target : undefined,
-    selector: targetIsString ? target : undefined
+    selector: targetIsString ? target : undefined,
   }
 }
 
 export function umbraHydrate({
   input,
   output,
-  inversed
+  inversed,
 }: {
   input: UmbraScheme
   output: UmbraRange[]
@@ -118,8 +118,8 @@ export function umbraHydrate({
       const target = getTarget(props?.target)
       const formated = getFormat(formater)
       const outputs = formated.attach({ alias, target })
-      input.settings?.callback && input.settings.callback(outputs)
+      if (input.settings?.callback) input.settings.callback(outputs)
       return outputs
-    }
+    },
   }
 }

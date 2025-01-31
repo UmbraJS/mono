@@ -55,6 +55,10 @@ function toggleTheme() {
           <IconUI />
         </RouterLink>
 
+        <RouterLink to="/color" class="button buttonFocus small" activeClass="primary">
+          <IconPaint />
+        </RouterLink>
+
         <Button variant="primary" size="small" @click="toggleTheme">
           <IconPaint />
         </Button>
