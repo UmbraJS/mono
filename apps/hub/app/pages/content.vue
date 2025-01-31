@@ -6,18 +6,18 @@ useSeoMeta({
   description: home.value?.description,
 })
 
-const md = `
-# Foo
-This is Foo blog post of some kind
+// const md = `
+// # Foo
+// This is Foo blog post of some kind
 
-## Bar
-This is Bar blog post of some kind :)
-`
+// ## Bar
+// This is Bar blog post of some kind :)
+// `
+// <MDC :value="md" tag="article" class="content post" />
 </script>
 
 <template>
   <div class="artickle">
-    <MDC :value="md" tag="article" class="content post" />
     <ContentRenderer v-if="home" :value="home" class="content post" />
     <div v-else>Home not found</div>
   </div>
