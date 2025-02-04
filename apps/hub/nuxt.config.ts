@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/icon',
     '@nuxt/content',
+    '@nuxtjs/mdc',
   ],
 
   // https://devtools.nuxt.com
@@ -50,6 +51,31 @@ export default defineNuxtConfig({
     },
   },
 
+  mdc: {
+    remarkPlugins: {
+      // Override remark-emoji options
+      'remark-emoji': {
+        options: {
+          emoticon: true,
+        },
+      },
+    },
+    highlight: {
+      theme: {
+        // TODO: Figure out why this doesn't work
+        default: 'dracula',
+        dark: 'github-dark',
+      },
+    },
+    components: {
+      // prose: false, // Add predefined map to render Prose Components instead of HTML tags, like p, ul, code
+      map: {
+        // This map will be used in `<MDCRenderer>` to control rendered components
+        // 'p': 'Prose',
+      },
+    },
+  },
+
   content: {
     build: {
       markdown: {
@@ -57,7 +83,7 @@ export default defineNuxtConfig({
           theme: {
             // TODO: Figure out why this doesn't work
             default: 'dracula',
-            dark: 'dracula',
+            dark: 'github-dark',
           },
         },
         remarkPlugins: {
