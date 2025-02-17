@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import '@nobel/core/styles/main.scss'
 import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText } from '@nobel/core'
 
 const theme = useUmbra()

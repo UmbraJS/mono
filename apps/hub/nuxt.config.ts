@@ -10,10 +10,20 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/icon',
     '@nuxt/content',
+    '@unocss/nuxt',
   ],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
+  css: ['@nobel/core/styles/main.css'],
+
+  // build: {
+  //   loaders: {
+  //     scss: {
+  //       implementation: require('sass'),
+  //     },
+  //   },
+  // },
 
   // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
   runtimeConfig: {
@@ -32,6 +42,13 @@ export default defineNuxtConfig({
     kv: true,
     blob: true,
     cache: true,
+  },
+
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
   },
 
   // https://eslint.nuxt.com

@@ -1,4 +1,4 @@
-import './styles/main.scss'
+import { presetNobel } from './uno.config'
 
 import Select from './components/ui/Select.vue'
 import Button from './components/ui/Button/Button.vue'
@@ -23,3 +23,4 @@ import SVG from './components/Icons/SVG.vue'
 
 export { IconAdd, IconClose, IconHome, IconPaint, IconText, IconUI, IconWidth, SVG }
 export { Button, ButtonGroup, Select, Toggle, AddButton, Chip, Radio, Slider }
+export { presetNobel }
