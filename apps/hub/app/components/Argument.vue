@@ -12,7 +12,7 @@ const edit = ref(false)
 </script>
 
 <template>
-  <div class="argument bodycopy">
+  <div class="argument bodycopy p-2">
     <header :class="{ hasImage: props.reason.background }">
       <ReasonConclution :reason="props.reason" />
       <NuxtImg

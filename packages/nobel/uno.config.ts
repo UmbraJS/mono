@@ -4,21 +4,25 @@ import transformerVariantGroup from '@unocss/transformer-variant-group'
 import { definePreset } from '@unocss/core'
 import type { PresetMiniOptions } from '@unocss/preset-mini'
 
-function spaceUtil(key = 'm', property = 'margin') {
-  const rules = []
-  for (let i = 1; i <= 10; i++) {
-    rules.push([`${key}-${i}`, { [property]: `var(--space-${i})` }])
-  }
-  return rules
-}
-
 export const presetNobel = definePreset((options: PresetMiniOptions) => {
   return {
     ...presetMini(options),
-    name: '@unocss/preset-wind',
-    rules: [...spaceUtil('m', 'margin'), ...spaceUtil('p', 'padding')],
+    name: '@unocss/preset-nobel',
     transformers: [transformerVariantGroup()],
     theme: {
+      spacing: {
+        0: 'var(--spacing-0, 0)',
+        1: 'var(--spacing-1, 0.25rem)',
+        2: 'var(--spacing-2, 0.5rem)',
+        3: 'var(--spacing-3, 0.75rem)',
+        4: 'var(--spacing-4, 1rem)',
+        5: 'var(--spacing-5, 1.25rem)',
+        6: 'var(--spacing-6, 1.5rem)',
+        7: 'var(--spacing-7, 1.75rem)',
+        8: 'var(--spacing-8, 2rem)',
+        9: 'var(--spacing-9, 2.25rem)',
+        10: 'var(--spacing-10, 2.5rem)',
+      },
       colors: {
         base: {
           0: 'var(--base, #16121f)',

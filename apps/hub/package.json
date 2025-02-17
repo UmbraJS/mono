@@ -37,6 +37,8 @@
     "@tiptap/starter-kit": "^2.10.3",
     "@tiptap/vue-3": "^2.10.3",
     "@umbrajs/core": "workspace:*",
+    "@unocss/core": "^65.5.0",
+    "@unocss/transformer-variant-group": "^65.5.0",
     "@vueuse/core": "^12.0.0",
     "better-auth": "^1.0.19",
     "drizzle-orm": "^0.36.4",
