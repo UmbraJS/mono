@@ -1,26 +1,27 @@
 <script setup lang="ts">
 const { data: home } = await useAsyncData(() => queryCollection('content').path('/').first())
 
-useSeoMeta({
-  title: home.value?.title,
-  description: home.value?.description,
-})
+const md = ref(`
+# Just a Vue app
 
-const md = `
-# Foo lol
-This is Foo blog post of some kind
+This is markdown content rendered via the \`<MDCRenderer>\` component, including MDC below.
 
-## Bar
-This is Bar blog post of some kind :)
+::alert
+Hello MDC
+::
 
-`
+\`\`\`ts
+const a = 1;
+\`\`\`
+`)
 </script>
 
 <template>
   <div class="artickle">
     <MDC :value="md" tag="article" class="content post" />
-    <!-- <ContentRenderer v-if="home" :value="home" class="content post" />
-    <div v-else>Home not found</div> -->
+
+    <ContentRenderer v-if="home" :value="home" class="content post" />
+    <div v-else>Home not found</div>
   </div>
 </template>
 
