@@ -17,6 +17,6 @@
     "db:generate": "cd apps/hub && pnpm run drizzle-kit generate"
   },
   "devDependencies": {
-    "vite": "^5.4.3"
+    "vite": "6.1.1"
   }
 }

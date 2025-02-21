@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/icon',
     '@nuxt/content',
-    '@unocss/nuxt',
+    // '@unocss/nuxt',
     '@nuxtjs/mdc',
   ],
 
@@ -37,12 +37,12 @@ export default defineNuxtConfig({
     cache: true,
   },
 
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
-  },
+  // postcss: {
+  //   plugins: {
+  //     tailwindcss: {},
+  //     autoprefixer: {},
+  //   },
+  // },
 
   // https://eslint.nuxt.com
   eslint: {
