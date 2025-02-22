@@ -17,7 +17,7 @@ async function sendMessage() {
 
 <template>
   <div>
-    <h3>Messages</h3>
+    <h3 class="">Messages</h3>
     <form @submit.prevent="sendMessage">
       <input v-model="newMessage" placeholder="Type a message" />
       <button type="submit">Send</button>

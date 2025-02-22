@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useTemplateRef, computed } from 'vue'
+import { useTemplateRef, computed, ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { ref } from 'vue'
 
 const value = ref<string>('Blueberry')
 const values = ref([

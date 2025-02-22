@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
-import { useTemplateRef, computed, ref, getCurrentInstance } from 'vue'
+import { useTemplateRef, computed, ref } from 'vue'
 import SelectOptions from './SelectOptions.vue'
 
 const value = ref<string>('Blueberry')

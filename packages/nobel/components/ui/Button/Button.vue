@@ -54,10 +54,10 @@ const genericColors = computed(() => {
 
 <template>
   <component
+    :is="ButtonVariant"
     tabindex="1"
     class="button buttonText buttonHover buttonActive buttonFocus focus"
     :class="size"
-    :is="ButtonVariant"
     :disabled="disabled"
     :style="genericColors"
   >

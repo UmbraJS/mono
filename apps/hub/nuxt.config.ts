@@ -37,12 +37,18 @@ export default defineNuxtConfig({
     cache: true,
   },
 
-  // postcss: {
-  //   plugins: {
-  //     tailwindcss: {},
-  //     autoprefixer: {},
-  //   },
-  // },
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+
+  nitro: {
+    experimental: {
+      openAPI: true,
+    },
+  },
 
   // https://eslint.nuxt.com
   eslint: {

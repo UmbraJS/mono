@@ -25,7 +25,7 @@ function getNameOfWebsiteFromURL(url?: string) {
         <PremisesPremiseId :id="index + 1" />
         <div class="PremiseContentWrapper">
           <p class="PremiseContent">{{ premise.text }}</p>
-          <div class="PremiseContentSource" v-if="premise.source">
+          <div v-if="premise.source" class="PremiseContentSource">
             <a :href="premise.source">
               <p>{{ getNameOfWebsiteFromURL(premise.source) }}</p>
             </a>

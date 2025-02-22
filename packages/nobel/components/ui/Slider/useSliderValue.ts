@@ -1,8 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import type { ShallowRef } from 'vue'
 import { useMouse, useMousePressed } from '@vueuse/core'
-import { clamp, gsapTo } from './utils'
-import { nearestSnapPoint } from './utils'
+import { clamp, gsapTo, nearestSnapPoint } from './utils'
 import { useSliderZoom } from './useSliderZoom'
 
 interface UseSliderValue {
@@ -108,6 +107,6 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
     pressed,
     leftHandleClicked,
     updateSlider,
-    snapPoints
+    snapPoints,
   }
 }

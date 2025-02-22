@@ -11,7 +11,7 @@ const track = useTemplateRef<HTMLDivElement>('track')
 
 const { size, left, zoom, pressed, updateSlider, leftHandleClicked, snapPoints } = useSliderValue({
   slider,
-  track
+  track,
 })
 
 useSliderKeys(slider, { size, snapPoints })
@@ -40,7 +40,7 @@ watch(pressed, (isPressed) => {
     >
       <div ref="track" class="track">
         <div class="range">
-          <SliderHandle @mousedown="leftHandleClicked = true" variant="secondary" side="left" />
+          <SliderHandle variant="secondary" side="left" @mousedown="leftHandleClicked = true" />
           <SliderHandle variant="primary" side="right" />
         </div>
 

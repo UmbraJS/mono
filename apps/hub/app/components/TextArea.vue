@@ -26,7 +26,7 @@ function conclutionTrimer(value: string) {
   }
   //Prevents multiple spaces in a row
   if (newValue.includes('  ')) {
-    newValue = newValue.replace(/  /g, ' ')
+    newValue = newValue.replace(/ {2}/g, ' ')
   }
   return newValue
 }

@@ -10,7 +10,7 @@ interface UseSliderKeys {
 
 export function useSliderKeys(
   slider: Readonly<ShallowRef<HTMLDivElement | null>> | null,
-  { size, snapPoints }: UseSliderKeys
+  { size, snapPoints }: UseSliderKeys,
 ) {
   const modifier = ref(false)
   const hasSnapPoints = computed(() => snapPoints.value.length > 0)
@@ -21,7 +21,11 @@ export function useSliderKeys(
   }
 
   function snapOrMove(value: number, add = 0) {
-    hasSnapPoints.value ? setValue(switchPoint(value, snapPoints.value, add)) : setValue(value, add)
+    if (hasSnapPoints.value) {
+      setValue(switchPoint(value, snapPoints.value, add))
+    } else {
+      setValue(value, add)
+    }
   }
 
   function shiftMod(e: KeyboardEvent) {
@@ -31,26 +35,26 @@ export function useSliderKeys(
 
   onKeyStroke('Shift', shiftMod, {
     eventName: 'keydown',
-    target: slider
+    target: slider,
   })
 
   onKeyStroke('Shift', shiftMod, {
     eventName: 'keyup',
-    target: slider
+    target: slider,
   })
 
   onKeyStroke('ArrowLeft', () => snapOrMove(size.value, -1), {
     eventName: 'keydown',
-    target: slider
+    target: slider,
   })
 
   onKeyStroke('ArrowRight', () => snapOrMove(size.value, 1), {
     eventName: 'keydown',
-    target: slider
+    target: slider,
   })
 
   return {
     modifier,
-    setValue
+    setValue,
   }
 }
