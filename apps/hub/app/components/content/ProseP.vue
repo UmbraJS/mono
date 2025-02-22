@@ -1,3 +1,3 @@
 <template>
-  <p>lol<slot></slot></p>
+  <p><slot></slot></p>
 </template>
