@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import '@nobel/core/styles/main.scss'
-
 useSeoMeta({
   title: 'NuxtHub Starter',
   description: 'A Nuxt template to build your full-stack application on the edge.',

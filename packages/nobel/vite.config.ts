@@ -12,16 +12,16 @@ export default defineConfig({
     lib: {
       entry: fileURLToPath(new URL('./index.ts', import.meta.url)),
       formats: ['es'],
-      name: 'Nobel'
+      name: 'Nobel',
     },
     minify: false,
     rollupOptions: {
       external: ['vue'],
       output: {
         globals: {
-          vue: 'vue'
-        }
-      }
-    }
-  }
+          vue: 'vue',
+        },
+      },
+    },
+  },
 })
