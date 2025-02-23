@@ -10,3 +10,6 @@ export function useDrizzle() {
 }
 
 export type User = typeof tables.user.$inferSelect
+export type Session = typeof tables.session.$inferSelect
+export type Account = typeof tables.account.$inferSelect
+export type Verification = typeof tables.verification.$inferSelect
