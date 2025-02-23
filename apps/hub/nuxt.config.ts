@@ -87,10 +87,10 @@ export default defineNuxtConfig({
     },
   },
 
-  components: {
-    global: true,
-    path: './components/prose',
-  },
+  // components: {
+  //   global: true,
+  //   path: './components/prose',
+  // },
 
   content: {
     build: {
