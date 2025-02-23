@@ -67,6 +67,9 @@ export default defineNuxtConfig({
   },
 
   mdc: {
+    components: {
+      prose: true,
+    },
     remarkPlugins: {
       // Override remark-emoji options
       'remark-emoji': {
@@ -82,13 +85,11 @@ export default defineNuxtConfig({
         dark: 'github-dark',
       },
     },
-    components: {
-      // prose: false, // Add predefined map to render Prose Components instead of HTML tags, like p, ul, code
-      map: {
-        // This map will be used in `<MDCRenderer>` to control rendered components
-        // 'p': 'Prose',
-      },
-    },
+  },
+
+  components: {
+    global: true,
+    path: './components/prose',
   },
 
   content: {
