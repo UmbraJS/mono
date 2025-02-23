@@ -1,7 +1,8 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2'
 
 export const user = sqliteTable('user', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().$default(createId),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: integer('emailVerified', {
@@ -17,7 +18,7 @@ export const user = sqliteTable('user', {
 })
 
 export const session = sqliteTable('session', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().$default(createId),
   expiresAt: integer('expiresAt', {
     mode: 'timestamp',
   }).notNull(),
@@ -29,7 +30,7 @@ export const session = sqliteTable('session', {
 })
 
 export const account = sqliteTable('account', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().$default(createId),
   accountId: text('accountId').notNull(),
   providerId: text('providerId').notNull(),
   userId: text('userId')
@@ -45,7 +46,7 @@ export const account = sqliteTable('account', {
 })
 
 export const verification = sqliteTable('verification', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().$default(createId),
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
   expiresAt: integer('expiresAt', {

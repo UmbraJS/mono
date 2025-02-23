@@ -23,6 +23,7 @@
     "@nuxt/image": "1.9.0",
     "@nuxthub/core": "^0.8.17",
     "@nuxtjs/mdc": "0.13.5",
+    "@paralleldrive/cuid2": "^2.2.2",
     "@pinia/nuxt": "0.10.1",
     "@tiptap/core": "^2.11.5",
     "@tiptap/extension-bold": "^2.11.5",
