@@ -24,6 +24,10 @@ export default defineNuxtConfig({
       // Can be overridden by NUXT_PUBLIC_HELLO_TEXT environment variable
       helloText: 'Hello from the Edge 👋',
     },
+    auth: {
+      redirectUserTo: '/user',
+      redirectGuestTo: '/',
+    },
   },
   // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
   future: { compatibilityVersion: 4 },
