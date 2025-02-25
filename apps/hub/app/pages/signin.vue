@@ -52,8 +52,8 @@ async function signUp() {
 <template>
   <div>
     <form @submit.prevent="signIn">
-      <Input v-model="email" type="email" placeholder="Email" />
-      <Input v-model="password" type="password" placeholder="Password" />
+      <Input v-model="email" type="email" label="Email" />
+      <Input v-model="password" type="password" label="Password" />
       <Button type="submit" :loading="loading" :disabled="!email || !password"> Sign In </Button>
       <Button
         type="button"
@@ -64,9 +64,9 @@ async function signUp() {
       </Button>
     </form>
     <form @submit.prevent="signUp">
-      <Input v-model="email" type="email" placeholder="Email" />
-      <Input v-model="password" type="password" placeholder="Password" />
-      <Input v-model="name" type="name" placeholder="Name" />
+      <Input v-model="email" type="email" label="Email" />
+      <Input v-model="password" type="password" label="Password" />
+      <Input v-model="name" type="name" label="Name" />
       <Button type="submit" :loading="loading"> Sign Up </Button>
     </form>
   </div>
@@ -75,6 +75,6 @@ async function signUp() {
 <style lang="scss">
 form {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 </style>

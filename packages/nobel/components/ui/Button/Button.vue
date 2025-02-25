@@ -72,7 +72,7 @@ const genericColors = computed(() => {
 @mixin button-medium {
   height: var(--block-big);
   min-width: var(--block-big);
-  padding: 0px var(--space-quark);
+  padding: 0px var(--space-1);
 }
 
 @mixin button-small {
