@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, toast } from '@nobel/core'
+import { Button, toast, Input } from '@nobel/core'
 
 definePageMeta({
   auth: {
@@ -52,21 +52,22 @@ async function signUp() {
 <template>
   <div>
     <form @submit.prevent="signIn">
-      <input v-model="email" type="email" placeholder="Email" />
-      <input v-model="password" type="password" placeholder="Password" />
+      <Input v-model="email" type="email" placeholder="Email" />
+      <Input v-model="password" type="password" placeholder="Password" />
       <Button type="submit" :loading="loading" :disabled="!email || !password"> Sign In </Button>
       <Button
         icon="i-simple-icons-github"
         type="button"
         @click="auth.signIn.social({ provider: 'github', callbackURL: '/user' })"
       >
-        Sign In with Github
+        <Icon name="i-simple-icons-github" />
+        <span>Sign In with Github</span>
       </Button>
     </form>
     <form @submit.prevent="signUp">
-      <input v-model="email" type="email" placeholder="Email" />
-      <input v-model="password" type="password" placeholder="Password" />
-      <input v-model="name" type="name" placeholder="Name" />
+      <Input v-model="email" type="email" placeholder="Email" />
+      <Input v-model="password" type="password" placeholder="Password" />
+      <Input v-model="name" type="name" placeholder="Name" />
       <Button type="submit" :loading="loading"> Sign Up </Button>
     </form>
   </div>
