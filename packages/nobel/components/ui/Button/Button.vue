@@ -12,42 +12,44 @@ const components = {
 }
 
 const {
-  type = 'default',
+  color = 'default',
   variant = 'base',
   disabled = false,
   size = 'medium',
+  type = 'button',
 } = defineProps<{
   variant?: keyof typeof components
   disabled?: boolean
   size?: 'medium' | 'small' | 'mini'
-  type?: 'warning' | 'success' | 'default'
+  color?: 'warning' | 'success' | 'default'
+  type?: HTMLButtonElement['type']
 }>()
 
 const ButtonVariant = computed(() => (disabled ? components.base : components[variant]))
 
-const buttonTypes = {
+const buttonColors = {
   default: '--accent',
   success: '--success',
   warning: '--warning',
 }
 
 const genericColors = computed(() => {
-  if (type === 'default') return
+  if (color === 'default') return
   return {
-    '--color': `var(${buttonTypes[type]}, --accent)`,
-    '--color-10': `var(${buttonTypes[type]}-10)`,
-    '--color-20': `var(${buttonTypes[type]}-20)`,
-    '--color-30': `var(${buttonTypes[type]}-30)`,
-    '--color-40': `var(${buttonTypes[type]}-40)`,
-    '--color-50': `var(${buttonTypes[type]}-50)`,
-    '--color-60': `var(${buttonTypes[type]}-60)`,
-    '--color-70': `var(${buttonTypes[type]}-70)`,
-    '--color-80': `var(${buttonTypes[type]}-80)`,
-    '--color-90': `var(${buttonTypes[type]}-90)`,
-    '--color-100': `var(${buttonTypes[type]}-100)`,
-    '--color-110': `var(${buttonTypes[type]}-110)`,
-    '--color-120': `var(${buttonTypes[type]}-120)`,
-    '--color-contrast': `var(${buttonTypes[type]}-contrast)`,
+    '--color': `var(${buttonColors[color]}, --accent)`,
+    '--color-10': `var(${buttonColors[color]}-10)`,
+    '--color-20': `var(${buttonColors[color]}-20)`,
+    '--color-30': `var(${buttonColors[color]}-30)`,
+    '--color-40': `var(${buttonColors[color]}-40)`,
+    '--color-50': `var(${buttonColors[color]}-50)`,
+    '--color-60': `var(${buttonColors[color]}-60)`,
+    '--color-70': `var(${buttonColors[color]}-70)`,
+    '--color-80': `var(${buttonColors[color]}-80)`,
+    '--color-90': `var(${buttonColors[color]}-90)`,
+    '--color-100': `var(${buttonColors[color]}-100)`,
+    '--color-110': `var(${buttonColors[color]}-110)`,
+    '--color-120': `var(${buttonColors[color]}-120)`,
+    '--color-contrast': `var(${buttonColors[color]}-contrast)`,
   }
 })
 </script>
@@ -60,6 +62,7 @@ const genericColors = computed(() => {
     :class="size"
     :disabled="disabled"
     :style="genericColors"
+    :type="type"
   >
     <slot></slot>
   </component>
