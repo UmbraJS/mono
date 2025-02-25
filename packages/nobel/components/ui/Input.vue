@@ -37,13 +37,17 @@ input {
   box-sizing: border-box;
 }
 
-input:-internal-autofill-selected {
+/* input:-internal-autofill-selected {
   background-color: var(--base-20) !important;
   color: var(--base-contrast) !important;
-}
+} */
 
 .input {
   position: relative;
+}
+
+div.input:has(+ div:focus-within) {
+  filter: blur(4px);
 }
 
 .input label {
