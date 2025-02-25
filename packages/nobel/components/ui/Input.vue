@@ -7,7 +7,8 @@ input {
   all: unset;
   background: var(--base);
   color: var(--base-contrast);
-  padding: var(--space-1);
+  padding: 0 var(--space-quark);
+  height: var(--block-big);
   border: solid var(--border-size) var(--base-60);
   border-radius: var(--radius);
 }

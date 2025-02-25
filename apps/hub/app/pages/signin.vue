@@ -56,7 +56,6 @@ async function signUp() {
       <Input v-model="password" type="password" placeholder="Password" />
       <Button type="submit" :loading="loading" :disabled="!email || !password"> Sign In </Button>
       <Button
-        icon="i-simple-icons-github"
         type="button"
         @click="auth.signIn.social({ provider: 'github', callbackURL: '/user' })"
       >
@@ -72,3 +71,10 @@ async function signUp() {
     </form>
   </div>
 </template>
+
+<style lang="scss">
+form {
+  display: grid;
+  gap: var(--space-2);
+}
+</style>
