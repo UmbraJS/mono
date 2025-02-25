@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Button, toast } from '@nobel/core'
+
 // https://better-auth.vercel.app/docs/integrations/nuxt#ssr-usage
 const { user, session, client } = useAuth()
 const { data: accounts } = await useAsyncData('accounts', () => client.listAccounts())
@@ -8,26 +10,21 @@ function hasProvider(provider: string) {
 }
 const error = useRoute().query?.error
 onMounted(() => {
-  if (error) {
-    // toast.add({
-    //   color: 'red',
-    //   title: error,
-    // })
-  }
+  if (!error) return
+  toast.error('Noble Error in User.vue')
 })
 </script>
 
 <template>
   <div>
-    <h3 class="text-xl font-bold">User</h3>
+    <h1 v-if="user">User</h1>
     <pre>{{ user }}</pre>
-    <h3 class="text-xl font-bold mt-2">Session</h3>
+    <h3 v-if="session">Session</h3>
     <pre>{{ session }}</pre>
-    <h3 class="text-xl font-bold mt-2">Accounts</h3>
+    <h3>Accounts</h3>
     <p class="mt-2">
       <Button
         v-if="hasProvider('github')"
-        color="gray"
         icon="i-simple-icons-github"
         trailing-icon="i-heroicons-check"
       >
@@ -35,7 +32,6 @@ onMounted(() => {
       </Button>
       <Button
         v-else
-        color="black"
         icon="i-simple-icons-github"
         @click="client.linkSocial({ provider: 'github' })"
       >

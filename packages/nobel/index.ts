@@ -1,3 +1,5 @@
+import { toast } from 'vue-sonner'
+
 import { presetNobel } from './uno.config'
 
 import Select from './components/ui/Select.vue'
@@ -5,6 +7,7 @@ import Button from './components/ui/Button/Button.vue'
 import ButtonGroup from './components/ui/Button/ButtonGroup.vue'
 import Toggle from './components/ui/Button/Toggle.vue'
 import AddButton from './components/ui/Button/presets/AddButton.vue'
+import Toaster from './components/ui/Toaster.vue'
 
 import Chip from './components/ui/Chip/Chip.vue'
 
@@ -21,6 +24,7 @@ import IconWidth from './components/Icons/IconWidth.vue'
 
 import SVG from './components/Icons/SVG.vue'
 
+export { toast }
 export { IconAdd, IconClose, IconHome, IconPaint, IconText, IconUI, IconWidth, SVG }
-export { Button, ButtonGroup, Select, Toggle, AddButton, Chip, Radio, Slider }
+export { Button, ButtonGroup, Select, Toggle, AddButton, Chip, Radio, Slider, Toaster }
 export { presetNobel }
