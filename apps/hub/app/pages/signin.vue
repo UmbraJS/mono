@@ -50,11 +50,11 @@ async function signUp() {
 </script>
 
 <template>
-  <div>
+  <div class="signin">
     <form @submit.prevent="signIn">
       <Input v-model="email" type="email" label="Email" />
       <Input v-model="password" type="password" label="Password" />
-      <Button type="submit" :loading="loading" :disabled="!email || !password"> Sign In </Button>
+      <Button type="submit" :disabled="!email.length || !password.length">Sign In</Button>
       <Button
         type="button"
         @click="auth.signIn.social({ provider: 'github', callbackURL: '/user' })"
@@ -67,7 +67,7 @@ async function signUp() {
       <Input v-model="email" type="email" label="Email" />
       <Input v-model="password" type="password" label="Password" />
       <Input v-model="name" type="name" label="Name" />
-      <Button type="submit" :loading="loading"> Sign Up </Button>
+      <Button type="submit">Sign Up</Button>
     </form>
   </div>
 </template>
@@ -76,5 +76,10 @@ async function signUp() {
 form {
   display: grid;
   gap: var(--space-1);
+}
+
+.signin {
+  display: grid;
+  gap: var(--space-4);
 }
 </style>
