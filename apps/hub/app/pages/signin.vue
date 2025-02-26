@@ -34,11 +34,15 @@ async function signIn() {
 async function signUp() {
   if (loading.value) return
   loading.value = true
+
+  console.log('rex stuff: ', email.value, password.value, name.value)
+
   const { error } = await auth.signUp.email({
     email: email.value,
     password: password.value,
     name: name.value,
   })
+  console.log('rex: ', error)
   if (error) {
     toast.error(error.message || 'Error signing up')
   } else {
@@ -51,6 +55,10 @@ async function signUp() {
 
 <template>
   <div class="signin">
+    <p>email: {{ email }}</p>
+    <p>password: {{ password }}</p>
+    <p>name: {{ name }}</p>
+    <!-- 
     <form @submit.prevent="signIn">
       <Input v-model="email" type="email" label="Email" />
       <Input v-model="password" type="password" label="Password" />
@@ -62,11 +70,11 @@ async function signUp() {
         <Icon name="i-simple-icons-github" />
         <span>Sign In with Github</span>
       </Button>
-    </form>
+    </form> -->
     <form @submit.prevent="signUp">
-      <Input v-model="email" type="email" label="Email" />
-      <Input v-model="password" type="password" label="Password" />
-      <Input v-model="name" type="name" label="Name" />
+      <Input @input="(e) => (email = e.target.value)" type="email" label="Email" />
+      <Input @input="(e) => (password = e.target.value)" type="password" label="Password" />
+      <Input @input="(e) => (name = e.target.value)" type="name" label="Name" />
       <Button type="submit">Sign Up</Button>
     </form>
   </div>
