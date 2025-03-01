@@ -5,7 +5,7 @@ const signMode = ref<'signin' | 'signup'>('signin')
 
 <template>
   <div class="signin">
-    <div class="toggle-wrapper border">
+    <div class="toggle-wrapper border sibling-blur">
       <ButtonGroup>
         <Button
           :variant="signMode === 'signin' ? 'primary' : 'base'"
@@ -37,7 +37,6 @@ form {
 .signin {
   display: grid;
   gap: var(--space-2);
-  width: 30em;
 }
 
 .toggle-wrapper {

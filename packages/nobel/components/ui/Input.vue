@@ -17,7 +17,7 @@ const focused = ref(false)
 </script>
 
 <template>
-  <div class="input">
+  <div class="input sibling-blur">
     <label
       for="html"
       class="button buttonText buttonHover buttonActive buttonFocus focus"
@@ -69,7 +69,7 @@ div.input:has(input:not(:placeholder-shown)):not(:focus-within) label {
   opacity: 0;
 }
 
-div.input:has(+ div:focus-within) {
+div.sibling-blur:has(+ *:focus-within) {
   filter: blur(4px);
 }
 
