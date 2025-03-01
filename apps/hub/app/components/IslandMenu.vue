@@ -1,27 +1,62 @@
 <script setup lang="ts">
-import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText } from '@nobel/core'
+import { Button, ButtonGroup, IconPaint, IconText } from '@nobel/core'
+import { onClickOutside } from '@vueuse/core'
+import { useTemplateRef } from 'vue'
 
 const theme = useUmbra()
 const hover = ref(false)
 const hazeStrength = computed(() => {
   return hover.value ? '58px' : '28px'
 })
+
+type Tab = 'user' | 'settings'
+
+const activeTab = ref<Tab>('user')
+const expandedTab = ref(true)
+
+function switchTab(tab: Tab) {
+  if (activeTab.value === tab) {
+    expandedTab.value = !expandedTab.value
+  } else {
+    activeTab.value = tab
+    expandedTab.value = true
+  }
+}
+
+function activeVariant(tab: Tab) {
+  return activeTab.value === tab ? 'primary' : 'base'
+}
+
+const islandMenu = useTemplateRef<HTMLElement>('islandMenu')
+
+onClickOutside(islandMenu, () => (expandedTab.value = false))
 </script>
 
 <template>
   <nav
     id="island-menu"
-    class="inverted-theme"
+    ref="islandMenu"
+    class="inverted-theme border"
+    :class="{ expanded: expandedTab }"
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
+    <div class="island-panel">
+      <SignUser v-if="activeTab === 'user'" />
+      <h1 v-if="activeTab === 'settings'">Settings</h1>
+    </div>
+
     <ButtonGroup>
-      <Button variant="base" size="small" @click="theme.inverse()">
-        <IconHome />
+      <Button size="small" :variant="activeVariant('user')" @click="() => switchTab('user')">
+        <Icon name="pixelarticons:user" size="1em" />
       </Button>
 
-      <Button variant="base" size="small" @click="theme.inverse()">
-        <IconWidth />
+      <Button
+        size="small"
+        :variant="activeVariant('settings')"
+        @click="() => switchTab('settings')"
+      >
+        <Icon name="pixelarticons:sliders-2" size="1em" />
       </Button>
 
       <Button variant="base" size="small" @click="theme.inverse()">
@@ -40,14 +75,14 @@ const hazeStrength = computed(() => {
 #island-menu {
   z-index: 1000;
   position: fixed;
-  height: var(--block-big);
   width: min-content;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: var(--space-quark);
-  padding: 0 var(--space-quark);
+  gap: 0;
+  padding: var(--space-quark);
 
   border-radius: var(--radius);
   background-color: var(--base-10);
@@ -58,6 +93,26 @@ const hazeStrength = computed(() => {
   margin: auto;
   left: 0;
   right: 0;
+}
+
+.island-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  height: 0;
+  width: 0;
+  transition: var(--slow);
+  overflow: hidden;
+}
+
+#island-menu.expanded .island-panel {
+  height: auto;
+  width: auto;
+  padding: var(--space-2) var(--space-2) var(--space-3);
+}
+
+#island-menu.expanded {
+  gap: var(--space-quark);
 }
 
 .island-position {
