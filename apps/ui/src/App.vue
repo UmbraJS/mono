@@ -5,6 +5,7 @@ import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText, IconUI }
 import TextScreen from './components/TextScreen.vue'
 import { umbra } from '@umbrajs/core'
 import type { Accent } from '@umbrajs/core'
+import '@nobel/core/styles/main.scss'
 
 const route = useRoute()
 

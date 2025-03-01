@@ -43,7 +43,6 @@ import {
       <p>Disabled</p>
     </Button>
 
-    <Select />
     <!-- <Select /> -->
 
     <section class="buttons">
