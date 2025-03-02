@@ -1,13 +1,13 @@
 <template>
-  <button class="primary">
+  <button class="primary base-accent">
     <slot></slot>
   </button>
 </template>
 
 <style lang="scss">
 .button.primary {
-  background: var(--color-100);
-  color: var(--color-10);
-  border: solid var(--border-size) var(--color-100);
+  background: var(--base-100);
+  color: var(--base-10);
+  border: solid var(--border-size) var(--base-100);
 }
 </style>

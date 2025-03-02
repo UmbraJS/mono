@@ -27,30 +27,9 @@ const {
 
 const ButtonVariant = computed(() => (disabled ? components.base : components[variant]))
 
-const buttonColors = {
-  default: '--accent',
-  success: '--success',
-  warning: '--warning',
-}
-
-const genericColors = computed(() => {
-  if (color === 'default') return
-  return {
-    '--color': `var(${buttonColors[color]}, --accent)`,
-    '--color-10': `var(${buttonColors[color]}-10)`,
-    '--color-20': `var(${buttonColors[color]}-20)`,
-    '--color-30': `var(${buttonColors[color]}-30)`,
-    '--color-40': `var(${buttonColors[color]}-40)`,
-    '--color-50': `var(${buttonColors[color]}-50)`,
-    '--color-60': `var(${buttonColors[color]}-60)`,
-    '--color-70': `var(${buttonColors[color]}-70)`,
-    '--color-80': `var(${buttonColors[color]}-80)`,
-    '--color-90': `var(${buttonColors[color]}-90)`,
-    '--color-100': `var(${buttonColors[color]}-100)`,
-    '--color-110': `var(${buttonColors[color]}-110)`,
-    '--color-120': `var(${buttonColors[color]}-120)`,
-    '--color-contrast': `var(${buttonColors[color]}-contrast)`,
-  }
+const getColorScheme = computed(() => {
+  if (color === 'default') return undefined
+  return `base-${color}`
 })
 </script>
 
@@ -59,9 +38,8 @@ const genericColors = computed(() => {
     :is="ButtonVariant"
     tabindex="1"
     class="button buttonText buttonHover buttonActive buttonFocus focus"
-    :class="size"
+    :class="`${size} ${getColorScheme}`"
     :disabled="disabled"
-    :style="genericColors"
     :type="type"
   >
     <slot></slot>
@@ -105,26 +83,26 @@ const genericColors = computed(() => {
 }
 
 @mixin button-hover {
-  color: var(--color-100);
-  background: var(--color-40);
-  border-color: var(--color-100);
+  color: var(--base-100);
+  background: var(--base-40);
+  border-color: var(--base-100);
 }
 
 @mixin button-active {
-  color: var(--color-100);
-  background: var(--color-70);
-  border-color: var(--color-100);
+  color: var(--base-100);
+  background: var(--base-70);
+  border-color: var(--base-100);
 }
 
 @mixin button-focus {
-  color: var(--color-100);
-  background: var(--color-70);
+  color: var(--base-100);
+  background: var(--base-70);
   border-color: var(--base-10);
 }
 
 /* Base */
 .button {
-  --focus-color: var(--color-100);
+  --focus-color: var(--base-100);
   border-radius: var(--radius);
   transition: all var(--time);
   @include button-base-theme;
@@ -159,7 +137,7 @@ const genericColors = computed(() => {
 
 .buttonFocus:focus {
   position: relative;
-  --focus-color: var(--color-100);
+  --focus-color: var(--base-100);
   outline: solid 0px var(--focus-color);
 }
 
@@ -171,7 +149,7 @@ const genericColors = computed(() => {
 
 .buttonFocus:active,
 .buttonFocus:has(*:active) {
-  outline: solid var(--border-size) var(--color-10);
+  outline: solid var(--border-size) var(--base-10);
 }
 
 /* Disabled */
