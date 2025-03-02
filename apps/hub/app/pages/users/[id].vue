@@ -1,10 +1,5 @@
 <script setup lang="ts">
 const route = useRoute()
-
-if (!route.params.id) {
-  console.log('Warning! Make sure user is authenticasted!')
-}
-
 const { data } = await useFetch(`/api/users/${route.params.id}`)
 </script>
 

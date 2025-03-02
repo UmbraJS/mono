@@ -52,7 +52,7 @@ export const account = sqliteTable('account', {
   providerId: text('providerId').notNull(),
   accessToken: text('accessToken'),
   refreshToken: text('refreshToken'),
-  accesTokenExiresAt: integer('accesTokenExiresAt', {
+  accessTokenExpiresAt: integer('accesTokenExiresAt', {
     mode: 'timestamp',
   }),
   refreshTokenExpiresAt: integer('refreshTokenExpiresAt', {

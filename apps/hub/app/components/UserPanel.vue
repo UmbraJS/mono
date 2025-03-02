@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Button, toast } from '@nobel/core'
+import { Button, ButtonGroup, toast } from '@nobel/core'
+
 const { user, session, client } = useAuth()
 
 const signOut = async () => {
@@ -7,12 +8,23 @@ const signOut = async () => {
   toast.success('Signed out')
 }
 
-const sessionAge = computed(() => {
-  if (!session.value?.createdAt) return
-  const startedAt = new Date(session.value.createdAt)
-  const now = new Date()
-  const diff = now.getTime() - startedAt.getTime()
-  return Math.floor(diff / 1000)
+const expiresIn = computed(() => {
+  if (!session) return ''
+  const currentTime = new Date()
+
+  const expiresAt = session.value?.expiresAt ? new Date(session.value.expiresAt).getTime() : 0
+  const difference = expiresAt - currentTime.getTime()
+
+  const minutes = Math.floor((difference / (1000 * 60)) % 60)
+  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
+  const days = Math.floor(difference / (1000 * 60 * 60 * 24))
+
+  return `${days}D ${hours}H ${minutes}M`
+})
+
+const creationDate = computed(() => {
+  if (!user.value) return ''
+  return new Date(user.value?.createdAt).toLocaleDateString()
 })
 </script>
 
@@ -31,11 +43,22 @@ const sessionAge = computed(() => {
         <Icon name="pixelarticons:check" />
       </div>
     </div>
+    <p>Creation date: {{ creationDate }}</p>
     <p>IP Adress: {{ session?.ipAddress }}</p>
-    <p>Session age: {{ sessionAge }}</p>
+    <p>Session expires in: {{ expiresIn }}</p>
     <p>{{ user?.id }}</p>
 
     <Button size="medium" @click="signOut">Sign out</Button>
+
+    <ButtonGroup>
+      <Button size="small" variant="primary" color="warning">
+        <Icon name="pixelarticons:alert" size="1em" />
+      </Button>
+
+      <Button size="small">
+        <Icon name="pixelarticons:sliders-2" size="1em" />
+      </Button>
+    </ButtonGroup>
   </div>
 </template>
 
