@@ -117,4 +117,15 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  vite: {
+    resolve: {
+      alias: {
+        path: 'path-browserify',
+        stream: 'stream-browserify',
+        readline: 'readline-browserify',
+        fs: 'fs-mock', // Add this alias for 'fs'
+      },
+    },
+  },
 })
