@@ -33,6 +33,8 @@ const sessionAge = computed(() => {
     </div>
     <p>IP Adress: {{ session?.ipAddress }}</p>
     <p>Session age: {{ sessionAge }}</p>
+    <p>{{ user?.id }}</p>
+
     <Button size="medium" @click="signOut">Sign out</Button>
   </div>
 </template>

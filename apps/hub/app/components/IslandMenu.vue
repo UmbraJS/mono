@@ -13,7 +13,7 @@ const hazeStrength = computed(() => {
 type Tab = 'user' | 'settings'
 
 const activeTab = ref<Tab>('user')
-const expandedTab = ref(true)
+const expandedTab = ref(false)
 
 function switchTab(tab: Tab) {
   if (activeTab.value === tab) {
