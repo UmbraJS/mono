@@ -63,9 +63,9 @@
     "path-browserify": "^1.0.1",
     "readline-browserify": "^0.0.4",
     "stream-browserify": "^3.0.0",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.2",
     "unocss": "^66.0.0",
-    "vue-tsc": "^2.2.2",
+    "vue-tsc": "^2.2.6",
     "wrangler": "^3.109.2"
   },
   "packageManager": "pnpm@9.12.3"
