@@ -1,4 +1,3 @@
-
 name: studio-nuxt-build
 run-name: studio nuxt build
 
@@ -17,7 +16,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: true
 
 jobs:
@@ -26,7 +25,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        working-directory: packages/docs
+        working-directory: apps/hub
 
     strategy:
       matrix:
@@ -40,7 +39,7 @@ jobs:
       - name: Identify package manager
         id: pkgman
         run: |
-          cache=`[ -f "packages/docs/pnpm-lock.yaml" ] && echo "pnpm" || ([ -f "packages/docs/package-lock.json" ] && echo "npm" || ([ -f "packages/docs/yarn.lock" ] && echo "yarn" || echo ""))`
+          cache=`[ -f "apps/hub/pnpm-lock.yaml" ] && echo "pnpm" || ([ -f "apps/hub/package-lock.json" ] && echo "npm" || ([ -f "apps/hub/yarn.lock" ] && echo "yarn" || echo ""))`
           package_manager=`[ ! -z "$cache" ] && echo "$cache" || echo "pnpm"`
           echo "cache=$cache" >> $GITHUB_OUTPUT
           echo "package_manager=$package_manager" >> $GITHUB_OUTPUT
@@ -72,7 +71,6 @@ jobs:
           NUXT_PUBLIC_STUDIO_API_URL: https://api.nuxt.studio
           NUXT_PUBLIC_STUDIO_TOKENS: eec209c726d7129192351fad2dc9db434d5a1dd6b1e168f3ae5fef11d0dc7ab7
 
-
       - name: Add .nojekyll file
         run: touch .output/public/.nojekyll
 
@@ -80,4 +78,4 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: packages/docs/.output/public
+          folder: apps/hub/.output/public

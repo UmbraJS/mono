@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "dev": "cd apps/nobel && pnpm run dev",
-    "docs": "cd packages/docs && pnpm run dev",
     "ui": "cd apps/ui && pnpm run dev",
     "dye": "cd packages/dye && pnpm run dev",
     "playground": "cd apps/playground && pnpm run dev",
