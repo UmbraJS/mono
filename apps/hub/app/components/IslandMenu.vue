@@ -3,6 +3,7 @@ import { Button, ButtonGroup, IconPaint, IconText } from '@nobel/core'
 import { onClickOutside } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import UserPanelWrapper from './UserPanelWrapper.vue'
+import SettingsPanel from './SettingsPanel.vue'
 
 const theme = useUmbra()
 const hover = ref(false)
@@ -44,7 +45,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   >
     <div class="island-panel">
       <UserPanelWrapper v-if="activeTab === 'user'" />
-      <h1 v-if="activeTab === 'settings'">Settings</h1>
+      <SettingsPanel v-if="activeTab === 'settings'" />
     </div>
 
     <ButtonGroup>

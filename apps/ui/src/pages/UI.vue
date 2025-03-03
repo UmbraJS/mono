@@ -9,6 +9,7 @@ import {
   Slider,
   IconHome,
   IconPaint,
+  ButtonToggle,
 } from '@nobel/core'
 </script>
 
@@ -82,14 +83,15 @@ import {
     </ButtonGroup>
 
     <section>
-      <Toggle>
+      <ButtonToggle>
         <template #active>
           <IconHome />
         </template>
         <template #inactive>
           <IconPaint />
         </template>
-      </Toggle>
+      </ButtonToggle>
+      <Toggle variant="primary" />
     </section>
   </div>
 </template>

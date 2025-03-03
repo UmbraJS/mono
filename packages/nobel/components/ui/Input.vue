@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, useModel } from 'vue'
-import { useVModel } from '@vueuse/core'
+import { ref } from 'vue'
 
 defineOptions({
   inheritAttrs: false,

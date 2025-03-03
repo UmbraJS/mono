@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, ButtonGroup, toast } from '@nobel/core'
+import { Button, ButtonGroup, Toggle, toast } from '@nobel/core'
 
 const { user, session, client } = useAuth()
 
@@ -36,6 +36,9 @@ const creationDate = computed(() => {
         alt="User Image"
       />
       <h2>{{ user?.name }}</h2>
+      <Button size="small" variant="primary" color="warning">
+        <Icon name="pixelarticons:alert" size="1em" />
+      </Button>
     </div>
     <div class="email">
       <p>{{ user?.email }}</p>

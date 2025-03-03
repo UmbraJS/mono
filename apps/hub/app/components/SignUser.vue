@@ -5,7 +5,7 @@ const signMode = ref<'signin' | 'signup'>('signin')
 
 <template>
   <div class="signin">
-    <div class="toggle-wrapper border sibling-blur">
+    <div class="multi-toggle-wrapper border sibling-blur">
       <ButtonGroup>
         <Button
           :variant="signMode === 'signin' ? 'primary' : 'base'"
@@ -39,7 +39,7 @@ form {
   gap: var(--space-2);
 }
 
-.toggle-wrapper {
+.multi-toggle-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
