@@ -48,7 +48,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
       <SettingsPanel v-if="activeTab === 'settings'" />
     </div>
 
-    <ButtonGroup>
+    <ButtonGroup class="island-actions">
       <Button size="small" :variant="activeVariant('user')" @click="() => switchTab('user')">
         <Icon name="pixelarticons:user" size="1em" />
       </Button>
@@ -73,7 +73,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   <div class="haze island-position"></div>
 </template>
 
-<style scoped>
+<style>
 #island-menu {
   z-index: 1000;
   position: fixed;
@@ -84,7 +84,6 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   justify-content: center;
   align-items: center;
   gap: 0;
-  padding: var(--space-quark);
 
   border-radius: var(--radius);
   background-color: var(--base-10);
@@ -110,11 +109,15 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
 #island-menu.expanded .island-panel {
   height: auto;
   width: 30em;
-  padding: var(--space-2) var(--space-2) var(--space-3);
 }
 
 #island-menu.expanded {
   gap: var(--space-quark);
+}
+
+.island-actions {
+  display: flex;
+  padding: var(--space-quark);
 }
 
 .island-position {
@@ -123,6 +126,10 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   margin: auto;
   left: 0;
   right: 0;
+}
+
+.panel-wrapper {
+  padding: var(--space-2);
 }
 
 .haze {

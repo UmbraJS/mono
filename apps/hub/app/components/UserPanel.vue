@@ -37,22 +37,30 @@ const creationDate = computed(() => {
   <div class="user-panel">
     <div class="identity">
       <NuxtImg
+        class="banner"
         src="https://images.unsplash.com/photo-1740475339769-664748d1193e?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt="User Image"
+        alt="User Banner"
       />
-      <h3>{{ user?.name }}</h3>
-      <div v-if="!user?.emailVerified" class="verified border base-accent">
-        <Icon name="pixelarticons:check" />
+      <div class="identity-content panel-wrapper">
+        <NuxtImg
+          class="avatar"
+          src="https://images.unsplash.com/photo-1740475339769-664748d1193e?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="User avatar"
+        />
+        <h3>{{ user?.name }}</h3>
+        <div v-if="!user?.emailVerified" class="verified border base-accent">
+          <Icon name="pixelarticons:check" />
+        </div>
       </div>
     </div>
 
-    <div class="email">
+    <div class="email panel-wrapper">
       <p>{{ user?.email }}</p>
       <p>Created at: {{ creationDate }}</p>
       <p>Session Expires: {{ expiresIn }}</p>
     </div>
 
-    <div class="user-actions">
+    <div class="user-actions panel-wrapper">
       <Button size="medium" @click="signOut">Sign out</Button>
       <Dialog variant="warning">
         <template #trigger>
@@ -84,11 +92,21 @@ const creationDate = computed(() => {
   width: 100%;
 }
 
-.user-panel img {
+.user-panel img.avatar {
   height: var(--block-big);
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 100%;
+}
+
+.user-panel img.banner {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  filter: blur(7px);
+  opacity: 0.7;
 }
 
 .user-panel .verified {
@@ -111,10 +129,17 @@ const creationDate = computed(() => {
 }
 
 .identity {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.identity-content {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: var(--space-1);
+  position: relative;
 }
 
 .user-actions {

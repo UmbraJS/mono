@@ -4,7 +4,7 @@ const signMode = ref<'signin' | 'signup'>('signin')
 </script>
 
 <template>
-  <div class="signin">
+  <div class="signin panel-wrapper">
     <div class="multi-toggle-wrapper border sibling-group-blur">
       <ButtonGroup>
         <Button
