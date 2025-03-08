@@ -68,7 +68,11 @@ div.input:has(input:not(:placeholder-shown)):not(:focus-within) label {
   opacity: 0;
 }
 
-div.sibling-blur:has(+ *:focus-within) {
+div.sibling-blur:has(+ * input:focus) {
+  filter: blur(4px);
+}
+
+div.sibling-group-blur:has(+ * > :first-child input:focus) {
   filter: blur(4px);
 }
 

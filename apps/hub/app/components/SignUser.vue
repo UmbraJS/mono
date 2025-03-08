@@ -5,7 +5,7 @@ const signMode = ref<'signin' | 'signup'>('signin')
 
 <template>
   <div class="signin">
-    <div class="multi-toggle-wrapper border sibling-blur">
+    <div class="multi-toggle-wrapper border sibling-group-blur">
       <ButtonGroup>
         <Button
           :variant="signMode === 'signin' ? 'primary' : 'base'"
