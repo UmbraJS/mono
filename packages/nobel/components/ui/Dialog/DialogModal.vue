@@ -41,10 +41,10 @@ const color = computed(() => {
 
 <style>
 .DialogOverlay {
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(40px);
   position: fixed;
   inset: 0;
-  animation: overlayShow var(--time) cubic-bezier(0.16, 1, 0.3, 1);
+  animation: contentShow 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 2000;
 }
 
@@ -103,12 +103,10 @@ const color = computed(() => {
 
 @keyframes contentShow {
   from {
-    opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
+    backdrop-filter: blur(0);
   }
   to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    backdrop-filter: blur(40px);
   }
 }
 </style>

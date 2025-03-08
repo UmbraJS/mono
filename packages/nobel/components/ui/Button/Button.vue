@@ -28,7 +28,7 @@ const {
 const ButtonVariant = computed(() => (disabled ? components.base : components[variant]))
 
 const getColorScheme = computed(() => {
-  if (color === 'default') return undefined
+  if (color === 'default') return `base-accent`
   return `base-${color}`
 })
 </script>
