@@ -10,6 +10,13 @@ import ButtonToggle from './components/ui/Button/Toggle.vue'
 import AddButton from './components/ui/Button/presets/AddButton.vue'
 import Toggle from './components/ui/Toggle.vue'
 import Toaster from './components/ui/Toaster.vue'
+import {
+  DialogRoot,
+  DialogTrigger,
+  Dialog,
+  DialogModal,
+  DialogClose,
+} from './components/ui/Dialog/index'
 
 import Chip from './components/ui/Chip/Chip.vue'
 
@@ -40,5 +47,10 @@ export {
   Slider,
   Toaster,
   Input,
+  Dialog,
+  DialogModal,
+  DialogRoot,
+  DialogTrigger,
+  DialogClose,
 }
 export { presetNobel }

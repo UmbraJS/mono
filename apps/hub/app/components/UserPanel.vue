@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, ButtonGroup, Toggle, toast } from '@nobel/core'
+import { Button, ButtonGroup, Toggle, toast, Dialog, DialogClose } from '@nobel/core'
 
 const { user, session, client } = useAuth()
 
@@ -8,24 +8,29 @@ const signOut = async () => {
   toast.success('Signed out')
 }
 
-const expiresIn = computed(() => {
-  if (!session) return ''
-  const currentTime = new Date()
+const deleteUser = async () => {
+  await client.deleteUser()
+  toast.success('User deleted')
+}
 
-  const expiresAt = session.value?.expiresAt ? new Date(session.value.expiresAt).getTime() : 0
-  const difference = expiresAt - currentTime.getTime()
+// const expiresIn = computed(() => {
+//   if (!session) return ''
+//   const currentTime = new Date()
 
-  const minutes = Math.floor((difference / (1000 * 60)) % 60)
-  const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
-  const days = Math.floor(difference / (1000 * 60 * 60 * 24))
+//   const expiresAt = session.value?.expiresAt ? new Date(session.value.expiresAt).getTime() : 0
+//   const difference = expiresAt - currentTime.getTime()
 
-  return `${days}D ${hours}H ${minutes}M`
-})
+//   const minutes = Math.floor((difference / (1000 * 60)) % 60)
+//   const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
+//   const days = Math.floor(difference / (1000 * 60 * 60 * 24))
 
-const creationDate = computed(() => {
-  if (!user.value) return ''
-  return new Date(user.value?.createdAt).toLocaleDateString()
-})
+//   return `${days}D ${hours}H ${minutes}M`
+// })
+
+// const creationDate = computed(() => {
+//   if (!user.value) return ''
+//   return new Date(user.value?.createdAt).toLocaleDateString()
+// })
 </script>
 
 <template>
@@ -36,36 +41,39 @@ const creationDate = computed(() => {
         alt="User Image"
       />
       <h2>{{ user?.name }}</h2>
-      <Button size="small" variant="primary" color="warning">
-        <Icon name="pixelarticons:alert" size="1em" />
-      </Button>
-    </div>
-    <div class="email">
-      <p>{{ user?.email }}</p>
       <div v-if="!user?.emailVerified" class="verified border">
         <Icon name="pixelarticons:check" />
       </div>
     </div>
-    <p>Creation date: {{ creationDate }}</p>
-    <p>IP Adress: {{ session?.ipAddress }}</p>
-    <p>Session expires in: {{ expiresIn }}</p>
-    <p>{{ user?.id }}</p>
+    <div class="email">
+      <p>{{ user?.email }}</p>
+    </div>
 
-    <Button size="medium" @click="signOut">Sign out</Button>
+    <div class="user-actions">
+      <Button size="medium" @click="signOut">Sign out</Button>
+      <Dialog variant="warning">
+        <template #trigger>
+          <Button size="medium" variant="primary" color="warning"> Delete user </Button>
+        </template>
 
-    <ButtonGroup>
-      <Button size="small" variant="primary" color="warning">
-        <Icon name="pixelarticons:alert" size="1em" />
-      </Button>
-
-      <Button size="small">
-        <Icon name="pixelarticons:sliders-2" size="1em" />
-      </Button>
-    </ButtonGroup>
+        <template #content>
+          <h2>Are you sure?</h2>
+          <p>Deleting this user is irriversible</p>
+          <DialogClose>
+            <Button size="medium" color="warning" @click="deleteUser"> Delete user </Button>
+          </DialogClose>
+        </template>
+      </Dialog>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
+.user-panel {
+  display: grid;
+  gap: var(--space-1);
+}
+
 .user-panel button {
   width: 100%;
 }
@@ -97,8 +105,14 @@ const creationDate = computed(() => {
 }
 
 .identity {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
+  gap: var(--space-1);
+}
+
+.user-actions {
+  display: grid;
   gap: var(--space-1);
 }
 </style>
