@@ -97,6 +97,7 @@ const expiresIn = computed(() => {
   overflow: hidden;
   object-fit: cover;
   filter: blur(7px);
+  transform: scale(1.4);
   opacity: 0.7;
 }
 
@@ -121,8 +122,6 @@ const expiresIn = computed(() => {
 
 .identity {
   position: relative;
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
   overflow: hidden;
 }
 

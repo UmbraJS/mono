@@ -89,6 +89,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   background-color: var(--base-10);
   border: solid var(--border-size) var(--base-50);
   border-radius: var(--outer-radius);
+  overflow: hidden;
 
   bottom: var(--space-1);
   margin: auto;
