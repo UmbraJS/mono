@@ -82,13 +82,6 @@ export default defineNuxtConfig({
         },
       },
     },
-    highlight: {
-      theme: {
-        // TODO: Figure out why this doesn't work
-        default: 'dracula',
-        dark: 'github-dark',
-      },
-    },
   },
 
   // components: {
