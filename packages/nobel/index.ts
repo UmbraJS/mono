@@ -16,6 +16,8 @@ import {
   Dialog,
   DialogModal,
   DialogClose,
+  DialogTitle,
+  DialogDescription,
 } from './components/ui/Dialog/index'
 
 import Chip from './components/ui/Chip/Chip.vue'
@@ -52,5 +54,7 @@ export {
   DialogRoot,
   DialogTrigger,
   DialogClose,
+  DialogTitle,
+  DialogDescription,
 }
 export { presetNobel }

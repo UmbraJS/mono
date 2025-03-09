@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import { Button, toast, Dialog, DialogClose } from '@nobel/core'
+import { Button, toast } from '@nobel/core'
+import DeleteUser from './Dialogs/DeleteUser.vue'
 
 const { user, session, client } = useAuth()
 
 const signOut = async () => {
   await client.signOut()
   toast.success('Signed out')
-}
-
-const deleteUser = async () => {
-  await client.deleteUser()
-  toast.success('User deleted')
 }
 
 const expiresIn = computed(() => {
@@ -26,11 +22,6 @@ const expiresIn = computed(() => {
 
   return `${days}D ${hours}H ${minutes}M`
 })
-
-const creationDate = computed(() => {
-  if (!user.value) return ''
-  return new Date(user.value?.createdAt).toLocaleDateString()
-})
 </script>
 
 <template>
@@ -38,13 +29,18 @@ const creationDate = computed(() => {
     <div class="identity">
       <NuxtImg
         class="banner"
-        src="https://images.unsplash.com/photo-1740475339769-664748d1193e?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        :src="
+          user?.image || 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+        "
         alt="User Banner"
       />
       <div class="identity-content panel-wrapper">
         <NuxtImg
           class="avatar"
-          src="https://images.unsplash.com/photo-1740475339769-664748d1193e?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          :src="
+            user?.image ||
+            'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+          "
           alt="User avatar"
         />
         <h3>{{ user?.name }}</h3>
@@ -56,28 +52,23 @@ const creationDate = computed(() => {
 
     <div class="email panel-wrapper">
       <p>{{ user?.email }}</p>
-      <p>Created at: {{ creationDate }}</p>
+      <p>
+        Created at:
+        <NuxtTime
+          v-if="user?.createdAt"
+          :datetime="new Date(user?.createdAt)"
+          second="numeric"
+          month="long"
+          day="numeric"
+          year="numeric"
+        />
+      </p>
       <p>Session Expires: {{ expiresIn }}</p>
     </div>
 
     <div class="user-actions panel-wrapper">
       <Button size="medium" @click="signOut">Sign out</Button>
-      <Dialog variant="warning">
-        <template #trigger>
-          <Button size="medium" color="warning"> Delete user </Button>
-        </template>
-
-        <template #content>
-          <div class="dialog-warning-title">
-            <Icon name="pixelarticons:warning-box" size="2rem" />
-            <h2>Are you sure?</h2>
-          </div>
-          <p>Deleting this user is irriversible</p>
-          <DialogClose>
-            <Button size="medium" color="warning" @click="deleteUser"> Delete user </Button>
-          </DialogClose>
-        </template>
-      </Dialog>
+      <DeleteUser />
     </div>
   </div>
 </template>
@@ -130,7 +121,8 @@ const creationDate = computed(() => {
 
 .identity {
   position: relative;
-  border-radius: var(--radius);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
   overflow: hidden;
 }
 

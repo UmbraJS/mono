@@ -45,6 +45,7 @@
     "better-auth": "^1.1.19",
     "drizzle-orm": "^0.39.3",
     "nuxt": "^3.15.4",
+    "nuxt-time": "1.0.3",
     "pinia": "3.0.1",
     "sass": "^1.85.0",
     "temporal-polyfill": "^0.2.5",

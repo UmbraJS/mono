@@ -9,9 +9,9 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
     '@nuxt/icon',
-    '@nuxt/content',
-    // '@unocss/nuxt',
+    '@nuxt/content', // '@unocss/nuxt',
     '@nuxtjs/mdc',
+    'nuxt-time',
   ],
 
   // https://devtools.nuxt.com
@@ -93,7 +93,7 @@ export default defineNuxtConfig({
 
   // components: {
   //   global: true,
-  //   path: './components/prose',
+  //   dirs: ['./components/prose'],
   // },
 
   content: {
