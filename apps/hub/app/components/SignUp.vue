@@ -22,7 +22,6 @@ async function signUp() {
     toast.error(error.message || 'Error signing up')
   } else {
     toast.success('You have been signed up!')
-    await navigateTo('/user')
   }
   loading.value = false
 }

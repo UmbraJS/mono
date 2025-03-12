@@ -1,12 +1,9 @@
 <template>
   <h1 :id="props.id">
-    lolers
     <a v-if="generate" :href="`#${props.id}`">
-      lolers
       <slot />
     </a>
     <slot v-else />
-    lolers
   </h1>
 </template>
 

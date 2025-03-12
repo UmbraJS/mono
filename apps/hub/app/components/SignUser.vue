@@ -35,6 +35,7 @@ form {
 }
 
 .signin {
+  position: relative;
   display: grid;
   gap: var(--space-2);
 }

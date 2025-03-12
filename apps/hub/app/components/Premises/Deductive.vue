@@ -13,24 +13,20 @@ function getNameOfWebsiteFromURL(url?: string) {
 
 <template>
   <Premises>
-    <!-- <p>
-      1 Nuxt layers are a <Reference id="0">powerful</Reference> feature that you can use to share
-      and reuse partial Nuxt applications within a monorepo, or from a git repository or npm
-      package. The layers structure is almost identical to a standard Nuxt application, which makes
-      them easy to author and maintain.
-    </p> -->
     <div class="gutter"></div>
     <div class="Deductive-Premises">
-      <PremisesPremise v-for="(premise, index) in props.reason.premises" :key="premise.id">
+      <PremisesPremise
+        v-for="(premise, index) in props.reason.premises"
+        :key="premise.id"
+        :class="premise.type === 'infavor' ? 'base-success' : 'base-warning'"
+      >
         <PremisesPremiseId :id="index + 1" />
-        <div class="PremiseContentWrapper">
-          <p class="PremiseContent">{{ premise.text }}</p>
-          <div v-if="premise.source" class="PremiseContentSource">
-            <a :href="premise.source">
-              <p>{{ getNameOfWebsiteFromURL(premise.source) }}</p>
-            </a>
-          </div>
-        </div>
+        <PremisesPremiseContent :editable="true">
+          {{ premise.text }}
+          <a v-if="premise.source" :href="premise.source" class="PremiseContentSource">
+            {{ getNameOfWebsiteFromURL(premise.source) }}
+          </a>
+        </PremisesPremiseContent>
         <ReasonCredibility :credibility="premise.credibility" />
       </PremisesPremise>
     </div>
@@ -49,15 +45,5 @@ function getNameOfWebsiteFromURL(url?: string) {
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-60);
   transition: var(--slower);
-}
-
-.PremiseContent {
-  padding: var(--space-quark);
-}
-
-.PremiseContentSource {
-  padding: var(--space-quark);
-  padding-top: 0px;
-  display: flex;
 }
 </style>

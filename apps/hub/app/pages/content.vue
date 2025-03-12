@@ -4,7 +4,9 @@ const { data: home } = await useAsyncData(() => queryCollection('content').path(
 const md = ref(`
 # Just a Vue app
 
-This is markdown content rendered via the \`<MDCRenderer>\` component, including MDC below.
+This is markdown content rendered via the \`<MDCRenderer>\` component, 
+
+including MDC below.
 
 \`\`\`ts
 const a = 1;
@@ -14,6 +16,8 @@ const a = 1;
 
 <template>
   <div class="artickle">
+    <textarea id="mdc" name="markdown" v-model="md" />
+
     <MDC :value="md" tag="article" class="content post" />
 
     <ContentRenderer v-if="home" :value="home" class="content post" />

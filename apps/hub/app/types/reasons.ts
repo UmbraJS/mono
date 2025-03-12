@@ -72,12 +72,14 @@ interface Reason {
   }
 }
 
+type PremiseType = 'infavor' | 'inopposition'
+
 interface Premise {
   id: string
-  type: string
+  type: PremiseType
   text: string
   source?: string
   credibility: Credibility
 }
 
-export type { Reason, Premise }
+export type { Reason, Premise, PremiseType }

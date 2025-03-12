@@ -38,12 +38,14 @@ const signinWithGithub = async () => {
 }
 
 const onSuccessfulSignIn = async () => {
-  await navigateTo('/user')
   toast.success('You have been signed in!')
 }
 </script>
 
 <template>
+  <div v-if="loading" class="loading-panel">
+    <Icon name="svg-spinners:pulse-multiple" size="8em" />
+  </div>
   <form @submit.prevent="signIn">
     <Input type="email" label="Email" @input="(e) => (email = e.target.value)" />
     <Input type="password" label="Password" @input="(e) => (password = e.target.value)" />
@@ -58,3 +60,29 @@ const onSuccessfulSignIn = async () => {
     </Button>
   </form>
 </template>
+
+<style>
+.loading-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0%;
+  left: 0%;
+  z-index: 20;
+  backdrop-filter: blur(4px);
+  animation: reveal var(--slower) forwards;
+}
+
+@keyframes reveal {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+  }
+  100% {
+    clip-path: circle(100% at 50% 50%);
+  }
+}
+</style>
