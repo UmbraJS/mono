@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PremiseType } from '../../types/reasons'
+import type { PremiseType } from '../../../types/reasoning'
 const props = defineProps<{
   type?: PremiseType
 }>()

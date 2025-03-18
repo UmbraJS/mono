@@ -6,11 +6,18 @@ date: 2020-11-11
 
 This is Foo blog post of some kind \`<MDCRenderer>\`
 
+> lolers
+
+_lol_ this **is** a **test**
+
 ## Bar
 
 This is Bar blog post of some kind :)
 
 ### Code
+
+- [x] foo
+- [ ] bar
 
 ```ts
 const foo = 'foo'

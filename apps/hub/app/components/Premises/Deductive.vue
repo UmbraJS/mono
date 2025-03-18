@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Reason } from '../../types/reasons'
+import type { Reason } from '../../../types/reasoning'
 const props = defineProps<{
   reason: Reason
 }>()
@@ -14,7 +14,7 @@ function getNameOfWebsiteFromURL(url?: string) {
 <template>
   <Premises>
     <div class="gutter"></div>
-    <div class="Deductive-Premises">
+    <div id="DeductivePremises">
       <PremisesPremise
         v-for="(premise, index) in props.reason.premises"
         :key="premise.id"
@@ -34,7 +34,7 @@ function getNameOfWebsiteFromURL(url?: string) {
 </template>
 
 <style>
-.Deductive-Premises {
+#DeductivePremises {
   display: grid;
   gap: var(--space-1);
 }

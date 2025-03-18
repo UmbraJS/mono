@@ -39,7 +39,7 @@ const focused = ref(false)
 </template>
 
 <style lang="scss">
-input {
+input.button {
   all: unset;
   width: 100%;
   box-sizing: border-box;

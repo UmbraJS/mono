@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Reason } from '../types/reasons'
-import ReasonConclution from './Reason/Conclution.vue'
+import type { Reason } from '../../../types/reasoning'
 import { Button, ButtonGroup } from '@nobel/core'
 
 const props = defineProps<{
@@ -12,7 +11,7 @@ const edit = ref(false)
 </script>
 
 <template>
-  <div class="argument bodycopy p-2">
+  <div class="argument bodycopy">
     <header :class="{ hasImage: props.reason.background }">
       <ReasonConclution :reason="props.reason" />
       <NuxtImg

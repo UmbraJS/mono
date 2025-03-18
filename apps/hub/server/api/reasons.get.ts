@@ -1,13 +1,4 @@
-import type { Reason } from '../types/reasoning'
-
-const user = {
-  id: '1',
-  name: 'John Doe',
-  email: '',
-  avatar:
-    'https://media.istockphoto.com/id/959577452/photo/ancient-marble-statue-of-the-great-greek-philosopher-socrates-on-background-the-blue-sky.jpg?s=2048x2048&w=is&k=20&c=WtJU-qeeItsS3qctpWc8mbZpGXRooouQXsrCW5RN5qA=',
-  bookmarks: [{ id: '1', type: 'reason' }],
-}
+import type { Reason } from '../../types/reasoning'
 
 const reasons: Reason[] = [
   {
@@ -57,7 +48,7 @@ const reasons: Reason[] = [
     type: 'Descriptive',
     background: {
       url: 'https://images.unsplash.com/photo-1731331131233-4f73c93ae693?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'Libery statue',
+      alt: 'Liberty statue',
       offset: 'center;',
     },
     credibility: {
@@ -152,7 +143,6 @@ const reasons: Reason[] = [
   },
 ]
 
-export default {
-  user,
-  reasons,
-}
+export default defineEventHandler(async () => {
+  return reasons
+})
