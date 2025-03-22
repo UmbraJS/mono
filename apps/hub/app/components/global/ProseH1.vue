@@ -1,5 +1,6 @@
 <template>
   <h1 :id="props.id">
+    <span contenteditable="false"># </span>
     <a v-if="generate" :href="`#${props.id}`">
       <slot />
     </a>

@@ -1,5 +1,6 @@
 <template>
   <h2 :id="props.id">
+    ##
     <a v-if="props.id && generate" :href="`#${props.id}`">
       <slot />
     </a>

@@ -1,65 +1,36 @@
 <script setup lang="ts">
 import RichText from '~/components/RichText.vue'
 import type { MDCParserResult } from '@nuxtjs/mdc'
-const { data: home } = await useAsyncData(() => queryCollection('content').path('/').first())
 
-const counter = ref(0)
-
+const someOther = ref(`# Simple`)
 const ast = ref<MDCParserResult>()
 
-const md = ref(`
-# Just a Vue app
-
-This is markdown content rendered via the \`<MDCRenderer>\` component,
-
-including MDC below. ${counter.value}
-
-\`\`\`ts
-const a = 1;
-\`\`\`
-`)
-
-const samllDemo = ref(`
-# Simple
-
-Simple paragraph
-`)
-
-const mounted = ref(false)
+// const source = useLocalStorage('nuxt-mdc-playground-code', someOther)
 
 async function pM(value: string) {
   ast.value = await parseMarkdown(value)
 }
 
-watch([mounted, samllDemo], () => {
-  if (!mounted.value) return
-  pM(samllDemo.value)
-})
-
-onMounted(() => {
-  mounted.value = true
-})
+watch(someOther, () => pM(someOther.value))
+onMounted(() => pM(someOther.value))
 </script>
 
 <template>
-  <div class="artickle" @click="counter++">
-    <RichText
-      @input="
-        (e) => {
-          samllDemo = (e?.target as HTMLDivElement)?.innerText || ''
-        }
-      "
-    />
+  <div class="artickle">
+    <RichText :value="someOther" @update:model-value="someOther = $event" />
 
-    <MDCRenderer
-      v-if="ast"
-      :body="ast!.body"
-      :data="ast!.data"
-      tag="article"
-      class="content post"
-    />
+    <!-- <Editor v-model:code="samllDemo" /> -->
+    <!-- <Editor :code="JSON.stringify(ast?.body, null, 2) || ''" language="json" read-only /> -->
 
-    <ContentRenderer v-if="home" :value="home" class="content post" />
+    <div contenteditable="true" class="buttonHover buttonFocus focus rounded border">
+      <MDCRenderer
+        v-if="ast"
+        :body="ast!.body"
+        :data="ast!.data"
+        tag="article"
+        class="content post"
+      />
+    </div>
   </div>
 </template>
 

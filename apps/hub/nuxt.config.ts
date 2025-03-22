@@ -8,10 +8,11 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxt/image',
-    '@nuxt/icon',
-    '@nuxt/content', // '@unocss/nuxt',
+    '@nuxt/icon', // '@unocss/nuxt',
+    '@nuxt/content',
     '@nuxtjs/mdc',
     'nuxt-time',
+    '@vueuse/nuxt',
   ],
 
   // https://devtools.nuxt.com

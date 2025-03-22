@@ -22,25 +22,23 @@ function handleKeyUp() {
   console.log('Cursor Position on Key Up:', cursorPos)
 }
 
-const model = defineModel<string>('lol')
+defineProps<{ value: string }>()
+const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
   <div
     id="RichText"
-    class="buttonHover buttonFocus focus"
+    class="buttonHover buttonFocus focus rounded border"
     contenteditable="true"
     @keyup="handleKeyUp"
     @mouseup="handleMouseUp"
+    @input="
+      (e) => {
+        emit('update:modelValue', (e?.target as HTMLDivElement)?.innerText || '')
+      }
+    "
   >
-    {{ model }}
+    {{ value }}
   </div>
 </template>
-
-<style lang="scss">
-#RichText {
-  height: 300px;
-  padding: var(--space-quark);
-  border-radius: var(--radius);
-}
-</style>

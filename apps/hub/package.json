@@ -15,6 +15,7 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@monaco-editor/loader": "^1.5.0",
     "@nobel/core": "workspace:*",
     "@nobel/richtext": "workspace:*",
     "@nuxt/content": "^3.3.0",
@@ -23,6 +24,7 @@
     "@nuxt/image": "1.9.0",
     "@nuxthub/core": "^0.8.18",
     "@nuxtjs/mdc": "0.15.0",
+    "@nuxtlabs/monarch-mdc": "^0.5.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@pinia/nuxt": "0.10.1",
     "@tiptap/core": "^2.11.5",
@@ -44,6 +46,7 @@
     "@unocss/core": "^66.1.0-beta.6",
     "@unocss/transformer-variant-group": "^66.1.0-beta.6",
     "@vueuse/core": "13.0.0",
+    "@vueuse/nuxt": "13.0.0",
     "better-auth": "^1.2.4",
     "drizzle-orm": "^0.40.1",
     "github-slugger": "^2.0.0",
