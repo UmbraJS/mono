@@ -12,4 +12,9 @@ defineProps<{
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.card {
+  height: 100%;
+  width: 100%;
+}
+</style>

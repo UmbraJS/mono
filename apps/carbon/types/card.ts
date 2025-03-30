@@ -76,6 +76,17 @@ const cardNames = [
   'Bow',
   'Dagger',
   'Bite',
+  'Skeleton Soldier',
+  'Skeleton Archer',
+  'Soldier',
+  'Archer',
+  'Halberdier',
+  'Emerald Sword',
+  'Doom Cloak',
+  'Swamp',
+  'Alien Halls',
+  'Abandoned Halls',
+  'Village',
 ] as const
 
 export interface Card {

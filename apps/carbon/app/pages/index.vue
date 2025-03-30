@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import Card from '~/components/Card.vue'
-import { cards } from ' ~/assets/cards'
+import { warrior, skeletonKing } from '../data/character'
 
-const get6Cards = () => {
-  return cards.slice(0, 6)
-}
+const cards = warrior.deck
+const opponentCards = skeletonKing.deck
 </script>
 
 <template>
   <main>
     <div class="board border">
-      <div class="cardSleve border" v-for="(card, index) in get6Cards()" :key="index">
+      <div class="cardSleve border" v-for="(card, index) in opponentCards" :key="index">
+        <Card :card="card" />
+      </div>
+    </div>
+    <div class="board border">
+      <div class="cardSleve border" v-for="(card, index) in cards" :key="index">
         <Card :card="card" />
       </div>
     </div>
@@ -22,12 +26,20 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  gap: var(--space-4);
   height: 100vh;
 }
 
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
 .board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  display: flex;
   gap: var(--space-1);
   padding: var(--space-4);
   background: var(--base-10);
