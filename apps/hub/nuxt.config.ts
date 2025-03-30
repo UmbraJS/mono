@@ -91,10 +91,10 @@ export default defineNuxtConfig({
     },
   },
 
-  // components: {
-  //   global: true,
-  //   path: './components/prose',
-  // },
+  components: {
+    global: true,
+    dirs: ['./components/prose']
+  },
 
   content: {
     build: {

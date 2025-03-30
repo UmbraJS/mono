@@ -17,6 +17,7 @@
   "dependencies": {
     "@nobel/core": "workspace:*",
     "@nobel/richtext": "workspace:*",
+    "@umbrajs/core": "workspace:*",
     "@nuxt/content": "^3.2.1",
     "@nuxt/eslint": "1.1.0",
     "@nuxt/icon": "1.10.3",
@@ -38,7 +39,6 @@
     "@tiptap/pm": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
     "@tiptap/vue-3": "^2.11.5",
-    "@umbrajs/core": "workspace:*",
     "@unocss/core": "^66.0.0",
     "@unocss/transformer-variant-group": "^66.0.0",
     "@vueuse/core": "^12.7.0",

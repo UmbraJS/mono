@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "cd apps/nobel && pnpm run dev",
     "ui": "cd apps/ui && pnpm run dev",
+    "carbon": "cd apps/carbon && pnpm run dev",
     "dye": "cd packages/dye && pnpm run dev",
     "playground": "cd apps/playground && pnpm run dev",
     "team": "cd apps/team && pnpm run dev",
