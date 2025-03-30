@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { Reason } from '../../types/reasons'
+import type { Reason } from '../../../types/reasoning'
+import PremiseContent from './PremiseContent.vue'
 const props = defineProps<{
   reason: Reason
 }>()
@@ -12,7 +13,7 @@ const props = defineProps<{
       :key="premise.id"
       :type="premise.type"
     >
-      <p>{{ premise.text }}</p>
+      <PremiseContent :editable="false">{{ premise.text }}</PremiseContent>
     </PremisesPremise>
   </Premises>
 </template>

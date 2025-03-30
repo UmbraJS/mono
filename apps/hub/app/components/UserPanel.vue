@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Button, ButtonGroup, Toggle, toast } from '@nobel/core'
+import { Button, toast } from '@nobel/core'
+import DeleteUser from './Dialogs/DeleteUser.vue'
 
 const { user, session, client } = useAuth()
 
@@ -21,60 +22,83 @@ const expiresIn = computed(() => {
 
   return `${days}D ${hours}H ${minutes}M`
 })
-
-const creationDate = computed(() => {
-  if (!user.value) return ''
-  return new Date(user.value?.createdAt).toLocaleDateString()
-})
 </script>
 
 <template>
   <div class="user-panel">
     <div class="identity">
       <NuxtImg
-        src="https://images.unsplash.com/photo-1740475339769-664748d1193e?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt="User Image"
+        class="banner"
+        :src="
+          user?.image || 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+        "
+        alt="User Banner"
       />
-      <h2>{{ user?.name }}</h2>
-      <Button size="small" variant="primary" color="warning">
-        <Icon name="pixelarticons:alert" size="1em" />
-      </Button>
-    </div>
-    <div class="email">
-      <p>{{ user?.email }}</p>
-      <div v-if="!user?.emailVerified" class="verified border">
-        <Icon name="pixelarticons:check" />
+      <div class="identity-content panel-wrapper">
+        <NuxtImg
+          class="avatar"
+          :src="
+            user?.image ||
+            'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+          "
+          alt="User avatar"
+        />
+        <h3>{{ user?.name }}</h3>
+        <div v-if="!user?.emailVerified" class="verified border base-accent">
+          <Icon name="pixelarticons:check" />
+        </div>
       </div>
     </div>
-    <p>Creation date: {{ creationDate }}</p>
-    <p>IP Adress: {{ session?.ipAddress }}</p>
-    <p>Session expires in: {{ expiresIn }}</p>
-    <p>{{ user?.id }}</p>
 
-    <Button size="medium" @click="signOut">Sign out</Button>
+    <div class="email panel-wrapper">
+      <p>{{ user?.email }}</p>
+      <p>
+        Created at:
+        <NuxtTime
+          v-if="user?.createdAt"
+          :datetime="new Date(user?.createdAt)"
+          second="numeric"
+          month="long"
+          day="numeric"
+          year="numeric"
+        />
+      </p>
+      <p>Session Expires: {{ expiresIn }}</p>
+    </div>
 
-    <ButtonGroup>
-      <Button size="small" variant="primary" color="warning">
-        <Icon name="pixelarticons:alert" size="1em" />
-      </Button>
-
-      <Button size="small">
-        <Icon name="pixelarticons:sliders-2" size="1em" />
-      </Button>
-    </ButtonGroup>
+    <div class="user-actions panel-wrapper">
+      <Button size="medium" @click="signOut">Sign out</Button>
+      <DeleteUser />
+    </div>
   </div>
 </template>
 
 <style lang="scss">
+.user-panel {
+  display: grid;
+  gap: var(--space-1);
+}
+
 .user-panel button {
   width: 100%;
 }
 
-.user-panel img {
+.user-panel img.avatar {
   height: var(--block-big);
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 100%;
+}
+
+.user-panel img.banner {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  object-fit: cover;
+  filter: blur(7px);
+  transform: scale(1.4);
+  opacity: 0.7;
 }
 
 .user-panel .verified {
@@ -82,21 +106,39 @@ const creationDate = computed(() => {
   justify-content: center;
   align-items: center;
   border-radius: 100%;
-  background-color: var(--success-40);
+  background-color: var(--base-110);
   width: var(--block);
   aspect-ratio: 1 / 1;
   .iconify {
-    background-color: var(--success-120);
+    background-color: var(--base-10);
   }
 }
 
 .email {
   display: flex;
-  align-items: center;
-  gap: var(--space-1);
+  flex-direction: column;
+  gap: var(--space-quark);
 }
 
 .identity {
+  position: relative;
+  overflow: hidden;
+}
+
+.identity-content {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-1);
+  position: relative;
+}
+
+.user-actions {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.dialog-warning-title {
   display: flex;
   align-items: center;
   gap: var(--space-1);

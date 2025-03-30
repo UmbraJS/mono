@@ -111,11 +111,6 @@ blockquote {
     max-width: clamp(300px, 100vw, 700px);
   }
 
-  span,
-  strong {
-    font-variation-settings: var(--font-semibold);
-  }
-
   &.display {
     font-size: clamp(14px, 1.3vw, 24px);
   }
@@ -125,4 +120,9 @@ blockquote {
     line-height: 1rem;
     font-variation-settings: var(--font-light);
   }
+}
+
+span,
+strong {
+  font-variation-settings: var(--font-semibold);
 }

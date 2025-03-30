@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import '@nobel/core/styles/main.scss'
 import { Toaster } from '@nobel/core'
+import IslandMenu from './components/IslandMenu.vue'
 
 useSeoMeta({
   title: 'NuxtHub Starter',

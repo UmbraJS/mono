@@ -1,4 +1,4 @@
-import type { Reason } from './types/reasons'
+import type { Reason } from '../types/reasoning'
 
 const user = {
   id: '1',
@@ -29,7 +29,7 @@ const reasons: Reason[] = [
     premises: [
       {
         id: '1',
-        type: 'premise',
+        type: 'infavor',
         text: 'All men are mortal',
         credibility: {
           value: 0.8,
@@ -39,7 +39,7 @@ const reasons: Reason[] = [
       },
       {
         id: '2',
-        type: 'premise',
+        type: 'infavor',
         text: 'Socrates is a man',
         credibility: {
           value: 0.8,

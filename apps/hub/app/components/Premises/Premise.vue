@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { PremiseType } from '../../../types/reasoning'
 const props = defineProps<{
-  type?: 'infavor' | 'inopposition'
+  type?: PremiseType
 }>()
 </script>
 
@@ -13,7 +14,7 @@ const props = defineProps<{
 <style>
 .premise {
   display: grid;
-  grid-template-columns: auto 1fr 100px;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   position: relative;
   background: var(--base-10);

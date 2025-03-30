@@ -49,27 +49,27 @@ export function getServerAuth() {
         enabled: true,
       },
     },
-    // user: {
-    //   additionalFields: {
-    //     firstName: {
-    //       type: 'string',
-    //       fieldName: 'firstName',
-    //       returned: true,
-    //       input: true,
-    //       required: true,
-    //     },
-    //     lastName: {
-    //       type: 'string',
-    //       fieldName: 'lastName',
-    //       returned: true,
-    //       input: true,
-    //       required: true,
-    //     },
-    //   },
-    //   deleteUser: {
-    //     enabled: true,
-    //   },
-    // },
+    user: {
+      // additionalFields: {
+      //   firstName: {
+      //     type: 'string',
+      //     fieldName: 'firstName',
+      //     returned: true,
+      //     input: true,
+      //     required: true,
+      //   },
+      //   lastName: {
+      //     type: 'string',
+      //     fieldName: 'lastName',
+      //     returned: true,
+      //     input: true,
+      //     required: true,
+      //   },
+      // },
+      deleteUser: {
+        enabled: true,
+      },
+    },
     plugins: [
       anonymous(),
       admin({

@@ -8,10 +8,11 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxt/image',
-    '@nuxt/icon',
+    '@nuxt/icon', // '@unocss/nuxt',
     '@nuxt/content',
-    // '@unocss/nuxt',
     '@nuxtjs/mdc',
+    'nuxt-time',
+    '@vueuse/nuxt',
   ],
 
   // https://devtools.nuxt.com
@@ -82,19 +83,12 @@ export default defineNuxtConfig({
         },
       },
     },
-    highlight: {
-      theme: {
-        // TODO: Figure out why this doesn't work
-        default: 'dracula',
-        dark: 'github-dark',
-      },
-    },
   },
 
-  components: {
-    global: true,
-    dirs: ['./components/prose']
-  },
+  // components: {
+  //   global: true,
+  //   dirs: ['./components/prose'],
+  // },
 
   content: {
     build: {

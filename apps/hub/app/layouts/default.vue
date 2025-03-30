@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onKeyStroke } from '@vueuse/core'
+import FrostLayer from '~/components/FrostLayer.vue'
 
 const theme = useUmbra()
 

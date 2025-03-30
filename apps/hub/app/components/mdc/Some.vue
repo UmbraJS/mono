@@ -1,5 +1,3 @@
 <template>
-  <div class="someone">
-    <slot></slot>
-  </div>
+  <div class="someone">Heres jonny</div>
 </template>

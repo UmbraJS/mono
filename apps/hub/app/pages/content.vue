@@ -1,27 +1,36 @@
 <script setup lang="ts">
-const { data: home } = await useAsyncData(() => queryCollection('content').path('/').first())
+import RichText from '~/components/RichText.vue'
+import type { MDCParserResult } from '@nuxtjs/mdc'
 
-const md = ref(`
-# Just a Vue app
+const someOther = ref(`# Simple`)
+const ast = ref<MDCParserResult>()
 
-This is markdown content rendered via the \`<MDCRenderer>\` component, including MDC below.
+// const source = useLocalStorage('nuxt-mdc-playground-code', someOther)
 
-::alert
-Hello MDC
-::
+async function pM(value: string) {
+  ast.value = await parseMarkdown(value)
+}
 
-\`\`\`ts
-const a = 1;
-\`\`\`
-`)
+watch(someOther, () => pM(someOther.value))
+onMounted(() => pM(someOther.value))
 </script>
 
 <template>
   <div class="artickle">
-    <MDC :value="md" tag="article" class="content post" />
+    <RichText :value="someOther" @update:model-value="someOther = $event" />
 
-    <ContentRenderer v-if="home" :value="home" class="content post" />
-    <div v-else>Home not found</div>
+    <!-- <Editor v-model:code="samllDemo" /> -->
+    <!-- <Editor :code="JSON.stringify(ast?.body, null, 2) || ''" language="json" read-only /> -->
+
+    <div contenteditable="true" class="buttonHover buttonFocus focus rounded border">
+      <MDCRenderer
+        v-if="ast"
+        :body="ast!.body"
+        :data="ast!.data"
+        tag="article"
+        class="content post"
+      />
+    </div>
   </div>
 </template>
 
