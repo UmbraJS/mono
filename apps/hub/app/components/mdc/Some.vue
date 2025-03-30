@@ -1,3 +1,3 @@
 <template>
-  <div class="someone">Heres jonny</div>
+  <div class="someone">Heres jonny <slot></slot></div>
 </template>

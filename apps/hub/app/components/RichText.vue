@@ -14,12 +14,12 @@ function getCursorPosition() {
 function handleMouseUp() {
   const cursorPos = getCursorPosition()
   if (!cursorPos) return
-  console.log('Cursor Position:', cursorPos)
+  // console.log('Cursor Position:', cursorPos)
 }
 
 function handleKeyUp() {
   const cursorPos = getCursorPosition()
-  console.log('Cursor Position on Key Up:', cursorPos)
+  // console.log('Cursor Position on Key Up:', cursorPos)
 }
 
 defineProps<{ value: string }>()

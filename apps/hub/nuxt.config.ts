@@ -72,9 +72,6 @@ export default defineNuxtConfig({
   },
 
   mdc: {
-    components: {
-      prose: true,
-    },
     remarkPlugins: {
       // Override remark-emoji options
       'remark-emoji': {

@@ -5,25 +5,24 @@ import type { MDCParserResult } from '@nuxtjs/mdc'
 const someOther = ref(`# Simple`)
 const ast = ref<MDCParserResult>()
 
-// const source = useLocalStorage('nuxt-mdc-playground-code', someOther)
+const source = useLocalStorage('nuxt-mdc-playground-code', someOther)
 
 async function pM(value: string) {
   ast.value = await parseMarkdown(value)
 }
 
-watch(someOther, () => pM(someOther.value))
-onMounted(() => pM(someOther.value))
+watch(source, () => pM(source.value))
+onMounted(() => pM(source.value))
+
+const defaultText = source.value
 </script>
 
 <template>
   <div class="artickle">
-    <RichText :value="someOther" @update:model-value="someOther = $event" />
-
-    <!-- <Editor v-model:code="samllDemo" /> -->
-    <!-- <Editor :code="JSON.stringify(ast?.body, null, 2) || ''" language="json" read-only /> -->
+    <RichText :value="defaultText" @update:model-value="source = $event" />
 
     <div contenteditable="true" class="buttonHover buttonFocus focus rounded border">
-      <MDCRenderer
+      <RenderMDC
         v-if="ast"
         :body="ast!.body"
         :data="ast!.data"
@@ -31,6 +30,9 @@ onMounted(() => pM(someOther.value))
         class="content post"
       />
     </div>
+
+    <!-- <Editor v-model:code="samllDemo" /> -->
+    <Editor :code="JSON.stringify(ast?.body, null, 2) || ''" language="json" read-only />
   </div>
 </template>
 
