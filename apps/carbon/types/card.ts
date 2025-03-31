@@ -87,6 +87,17 @@ const cardNames = [
   'Alien Halls',
   'Abandoned Halls',
   'Village',
+  "Idun's Apple",
+  "Freyja's Tears",
+  'Skeleton Healer',
+  'Skeleton Horseman',
+  'Gauntlet of Sigmar',
+  'Glimmer Cloak',
+  'Longsword',
+  'Moon Harp',
+  'Thunder Cannon',
+  'Viking',
+  'Treasure',
 ] as const
 
 export interface Card {
