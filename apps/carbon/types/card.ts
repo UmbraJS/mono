@@ -1,9 +1,9 @@
 interface CardImage {
-  default: string
+  default?: string
 }
 
 interface AspectImage {
-  default: string
+  default?: string
   1?: string
   2?: string
   3?: string
@@ -117,10 +117,15 @@ export interface Card {
 }
 
 export interface CardStats {
-  attack: number
-  shield: number
-  heal: number
-  burn: number
-  poison: number
-  actionRate: number // in milliseconds
+  attack?: number
+  shield?: number
+  heal?: number
+  burn?: number
+  poison?: number
+  banter?: number
+  terror?: number
+  critChance?: number
+  critDamage?: number
+  actionCount?: number
+  actionRate?: number // in milliseconds
 }

@@ -9,10 +9,10 @@ import IconClose from '../../Icons/IconClose.vue'
   <div class="chip">
     <ButtonGroup>
       <ChipLabel />
-      <Button variant="base" :size="'small'" type="warning">
+      <Button variant="base" :size="'small'" color="warning">
         <IconClose />
       </Button>
-      <Button variant="base" :size="'small'" type="warning">
+      <Button variant="base" :size="'small'" color="warning">
         <IconClose />
       </Button>
     </ButtonGroup>

@@ -44,10 +44,12 @@ const warrior: Character = {
     cards.find((card) => card.name === 'Archer')!,
     cards.find((card) => card.name === 'Halberdier')!,
     cards.find((card) => card.name === 'Doom Cloak')!,
+    cards.find((card) => card.name === 'Glimmer Cloak')!,
+  ],
+  inventory: [
     cards.find((card) => card.name === 'Village')!,
     cards.find((card) => card.name === 'Swamp')!,
   ],
-  inventory: [],
 }
 
 const skeletonKing: Character = {
@@ -65,10 +67,13 @@ const skeletonKing: Character = {
   deck: [
     cards.find((card) => card.name === 'Skeleton Archer')!,
     cards.find((card) => card.name === 'Skeleton Soldier')!,
-    cards.find((card) => card.name === 'Abandoned Halls')!,
-    cards.find((card) => card.name === 'Alien Halls')!,
+    cards.find((card) => card.name === 'Skeleton Healer')!,
+    cards.find((card) => card.name === 'Skeleton Horseman')!,
   ],
-  inventory: [],
+  inventory: [
+    cards.find((card) => card.name === 'Alien Halls')!,
+    cards.find((card) => card.name === 'Abandoned Halls')!,
+  ],
 }
 
 export { warrior, skeletonKing }

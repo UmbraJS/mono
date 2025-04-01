@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Card from '~/components/Card.vue'
 import { warrior, skeletonKing } from '../data/character'
+import Board from '~/components/Board.vue'
 
 const cards = warrior.deck
 const opponentCards = skeletonKing.deck
@@ -8,48 +8,34 @@ const opponentCards = skeletonKing.deck
 
 <template>
   <main>
-    <div class="board border">
-      <div class="cardSleve border" v-for="(card, index) in opponentCards" :key="index">
-        <Card :card="card" />
-      </div>
+    <PlayerCharacter :character="skeletonKing" :reverse="false" />
+    <div class="field">
+      <Board :cards="opponentCards" :reverse="false" />
+      <div class="divider"></div>
+      <Board :cards="cards" :reverse="true" />
     </div>
-    <div class="board border">
-      <div class="cardSleve border" v-for="(card, index) in cards" :key="index">
-        <Card :card="card" />
-      </div>
-    </div>
+    <PlayerCharacter :character="warrior" :reverse="true" />
   </main>
 </template>
 
 <style>
 main {
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  gap: var(--space-4);
+  grid-template-rows: 1fr 2fr 1fr;
   height: 100vh;
 }
 
-img {
-  width: 100%;
+main .field {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
   height: 100%;
-  object-fit: cover;
-  object-position: top;
+  /* perspective: 1000px; */
 }
 
-.board {
-  display: flex;
-  gap: var(--space-1);
-  padding: var(--space-4);
-  background: var(--base-10);
-  border-radius: var(--radius);
-}
-
-.cardSleve {
-  background: var(--base-9);
-  border-radius: var(--radius);
-  height: 200px;
-  width: 150px;
+main .divider {
+  width: 100%;
+  height: 1px;
 }
 </style>

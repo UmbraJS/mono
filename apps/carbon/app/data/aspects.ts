@@ -1,4 +1,4 @@
-import type { Aspect } from '../types/card'
+import type { Aspect } from '../../types/card'
 
 const ember: Aspect = {
   name: 'ember',
@@ -121,6 +121,16 @@ const metal: Aspect = {
   },
 }
 
+const hardMetal: Aspect = {
+  name: 'Hard Metal',
+  description: 'A solid material that is typically hard, shiny, and malleable',
+  type: 'metal',
+  level: 2,
+  image: {
+    default: 'https://example.com/hard-metal.png',
+  },
+}
+
 export const aspects = {
   ember,
   water,
@@ -134,4 +144,5 @@ export const aspects = {
   warpWeave,
   slash,
   metal,
+  hardMetal,
 } as const
