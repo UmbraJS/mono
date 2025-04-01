@@ -34,12 +34,6 @@ defineProps<{
       >
         {{ card.stats.banter }}
       </div>
-      <div
-        v-if="card.stats.terror"
-        class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus"
-      >
-        {{ card.stats.terror }}
-      </div>
     </div>
   </div>
 </template>
@@ -66,7 +60,7 @@ defineProps<{
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   position: relative;
   width: 100%;
 }
@@ -82,11 +76,11 @@ defineProps<{
 }
 
 /* if there are less than 5 chips children inside .stats give the last chip boder radius */
-.stats:not(:has(.chip:nth-child(5n))) .chip:last-child {
+.stats:not(:has(.chip:nth-child(4n))) .chip:last-child {
   border-top-right-radius: var(--radius);
 }
 
-.stats:has(.chip:nth-child(5n)) .chip:last-child {
+.stats:has(.chip:nth-child(4n)) .chip:last-child {
   border-bottom-right-radius: var(--radius);
 }
 

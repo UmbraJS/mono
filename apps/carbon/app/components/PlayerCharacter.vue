@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="character" :class="{ reverse }">
+  <section class="character" :class="{ reverse }">
     <header>
       <div class="character-avatar">
         <img v-if="character.image" :src="character.image.default" alt="Character Image" />
@@ -23,7 +23,7 @@ defineProps<{
       <div class="life">{{ character.health }} / {{ character.maxHealth }}</div>
       <div class="death"></div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style>

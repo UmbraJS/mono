@@ -20,7 +20,10 @@ defineProps<{
 .board {
   --rotateAmount: 15;
 
-  display: flex;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: span 12;
+
   gap: var(--space-1);
   padding: var(--space-1);
   background: var(--base-10);
@@ -37,6 +40,5 @@ defineProps<{
   background: var(--base-9);
   border-radius: var(--radius);
   height: 100%;
-  width: 150px;
 }
 </style>
