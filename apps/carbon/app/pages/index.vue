@@ -4,11 +4,14 @@ import Board from '~/components/Board.vue'
 
 const cards = warrior.deck
 const opponentCards = skeletonKing.deck
+
+const playerCharacter = ref(warrior)
+const opponentCharacter = ref(skeletonKing)
 </script>
 
 <template>
   <div class="conflict-wrapper">
-    <aside class="opponent">
+    <section class="character opponent">
       <div class="location border">
         <img :src="skeletonKing.field" alt="Location" />
       </div>
@@ -16,10 +19,10 @@ const opponentCards = skeletonKing.deck
       <div class="location border">
         <img :src="skeletonKing.field" alt="Location" />
       </div>
-    </aside>
-    <Board :cards="opponentCards" :reverse="false" />
-    <Board :cards="cards" :reverse="true" />
-    <aside class="player">
+    </section>
+    <Board :cards="opponentCards" />
+    <Board :cards="cards" />
+    <section class="character player">
       <div class="location border">
         <img src="/treasure.jpg" alt="Location" />
       </div>
@@ -27,56 +30,43 @@ const opponentCards = skeletonKing.deck
       <div class="location border">
         <img src="/treasure.jpg" alt="Location" />
       </div>
-    </aside>
+    </section>
   </div>
 </template>
 
 <style>
-aside {
+.conflict-wrapper {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto 1fr 1fr auto;
+  gap: var(--space-1);
+
+  height: 100vh;
+  padding: var(--space-1);
+  /* perspective: 1000px; */
+}
+
+section.character {
   display: grid;
   grid-template-columns: subgrid;
   grid-column: span 12;
   gap: var(--space-1);
 }
 
-aside > * {
+section.character > * {
   grid-column: span 4;
 }
 
-aside .location {
+section.character .location {
   position: relative;
   height: 100%;
 }
 
-aside img {
+section.character img {
   position: absolute;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: var(--radius);
-}
-
-.conflict-wrapper {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto 1fr 1fr auto;
-  gap: var(--space-1);
-  height: 100vh;
-  padding: var(--space-1);
-}
-
-main.field {
-  display: grid;
-  grid-column: span 12;
-  grid-template-rows: 1fr 1fr;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  /* perspective: 1000px; */
-}
-
-main .divider {
-  width: 100%;
-  height: 1px;
 }
 </style>

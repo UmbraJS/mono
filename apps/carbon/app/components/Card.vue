@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import CardSpace from '~/components/CardSpace.vue'
+
 import type { Card } from '../../types'
 
 defineProps<{
-  card: Card
+  card?: Card
 }>()
 </script>
 
 <template>
-  <div class="card">
+  <CardSpace v-if="!card" />
+  <div v-else class="card">
     <img v-if="card.image" :src="card.image.default" alt="Card Image" />
     <div class="stats">
       <div
