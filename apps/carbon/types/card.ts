@@ -103,11 +103,13 @@ const cardNames = [
 export interface Card {
   id: string
   name: (typeof cardNames)[number]
-  stats: CardStats
+  bash: CardBash
+  stats?: CardStats
   level: number
   maxLevel: number
   description: string
   rarity: number
+  unique: boolean
   baseCost: number
   cost: number
   tags: CardTag[]
@@ -116,7 +118,15 @@ export interface Card {
   effect?: () => void
 }
 
-export interface CardStats {
+interface CardStats {
+  banter?: number
+  attack?: number
+  shield?: number
+  heal?: number
+  value: number
+}
+
+export interface CardBash {
   attack?: number
   shield?: number
   heal?: number
@@ -127,5 +137,11 @@ export interface CardStats {
   critChance?: number
   critDamage?: number
   actionCount?: number
-  actionRate?: number // in milliseconds
+  cooldown?: number // in milliseconds
+}
+
+export interface CardAction {
+  bash: CardBash
+  index: number
+  card: Card
 }

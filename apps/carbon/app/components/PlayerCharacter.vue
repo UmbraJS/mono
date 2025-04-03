@@ -2,8 +2,11 @@
 import type { Character } from '~~/types'
 
 defineProps<{
-  character: Character
   reverse: boolean
+  character: Character
+  health: number
+  morale: number
+  shield: number
 }>()
 </script>
 
@@ -20,7 +23,7 @@ defineProps<{
     </header>
 
     <div class="character-health">
-      <div class="life">{{ character.health }} / {{ character.maxHealth }}</div>
+      <div class="life">{{ health }} / {{ character.maxHealth }} + {{ shield }}</div>
       <div class="death"></div>
     </div>
   </section>
@@ -83,7 +86,6 @@ defineProps<{
   overflow: hidden;
   width: 100%;
   height: var(--block-big);
-  padding: var(--space-quark) 0;
   font-weight: 900;
   grid-area: health;
 }

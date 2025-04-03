@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue'
 import { timeStates } from '../../types'
-import type { Card, Player, Character, GameTime, GameState } from '../../types'
+import type { Card, Player, Character, GameTime, GameState, TimeState } from '../../types'
+import { fields } from '@/data/cards'
 
 const defaultEndurance = 100
 
@@ -25,6 +26,7 @@ const initialPlayer: Player = {
   interest: 5,
   endurance: defaultEndurance,
   deck: [],
+  field: fields[0] as Card,
   experience: 0,
   level: 1,
   inventory: [],
@@ -76,7 +78,7 @@ export const useGameStore = () => {
       timeState.value.state = timeStates[0]
     } else {
       timeState.value.hour += 1
-      timeState.value.state = timeStates[timeState.value.hour]
+      timeState.value.state = timeStates[timeState.value.hour] as TimeState
     }
   }
 

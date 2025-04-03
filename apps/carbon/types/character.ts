@@ -63,7 +63,7 @@ export interface Character {
   description: string
   health: number
   maxHealth: number
-  field: string
+  field: Card
   deck: Card[]
   stats: CharacterStats
   inventory: Card[]

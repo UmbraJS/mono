@@ -1,18 +1,7 @@
-<script setup lang="ts">
-import PlayerCard from '~/components/Card.vue'
-import type { Card } from '../../types'
-
-defineProps<{
-  cards: Card[]
-}>()
-</script>
-
 <template>
   <div class="board-wrapper">
     <div class="board">
-      <div class="cardSleve border" v-for="(card, index) in cards" :key="index">
-        <PlayerCard :card="card" />
-      </div>
+      <slot />
     </div>
     <div class="subSpace">
       <CardSpace v-for="index in 12" :key="index" />
@@ -44,12 +33,6 @@ defineProps<{
   grid-area: stack;
   grid-column: 1 / -1;
   z-index: 2;
-}
-
-.cardSleve {
-  background: var(--base-9);
-  border-radius: var(--radius);
-  height: 100%;
 }
 
 .subSpace {

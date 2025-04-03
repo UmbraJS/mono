@@ -1,47 +1,110 @@
 <script setup lang="ts">
-import CardSpace from '~/components/CardSpace.vue'
+import { gsap } from 'gsap'
+import type { Card, CardAction, CardBash } from '../../types'
 
-import type { Card } from '../../types'
-
-defineProps<{
-  card?: Card
+const props = defineProps<{
+  card: Card
+  index: number
+  timeline: gsap.core.Timeline
 }>()
+
+const emit = defineEmits<{
+  (e: 'bash', bashAction: CardAction): void
+}>()
+
+const cooldown = ref(100)
+const opacity = computed(() => remapValue(cooldown.value))
+
+function remapValue(value: number): number {
+  const start = 98
+  const fadein = start - 15
+  if (value >= start) {
+    return 0.0
+  } else if (value >= fadein) {
+    return (start - value) / 10
+  } else {
+    return 1.0
+  }
+}
+
+function getAction(bash: CardBash): CardAction {
+  return {
+    bash: bash,
+    index: props.index,
+    card: props.card,
+  }
+}
+
+const triggerCard = () => {
+  const bash = props.card.bash
+  emit('bash', getAction(bash))
+}
+
+// Start the cooldown animation when the component is mounted
+onMounted(() => {
+  props.timeline.to(
+    cooldown,
+    {
+      value: 0,
+      duration: props.card.bash.cooldown,
+      repeat: 10,
+      // onComplete: () => {
+      //   triggerCard()
+      //   cooldown.value = 100 // Reset cooldown
+      // },
+    },
+    0,
+  )
+})
 </script>
 
 <template>
-  <CardSpace v-if="!card" />
-  <div v-else class="card">
+  <div class="card border">
+    <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%`, opacity }"></div>
     <img v-if="card.image" :src="card.image.default" alt="Card Image" />
     <div class="stats">
       <div
-        v-if="card.stats.attack"
+        v-if="card.bash.attack"
         class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus"
       >
-        {{ card.stats.attack }}
+        {{ card.bash.attack }}
       </div>
       <div
-        v-if="card.stats.heal"
+        v-if="card.bash.heal"
         class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus"
       >
-        {{ card.stats.heal }}
+        {{ card.bash.heal }}
       </div>
       <div
-        v-if="card.stats.shield"
+        v-if="card.bash.shield"
         class="chip base-accent button buttonText buttonHover buttonActive buttonFocus focus"
       >
-        {{ card.stats.shield }}
+        {{ card.bash.shield }}
       </div>
       <div
-        v-if="card.stats.banter"
+        v-if="card.bash.banter"
         class="chip base-accent button buttonText buttonHover buttonActive buttonFocus focus"
       >
-        {{ card.stats.banter }}
+        {{ card.bash.banter }}
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
+.cooldown {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  border-top: solid 2px var(--base-40);
+  border-radius: var(--radius);
+  pointer-events: none;
+}
+
 .card {
   display: flex;
   justify-content: center;
@@ -66,6 +129,7 @@ defineProps<{
   grid-template-columns: repeat(4, 1fr);
   position: relative;
   width: 100%;
+  z-index: 1;
 }
 
 .stats .chip {
