@@ -5,6 +5,7 @@ import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
 import { terminalHealth } from '@/utils/health'
 import BashLog from '~/components/BashLog.vue'
+import { useAudioCue } from '@/composables/useAudioCue'
 
 const time = ref(0)
 
@@ -31,37 +32,7 @@ const player = usePlayer({
   },
 })
 
-const audioContext = new AudioContext()
-let audioBuffer: AudioBuffer
-
-fetch('sounds/cardFlips.mp3')
-  .then((response) => response.arrayBuffer())
-  .then((data) => audioContext.decodeAudioData(data))
-  .then((buffer) => {
-    audioBuffer = buffer
-  })
-
-const flipSegments = [
-  { start: 0.2, duration: 0.5 },
-  { start: 0.7, duration: 0.5 },
-  { start: 2.2, duration: 0.5 },
-]
-
-function playCardFlip() {
-  // get a random flipSegment
-
-  const randomIndex = Math.floor(Math.random() * flipSegments.length)
-  const segment = flipSegments[randomIndex]
-
-  if (!segment) return
-
-  const { start, duration } = segment
-
-  const source = audioContext.createBufferSource()
-  source.buffer = audioBuffer
-  source.connect(audioContext.destination)
-  source.start(0, start, duration)
-}
+const audio = useAudioCue()
 </script>
 
 <template>
@@ -77,7 +48,7 @@ function playCardFlip() {
         :shield="opponent.shield.value"
         :reverse="false"
       />
-      <BashLog :player="opponent" />
+      <BashLog :player="opponent" :opponentDeck="player.deck.value" />
     </section>
     <Board>
       <PlayerCard
@@ -87,8 +58,8 @@ function playCardFlip() {
         :index="index"
         :timeline="timeline"
         :time="time"
-        @mouseenter="playCardFlip()"
         @bash="opponent.bash"
+        @mouseenter="audio?.playCardFlip()"
       />
     </Board>
     <TimeControls :timeline="timeline" @on-restart="handleReset" />
@@ -101,8 +72,8 @@ function playCardFlip() {
         :index="index"
         :timeline="timeline"
         :time="time"
-        @mouseenter="playCardFlip()"
         @bash="player.bash"
+        @mouseenter="audio?.playCardFlip()"
       />
     </Board>
     <section class="character player">
