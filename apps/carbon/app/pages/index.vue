@@ -30,6 +30,38 @@ const player = usePlayer({
     opponent.hurt(playerAttack, time.value, index)
   },
 })
+
+const audioContext = new AudioContext()
+let audioBuffer: AudioBuffer
+
+fetch('sounds/cardFlips.mp3')
+  .then((response) => response.arrayBuffer())
+  .then((data) => audioContext.decodeAudioData(data))
+  .then((buffer) => {
+    audioBuffer = buffer
+  })
+
+const flipSegments = [
+  { start: 0.2, duration: 0.5 },
+  { start: 0.7, duration: 0.5 },
+  { start: 2.2, duration: 0.5 },
+]
+
+function playCardFlip() {
+  // get a random flipSegment
+
+  const randomIndex = Math.floor(Math.random() * flipSegments.length)
+  const segment = flipSegments[randomIndex]
+
+  if (!segment) return
+
+  const { start, duration } = segment
+
+  const source = audioContext.createBufferSource()
+  source.buffer = audioBuffer
+  source.connect(audioContext.destination)
+  source.start(0, start, duration)
+}
 </script>
 
 <template>
@@ -55,6 +87,7 @@ const player = usePlayer({
         :index="index"
         :timeline="timeline"
         :time="time"
+        @mouseenter="playCardFlip()"
         @bash="opponent.bash"
       />
     </Board>
@@ -68,6 +101,7 @@ const player = usePlayer({
         :index="index"
         :timeline="timeline"
         :time="time"
+        @mouseenter="playCardFlip()"
         @bash="player.bash"
       />
     </Board>
