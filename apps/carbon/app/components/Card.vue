@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { templateRef } from '@vueuse/core'
 import type { Card, CardAction, CardBash } from '../../types'
+import { gsap } from 'gsap/gsap-core'
 
 const props = defineProps<{
   card: Card
   index: number
   timeline: gsap.core.Timeline
   time: number
+  reverse: boolean
 }>()
 
 const emit = defineEmits<{
@@ -41,6 +44,25 @@ const triggerCard = () => {
   emit('bash', getAction(bash))
 }
 
+const cardRef = templateRef<HTMLButtonElement>('cardRef')
+
+function animateAction() {
+  gsap.to(cardRef.value, {
+    scale: 1,
+    y: props.reverse ? -60 : 60,
+    duration: 0.01,
+    ease: 'power1.inOut',
+    onComplete: () => {
+      gsap.to(cardRef.value, {
+        scale: 1,
+        y: 0,
+        duration: 0.2,
+        ease: 'power1.inOut',
+      })
+    },
+  })
+}
+
 // Start the cooldown animation when the component is mounted
 props.timeline.to(
   cooldown,
@@ -51,6 +73,7 @@ props.timeline.to(
     onRepeat: () => {
       console.log('Cooldown complete')
       triggerCard()
+      animateAction()
     },
   },
   0,
@@ -59,6 +82,7 @@ props.timeline.to(
 
 <template>
   <button
+    ref="cardRef"
     class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
   >
     <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%`, opacity }"></div>

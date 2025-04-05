@@ -58,6 +58,7 @@ const audio = useAudioCue()
         :index="index"
         :timeline="timeline"
         :time="time"
+        :reverse="false"
         @bash="opponent.bash"
         @click="audio?.playCardFlip()"
       />
@@ -72,6 +73,7 @@ const audio = useAudioCue()
         :index="index"
         :timeline="timeline"
         :time="time"
+        :reverse="true"
         @bash="player.bash"
         @click="audio?.playCardFlip()"
       />
