@@ -17,7 +17,13 @@ const player = usePlayer({
   },
 })
 
-const timeline = gsap.timeline()
+const time = ref(0)
+
+const timeline = gsap.timeline({
+  onUpdate: () => {
+    time.value = timeline.time()
+  },
+})
 
 function handleReset() {
   timeline.restart()
@@ -54,6 +60,7 @@ function handleReset() {
     </Board>
     <TimeControls :timeline="timeline" @on-restart="handleReset" />
     <Board>
+      <p>{{ time }}</p>
       <PlayerCard
         v-for="(card, index) in player.deck.value"
         :key="index"

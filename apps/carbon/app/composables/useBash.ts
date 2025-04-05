@@ -22,7 +22,11 @@ interface ValueChangeAttempt extends ValueChange {
 export function useHealth(character: Character) {
   const maxHealth = character.maxHealth
   const healthLog = ref<ValueLog[]>([])
-  const health = computed(() => healthLog.value[healthLog.value.length - 1]?.oldValue || maxHealth)
+  const health = computed(() => {
+    const lastLog = healthLog.value[healthLog.value.length - 1]
+    if (lastLog?.newValue === undefined) return maxHealth
+    return lastLog.newValue
+  })
 
   function heal({ change, timestamp, index }: ValueChange) {
     const healthDeficit = maxHealth - health.value
@@ -41,7 +45,7 @@ export function useHealth(character: Character) {
       actualChange: Math.max(0, change),
       attemptedChange: attemptedChange,
       oldValue: health.value,
-      newValue: Math.max(0, health.value - change),
+      newValue: health.value - change,
       timestamp,
       index,
     })

@@ -1,11 +1,26 @@
 <script setup lang="ts">
 import { Button } from '@nobel/core'
 
-defineProps<{
+const props = defineProps<{
   timeline: gsap.core.Timeline
 }>()
 
 defineEmits(['onRestart'])
+
+const isPaused = ref(false)
+
+function pausePlay(bool: boolean) {
+  isPaused.value = bool
+  bool ? props.timeline.pause() : props.timeline.play()
+}
+
+const timesSpeed = ref(1)
+
+function setSpeed() {
+  timesSpeed.value = timesSpeed.value + 1
+  if (timesSpeed.value > 10) timesSpeed.value = 1
+  props.timeline.timeScale(timesSpeed.value)
+}
 </script>
 
 <template>
@@ -13,11 +28,21 @@ defineEmits(['onRestart'])
     <Button variant="base" size="small" color="default" @click="() => $emit('onRestart')">
       <Icon name="carbon:skip-back-filled" size="2rem" />
     </Button>
-    <Button variant="base" size="small" color="default" @click="timeline.play()">
+    <Button
+      v-if="!isPaused"
+      variant="base"
+      size="small"
+      color="default"
+      @click="() => pausePlay(true)"
+    >
+      <Icon name="carbon:pause-filled" size="2rem" />
+    </Button>
+    <Button v-else variant="base" size="small" color="default" @click="() => pausePlay(false)">
       <Icon name="carbon:play-filled-alt" size="2rem" />
     </Button>
-    <Button variant="base" size="small" color="default" @click="timeline.pause()">
-      <Icon name="carbon:pause-filled" size="2rem" />
+
+    <Button variant="base" size="small" color="default" @click="setSpeed">
+      <p>Speed: {{ timesSpeed }}</p>
     </Button>
   </div>
 </template>
