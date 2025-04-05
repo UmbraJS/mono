@@ -4,18 +4,7 @@ import { warrior, skeletonKing } from '../data/character'
 import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
 import { terminalHealth } from '@/utils/health'
-
-const opponent = usePlayer({
-  character: skeletonKing,
-  onAttack: (opponentAttack) => player.hurt(opponentAttack),
-})
-
-const player = usePlayer({
-  character: warrior,
-  onAttack: (playerAttack) => {
-    opponent.hurt(playerAttack)
-  },
-})
+import BashLog from '~/components/BashLog.vue'
 
 const time = ref(0)
 
@@ -29,6 +18,18 @@ function handleReset() {
   timeline.restart()
   // Reset the health and morale of both players
 }
+
+const opponent = usePlayer({
+  character: skeletonKing,
+  onAttack: (opponentAttack, index) => player.hurt(opponentAttack, time.value, index),
+})
+
+const player = usePlayer({
+  character: warrior,
+  onAttack: (playerAttack, index) => {
+    opponent.hurt(playerAttack, time.value, index)
+  },
+})
 </script>
 
 <template>
@@ -44,9 +45,7 @@ function handleReset() {
         :shield="opponent.shield.value"
         :reverse="false"
       />
-      <div class="location border">
-        <img :src="skeletonKing.field.image?.default" alt="Location" />
-      </div>
+      <BashLog :player="opponent" />
     </section>
     <Board>
       <PlayerCard
@@ -55,6 +54,7 @@ function handleReset() {
         :card="card"
         :index="index"
         :timeline="timeline"
+        :time="time"
         @bash="opponent.bash"
       />
     </Board>
@@ -67,6 +67,7 @@ function handleReset() {
         :card="card"
         :index="index"
         :timeline="timeline"
+        :time="time"
         @bash="player.bash"
       />
     </Board>

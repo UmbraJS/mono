@@ -3,7 +3,7 @@ import { useHealth, useShield, useMorale } from './useBash'
 
 interface UsePlayerProps {
   character: Character
-  onAttack: (attack: number) => void
+  onAttack: (attack: number, index: number) => void
 }
 
 export function usePlayer({ character, onAttack }: UsePlayerProps) {
@@ -13,19 +13,21 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
 
   const deck = ref(character.deck)
 
-  function attack(attack: number) {
+  function attack(attack: number, timestamp: number, index: number) {
     const remainingAttack = Math.max(0, attack - shields.shield.value)
-    shields.shieldChange({
+    const touchedIndexes = shields.shieldDown({
       change: -attack,
-      timestamp: Date.now(),
-      index: 0,
+      timestamp: timestamp,
+      index: index,
+      reductionSources: [],
     })
 
     health.hurt({
       change: remainingAttack,
       attemptedChange: attack,
-      timestamp: Date.now(),
-      index: 0,
+      timestamp: timestamp,
+      index: index,
+      reductionSources: touchedIndexes,
     })
   }
 
@@ -37,19 +39,22 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         change: bash.banter,
         timestamp: entry.timestamp,
         index: entry.index,
+        reductionSources: [],
       })
-    if (bash.attack) onAttack(bash.attack)
+    if (bash.attack) onAttack(bash.attack, entry.index)
     if (bash.shield)
-      shields.shieldChange({
+      shields.shieldUp({
         change: bash.shield,
         timestamp: entry.timestamp,
         index: entry.index,
+        reductionSources: [],
       })
     if (bash.heal)
       health.heal({
         change: bash.heal,
         timestamp: entry.timestamp,
         index: entry.index,
+        reductionSources: [],
       })
   }
 
@@ -62,3 +67,5 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
     bash,
   }
 }
+
+export type UsePlayerReturn = ReturnType<typeof usePlayer>

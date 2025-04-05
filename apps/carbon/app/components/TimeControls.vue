@@ -61,6 +61,5 @@ function setSpeed() {
 
 .controlPanel > * {
   cursor: pointer;
-  color: var(--base-50);
 }
 </style>

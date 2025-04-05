@@ -6,6 +6,7 @@ const props = defineProps<{
   card: Card
   index: number
   timeline: gsap.core.Timeline
+  time: number
 }>()
 
 const emit = defineEmits<{
@@ -31,7 +32,7 @@ function getAction(bash: CardBash): CardAction {
   return {
     bash: bash,
     index: props.index,
-    timestamp: Date.now(),
+    timestamp: props.time,
     card: props.card,
   }
 }

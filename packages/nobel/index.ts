@@ -1,16 +1,15 @@
 import { toast } from 'vue-sonner'
-
 import { presetNobel } from './uno.config'
 
-import Input from './components/ui/Input.vue'
-import Select from './components/ui/Select.vue'
-import Button from './components/ui/Button/Button.vue'
-import ButtonGroup from './components/ui/Button/ButtonGroup.vue'
-import ButtonToggle from './components/ui/Button/Toggle.vue'
-import AddButton from './components/ui/Button/presets/AddButton.vue'
-import Toggle from './components/ui/Toggle.vue'
-import Toaster from './components/ui/Toaster.vue'
-import {
+export { default as Input } from './components/ui/Input.vue'
+export { default as Select } from './components/ui/Select.vue'
+export { default as Button } from './components/ui/Button/Button.vue'
+export { default as ButtonGroup } from './components/ui/Button/ButtonGroup.vue'
+export { default as ButtonToggle } from './components/ui/Button/Toggle.vue'
+export { default as AddButton } from './components/ui/Button/presets/AddButton.vue'
+export { default as Toggle } from './components/ui/Toggle.vue'
+export { default as Toaster } from './components/ui/Toaster.vue'
+export {
   DialogRoot,
   DialogTrigger,
   Dialog,
@@ -19,42 +18,9 @@ import {
   DialogTitle,
   DialogDescription,
 } from './components/ui/Dialog/index'
+export { default as Chip } from './components/ui/Chip/Chip.vue'
+export { default as Radio } from './components/ui/Radio/Radio.vue'
+export { default as Slider } from './components/ui/Slider/Slider.vue'
+export { default as ScrollArea } from './components/ui/ScrollArea.vue'
 
-import Chip from './components/ui/Chip/Chip.vue'
-
-import Radio from './components/ui/Radio/Radio.vue'
-import Slider from './components/ui/Slider/Slider.vue'
-
-import IconAdd from './components/Icons/IconAdd.vue'
-import IconClose from './components/Icons/IconClose.vue'
-import IconHome from './components/Icons/IconHome.vue'
-import IconPaint from './components/Icons/IconPaint.vue'
-import IconText from './components/Icons/IconText.vue'
-import IconUI from './components/Icons/IconUI.vue'
-import IconWidth from './components/Icons/IconWidth.vue'
-
-import SVG from './components/Icons/SVG.vue'
-
-export { toast }
-export { IconAdd, IconClose, IconHome, IconPaint, IconText, IconUI, IconWidth, SVG }
-export {
-  Button,
-  ButtonGroup,
-  Select,
-  Toggle,
-  ButtonToggle,
-  AddButton,
-  Chip,
-  Radio,
-  Slider,
-  Toaster,
-  Input,
-  Dialog,
-  DialogModal,
-  DialogRoot,
-  DialogTrigger,
-  DialogClose,
-  DialogTitle,
-  DialogDescription,
-}
-export { presetNobel }
+export { toast, presetNobel }
