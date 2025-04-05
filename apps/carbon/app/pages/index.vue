@@ -19,29 +19,14 @@ const player = usePlayer({
 
 const timeline = gsap.timeline()
 
-function play() {
-  timeline.play()
-}
-
-function pause() {
-  timeline.pause()
-}
-
-function reverse() {
-  timeline.reverse()
-}
-
-function restart() {
+function handleReset() {
   timeline.restart()
-}
-
-function resume() {
-  timeline.resume(0)
+  // Reset the health and morale of both players
 }
 </script>
 
 <template>
-  <div class="conflict-wrapper" @click="timeline.pause()">
+  <div class="conflict-wrapper">
     <section class="character opponent">
       <div class="location border">
         <img :src="skeletonKing.field.image?.default" alt="Location" />
@@ -67,11 +52,7 @@ function resume() {
         @bash="opponent.bash"
       />
     </Board>
-    <div class="controlPanel">
-      <Icon name="carbon:skip-back-filled" size="4rem" @click="timeline.reverse()" />
-      <Icon name="carbon:play-filled-alt" size="4rem" @click="timeline.play()" />
-      <Icon name="carbon:pause-filled" size="4rem" @click="timeline.pause()" />
-    </div>
+    <TimeControls :timeline="timeline" @on-restart="handleReset" />
     <Board>
       <PlayerCard
         v-for="(card, index) in player.deck.value"
@@ -101,19 +82,6 @@ function resume() {
 </template>
 
 <style>
-.controlPanel {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-2);
-  grid-column: 1 / -1;
-}
-
-.controlPanel > * {
-  cursor: pointer;
-  color: var(--base-50);
-}
-
 .conflict-wrapper {
   display: grid;
   grid-template-columns: repeat(12, 1fr);

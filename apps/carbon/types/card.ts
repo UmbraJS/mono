@@ -143,5 +143,6 @@ export interface CardBash {
 export interface CardAction {
   bash: CardBash
   index: number
+  timestamp: number
   card: Card
 }

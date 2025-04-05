@@ -31,6 +31,7 @@ function getAction(bash: CardBash): CardAction {
   return {
     bash: bash,
     index: props.index,
+    timestamp: Date.now(),
     card: props.card,
   }
 }
@@ -41,21 +42,19 @@ const triggerCard = () => {
 }
 
 // Start the cooldown animation when the component is mounted
-onMounted(() => {
-  props.timeline.to(
-    cooldown,
-    {
-      value: 0,
-      duration: props.card.bash.cooldown,
-      repeat: 10,
-      // onComplete: () => {
-      //   triggerCard()
-      //   cooldown.value = 100 // Reset cooldown
-      // },
+props.timeline.to(
+  cooldown,
+  {
+    value: 0,
+    duration: props.card.bash.cooldown,
+    repeat: -1,
+    onRepeat: () => {
+      console.log('Cooldown complete')
+      triggerCard()
     },
-    0,
-  )
-})
+  },
+  0,
+)
 </script>
 
 <template>
