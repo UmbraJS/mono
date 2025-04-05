@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { gsap } from 'gsap'
 import type { Card, CardAction, CardBash } from '../../types'
 
 const props = defineProps<{
@@ -59,7 +58,9 @@ props.timeline.to(
 </script>
 
 <template>
-  <div class="card border">
+  <button
+    class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
+  >
     <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%`, opacity }"></div>
     <img v-if="card.image" :src="card.image.default" alt="Card Image" />
     <div class="stats">
@@ -88,7 +89,7 @@ props.timeline.to(
         {{ card.bash.banter }}
       </div>
     </div>
-  </div>
+  </button>
 </template>
 
 <style lang="scss">
