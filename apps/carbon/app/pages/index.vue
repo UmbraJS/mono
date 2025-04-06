@@ -48,7 +48,7 @@ function triggerFlipSound() {
 
 <template>
   <div class="conflict-wrapper">
-    <section class="character opponent">
+    <section class="sides">
       <div class="location border">
         <img :src="skeletonKing.field?.image?.default" alt="Location" />
       </div>
@@ -94,7 +94,7 @@ function triggerFlipSound() {
         @mouseup="triggerFlipSound"
       />
     </Board>
-    <section class="character player">
+    <section class="sides">
       <div class="location border">
         <img src="/treasure.jpg" alt="Location" />
       </div>
@@ -123,23 +123,23 @@ function triggerFlipSound() {
   padding: var(--space-1);
 }
 
-section.character {
+section.sides {
   display: grid;
   grid-template-columns: subgrid;
   grid-column: span 12;
   gap: var(--space-1);
 }
 
-section.character > * {
+section.sides > * {
   grid-column: span 4;
 }
 
-section.character .location {
+section.sides .location {
   position: relative;
   height: 100%;
 }
 
-section.character img {
+section.sides img {
   position: absolute;
   width: 100%;
   height: 100%;
