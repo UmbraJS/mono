@@ -30,28 +30,47 @@ const bash = props.card.bash
     <DialogModal variant="accent">
       <div class="dialogWrapper">
         <div class="avatar">
+          <div class="chips">
+            <div v-if="card.rarity" class="chip base-yellow">
+              <BanterIcon />
+              Rarity: {{ card.rarity }}
+            </div>
+            <div v-if="card.unique" class="chip base-yellow">
+              <BanterIcon />
+              Unique
+            </div>
+          </div>
           <img :src="card.image?.default" alt="card image" class="dialog-image border" />
         </div>
         <div class="cardMeta">
-          <DialogTitle> {{ card.name }} </DialogTitle>
+          <DialogTitle> lvl {{ card.level }} - {{ card.name }} </DialogTitle>
           <DialogDescription>
             {{ card.description }}
           </DialogDescription>
+
           <div class="bash">
+            <h4>B.A.S.H -----------------------</h4>
+            <div v-if="bash.banter" class="chip base-yellow">
+              <BanterIcon />
+              Banter: {{ bash.banter }}
+            </div>
             <div v-if="bash.attack" class="chip base-warning">
               <AttackIcon />Attack: {{ bash.attack }}
-            </div>
-            <div v-if="bash.heal" class="chip base-success">
-              <HealIcon />
-              Heal: {{ bash.heal }}
             </div>
             <div v-if="bash.shield" class="chip base-info">
               <ShieldIcon />
               Shield: {{ bash.shield }}
             </div>
-            <div v-if="bash.banter" class="chip base-yellow">
-              <BanterIcon />
-              Banter: {{ bash.banter }}
+            <div v-if="bash.heal" class="chip base-success">
+              <HealIcon />
+              Heal: {{ bash.heal }}
+            </div>
+          </div>
+
+          <div class="tags">
+            <h4>Tags:</h4>
+            <div v-for="tag in card.tags" class="chip">
+              {{ tag }}
             </div>
           </div>
         </div>
@@ -69,7 +88,7 @@ const bash = props.card.bash
 .DialogContent .chip {
   display: flex;
   gap: var(--space-1);
-
+  align-items: center;
   border: solid 2px var(--base-60);
   padding: var(--space-quark);
   width: 100%;
@@ -86,13 +105,21 @@ const bash = props.card.bash
 .dialogWrapper .cardMeta {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: var(--space-1);
+  gap: var(--space-2);
   width: 100%;
+  padding-top: var(--space-3);
 }
 
 .dialogWrapper .bash {
   display: flex;
   flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dialogWrapper .tags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: var(--space-1);
 }
 
@@ -107,5 +134,21 @@ const bash = props.card.bash
   overflow: hidden;
   aspect-ratio: 1 / 1;
   border-radius: var(--radius);
+}
+
+.DialogContent .avatar .chips {
+  position: absolute;
+  top: var(--space-1);
+  left: var(--space-1);
+  display: flex;
+  gap: var(--space-1);
+}
+
+.DialogContent .avatar .chips .chip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px var(--space-quark);
+  width: max-content;
 }
 </style>

@@ -26,6 +26,7 @@ function setSpeed() {
 const timeInMinutesAndSeconds = computed(() => {
   const minutes = Math.floor(props.time / 60)
   const seconds = Math.floor(props.time % 60)
+  if (minutes === 0) return `${seconds < 10 ? '0' : ''}${seconds}s`
   return `${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`
 })
 </script>
@@ -57,23 +58,19 @@ const timeInMinutesAndSeconds = computed(() => {
         <p>Speed: {{ timesSpeed }}</p>
       </Button>
     </div>
-    <h3>
-      <Icon name="carbon:time" size="1.5rem" />
-      {{ timeInMinutesAndSeconds }}
-    </h3>
   </div>
 </template>
 
 <style>
 .controlPanel {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto;
   grid-column: 1 / -1;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-1);
-  background-color: var(--base-30);
+  background-color: var(--base-10);
   border-radius: var(--radius);
   width: 100%;
 }

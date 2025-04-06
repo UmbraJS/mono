@@ -387,7 +387,7 @@ export const cards: Card[] = [
     rarity: 1,
     baseCost: 10,
     cost: 10,
-    tags: ['servant'],
+    tags: ['servant', 'undead'],
     aspects: [aspects.shadow],
     image: {
       default: 'skeletonSoldier.jpg',
@@ -405,7 +405,7 @@ export const cards: Card[] = [
     rarity: 1,
     baseCost: 10,
     cost: 10,
-    tags: ['servant'],
+    tags: ['servant', 'undead'],
     aspects: [aspects.shadow],
     image: {
       default: 'skeletonArcher.jpg',
@@ -562,8 +562,7 @@ export const cards: Card[] = [
       cooldown: 10,
     },
     level: 1,
-    unique: false,
-
+    unique: true,
     maxLevel: 5,
     description:
       'When this enchantment enters, if its your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.',

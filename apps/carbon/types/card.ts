@@ -18,6 +18,7 @@ type CardTag =
   | 'armor'
   | 'spell'
   | 'friend'
+  | 'undead'
   | 'servant'
   | 'location'
   | 'land'
