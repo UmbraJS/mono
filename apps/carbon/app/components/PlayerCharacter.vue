@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { Character } from '~~/types'
 
-defineProps<{
+const props = defineProps<{
   reverse: boolean
   character: Character
   health: number
   morale: number
   shield: number
 }>()
+
+const healthPercentage = computed(() => {
+  return (Math.max(0, props.health) / props.character.maxHealth) * 100
+})
 </script>
 
 <template>
@@ -23,7 +27,8 @@ defineProps<{
     </header>
 
     <div class="character-health">
-      <div class="life">{{ health }} / {{ character.maxHealth }} + {{ shield }}</div>
+      <p class="digits">{{ health }} / {{ character.maxHealth }} + {{ shield }}</p>
+      <div class="life"></div>
       <div class="death"></div>
     </div>
   </section>
@@ -78,8 +83,9 @@ defineProps<{
 }
 
 .character-health {
+  position: relative;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: calc(v-bind(healthPercentage) * 1%) 1fr;
   align-items: center;
   gap: var(--space-1);
   background: var(--base);
@@ -90,6 +96,12 @@ defineProps<{
   grid-area: health;
 }
 
+.character-health .digits {
+  position: absolute;
+  padding: 0 var(--space-1);
+  font-variation-settings: var(--font-semibold);
+}
+
 .character-health .life {
   display: flex;
   justify-content: center;
@@ -98,6 +110,7 @@ defineProps<{
   padding: 0px var(--space-quark);
   border-radius: var(--radius);
   height: 100%;
+  width: 100%;
 }
 
 .character-health .death {

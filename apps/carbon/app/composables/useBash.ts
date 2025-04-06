@@ -83,14 +83,14 @@ export function useShield() {
   }
 
   function shieldUp({ change, timestamp, index, reductionSources }: ValueChange) {
-    if (change > 0) console.error('Shield up called with negative change', change)
+    if (change < 0) console.error('Shield up called with negative change', change)
     const entry = shieldEntry({ change, timestamp, index, reductionSources })
     shieldLog.value.push(entry)
     shieldChunks.value.push(entry)
   }
 
   function shieldDown({ change, timestamp, index, reductionSources }: ValueChange) {
-    if (change < 0) console.error('Shield down called with positive change', change)
+    if (change > 0) console.error('Shield down called with positive change', change)
     const entry = shieldEntry({ change, timestamp, index, reductionSources })
     shieldLog.value.push(entry)
 

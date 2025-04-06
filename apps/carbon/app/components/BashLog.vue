@@ -5,7 +5,8 @@ import type { Card } from '../../types/card'
 
 const props = defineProps<{
   player: UsePlayerReturn
-  opponentDeck: Card[]
+  playerDeck: Card[]
+  opponetDeck: Card[]
 }>()
 
 const reversedHealthLog = computed(() => {
@@ -13,7 +14,11 @@ const reversedHealthLog = computed(() => {
 })
 
 function getCardByIndex(index: number) {
-  return props.opponentDeck[index]
+  return props.playerDeck[index]
+}
+
+function getCardByIndexFromOpponent(index: number) {
+  return props.opponetDeck[index]
 }
 </script>
 
@@ -23,11 +28,12 @@ function getCardByIndex(index: number) {
       <li v-for="(log, index) in reversedHealthLog" :key="index">
         <p class="timestamp">{{ Math.floor(log.timestamp) }}s -</p>
         <div class="change">
+          <p>{{ getCardByIndexFromOpponent(log.index)?.name }}:</p>
           <p v-if="log.actualChange !== log.attemptedChange">
             {{ log.actualChange }} / {{ log.attemptedChange }}
           </p>
           <p v-else>{{ log.actualChange }}</p>
-          <p v-if="log.reductionSources.length > 0">
+          <!-- <p v-if="log.reductionSources.length > 0">
             reduced by
             {{
               log.reductionSources
@@ -37,7 +43,7 @@ function getCardByIndex(index: number) {
                 })
                 .join(', ')
             }}
-          </p>
+          </p> -->
         </div>
         <p class="newValue">
           {{ log.newValue }}

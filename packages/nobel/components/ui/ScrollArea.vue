@@ -1,5 +1,11 @@
 <script setup>
-import { ScrollAreaRoot, ScrollAreaScrollbar, ScrollAreaThumb, ScrollAreaViewport } from 'reka-ui'
+import {
+  ScrollAreaRoot,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+  ScrollAreaViewport,
+  ScrollAreaCorner,
+} from 'reka-ui'
 </script>
 
 <template>
@@ -7,13 +13,13 @@ import { ScrollAreaRoot, ScrollAreaScrollbar, ScrollAreaThumb, ScrollAreaViewpor
     <ScrollAreaViewport class="ScrollAreaViewport">
       <slot />
     </ScrollAreaViewport>
-    <ScrollAreaScrollbar class="ScrollAreaScrollbar" orientation="horizontal">
+    <!-- <ScrollAreaScrollbar class="ScrollAreaScrollbar" orientation="horizontal">
       <ScrollAreaThumb class="ScrollAreaThumb" />
-    </ScrollAreaScrollbar>
+    </ScrollAreaScrollbar> -->
     <ScrollAreaScrollbar class="ScrollAreaScrollbar" orientation="vertical">
       <ScrollAreaThumb class="ScrollAreaThumb" />
     </ScrollAreaScrollbar>
-    <ScrollAreaCorner />
+    <!-- <ScrollAreaCorner /> -->
   </ScrollAreaRoot>
 </template>
 

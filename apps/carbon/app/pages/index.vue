@@ -48,7 +48,11 @@ const audio = useAudioCue()
         :shield="opponent.shield.value"
         :reverse="false"
       />
-      <BashLog :player="opponent" :opponentDeck="opponent.deck.value" />
+      <BashLog
+        :player="opponent"
+        :playerDeck="opponent.deck.value"
+        :opponetDeck="player.deck.value"
+      />
     </section>
     <Board>
       <PlayerCard
@@ -60,7 +64,8 @@ const audio = useAudioCue()
         :time="time"
         :reverse="false"
         @bash="opponent.bash"
-        @click="audio?.playCardFlip()"
+        @mousedown="audio?.playCardFlip()"
+        @mouseup="audio?.playCardFlip()"
       />
     </Board>
     <TimeControls :timeline="timeline" @on-restart="handleReset" />
@@ -75,7 +80,8 @@ const audio = useAudioCue()
         :time="time"
         :reverse="true"
         @bash="player.bash"
-        @click="audio?.playCardFlip()"
+        @mousedown="audio?.playCardFlip()"
+        @mouseup="audio?.playCardFlip()"
       />
     </Board>
     <section class="character player">

@@ -2,6 +2,7 @@
 import { templateRef } from '@vueuse/core'
 import type { Card, CardAction, CardBash } from '../../types'
 import { gsap } from 'gsap/gsap-core'
+import CardModal from './CardModal.vue'
 
 const props = defineProps<{
   card: Card
@@ -47,6 +48,7 @@ const triggerCard = () => {
 const cardRef = templateRef<HTMLButtonElement>('cardRef')
 
 function animateAction() {
+  if (!cardRef.value) return
   gsap.to(cardRef.value, {
     scale: 1,
     y: props.reverse ? -60 : 60,
@@ -81,6 +83,7 @@ props.timeline.to(
 </script>
 
 <template>
+  <!-- <CardModal :card="card"> -->
   <button
     ref="cardRef"
     class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
@@ -114,6 +117,7 @@ props.timeline.to(
       </div>
     </div>
   </button>
+  <!-- </CardModal> -->
 </template>
 
 <style lang="scss">
@@ -158,9 +162,9 @@ props.timeline.to(
 }
 
 .stats .chip {
-  padding: var(--space-quark);
   border-radius: 0;
   cursor: pointer;
+  padding: 0px;
 }
 
 .stats .chip:first-child {
