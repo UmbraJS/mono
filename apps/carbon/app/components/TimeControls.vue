@@ -3,6 +3,7 @@ import { Button } from '@nobel/core'
 
 const props = defineProps<{
   timeline: gsap.core.Timeline
+  time: number
 }>()
 
 defineEmits(['onRestart'])
@@ -21,45 +22,77 @@ function setSpeed() {
   if (timesSpeed.value > 10) timesSpeed.value = 1
   props.timeline.timeScale(timesSpeed.value)
 }
+
+const timeInMinutesAndSeconds = computed(() => {
+  const minutes = Math.floor(props.time / 60)
+  const seconds = Math.floor(props.time % 60)
+  return `${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`
+})
 </script>
 
 <template>
   <div class="controlPanel">
-    <Button variant="base" size="small" color="default" @click="() => $emit('onRestart')">
-      <Icon name="carbon:skip-back-filled" size="2rem" />
-    </Button>
-    <Button
-      v-if="!isPaused"
-      variant="base"
-      size="small"
-      color="default"
-      @click="() => pausePlay(true)"
-    >
-      <Icon name="carbon:pause-filled" size="2rem" />
-    </Button>
-    <Button v-else variant="base" size="small" color="default" @click="() => pausePlay(false)">
-      <Icon name="carbon:play-filled-alt" size="2rem" />
-    </Button>
+    <h3>
+      <Icon name="carbon:time" size="1.5rem" />
+      {{ timeInMinutesAndSeconds }}
+    </h3>
+    <div class="controls">
+      <Button variant="base" size="small" color="default" @click="() => $emit('onRestart')">
+        <Icon name="carbon:restart" size="2rem" />
+      </Button>
+      <Button
+        v-if="!isPaused"
+        variant="base"
+        size="small"
+        color="default"
+        @click="() => pausePlay(true)"
+      >
+        <Icon name="carbon:pause-filled" size="2rem" />
+      </Button>
+      <Button v-else variant="base" size="small" color="default" @click="() => pausePlay(false)">
+        <Icon name="carbon:play-filled-alt" size="2rem" />
+      </Button>
 
-    <Button variant="base" size="small" color="default" @click="setSpeed">
-      <p>Speed: {{ timesSpeed }}</p>
-    </Button>
+      <Button variant="base" size="small" color="default" @click="setSpeed">
+        <p>Speed: {{ timesSpeed }}</p>
+      </Button>
+    </div>
+    <h3>
+      <Icon name="carbon:time" size="1.5rem" />
+      {{ timeInMinutesAndSeconds }}
+    </h3>
   </div>
 </template>
 
 <style>
 .controlPanel {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   grid-column: 1 / -1;
   justify-content: center;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2);
+  gap: var(--space-1);
+  padding: var(--space-1);
   background-color: var(--base-30);
   border-radius: var(--radius);
+  width: 100%;
 }
 
 .controlPanel > * {
   cursor: pointer;
+}
+
+.controlPanel .controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.controlPanel h3 {
+  display: flex;
+  align-items: center;
+  color: var(--accent-120);
+  width: 190px;
 }
 </style>

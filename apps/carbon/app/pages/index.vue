@@ -79,9 +79,8 @@ function triggerFlipSound() {
         @mouseup="triggerFlipSound"
       />
     </Board>
-    <TimeControls :timeline="timeline" @on-restart="handleReset" />
+    <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>
-      <p>{{ time }}</p>
       <PlayerCard
         v-for="(card, index) in player.deck.value"
         :key="index"

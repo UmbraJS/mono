@@ -565,7 +565,8 @@ export const cards: Card[] = [
     unique: false,
 
     maxLevel: 5,
-    description: 'A basic glimmer cloak',
+    description:
+      'When this enchantment enters, if its your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.',
     rarity: 1,
     baseCost: 10,
     cost: 10,
