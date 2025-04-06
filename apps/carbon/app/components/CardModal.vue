@@ -43,10 +43,27 @@ const bash = props.card.bash
           <img :src="card.image?.default" alt="card image" class="dialog-image border" />
         </div>
         <div class="cardMeta">
-          <DialogTitle> lvl {{ card.level }} - {{ card.name }} </DialogTitle>
+          <DialogTitle>
+            <span>lvl {{ card.level }} - </span>{{ card.name }}
+          </DialogTitle>
           <DialogDescription>
             {{ card.description }}
           </DialogDescription>
+          <div class="bash">
+            <h4>Meta --------------------------</h4>
+            <div v-if="bash.cooldown" class="chip">
+              <BanterIcon />
+              Cooldown: {{ bash.cooldown }}s
+            </div>
+            <div class="chip"><AttackIcon />Cost: {{ card.cost }}</div>
+          </div>
+
+          <div class="tags">
+            <p>Aspects:</p>
+            <div v-for="aspect in card.aspects" class="chip">
+              {{ aspect.name }}
+            </div>
+          </div>
 
           <div class="bash">
             <h4>B.A.S.H -----------------------</h4>
@@ -68,7 +85,7 @@ const bash = props.card.bash
           </div>
 
           <div class="tags">
-            <h4>Tags:</h4>
+            <p>Tags:</p>
             <div v-for="tag in card.tags" class="chip">
               {{ tag }}
             </div>
@@ -108,6 +125,14 @@ const bash = props.card.bash
   gap: var(--space-2);
   width: 100%;
   padding-top: var(--space-3);
+}
+
+.dialogWrapper .cardMeta span {
+  color: var(--base-60);
+}
+
+.dialogWrapper h4 {
+  color: var(--base-60);
 }
 
 .dialogWrapper .bash {
