@@ -172,3 +172,37 @@ $desktop: 1200px;
   --base-120: var(--success-120);
   --base-contrast: var(--success-contrast);
 }
+
+.base-info {
+  --base: var(--info);
+  --base-10: var(--info-10);
+  --base-20: var(--info-20);
+  --base-30: var(--info-30);
+  --base-40: var(--info-40);
+  --base-50: var(--info-50);
+  --base-60: var(--info-60);
+  --base-70: var(--info-70);
+  --base-80: var(--info-80);
+  --base-90: var(--info-90);
+  --base-100: var(--info-100);
+  --base-110: var(--info-110);
+  --base-120: var(--info-120);
+  --base-contrast: var(--info-contrast);
+}
+
+.base-yellow {
+  --base: var(--yellow);
+  --base-10: var(--yellow-10);
+  --base-20: var(--yellow-20);
+  --base-30: var(--yellow-30);
+  --base-40: var(--yellow-40);
+  --base-50: var(--yellow-50);
+  --base-60: var(--yellow-60);
+  --base-70: var(--yellow-70);
+  --base-80: var(--yellow-80);
+  --base-90: var(--yellow-90);
+  --base-100: var(--yellow-100);
+  --base-110: var(--yellow-110);
+  --base-120: var(--yellow-120);
+  --base-contrast: var(--yellow-contrast);
+}

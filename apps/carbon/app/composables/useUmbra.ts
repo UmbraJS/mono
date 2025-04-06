@@ -8,6 +8,16 @@ const warningAccent: Accent = {
   color: '#ff0000',
 }
 
+const infoAccent: Accent = {
+  name: 'info',
+  color: '#2bb8e6',
+}
+
+const yellowAccent: Accent = {
+  name: 'yellow',
+  color: '#ffff00',
+}
+
 const successAccent: Accent = {
   name: 'success',
   color: '#00ff00',
@@ -16,11 +26,11 @@ const successAccent: Accent = {
 const themeInput: UmbraInput = {
   foreground: '#16121f',
   background: '#f3f6ea',
-  accents: ['#9999ff', warningAccent, successAccent],
+  accents: ['#9999ff', warningAccent, successAccent, infoAccent, yellowAccent],
   inversed: {
     foreground: '#f3f6ea',
     background: '#16121f',
-    accents: ['#9999ff', warningAccent, successAccent],
+    accents: ['#9999ff', warningAccent, successAccent, infoAccent, yellowAccent],
   },
 }
 

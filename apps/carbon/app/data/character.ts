@@ -35,7 +35,7 @@ const warrior: Character = {
   health: 150,
   maxHealth: 150,
   stats: soldierStats,
-  field: 'village.jpg',
+  field: cards.find((card) => card.name === 'Village')!,
   image: {
     default: 'soldier.jpg',
   },
@@ -60,7 +60,7 @@ const skeletonKing: Character = {
   health: 200,
   maxHealth: 200,
   stats: mageStats,
-  field: 'abandonedHalls.jpg',
+  field: cards.find((card) => card.name === 'Abandoned Halls')!,
   image: {
     default: 'skeletonKing.jpg',
   },

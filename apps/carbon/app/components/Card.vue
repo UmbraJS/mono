@@ -45,7 +45,7 @@ const triggerCard = () => {
   emit('bash', getAction(bash))
 }
 
-const cardRef = templateRef<HTMLButtonElement>('cardRef')
+const cardRef = templateRef<HTMLDivElement>('cardRef')
 
 function animateAction() {
   if (!cardRef.value) return
@@ -83,41 +83,46 @@ props.timeline.to(
 </script>
 
 <template>
-  <!-- <CardModal :card="card"> -->
-  <button
-    ref="cardRef"
-    class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
-  >
-    <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%`, opacity }"></div>
-    <img v-if="card.image" :src="card.image.default" alt="Card Image" />
-    <div class="stats">
-      <div
-        v-if="card.bash.attack"
-        class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus"
+  <div ref="cardRef">
+    <CardModal :card="card">
+      <button
+        class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
       >
-        {{ card.bash.attack }}
-      </div>
-      <div
-        v-if="card.bash.heal"
-        class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus"
-      >
-        {{ card.bash.heal }}
-      </div>
-      <div
-        v-if="card.bash.shield"
-        class="chip base-accent button buttonText buttonHover buttonActive buttonFocus focus"
-      >
-        {{ card.bash.shield }}
-      </div>
-      <div
-        v-if="card.bash.banter"
-        class="chip base-accent button buttonText buttonHover buttonActive buttonFocus focus"
-      >
-        {{ card.bash.banter }}
-      </div>
-    </div>
-  </button>
-  <!-- </CardModal> -->
+        <div
+          class="cooldown"
+          v-if="cooldown > 0"
+          :style="{ height: `${cooldown}%`, opacity }"
+        ></div>
+        <img v-if="card.image" :src="card.image.default" alt="Card Image" />
+        <div class="stats">
+          <div
+            v-if="card.bash.attack"
+            class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus"
+          >
+            {{ card.bash.attack }}
+          </div>
+          <div
+            v-if="card.bash.heal"
+            class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus"
+          >
+            {{ card.bash.heal }}
+          </div>
+          <div
+            v-if="card.bash.shield"
+            class="chip base-info button buttonText buttonHover buttonActive buttonFocus focus"
+          >
+            {{ card.bash.shield }}
+          </div>
+          <div
+            v-if="card.bash.banter"
+            class="chip base-yellow button buttonText buttonHover buttonActive buttonFocus focus"
+          >
+            {{ card.bash.banter }}
+          </div>
+        </div>
+      </button>
+    </CardModal>
+  </div>
 </template>
 
 <style lang="scss">
@@ -165,6 +170,7 @@ props.timeline.to(
   border-radius: 0;
   cursor: pointer;
   padding: 0px;
+  min-width: max-content;
 }
 
 .stats .chip:first-child {

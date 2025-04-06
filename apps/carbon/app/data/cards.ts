@@ -43,7 +43,6 @@ export const fields: Card[] = [
     bash: { cooldown: 5 },
     level: 1,
     unique: false,
-
     maxLevel: 5,
     description: 'A basic abandoned halls',
     rarity: 1,
@@ -469,7 +468,7 @@ export const cards: Card[] = [
   {
     id: 'DoomCloak',
     name: 'Doom Cloak',
-    bash: { attack: 20, shield: 10, cooldown: 7 },
+    bash: { attack: 20, shield: 20, cooldown: 7 },
     level: 1,
     unique: false,
 

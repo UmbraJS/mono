@@ -33,13 +33,24 @@ const player = usePlayer({
 })
 
 const audio = useAudioCue()
+
+const recentlyClickedFlipSound = ref(false)
+
+function triggerFlipSound() {
+  if (recentlyClickedFlipSound.value) return
+  recentlyClickedFlipSound.value = true
+  audio?.playCardFlip()
+  setTimeout(() => {
+    recentlyClickedFlipSound.value = false
+  }, 200)
+}
 </script>
 
 <template>
   <div class="conflict-wrapper">
     <section class="character opponent">
       <div class="location border">
-        <img :src="skeletonKing.field.image?.default" alt="Location" />
+        <img :src="skeletonKing.field?.image?.default" alt="Location" />
       </div>
       <PlayerCharacter
         :character="skeletonKing"
@@ -64,8 +75,8 @@ const audio = useAudioCue()
         :time="time"
         :reverse="false"
         @bash="opponent.bash"
-        @mousedown="audio?.playCardFlip()"
-        @mouseup="audio?.playCardFlip()"
+        @mousedown="triggerFlipSound"
+        @mouseup="triggerFlipSound"
       />
     </Board>
     <TimeControls :timeline="timeline" @on-restart="handleReset" />
@@ -80,8 +91,8 @@ const audio = useAudioCue()
         :time="time"
         :reverse="true"
         @bash="player.bash"
-        @mousedown="audio?.playCardFlip()"
-        @mouseup="audio?.playCardFlip()"
+        @mousedown="triggerFlipSound"
+        @mouseup="triggerFlipSound"
       />
     </Board>
     <section class="character player">
