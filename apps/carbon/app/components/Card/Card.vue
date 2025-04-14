@@ -4,6 +4,7 @@ import type { Card, CardAction, CardBash } from '../../../types'
 import { gsap } from 'gsap/gsap-core'
 import CardModal from './CardModal.vue'
 import CardCooldown from './CardCooldown.vue'
+import CardStats from './CardStats.vue'
 
 const props = defineProps<{
   card: Card
@@ -51,6 +52,12 @@ function animateAction() {
     },
   })
 }
+
+function onBash() {
+  console.log('Cooldown complete')
+  triggerCard()
+  animateAction()
+}
 </script>
 
 <template>
@@ -64,41 +71,10 @@ function animateAction() {
           :card="card"
           :timeline="props.timeline"
           :delay="props.delay"
-          @bash="
-            () => {
-              console.log('Cooldown complete')
-              triggerCard()
-              animateAction()
-            }
-          "
+          @bash="onBash"
         />
         <img v-if="card.image" :src="card.image.default" alt="Card Image" />
-        <div class="stats">
-          <div
-            v-if="card.bash.attack"
-            class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus"
-          >
-            {{ card.bash.attack }}
-          </div>
-          <div
-            v-if="card.bash.heal"
-            class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus"
-          >
-            {{ card.bash.heal }}
-          </div>
-          <div
-            v-if="card.bash.shield"
-            class="chip base-info button buttonText buttonHover buttonActive buttonFocus focus"
-          >
-            {{ card.bash.shield }}
-          </div>
-          <div
-            v-if="card.bash.banter"
-            class="chip base-yellow button buttonText buttonHover buttonActive buttonFocus focus"
-          >
-            {{ card.bash.banter }}
-          </div>
-        </div>
+        <CardStats :card="card" />
       </button>
     </CardModal>
   </div>
@@ -122,34 +98,6 @@ function animateAction() {
   top: 0px;
   left: 0px;
   z-index: 0;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  position: relative;
-  width: 100%;
-  z-index: 1;
-}
-
-.stats .chip {
-  border-radius: 0;
-  cursor: pointer;
-  padding: 0px;
-  min-width: max-content;
-}
-
-.stats .chip:first-child {
-  border-bottom-left-radius: var(--radius);
-}
-
-/* if there are less than 5 chips children inside .stats give the last chip boder radius */
-.stats:not(:has(.chip:nth-child(4n))) .chip:last-child {
-  border-top-right-radius: var(--radius);
-}
-
-.stats:has(.chip:nth-child(4n)) .chip:last-child {
-  border-bottom-right-radius: var(--radius);
 }
 
 .card img {
