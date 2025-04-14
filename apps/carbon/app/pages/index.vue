@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PlayerCard from '~/components/Card.vue'
+import PlayerCard from '~/components/Card/Card.vue'
 import { warrior, skeletonKing } from '../data/character'
 import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
@@ -10,6 +10,7 @@ import { useAudioCue } from '@/composables/useAudioCue'
 const time = ref(0)
 
 const timeline = gsap.timeline({
+  paused: true,
   onUpdate: () => {
     time.value = timeline.time()
   },
@@ -55,6 +56,7 @@ function triggerFlipSound() {
       <PlayerCharacter
         :character="skeletonKing"
         :health="opponent.health.value"
+        :healthDelayed="opponent.healthDelayed.value"
         :morale="opponent.morale.value"
         :shield="opponent.shield.value"
         :reverse="false"
@@ -77,6 +79,7 @@ function triggerFlipSound() {
         @bash="opponent.bash"
         @mousedown="triggerFlipSound"
         @mouseup="triggerFlipSound"
+        :delay="0"
       />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
@@ -92,6 +95,7 @@ function triggerFlipSound() {
         @bash="player.bash"
         @mousedown="triggerFlipSound"
         @mouseup="triggerFlipSound"
+        :delay="3"
       />
     </Board>
     <section class="sides">
@@ -101,6 +105,7 @@ function triggerFlipSound() {
       <PlayerCharacter
         :character="warrior"
         :health="player.health.value"
+        :healthDelayed="player.healthDelayed.value"
         :morale="player.morale.value"
         :shield="player.shield.value"
         :reverse="true"

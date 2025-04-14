@@ -8,7 +8,7 @@ const props = defineProps<{
 
 defineEmits(['onRestart'])
 
-const isPaused = ref(false)
+const isPaused = ref(props.timeline.paused())
 
 function pausePlay(bool: boolean) {
   isPaused.value = bool

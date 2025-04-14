@@ -14,20 +14,25 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
   const deck = ref(character.deck)
 
   function attack(attack: number, timestamp: number, index: number) {
-    const remainingAttack = Math.max(0, attack - shields.shield.value)
-    const touchedIndexes = shields.shieldDown({
-      change: -attack,
+    shields.shieldDown({
+      change: attack,
       timestamp: timestamp,
       index: index,
-      reductionSources: [],
+      banter: {
+        buffs: [],
+        debufs: [],
+      },
     })
 
     health.hurt({
-      change: remainingAttack,
+      change: Math.max(0, attack - shields.shield.value),
       attemptedChange: attack,
       timestamp: timestamp,
       index: index,
-      reductionSources: touchedIndexes,
+      banter: {
+        buffs: [],
+        debufs: [],
+      },
     })
   }
 
@@ -39,7 +44,10 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         change: bash.banter,
         timestamp: entry.timestamp,
         index: entry.index,
-        reductionSources: [],
+        banter: {
+          buffs: [],
+          debufs: [],
+        },
       })
     if (bash.attack) onAttack(bash.attack, entry.index)
     if (bash.shield)
@@ -47,14 +55,20 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         change: bash.shield,
         timestamp: entry.timestamp,
         index: entry.index,
-        reductionSources: [],
+        banter: {
+          buffs: [],
+          debufs: [],
+        },
       })
     if (bash.heal)
       health.heal({
         change: bash.heal,
         timestamp: entry.timestamp,
         index: entry.index,
-        reductionSources: [],
+        banter: {
+          buffs: [],
+          debufs: [],
+        },
       })
   }
 

@@ -378,7 +378,7 @@ export const cards: Card[] = [
   {
     id: 'skeleton-soldier',
     name: 'Skeleton Soldier',
-    bash: { attack: 5, shield: 5, cooldown: 3 },
+    bash: { attack: 5, shield: 5, cooldown: 1 },
     level: 1,
     unique: false,
 

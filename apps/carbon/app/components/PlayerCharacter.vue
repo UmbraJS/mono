@@ -5,6 +5,7 @@ const props = defineProps<{
   reverse: boolean
   character: Character
   health: number
+  healthDelayed: number
   morale: number
   shield: number
 }>()
@@ -57,6 +58,7 @@ const shieldPercentage = computed(() => {
 <style>
 .character {
   display: grid;
+  gap: var(--space-quark);
   grid-template-rows: 1fr auto;
   grid-template-areas:
     'avatar'

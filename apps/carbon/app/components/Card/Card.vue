@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { templateRef } from '@vueuse/core'
-import type { Card, CardAction, CardBash } from '../../types'
+import type { Card, CardAction, CardBash } from '../../../types'
 import { gsap } from 'gsap/gsap-core'
 import CardModal from './CardModal.vue'
+import CardCooldown from './CardCooldown.vue'
 
 const props = defineProps<{
   card: Card
@@ -10,26 +11,12 @@ const props = defineProps<{
   timeline: gsap.core.Timeline
   time: number
   reverse: boolean
+  delay: number
 }>()
 
 const emit = defineEmits<{
   (e: 'bash', bashAction: CardAction): void
 }>()
-
-const cooldown = ref(100)
-const opacity = computed(() => remapValue(cooldown.value))
-
-function remapValue(value: number): number {
-  const start = 98
-  const fadein = start - 15
-  if (value >= start) {
-    return 0.0
-  } else if (value >= fadein) {
-    return (start - value) / 10
-  } else {
-    return 1.0
-  }
-}
 
 function getAction(bash: CardBash): CardAction {
   return {
@@ -64,22 +51,6 @@ function animateAction() {
     },
   })
 }
-
-// Start the cooldown animation when the component is mounted
-props.timeline.to(
-  cooldown,
-  {
-    value: 0,
-    duration: props.card.bash.cooldown,
-    repeat: -1,
-    onRepeat: () => {
-      console.log('Cooldown complete')
-      triggerCard()
-      animateAction()
-    },
-  },
-  0,
-)
 </script>
 
 <template>
@@ -88,11 +59,19 @@ props.timeline.to(
       <button
         class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
       >
-        <div
-          class="cooldown"
-          v-if="cooldown > 0"
-          :style="{ height: `${cooldown}%`, opacity }"
-        ></div>
+        <CardCooldown
+          v-if="card.bash.cooldown"
+          :card="card"
+          :timeline="props.timeline"
+          :delay="props.delay"
+          @bash="
+            () => {
+              console.log('Cooldown complete')
+              triggerCard()
+              animateAction()
+            }
+          "
+        />
         <img v-if="card.image" :src="card.image.default" alt="Card Image" />
         <div class="stats">
           <div
@@ -126,19 +105,6 @@ props.timeline.to(
 </template>
 
 <style lang="scss">
-.cooldown {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-  border-top: solid 2px var(--base-40);
-  border-radius: var(--radius);
-  pointer-events: none;
-}
-
 .card {
   display: flex;
   justify-content: center;

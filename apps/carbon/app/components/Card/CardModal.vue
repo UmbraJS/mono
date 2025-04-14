@@ -9,11 +9,11 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@nobel/core'
-import type { Card } from '../../types'
-import AttackIcon from './icons/Attack.vue'
-import HealIcon from './icons/Heal.vue'
-import ShieldIcon from './icons/Shield.vue'
-import BanterIcon from './icons/Banter.vue'
+import type { Card } from '../../../types'
+import AttackIcon from '../icons/Attack.vue'
+import HealIcon from '../icons/Heal.vue'
+import ShieldIcon from '../icons/Shield.vue'
+import BanterIcon from '../icons/Banter.vue'
 
 const props = defineProps<{
   card: Card

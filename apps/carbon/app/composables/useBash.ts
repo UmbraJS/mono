@@ -1,4 +1,10 @@
 import type { Character } from '../../types'
+import { gsap } from 'gsap'
+
+interface ValueChangeSource {
+  amount: number
+  sourceIndex: number
+}
 
 interface ValueLog {
   actualChange: number
@@ -7,14 +13,18 @@ interface ValueLog {
   newValue: number
   timestamp: number
   index: number
-  reductionSources: number[]
+  debufs: ValueChangeSource[]
+  buffs: ValueChangeSource[]
 }
 
 interface ValueChange {
   change: number
   timestamp: number
   index: number
-  reductionSources: number[]
+  banter: {
+    debufs: ValueChangeSource[]
+    buffs: ValueChangeSource[]
+  }
 }
 
 interface ValueChangeAttempt extends ValueChange {
@@ -30,89 +40,107 @@ export function useHealth(character: Character) {
     return lastLog.newValue
   })
 
-  function heal({ change, timestamp, index, reductionSources }: ValueChange) {
+  const healthDelayed = ref(maxHealth)
+
+  watch(health, (newValue) => {
+    gsap.to(healthDelayed, {
+      duration: 0.5,
+      value: newValue,
+    })
+  })
+
+  function heal({ change, timestamp, index, banter }: ValueChange) {
     const healthDeficit = maxHealth - health.value
     const valueLog: ValueLog = {
       actualChange: Math.min(healthDeficit, change),
       attemptedChange: change,
       oldValue: health.value,
       newValue: Math.min(maxHealth, health.value + change),
-      reductionSources,
+      debufs: banter.buffs,
+      buffs: banter.debufs,
       timestamp,
       index,
     }
     healthLog.value.push(valueLog)
   }
 
-  function hurt({
-    change,
-    attemptedChange,
-    timestamp,
-    index,
-    reductionSources,
-  }: ValueChangeAttempt) {
+  function hurt({ change, attemptedChange, timestamp, index, banter }: ValueChangeAttempt) {
     healthLog.value.push({
       actualChange: Math.max(0, change),
       attemptedChange: attemptedChange,
       oldValue: health.value,
       newValue: health.value - change,
-      reductionSources,
+      buffs: banter.buffs,
+      debufs: banter.debufs,
       timestamp,
       index,
     })
   }
 
-  return { health, healthLog, heal, hurt }
+  return { healthDelayed, health, healthLog, heal, hurt }
 }
 
 export function useShield() {
-  const shieldLog = ref<ValueLog[]>([])
-  const shieldChunks = ref<ValueLog[]>([])
-  const shield = computed(() => shieldLog.value[shieldLog.value.length - 1]?.newValue || 0)
+  const shieldLog = shallowRef<ValueLog[]>([])
+  const shield = shallowRef(0)
 
-  function shieldEntry({ change, timestamp, index, reductionSources }: ValueChange): ValueLog {
-    return {
+  function updateShield() {
+    const lastLog = shieldLog.value[shieldLog.value.length - 1]?.newValue || 0
+    shield.value = lastLog
+    return lastLog
+  }
+
+  function shieldUp({ change, timestamp, index, banter }: ValueChange) {
+    if (change < 0) console.error('Shield up called with negative change', change)
+    const lastLog = shieldLog.value[shieldLog.value.length - 1]?.newValue || 0
+
+    shieldLog.value.push({
       actualChange: change,
       attemptedChange: change,
-      oldValue: shield.value,
-      newValue: Math.max(0, shield.value + change),
-      reductionSources,
+      oldValue: lastLog,
+      newValue: Math.max(0, lastLog + change),
+      debufs: banter.debufs,
+      buffs: banter.buffs,
       timestamp,
       index,
-    }
+    })
+    updateShield()
   }
 
-  function shieldUp({ change, timestamp, index, reductionSources }: ValueChange) {
-    if (change < 0) console.error('Shield up called with negative change', change)
-    const entry = shieldEntry({ change, timestamp, index, reductionSources })
-    shieldLog.value.push(entry)
-    shieldChunks.value.push(entry)
-  }
+  function shieldDown({ change, index }: ValueChange) {
+    if (shield.value <= 0) return
 
-  function shieldDown({ change, timestamp, index, reductionSources }: ValueChange) {
-    if (change > 0) console.error('Shield down called with positive change', change)
-    const entry = shieldEntry({ change, timestamp, index, reductionSources })
-    shieldLog.value.push(entry)
+    let remainingDebuff = change
 
-    const indexesTouched: number[] = []
-
-    let remainingChange = Math.abs(change) // Work with the absolute value of the change
-    while (remainingChange > 0 && shieldChunks.value.length > 0) {
-      const chunk = shieldChunks.value[0]
-      if (chunk === undefined) break // Safety check
-      if (chunk?.actualChange <= remainingChange) {
-        // Remove the entire chunk if its actualChange is less than or equal to the remaining change
-        remainingChange -= chunk.actualChange
-        indexesTouched.push(chunk.index)
-        shieldChunks.value.shift() // Remove the first chunk
-      } else {
-        // Reduce the actualChange of the chunk and stop the loop
-        indexesTouched.push(chunk.index)
-        chunk.actualChange -= remainingChange
-        remainingChange = 0
+    shieldLog.value = shieldLog.value.map((entry) => {
+      // Skip entries that cannot be debuffed
+      if (remainingDebuff <= 0 || entry.newValue <= 0 || entry.actualChange <= 0) {
+        return entry
       }
-    }
-    return indexesTouched
+
+      // Calculate the debuff to apply to this entry
+      const potentialChangeAfterDebuff = entry.actualChange - remainingDebuff
+      const appliedDebuff = potentialChangeAfterDebuff < 0 ? entry.actualChange : remainingDebuff
+
+      // Update the remaining debuff for subsequent entries
+      remainingDebuff = Math.max(0, remainingDebuff - entry.actualChange)
+
+      // Return the updated entry with the debuff applied
+      return {
+        ...entry,
+        debufs: [
+          ...entry.debufs,
+          {
+            amount: appliedDebuff,
+            sourceIndex: index,
+          },
+        ],
+        actualChange: entry.actualChange - appliedDebuff,
+        newValue: Math.max(0, entry.newValue - Math.max(0, potentialChangeAfterDebuff)),
+      }
+    })
+
+    updateShield()
   }
 
   return { shield, shieldLog, shieldUp, shieldDown }
@@ -122,13 +150,14 @@ export function useMorale() {
   const moraleLog = ref<ValueLog[]>([])
   const morale = computed(() => moraleLog.value.reduce((acc, entry) => acc + entry.actualChange, 0))
 
-  function banter({ change, timestamp, index, reductionSources }: ValueChange) {
+  function banter({ change, timestamp, index, banter }: ValueChange) {
     moraleLog.value.push({
       actualChange: change,
       attemptedChange: change,
       oldValue: morale.value,
       newValue: Math.max(0, morale.value + change),
-      reductionSources,
+      buffs: banter.buffs,
+      debufs: banter.debufs,
       timestamp,
       index,
     })
