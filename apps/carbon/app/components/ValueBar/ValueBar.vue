@@ -67,10 +67,11 @@ watch(healthPercentage, (newValue) => {
 .character-health .life {
   background-color: var(--success-50);
   width: calc(v-bind(healthPercentage) * 1%);
+  transition: 0.1s;
 }
 
 .character-health .delayedLife {
-  background-color: var(--warning-80);
+  background-color: var(--warning-50);
   width: calc(v-bind(healthPercentageDelayed) * 1%);
 }
 
