@@ -6,13 +6,14 @@ interface ValueChangeSource {
   sourceIndex: number
 }
 
-interface ValueLog {
+export interface ValueLog {
   actualChange: number
   attemptedChange: number
   oldValue: number
   newValue: number
   timestamp: number
   index: number
+  type: 'banter' | 'attack' | 'shield' | 'heal'
   debufs: ValueChangeSource[]
   buffs: ValueChangeSource[]
 }
@@ -56,6 +57,7 @@ export function useHealth(character: Character) {
       attemptedChange: change,
       oldValue: health.value,
       newValue: Math.min(maxHealth, health.value + change),
+      type: 'heal',
       debufs: banter.buffs,
       buffs: banter.debufs,
       timestamp,
@@ -70,6 +72,7 @@ export function useHealth(character: Character) {
       attemptedChange: attemptedChange,
       oldValue: health.value,
       newValue: health.value - change,
+      type: 'attack',
       buffs: banter.buffs,
       debufs: banter.debufs,
       timestamp,
@@ -108,6 +111,7 @@ export function useShield() {
       oldValue: lastLog,
       newValue: Math.max(0, lastLog + change),
       debufs: banter.debufs,
+      type: 'shield',
       buffs: banter.buffs,
       timestamp,
       index,
@@ -165,6 +169,7 @@ export function useMorale() {
       oldValue: morale.value,
       newValue: Math.max(0, morale.value + change),
       buffs: banter.buffs,
+      type: 'banter',
       debufs: banter.debufs,
       timestamp,
       index,

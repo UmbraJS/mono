@@ -3,7 +3,7 @@ import PlayerCard from '~/components/Card/Card.vue'
 import { warrior, skeletonKing } from '../data/character'
 import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
-import BashLog from '~/components/BashLog.vue'
+import BashLog from '~/components/BashLog/BashLog.vue'
 import { useAudioCue } from '@/composables/useAudioCue'
 
 const time = ref(0)
