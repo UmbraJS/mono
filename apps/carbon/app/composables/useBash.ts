@@ -34,7 +34,7 @@ interface ValueChangeAttempt extends ValueChange {
 
 export function useHealth(character: Character) {
   const maxHealth = character.maxHealth
-  const healthLog = ref<ValueLog[]>([])
+  const healthLog = shallowRef<ValueLog[]>([])
   const health = computed(() => {
     const lastLog = healthLog.value[healthLog.value.length - 1]
     if (lastLog?.newValue === undefined) return maxHealth

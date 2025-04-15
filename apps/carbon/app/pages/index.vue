@@ -62,6 +62,7 @@ function triggerFlipSound() {
       />
       <BashLog
         :player="opponent"
+        :opponent="player"
         :playerDeck="opponent.deck.value"
         :opponetDeck="player.deck.value"
       />

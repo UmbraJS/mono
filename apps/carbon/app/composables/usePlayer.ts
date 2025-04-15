@@ -14,26 +14,30 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
   const deck = ref(character.deck)
 
   function attack(attack: number, timestamp: number, index: number) {
-    shields.shieldDown({
-      change: attack,
-      timestamp: timestamp,
-      index: index,
-      banter: {
-        buffs: [],
-        debufs: [],
-      },
-    })
-
-    health.hurt({
-      change: Math.max(0, attack - shields.shield.value),
-      attemptedChange: attack,
-      timestamp: timestamp,
-      index: index,
-      banter: {
-        buffs: [],
-        debufs: [],
-      },
-    })
+    const shieldPierce = attack - shields.shield.value
+    if (shields.shield.value > 0) {
+      shields.shieldDown({
+        change: attack,
+        timestamp: timestamp,
+        index: index,
+        banter: {
+          buffs: [],
+          debufs: [],
+        },
+      })
+    }
+    if (shieldPierce > 0) {
+      health.hurt({
+        change: Math.max(0, shieldPierce),
+        attemptedChange: attack,
+        timestamp: timestamp,
+        index: index,
+        banter: {
+          buffs: [],
+          debufs: [],
+        },
+      })
+    }
   }
 
   function bash(entry: CardAction) {
@@ -60,7 +64,7 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
           debufs: [],
         },
       })
-    if (bash.heal)
+    if (bash.heal && health.health.value < character.maxHealth)
       health.heal({
         change: bash.heal,
         timestamp: entry.timestamp,

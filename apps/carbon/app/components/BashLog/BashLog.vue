@@ -6,19 +6,24 @@ import BashLogEntry from './BashLogEntry.vue'
 
 const props = defineProps<{
   player: UsePlayerReturn
+  opponent: UsePlayerReturn
   playerDeck: Card[]
   opponetDeck: Card[]
 }>()
 
-const reversedHealthLog = computed(() => {
-  return props.player.healthLog.value.slice().reverse()
+const allLogsOrderedByTime = computed(() => {
+  const allLogs = [...props.player.healthLog.value, ...props.player.shieldLog.value]
+  return allLogs
+    .sort((a, b) => a.timestamp - b.timestamp)
+    .slice()
+    .reverse()
 })
 </script>
 
 <template>
   <ScrollArea class="ScrollArea border">
     <ul>
-      <li v-for="(log, index) in reversedHealthLog" :key="index">
+      <li v-for="(log, index) in allLogsOrderedByTime" :key="index">
         <BashLogEntry
           :health-log="log"
           :opponet-deck="props.opponetDeck"
