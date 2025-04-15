@@ -8,6 +8,8 @@ const props = defineProps<{
   healthLog: ValueLog
 }>()
 
+const open = ref(false)
+
 function getCardByIndex(index: number) {
   return props.playerDeck[index]
 }
@@ -36,17 +38,25 @@ const opponentCardByIndex = props.playerDeck[props.healthLog.index]
       </p>
       <p v-else>{{ healthLog.actualChange }}</p>
     </div>
-    <!-- <p v-if="healthLog.reductionSources.length > 0">
-            reduced by
-            {{
-              healthLog.reductionSources
-                .map((source) => {
-                  const card = getCardByIndex(source)
-                  return card ? card.name : 'Unknown'
-                })
-                .join(', ')
-            }}
-          </p> -->
+
+    <div class="dropdown-wrapper" :class="{ open }" v-if="healthLog.debufs.length > 0">
+      <div class="dropdown-toggle" @click="open = !open">
+        <Icon name="carbon:chevron-down" size="1.5rem" />
+      </div>
+      <div class="dropdown">
+        <p>
+          reduced by
+          {{
+            healthLog.debufs
+              .map((source) => {
+                const card = getCardByIndex(source.sourceIndex)
+                return card ? card.name : 'Unknown'
+              })
+              .join(', ')
+          }}
+        </p>
+      </div>
+    </div>
   </li>
 </template>
 
@@ -64,6 +74,42 @@ li.change {
 
 li.change.dud {
   opacity: 0.2;
+}
+
+li .dropdown-wrapper {
+  grid-column: 1 / -1;
+}
+
+li .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--base-20);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+li .dropdown-toggle:hover {
+  background-color: var(--base-30);
+}
+
+li .dropdown-toggle span {
+  transform: rotate(180deg);
+  transition: 0.2s;
+}
+
+li .open .dropdown-toggle span {
+  transform: rotate(0deg);
+}
+
+li .dropdown {
+  padding: 0px;
+  height: 0px;
+  overflow: hidden;
+}
+
+li .open .dropdown {
+  height: auto;
 }
 
 li.change .value {
