@@ -13,7 +13,9 @@ const open = ref(false)
 function getCardByIndex(index: number) {
   return props.playerDeck[index]
 }
-const opponentCardByIndex = props.playerDeck[props.healthLog.index]
+const opponentCardByIndex = computed(() => {
+  return props.opponetDeck[props.healthLog.index]
+})
 </script>
 
 <template>
@@ -30,7 +32,7 @@ const opponentCardByIndex = props.playerDeck[props.healthLog.index]
     <div class="avatar border">
       <img :src="opponentCardByIndex?.image?.default" alt="Card avatar" />
     </div>
-    <p>{{ opponentCardByIndex?.name }}</p>
+    <p>{{ opponentCardByIndex?.name }} {{ healthLog.index }}</p>
 
     <div class="value border">
       <p v-if="healthLog.actualChange !== healthLog.attemptedChange">
