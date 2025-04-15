@@ -85,9 +85,17 @@ export function useShield() {
   const shield = shallowRef(0)
 
   function updateShield() {
-    const lastLog = shieldLog.value[shieldLog.value.length - 1]?.newValue || 0
+    let shieldCounter = 0
+    const updateShieldLog = shieldLog.value.map((entry) => {
+      shieldCounter += entry.actualChange
+      return {
+        ...entry,
+        newValue: shieldCounter,
+      }
+    })
+    const lastLog = updateShieldLog[shieldLog.value.length - 1]?.newValue || 0
     shield.value = lastLog
-    return lastLog
+    shieldLog.value = updateShieldLog
   }
 
   function shieldUp({ change, timestamp, index, banter }: ValueChange) {

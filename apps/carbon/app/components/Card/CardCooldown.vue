@@ -26,8 +26,11 @@ function remapValue(value: number): number {
     return 1.0
   }
 }
+const paused = ref(false)
 
-const cardTimeline = gsap.timeline()
+const cardTimeline = gsap.timeline({
+  paused: paused.value,
+})
 
 cardTimeline.to(cooldown, {
   value: 0,
@@ -38,9 +41,28 @@ cardTimeline.to(cooldown, {
 })
 
 props.timeline.add(cardTimeline, 0)
+
+function pause() {
+  paused.value = true
+  cardTimeline.pause()
+}
+
+function play() {
+  paused.value = false
+  cardTimeline.play()
+}
+
+function toggle() {
+  if (paused.value) {
+    play()
+  } else {
+    pause()
+  }
+}
 </script>
 
 <template>
+  <p class="lool" @click="toggle">{{ paused ? 'Paused' : 'Playing' }}</p>
   <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%`, opacity }"></div>
 </template>
 
@@ -56,5 +78,16 @@ props.timeline.add(cardTimeline, 0)
   border-top: solid 2px var(--base-40);
   border-radius: var(--radius);
   pointer-events: none;
+}
+
+p.lool {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transform: translate(-50%, -50%);
+  color: var(--base-120);
+  z-index: 2;
+  font-size: var(--font-size-2);
+  font-weight: var(--font-weight-2);
 }
 </style>

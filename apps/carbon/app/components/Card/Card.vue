@@ -54,7 +54,6 @@ function animateAction() {
 }
 
 function onBash() {
-  console.log('Cooldown complete')
   triggerCard()
   animateAction()
 }
@@ -62,21 +61,21 @@ function onBash() {
 
 <template>
   <div ref="cardRef">
-    <CardModal :card="card">
-      <button
-        class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
-      >
-        <CardCooldown
-          v-if="card.bash.cooldown"
-          :card="card"
-          :timeline="props.timeline"
-          :delay="props.delay"
-          @bash="onBash"
-        />
-        <img v-if="card.image" :src="card.image.default" alt="Card Image" />
-        <CardStats :card="card" />
-      </button>
-    </CardModal>
+    <!-- <CardModal :card="card">  -->
+    <button
+      class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
+    >
+      <CardCooldown
+        v-if="card.bash.cooldown"
+        :card="card"
+        :timeline="props.timeline"
+        :delay="props.delay"
+        @bash="onBash"
+      />
+      <img v-if="card.image" :src="card.image.default" alt="Card Image" />
+      <CardStats :card="card" />
+    </button>
+    <!-- </CardModal> -->
   </div>
 </template>
 
