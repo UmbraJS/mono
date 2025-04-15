@@ -29,14 +29,25 @@ const shieldPercentage = computed(() => {
       </div>
     </header>
 
-    <div class="character-shield">
-      <MeterLines :value="character.maxHealth" :meter="30" />
-      <p class="digits">{{ shield }}</p>
-      <div class="shield"></div>
-      <div class="open"></div>
-    </div>
+    <ValueBar
+      :character="character"
+      :value="shield"
+      :maxValue="character.maxHealth"
+      barColor="var(--info-90)"
+      delayColor="var(--info-50)"
+      gridArea="shield"
+    >
+      {{ shield }}
+    </ValueBar>
 
-    <ValueBar :character="character" :health="health" :max-health="character.maxHealth">
+    <ValueBar
+      :character="character"
+      :value="health"
+      :maxValue="character.maxHealth"
+      barColor="var(--success-50)"
+      delayColor="var(--warning-50)"
+      gridArea="health"
+    >
       {{ health }} / {{ character.maxHealth }}
     </ValueBar>
   </section>
@@ -91,42 +102,5 @@ const shieldPercentage = computed(() => {
 
 .character-sheet {
   padding: var(--space-2);
-}
-
-.character-shield {
-  position: relative;
-  display: grid;
-  grid-template-columns: calc(v-bind(shieldPercentage) * 1%) 1fr;
-  align-items: center;
-  gap: var(--space-1);
-  background: var(--base);
-  overflow: hidden;
-  width: 100%;
-  height: var(--paragraph);
-  font-weight: 900;
-  grid-area: shield;
-}
-
-.character-shield .digits {
-  position: absolute;
-  padding: 0 var(--space-1);
-  font-variation-settings: var(--font-semibold);
-}
-
-.character-shield .shield {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--info-90);
-  padding: 0px var(--space-quark);
-  border-radius: var(--radius);
-  height: 100%;
-}
-
-.character-shield .open {
-  background-color: var(--base-20);
-  padding: 0px var(--space-quark);
-  border-radius: var(--radius);
-  height: 100%;
 }
 </style>

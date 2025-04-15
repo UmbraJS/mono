@@ -5,20 +5,21 @@ import MeterLines from './MeterLines.vue'
 
 const props = defineProps<{
   character: Character
-  health: number
-  maxHealth: number
+  value: number
+  maxValue: number
+  barColor: string
+  delayColor: string
+  gridArea: 'health' | 'shield'
 }>()
 
-const healthPercentage = computed(() => {
-  return (Math.max(0, props.health) / props.maxHealth) * 100
+const percentage = computed(() => {
+  return (Math.max(0, props.value) / props.maxValue) * 100
 })
 
-const healthPercentageDelayed = ref(healthPercentage.value)
+const percentageDelayed = ref(percentage.value)
 
-watch(healthPercentage, (newValue) => {
-  console.log('healthPercentage', newValue)
-
-  gsap.to(healthPercentageDelayed, {
+watch(percentage, (newValue) => {
+  gsap.to(percentageDelayed, {
     duration: 1,
     value: newValue,
   })
@@ -26,7 +27,14 @@ watch(healthPercentage, (newValue) => {
 </script>
 
 <template>
-  <div class="character-health">
+  <div
+    class="character-health"
+    :style="{
+      '--barColor': props.barColor,
+      '--delayColor': props.delayColor,
+      gridArea: props.gridArea,
+    }"
+  >
     <MeterLines :value="character.maxHealth" :meter="30" />
     <p class="digits"><slot /></p>
     <div class="death bar"></div>
@@ -65,19 +73,19 @@ watch(healthPercentage, (newValue) => {
 }
 
 .character-health .life {
-  background-color: var(--success-50);
-  width: calc(v-bind(healthPercentage) * 1%);
+  background-color: var(--barColor);
+  width: calc(v-bind(percentage) * 1%);
   transition: 0.1s;
 }
 
 .character-health .delayedLife {
-  background-color: var(--warning-50);
-  width: calc(v-bind(healthPercentageDelayed) * 1%);
+  background-color: var(--delayColor);
+  width: calc(v-bind(percentageDelayed) * 1%);
 }
 
 .character-health .death {
   background-color: var(--base-20);
-  width: calc(100% - v-bind(healthPercentageDelayed) * 1% - var(--space-quark));
+  width: calc(100% - v-bind(percentageDelayed) * 1% - var(--space-quark));
   right: 0;
 }
 </style>
