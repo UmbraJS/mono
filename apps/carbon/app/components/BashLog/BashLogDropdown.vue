@@ -52,7 +52,11 @@ const open = ref(false)
 }
 
 .dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-quark);
   padding: 0px;
+  padding-left: var(--space-2);
   height: 0px;
   overflow: hidden;
 }

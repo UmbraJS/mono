@@ -14,6 +14,20 @@ const card = computed(() => {
   if (props.logEntry.type === 'shield') return props.playerDeck[props.logEntry.index]
   if (props.logEntry.type === 'banter') return props.playerDeck[props.logEntry.index]
 })
+
+const valueText = computed(() => {
+  const isFullChange = props.logEntry.actualChange === props.logEntry.attemptedChange
+  const changeText = isFullChange
+    ? props.logEntry.actualChange
+    : `${props.logEntry.actualChange} / ${props.logEntry.attemptedChange}`
+
+  const isNegative = props.logEntry.type === 'attack'
+
+  if (isNegative) {
+    return `-${changeText}`
+  }
+  return changeText
+})
 </script>
 
 <template>
@@ -31,10 +45,7 @@ const card = computed(() => {
     </div>
     <p>{{ card?.name }} {{ logEntry.index }}</p>
     <div class="value border">
-      <p v-if="logEntry.actualChange !== logEntry.attemptedChange">
-        {{ logEntry.actualChange }} / {{ logEntry.attemptedChange }}
-      </p>
-      <p v-else>{{ logEntry.actualChange }}</p>
+      <p>{{ valueText }}</p>
     </div>
   </div>
 </template>
