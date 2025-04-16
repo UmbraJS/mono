@@ -7,12 +7,12 @@ const active = ref(false)
 
 function handleClick() {
   active.value = !active.value
-  emit('click', active)
+  emit('click', active.value)
 }
 </script>
 
 <template>
-  <Button @click="handleClick" size="small" :type="active ? 'warning' : 'success'">
+  <Button size="small" :color="active ? 'warning' : 'success'" @click="handleClick">
     <slot v-if="active" name="active" />
     <slot v-else name="inactive" />
   </Button>

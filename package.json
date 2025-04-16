@@ -17,6 +17,7 @@
     "db:generate": "cd apps/hub && pnpm run drizzle-kit generate"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
     "vite": "6.1.1"
   }
 }

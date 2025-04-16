@@ -1,7 +1,7 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "exclude": ["./**/__tests__/*"],
-  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.vue", "index.ts"],
+  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.vue", "index.ts", "src", "components", "*.vue"],
   "compilerOptions": {
     //...
     "allowJs": true,
