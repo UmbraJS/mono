@@ -43,12 +43,12 @@ const open = ref(false)
 }
 
 .dropdown-toggle span {
-  transform: rotate(180deg);
-  transition: 0.5s;
+  transform: rotate(0deg);
+  transition: 0.2s;
 }
 
 .open .dropdown-toggle span {
-  transform: rotate(0deg);
+  transform: rotate(180deg);
 }
 
 .dropdown {

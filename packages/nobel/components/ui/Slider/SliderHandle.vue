@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue'
 import Button from '../Button/Button.vue'
-import IconHome from '../../Icons/IconHome.vue'
 
 defineProps<{
   variant: 'primary' | 'secondary' | 'base'
@@ -10,7 +10,7 @@ defineProps<{
 
 <template>
   <Button size="mini" :variant="variant" class="handle" :class="side">
-    <IconHome size="mini" />
+    <Icon icon="pixelarticons:home" />
   </Button>
 </template>
 

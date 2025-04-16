@@ -26,6 +26,7 @@ const props = defineProps<{
       :opponet-deck="props.opponetDeck"
       :player-deck="props.playerDeck"
       :log-entry="logEntry"
+      :can-have-strikethrough="true"
     />
 
     <BashLogDropdown
@@ -43,9 +44,5 @@ li.change {
   color: var(--base-120);
   padding: var(--space-1);
   border-radius: var(--radius);
-}
-
-li.change.dud {
-  opacity: 0.7;
 }
 </style>

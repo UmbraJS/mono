@@ -2,31 +2,37 @@
 import type { Card } from '../../../types/card'
 import type { ValueLogCore } from '../../composables/useBash'
 
-const props = defineProps<{
+const {
+  logEntry,
+  opponetDeck,
+  playerDeck,
+  canHaveStrikethrough = false,
+} = defineProps<{
   opponetDeck: Card[]
   playerDeck: Card[]
   logEntry: ValueLogCore
+  canHaveStrikethrough?: boolean
 }>()
 
 const card = computed(() => {
-  if (props.logEntry.type === 'heal') return props.playerDeck[props.logEntry.index]
-  if (props.logEntry.type === 'attack') return props.opponetDeck[props.logEntry.index]
-  if (props.logEntry.type === 'shield') return props.playerDeck[props.logEntry.index]
-  if (props.logEntry.type === 'banter') return props.playerDeck[props.logEntry.index]
+  if (logEntry.type === 'heal') return playerDeck[logEntry.index]
+  if (logEntry.type === 'attack') return opponetDeck[logEntry.index]
+  if (logEntry.type === 'shield') return playerDeck[logEntry.index]
+  if (logEntry.type === 'banter') return playerDeck[logEntry.index]
 })
 
 const valueText = computed(() => {
-  const isFullChange = props.logEntry.actualChange === props.logEntry.attemptedChange
+  const isFullChange = logEntry.actualChange === logEntry.attemptedChange
   const changeText = isFullChange
-    ? props.logEntry.actualChange
-    : `${props.logEntry.actualChange} / ${props.logEntry.attemptedChange}`
+    ? logEntry.actualChange
+    : `(${logEntry.actualChange} / ${logEntry.attemptedChange})`
 
-  const isNegative = props.logEntry.type === 'attack'
+  const isNegative = logEntry.type === 'attack'
 
   if (isNegative) {
     return `-${changeText}`
   }
-  return changeText
+  return `+${changeText}`
 })
 </script>
 
@@ -38,6 +44,7 @@ const valueText = computed(() => {
       'base-warning': logEntry.type === 'attack',
       'base-info': logEntry.type === 'shield',
       'base-yellow': logEntry.type === 'banter',
+      strike: canHaveStrikethrough,
     }"
   >
     <div class="avatar border">
@@ -56,6 +63,10 @@ const valueText = computed(() => {
   grid-template-columns: auto 1fr auto;
   gap: var(--space-1);
   align-items: center;
+}
+
+li.change.dud .EntryContent.strike {
+  text-decoration: line-through;
 }
 
 li.change .value {

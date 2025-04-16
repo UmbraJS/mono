@@ -21,7 +21,7 @@ const allLogsOrderedByTime = computed(() => {
 </script>
 
 <template>
-  <ScrollArea class="ScrollArea border">
+  <ScrollArea class="ScrollArea">
     <ul>
       <li v-for="(log, index) in allLogsOrderedByTime" :key="index">
         <BashLogEntry
@@ -37,8 +37,7 @@ const allLogsOrderedByTime = computed(() => {
 <style>
 .ScrollArea {
   height: 130px;
-  overflow: hidden;
-  padding: var(--space-2);
+  padding-right: var(--space-quark);
 }
 
 ul {

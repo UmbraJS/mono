@@ -1,16 +1,6 @@
 <script setup lang="ts">
-import {
-  Select,
-  Button,
-  ButtonGroup,
-  Toggle,
-  Chip,
-  Radio,
-  Slider,
-  IconHome,
-  IconPaint,
-  ButtonToggle,
-} from '@nobel/core'
+import { Icon } from '@iconify/vue'
+import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle } from '@nobel/core'
 </script>
 
 <template>
@@ -28,19 +18,21 @@ import {
       <Radio> condition </Radio>
     </section>
     <Button variant="primary">
-      <IconHome />
+      <Icon icon="pixelarticons:home" />
       <p>Primary</p>
     </Button>
     <Button variant="secondary">
-      <IconHome />
+      <Icon icon="pixelarticons:home" />
       <p>Secondary</p>
     </Button>
     <Button>
-      <IconHome />
+      <Icon icon="pixelarticons:home" />
+
       <p>Base</p>
     </Button>
     <Button disabled>
-      <IconHome />
+      <Icon icon="pixelarticons:home" />
+
       <p>Disabled</p>
     </Button>
 
@@ -48,50 +40,50 @@ import {
 
     <section class="buttons">
       <Button variant="primary" size="mini">
-        <IconHome size="mini" />
+        <Icon icon="pixelarticons:home" />
       </Button>
       <Button variant="secondary" size="small">
-        <IconHome size="small" />
+        <Icon icon="pixelarticons:home" />
       </Button>
       <Button>
-        <IconHome size="medium" />
+        <Icon icon="pixelarticons:home" />
       </Button>
     </section>
 
     <ButtonGroup>
       <Button size="small">
-        <IconHome />
+        <Icon icon="pixelarticons:home" />
       </Button>
       <Button size="small">
-        <IconHome />
+        <Icon icon="pixelarticons:home" />
       </Button>
       <Button size="small">
-        <IconHome />
+        <Icon icon="pixelarticons:home" />
       </Button>
     </ButtonGroup>
 
     <ButtonGroup>
       <Button size="mini">
-        <IconHome size="mini"></IconHome>
+        <Icon icon="pixelarticons:home" />
       </Button>
       <Button size="mini">
-        <IconHome size="mini"></IconHome>
+        <Icon icon="pixelarticons:home" />
       </Button>
       <Button size="mini">
-        <IconHome size="mini"></IconHome>
+        <Icon icon="pixelarticons:home" />
       </Button>
     </ButtonGroup>
 
     <section>
       <ButtonToggle>
         <template #active>
-          <IconHome />
+          <Icon icon="pixelarticons:home" />
         </template>
         <template #inactive>
-          <IconPaint />
+          <Icon icon="pixelarticons:paint-bucket" />
         </template>
       </ButtonToggle>
-      <Toggle variant="primary" />
+      <Toggle :value="false" />
     </section>
   </div>
 </template>

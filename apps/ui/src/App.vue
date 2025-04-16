@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Button, ButtonGroup, IconHome, IconWidth, IconPaint, IconText, IconUI } from '@nobel/core'
+import { Button, ButtonGroup } from '@nobel/core'
 import TextScreen from './components/TextScreen.vue'
 import { umbra } from '@umbrajs/core'
+import { Icon } from '@iconify/vue'
 import type { Accent } from '@umbrajs/core'
 import '@nobel/core/styles/main.scss'
 
@@ -41,27 +42,27 @@ function toggleTheme() {
     <nav>
       <ButtonGroup>
         <RouterLink to="/" class="button buttonFocus small" activeClass="primary">
-          <IconHome />
+          <Icon icon="pixelarticons:home" />
         </RouterLink>
 
         <RouterLink to="/type" class="button buttonFocus small" activeClass="primary">
-          <IconText />
+          <Icon icon="pixelarticons:card-text" />
         </RouterLink>
 
         <RouterLink to="/sizes" class="button buttonFocus small" activeClass="primary">
-          <IconWidth />
+          <Icon icon="pixelarticons:viewport-wide" />
         </RouterLink>
 
         <RouterLink to="/ui" class="button buttonFocus small" activeClass="primary">
-          <IconUI />
+          <Icon icon="pixelarticons:building" />
         </RouterLink>
 
         <RouterLink to="/color" class="button buttonFocus small" activeClass="primary">
-          <IconPaint />
+          <Icon icon="pixelarticons:paint-bucket" />
         </RouterLink>
 
         <Button variant="primary" size="small" @click="toggleTheme">
-          <IconPaint />
+          <Icon icon="pixelarticons:paint-bucket" />
         </Button>
       </ButtonGroup>
     </nav>

@@ -62,11 +62,11 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
       </Button>
 
       <Button variant="base" size="small" @click="theme.inverse()">
-        <IconText />
+        <Icon name="pixelarticons:card-text" />
       </Button>
 
       <Button :variant="theme.isDark ? 'primary' : 'base'" size="small" @click="theme.inverse()">
-        <IconPaint />
+        <Icon name="pixelarticons:paint-bucket" />
       </Button>
     </ButtonGroup>
   </nav>

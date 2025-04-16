@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { umbra, isDark, getReadability } from '@umbrajs/core'
-import type { Accent, UmbraRange } from '@umbrajs/core'
-import type { Colord } from 'colord'
+import { umbra } from '@umbrajs/core'
+import type { Accent } from '@umbrajs/core'
 
 const warningAccent: Accent = {
   name: 'warning',
