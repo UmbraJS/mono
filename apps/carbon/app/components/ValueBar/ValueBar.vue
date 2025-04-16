@@ -35,7 +35,7 @@ watch(percentage, (newValue) => {
       gridArea: props.gridArea,
     }"
   >
-    <MeterLines :value="character.maxHealth" :meter="30" />
+    <MeterLines :value="props.maxValue" :meter="30" />
     <p class="digits"><slot /></p>
     <div class="death bar"></div>
     <div class="delayedLife bar"></div>

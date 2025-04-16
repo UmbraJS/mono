@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { Card } from '../../../types/card'
-import type { ValueLog } from '../../composables/useBash'
+import type { ValueLogCore } from '../../composables/useBash'
 
 const props = defineProps<{
   opponetDeck: Card[]
   playerDeck: Card[]
-  healthLog: ValueLog
+  logEntry: ValueLogCore
 }>()
 
 const card = computed(() => {
-  if (props.healthLog.type === 'heal') return props.playerDeck[props.healthLog.index]
-  if (props.healthLog.type === 'attack') return props.opponetDeck[props.healthLog.index]
-  if (props.healthLog.type === 'shield') return props.playerDeck[props.healthLog.index]
-  if (props.healthLog.type === 'banter') return props.playerDeck[props.healthLog.index]
+  if (props.logEntry.type === 'heal') return props.playerDeck[props.logEntry.index]
+  if (props.logEntry.type === 'attack') return props.opponetDeck[props.logEntry.index]
+  if (props.logEntry.type === 'shield') return props.playerDeck[props.logEntry.index]
+  if (props.logEntry.type === 'banter') return props.playerDeck[props.logEntry.index]
 })
 </script>
 
@@ -20,21 +20,21 @@ const card = computed(() => {
   <div
     class="EntryContent"
     :class="{
-      'base-success': healthLog.type === 'heal',
-      'base-warning': healthLog.type === 'attack',
-      'base-info': healthLog.type === 'shield',
-      'base-yellow': healthLog.type === 'banter',
+      'base-success': logEntry.type === 'heal',
+      'base-warning': logEntry.type === 'attack',
+      'base-info': logEntry.type === 'shield',
+      'base-yellow': logEntry.type === 'banter',
     }"
   >
     <div class="avatar border">
       <img :src="card?.image?.default" alt="Card avatar" />
     </div>
-    <p>{{ card?.name }} {{ healthLog.index }}</p>
+    <p>{{ card?.name }} {{ logEntry.index }}</p>
     <div class="value border">
-      <p v-if="healthLog.actualChange !== healthLog.attemptedChange">
-        {{ healthLog.actualChange }} / {{ healthLog.attemptedChange }}
+      <p v-if="logEntry.actualChange !== logEntry.attemptedChange">
+        {{ logEntry.actualChange }} / {{ logEntry.attemptedChange }}
       </p>
-      <p v-else>{{ healthLog.actualChange }}</p>
+      <p v-else>{{ logEntry.actualChange }}</p>
     </div>
   </div>
 </template>

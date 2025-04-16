@@ -1,35 +1,21 @@
 import type { Character } from '../../types'
 import { gsap } from 'gsap'
 
-interface ValueChangeSource {
-  amount: number
-  sourceIndex: number
-}
-
-export interface ValueLog {
+export interface ValueLogCore {
   actualChange: number
   attemptedChange: number
-  oldValue: number
-  newValue: number
   timestamp: number
   index: number
   type: 'banter' | 'attack' | 'shield' | 'heal'
-  debufs: ValueChangeSource[]
-  buffs: ValueChangeSource[]
-}
-
-interface ValueChange {
-  change: number
-  timestamp: number
-  index: number
   banter: {
-    debufs: ValueChangeSource[]
-    buffs: ValueChangeSource[]
+    debufs: ValueLogCore[]
+    buffs: ValueLogCore[]
   }
 }
 
-interface ValueChangeAttempt extends ValueChange {
-  attemptedChange: number
+export interface ValueLog extends ValueLogCore {
+  oldValue: number
+  newValue: number
 }
 
 export function useHealth(character: Character) {
@@ -50,31 +36,29 @@ export function useHealth(character: Character) {
     })
   })
 
-  function heal({ change, timestamp, index, banter }: ValueChange) {
+  function heal({ actualChange, timestamp, index, banter }: ValueLogCore) {
     const healthDeficit = maxHealth - health.value
     const valueLog: ValueLog = {
-      actualChange: Math.min(healthDeficit, change),
-      attemptedChange: change,
+      actualChange: Math.min(healthDeficit, actualChange),
+      attemptedChange: actualChange,
       oldValue: health.value,
-      newValue: Math.min(maxHealth, health.value + change),
+      newValue: Math.min(maxHealth, health.value + actualChange),
       type: 'heal',
-      debufs: banter.buffs,
-      buffs: banter.debufs,
+      banter,
       timestamp,
       index,
     }
     healthLog.value.push(valueLog)
   }
 
-  function hurt({ change, attemptedChange, timestamp, index, banter }: ValueChangeAttempt) {
+  function hurt({ actualChange, attemptedChange, timestamp, index, banter }: ValueLogCore) {
     healthLog.value.push({
-      actualChange: Math.max(0, change),
+      actualChange: Math.max(0, actualChange),
       attemptedChange: attemptedChange,
       oldValue: health.value,
-      newValue: health.value - change,
+      newValue: health.value - actualChange,
       type: 'attack',
-      buffs: banter.buffs,
-      debufs: banter.debufs,
+      banter,
       timestamp,
       index,
     })
@@ -101,28 +85,34 @@ export function useShield() {
     shieldLog.value = updateShieldLog
   }
 
-  function shieldUp({ change, timestamp, index, banter }: ValueChange) {
-    if (change < 0) console.error('Shield up called with negative change', change)
+  function shieldUp({ actualChange, timestamp, index, banter }: ValueLogCore) {
+    if (actualChange < 0) console.error('Shield up called with negative change', actualChange)
     const lastLog = shieldLog.value[shieldLog.value.length - 1]?.newValue || 0
 
     shieldLog.value.push({
-      actualChange: change,
-      attemptedChange: change,
+      actualChange: actualChange,
+      attemptedChange: actualChange,
       oldValue: lastLog,
-      newValue: Math.max(0, lastLog + change),
-      debufs: banter.debufs,
+      newValue: Math.max(0, lastLog + actualChange),
       type: 'shield',
-      buffs: banter.buffs,
+      banter,
       timestamp,
       index,
     })
     updateShield()
   }
 
-  function shieldDown({ change, index }: ValueChange) {
+  function shieldDown({
+    actualChange,
+    index,
+    timestamp,
+    type,
+    attemptedChange,
+    banter,
+  }: ValueLogCore) {
     if (shield.value <= 0) return
 
-    let remainingDebuff = change
+    let remainingDebuff = actualChange
 
     shieldLog.value = shieldLog.value.map((entry) => {
       // Skip entries that cannot be debuffed
@@ -140,15 +130,23 @@ export function useShield() {
       // Return the updated entry with the debuff applied
       return {
         ...entry,
-        debufs: [
-          ...entry.debufs,
-          {
-            amount: appliedDebuff,
-            sourceIndex: index,
-          },
-        ],
+        banter: {
+          buffs: entry.banter.buffs,
+          debufs: [
+            ...entry.banter.debufs,
+            {
+              attemptedChange: attemptedChange,
+              actualChange: appliedDebuff,
+              index: index,
+              type: type,
+              timestamp: timestamp,
+              banter,
+            },
+          ],
+        },
         actualChange: entry.actualChange - appliedDebuff,
         newValue: Math.max(0, entry.newValue - Math.max(0, potentialChangeAfterDebuff)),
+        oldValue: entry.oldValue,
       }
     })
 
@@ -162,15 +160,14 @@ export function useMorale() {
   const moraleLog = ref<ValueLog[]>([])
   const morale = computed(() => moraleLog.value.reduce((acc, entry) => acc + entry.actualChange, 0))
 
-  function banter({ change, timestamp, index, banter }: ValueChange) {
+  function banter({ actualChange, timestamp, index, banter }: ValueLogCore) {
     moraleLog.value.push({
-      actualChange: change,
-      attemptedChange: change,
+      actualChange: actualChange,
+      attemptedChange: actualChange,
       oldValue: morale.value,
-      newValue: Math.max(0, morale.value + change),
-      buffs: banter.buffs,
+      newValue: Math.max(0, morale.value + actualChange),
+      banter,
       type: 'banter',
-      debufs: banter.debufs,
       timestamp,
       index,
     })

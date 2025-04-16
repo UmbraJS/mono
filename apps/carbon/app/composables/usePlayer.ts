@@ -17,8 +17,10 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
     const shieldPierce = attack - shields.shield.value
     if (shields.shield.value > 0) {
       shields.shieldDown({
-        change: attack,
+        actualChange: attack,
+        attemptedChange: attack,
         timestamp: timestamp,
+        type: 'attack',
         index: index,
         banter: {
           buffs: [],
@@ -28,9 +30,10 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
     }
     if (shieldPierce > 0) {
       health.hurt({
-        change: Math.max(0, shieldPierce),
+        actualChange: Math.max(0, shieldPierce),
         attemptedChange: attack,
         timestamp: timestamp,
+        type: 'attack',
         index: index,
         banter: {
           buffs: [],
@@ -45,9 +48,11 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
 
     if (bash.banter)
       morale.banter({
-        change: bash.banter,
+        actualChange: bash.banter,
+        attemptedChange: bash.banter,
         timestamp: entry.timestamp,
         index: entry.index,
+        type: 'banter',
         banter: {
           buffs: [],
           debufs: [],
@@ -56,8 +61,10 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
     if (bash.attack) onAttack(bash.attack, entry.index)
     if (bash.shield)
       shields.shieldUp({
-        change: bash.shield,
+        actualChange: bash.shield,
+        attemptedChange: bash.shield,
         timestamp: entry.timestamp,
+        type: 'shield',
         index: entry.index,
         banter: {
           buffs: [],
@@ -66,8 +73,10 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
       })
     if (bash.heal && health.health.value < character.maxHealth)
       health.heal({
-        change: bash.heal,
+        actualChange: bash.heal,
+        attemptedChange: bash.heal,
         timestamp: entry.timestamp,
+        type: 'heal',
         index: entry.index,
         banter: {
           buffs: [],

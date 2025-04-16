@@ -25,7 +25,7 @@ const allLogsOrderedByTime = computed(() => {
     <ul>
       <li v-for="(log, index) in allLogsOrderedByTime" :key="index">
         <BashLogEntry
-          :health-log="log"
+          :log-entry="log"
           :opponet-deck="props.opponetDeck"
           :player-deck="props.playerDeck"
         />

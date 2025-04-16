@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import type { Card } from '../../../types/card'
-import type { ValueLog } from '../../composables/useBash'
+import type { ValueLogCore } from '../../composables/useBash'
 import BashLogEntryContent from './BashLogEntryContent.vue'
 
-const props = defineProps<{
+defineProps<{
   opponetDeck: Card[]
   playerDeck: Card[]
-  healthLog: ValueLog
+  logEntry: ValueLogCore
 }>()
 
 const open = ref(false)
-function getCardByIndex(index: number) {
-  return props.opponetDeck[index]
-}
 </script>
 
 <template>
@@ -21,23 +18,12 @@ function getCardByIndex(index: number) {
       <Icon name="carbon:chevron-down" size="1.5rem" />
     </div>
     <div class="dropdown">
-      <p>
-        reduced by
-        {{
-          healthLog.debufs
-            .map((source) => {
-              const card = getCardByIndex(source.sourceIndex)
-              return card ? card.name : 'Unknown'
-            })
-            .join(', ')
-        }}
-      </p>
-      <!-- <BashLogEntryContent
-        v-for="(source, index) in healthLog.debufs"
+      <BashLogEntryContent
+        v-for="(log, index) in logEntry.banter.debufs"
         :opponet-deck="opponetDeck"
         :player-deck="playerDeck"
-        :health-log="healthLog"
-      /> -->
+        :logEntry="log"
+      />
     </div>
   </div>
 </template>

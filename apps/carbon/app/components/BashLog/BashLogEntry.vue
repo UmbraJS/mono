@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { Card } from '../../../types/card'
-import type { ValueLog } from '../../composables/useBash'
+import type { ValueLogCore } from '../../composables/useBash'
 import BashLogDropdown from './BashLogDropdown.vue'
 import BashLogEntryContent from './BashLogEntryContent.vue'
 
 const props = defineProps<{
   opponetDeck: Card[]
   playerDeck: Card[]
-  healthLog: ValueLog
+  logEntry: ValueLogCore
 }>()
 </script>
 
@@ -15,24 +15,24 @@ const props = defineProps<{
   <li
     class="change"
     :class="{
-      'base-success': healthLog.type === 'heal',
-      'base-warning': healthLog.type === 'attack',
-      'base-info': healthLog.type === 'shield',
-      'base-yellow': healthLog.type === 'banter',
-      dud: healthLog.actualChange === 0,
+      'base-success': logEntry.type === 'heal',
+      'base-warning': logEntry.type === 'attack',
+      'base-info': logEntry.type === 'shield',
+      'base-yellow': logEntry.type === 'banter',
+      dud: logEntry.actualChange === 0,
     }"
   >
     <BashLogEntryContent
       :opponet-deck="props.opponetDeck"
       :player-deck="props.playerDeck"
-      :health-log="healthLog"
+      :log-entry="logEntry"
     />
 
     <BashLogDropdown
-      v-if="healthLog.debufs.length > 0"
+      v-if="logEntry.banter.debufs.length > 0"
       :player-deck="props.playerDeck"
       :opponet-deck="props.opponetDeck"
-      :health-log="healthLog"
+      :log-entry="logEntry"
     />
   </li>
 </template>
@@ -46,6 +46,6 @@ li.change {
 }
 
 li.change.dud {
-  opacity: 0.2;
+  opacity: 0.7;
 }
 </style>

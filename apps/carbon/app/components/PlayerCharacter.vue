@@ -32,7 +32,7 @@ const shieldPercentage = computed(() => {
     <ValueBar
       :character="character"
       :value="shield"
-      :maxValue="character.maxHealth"
+      :maxValue="Math.max(character.maxHealth, shield)"
       barColor="var(--info-90)"
       delayColor="var(--info-50)"
       gridArea="shield"
