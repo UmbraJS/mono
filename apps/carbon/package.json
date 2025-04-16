@@ -1,7 +1,8 @@
 {
   "name": "nuxt-app",
-  "private": true,
   "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.6.5",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -30,6 +31,5 @@
     "typescript": "^5.8.3",
     "vue-tsc": "^2.2.8",
     "wrangler": "^4.11.1"
-  },
-  "packageManager": "pnpm@10.6.5"
+  }
 }

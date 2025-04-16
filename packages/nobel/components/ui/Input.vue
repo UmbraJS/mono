@@ -10,9 +10,6 @@ const { size = 'medium' } = defineProps<{
   label: string
 }>()
 
-//emit @ input event
-// const emit = defineEmits(['input'])
-
 const focused = ref(false)
 </script>
 

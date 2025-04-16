@@ -1,28 +1,21 @@
 {
   "name": "@umbrajs/dye",
-  "private": false,
+  "type": "module",
   "version": "0.0.155",
+  "private": false,
   "description": "Vue color picker using umbra",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umbrajs/dye"
+  },
   "keywords": [
     "vue",
     "color",
     "picker",
     "umbra"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/umbrajs/dye"
-  },
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/dye.umd.cjs",
-  "module": "./dist/dye.js",
-  "types": "./dist/types/index.d.ts",
-  "style": "./dist/style.css",
   "exports": {
     ".": {
       "import": "./dist/dye.js",
@@ -30,6 +23,13 @@
     },
     "./dist/style.css": "./dist/style.css"
   },
+  "main": "./dist/dye.umd.cjs",
+  "module": "./dist/dye.js",
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "style": "./dist/style.css",
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly",

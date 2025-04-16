@@ -1,7 +1,9 @@
 {
   "name": "@nobel/core",
+  "type": "module",
   "version": "1.0.0",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/UmbraJS/core"
@@ -9,14 +11,9 @@
   "bugs": {
     "url": "https://github.com/UmbraJS/core/issues"
   },
-  "license": "MIT",
   "keywords": [
     "ui"
   ],
-  "type": "module",
-  "main": "index.ts",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -25,12 +22,15 @@
     },
     "./*": "./*"
   },
+  "main": "index.ts",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "typings": "types/index.d.ts",
   "files": [
+    "README.md",
     "dist",
     "src",
-    "types",
-    "README.md"
+    "types"
   ],
   "scripts": {
     "dev": "vite",

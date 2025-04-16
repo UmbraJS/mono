@@ -100,7 +100,7 @@ umbra({
   foreground: 'black',
   accents: ['#a94d94']
 })
-  .format((color) => color.toHslString())
+  .format(color => color.toHslString())
   .attach()
 ```
 

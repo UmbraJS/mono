@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle } from '@nobel/core'
+import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs } from '@nobel/core'
 </script>
 
 <template>
@@ -84,6 +84,11 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle } from '
         </template>
       </ButtonToggle>
       <Toggle :value="false" />
+    </section>
+
+    <section>
+
+      <Tabs/>
     </section>
   </div>
 </template>

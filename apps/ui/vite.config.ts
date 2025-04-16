@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
@@ -12,16 +12,16 @@ export default defineConfig({
     lib: {
       entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
       formats: ['es'],
-      name: 'Nobel'
+      name: 'Nobel',
     },
     minify: false,
     rollupOptions: {
       external: ['vue'],
       output: {
         globals: {
-          Vue: 'vue'
-        }
-      }
-    }
-  }
+          Vue: 'vue',
+        },
+      },
+    },
+  },
 })

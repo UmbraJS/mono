@@ -1,8 +1,10 @@
 {
   "name": "@umbrajs/core",
+  "type": "module",
   "version": "0.0.456",
   "description": "Umbra is a theme managment library that allows you to create semantic color themes that are easy to dynamically customize, change retroactively and scale progressively",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/UmbraJS/core"
@@ -10,7 +12,6 @@
   "bugs": {
     "url": "https://github.com/UmbraJS/core/issues"
   },
-  "license": "MIT",
   "keywords": [
     "colors",
     "colours",
@@ -20,18 +21,17 @@
     "customization",
     "APCA"
   ],
-  "type": "module",
-  "main": "./index.umd.cjs",
-  "module": "./index.js",
-  "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "require": "./index.umd.cjs",
-      "import": "./index.js"
+      "import": "./index.js",
+      "require": "./index.umd.cjs"
     },
     "./*": "./*"
   },
+  "main": "./index.umd.cjs",
+  "module": "./index.js",
+  "types": "./types/index.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && copy package.json dist && copy README.md dist",

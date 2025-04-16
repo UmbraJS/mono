@@ -27,6 +27,6 @@ const foo = 'foo'
 const foo = 'foo'
 
 function getBeer() {
-  return 'beer' + foo
+  return `beer${foo}`
 }
 ```

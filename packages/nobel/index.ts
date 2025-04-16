@@ -9,6 +9,7 @@ export { default as ButtonToggle } from './components/ui/Button/Toggle.vue'
 export { default as AddButton } from './components/ui/Button/presets/AddButton.vue'
 export { default as Toggle } from './components/ui/Toggle.vue'
 export { default as Toaster } from './components/ui/Toaster.vue'
+export { default as Tabs } from './components/ui/Tabs.vue'
 export {
   DialogRoot,
   DialogTrigger,
