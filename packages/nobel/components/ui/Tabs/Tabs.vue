@@ -2,7 +2,7 @@
 import { TabButton } from '@nobel/core'
 import { TabsList, TabsRoot, TabsContent } from 'reka-ui'
 import type { ButtonSize } from "../../../types/button"
-import { ref } from 'process';
+import { ref } from 'vue';
 
 const props = defineProps<{
   ariaLabel: string
