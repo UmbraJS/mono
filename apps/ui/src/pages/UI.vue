@@ -88,27 +88,25 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs } 
 
     <section>
 
-      <Tabs ariaLabel="Tabs example" default-value="tab1" size="small" :tabs="[
-        'tab1',
-        'tab2',
-        'tab3',
-        'tab4'
+      <Tabs ariaLabel="Tabs example" :tabs="[
+        {
+          name: 'tab1',
+          icon: 'pixelarticons:home',
+        },
+        {
+          name: 'tab2',
+          icon: 'pixelarticons:home',
+        },
+
       ]">
         <template #tab1>
           <h2>Tab 1</h2>
           <p>Content for Tab 1</p>
         </template>
+
         <template #tab2>
           <h2>Tab 2</h2>
           <p>Content for Tab 2</p>
-        </template>
-        <template #tab3>
-          <h2>Tab 3</h2>
-          <p>Content for Tab 3</p>
-        </template>
-        <template #tab4>
-          <h2>Tab 4</h2>
-          <p>Content for Tab 4</p>
         </template>
       </Tabs>
 
