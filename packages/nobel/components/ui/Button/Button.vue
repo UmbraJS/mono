@@ -1,15 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-
-import ButtonPrimary from './variants/ButtonPrimary.vue'
-import ButtonSecondary from './variants/ButtonSecondary.vue'
-import ButtonBase from './variants/ButtonBase.vue'
-
-const components = {
-  primary: ButtonPrimary,
-  secondary: ButtonSecondary,
-  base: ButtonBase,
-}
+import type { NobleButton } from '../../../types/button'
+import { buttonVariants } from "./variants"
 
 const {
   color = 'default',
@@ -17,15 +9,9 @@ const {
   disabled = false,
   size = 'medium',
   type = 'button',
-} = defineProps<{
-  variant?: keyof typeof components
-  disabled?: boolean
-  size?: 'medium' | 'small' | 'mini'
-  color?: 'warning' | 'success' | 'default'
-  type?: HTMLButtonElement['type']
-}>()
+} = defineProps<NobleButton>()
 
-const ButtonVariant = computed(() => (disabled ? components.base : components[variant]))
+const ButtonVariant = computed(() => (disabled ? buttonVariants.base : buttonVariants[variant]))
 
 const getColorScheme = computed(() => {
   if (color === 'default') return `base-accent`
@@ -34,14 +20,8 @@ const getColorScheme = computed(() => {
 </script>
 
 <template>
-  <component
-    :is="ButtonVariant"
-    tabindex="1"
-    class="button buttonText buttonHover buttonActive buttonFocus focus"
-    :class="`${size} ${getColorScheme}`"
-    :disabled="disabled"
-    :type="type"
-  >
+  <component :is="ButtonVariant" tabindex="1" class="button buttonText buttonHover buttonActive buttonFocus focus"
+    :class="`${size} ${getColorScheme}`" :disabled="disabled" :type="type">
     <slot></slot>
   </component>
 </template>
@@ -75,6 +55,7 @@ const getColorScheme = computed(() => {
   display: grid;
   justify-content: center;
   align-items: center;
+
   /* If it has more than one child */
   &:has(> :nth-child(2)) {
     gap: var(--space-1);
@@ -143,7 +124,8 @@ const getColorScheme = computed(() => {
 
 .buttonFocus:focus,
 .buttonFocus:has(*:focus) {
-  z-index: 3; /* Makes sure the outline goes on top of sibling elements */
+  z-index: 3;
+  /* Makes sure the outline goes on top of sibling elements */
   outline: solid var(--space-quark) var(--focus-color);
 }
 
