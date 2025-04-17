@@ -5,6 +5,7 @@ import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
 import BashLog from '~/components/BashLog/BashLog.vue'
 import { useAudioCue } from '@/composables/useAudioCue'
+import { Tabs } from '@nobel/core'
 
 const time = ref(0)
 
@@ -52,64 +53,43 @@ function triggerFlipSound() {
       <div class="location border">
         <img :src="skeletonKing.field?.image?.default" alt="Location" />
       </div>
-      <PlayerCharacter
-        :character="skeletonKing"
-        :health="opponent.health.value"
-        :healthDelayed="opponent.healthDelayed.value"
-        :morale="opponent.morale.value"
-        :shield="opponent.shield.value"
-        :reverse="false"
-      />
-      <BashLog
-        :player="opponent"
-        :opponent="player"
-        :playerDeck="opponent.deck.value"
-        :opponetDeck="player.deck.value"
-      />
+      <PlayerCharacter :character="skeletonKing" :health="opponent.health.value"
+        :healthDelayed="opponent.healthDelayed.value" :morale="opponent.morale.value" :shield="opponent.shield.value"
+        :reverse="false" />
+
+      <Tabs ariaLabel="Actions" :tabs="[
+        { label: 'Opponent', icon: 'mdi:crosshairs-gps' },
+        { label: 'Player', icon: 'mdi:shield' },
+      ]">
+        <template #tab1>
+          <BashLog :player="opponent" :opponent="player" :playerDeck="opponent.deck.value"
+            :opponetDeck="player.deck.value" />
+        </template>
+        <template #tab2>
+          <BashLog :player="player" :opponent="opponent" :playerDeck="player.deck.value"
+            :opponetDeck="opponent.deck.value" />
+        </template>
+      </Tabs>
+
+
     </section>
     <Board>
-      <PlayerCard
-        v-for="(card, index) in opponent.deck.value"
-        :key="index"
-        :card="card"
-        :index="index"
-        :timeline="timeline"
-        :time="time"
-        :reverse="false"
-        @bash="opponent.bash"
-        @mousedown="triggerFlipSound"
-        @mouseup="triggerFlipSound"
-        :delay="0"
-      />
+      <PlayerCard v-for="(card, index) in opponent.deck.value" :key="index" :card="card" :index="index"
+        :timeline="timeline" :time="time" :reverse="false" @bash="opponent.bash" @mousedown="triggerFlipSound"
+        @mouseup="triggerFlipSound" :delay="0" />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>
-      <PlayerCard
-        v-for="(card, index) in player.deck.value"
-        :key="index"
-        :card="card"
-        :index="index"
-        :timeline="timeline"
-        :time="time"
-        :reverse="true"
-        @bash="player.bash"
-        @mousedown="triggerFlipSound"
-        @mouseup="triggerFlipSound"
-        :delay="3"
-      />
+      <PlayerCard v-for="(card, index) in player.deck.value" :key="index" :card="card" :index="index"
+        :timeline="timeline" :time="time" :reverse="true" @bash="player.bash" @mousedown="triggerFlipSound"
+        @mouseup="triggerFlipSound" :delay="3" />
     </Board>
     <section class="sides">
       <div class="location border">
         <img src="/treasure.jpg" alt="Location" />
       </div>
-      <PlayerCharacter
-        :character="warrior"
-        :health="player.health.value"
-        :healthDelayed="player.healthDelayed.value"
-        :morale="player.morale.value"
-        :shield="player.shield.value"
-        :reverse="true"
-      />
+      <PlayerCharacter :character="warrior" :health="player.health.value" :healthDelayed="player.healthDelayed.value"
+        :morale="player.morale.value" :shield="player.shield.value" :reverse="true" />
       <div class="location border">
         <img src="/treasure.jpg" alt="Location" />
       </div>
@@ -135,7 +115,7 @@ section.sides {
   gap: var(--space-1);
 }
 
-section.sides > * {
+section.sides>* {
   grid-column: span 4;
 }
 

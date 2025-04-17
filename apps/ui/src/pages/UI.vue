@@ -90,22 +90,22 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs } 
 
       <Tabs ariaLabel="Tabs example" :tabs="[
         {
-          name: 'tab1',
+          label: 'Some tab',
           icon: 'pixelarticons:home',
         },
         {
-          name: 'tab2',
+          label: 'Some other tab',
           icon: 'pixelarticons:home',
         },
 
       ]">
-        <template #tab1>
-          <h2>Tab 1</h2>
+        <template #tab1="props">
+          <h2>{{ props.label }}</h2>
           <p>Content for Tab 1</p>
         </template>
 
-        <template #tab2>
-          <h2>Tab 2</h2>
+        <template #tab2="props">
+          <h2>{{ props.label }}</h2>
           <p>Content for Tab 2</p>
         </template>
       </Tabs>

@@ -14,28 +14,29 @@ const {
   defaultValue?: string
   ariaLabel: string
   tabs: {
-    name?: string
+    label?: string
     icon?: string
   }[]
 }>()
 
-const valX = ref(defaultValue ?? tabs[0].name)
+const valX = ref(defaultValue ?? tabID(0))
 function tabID(index: number) {
-  return 'tab' + index
+  return 'tab' + (index + 1)
 }
 </script>
 
 <template>
   <TabsRoot class="TabsRoot" :default-value="defaultValue" orientation="horizontal" v-model="valX">
     <TabsList class="TabsList button-group" :aria-label="ariaLabel">
-      <TabButton v-for="(tab, index) in tabs" :key="tab.name" :value="tabID(index)" :size="size"
-        :active="defaultValue === tabID(index)" :disabled="false">
+      <TabButton v-for="(tab, index) in tabs" :key="tab.label" :value="tabID(index)" :size="size"
+        :active="valX === tabID(index)" :disabled="false">
         <Icon v-if="tab.icon" :icon="tab.icon" />
-        <p v-if="tab.name">{{ tab.name }}</p>
+        <p v-if="tab.label">{{ tab.label }}</p>
       </TabButton>
     </TabsList>
-    <TabsContent v-for="(tab, index) in tabs" :key="tab.name" :value="tabID(index - 1)">
-      <slot :name="tabID(index)" />
+    <TabsContent v-for="(tab, index) in tabs" :key="tab.label" :value="tabID(index)">
+      <slot :name="tabID(index)" :label="tab.label" :icon="tab.icon" :id="tabID(index)"
+        :active="defaultValue === tabID(index)" />
     </TabsContent>
   </TabsRoot>
 </template>
