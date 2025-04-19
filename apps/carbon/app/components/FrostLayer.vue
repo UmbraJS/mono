@@ -12,12 +12,12 @@ const {
   maxHealth: number
 }>()
 
-const strength = ref(30)
+const strength = ref(0)
 const mappedStrength = computed(() => {
-  const maxStrength = 300
+  const maxStrength = 200
   const mapped = (strength.value / 100) * maxStrength
   const value = mapped > maxStrength ? maxStrength : mapped
-  return reversed ? `-${value}px` : `${value}px`
+  return reversed ? `${value}px` : `-${value}px`
 })
 
 const opacity = computed(() => {
@@ -26,18 +26,20 @@ const opacity = computed(() => {
 
 const healthValue = ref(health)
 
-const baseSpeed = 200; // units per second (tweak this to your desired feel)
+const baseSpeed = 20; // units per second (tweak this to your desired feel)
 let currentTween: gsap.core.Timeline | null = null;
 function tweenStrength(newValue: number) {
   const delta = Math.abs(strength.value - newValue);
   const duration = delta / baseSpeed;
+
+  console.log("rex: ", duration);
 
   if (currentTween) currentTween.kill();
   currentTween = gsap.timeline();
   currentTween
     .to(strength, {
       value: newValue,
-      duration: duration / 2,
+      duration: duration / 1.4,
       ease: "power2.out"
     })
     .to(strength, {
@@ -50,8 +52,7 @@ function tweenStrength(newValue: number) {
 watch(() => health, (newValue) => {
   // set strength as the difference between the old health and the newValue as a percentage of the maxHealth
   const diff = Math.abs(healthValue.value - newValue)
-  const maxDiff = Math.abs(maxHealth - healthValue.value)
-  const percentage = (diff / maxDiff) * 100
+  const percentage = (diff / maxHealth) * 100
   tweenStrength(percentage > 100 ? 100 : percentage)
   healthValue.value = newValue
 })
@@ -60,16 +61,60 @@ const amountOfLayers = 6
 const exponential = Array.from({ length: amountOfLayers }, (_, i) => 2 ** i);
 const exponentialLayers = exponential //  reversed ? exponential.reverse() : exponential;
 
+const gradientStops: number[][] = [
+  [0, 25, 37.5, 50],
+  [25, 37.5, 50, 62.5],
+  [37.5, 50, 62.5, 75],
+  [50, 62.5, 75, 87.5],
+  [62.5, 75, 87.5, 100],
+  [75, 87.5, 100]
+]
+
+const rgba = (a: number): string => `rgba(0, 0, 0, ${a})`
+
+// Style generator
+const getLayerStyle = (index: number, entry: number) => {
+  const direction: 'to top' | 'to bottom' = reversed ? 'to bottom' : 'to top'
+  const originalStops = gradientStops[index]
+
+  const stops =
+    direction === 'to bottom'
+      ? originalStops
+      : originalStops?.map((p) => 100 - p).reverse()
+
+  if (!stops) return
+
+  const gradient = ((): string => {
+    if (stops.length === 3) {
+      return `
+        ${rgba(0)} ${stops[0]}%,
+        ${rgba(1)} ${stops[1]}%,
+        ${rgba(1)} ${stops[2]}%`
+    } else {
+      return `
+        ${rgba(0)} ${stops[0]}%,
+        ${rgba(1)} ${stops[1]}%,
+        ${rgba(1)} ${stops[2]}%,
+        ${rgba(0)} ${stops[3]}%`
+    }
+  })()
+
+  return {
+    zIndex: 7 - index,
+    backdropFilter: `blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast))`,
+    WebkitMaskImage: `linear-gradient(${direction},${gradient})`,
+    maskImage: `linear-gradient(${direction},${gradient})`,
+    '--blurSize': `${entry}px`,
+  }
+}
 </script>
 
 <template>
-  <p class="debug">
+  <!-- <p class="debug">
     {{ mappedStrength }} -
-  </p>
+  </p> -->
   <div class="frost-layers" :class="{ reversed }">
-    <div class="layer" v-for="entry in exponentialLayers" :key="entry" :style="{
-      '--blurSize': `${entry}px`,
-    }"></div>
+    <div class="layer" v-for="(entry, i) in exponentialLayers" :key="entry" :style="getLayerStyle(i - 1, entry)"></div>
   </div>
 </template>
 
@@ -108,72 +153,13 @@ const exponentialLayers = exponential //  reversed ? exponential.reverse() : exp
   height: calc(var(--blur-size) * 1px);
   width: 100%;
   pointer-events: none;
-  box-shadow: inset 0px v-bind(mappedStrength) 130px -96px var(--warning-100);
+  box-shadow: inset 0px v-bind(mappedStrength) 130px -96px var(--warning-70);
 
   &>div {
     position: absolute;
     inset: 0;
     transition: var(--slower);
     opacity: v-bind(opacity);
-  }
-
-  &>div:nth-of-type(1) {
-    z-index: 2;
-    backdrop-filter: blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
-    mask: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 25%,
-        rgba(0, 0, 0, 1) 37.5%,
-        rgba(0, 0, 0, 0) 50%);
-  }
-
-  &>div:nth-of-type(2) {
-    z-index: 3;
-    backdrop-filter: blur(2px) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
-    mask: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 25%,
-        rgba(0, 0, 0, 1) 37.5%,
-        rgba(0, 0, 0, 1) 50%,
-        rgba(0, 0, 0, 0) 62.5%);
-  }
-
-  &>div:nth-of-type(3) {
-    z-index: 4;
-    backdrop-filter: blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
-    mask: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 37.5%,
-        rgba(0, 0, 0, 1) 50%,
-        rgba(0, 0, 0, 1) 62.5%,
-        rgba(0, 0, 0, 0) 75%);
-  }
-
-  &>div:nth-of-type(4) {
-    z-index: 5;
-    backdrop-filter: blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
-    mask: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 50%,
-        rgba(0, 0, 0, 1) 62.5%,
-        rgba(0, 0, 0, 1) 75%,
-        rgba(0, 0, 0, 0) 87.5%);
-  }
-
-  &>div:nth-of-type(5) {
-    z-index: 6;
-    backdrop-filter: blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
-    mask: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 62.5%,
-        rgba(0, 0, 0, 1) 75%,
-        rgba(0, 0, 0, 1) 87.5%,
-        rgba(0, 0, 0, 0) 100%);
-  }
-
-  &>div:nth-of-type(6) {
-    z-index: 7;
-    backdrop-filter: blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast));
-    mask: linear-gradient(to bottom,
-        rgba(0, 0, 0, 0) 75%,
-        rgba(0, 0, 0, 1) 87.5%,
-        rgba(0, 0, 0, 1) 100%);
   }
 }
 </style>

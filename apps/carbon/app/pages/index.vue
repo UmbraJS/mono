@@ -66,7 +66,7 @@ function triggerFlipSound() {
     <Board>
       <PlayerCard v-for="(card, index) in player.deck.value" :key="index" :card="card" :index="index"
         :timeline="timeline" :time="time" :reverse="true" @bash="player.bash" @mousedown="triggerFlipSound"
-        @mouseup="triggerFlipSound" :delay="3" />
+        @mouseup="triggerFlipSound" :delay="0" />
     </Board>
     <section class="sides">
       <div class="location border">
