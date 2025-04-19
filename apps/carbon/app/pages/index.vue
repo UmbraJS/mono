@@ -3,9 +3,8 @@ import PlayerCard from '~/components/Card/Card.vue'
 import { warrior, skeletonKing } from '../data/character'
 import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
-import BashLog from '~/components/BashLog/BashLog.vue'
 import { useAudioCue } from '@/composables/useAudioCue'
-import { Tabs } from '@nobel/core'
+import BashLogs from '~/components/BashLog/BashLogs.vue'
 
 const time = ref(0)
 
@@ -56,22 +55,7 @@ function triggerFlipSound() {
       <PlayerCharacter :character="skeletonKing" :health="opponent.health.value"
         :healthDelayed="opponent.healthDelayed.value" :morale="opponent.morale.value" :shield="opponent.shield.value"
         :reverse="false" />
-
-      <Tabs ariaLabel="Actions" :tabs="[
-        { label: 'Opponent', icon: 'mdi:crosshairs-gps' },
-        { label: 'Player', icon: 'mdi:shield' },
-      ]">
-        <template #tab1>
-          <BashLog :player="opponent" :opponent="player" :playerDeck="opponent.deck.value"
-            :opponetDeck="player.deck.value" />
-        </template>
-        <template #tab2>
-          <BashLog :player="player" :opponent="opponent" :playerDeck="player.deck.value"
-            :opponetDeck="opponent.deck.value" />
-        </template>
-      </Tabs>
-
-
+      <BashLogs :player="opponent" :opponent="player" :modal-button="true" />
     </section>
     <Board>
       <PlayerCard v-for="(card, index) in opponent.deck.value" :key="index" :card="card" :index="index"
@@ -100,10 +84,10 @@ function triggerFlipSound() {
 <style>
 .conflict-wrapper {
   display: grid;
+  --side-size: 17vh;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto 1fr auto 1fr auto;
+  grid-template-rows: var(--side-size) 1fr auto 1fr var(--side-size);
   gap: var(--space-1);
-
   height: 100vh;
   padding: var(--space-1);
 }

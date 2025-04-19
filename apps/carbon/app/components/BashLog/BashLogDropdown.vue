@@ -4,7 +4,7 @@ import type { ValueLogCore } from '../../composables/useBash'
 import BashLogEntryContent from './BashLogEntryContent.vue'
 
 defineProps<{
-  opponetDeck: Card[]
+  opponentDeck: Card[]
   playerDeck: Card[]
   logEntry: ValueLogCore
 }>()
@@ -18,12 +18,8 @@ const open = ref(false)
       <Icon name="carbon:chevron-down" size="1.5rem" />
     </div>
     <div class="dropdown">
-      <BashLogEntryContent
-        v-for="(log, index) in logEntry.banter.debufs"
-        :opponet-deck="opponetDeck"
-        :player-deck="playerDeck"
-        :logEntry="log"
-      />
+      <BashLogEntryContent v-for="(log, index) in logEntry.banter.debuffs" :opponentDeck="opponentDeck"
+        :player-deck="playerDeck" :logEntry="log" />
     </div>
   </div>
 </template>
@@ -55,13 +51,15 @@ const open = ref(false)
   display: flex;
   flex-direction: column;
   gap: var(--space-quark);
-  padding: 0px;
-  padding-left: var(--space-2);
+  padding: 0;
   height: 0px;
   overflow: hidden;
+  transition: 0.2s ease-in-out;
 }
 
 .open .dropdown {
+  padding: var(--space-1);
+  padding-left: var(--space-3);
   height: auto;
 }
 </style>

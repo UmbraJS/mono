@@ -24,7 +24,7 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         index: index,
         banter: {
           buffs: [],
-          debufs: [],
+          debuffs: [],
         },
       })
     }
@@ -37,7 +37,7 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         index: index,
         banter: {
           buffs: [],
-          debufs: [],
+          debuffs: [],
         },
       })
     }
@@ -55,7 +55,7 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         type: 'banter',
         banter: {
           buffs: [],
-          debufs: [],
+          debuffs: [],
         },
       })
     if (bash.attack) onAttack(bash.attack, entry.index)
@@ -68,7 +68,7 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         index: entry.index,
         banter: {
           buffs: [],
-          debufs: [],
+          debuffs: [],
         },
       })
     if (bash.heal && health.health.value < character.maxHealth)
@@ -80,7 +80,7 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
         index: entry.index,
         banter: {
           buffs: [],
-          debufs: [],
+          debuffs: [],
         },
       })
   }

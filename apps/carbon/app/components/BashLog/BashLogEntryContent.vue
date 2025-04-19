@@ -4,11 +4,11 @@ import type { ValueLogCore } from '../../composables/useBash'
 
 const {
   logEntry,
-  opponetDeck,
+  opponentDeck,
   playerDeck,
   canHaveStrikethrough = false,
 } = defineProps<{
-  opponetDeck: Card[]
+  opponentDeck: Card[]
   playerDeck: Card[]
   logEntry: ValueLogCore
   canHaveStrikethrough?: boolean
@@ -16,7 +16,7 @@ const {
 
 const card = computed(() => {
   if (logEntry.type === 'heal') return playerDeck[logEntry.index]
-  if (logEntry.type === 'attack') return opponetDeck[logEntry.index]
+  if (logEntry.type === 'attack') return opponentDeck[logEntry.index]
   if (logEntry.type === 'shield') return playerDeck[logEntry.index]
   if (logEntry.type === 'banter') return playerDeck[logEntry.index]
 })
@@ -37,16 +37,13 @@ const valueText = computed(() => {
 </script>
 
 <template>
-  <div
-    class="EntryContent"
-    :class="{
-      'base-success': logEntry.type === 'heal',
-      'base-warning': logEntry.type === 'attack',
-      'base-info': logEntry.type === 'shield',
-      'base-yellow': logEntry.type === 'banter',
-      strike: canHaveStrikethrough,
-    }"
-  >
+  <div class="EntryContent" :class="{
+    'base-success': logEntry.type === 'heal',
+    'base-warning': logEntry.type === 'attack',
+    'base-info': logEntry.type === 'shield',
+    'base-yellow': logEntry.type === 'banter',
+    strike: canHaveStrikethrough,
+  }">
     <div class="avatar border">
       <img :src="card?.image?.default" alt="Card avatar" />
     </div>

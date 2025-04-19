@@ -4,7 +4,7 @@ import {
   ScrollAreaScrollbar,
   ScrollAreaThumb,
   ScrollAreaViewport,
-  ScrollAreaCorner,
+  // ScrollAreaCorner,
 } from 'reka-ui'
 </script>
 
@@ -25,8 +25,8 @@ import {
 
 <style>
 .ScrollAreaRoot {
-  height: 225px;
   overflow: hidden;
+  width: 100%;
   --scrollbar-size: 10px;
 }
 
@@ -45,6 +45,7 @@ import {
   padding: 2px;
   background-color: var(--base-20);
 }
+
 .ScrollAreaScrollbar:hover {
   background-color: var(--base-40);
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { Character } from '~~/types'
-import MeterLines from './ValueBar/MeterLines.vue'
 import ValueBar from './ValueBar/ValueBar.vue'
+import FrostLayer from './FrostLayer.vue'
 
-const props = defineProps<{
+defineProps<{
   reverse: boolean
   character: Character
   health: number
@@ -12,9 +12,6 @@ const props = defineProps<{
   shield: number
 }>()
 
-const shieldPercentage = computed(() => {
-  return (Math.max(0, props.shield) / props.character.maxHealth) * 100
-})
 </script>
 
 <template>
@@ -27,33 +24,37 @@ const shieldPercentage = computed(() => {
         <h2>{{ character.name }}</h2>
         <p>{{ character.description }}</p>
       </div>
+      <div class="healthImpact">
+        <FrostLayer :reversed="reverse" :health="health" :maxHealth="character.maxHealth" />
+      </div>
     </header>
 
-    <ValueBar
-      :character="character"
-      :value="shield"
-      :maxValue="Math.max(character.maxHealth, shield)"
-      barColor="var(--info-90)"
-      delayColor="var(--info-50)"
-      gridArea="shield"
-    >
+    <ValueBar :character="character" :value="shield" :maxValue="Math.max(character.maxHealth, shield)"
+      barColor="var(--info-90)" delayColor="var(--info-50)" gridArea="shield">
       {{ shield }}
     </ValueBar>
 
-    <ValueBar
-      :character="character"
-      :value="health"
-      :maxValue="character.maxHealth"
-      barColor="var(--success-50)"
-      delayColor="var(--warning-50)"
-      gridArea="health"
-    >
+    <ValueBar :character="character" :value="health" :maxValue="character.maxHealth" barColor="var(--success-50)"
+      delayColor="var(--warning-50)" gridArea="health">
       {{ health }} / {{ character.maxHealth }}
     </ValueBar>
   </section>
 </template>
 
 <style>
+.healthImpact {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  z-index: 1;
+  display: grid;
+  overflow: hidden;
+}
+
 .character {
   display: grid;
   gap: var(--space-quark);

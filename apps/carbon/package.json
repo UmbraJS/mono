@@ -13,6 +13,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@iconify/vue": "catalog:",
     "@nobel/core": "workspace:*",
     "@nuxt/eslint": "^1.3.0",
     "@nuxthub/core": "^0.8.24",

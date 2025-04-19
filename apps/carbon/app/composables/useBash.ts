@@ -8,7 +8,7 @@ export interface ValueLogCore {
   index: number
   type: 'banter' | 'attack' | 'shield' | 'heal'
   banter: {
-    debufs: ValueLogCore[]
+    debuffs: ValueLogCore[]
     buffs: ValueLogCore[]
   }
 }
@@ -132,8 +132,8 @@ export function useShield() {
         ...entry,
         banter: {
           buffs: entry.banter.buffs,
-          debufs: [
-            ...entry.banter.debufs,
+          debuffs: [
+            ...entry.banter.debuffs,
             {
               attemptedChange: attemptedChange,
               actualChange: appliedDebuff,

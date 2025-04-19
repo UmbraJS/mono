@@ -197,6 +197,9 @@ importers:
 
   apps/carbon:
     dependencies:
+      '@iconify/vue':
+        specifier: 'catalog:'
+        version: 4.3.0(vue@3.5.13(typescript@5.8.3))
       '@nobel/core':
         specifier: workspace:*
         version: link:../../packages/nobel

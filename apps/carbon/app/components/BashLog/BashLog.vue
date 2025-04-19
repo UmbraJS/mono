@@ -8,7 +8,7 @@ const props = defineProps<{
   player: UsePlayerReturn
   opponent: UsePlayerReturn
   playerDeck: Card[]
-  opponetDeck: Card[]
+  opponentDeck: Card[]
 }>()
 
 const allLogsOrderedByTime = computed(() => {
@@ -23,21 +23,17 @@ const allLogsOrderedByTime = computed(() => {
 <template>
   <ScrollArea class="ScrollArea">
     <ul>
-      <li v-for="(log, index) in allLogsOrderedByTime" :key="index">
-        <BashLogEntry
-          :log-entry="log"
-          :opponet-deck="props.opponetDeck"
-          :player-deck="props.playerDeck"
-        />
-      </li>
+      <BashLogEntry v-for="log in allLogsOrderedByTime" :key="log.timestamp" :log-entry="log"
+        :opponent-deck="props.opponentDeck" :player-deck="props.playerDeck" />
     </ul>
   </ScrollArea>
 </template>
 
 <style>
 .ScrollArea {
-  height: 130px;
   padding-right: var(--space-quark);
+  height: 100%;
+  padding-right: var(--space-2);
 }
 
 ul {
