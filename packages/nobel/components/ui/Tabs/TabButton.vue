@@ -12,7 +12,7 @@ defineProps<{
 
 <template>
   <TabsTrigger class="button buttonText buttonHover buttonActive buttonFocus focus"
-    :class="`${size} ${active ? 'base-accent' : 'base-base'}`" :value="value" :disabled="disabled" :active="active">
+    :class="`${size} ${active ? 'base-accent' : 'base'}`" :value="value" :disabled="disabled" :active="active">
     <slot />
   </TabsTrigger>
 </template>

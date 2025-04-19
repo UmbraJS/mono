@@ -3,7 +3,7 @@ import PlayerCard from '~/components/Card/Card.vue'
 import { warrior, skeletonKing } from '../data/character'
 import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
-import { useAudioCue } from '@/composables/useAudioCue'
+// import { useAudioCue } from '@/composables/useAudioCue'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
 
 const time = ref(0)
@@ -32,14 +32,14 @@ const player = usePlayer({
   },
 })
 
-const audio = useAudioCue()
+// const audio = useAudioCue()
 
 const recentlyClickedFlipSound = ref(false)
 
 function triggerFlipSound() {
   if (recentlyClickedFlipSound.value) return
   recentlyClickedFlipSound.value = true
-  audio?.playCardFlip()
+  // audio?.playCardFlip()
   setTimeout(() => {
     recentlyClickedFlipSound.value = false
   }, 200)
@@ -60,13 +60,13 @@ function triggerFlipSound() {
     <Board>
       <PlayerCard v-for="(card, index) in opponent.deck.value" :key="index" :card="card" :index="index"
         :timeline="timeline" :time="time" :reverse="false" @bash="opponent.bash" @mousedown="triggerFlipSound"
-        @mouseup="triggerFlipSound" :delay="0" />
+        @mouseup="triggerFlipSound" :delay="0" :opponent="player" :player="opponent" />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>
       <PlayerCard v-for="(card, index) in player.deck.value" :key="index" :card="card" :index="index"
         :timeline="timeline" :time="time" :reverse="true" @bash="player.bash" @mousedown="triggerFlipSound"
-        @mouseup="triggerFlipSound" :delay="0" />
+        @mouseup="triggerFlipSound" :delay="0" :opponent="opponent" :player="player" />
     </Board>
     <section class="sides">
       <div class="location border">

@@ -3,9 +3,13 @@ import { DialogRoot, DialogTrigger, DialogModal } from '@nobel/core'
 import type { Card } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
+import type { UsePlayerReturn } from '../../composables/usePlayer'
 
 defineProps<{
   card: Card
+  opponent: UsePlayerReturn
+  player: UsePlayerReturn
+  index: number
 }>()
 </script>
 
@@ -17,7 +21,7 @@ defineProps<{
     <DialogModal variant="accent">
       <div class="DialogWrapper">
         <CardModalAvatar :card="card" />
-        <CardModalMeta :card="card" />
+        <CardModalMeta :card="card" :opponent="opponent" :player="player" :index="index" />
       </div>
     </DialogModal>
   </DialogRoot>

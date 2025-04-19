@@ -19,7 +19,9 @@ const bash = props.card.bash
       <BanterIcon />
       Banter: {{ bash.banter }}
     </div>
-    <div v-if="bash.attack" class="chip base-warning"><AttackIcon />Attack: {{ bash.attack }}</div>
+    <div v-if="bash.attack" class="chip base-warning">
+      <AttackIcon />Attack: {{ bash.attack }}
+    </div>
     <div v-if="bash.shield" class="chip base-info">
       <ShieldIcon />
       Shield: {{ bash.shield }}
@@ -30,5 +32,3 @@ const bash = props.card.bash
     </div>
   </div>
 </template>
-
-<style></style>

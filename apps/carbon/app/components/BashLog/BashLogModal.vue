@@ -16,7 +16,7 @@ defineProps<{
       <slot />
     </DialogTrigger>
     <DialogModal variant="accent">
-      <div class="DialogWrapper">
+      <div class="BashLogsDialogWrapper">
         <DialogTitle>
           Bash Logs
         </DialogTitle>
@@ -30,14 +30,14 @@ defineProps<{
 </template>
 
 <style>
-.DialogWrapper {
+.BashLogsDialogWrapper {
   display: flex;
   flex-direction: column;
   padding: var(--space-4);
   height: 70vh;
 }
 
-.DialogWrapper .BashLogTabs {
+.BashLogsDialogWrapper .BashLogTabs {
   height: 50vh;
 }
 </style>

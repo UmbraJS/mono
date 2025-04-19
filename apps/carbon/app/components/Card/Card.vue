@@ -5,6 +5,7 @@ import { gsap } from 'gsap/gsap-core'
 import CardModal from './CardModal.vue'
 import CardCooldown from './CardCooldown.vue'
 import CardStats from './CardStats.vue'
+import type { UsePlayerReturn } from '../../composables/usePlayer'
 
 const props = defineProps<{
   card: Card
@@ -13,6 +14,8 @@ const props = defineProps<{
   time: number
   reverse: boolean
   delay: number
+  opponent: UsePlayerReturn
+  player: UsePlayerReturn
 }>()
 
 const emit = defineEmits<{
@@ -61,17 +64,10 @@ function onBash() {
 
 <template>
   <div ref="cardRef">
-    <CardModal :card="card">
-      <button
-        class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
-      >
-        <CardCooldown
-          v-if="card.bash.cooldown"
-          :card="card"
-          :timeline="props.timeline"
-          :delay="props.delay"
-          @bash="onBash"
-        />
+    <CardModal :card="card" :opponent="opponent" :player="player" :index="index">
+      <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
+        <CardCooldown v-if="card.bash.cooldown" :card="card" :timeline="props.timeline" :delay="props.delay"
+          @bash="onBash" />
         <img v-if="card.image" :src="card.image.default" alt="Card Image" />
         <CardStats :card="card" />
       </button>

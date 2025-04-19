@@ -1,4 +1,4 @@
-import type { CardAction, Character } from '../../types'
+import type { CardAction, Character, Card } from '../../types'
 import { useHealth, useShield, useMorale } from './useBash'
 
 interface UsePlayerProps {
