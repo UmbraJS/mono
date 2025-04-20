@@ -4,64 +4,15 @@ import type { Card } from '../../../types'
 import CardModalDetails from './CardModalDetails.vue'
 import { Icon } from '@iconify/vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
-import type { ValueLogCore } from '../../composables/useBash'
+import type { BashRecords } from '~/composables/useBashRecords'
 
-const props = defineProps<{
+defineProps<{
   card: Card
   opponent: UsePlayerReturn
   player: UsePlayerReturn
   index: number
+  bashRecords: BashRecords
 }>()
-
-const attackRecord = computed(() => {
-  const healthAttackLogs = props.opponent.healthLog.value.filter((entry) => {
-    if (entry.type !== 'attack') return
-    return entry.index === props.index
-  })
-
-  let shieldAttackLogs: ValueLogCore[] = []
-  props.opponent.shieldLog.value.forEach((entry) => {
-    const shieldDebuffs = entry.banter.debuffs
-    if (!shieldDebuffs.length) return
-    shieldAttackLogs = [
-      ...shieldAttackLogs,
-      ...shieldDebuffs
-    ]
-  })
-
-  const filteredShieldAttackLogs = shieldAttackLogs.filter((entry) => {
-    if (entry.type !== 'attack') return
-    return entry.index === props.index
-  })
-
-  const accumulatedHealtAttack = healthAttackLogs.reduce((acc, entry) => {
-    return acc + entry.actualChange
-  }, 0)
-
-  const accumulatedShieldAttack = filteredShieldAttackLogs.reduce((acc, entry) => {
-    return acc + entry.actualChange
-  }, 0)
-
-  return {
-    health: accumulatedHealtAttack,
-    shield: accumulatedShieldAttack,
-    total: accumulatedHealtAttack + accumulatedShieldAttack
-  }
-})
-
-const healingRecord = computed(() => {
-  return props.player.healthLog.value.filter((entry) => {
-    if (entry.type !== 'heal') return
-    return entry.index === props.index
-  }).reduce((acc, entry) => {
-    return acc + entry.actualChange
-  }, 0)
-})
-
-const totalValue = computed(() => {
-  return healingRecord.value + attackRecord.value.total
-})
-
 </script>
 
 <template>
@@ -83,21 +34,22 @@ const totalValue = computed(() => {
             <Icon icon="mdi:account-injury-outline" />
             Bash: {{ card.stats.banter }}
           </div>
-          <div class="chip base-warning" v-if="attackRecord.total">
+          <div class="chip base-warning" v-if="bashRecords.attackRecord.value.total">
             <Icon icon="mdi:account-injury-outline" />
-            Attack: {{ attackRecord.total }} ({{ attackRecord.health }} + {{ attackRecord.shield }})
+            Attack: {{ bashRecords.attackRecord.value.total }} ({{ bashRecords.attackRecord.value.health }} + {{
+              bashRecords.attackRecord.value.shield }})
           </div>
-          <div class="chip base-info" v-if="healingRecord">
+          <div class="chip base-info" v-if="bashRecords.shieldRecord.value">
             <Icon icon="mdi:account-injury-outline" />
-            Shield: {{ healingRecord }}
+            Shield: {{ bashRecords.shieldRecord.value }}
           </div>
-          <div class="chip base-success" v-if="healingRecord">
+          <div class="chip base-success" v-if="bashRecords.healingRecord.value">
             <Icon icon="mdi:account-injury-outline" />
-            Heal: {{ healingRecord }}
+            Heal: {{ bashRecords.healingRecord.value }}
           </div>
-          <div class="chip" v-if="totalValue">
+          <div class="chip" v-if="bashRecords.totalValue.value">
             <Icon icon="mdi:account-injury-outline" />
-            Total Value: {{ totalValue }}
+            Total Value: {{ bashRecords.totalValue.value }}
           </div>
         </div>
       </template>

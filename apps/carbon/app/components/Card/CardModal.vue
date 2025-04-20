@@ -4,12 +4,17 @@ import type { Card } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
+import type { BashRecords } from '~/composables/useBashRecords'
+import { gsap } from 'gsap/gsap-core'
 
 defineProps<{
   card: Card
   opponent: UsePlayerReturn
   player: UsePlayerReturn
   index: number
+  bashRecords: BashRecords
+  timeline: gsap.core.Timeline
+  delay: number
 }>()
 </script>
 
@@ -20,8 +25,8 @@ defineProps<{
     </DialogTrigger>
     <DialogModal variant="accent">
       <div class="DialogWrapper">
-        <CardModalAvatar :card="card" />
-        <CardModalMeta :card="card" :opponent="opponent" :player="player" :index="index" />
+        <CardModalAvatar :card="card" :timeline="timeline" :delay="delay" />
+        <CardModalMeta :card="card" :opponent="opponent" :player="player" :index="index" :bashRecords="bashRecords" />
       </div>
     </DialogModal>
   </DialogRoot>

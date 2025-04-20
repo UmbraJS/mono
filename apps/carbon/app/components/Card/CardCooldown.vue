@@ -17,10 +17,10 @@ const opacity = computed(() => remapValue(cooldown.value))
 
 function remapValue(value: number): number {
   const start = 98
-  const fadein = start - 15
+  const fadeIn = start - 15
   if (value >= start) {
     return 0.0
-  } else if (value >= fadein) {
+  } else if (value >= fadeIn) {
     return (start - value) / 10
   } else {
     return 1.0
@@ -42,27 +42,26 @@ cardTimeline.to(cooldown, {
 
 props.timeline.add(cardTimeline, 0)
 
-function pause() {
-  paused.value = true
-  cardTimeline.pause()
-}
+// function pause() {
+//   paused.value = true
+//   cardTimeline.pause()
+// }
 
-function play() {
-  paused.value = false
-  cardTimeline.play()
-}
+// function play() {
+//   paused.value = false
+//   cardTimeline.play()
+// }
 
-function toggle() {
-  if (paused.value) {
-    play()
-  } else {
-    pause()
-  }
-}
+// function toggle() {
+//   if (paused.value) {
+//     play()
+//   } else {
+//     pause()
+//   }
+// }
 </script>
 
 <template>
-  <p class="lool" @click="toggle">{{ paused ? 'Paused' : 'Playing' }}</p>
   <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%`, opacity }"></div>
 </template>
 
@@ -78,16 +77,5 @@ function toggle() {
   border-top: solid 2px var(--base-40);
   border-radius: var(--radius);
   pointer-events: none;
-}
-
-p.lool {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  transform: translate(-50%, -50%);
-  color: var(--base-120);
-  z-index: 2;
-  font-size: var(--font-size-2);
-  font-weight: var(--font-weight-2);
 }
 </style>

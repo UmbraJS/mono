@@ -14,7 +14,6 @@ const bash = props.card.bash
 
 <template>
   <div class="bash">
-    <h4>B.A.S.H -----------------------</h4>
     <div v-if="bash.banter" class="chip base-yellow">
       <BanterIcon />
       Banter: {{ bash.banter }}

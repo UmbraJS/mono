@@ -1,5 +1,6 @@
 import type { CardAction, Character, Card } from '../../types'
 import { useHealth, useShield, useMorale } from './useBash'
+import { useBashRecords } from './useBashRecords'
 
 interface UsePlayerProps {
   character: Character
