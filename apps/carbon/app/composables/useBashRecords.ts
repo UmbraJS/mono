@@ -37,13 +37,6 @@ const attackRecord = computed(() => {
     return acc + entry.actualChange
   }, 0)
 
-  // const sortedAttackLogs = [
-  //   ...filteredHealthAttackLogs,
-  //   ...filteredShieldAttackLogs
-  // ].sort((a, b) => {
-  //   return a.timestamp - b.timestamp
-  // })
-
   return {
     health: accumulatedHealtAttack,
     shield: accumulatedShieldAttack,

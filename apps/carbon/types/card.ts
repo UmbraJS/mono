@@ -141,8 +141,18 @@ export interface CardBash {
   cooldown?: number // in milliseconds
 }
 
+type CardEffect = (value: number) => number
+
+interface CardEffects {
+  banter: CardEffect[]
+  attack: CardEffect[]
+  shield: CardEffect[]
+  heal: CardEffect[]
+}
+
 export interface CardAction {
   bash: CardBash
+  effects: CardEffects
   index: number
   timestamp: number
   card: Card

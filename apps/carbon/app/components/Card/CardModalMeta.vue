@@ -5,7 +5,7 @@ import CardModalDetails from './CardModalDetails.vue'
 import { Icon } from '@iconify/vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
 import type { BashRecords } from '~/composables/useBashRecords'
-import { DialogDescription, ScrollArea } from '@nobel/core'
+import { ScrollArea } from '@nobel/core'
 
 type DataRecord = {
   x: number
@@ -95,6 +95,7 @@ const recordedData = computed(() => {
 
 .datavis {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }

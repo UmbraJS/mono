@@ -431,10 +431,9 @@ export const cards: Card[] = [
   {
     id: 'halberdier',
     name: 'Halberdier',
-    bash: { attack: 10, shield: 5, cooldown: 5 },
+    bash: { attack: 10, shield: 10, cooldown: 5 },
     level: 1,
     unique: false,
-
     maxLevel: 5,
     description: 'A basic halberdier',
     rarity: 1,
@@ -487,11 +486,10 @@ export const cards: Card[] = [
     name: 'Skeleton Healer',
     bash: {
       heal: 10,
-      cooldown: 5,
+      cooldown: 3,
     },
     level: 1,
     unique: false,
-
     maxLevel: 5,
     description: 'A basic skeleton healer',
     rarity: 1,
@@ -507,12 +505,12 @@ export const cards: Card[] = [
     id: 'Skeleton Horseman',
     name: 'Skeleton Horseman',
     bash: {
-      attack: 10,
-      cooldown: 4,
+      attack: 7,
+      shield: 5,
+      cooldown: 3.5,
     },
     level: 1,
     unique: false,
-
     maxLevel: 5,
     description: 'A basic skeleton horseman',
     rarity: 1,
@@ -558,7 +556,7 @@ export const cards: Card[] = [
       poison: 5,
       terror: 5,
       shield: 10,
-      cooldown: 10,
+      cooldown: 3,
     },
     level: 1,
     unique: true,

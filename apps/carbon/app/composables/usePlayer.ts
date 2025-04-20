@@ -1,6 +1,5 @@
-import type { CardAction, Character, Card } from '../../types'
+import type { CardAction, Character } from '../../types'
 import { useHealth, useShield, useMorale } from './useBash'
-import { useBashRecords } from './useBashRecords'
 
 interface UsePlayerProps {
   character: Character
@@ -14,76 +13,98 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
 
   const deck = ref(character.deck)
 
-  function attack(attack: number, timestamp: number, index: number) {
-    const shieldPierce = attack - shields.shield.value
-    if (shields.shield.value > 0) {
-      shields.shieldDown({
-        actualChange: attack,
-        attemptedChange: attack,
-        timestamp: timestamp,
-        type: 'attack',
-        index: index,
-        banter: {
-          buffs: [],
-          debuffs: [],
-        },
-      })
-    }
-    if (shieldPierce > 0) {
-      health.hurt({
-        actualChange: Math.max(0, shieldPierce),
-        attemptedChange: attack,
-        timestamp: timestamp,
-        type: 'attack',
-        index: index,
-        banter: {
-          buffs: [],
-          debuffs: [],
-        },
-      })
+function handleShieldDown(shields: any, attack: number, timestamp: number, index: number) {
+  if (shields.shield.value > 0) {
+    shields.shieldDown({
+      actualChange: attack,
+      attemptedChange: attack,
+      timestamp: timestamp,
+      type: 'attack',
+      index: index,
+      banter: createBanterObject(),
+    })
+  }
+}
+
+function handleHealthDamage(health: any, shieldPierce: number, attack: number, timestamp: number, index: number) {
+  if (shieldPierce > 0) {
+    health.hurt({
+      actualChange: Math.max(0, shieldPierce),
+      attemptedChange: attack,
+      timestamp: timestamp,
+      type: 'attack',
+      index: index,
+      banter: createBanterObject(),
+    })
+  }
+}
+
+function hurt(attack: number, timestamp: number, index: number) {
+  const shieldPierce = attack - shields.shield.value
+
+  handleShieldDown(shields, attack, timestamp, index)
+  handleHealthDamage(health, shieldPierce, attack, timestamp, index)
+}
+  function createBanterObject() {
+    return {
+      buffs: [],
+      debuffs: [],
     }
   }
 
-  function bash(entry: CardAction) {
+  function handleMoraleChange(entry: CardAction) {
     const bash = entry.bash
-
-    if (bash.banter)
+    if (bash.banter) {
       morale.banter({
         actualChange: bash.banter,
         attemptedChange: bash.banter,
         timestamp: entry.timestamp,
         index: entry.index,
         type: 'banter',
-        banter: {
-          buffs: [],
-          debuffs: [],
-        },
+        banter: createBanterObject(),
       })
-    if (bash.attack) onAttack(bash.attack, entry.index)
-    if (bash.shield)
+    }
+  }
+
+  function handleAttack(entry: CardAction) {
+    const bash = entry.bash
+    if (!bash.attack) return
+    onAttack(bash.attack, entry.index)
+  }
+
+  function handleShieldChange(entry: CardAction) {
+    const bash = entry.bash
+    if (bash.shield) {
       shields.shieldUp({
         actualChange: bash.shield,
         attemptedChange: bash.shield,
         timestamp: entry.timestamp,
         type: 'shield',
         index: entry.index,
-        banter: {
-          buffs: [],
-          debuffs: [],
-        },
+        banter: createBanterObject(),
       })
-    if (bash.heal && health.health.value < character.maxHealth)
+    }
+  }
+
+  function handleHealing(entry: CardAction) {
+    const bash = entry.bash
+    if (bash.heal && health.health.value < character.maxHealth) {
       health.heal({
         actualChange: bash.heal,
         attemptedChange: bash.heal,
         timestamp: entry.timestamp,
         type: 'heal',
         index: entry.index,
-        banter: {
-          buffs: [],
-          debuffs: [],
-        },
+        banter: createBanterObject(),
       })
+    }
+  }
+
+  function bash(entry: CardAction) {
+    handleMoraleChange(entry)
+    handleAttack(entry)
+    handleShieldChange(entry)
+    handleHealing(entry)
   }
 
   return {
@@ -91,7 +112,7 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
     ...shields,
     ...morale,
     ...health,
-    hurt: attack,
+    hurt,
     bash,
   }
 }
