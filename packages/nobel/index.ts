@@ -24,5 +24,6 @@ export { default as TabButton } from './components/ui/Tabs/TabButton.vue'
 export { default as Tabs } from './components/ui/Tabs/Tabs.vue'
 export { default as Toaster } from './components/ui/Toaster.vue'
 export { default as Toggle } from './components/ui/Toggle.vue'
+export { default as Graph } from './components/graph/Graph.vue'
 
 export { presetNobel, toast }

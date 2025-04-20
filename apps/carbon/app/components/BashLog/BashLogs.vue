@@ -35,3 +35,9 @@ defineProps<{
     </template>
   </Tabs>
 </template>
+
+<style>
+.BashLogTabs {
+  height: var(--side-size)
+}
+</style>

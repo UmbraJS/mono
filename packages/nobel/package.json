@@ -48,6 +48,8 @@
     "@umbrajs/core": "workspace:*",
     "@unocss/core": "catalog:",
     "@unocss/transformer-variant-group": "catalog:",
+    "@unovis/ts": "^1.5.1",
+    "@unovis/vue": "^1.5.1",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
     "colord": "catalog:",

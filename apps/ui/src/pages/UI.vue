@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs } from '@nobel/core'
+import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs, Graph } from '@nobel/core'
 </script>
 
 <template>
@@ -111,6 +111,24 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs } 
       </Tabs>
 
     </section>
+
+    <section class="graph">
+      <h2>Graph</h2>
+      <Graph :data="[
+        { x: 1, y: 2, y1: 3, y2: 4 },
+        { x: 20, y: 3, y1: 4, y2: 5 },
+        { x: 30, y: 4, y1: 5, y2: 6 },
+        { x: 40, y: 5, y1: 6, y2: 7 },
+        { x: 50, y: 6, y1: 7, y2: 8 },
+        { x: 60, y: 7, y1: 8, y2: 9 },
+        { x: 70, y: 8, y1: 9, y2: 10 },
+        { x: 80, y: 9, y1: 10, y2: 11 },
+        { x: 90, y: 10, y1: 11, y2: 12 },
+        { x: 100, y: 11, y1: 12, y2: 13 },
+        { x: 110, y: 12, y1: 13, y2: 14 },
+      ]" />
+
+    </section>
   </div>
 </template>
 
@@ -130,6 +148,13 @@ section {
   padding: 0 var(--space-quark);
   border-radius: var(--radius);
   background-color: var(--base-10);
+}
+
+section.graph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-quark);
+  padding: var(--space-4);
 }
 
 section#chips {
