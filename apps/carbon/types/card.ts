@@ -131,28 +131,27 @@ export interface CardBash {
   attack?: number
   shield?: number
   heal?: number
-  burn?: number
-  poison?: number
   banter?: number
-  terror?: number
   critChance?: number
   critDamage?: number
   actionCount?: number
   cooldown?: number // in milliseconds
+  effects?: CardEffect[]
 }
 
-type CardEffect = (value: number) => number
+interface CardEffectMeta {
+  trigger: "action"
+  type: "banter" | "attack" | "shield" | "heal"
+  triggerCards: number[]
+  source: number
+}
 
-interface CardEffects {
-  banter: CardEffect[]
-  attack: CardEffect[]
-  shield: CardEffect[]
-  heal: CardEffect[]
+interface CardEffect extends CardEffectMeta {
+  effect: (value: number, meta: CardEffectMeta) => number
 }
 
 export interface CardAction {
   bash: CardBash
-  effects: CardEffects
   index: number
   timestamp: number
   card: Card

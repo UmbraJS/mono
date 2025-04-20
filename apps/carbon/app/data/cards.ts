@@ -25,7 +25,6 @@ export const fields: Card[] = [
     bash: { cooldown: 5 },
     level: 1,
     unique: false,
-
     maxLevel: 5,
     description: 'A basic alien halls',
     rarity: 1,
@@ -80,9 +79,18 @@ export const cards: Card[] = [
     name: 'Fireball',
     bash: {
       attack: 10,
-      burn: 5,
-      actionCount: 1,
       cooldown: 5,
+      effects: [
+        {
+          trigger: 'action',
+          type: 'attack',
+          triggerCards: [0],
+          source: 0,
+          effect: (value, meta) => {
+            return value + 5
+          },
+        },
+      ]
     },
     level: 1,
     unique: false,
@@ -102,7 +110,6 @@ export const cards: Card[] = [
     name: 'Water Splash',
     bash: {
       attack: 5,
-      actionCount: 1,
       cooldown: 5,
     },
     level: 1,
@@ -124,7 +131,6 @@ export const cards: Card[] = [
     name: 'Earth Quake',
     bash: {
       attack: 15,
-      actionCount: 1,
       cooldown: 5,
     },
     level: 1,
@@ -144,10 +150,9 @@ export const cards: Card[] = [
   {
     id: 'air-slice',
     name: 'Air Slice',
-    bash: { attack: 8, shield: 0, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { attack: 8, cooldown: 5 },
     level: 1,
     unique: false,
-
     maxLevel: 5,
     description: 'A basic air spell',
     rarity: 1,
@@ -162,7 +167,7 @@ export const cards: Card[] = [
   {
     id: 'light-blast',
     name: 'Light Blast',
-    bash: { attack: 12, shield: 0, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { attack: 12, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -180,7 +185,7 @@ export const cards: Card[] = [
   {
     id: 'darkness-shroud',
     name: 'Darkness Shroud',
-    bash: { attack: 0, shield: 5, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { shield: 5, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -198,7 +203,7 @@ export const cards: Card[] = [
   {
     id: 'sword',
     name: 'Sword',
-    bash: { attack: 15, shield: 0, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { attack: 15, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -216,7 +221,7 @@ export const cards: Card[] = [
   {
     id: 'wooden-shield',
     name: 'Wooden Shield',
-    bash: { attack: 0, shield: 10, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { shield: 10, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -234,7 +239,7 @@ export const cards: Card[] = [
   {
     id: 'stone-armor',
     name: 'Stone Armor',
-    bash: { attack: 0, shield: 15, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { shield: 15, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -252,7 +257,7 @@ export const cards: Card[] = [
   {
     id: 'ice-shard',
     name: 'Ice Shard',
-    bash: { attack: 7, shield: 0, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { attack: 7, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -270,7 +275,7 @@ export const cards: Card[] = [
   {
     id: 'electric-bolt',
     name: 'Electric Bolt',
-    bash: { attack: 9, shield: 0, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { attack: 9, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -288,7 +293,7 @@ export const cards: Card[] = [
   {
     id: 'psychic-wave',
     name: 'Psychic Wave',
-    bash: { attack: 6, shield: 0, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { attack: 6, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -306,7 +311,7 @@ export const cards: Card[] = [
   {
     id: 'arrow',
     name: 'Arrow',
-    bash: { attack: 8, shield: 0, heal: 0, burn: 0, poison: 0, cooldown: 5 },
+    bash: { attack: 8, cooldown: 5 },
     level: 1,
     unique: false,
 
@@ -551,12 +556,20 @@ export const cards: Card[] = [
     bash: {
       attack: 5,
       banter: 5,
-      burn: 5,
       heal: 5,
-      poison: 5,
-      terror: 5,
       shield: 10,
       cooldown: 3,
+      effects: [
+        {
+          trigger: 'action',
+          type: 'attack',
+          triggerCards: [0],
+          source: 0,
+          effect: (value, meta) => {
+            return value + 5
+          },
+        },
+      ]
     },
     level: 1,
     unique: true,

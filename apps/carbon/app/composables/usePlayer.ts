@@ -13,38 +13,49 @@ export function usePlayer({ character, onAttack }: UsePlayerProps) {
 
   const deck = ref(character.deck)
 
-function handleShieldDown(shields: any, attack: number, timestamp: number, index: number) {
-  if (shields.shield.value > 0) {
-    shields.shieldDown({
-      actualChange: attack,
-      attemptedChange: attack,
-      timestamp: timestamp,
-      type: 'attack',
-      index: index,
-      banter: createBanterObject(),
-    })
+  const deckEffects = computed(() => {
+    const effects = deck.value
+      .map((card) => card)
+
+    return effects
+  })
+
+
+  console.log("rex: deckEffects", deckEffects.value);
+
+
+  function handleShieldDown(shields: any, attack: number, timestamp: number, index: number) {
+    if (shields.shield.value > 0) {
+      shields.shieldDown({
+        actualChange: attack,
+        attemptedChange: attack,
+        timestamp: timestamp,
+        type: 'attack',
+        index: index,
+        banter: createBanterObject(),
+      })
+    }
   }
-}
 
-function handleHealthDamage(health: any, shieldPierce: number, attack: number, timestamp: number, index: number) {
-  if (shieldPierce > 0) {
-    health.hurt({
-      actualChange: Math.max(0, shieldPierce),
-      attemptedChange: attack,
-      timestamp: timestamp,
-      type: 'attack',
-      index: index,
-      banter: createBanterObject(),
-    })
+  function handleHealthDamage(health: any, shieldPierce: number, attack: number, timestamp: number, index: number) {
+    if (shieldPierce > 0) {
+      health.hurt({
+        actualChange: Math.max(0, shieldPierce),
+        attemptedChange: attack,
+        timestamp: timestamp,
+        type: 'attack',
+        index: index,
+        banter: createBanterObject(),
+      })
+    }
   }
-}
 
-function hurt(attack: number, timestamp: number, index: number) {
-  const shieldPierce = attack - shields.shield.value
+  function hurt(attack: number, timestamp: number, index: number) {
+    const shieldPierce = attack - shields.shield.value
+    handleShieldDown(shields, attack, timestamp, index)
+    handleHealthDamage(health, shieldPierce, attack, timestamp, index)
+  }
 
-  handleShieldDown(shields, attack, timestamp, index)
-  handleHealthDamage(health, shieldPierce, attack, timestamp, index)
-}
   function createBanterObject() {
     return {
       buffs: [],
@@ -54,16 +65,15 @@ function hurt(attack: number, timestamp: number, index: number) {
 
   function handleMoraleChange(entry: CardAction) {
     const bash = entry.bash
-    if (bash.banter) {
-      morale.banter({
-        actualChange: bash.banter,
-        attemptedChange: bash.banter,
-        timestamp: entry.timestamp,
-        index: entry.index,
-        type: 'banter',
-        banter: createBanterObject(),
-      })
-    }
+    if (!bash.banter) return
+    morale.banter({
+      actualChange: bash.banter,
+      attemptedChange: bash.banter,
+      timestamp: entry.timestamp,
+      index: entry.index,
+      type: 'banter',
+      banter: createBanterObject(),
+    })
   }
 
   function handleAttack(entry: CardAction) {
@@ -74,16 +84,15 @@ function hurt(attack: number, timestamp: number, index: number) {
 
   function handleShieldChange(entry: CardAction) {
     const bash = entry.bash
-    if (bash.shield) {
-      shields.shieldUp({
-        actualChange: bash.shield,
-        attemptedChange: bash.shield,
-        timestamp: entry.timestamp,
-        type: 'shield',
-        index: entry.index,
-        banter: createBanterObject(),
-      })
-    }
+    if (!bash.shield) return
+    shields.shieldUp({
+      actualChange: bash.shield,
+      attemptedChange: bash.shield,
+      timestamp: entry.timestamp,
+      type: 'shield',
+      index: entry.index,
+      banter: createBanterObject(),
+    })
   }
 
   function handleHealing(entry: CardAction) {
