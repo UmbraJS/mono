@@ -5,14 +5,32 @@ import CardModalDetails from './CardModalDetails.vue'
 import { Icon } from '@iconify/vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
 import type { BashRecords } from '~/composables/useBashRecords'
+import { DialogDescription, ScrollArea } from '@nobel/core'
 
-defineProps<{
+type DataRecord = {
+  x: number
+  y: number
+  y1: number
+  y2: number
+}
+
+const props = defineProps<{
   card: Card
   opponent: UsePlayerReturn
   player: UsePlayerReturn
   index: number
   bashRecords: BashRecords
 }>()
+
+const recordedData = computed(() => {
+  const d = props.bashRecords.attackRecord.value.logs
+  return d.map((record) => ({
+    x: record.timestamp,
+    y: record.attemptedChange,
+    y1: 10,
+    y2: 10,
+  }))
+})
 </script>
 
 <template>
@@ -29,7 +47,7 @@ defineProps<{
         <CardModalDetails :card="card" />
       </template>
       <template #tab2>
-        <div class="CardModalRecords">
+        <ScrollArea class="CardModalRecords">
           <div class="bashRecords">
             <div class="chip base-yellow" v-if="card.stats?.banter">
               <Icon icon="mdi:account-injury-outline" />
@@ -54,21 +72,9 @@ defineProps<{
             </div>
           </div>
           <div class="datavis">
-            <Graph :data="[
-              { x: 1, y: 2, y1: 3, y2: 4 },
-              { x: 2, y: 3, y1: 4, y2: 5 },
-              { x: 3, y: 4, y1: 5, y2: 6 },
-              { x: 4, y: 5, y1: 6, y2: 7 },
-              { x: 5, y: 6, y1: 7, y2: 8 },
-              { x: 6, y: 7, y1: 8, y2: 9 },
-              { x: 7, y: 8, y1: 9, y2: 10 },
-              { x: 8, y: 9, y1: 10, y2: 11 },
-              { x: 9, y: 10, y1: 11, y2: 12 },
-              { x: 10, y: 11, y1: 12, y2: 13 },
-              { x: 11, y: 12, y1: 13, y2: 14 },
-            ]" />
+            <Graph :data="recordedData" />
           </div>
-        </div>
+        </ScrollArea>
       </template>
     </Tabs>
   </div>
@@ -91,9 +97,6 @@ defineProps<{
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 400px;
-  height: 300px;
-  background-color: black;
 }
 
 .bashRecords {

@@ -9,7 +9,7 @@ interface BashRecordProps {
 
 export function useBashRecords(props: BashRecordProps) {
 const attackRecord = computed(() => {
-  const healthAttackLogs = props.opponent.healthLog.value.filter((entry) => {
+  const filteredHealthAttackLogs = props.opponent.healthLog.value.filter((entry) => {
     if (entry.type !== 'attack') return
     return entry.index === props.index
   })
@@ -29,7 +29,7 @@ const attackRecord = computed(() => {
     return entry.index === props.index
   })
 
-  const accumulatedHealtAttack = healthAttackLogs.reduce((acc, entry) => {
+  const accumulatedHealtAttack = filteredHealthAttackLogs.reduce((acc, entry) => {
     return acc + entry.actualChange
   }, 0)
 
@@ -37,10 +37,18 @@ const attackRecord = computed(() => {
     return acc + entry.actualChange
   }, 0)
 
+  // const sortedAttackLogs = [
+  //   ...filteredHealthAttackLogs,
+  //   ...filteredShieldAttackLogs
+  // ].sort((a, b) => {
+  //   return a.timestamp - b.timestamp
+  // })
+
   return {
     health: accumulatedHealtAttack,
     shield: accumulatedShieldAttack,
-    total: accumulatedHealtAttack + accumulatedShieldAttack
+    total: accumulatedHealtAttack + accumulatedShieldAttack,
+    logs: filteredHealthAttackLogs
   }
 })
 
@@ -61,7 +69,6 @@ const shieldRecord = computed(() => {
     return acc + entry.attemptedChange
   }, 0)
 })
-
 
 const totalValue = computed(() => {
   return healingRecord.value + attackRecord.value.total + shieldRecord.value

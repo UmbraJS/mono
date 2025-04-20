@@ -39,7 +39,7 @@ const y = [
 </script>
 
 <template>
-  <VisXYContainer :padding="padding" :data="data">
+  <VisXYContainer class="NobleGraph" :padding="padding" :data="data">
     <!-- <VisTooltip :content="tooltipContent" /> -->
     <VisLine :x="x" :y="y" />
     <VisAxis type="x" />
@@ -49,7 +49,7 @@ const y = [
 </template>
 
 <style>
-:root {
+.NobleGraph {
   --vis-font-family: Inter, Arial, "Helvetica Neue", Helvetica, sans-serif;
   --vis-color-main: #4D8CFD;
   --vis-color-main-light: #d0e0fe;
@@ -62,5 +62,16 @@ const y = [
   --vis-color3: var(--yellow-100);
   --vis-color4: #00C19A;
   --vis-color5: #6859BE;
+}
+
+.NobleGraph {
+  --vis-axis-tick-color: #e8e9ef;
+  --vis-axis-grid-color: var(--base-40);
+  --vis-axis-label-color: #6c778c;
+  --vis-axis-tick-label-color: #6c778c;
+  --vis-dark-axis-tick-color: #6c778c;
+  --vis-dark-axis-tick-label-color: #e8e9ef;
+  --vis-dark-axis-grid-color: var(--base-30);
+  --vis-dark-axis-label-color: #fefefe;
 }
 </style>
