@@ -3,7 +3,6 @@ import type { Card } from '../../../types/card'
 import type { ValueLogCore } from '../../composables/useBash'
 import BashLogDropdown from './BashLogDropdown.vue'
 import BashLogEntryContent from './BashLogEntryContent.vue'
-import BashLogModal from './BashLogModal.vue'
 
 const props = defineProps<{
   opponentDeck: Card[]

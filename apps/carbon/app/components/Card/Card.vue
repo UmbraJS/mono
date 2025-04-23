@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { templateRef } from '@vueuse/core'
-import type { Card, CardAction, CardBash } from '../../../types'
-import { gsap } from 'gsap/gsap-core'
+import type { ReactiveCard } from '../../../types'
 import CardModal from './CardModal.vue'
 import CardCooldown from './CardCooldown.vue'
 import CardStats from './CardStats.vue'
@@ -9,75 +7,27 @@ import type { UsePlayerReturn } from '../../composables/usePlayer'
 import { useBashRecords } from '~/composables/useBashRecords'
 
 const props = defineProps<{
-  card: Card
-  index: number
-  timeline: gsap.core.Timeline
-  time: number
-  reverse: boolean
-  delay: number
+  card: ReactiveCard
   opponent: UsePlayerReturn
   player: UsePlayerReturn
 }>()
 
-const emit = defineEmits<{
-  (e: 'bash', bashAction: CardAction): void
-}>()
-
-function getAction(bash: CardBash): CardAction {
-  return {
-    bash: bash,
-    index: props.index,
-    timestamp: props.time,
-    card: props.card,
-  }
-}
-
-const triggerCard = () => {
-  const bash = props.card.bash
-  emit('bash', getAction(bash))
-}
-
-const cardRef = templateRef<HTMLDivElement>('cardRef')
-
-function animateAction() {
-  if (!cardRef.value) return
-  gsap.to(cardRef.value, {
-    scale: 1,
-    y: props.reverse ? -60 : 60,
-    duration: 0.01,
-    ease: 'power1.inOut',
-    onComplete: () => {
-      gsap.to(cardRef.value, {
-        scale: 1,
-        y: 0,
-        duration: 0.2,
-        ease: 'power1.inOut',
-      })
-    },
-  })
-}
-
-function onBash() {
-  triggerCard()
-  animateAction()
-}
-
 const cardBashRecords = useBashRecords({
   player: props.player,
   opponent: props.opponent,
-  index: props.index,
+  index: props.card.index,
 })
 </script>
 
 <template>
-  <div ref="cardRef">
-    <CardModal :card="card" :opponent="opponent" :player="player" :index="index" :bash-records="cardBashRecords"
-      :timeline="timeline" :delay="delay">
+  <div :ref="card.functionRef">
+    <CardModal :card="card" :opponent="opponent" :player="player" :bash-records="cardBashRecords">
       <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
-        <CardCooldown v-if="card.bash.cooldown" :card="card" :timeline="props.timeline" :delay="props.delay"
-          @bash="onBash" />
+        <CardCooldown v-if="card.bash.cooldown" :card="card" />
         <div class="RecordedValue">
           <p class="border"> {{ cardBashRecords.totalValue.value }}</p>
+          <p class="border base-warning"> {{ Number(card.slow.value.toFixed(1)) }}</p>
+          <p class="border base-success"> {{ Number(card.haste.value.toFixed(1)) }}</p>
         </div>
         <img v-if="card.image" :src="card.image.default" alt="Card Image" />
         <CardStats :card="card" />

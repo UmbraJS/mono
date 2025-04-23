@@ -21,16 +21,22 @@ function handleReset() {
 }
 
 const opponent = usePlayer({
+  timeline,
   character: skeletonKing,
   onAttack: (opponentAttack, index) => player.hurt(opponentAttack, time.value, index),
 })
 
 const player = usePlayer({
+  timeline,
   character: warrior,
   onAttack: (playerAttack, index) => {
     opponent.hurt(playerAttack, time.value, index)
   },
 })
+
+setTimeout(() => {
+  opponent.deck[0]?.setSlow(2)
+}, 1000)
 
 // const audio = useAudioCue()
 
@@ -58,15 +64,11 @@ function triggerFlipSound() {
       <BashLogs :player="opponent" :opponent="player" :modal-button="true" />
     </section>
     <Board>
-      <PlayerCard v-for="(card, index) in opponent.deck.value" :key="index" :card="card" :index="index"
-        :timeline="timeline" :time="time" :reverse="false" @bash="opponent.bash" @mousedown="triggerFlipSound"
-        @mouseup="triggerFlipSound" :delay="0" :opponent="player" :player="opponent" />
+      <PlayerCard v-for="card in opponent.deck" :key="card.index" :card="card" :opponent="player" :player="opponent" />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>
-      <PlayerCard v-for="(card, index) in player.deck.value" :key="index" :card="card" :index="index"
-        :timeline="timeline" :time="time" :reverse="true" @bash="player.bash" @mousedown="triggerFlipSound"
-        @mouseup="triggerFlipSound" :delay="0" :opponent="opponent" :player="player" />
+      <PlayerCard v-for="card in player.deck" :key="card.index" :card="card" :opponent="opponent" :player="player" />
     </Board>
     <section class="sides">
       <div class="location border">

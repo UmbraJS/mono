@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import { DialogRoot, DialogTrigger, DialogModal } from '@nobel/core'
-import type { Card } from '../../../types'
+import type { ReactiveCard } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
 import type { BashRecords } from '~/composables/useBashRecords'
-import { gsap } from 'gsap/gsap-core'
 
 defineProps<{
-  card: Card
+  card: ReactiveCard
   opponent: UsePlayerReturn
   player: UsePlayerReturn
-  index: number
   bashRecords: BashRecords
-  timeline: gsap.core.Timeline
-  delay: number
 }>()
 </script>
 
@@ -25,8 +21,8 @@ defineProps<{
     </DialogTrigger>
     <DialogModal variant="accent">
       <div class="DialogWrapper">
-        <CardModalAvatar :card="card" :timeline="timeline" :delay="delay" />
-        <CardModalMeta :card="card" :opponent="opponent" :player="player" :index="index" :bashRecords="bashRecords" />
+        <CardModalAvatar :card="card" />
+        <CardModalMeta :card="card" :opponent="opponent" :player="player" :bashRecords="bashRecords" />
       </div>
     </DialogModal>
   </DialogRoot>

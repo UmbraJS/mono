@@ -32,8 +32,6 @@ function tweenStrength(newValue: number) {
   const delta = Math.abs(strength.value - newValue);
   const duration = delta / baseSpeed;
 
-  console.log("rex: ", duration);
-
   if (currentTween) currentTween.kill();
   currentTween = gsap.timeline();
   currentTween

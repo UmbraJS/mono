@@ -7,14 +7,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="layout"
-    :class="{
-      dark: theme.isDark,
-    }"
-  >
+  <div class="layout" :class="{
+    dark: theme.isDark,
+  }">
     <slot />
   </div>
 </template>
-
-<style lang="scss"></style>

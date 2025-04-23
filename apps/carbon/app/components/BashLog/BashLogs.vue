@@ -26,12 +26,10 @@ defineProps<{
       </BashLogModal>
     </template>
     <template #tab1>
-      <BashLog :player="opponent" :opponent="player" :playerDeck="opponent.deck.value"
-        :opponentDeck="player.deck.value" />
+      <BashLog :player="opponent" :opponent="player" :playerDeck="opponent.deck" :opponentDeck="player.deck" />
     </template>
     <template #tab2>
-      <BashLog :player="player" :opponent="opponent" :playerDeck="player.deck.value"
-        :opponentDeck="opponent.deck.value" />
+      <BashLog :player="player" :opponent="opponent" :playerDeck="player.deck" :opponentDeck="opponent.deck" />
     </template>
   </Tabs>
 </template>

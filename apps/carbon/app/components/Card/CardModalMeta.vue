@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DialogTitle, Tabs, Graph } from '@nobel/core'
-import type { Card } from '../../../types'
+import type { ReactiveCard } from '../../../types'
 import CardModalDetails from './CardModalDetails.vue'
 import { Icon } from '@iconify/vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
@@ -15,10 +15,9 @@ type DataRecord = {
 }
 
 const props = defineProps<{
-  card: Card
+  card: ReactiveCard
   opponent: UsePlayerReturn
   player: UsePlayerReturn
-  index: number
   bashRecords: BashRecords
 }>()
 

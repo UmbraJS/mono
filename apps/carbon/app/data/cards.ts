@@ -84,7 +84,6 @@ export const cards: Card[] = [
         {
           trigger: 'action',
           type: 'attack',
-          triggerCards: [0],
           source: 0,
           effect: (value, meta) => {
             return value + 5
@@ -563,7 +562,6 @@ export const cards: Card[] = [
         {
           trigger: 'action',
           type: 'attack',
-          triggerCards: [0],
           source: 0,
           effect: (value, meta) => {
             return value + 5

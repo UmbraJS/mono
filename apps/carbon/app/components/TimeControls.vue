@@ -41,13 +41,7 @@ const timeInMinutesAndSeconds = computed(() => {
       <Button variant="base" size="small" color="default" @click="() => $emit('onRestart')">
         <Icon name="carbon:restart" size="2rem" />
       </Button>
-      <Button
-        v-if="!isPaused"
-        variant="base"
-        size="small"
-        color="default"
-        @click="() => pausePlay(true)"
-      >
+      <Button v-if="!isPaused" variant="base" size="small" color="default" @click="() => pausePlay(true)">
         <Icon name="carbon:pause-filled" size="2rem" />
       </Button>
       <Button v-else variant="base" size="small" color="default" @click="() => pausePlay(false)">
@@ -75,7 +69,7 @@ const timeInMinutesAndSeconds = computed(() => {
   width: 100%;
 }
 
-.controlPanel > * {
+.controlPanel>* {
   cursor: pointer;
 }
 

@@ -1,3 +1,5 @@
+import type { ElementRef } from './utils'
+
 interface CardImage {
   default?: string
 }
@@ -101,6 +103,17 @@ const cardNames = [
   'Treasure',
 ] as const
 
+export interface ReactiveCard extends Card {
+  index: number;
+  cooldown: Ref<number, number>;
+  cardTimeline: gsap.core.Timeline;
+  functionRef: (el: ElementRef) => void;
+  slow: Ref<number, number>;
+  haste: Ref<number, number>;
+  setSlow: (duration: number) => void;
+  setHaste: (duration: number) => void;
+}
+
 export interface Card {
   id: string
   name: (typeof cardNames)[number]
@@ -116,7 +129,6 @@ export interface Card {
   tags: CardTag[]
   aspects: Aspect[]
   image?: CardImage
-  effect?: () => void
 }
 
 interface CardStats {
@@ -139,10 +151,9 @@ export interface CardBash {
   effects?: CardEffect[]
 }
 
-interface CardEffectMeta {
+export interface CardEffectMeta {
   trigger: "action"
   type: "banter" | "attack" | "shield" | "heal"
-  triggerCards: number[]
   source: number
 }
 

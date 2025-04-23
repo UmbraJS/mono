@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import CardCooldown from './CardCooldown.vue'
-import type { Card } from '../../../types'
+import type { ReactiveCard } from '../../../types'
 import BanterIcon from '../icons/Banter.vue'
 import { gsap } from 'gsap/gsap-core'
 
 defineProps<{
-  card: Card
-  timeline: gsap.core.Timeline
-  delay: number
+  card: ReactiveCard
 }>()
 </script>
 
 <template>
   <div class="avatar">
-    <CardCooldown v-if="card.bash.cooldown" :card="card" :timeline="timeline" :delay="delay" />
+    <CardCooldown v-if="card.bash.cooldown" :card="card" />
     <div class="chips">
       <div v-if="card.rarity" class="chip base-yellow">
         <BanterIcon />
