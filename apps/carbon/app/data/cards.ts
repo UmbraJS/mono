@@ -8,7 +8,20 @@ const stumble: CardEffect = (card) => {
     value: 2,
     trigger: {
       type: 'start',
-      playerTriggerIndexes: [],
+      playerTriggerIndexes: [card.index],
+      opponentTriggerIndexes: [],
+    },
+  }
+}
+
+const leap: CardEffect = (card) => {
+  return {
+    sourceIndex: card.index,
+    type: 'haste',
+    value: 1,
+    trigger: {
+      type: 'start',
+      playerTriggerIndexes: [card.index],
       opponentTriggerIndexes: [],
     },
   }
@@ -21,7 +34,7 @@ const hasteYourself: CardEffect = (card) => {
     value: 2,
     trigger: {
       type: 'cooldown',
-      playerTriggerIndexes: [],
+      playerTriggerIndexes: [card.index],
       opponentTriggerIndexes: [],
     },
   }
@@ -185,7 +198,7 @@ export const cards: Card[] = [
     stats: {},
     level: 1,
     unique: false,
-    effects: [slowSibling],
+    effects: [],
     maxLevel: 5,
     description: 'A basic archer',
     rarity: 1,
@@ -205,7 +218,7 @@ export const cards: Card[] = [
     stats: {},
     level: 1,
     unique: false,
-    effects: [stumble],
+    effects: [leap],
     maxLevel: 5,
     description: 'A basic halberdier',
     rarity: 1,
