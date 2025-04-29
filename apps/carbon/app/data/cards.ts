@@ -1,13 +1,68 @@
-import type { Card } from '../../types/card'
+import type { Card, CardEffect } from '../../types/card'
 import { aspects } from './aspects'
+
+const stumble: CardEffect = (card) => {
+  return {
+    sourceIndex: card.index,
+    type: 'slow',
+    value: 2,
+    trigger: {
+      type: 'start',
+      playerTriggerIndexes: [],
+      opponentTriggerIndexes: [],
+    },
+  }
+}
+
+const hasteYourself: CardEffect = (card) => {
+  return {
+    sourceIndex: card.index,
+    type: 'haste',
+    value: 2,
+    trigger: {
+      type: 'cooldown',
+      playerTriggerIndexes: [],
+      opponentTriggerIndexes: [],
+    },
+  }
+}
+
+const hasteYourSibling: CardEffect = (card) => {
+  return {
+    sourceIndex: card.index,
+    type: 'haste',
+    value: 2,
+    trigger: {
+      type: 'cooldown',
+      playerTriggerIndexes: [card.index + 1],
+      opponentTriggerIndexes: [],
+    },
+  }
+}
+
+const slowSibling: CardEffect = (card) => {
+  return {
+    sourceIndex: card.index,
+    type: 'slow',
+    value: 2,
+    trigger: {
+      type: 'cooldown',
+      playerTriggerIndexes: [card.index + 1],
+      opponentTriggerIndexes: [],
+    },
+  }
+}
 
 export const fields: Card[] = [
   {
     id: 'Swamp',
     name: 'Swamp',
     bash: { cooldown: 5 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
+    effects: [],
     maxLevel: 5,
     description: 'A basic swamp',
     rarity: 1,
@@ -23,8 +78,11 @@ export const fields: Card[] = [
     id: 'AlienHalls',
     name: 'Alien Halls',
     bash: { cooldown: 5 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
+    effects: [],
     maxLevel: 5,
     description: 'A basic alien halls',
     rarity: 1,
@@ -40,8 +98,11 @@ export const fields: Card[] = [
     id: 'AbandonedHalls',
     name: 'Abandoned Halls',
     bash: { cooldown: 5 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
+    effects: [],
     maxLevel: 5,
     description: 'A basic abandoned halls',
     rarity: 1,
@@ -57,9 +118,11 @@ export const fields: Card[] = [
     id: 'Village',
     name: 'Village',
     bash: { cooldown: 5 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
-
+    effects: [],
     maxLevel: 5,
     description: 'A basic village',
     rarity: 1,
@@ -75,317 +138,14 @@ export const fields: Card[] = [
 
 export const cards: Card[] = [
   {
-    id: 'fireball',
-    name: 'Fireball',
-    bash: {
-      attack: 10,
-      cooldown: 5,
-      effects: [
-        {
-          trigger: 'action',
-          type: 'attack',
-          source: 0,
-          effect: (value, meta) => {
-            return value + 5
-          },
-        },
-      ]
-    },
-    level: 1,
-    unique: false,
-    maxLevel: 5,
-    description: 'A basic fire spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.ember, aspects.air],
-    image: {
-      default: 'https://example.com/fireball.png',
-    },
-  },
-  {
-    id: 'water-splash',
-    name: 'Water Splash',
-    bash: {
-      attack: 5,
-      cooldown: 5,
-    },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic water spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.water],
-    image: {
-      default: 'https://example.com/water-splash.png',
-    },
-  },
-  {
-    id: 'earth-quake',
-    name: 'Earth Quake',
-    bash: {
-      attack: 15,
-      cooldown: 5,
-    },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic earth spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.rock],
-    image: {
-      default: 'https://example.com/earth-quake.png',
-    },
-  },
-  {
-    id: 'air-slice',
-    name: 'Air Slice',
-    bash: { attack: 8, cooldown: 5 },
-    level: 1,
-    unique: false,
-    maxLevel: 5,
-    description: 'A basic air spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.air, aspects.slash],
-    image: {
-      default: 'https://example.com/air-slice.png',
-    },
-  },
-  {
-    id: 'light-blast',
-    name: 'Light Blast',
-    bash: { attack: 12, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic light spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.light],
-    image: {
-      default: 'https://example.com/light-blast.png',
-    },
-  },
-  {
-    id: 'darkness-shroud',
-    name: 'Darkness Shroud',
-    bash: { shield: 5, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic darkness spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.shadow],
-    image: {
-      default: 'https://example.com/darkness-shroud.png',
-    },
-  },
-  {
-    id: 'sword',
-    name: 'Sword',
-    bash: { attack: 15, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic sword',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['weapon'],
-    aspects: [aspects.slash, aspects.metal],
-    image: {
-      default: 'sword.png',
-    },
-  },
-  {
-    id: 'wooden-shield',
-    name: 'Wooden Shield',
-    bash: { shield: 10, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic wood spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.wood],
-    image: {
-      default: 'https://example.com/wooden-shield.png',
-    },
-  },
-  {
-    id: 'stone-armor',
-    name: 'Stone Armor',
-    bash: { shield: 15, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic stone spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.rock],
-    image: {
-      default: 'https://example.com/stone-armor.png',
-    },
-  },
-  {
-    id: 'ice-shard',
-    name: 'Ice Shard',
-    bash: { attack: 7, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic ice spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.ice],
-    image: {
-      default: 'https://example.com/ice-shard.png',
-    },
-  },
-  {
-    id: 'electric-bolt',
-    name: 'Electric Bolt',
-    bash: { attack: 9, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic electricity spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.charge],
-    image: {
-      default: 'https://example.com/electric-bolt.png',
-    },
-  },
-  {
-    id: 'psychic-wave',
-    name: 'Psychic Wave',
-    bash: { attack: 6, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic psychic spell',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['spell'],
-    aspects: [aspects.warpWeave],
-    image: {
-      default: 'https://example.com/psychic-wave.png',
-    },
-  },
-  {
-    id: 'arrow',
-    name: 'Arrow',
-    bash: { attack: 8, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic arrow',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['weapon'],
-    aspects: [aspects.wood, aspects.slash],
-    image: {
-      default: 'https://example.com/arrow.png',
-    },
-  },
-  {
-    id: 'bow',
-    name: 'Bow',
-    bash: { attack: 10, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic bow',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['weapon'],
-    aspects: [aspects.wood],
-    image: {
-      default: 'https://example.com/bow.png',
-    },
-  },
-  {
-    id: 'dagger',
-    name: 'Dagger',
-    bash: { attack: 5, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic dagger',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['weapon'],
-    aspects: [aspects.slash],
-    image: {
-      default: 'https://example.com/dagger.png',
-    },
-  },
-  {
-    id: 'bite',
-    name: 'Bite',
-    bash: { attack: 3, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic bite',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['action'],
-    aspects: [],
-    image: {
-      default: 'https://example.com/bite.png',
-    },
-  },
-  {
     id: 'skeleton-soldier',
     name: 'Skeleton Soldier',
     bash: { attack: 2, shield: 5, cooldown: 2 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
-
+    effects: [],
     maxLevel: 5,
     description: 'A basic skeleton',
     rarity: 1,
@@ -400,9 +160,12 @@ export const cards: Card[] = [
   {
     id: 'skeleton-archer',
     name: 'Skeleton Archer',
+    index: 0,
+    stats: {},
     bash: { attack: 7, shield: 3, cooldown: 3 },
     level: 1,
     unique: false,
+    effects: [],
     maxLevel: 5,
     description: 'A basic skeleton archer',
     rarity: 1,
@@ -418,9 +181,11 @@ export const cards: Card[] = [
     id: 'archer',
     name: 'Archer',
     bash: { attack: 7, cooldown: 2 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
-
+    effects: [slowSibling],
     maxLevel: 5,
     description: 'A basic archer',
     rarity: 1,
@@ -436,8 +201,11 @@ export const cards: Card[] = [
     id: 'halberdier',
     name: 'Halberdier',
     bash: { attack: 10, shield: 10, cooldown: 5 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
+    effects: [stumble],
     maxLevel: 5,
     description: 'A basic halberdier',
     rarity: 1,
@@ -450,30 +218,14 @@ export const cards: Card[] = [
     },
   },
   {
-    id: 'EmeraldSword',
-    name: 'Emerald Sword',
-    bash: { attack: 20, cooldown: 5 },
-    level: 1,
-    unique: false,
-
-    maxLevel: 5,
-    description: 'A basic emerald sword',
-    rarity: 1,
-    baseCost: 10,
-    cost: 10,
-    tags: ['weapon'],
-    aspects: [aspects.slash, aspects.metal],
-    image: {
-      default: 'emeraldSword.jpg',
-    },
-  },
-  {
     id: 'DoomCloak',
     name: 'Doom Cloak',
     bash: { attack: 20, shield: 20, cooldown: 7 },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
-
+    effects: [],
     maxLevel: 5,
     description: 'A basic doom cloak',
     rarity: 2,
@@ -492,8 +244,11 @@ export const cards: Card[] = [
       heal: 10,
       cooldown: 3,
     },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
+    effects: [],
     maxLevel: 5,
     description: 'A basic skeleton healer',
     rarity: 1,
@@ -513,8 +268,11 @@ export const cards: Card[] = [
       shield: 5,
       cooldown: 3.5,
     },
+    index: 0,
+    stats: {},
     level: 1,
     unique: false,
+    effects: [],
     maxLevel: 5,
     description: 'A basic skeleton horseman',
     rarity: 1,
@@ -529,6 +287,8 @@ export const cards: Card[] = [
   {
     id: 'Gauntlet of Sigmar',
     name: 'Gauntlet of Sigmar',
+    index: 0,
+    stats: {},
     bash: {
       attack: 10,
       shield: 10,
@@ -537,7 +297,7 @@ export const cards: Card[] = [
     },
     level: 1,
     unique: false,
-
+    effects: [],
     maxLevel: 5,
     description: 'A basic gauntlet of sigmar',
     rarity: 1,
@@ -552,25 +312,18 @@ export const cards: Card[] = [
   {
     id: 'Glimmer Cloak',
     name: 'Glimmer Cloak',
+    index: 0,
+    stats: {},
     bash: {
       attack: 5,
       banter: 5,
       heal: 5,
       shield: 10,
       cooldown: 3,
-      effects: [
-        {
-          trigger: 'action',
-          type: 'attack',
-          source: 0,
-          effect: (value, meta) => {
-            return value + 5
-          },
-        },
-      ]
     },
     level: 1,
     unique: true,
+    effects: [],
     maxLevel: 5,
     description:
       'When this enchantment enters, if its your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.',
@@ -586,6 +339,8 @@ export const cards: Card[] = [
   {
     id: 'viking',
     name: 'Viking',
+    index: 0,
+    stats: {},
     bash: {
       attack: 10,
       shield: 5,
@@ -594,7 +349,7 @@ export const cards: Card[] = [
     },
     level: 1,
     unique: false,
-
+    effects: [],
     maxLevel: 5,
     description: 'A basic viking',
     rarity: 1,
@@ -609,6 +364,8 @@ export const cards: Card[] = [
   {
     id: 'Thunder Cannon',
     name: 'Thunder Cannon',
+    index: 0,
+    stats: {},
     bash: {
       attack: 20,
       actionCount: 1,
@@ -616,7 +373,7 @@ export const cards: Card[] = [
     },
     level: 1,
     unique: false,
-
+    effects: [],
     maxLevel: 5,
     description: 'A basic thunder cannon',
     rarity: 1,
@@ -631,12 +388,14 @@ export const cards: Card[] = [
   {
     id: 'Treasure',
     name: 'Treasure',
+    index: 0,
+    stats: {},
     bash: {
       cooldown: 5,
     },
     level: 1,
     unique: false,
-
+    effects: [],
     maxLevel: 5,
     description: 'A basic treasure',
     rarity: 1,

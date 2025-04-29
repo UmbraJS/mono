@@ -1,4 +1,4 @@
-export type { Card, ReactiveCard, CardAction, CardBash, Aspect, CardEffectMeta } from './card'
+export type { Card, ReactiveCard, SimCard, CardAction, CardBash, Aspect, CardEffect } from './card'
 export type { Player, Character } from './character'
 export type { GameState, GameTime, TimeState } from './game'
 export type { ElementRef } from './utils'

@@ -1,4 +1,3 @@
-import { timestamp } from '@vueuse/core'
 import type { CardAction, Character, ReactiveCard, Card, ElementRef, CardEffectMeta } from '../../types'
 import { useHealth, useShield, useMorale } from './useBash'
 import { gsap } from 'gsap'
@@ -21,16 +20,15 @@ export function usePlayer({ character, timeline, onAttack }: UsePlayerProps) {
     card: card,
   }))
 
-
   const deckEffects = computed(() => {
     const effects: CardEffectMeta[] = []
     deck.forEach((entry) => {
-      const e = entry.bash.effects
+      const e = entry.effects
       if (!e || e.length === 0) return
       e.forEach((effect) => {
         effects.push({
           ...effect,
-          source: entry.index,
+          sourceIndex: entry.index,
         })
       })
     })
@@ -245,52 +243,4 @@ function getDeck(character: Character, timeline: gsap.core.Timeline, onCooldown:
   });
 
 }
-
-const cooldownsUntouched = [{
-  baseDuration: 1, // Original duration of the entry in seconds
-  duration: 1, // Summed duration of all chunks (slow, haste)
-  chunks: [
-    { type: "base", duration: 1, timestamp: 0, toPercent: 0 },
-  ]
-}]
-
-const cooldownsUntouchedStartsLater = [{
-  baseDuration: 1, // Original duration of the entry in seconds
-  duration: 1, // Summed duration of all chunks (slow, haste)
-  chunks: [
-    { type: "base", duration: 1, timestamp: 2.5, toPercent: 0 },
-  ]
-}]
-
-const cooldownsSlowed = [{
-  baseDuration: 1, // Original duration of the entry in seconds
-  duration: 1.4, // Summed duration of all chunks (slow, haste)
-  chunks: [
-    { type: "base", duration: 0.2, timestamp: 0.4, toPercent: 20 }, // 0.2 of baseDuration (1) is 20%
-    { type: "slow", duration: 0.4, timestamp: 0.6, toPercent: 42.86 },
-    { type: "base", duration: 0.8, timestamp: 1.0, toPercent: 0 },
-  ]
-}]
-
-const cooldownsHasted = [{
-  baseDuration: 4.0, // Original duration of the entry in seconds
-  duration: 3.0, // Summed duration of all chunks (slow, haste)
-  chunks: [
-    { type: "base", duration: 1.5, timestamp: 0.4, toPercent: 37.5 },
-    { type: "haste", duration: 1.0, timestamp: 1.4, toPercent: 62.5 },
-    { type: "base", duration: 0.5, timestamp: 2.9, toPercent: 100 },
-  ]
-}]
-
-const cooldownsOverlappingSlowHaste = [{
-  baseDuration: 1, // Original duration of the entry in seconds
-  duration: 1.2, // Summed duration of all chunks (slow, haste)
-  chunks: [
-    { type: "base", duration: 0.2, timestamp: 0.4, toPercent: 16.67 },
-    { type: "slow", duration: 0.2, timestamp: 0.6, toPercent: 33.33 },
-    { type: "haste", duration: -0.5, timestamp: 0.8, toPercent: 50 },
-    { type: "base", duration: 0.8, timestamp: 1.5, toPercent: 100 },
-  ]
-}]
-
 export type UsePlayerReturn = ReturnType<typeof usePlayer>

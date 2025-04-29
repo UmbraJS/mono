@@ -1,4 +1,5 @@
 import type { ElementRef } from './utils'
+import type { ModifierChunk, OutputChunk } from "../utils/types";
 
 interface CardImage {
   default?: string
@@ -114,11 +115,28 @@ export interface ReactiveCard extends Card {
   setHaste: (duration: number) => void;
 }
 
+
+export type Owner = 'player' | 'opponent';
+
+export interface SimCard extends Card {
+  cooldownEvents: {
+    baseDuration: number;
+    duration: number;
+    chunks: OutputChunk[];
+  }[];
+  activeModifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
+  remainingCooldown: number; // Seconds left until trigger
+  count: number; // Number of times this card has been played
+  owner: Owner; // Owner of the card
+}
+
 export interface Card {
   id: string
+  index: number
   name: (typeof cardNames)[number]
   bash: CardBash
-  stats?: CardStats
+  effects: CardEffect[]
+  stats: CardStats
   level: number
   maxLevel: number
   description: string
@@ -136,7 +154,7 @@ interface CardStats {
   attack?: number
   shield?: number
   heal?: number
-  value: number
+  value?: number
 }
 
 export interface CardBash {
@@ -148,18 +166,19 @@ export interface CardBash {
   critDamage?: number
   actionCount?: number
   cooldown?: number // in milliseconds
-  effects?: CardEffect[]
 }
 
-export interface CardEffectMeta {
-  trigger: "action"
-  type: "banter" | "attack" | "shield" | "heal"
-  source: number
+export interface CardEffectOutput {
+  value: number
+  type: "haste" | "slow" | "freeze"
+  trigger: {
+    type: "trigger" | "cooldown" | "start" | "end" | "banter" | "attack" | "shield" | "heal",
+    playerTriggerIndexes: number[]
+    opponentTriggerIndexes: number[]
+  }
 }
 
-interface CardEffect extends CardEffectMeta {
-  effect: (value: number, meta: CardEffectMeta) => number
-}
+export type CardEffect = (card: Card) => CardEffectOutput
 
 export interface CardAction {
   bash: CardBash

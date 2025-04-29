@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import type { ReactiveCard } from '../../../types'
+import type { SimCard } from '../../../types'
 import CardModal from './CardModal.vue'
 import CardCooldown from './CardCooldown.vue'
 import CardStats from './CardStats.vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
 import { useBashRecords } from '~/composables/useBashRecords'
+import type { ChainedCooldownEvent } from '../../../utils/generateChainedCooldownEvents'
+// import type { SimCard } from '../../../utils/simulateCards'
 
 const props = defineProps<{
-  card: ReactiveCard
+  card: SimCard
   opponent: UsePlayerReturn
   player: UsePlayerReturn
+  time: number
+  timeline: gsap.core.Timeline;
 }>()
 
 const cardBashRecords = useBashRecords({
@@ -20,15 +24,17 @@ const cardBashRecords = useBashRecords({
 </script>
 
 <template>
-  <div :ref="card.functionRef">
-    <CardModal :card="card" :opponent="opponent" :player="player" :bash-records="cardBashRecords">
+  <div>
+    <CardModal :card="card" :opponent="opponent" :player="player" :bash-records="cardBashRecords" :time="time"
+      :timeline="timeline" :cooldownEvents="card.cooldownEvents">
       <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
-        <CardCooldown v-if="card.bash.cooldown" :card="card" />
-        <div class="RecordedValue">
+        <CardCooldown v-if="card.bash.cooldown" :card="card" :time="time" :timeline="timeline"
+          :cooldownEvents="card.cooldownEvents" />
+        <!-- <div class="RecordedValue">
           <p class="border"> {{ cardBashRecords.totalValue.value }}</p>
           <p class="border base-warning"> {{ Number(card.slow.value.toFixed(1)) }}</p>
           <p class="border base-success"> {{ Number(card.haste.value.toFixed(1)) }}</p>
-        </div>
+        </div> -->
         <img v-if="card.image" :src="card.image.default" alt="Card Image" />
         <CardStats :card="card" />
       </button>

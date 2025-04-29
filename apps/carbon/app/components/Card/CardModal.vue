@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { DialogRoot, DialogTrigger, DialogModal } from '@nobel/core'
-import type { ReactiveCard } from '../../../types'
+import type { SimCard } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
 import type { BashRecords } from '~/composables/useBashRecords'
+import type { ChainedCooldownEvent } from '../../../utils/generateChainedCooldownEvents'
 
 defineProps<{
-  card: ReactiveCard
+  card: SimCard
   opponent: UsePlayerReturn
   player: UsePlayerReturn
   bashRecords: BashRecords
+  time: number
+  timeline: gsap.core.Timeline;
 }>()
 </script>
 
@@ -21,7 +24,7 @@ defineProps<{
     </DialogTrigger>
     <DialogModal variant="accent">
       <div class="DialogWrapper">
-        <CardModalAvatar :card="card" />
+        <CardModalAvatar :card="card" :time="time" :timeline="timeline" />
         <CardModalMeta :card="card" :opponent="opponent" :player="player" :bashRecords="bashRecords" />
       </div>
     </DialogModal>

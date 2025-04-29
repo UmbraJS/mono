@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DialogTitle, Tabs, Graph } from '@nobel/core'
-import type { ReactiveCard } from '../../../types'
+import type { SimCard } from '../../../types'
 import CardModalDetails from './CardModalDetails.vue'
 import { Icon } from '@iconify/vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
@@ -15,7 +15,7 @@ type DataRecord = {
 }
 
 const props = defineProps<{
-  card: ReactiveCard
+  card: SimCard
   opponent: UsePlayerReturn
   player: UsePlayerReturn
   bashRecords: BashRecords

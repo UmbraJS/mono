@@ -5,6 +5,7 @@ import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
 // import { useAudioCue } from '@/composables/useAudioCue'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
+import { simulateCooldownTimeline } from '../../utils/simulateCards'
 
 const time = ref(0)
 
@@ -34,9 +35,11 @@ const player = usePlayer({
   },
 })
 
-setTimeout(() => {
-  opponent.deck[0]?.setSlow(2)
-}, 1000)
+const cardTimeline = simulateCooldownTimeline({
+  opponentDeck: opponent.deck,
+  playerDeck: player.deck,
+  matchDuration: 30
+})
 
 // const audio = useAudioCue()
 
@@ -64,11 +67,13 @@ function triggerFlipSound() {
       <BashLogs :player="opponent" :opponent="player" :modal-button="true" />
     </section>
     <Board>
-      <PlayerCard v-for="card in opponent.deck" :key="card.index" :card="card" :opponent="player" :player="opponent" />
+      <PlayerCard v-for="card in cardTimeline.opponent" :key="card.index" :card="card" :opponent="player"
+        :player="opponent" :time="time" :timeline="timeline" />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>
-      <PlayerCard v-for="card in player.deck" :key="card.index" :card="card" :opponent="opponent" :player="player" />
+      <PlayerCard v-for="card in cardTimeline.player" :key="card.index" :card="card" :opponent="opponent"
+        :player="player" :time="time" :timeline="timeline" />
     </Board>
     <section class="sides">
       <div class="location border">
