@@ -172,7 +172,7 @@ export interface CardEffectOutput {
   value: number
   type: "haste" | "slow" | "freeze"
   trigger: {
-    type: "trigger" | "cooldown" | "start" | "end" | "banter" | "attack" | "shield" | "heal",
+    type: "trigger" | "cooldown" | "start" | "end" | "banter" | "attack" | "shield" | "heal"
     playerTriggerIndexes: number[]
     opponentTriggerIndexes: number[]
   }

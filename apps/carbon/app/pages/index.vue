@@ -41,6 +41,8 @@ const cardTimeline = simulateCooldownTimeline({
   matchDuration: 30
 })
 
+console.log('cardTimeline', cardTimeline)
+
 // const audio = useAudioCue()
 
 const recentlyClickedFlipSound = ref(false)

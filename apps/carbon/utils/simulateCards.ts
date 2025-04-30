@@ -1,5 +1,6 @@
 import { generateCooldownEvent } from "./generateCooldownEvent";
-import type { Card, SimCard, CardEffectOutput } from "../types/card"
+import type { CooldownEvent } from "./generateCooldownEvent";
+import type { Card, SimCard, CardEffectOutput, } from "../types/card"
 
 interface SimulateCooldownTimelineArgs {
   playerDeck: Card[];
@@ -19,45 +20,53 @@ export function simulateCooldownTimeline({
 
   // --- Apply all "start" triggered effects ---
   for (const card of simCards) {
-    for (const effect of card.effects) {
-      const effectOutput = effect(card);
-      const targets = effectOutput.trigger;
-      if (targets.type !== "start") continue;
-      const applyEffect = (indexes: number[], targetDeck: SimCard[]) => {
-        console.log("applying effect: ", indexes);
-        for (const index of indexes) {
-          const targetCard = targetDeck.find(c => c.index === index);
-          console.log("applying effect: ", targetCard);
-          if (!targetCard) continue;
-          targetCard.activeModifiers.push({
-            type: effectOutput.type,
-            duration: effectOutput.value,
-            timestamp: 0,
-            sourceIndex: card.index,
-          });
-        }
-      };
-      applyEffect(targets.playerTriggerIndexes, playerSimCards);
-      applyEffect(targets.opponentTriggerIndexes, opponentSimCards);
-      console.log("start effect: ", playerSimCards.map((e) => {
-        return {
-          name: e.name,
-          activeModifiers: e.activeModifiers,
-        }
-      }))
-    }
+    applyAllTriggeredEffects(card, (effectOutput) => {
+      if (effectOutput.trigger.type !== "start") return;
+
+      applyEffectToTargets({
+        sourceCard: card,
+        timestamp: 0,
+        indexes: effectOutput.trigger.playerTriggerIndexes,
+        targetDeck: playerSimCards,
+        effectOutput
+      })
+
+      applyEffectToTargets({
+        sourceCard: card,
+        timestamp: 0,
+        indexes: effectOutput.trigger.opponentTriggerIndexes,
+        targetDeck: opponentSimCards,
+        effectOutput
+      })
+    })
   }
 
   // --- Main simulation loop ---
   while (globalTime < matchDuration) {
     const next = findNextReadyCard(simCards);
-
     if (!next) break;
     if (!next.card.bash.cooldown) break; // No cooldown, no need to simulate
 
-    // Advance time
-    globalTime += next.timeUntilReady;
-    advanceTimeForAllCards(simCards, next.timeUntilReady);
+    applyAllTriggeredEffects(next.card, (effectOutput) => {
+      if (next.card.count === 0) return
+      if (effectOutput.trigger.type !== "cooldown") return;
+      applyEffectToTargets({
+        sourceCard: next.card,
+        timestamp: globalTime,
+        indexes: effectOutput.trigger.playerTriggerIndexes,
+        targetDeck: playerSimCards,
+        effectOutput
+      });
+      applyEffectToTargets({
+        sourceCard: next.card,
+        timestamp: globalTime,
+        indexes: effectOutput.trigger.opponentTriggerIndexes,
+        targetDeck: opponentSimCards,
+        effectOutput
+      });
+    })
+
+    advanceTime(simCards, next.timeUntilReady);
 
     // Generate cooldown event for this card
     const cooldownEvent = generateCooldownEvent({
@@ -68,36 +77,57 @@ export function simulateCooldownTimeline({
       }))
     });
 
-    next.card.cooldownEvents.push(cooldownEvent);
-    next.card.count += 1; // Increment play count
-
-    // Clear current modifiers, replace with leftover ones
-    next.card.activeModifiers = cooldownEvent.remainingModifiers.map(m => ({
-      ...m,
-      timestamp: m.timestamp + globalTime
-    }));
-
-    // Reset cooldown
-    next.card.remainingCooldown = cooldownEvent.duration;
-
-    // Makes sure the effects are triggered on cooldown and not on start
-    if (next.card.count === 1) continue;
-    // Apply any triggered effects
-    applyAllTriggeredEffects({
-      sourceCard: next.card,
-      timestamp: globalTime,
-      playerDeck: playerSimCards,
-      opponentDeck: opponentSimCards
-    });
+    addCooldownEvent(next.card, cooldownEvent);
   }
-
-  const playerSimulatedCards = simCards.filter(card => card.owner === "player");
-  const opponentSimulatedCards = simCards.filter(card => card.owner === "opponent");
 
   // --- Return results ---
   return {
-    player: playerSimulatedCards,
-    opponent: opponentSimulatedCards,
+    player: playerSimCards,
+    opponent: opponentSimCards,
+  }
+
+  interface ApplyEffectProps {
+    sourceCard: SimCard,
+    timestamp: number,
+    indexes: number[],
+    targetDeck: SimCard[],
+    effectOutput: CardEffectOutput
+  }
+
+  function applyEffectToTargets({
+    sourceCard,
+    timestamp,
+    indexes,
+    targetDeck,
+    effectOutput
+  }: ApplyEffectProps) {
+    const lol = indexes.map(index => {
+      const targetCard = targetDeck.find(c => c.index === index);
+      if (!targetCard) return null;
+
+      return {
+        name: targetCard.name,
+        activeModifiers: targetCard.activeModifiers,
+      }
+    });
+
+
+    for (const index of indexes) {
+      const targetCard = targetDeck.find(c => c.index === index);
+      if (!targetCard) continue;
+
+      targetCard.activeModifiers.push({
+        type: effectOutput.type,
+        duration: effectOutput.value,
+        timestamp: timestamp,
+        sourceIndex: sourceCard.index,
+      });
+
+      console.log("rex: ", {
+        name: targetCard.name,
+        activeModifiers: targetCard.activeModifiers,
+      })
+    }
   }
 
   function initializeSimCards(deck: Card[], owner: "player" | "opponent"): SimCard[] {
@@ -126,66 +156,35 @@ export function simulateCooldownTimeline({
     return nextCard ? { card: nextCard, timeUntilReady: shortestTime } : null;
   }
 
-  function advanceTimeForAllCards(cards: SimCard[], elapsed: number): void {
+
+  function addCooldownEvent(card: SimCard, cooldownEvent: CooldownEvent) {
+    card.cooldownEvents.push(cooldownEvent);
+    card.count += 1; // Increment play count
+
+    // Clear current modifiers, replace with leftover ones
+    card.activeModifiers = cooldownEvent.remainingModifiers.map(m => ({
+      ...m,
+      timestamp: m.timestamp + globalTime
+    }));
+
+    // Reset cooldown
+    card.remainingCooldown = cooldownEvent.duration;
+  }
+
+  function advanceTime(cards: SimCard[], elapsed: number): void {
+    globalTime += elapsed;
     for (const card of cards) {
       card.remainingCooldown = Math.max(0, card.remainingCooldown - elapsed);
     }
   }
 
-  function applyEffectToTargets({
-    sourceCard,
-    timestamp,
-    indexes,
-    targetDeck,
-    effectOutput
-  }: {
+  function applyAllTriggeredEffects(
     sourceCard: SimCard,
-    timestamp: number,
-    indexes: number[],
-    targetDeck: SimCard[],
-    effectOutput: CardEffectOutput,
-  }) {
-    for (const index of indexes) {
-      const targetCard = targetDeck.find(c => c.index === index);
-      if (!targetCard) continue;
-      targetCard.activeModifiers.push({
-        type: effectOutput.type,
-        duration: effectOutput.value,
-        timestamp: timestamp,
-        sourceIndex: sourceCard.index,
-      });
-    }
-  }
-
-  function applyAllTriggeredEffects({
-    sourceCard,
-    timestamp,
-    playerDeck,
-    opponentDeck
-  }: {
-    sourceCard: SimCard,
-    timestamp: number,
-    playerDeck: SimCard[],
-    opponentDeck: SimCard[]
-  }): void {
+    callback: (effectOutput: CardEffectOutput) => void
+  ): void {
     for (const effect of sourceCard.effects) {
       const effectOutput = effect(sourceCard);
-      const trigger = effectOutput.trigger;
-      if (trigger.type !== "cooldown") continue;
-      applyEffectToTargets({
-        sourceCard,
-        timestamp,
-        indexes: trigger.playerTriggerIndexes,
-        targetDeck: playerDeck,
-        effectOutput
-      });
-      applyEffectToTargets({
-        sourceCard,
-        timestamp,
-        indexes: trigger.opponentTriggerIndexes,
-        targetDeck: opponentDeck,
-        effectOutput
-      });
+      callback(effectOutput);
     }
   }
 }

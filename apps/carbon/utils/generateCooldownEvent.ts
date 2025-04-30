@@ -4,7 +4,7 @@ import { buildTimelineSegments } from "./buildTimelineSegments";
 import { convertSegmentsToChunks } from "./convertSegmentsToChunks";
 import { extractRemainingModifiers } from "./extractRemainingModifiers";
 
-interface CooldownEvent {
+export interface CooldownEvent {
   baseDuration: number;
   duration: number;
   chunks: OutputChunk[];
