@@ -44,10 +44,10 @@ const hasteYourSibling: CardEffect = (card) => {
   return {
     sourceIndex: card.index,
     type: 'haste',
-    value: 2,
+    value: 1,
     trigger: {
       type: 'cooldown',
-      playerTriggerIndexes: [card.index + 1],
+      playerTriggerIndexes: [card.index],
       opponentTriggerIndexes: [],
     },
   }
@@ -198,7 +198,7 @@ export const cards: Card[] = [
     stats: {},
     level: 1,
     unique: false,
-    effects: [leap],
+    effects: [],
     maxLevel: 5,
     description: 'A basic archer',
     rarity: 1,
@@ -218,7 +218,7 @@ export const cards: Card[] = [
     stats: {},
     level: 1,
     unique: false,
-    effects: [hasteYourself],
+    effects: [hasteYourSibling],
     maxLevel: 5,
     description: 'A basic halberdier',
     rarity: 1,

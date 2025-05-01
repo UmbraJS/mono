@@ -13,6 +13,7 @@ export interface CooldownEvent {
 
 interface CooldownEventProps {
   baseDuration: number;
+  startTime: number;
   modifiers: ModifierChunk[];
 }
 
@@ -26,11 +27,17 @@ interface CooldownEventProps {
 export function generateCooldownEvent({
   baseDuration,
   modifiers,
+  startTime,
 }: CooldownEventProps): CooldownEvent {
-  const resolvedModifiers = resolveOverlappingModifiers(modifiers);
+  const adjustedModifiers = modifiers.map(m => ({
+    ...m,
+    timestamp: m.timestamp - startTime // Adjust timestamp relative to start of event
+  }))
+
+  const resolvedModifiers = resolveOverlappingModifiers(adjustedModifiers);
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
   const { chunks, duration } = convertSegmentsToChunks(baseDuration, timelineSegments);
-  const remainingModifiers = extractRemainingModifiers(modifiers, duration);
+  const remainingModifiers = extractRemainingModifiers(adjustedModifiers, duration);
 
   return {
     baseDuration,

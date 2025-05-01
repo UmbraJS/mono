@@ -124,7 +124,7 @@ export interface SimCard extends Card {
     duration: number;
     chunks: OutputChunk[];
   }[];
-  activeModifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
+  modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
   remainingCooldown: number; // Seconds left until trigger
   count: number; // Number of times this card has been played
   owner: Owner; // Owner of the card
@@ -168,7 +168,7 @@ export interface CardBash {
   cooldown?: number // in milliseconds
 }
 
-export interface CardEffectOutput {
+export interface CardModifier {
   value: number
   type: "haste" | "slow" | "freeze"
   trigger: {
@@ -178,7 +178,7 @@ export interface CardEffectOutput {
   }
 }
 
-export type CardEffect = (card: Card) => CardEffectOutput
+export type CardEffect = (card: Card) => CardModifier
 
 export interface CardAction {
   bash: CardBash

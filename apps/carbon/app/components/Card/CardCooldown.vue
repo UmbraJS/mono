@@ -9,26 +9,32 @@ const props = defineProps<{
 }>()
 
 const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.cooldownEvents)
+
+
 </script>
 
 <template>
-  <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%` }" :class="{ slow, haste, frozen }">
-    <div class="slowp">
-      <p>{{ cooldownDuration.toFixed(1) }}</p>
-      <p>{{ time.toFixed(1) }}</p>
-      <p>{{ Math.floor(cooldown) }}</p>
+  <div :class="{ slow, haste, frozen }">
+    <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%` }">
     </div>
-    <div class="slowp n2">
-      <p>{{ slow.toFixed(1) }}</p>
-      <p>{{ slowSource }}</p>
-    </div>
-    <div class="slowp n3">
-      <p>{{ haste.toFixed(1) }}</p>
-      <p>{{ hasteSource }}</p>
-    </div>
-    <div class="slowp n4">
-      <p>{{ frozen.toFixed(1) }}</p>
-      <p>{{ frozenSource }}</p>
+    <div class="debugPanel">
+      <div class="slowp">
+        <p>{{ cooldownDuration.toFixed(1) }}</p>
+        <p>{{ time.toFixed(1) }}</p>
+        <p>{{ Math.floor(cooldown) }}</p>
+      </div>
+      <div class="slowp n2">
+        <p>{{ slow.toFixed(1) }}</p>
+        <p>{{ slowSource }}</p>
+      </div>
+      <div class="slowp n3">
+        <p>{{ haste.toFixed(1) }}</p>
+        <p>{{ hasteSource }}</p>
+      </div>
+      <div class="slowp n4">
+        <p>{{ frozen.toFixed(1) }}</p>
+        <p>{{ frozenSource }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -38,20 +44,20 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   display: flex;
   justify-content: space-between;
   background-color: var(--base-40);
-  padding: var(--space-1);
+  padding: var(--space-quark);
 }
 
-.cooldown.slow .n2 {
+.slow .n2 {
   background-color: var(--warning-40);
   color: var(--warning-120);
 }
 
-.cooldown.haste .n3 {
+.haste .n3 {
   background-color: var(--success-40);
   color: var(--success-120);
 }
 
-.cooldown.frozen .n4 {
+.frozen .n4 {
   background-color: var(--info-40);
   color: var(--info-120);
 }
@@ -67,5 +73,14 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   border-top: solid 2px var(--base-40);
   border-radius: var(--radius);
   pointer-events: none;
+}
+
+.debugPanel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  opacity: 0.8;
 }
 </style>

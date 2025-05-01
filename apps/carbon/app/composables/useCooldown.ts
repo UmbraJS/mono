@@ -12,6 +12,8 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
   const frozen = ref(0)
   const frozenSource = ref<string>("freeze")
 
+  console.log("rex: 22: cooldownEvents", cooldownEvents)
+
   const cardTimeline = gsap.timeline()
   timeline.add(cardTimeline, 0)
 
@@ -57,7 +59,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
       const animationProps = {
         toPercent,
         duration,
-        type: chunk.type,
+        sourceName: `${chunk.type}-${chunk.sourceIndex}`,
       }
 
       if (chunk.type === 'base') {
@@ -74,7 +76,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
     interface AnimationProp {
       toPercent: number
       duration: number
-      type: string | null
+      sourceName: string
     }
 
     function gsapBase({
@@ -91,7 +93,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
     function gsapSlow({
       toPercent,
       duration,
-      type,
+      sourceName,
     }: AnimationProp) {
       chunkTimeline.to(cooldown, {
         value: toPercent,
@@ -105,7 +107,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
             duration: duration,
             ease: 'none',
             onStart: () => {
-              slowSource.value = type || "slow"
+              slowSource.value = sourceName || "slow"
             },
             onComplete: () => {
               slowSource.value = "slow"
@@ -118,7 +120,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
     function gsapHaste({
       toPercent,
       duration,
-      type,
+      sourceName,
     }: AnimationProp) {
       chunkTimeline.to(cooldown, {
         value: toPercent,
@@ -132,7 +134,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
             duration: duration,
             ease: 'none',
             onStart: () => {
-              hasteSource.value = type || "haste"
+              hasteSource.value = sourceName || "haste"
             },
             onComplete: () => {
               hasteSource.value = "haste"
@@ -145,7 +147,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
     function gsapFreeze({
       toPercent,
       duration,
-      type,
+      sourceName,
     }: AnimationProp) {
       chunkTimeline.to(cooldown, {
         value: toPercent,
@@ -159,7 +161,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
             duration: duration,
             ease: 'none',
             onStart: () => {
-              frozenSource.value = type || "freeze"
+              frozenSource.value = sourceName || "freeze"
             },
             onComplete: () => {
               frozenSource.value = "freeze"

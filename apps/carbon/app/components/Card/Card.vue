@@ -24,11 +24,11 @@ const cardBashRecords = useBashRecords({
 </script>
 
 <template>
-  <div>
+  <div class="carder">
     <CardModal :card="card" :opponent="opponent" :player="player" :bash-records="cardBashRecords" :time="time"
       :timeline="timeline" :cooldownEvents="card.cooldownEvents">
       <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
-        <CardCooldown v-if="card.bash.cooldown" :card="card" :time="time" :timeline="timeline"
+        <CardCooldown v-if="card.bash.cooldown" :time="time" :timeline="timeline"
           :cooldownEvents="card.cooldownEvents" />
         <!-- <div class="RecordedValue">
           <p class="border"> {{ cardBashRecords.totalValue.value }}</p>
@@ -43,6 +43,10 @@ const cardBashRecords = useBashRecords({
 </template>
 
 <style lang="scss">
+.carder {
+  grid-column: span 3;
+}
+
 .RecordedValue {
   display: flex;
   flex-direction: column;

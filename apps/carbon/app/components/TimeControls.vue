@@ -38,6 +38,10 @@ const timeInMinutesAndSeconds = computed(() => {
       {{ timeInMinutesAndSeconds }}
     </h3>
     <div class="controls">
+      <h3>
+        <Icon name="carbon:time" size="1.5rem" />
+        {{ timeInMinutesAndSeconds }}
+      </h3>
       <Button variant="base" size="small" color="default" @click="() => $emit('onRestart')">
         <Icon name="carbon:restart" size="2rem" />
       </Button>
