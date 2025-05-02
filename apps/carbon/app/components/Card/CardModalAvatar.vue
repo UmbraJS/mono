@@ -2,7 +2,6 @@
 import CardCooldown from './CardCooldown.vue'
 import type { SimCard } from '../../../types'
 import BanterIcon from '../icons/Banter.vue'
-import type { ChainedCooldownEvent } from '../../../utils/generateChainedCooldownEvents'
 
 defineProps<{
   card: SimCard
@@ -13,7 +12,8 @@ defineProps<{
 
 <template>
   <div class="avatar">
-    <CardCooldown v-if="card.bash.cooldown" :time="time" :timeline="timeline" :cooldownEvents="card.cooldownEvents" />
+    <CardCooldown v-if="card.bash.cooldown" :time="time" :timeline="timeline"
+      :cooldownEvents="card.simulation.cooldownEvents" />
     <div class="chips">
       <div v-if="card.rarity" class="chip base-yellow">
         <BanterIcon />

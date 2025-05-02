@@ -12,8 +12,6 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
   const frozen = ref(0)
   const frozenSource = ref<string>("freeze")
 
-  console.log("rex: 22: cooldownEvents", cooldownEvents)
-
   const cardTimeline = gsap.timeline()
   timeline.add(cardTimeline, 0)
 

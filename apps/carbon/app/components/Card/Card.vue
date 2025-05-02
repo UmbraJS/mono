@@ -26,10 +26,10 @@ const cardBashRecords = useBashRecords({
 <template>
   <div class="carder">
     <CardModal :card="card" :opponent="opponent" :player="player" :bash-records="cardBashRecords" :time="time"
-      :timeline="timeline" :cooldownEvents="card.cooldownEvents">
+      :timeline="timeline" :cooldownEvents="card.simulation.cooldownEvents">
       <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
         <CardCooldown v-if="card.bash.cooldown" :time="time" :timeline="timeline"
-          :cooldownEvents="card.cooldownEvents" />
+          :cooldownEvents="card.simulation.cooldownEvents" />
         <!-- <div class="RecordedValue">
           <p class="border"> {{ cardBashRecords.totalValue.value }}</p>
           <p class="border base-warning"> {{ Number(card.slow.value.toFixed(1)) }}</p>

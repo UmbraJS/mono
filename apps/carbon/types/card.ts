@@ -119,15 +119,18 @@ export interface ReactiveCard extends Card {
 export type Owner = 'player' | 'opponent';
 
 export interface SimCard extends Card {
-  cooldownEvents: {
-    baseDuration: number;
-    duration: number;
-    chunks: OutputChunk[];
-  }[];
-  modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
-  remainingCooldown: number; // Seconds left until trigger
-  count: number; // Number of times this card has been played
-  owner: Owner; // Owner of the card
+  simulation: {
+    cooldownEvents: {
+      baseDuration: number;
+      duration: number;
+      chunks: OutputChunk[];
+    }[];
+    nextCooldownTimestamp: number; // Amount of time passed for this card
+    modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
+    remainingCooldown: number; // Seconds left until trigger
+    count: number; // Number of times this card has been played
+    owner: Owner; // Owner of the card
+  }
 }
 
 export interface Card {

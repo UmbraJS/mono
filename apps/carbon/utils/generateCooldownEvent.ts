@@ -9,6 +9,7 @@ export interface CooldownEvent {
   duration: number;
   chunks: OutputChunk[];
   remainingModifiers: ModifierChunk[];
+  resolvedModifiers: ModifierChunk[];
 }
 
 interface CooldownEventProps {
@@ -29,20 +30,33 @@ export function generateCooldownEvent({
   modifiers,
   startTime,
 }: CooldownEventProps): CooldownEvent {
-  const adjustedModifiers = modifiers.map(m => ({
-    ...m,
-    timestamp: m.timestamp - startTime // Adjust timestamp relative to start of event
-  }))
+  // const adjustedModifiers = modifiers.map(m => ({
+  //   ...m,
+  //   timestamp: m.timestamp - startTime // Adjust timestamp relative to start of event
+  // }))
 
-  const resolvedModifiers = resolveOverlappingModifiers(adjustedModifiers);
+  const resolvedModifiers = resolveOverlappingModifiers(modifiers);
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
-  const { chunks, duration } = convertSegmentsToChunks(baseDuration, timelineSegments);
-  const remainingModifiers = extractRemainingModifiers(adjustedModifiers, duration);
+  const { chunks, duration } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime);
+  const remainingModifiers = extractRemainingModifiers(modifiers, duration);
+
+  // if (modifiers.length > 0) console.log("rex generateCooldownEvent",
+  //   {
+  //     adjustedModifiers,
+  //     modifiers,
+  //     startTime,
+  //     chunks,
+  //     resolvedModifiers,
+  //   }
+  // )
 
   return {
     baseDuration,
     duration,
     chunks,
     remainingModifiers,
+    resolvedModifiers,
+
   };
 }
+

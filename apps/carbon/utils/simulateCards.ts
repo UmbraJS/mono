@@ -16,9 +16,9 @@ export function simulateCooldownTimeline({
   const playerSimCards = initializeSimCards(playerDeck, "player");
   const opponentSimCards = initializeSimCards(opponentDeck, "opponent");
   const simCards = [...playerSimCards, ...opponentSimCards];
-  let globalTime = findNextReadyCard(simCards)?.timeUntilReady || matchDuration;
+  let globalTime = 0;
 
-  // --- Apply all "start" triggered effects ---
+  // --- Apply all "start" modifier effects ---
   for (const card of simCards) {
     forEachEffect(card, (cardModifier) => {
       if (cardModifier.trigger.type !== "start") return;
@@ -44,18 +44,15 @@ export function simulateCooldownTimeline({
   // --- Main simulation loop ---
   while (globalTime < matchDuration) {
     const nextCard = findNextReadyCard(simCards);
-    if (!nextCard) break;
-    if (!nextCard.card.bash.cooldown) break; // No cooldown, no need to simulate
+    if (!nextCard.nextCard.bash.cooldown) break; // No cooldown, no need to simulate
 
-    const timeUntilNext = nextCard.timeUntilReady;
-    const eventStartTime = globalTime + timeUntilNext;
-
-    forEachEffect(nextCard.card, (cardModifier) => {
-      if (nextCard.card.count === 0) return
+    // Gather all modifiers that are triggered by this card
+    forEachEffect(nextCard.nextCard, (cardModifier) => {
+      if (nextCard.nextCard.simulation.count === 0) return
       if (cardModifier.trigger.type !== "cooldown") return;
 
       pushModifiers({
-        sourceCard: nextCard.card,
+        sourceCard: nextCard.nextCard,
         timestamp: globalTime,
         indexes: cardModifier.trigger.playerTriggerIndexes,
         mutateDeck: playerSimCards,
@@ -63,7 +60,7 @@ export function simulateCooldownTimeline({
       });
 
       pushModifiers({
-        sourceCard: nextCard.card,
+        sourceCard: nextCard.nextCard,
         timestamp: globalTime,
         indexes: cardModifier.trigger.opponentTriggerIndexes,
         mutateDeck: opponentSimCards,
@@ -71,15 +68,30 @@ export function simulateCooldownTimeline({
       });
     })
 
-    console.log("rex: nextCard", nextCard.card.name, nextCard.card.modifiers);
+    // if (nextCard.nextCard.name === "Doom Cloak") console.log("card", eventStartTime, nextCard.nextCard.simulation.nextCooldownTimestamp)
 
-    addCooldownEvent(nextCard.card, generateCooldownEvent({
-      baseDuration: nextCard.card.bash.cooldown,
-      startTime: eventStartTime,
-      modifiers: nextCard.card.modifiers,
-    }));
-    advanceTime(simCards, timeUntilNext);
+    const e = generateCooldownEvent({
+      baseDuration: nextCard.nextCard.bash.cooldown,
+      startTime: nextCard.nextCard.simulation.nextCooldownTimestamp,
+      modifiers: nextCard.nextCard.simulation.modifiers,
+    })
 
+    if (nextCard.nextCard.name === "Doom Cloak") console.log("rex event: ", {
+      startTime: nextCard.nextCard.simulation.nextCooldownTimestamp,
+      modifiers: nextCard.nextCard.simulation.modifiers,
+      resolvedModifiers: e.resolvedModifiers,
+      chunks: e.chunks,
+    })
+
+    // Generate a cooldown event for this card
+    addCooldownEvent(nextCard.nextCard, e);
+
+    // Advance time to the next card's cooldown
+    globalTime += nextCard.remainingCooldown;
+    // if (nextCard.nextCard.name === "Doom Cloak") console.log("advanceTime", globalTime, nextCard.remainingCooldown, nextCard.remainingCooldown)
+    for (const card of simCards) {
+      card.simulation.remainingCooldown = Math.max(0, card.simulation.remainingCooldown - nextCard.remainingCooldown);
+    }
   }
 
   // --- Return results ---
@@ -106,7 +118,7 @@ export function simulateCooldownTimeline({
     for (const index of indexes) {
       const targetCard = mutateDeck.find(c => c.index === index);
       if (!targetCard) continue;
-      targetCard.modifiers.push({
+      targetCard.simulation.modifiers.push({
         type: modifier.type,
         duration: modifier.value,
         timestamp: timestamp,
@@ -125,46 +137,48 @@ export function simulateCooldownTimeline({
         ...card,
         index: card.index, // Important for tracking in the simulation
         effects: card.effects || [],
-        cooldownEvents: [],
-        modifiers: [], // Start empty; "start" effects will populate
-        remainingCooldown: cooldown,
-        count: 0, // Number of times this card has been played
-        owner: owner
+        simulation: {
+          cooldownEvents: [],
+          modifiers: [], // Start empty; "start" effects will populate
+          remainingCooldown: cooldown,
+          count: 0, // Number of times this card has been played
+          owner: owner, // Owner of the card
+          nextCooldownTimestamp: 0, // Amount of time passed for this card
+        },
       })
     }
 
     return simCards
   }
 
-  function findNextReadyCard(cards: SimCard[]): { card: SimCard; timeUntilReady: number } | null {
-    let nextCard: SimCard | null = null;
-    let shortestTime = Infinity;
-
-    for (const card of cards) {
-      if (card.remainingCooldown >= shortestTime) continue;
-      shortestTime = card.remainingCooldown;
-      nextCard = card;
-    }
-
-    return nextCard ? { card: nextCard, timeUntilReady: shortestTime } : null;
+  function findNextReadyCard(cards: SimCard[]) {
+    const nextCard = cards.reduce((prev, curr) => {
+      return prev.simulation.remainingCooldown < curr.simulation.remainingCooldown ? prev : curr;
+    })
+    return { nextCard, remainingCooldown: nextCard.simulation.remainingCooldown }
   }
-
 
   function addCooldownEvent(card: SimCard, cooldownEvent: CooldownEvent) {
-    card.remainingCooldown = cooldownEvent.duration; // Reset cooldown
-    card.cooldownEvents.push(cooldownEvent);
-    card.count += 1; // Increment play count
-    card.modifiers = [
-      ...card.modifiers.filter(m => m.timestamp > cooldownEvent.baseDuration),
+    if (card.name === "Doom Cloak") console.log("addCooldownEvent", {
+      name: card.name,
+      cooldownStartTime: card.simulation.nextCooldownTimestamp,
+      modifiers: card.simulation.modifiers,
+      cooldownEvent: cooldownEvent.chunks,
+      resolved: cooldownEvent.resolvedModifiers,
+    });
+
+
+    card.simulation.remainingCooldown = cooldownEvent.duration; // Reset cooldown
+    card.simulation.nextCooldownTimestamp += cooldownEvent.duration; // Update current time
+    card.simulation.cooldownEvents.push(cooldownEvent);
+    card.simulation.count += 1; // Increment play count
+
+
+    // if (card.name === "Doom Cloak") console.log("cooldown event", cooldownEvent);
+    card.simulation.modifiers = [
+      ...card.simulation.modifiers.filter(m => m.timestamp > globalTime),
       ...cooldownEvent.remainingModifiers
     ];
-  }
-
-  function advanceTime(cards: SimCard[], elapsed: number): void {
-    globalTime += elapsed;
-    for (const card of cards) {
-      card.remainingCooldown = Math.max(0, card.remainingCooldown - elapsed);
-    }
   }
 
   function forEachEffect(

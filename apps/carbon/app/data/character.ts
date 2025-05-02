@@ -42,10 +42,10 @@ const warrior: Character = {
   age: adultHumanAge,
   perks: [],
   deck: [
-    cards.find((card) => card.name === 'Archer')!,
+    // cards.find((card) => card.name === 'Archer')!,
     cards.find((card) => card.name === 'Halberdier')!,
     cards.find((card) => card.name === 'Doom Cloak')!,
-    cards.find((card) => card.name === 'Glimmer Cloak')!,
+    // cards.find((card) => card.name === 'Glimmer Cloak')!,
   ],
   inventory: [
     cards.find((card) => card.name === 'Village')!,
@@ -67,10 +67,10 @@ const skeletonKing: Character = {
   age: adultHumanAge,
   perks: [],
   deck: [
-    cards.find((card) => card.name === 'Skeleton Archer')!,
-    cards.find((card) => card.name === 'Skeleton Soldier')!,
-    cards.find((card) => card.name === 'Skeleton Healer')!,
-    cards.find((card) => card.name === 'Skeleton Horseman')!,
+    // cards.find((card) => card.name === 'Skeleton Archer')!,
+    // cards.find((card) => card.name === 'Skeleton Soldier')!,
+    // cards.find((card) => card.name === 'Skeleton Healer')!,
+    // cards.find((card) => card.name === 'Skeleton Horseman')!,
   ],
   inventory: [
     cards.find((card) => card.name === 'Alien Halls')!,

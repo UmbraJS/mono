@@ -12,4 +12,5 @@ export type OutputChunk = {
   duration: number;
   toPercent: number;
   sourceIndex: number | null;
+  timestamp: number;
 };

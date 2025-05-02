@@ -1,5 +1,11 @@
 import type { OutputChunk } from "./types";
 
+interface ChunkSegment {
+  start: number;
+  end: number;
+  type: OutputChunk["type"];
+  sourceIndex: number | null;
+}
 
 /**
  * Converts timeline segments into output chunks with their respective durations and percentages.
@@ -13,12 +19,7 @@ import type { OutputChunk } from "./types";
  * @returns {Object} An object containing the output chunks and total duration.
  */
 
-export function convertSegmentsToChunks(baseDuration: number, segments: {
-  start: number;
-  end: number;
-  type: OutputChunk["type"];
-  sourceIndex: number | null;
-}[]): {
+export function convertSegmentsToChunks(baseDuration: number, segments: ChunkSegment[], startTime: number): {
   chunks: OutputChunk[];
   duration: number;
 } {
@@ -34,7 +35,13 @@ export function convertSegmentsToChunks(baseDuration: number, segments: {
     let duration = fullDuration
 
     if (seg.type === "freeze") {
-      chunks.push({ type: "freeze", duration, toPercent: Math.round(currentPercent), sourceIndex: seg.sourceIndex });
+      chunks.push({
+        type: "freeze",
+        duration,
+        toPercent: Math.round(currentPercent),
+        sourceIndex: seg.sourceIndex,
+        timestamp: seg.start + startTime
+      });
       continue;
     }
 
@@ -54,6 +61,7 @@ export function convertSegmentsToChunks(baseDuration: number, segments: {
       duration,
       toPercent: Math.round(Math.max(currentPercent, 0)),
       sourceIndex: seg.sourceIndex,
+      timestamp: seg.start + startTime
     });
 
     if (currentPercent <= 0) break;
@@ -61,7 +69,7 @@ export function convertSegmentsToChunks(baseDuration: number, segments: {
 
   if (currentPercent > 0) {
     const duration = currentPercent * baseSecondsPerPercent;
-    chunks.push({ type: "base", duration, toPercent: 0, sourceIndex: null });
+    chunks.push({ type: "base", duration, toPercent: 0, sourceIndex: null, timestamp: startTime });
   }
 
   const totalDuration = chunks.reduce((sum, c) => sum + c.duration, 0);
