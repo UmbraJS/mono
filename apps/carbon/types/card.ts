@@ -104,6 +104,8 @@ const cardNames = [
   'Treasure',
 ] as const
 
+export type CardName = (typeof cardNames)[number]
+
 export interface ReactiveCard extends Card {
   index: number;
   cooldown: Ref<number, number>;
@@ -136,7 +138,7 @@ export interface SimCard extends Card {
 export interface Card {
   id: string
   index: number
-  name: (typeof cardNames)[number]
+  name: CardName
   bash: CardBash
   effects: CardEffect[]
   stats: CardStats

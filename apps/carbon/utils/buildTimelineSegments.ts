@@ -1,6 +1,6 @@
 import type { ModifierChunk, ModifierType, OutputChunk } from "./types";
 
-interface TimelineSegments {
+export interface TimelineSegments {
   start: number;
   end: number;
   type: OutputChunk["type"];
@@ -23,7 +23,7 @@ export function buildTimelineSegments(modifiers: ModifierChunk[]): TimelineSegme
   events.sort((a, b) => a.time - b.time || (a.action === "end" ? -1 : 1));
 
   const active = new Map<ModifierType, { mod: ModifierChunk; index: number }>();
-  let lastTime = 0;
+  let lastTime: number | null = null;
   const segments: TimelineSegments[] = [];
 
   const getCurrent: () => {
@@ -38,11 +38,12 @@ export function buildTimelineSegments(modifiers: ModifierChunk[]): TimelineSegme
   };
 
   for (const event of events) {
-    if (event.time > lastTime) {
+    if (lastTime !== null && event.time > lastTime) {
       const current = getCurrent();
       segments.push({ start: lastTime, end: event.time, ...current });
-      lastTime = event.time;
     }
+
+    lastTime = event.time;
 
     if (event.action === "start") {
       if (event.mod.type === "slow" && active.has("haste")) active.delete("haste");

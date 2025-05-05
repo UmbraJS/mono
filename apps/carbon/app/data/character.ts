@@ -42,9 +42,9 @@ const warrior: Character = {
   age: adultHumanAge,
   perks: [],
   deck: [
-    // cards.find((card) => card.name === 'Archer')!,
+    cards.find((card) => card.name === 'Archer')!,
     cards.find((card) => card.name === 'Halberdier')!,
-    cards.find((card) => card.name === 'Doom Cloak')!,
+    // cards.find((card) => card.name === 'Doom Cloak')!,
     // cards.find((card) => card.name === 'Glimmer Cloak')!,
   ],
   inventory: [

@@ -47,7 +47,7 @@ const hasteYourSibling: CardEffect = (card) => {
     value: 1,
     trigger: {
       type: 'cooldown',
-      playerTriggerIndexes: [card.index + 1],
+      playerTriggerIndexes: [card.index],
       opponentTriggerIndexes: [],
     },
   }

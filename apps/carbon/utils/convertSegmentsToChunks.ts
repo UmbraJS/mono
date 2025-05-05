@@ -7,6 +7,11 @@ interface ChunkSegment {
   sourceIndex: number | null;
 }
 
+interface ChunksContainer {
+  chunks: OutputChunk[];
+  duration: number;
+}
+
 /**
  * Converts timeline segments into output chunks with their respective durations and percentages.
  * Take segments, calculate cooldown percent progress.
@@ -19,10 +24,7 @@ interface ChunkSegment {
  * @returns {Object} An object containing the output chunks and total duration.
  */
 
-export function convertSegmentsToChunks(baseDuration: number, segments: ChunkSegment[], startTime: number): {
-  chunks: OutputChunk[];
-  duration: number;
-} {
+export function convertSegmentsToChunks(baseDuration: number, segments: ChunkSegment[], startTime: number): ChunksContainer {
   const baseSecondsPerPercent = baseDuration / 100;
   const slowedSecondsPerPercent = (baseDuration * 4) / 100;
   const hastedSecondsPerPercent = (baseDuration / 3) / 100;
