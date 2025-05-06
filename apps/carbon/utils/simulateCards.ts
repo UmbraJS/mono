@@ -42,6 +42,59 @@ export function simulateCooldownTimeline({
   //   })
   // }
 
+  // --- Main simulation loop ---
+  while (globalTime < matchDuration) {
+    const nextCardsToStart = findNextReadyCards(simCards);
+
+    if (nextCardsToStart.cards.length === 0) break; // No more cards to simulate
+    const nextCardCooldownEnd = globalTime + nextCardsToStart.remainingCooldown; // We can do this because we know this is the next card that will trigger and therefore no other mods will be triggered until after this timestamp
+
+    const nextCardsToFinish = processNextCards(nextCardsToStart);
+    if (!nextCardsToFinish) continue; // No cards to finish
+    if (nextCardsToFinish.cards.length === 0) continue;
+
+    // STAGE 3: Advance time
+    // Advance time to the next card's cooldown
+    globalTime = nextCardCooldownEnd;
+    for (const card of simCards) {
+      const remainingCooldown = card.simulation.remainingCooldown - nextCardsToFinish.remainingCooldown;
+      if (remainingCooldown <= 0) card.simulation.remainingCooldown = nextCardsToFinish.duration;
+      else card.simulation.remainingCooldown = Math.max(0, remainingCooldown);
+    }
+  }
+
+  // --- Return results ---
+  return {
+    player: playerSimCards,
+    opponent: opponentSimCards,
+  }
+
+
+  /**
+  * Processes the cooldown events for the next cards and returns the cards that will finish next.
+  */
+  function processNextCards(nextCards: { cards: SimCard[]; remainingCooldown: number }) {
+    const cardEvents = nextCards.cards
+      .map((nextCard) => cooldownEvent(nextCard, nextCards.remainingCooldown))
+      .filter(e => e !== undefined)
+    if (cardEvents.length === 0) return;
+
+    const smallestDuration = Math.min(...cardEvents.map(e => e.duration));
+    const nextCardsToFinish = cardEvents.filter(e => e.duration === smallestDuration);
+    if (nextCardsToFinish.length === 0) return;
+
+    const remainingCooldowns = nextCardsToFinish.map(e => e.remainingCooldown);
+    console.log("remainingCooldowns", remainingCooldowns)
+    const nextCardRemainingCooldown = remainingCooldowns[0];
+    if (!nextCardRemainingCooldown) return;
+
+    return {
+      cards: nextCardsToFinish,
+      remainingCooldown: nextCardRemainingCooldown,
+      duration: smallestDuration,
+    }
+  }
+
   function cooldownEvent(nextCard: SimCard, nextCardCooldownEnd: number) {
     if (!nextCard.bash.cooldown) return; // No cooldown, no need to simulate
 
@@ -50,6 +103,14 @@ export function simulateCooldownTimeline({
       baseDuration: nextCard.bash.cooldown,
       startTime: nextCard.simulation.nextCooldownTimestamp,
       modifiers: nextCard.simulation.modifiers,
+    })
+
+    if (nextCard.name === "Archer") console.table({
+      name: nextCard.name,
+      startTime: nextCard.simulation.nextCooldownTimestamp,
+      baseDuration: nextCard.bash.cooldown,
+      modifiers: nextCard.simulation.modifiers,
+      duration: e.duration,
     })
 
     logCard({
@@ -92,57 +153,6 @@ export function simulateCooldownTimeline({
       ...e,
       remainingCooldown: nextCard.simulation.remainingCooldown,
     };
-  }
-
-  // --- Main simulation loop ---
-  while (globalTime < matchDuration) {
-    const nextCardsToStart = findNextReadyCards(simCards);
-
-    if (nextCardsToStart.cards.length === 0) break; // No more cards to simulate
-    const nextCardCooldownEnd = globalTime + nextCardsToStart.remainingCooldown; // We can do this because we know this is the next card that will trigger and therefore no other mods will be triggered until after this timestamp
-
-    const nextCardsToFinish = processNextCards(nextCardsToStart);
-    if (!nextCardsToFinish) continue; // No cards to finish
-    if (nextCardsToFinish.cards.length === 0) continue;
-
-    // STAGE 3: Advance time
-    // Advance time to the next card's cooldown
-    globalTime = nextCardCooldownEnd;
-    for (const card of simCards) {
-      const remainingCooldown = card.simulation.remainingCooldown - nextCardsToFinish.remainingCooldown;
-      if (remainingCooldown <= 0) card.simulation.remainingCooldown = nextCardsToFinish.duration;
-      else card.simulation.remainingCooldown = Math.max(0, remainingCooldown);
-    }
-  }
-
-  /**
-   * Processes the cooldown events for the next cards and returns the cards that will finish next.
-   */
-  function processNextCards(nextCards: { cards: SimCard[]; remainingCooldown: number }) {
-    const cardEvents = nextCards.cards
-      .map((nextCard) => cooldownEvent(nextCard, nextCards.remainingCooldown))
-      .filter(e => e !== undefined)
-    if (cardEvents.length === 0) return;
-
-    const smallestDuration = Math.min(...cardEvents.map(e => e.duration));
-    const nextCardsToFinish = cardEvents.filter(e => e.duration === smallestDuration);
-    if (nextCardsToFinish.length === 0) return;
-
-    const remainingCooldowns = nextCardsToFinish.map(e => e.remainingCooldown);
-    const nextCardRemainingCooldown = remainingCooldowns[0];
-    if (!nextCardRemainingCooldown) return;
-
-    return {
-      cards: nextCardsToFinish,
-      remainingCooldown: nextCardRemainingCooldown,
-      duration: smallestDuration,
-    }
-  }
-
-  // --- Return results ---
-  return {
-    player: playerSimCards,
-    opponent: opponentSimCards,
   }
 
   interface ApplyEffectProps {

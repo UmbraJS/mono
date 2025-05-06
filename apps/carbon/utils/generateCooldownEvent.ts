@@ -41,7 +41,6 @@ export function generateCooldownEvent({
   const { chunks, duration } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime);
   const remainingModifiers = extractRemainingModifiers(modifiers, duration);
 
-
   return {
     baseDuration,
     duration,
