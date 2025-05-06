@@ -44,6 +44,11 @@ export function simulateCooldownTimeline({
 
   // --- Main simulation loop ---
   while (globalTime < matchDuration) {
+    console.log("rexer2: ", simCards.map((card) => ({
+      name: card.name,
+      remaining: card.simulation.remainingCooldown,
+      timestamp: globalTime + card.simulation.remainingCooldown
+    })))
     const nextCardsToStart = findNextReadyCards(simCards);
 
     if (nextCardsToStart.cards.length === 0) break; // No more cards to simulate
@@ -58,6 +63,9 @@ export function simulateCooldownTimeline({
     globalTime = nextCardCooldownEnd;
     for (const card of simCards) {
       const remainingCooldown = card.simulation.remainingCooldown - nextCardsToFinish.remainingCooldown;
+      console.log("rexer3: ", card.name, {
+        equation: `${card.simulation.remainingCooldown} - ${nextCardsToFinish.remainingCooldown} = ${remainingCooldown}`,
+      })
       if (remainingCooldown <= 0) card.simulation.remainingCooldown = nextCardsToFinish.duration;
       else card.simulation.remainingCooldown = Math.max(0, remainingCooldown);
     }
@@ -69,13 +77,18 @@ export function simulateCooldownTimeline({
     opponent: opponentSimCards,
   }
 
-
   /**
   * Processes the cooldown events for the next cards and returns the cards that will finish next.
   */
-  function processNextCards(nextCards: { cards: SimCard[]; remainingCooldown: number }) {
+  function processNextCards(nextCards: FindNextReadyCardsReturn) {
     const cardEvents = nextCards.cards
-      .map((nextCard) => cooldownEvent(nextCard, nextCards.remainingCooldown))
+      .map((nextCard) => {
+        console.log("Pushed modifier - cards", nextCard.name, {
+          remaining: nextCard.simulation.remainingCooldown,
+          timestamp: globalTime + nextCard.simulation.remainingCooldown
+        })
+        return cooldownEvent(nextCard, globalTime + nextCard.simulation.remainingCooldown)
+      })
       .filter(e => e !== undefined)
     if (cardEvents.length === 0) return;
 
@@ -84,7 +97,11 @@ export function simulateCooldownTimeline({
     if (nextCardsToFinish.length === 0) return;
 
     const remainingCooldowns = nextCardsToFinish.map(e => e.remainingCooldown);
-    console.log("remainingCooldowns", remainingCooldowns)
+    console.log("rexer3 - nextCardsToFinish: ", nextCardsToFinish.map(e => ({
+      name: e.name,
+      remainingCooldown: e.remainingCooldown,
+      duration: e.duration,
+    })))
     const nextCardRemainingCooldown = remainingCooldowns[0];
     if (!nextCardRemainingCooldown) return;
 
@@ -105,13 +122,10 @@ export function simulateCooldownTimeline({
       modifiers: nextCard.simulation.modifiers,
     })
 
-    if (nextCard.name === "Archer") console.table({
-      name: nextCard.name,
-      startTime: nextCard.simulation.nextCooldownTimestamp,
-      baseDuration: nextCard.bash.cooldown,
-      modifiers: nextCard.simulation.modifiers,
-      duration: e.duration,
-    })
+    // if (nextCard.name === "Halberdier") console.log("Pushed modifier - cards Halberdier", {
+    //   name: nextCard.name,
+    //   duration: e.duration,
+    // })
 
     logCard({
       name: nextCard.name,
@@ -151,6 +165,7 @@ export function simulateCooldownTimeline({
 
     return {
       ...e,
+      name: nextCard.name,
       remainingCooldown: nextCard.simulation.remainingCooldown,
     };
   }
@@ -179,7 +194,12 @@ export function simulateCooldownTimeline({
         timestamp: timestamp,
         sourceIndex: sourceCard.index,
       });
-      console.log("pushModifiers", targetCard.simulation.modifiers)
+      console.log("Pushed modifier", {
+        targetCard: targetCard.name,
+        modifier: modifier.type,
+        value: modifier.value,
+        timestamp: timestamp,
+      })
     }
   }
 
@@ -215,6 +235,10 @@ export function simulateCooldownTimeline({
   type FindNextReadyCardsReturn = ReturnType<typeof findNextReadyCards>;
 
   function addCooldownEvent(card: SimCard, cooldownEvent: CooldownEvent) {
+    // console.log("Pushed modifier - cards Halberdier 22", {
+    //   name: card.name,
+    //   duration: cooldownEvent.duration,
+    // })
     card.simulation.remainingCooldown = cooldownEvent.duration; // Reset cooldown
     card.simulation.nextCooldownTimestamp += cooldownEvent.duration; // Update current time
     card.simulation.cooldownEvents.push(cooldownEvent);
