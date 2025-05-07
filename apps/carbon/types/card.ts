@@ -129,8 +129,7 @@ export interface SimCard extends Card {
     }[];
     nextCooldownTimestamp: number; // Amount of time passed for this card
     modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
-    remainingCooldown: number; // Seconds left until trigger
-    count: number; // Number of times this card has been played
+    lifetime: number[]; // Amount of time in cooldowns passed for this card
     owner: Owner; // Owner of the card
   }
 }

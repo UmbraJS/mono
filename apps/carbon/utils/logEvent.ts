@@ -21,7 +21,7 @@ export function logCard({
 }: LogCard) {
   if (nextCard.card.name !== name) return
   const nextCooldownTimestamp = nextCard.card.simulation.nextCooldownTimestamp; // The cooldownEvent.duration added to itself each round
-  const count = nextCard.card.simulation.count + 1 > 9 ? nextCard.card.simulation.count + 1 : `0${nextCard.card.simulation.count + 1}`;
+  const count = nextCard.card.simulation.lifetime.length + 1 > 9 ? nextCard.card.simulation.lifetime.length + 1 : `0${nextCard.card.simulation.lifetime.length + 1}`;
 
   const ERROR_COOLDOWN_START_BEFORE_END = nextCardCooldownEnd < nextCooldownTimestamp;
   const eventStyle = `color: ${ERROR_COOLDOWN_START_BEFORE_END ? "red" : "white"}; font-weight: bold; font-size: 14px; background: black; padding: 5px 15px; border-radius: 6px;`;
