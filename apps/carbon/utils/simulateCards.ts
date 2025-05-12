@@ -47,22 +47,14 @@ export function simulateCooldownTimeline({
 
   while (count < 10) {
     const processedCards = processCards(simCards);
+    console.log("processedCards", processedCards?.nextCardsToFinish.map(c => c.card.name), simCards.map(c => c.name));
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) continue; // No cards to finish
+
 
     globalTime = processedCards.nextCooldownEnd;
     pushCardEvents(processedCards, (cardEvent) => {
       pushModifiers(cardEvent);
     });
-
-    // const halbert = playerSimCards.find(c => c.name === "Halberdier");
-
-    // console.table({
-    //   name: halbert?.name,
-    //   globalTime: globalTime,
-    // })
-    // console.log("lifetime", halbert?.simulation.lifetime)
-    // console.log("stored modifiers", halbert?.simulation.modifiers.map(m => m.timestamp))
-    // console.groupEnd();
 
     count++;
   }
@@ -80,11 +72,13 @@ export function simulateCooldownTimeline({
     const cardEvents = cards
       .map((card) => cooldownEvent(card))
       .filter(e => e !== undefined)
-      .sort((a, b) => a.remainingCooldown - b.remainingCooldown);
+      .sort((a, b) => a.nextCooldownEnd - b.nextCooldownEnd);
     if (cardEvents.length === 0) return;
 
-    const smallestDuration = Math.min(...cardEvents.map(e => e.duration));
-    const nextCardsToFinish = cardEvents.filter(e => e.duration === smallestDuration);
+
+    const nextCardToFinish = cardEvents[0];
+    if (!nextCardToFinish) return;
+    const nextCardsToFinish = cardEvents.filter(e => e.nextCooldownEnd === nextCardToFinish.nextCooldownEnd);
     if (nextCardsToFinish.length === 0) return;
 
     const remainingCooldowns = nextCardsToFinish.map(e => e.remainingCooldown);
@@ -103,9 +97,6 @@ export function simulateCooldownTimeline({
   function cooldownEvent(card: SimCard) {
     if (!card.bash.cooldown) return; // No cooldown, no need to simulate
 
-    const mods = card.simulation.modifiers
-    const playerModifiers = getEffectModifiers(getTotalLifetime(card.simulation.lifetime))
-
     // STAGE 1: Generate a cooldown event for the next card
     const cooldownEvent = generateCooldownEvent({
       baseDuration: card.bash.cooldown,
@@ -119,7 +110,7 @@ export function simulateCooldownTimeline({
     });
 
     const allModifiers = getEffectModifiers(totalLifetime);
-    console.log(`this cooldown ${totalLifetime} - ${nextCardCooldownEnd} : [${allModifiers.map((c) => c.playerModifiers[0]?.timestamp)}]`);
+    // console.log(`this cooldown ${totalLifetime} - ${nextCardCooldownEnd} : [${allModifiers.map((c) => c.playerModifiers[0]?.timestamp)}]`);
 
     function getEffectModifiers(nextCardCooldownEnd: number) {
       return card.effects.map(effect => {
