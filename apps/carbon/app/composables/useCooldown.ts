@@ -40,10 +40,10 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
     cardTimeline.add(cooldownTimeline)
 
     durationTimeline.fromTo(cooldownDuration, {
-      value: event.duration,
+      value: event.lifetime[event.lifetime.length - 1],
     }, {
       value: 0,
-      duration: event.duration,
+      duration: event.lifetime[event.lifetime.length - 1],
       ease: 'none',
       onComplete: () => {
         cooldown.value = 100
@@ -52,7 +52,7 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
 
     timeChunks.forEach((chunk) => {
       const duration = chunk.duration
-      const toPercent = chunk.toPercent
+      const toPercent = chunk.to
 
       const animationProps = {
         toPercent,

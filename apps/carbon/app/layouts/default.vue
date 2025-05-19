@@ -3,6 +3,9 @@ const theme = useUmbra()
 
 onMounted(() => {
   theme.inverse()
+  theme.inverse()
+  theme.inverse()
+
 })
 </script>
 

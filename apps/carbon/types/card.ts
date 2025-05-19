@@ -124,7 +124,7 @@ export interface SimCard extends Card {
   simulation: {
     cooldownEvents: {
       baseDuration: number;
-      duration: number;
+      lifetime: number[];
       chunks: OutputChunk[];
     }[];
     nextCooldownTimestamp: number; // Amount of time passed for this card

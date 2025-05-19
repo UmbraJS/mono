@@ -6,6 +6,7 @@ import { gsap } from 'gsap'
 // import { useAudioCue } from '@/composables/useAudioCue'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
 import { simulateCooldownTimeline } from '../../utils/simulateCards'
+import type { timestamp } from '@vueuse/core'
 
 const time = ref(0)
 
@@ -41,7 +42,10 @@ const cardTimeline = simulateCooldownTimeline({
   matchDuration: 30
 })
 
-console.log('cardTimeline', cardTimeline)
+console.log('rex cardTimeline', cardTimeline?.player.map((card) => ({
+  name: card.name,
+  events: card.simulation.cooldownEvents,
+})))
 
 // const audio = useAudioCue()
 

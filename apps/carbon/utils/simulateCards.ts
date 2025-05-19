@@ -1,8 +1,6 @@
 import { generateCooldownEvent } from "./generateCooldownEvent";
-import type { CooldownEvent } from "./generateCooldownEvent";
 import type { Card, SimCard, CardModifier } from "../types/card"
-import { logCard } from "./logEvent";
-import type { timestamp } from "@vueuse/core";
+// import { logCard } from "./logEvent";
 
 interface SimulateCooldownTimelineArgs {
   playerDeck: Card[];
@@ -45,16 +43,52 @@ export function simulateCooldownTimeline({
 
   let count = 0;
 
-  while (count < 10) {
+  while (globalTime < 10 && count < 10) {
+    // Calculate data
     const processedCards = processCards(simCards);
-    console.log("processedCards", processedCards?.nextCardsToFinish.map(c => c.card.name), simCards.map(c => c.name));
-    if (!processedCards || processedCards.nextCardsToFinish.length === 0) continue; // No cards to finish
 
-
+    // Pass time
+    if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
+      globalTime += 1;
+      continue;
+    }; // No cards to finish
     globalTime = processedCards.nextCooldownEnd;
-    pushCardEvents(processedCards, (cardEvent) => {
-      pushModifiers(cardEvent);
-    });
+
+    console.log("rex g: ", processedCards.nextCooldownEnd)
+
+    // Mutate data
+    for (const nextCardToFinish of processedCards.nextCardsToFinish) {
+      if (!nextCardToFinish.allModifiers) continue; // No modifiers to apply so nothing to do
+
+      // Store data on the next card
+      nextCardToFinish.card.simulation.cooldownEvents.push({
+        baseDuration: nextCardToFinish.baseDuration,
+        lifetime: nextCardToFinish.lifetime, // lifetime is not getting updated correctly
+        chunks: nextCardToFinish.chunks,
+      });
+
+      const nextCardCooldownDuration = nextCardToFinish.lifetime[nextCardToFinish.lifetime.length - 1];
+      if (!nextCardCooldownDuration) continue;
+
+      nextCardToFinish.card.simulation.lifetime.push(nextCardCooldownDuration);
+      nextCardToFinish.card.simulation.nextCooldownTimestamp = nextCardToFinish.nextCooldownEnd;
+
+      console.log("rex life: ", {
+        lifetime: nextCardToFinish.lifetime,
+      });
+
+      if (((nextCardToFinish?.totalLifetime ?? 0)) > 30) continue;
+      if (!nextCardToFinish) continue;
+
+      // Store data on every card modified by this next card
+      for (const modifier of nextCardToFinish.allModifiers) {
+        modifier.playerModifiers.forEach(mod => {
+          const targetCard = playerSimCards.find(c => c.index === mod.index);
+          if (!targetCard) return;
+          targetCard.simulation.modifiers.push(mod);
+        })
+      }
+    }
 
     count++;
   }
@@ -75,11 +109,11 @@ export function simulateCooldownTimeline({
       .sort((a, b) => a.nextCooldownEnd - b.nextCooldownEnd);
     if (cardEvents.length === 0) return;
 
-
     const nextCardToFinish = cardEvents[0];
     if (!nextCardToFinish) return;
     const nextCardsToFinish = cardEvents.filter(e => e.nextCooldownEnd === nextCardToFinish.nextCooldownEnd);
     if (nextCardsToFinish.length === 0) return;
+
 
     const remainingCooldowns = nextCardsToFinish.map(e => e.remainingCooldown);
     const nextCardRemainingCooldown = remainingCooldowns[0];
@@ -92,104 +126,37 @@ export function simulateCooldownTimeline({
     }
   }
 
-  type ProccessedCards = ReturnType<typeof processCards>;
-
   function cooldownEvent(card: SimCard) {
-    if (!card.bash.cooldown) return; // No cooldown, no need to simulate
+    // Generate event using previously stored modifiers
+    const cooldownEvent = generateCooldownEvent(card);
+    if (!cooldownEvent) return;
 
-    // STAGE 1: Generate a cooldown event for the next card
-    const cooldownEvent = generateCooldownEvent({
-      baseDuration: card.bash.cooldown,
-      startTime: card.simulation.nextCooldownTimestamp,
-      modifiers: card.simulation.modifiers,
-    })
+    const totalLifetime = getTotalLifetime(card.simulation.lifetime);
+    const nextCooldownEnd = getTotalLifetime(cooldownEvent.lifetime);
 
-    const { nextCardCooldownEnd, totalLifetime } = getNextCooldownEnd({
-      lifetime: card.simulation.lifetime,
-      nextEventDuration: cooldownEvent.duration,
-    });
+    // Get modifiers for next events
+    const allModifiers = card.effects.map(effect => {
+      const cardModifier = effect(card);
+      if (cardModifier.trigger.type !== "cooldown") return;
 
-    const allModifiers = getEffectModifiers(totalLifetime);
-    // console.log(`this cooldown ${totalLifetime} - ${nextCardCooldownEnd} : [${allModifiers.map((c) => c.playerModifiers[0]?.timestamp)}]`);
+      return getModifiers({
+        sourceCard: card,
+        timestamp: getTotalLifetime(cooldownEvent.lifetime),
+        modifier: cardModifier
+      });
 
-    function getEffectModifiers(nextCardCooldownEnd: number) {
-      return card.effects.map(effect => {
-        const cardModifier = effect(card);
-        if (cardModifier.trigger.type !== "cooldown") return;
+    }).filter(mod => mod !== undefined);
 
-        return getModifiers({
-          sourceCard: card,
-          timestamp: nextCardCooldownEnd,
-          modifier: cardModifier
-        });
-
-      }).filter(mod => mod !== undefined);
-    }
-
-    // console.groupCollapsed(`%c🛡️ ${card.name} Event ${card.simulation.lifetime}`);
-    // console.log("card: ", card.name);
-    // console.log("applied modifiers: ", card.simulation.modifiers.map(m => m.timestamp));
-    // console.log("all modifiers", allModifiers);
-    // console.log("event: ", cooldownEvent)
+    const remainingCooldown = getRemainingCooldown(cooldownEvent.lifetime, globalTime);
 
     return {
       ...cooldownEvent,
       card: card,
-      remainingCooldown: getRemainingCooldown(card.simulation.lifetime, cooldownEvent.duration, globalTime),
-      totalLifetime: totalLifetime,
-      nextCooldownEnd: nextCardCooldownEnd,
+      remainingCooldown,
+      totalLifetime,
+      nextCooldownEnd,
       allModifiers
     };
-  }
-
-  type CardEvent = ReturnType<typeof cooldownEvent>;
-
-  function pushCardEvents(nextCards: ProccessedCards, callback: ({
-    cardEvent,
-    timestamp
-  }: {
-    cardEvent: CardEvent;
-    timestamp: number;
-  }) => void) {
-    if (!nextCards) return;
-    for (const nextCard of nextCards.nextCardsToFinish) {
-      const cooldownEvent = nextCard;
-      if (!cooldownEvent.allModifiers) continue;
-
-      nextCard.card.simulation.cooldownEvents.push(cooldownEvent);
-      nextCard.card.simulation.lifetime.push(cooldownEvent.duration);
-      nextCard.card.simulation.nextCooldownTimestamp += cooldownEvent.nextCooldownEnd;
-
-      // card.simulation.modifiers = [
-      //   ...card.simulation.modifiers,
-      //   // ...cooldownEvent.remainingModifiers
-      // ];
-
-      callback({
-        cardEvent: cooldownEvent,
-        timestamp: nextCard.totalLifetime
-      });
-
-    }
-  }
-
-  function pushModifiers({
-    cardEvent,
-    timestamp
-  }: { cardEvent: CardEvent; timestamp: number }) {
-    if (!cardEvent) return;
-    for (const modifier of cardEvent.allModifiers) {
-      modifier.playerModifiers.forEach(m => {
-        const targetCard = playerSimCards.find(c => c.index === m.index);
-        if (!targetCard) return;
-        targetCard.simulation.modifiers.push({
-          type: m.type,
-          duration: m.duration,
-          timestamp: timestamp,
-          sourceIndex: m.sourceIndex,
-        });
-      })
-    }
   }
 
   interface GetModifiersProps {
@@ -244,35 +211,23 @@ export function simulateCooldownTimeline({
   }
 }
 
-export function getRemainingCooldown(lifetime: number[], cooldownDuration: number, globalTime: number) {
-  const lastLifetimeEntry = lifetime[lifetime.length - 1];
-  if (!lastLifetimeEntry) return cooldownDuration;
-  const totalLifetime = getTotalLifetime(lifetime);
-  const nextCooldownEnd = totalLifetime + cooldownDuration;
-  const remainingDuration = nextCooldownEnd - globalTime;
+export function getRemainingCooldown(newLifetime: number[], globalTime: number) {
+  const thisCooldownDuration = newLifetime[newLifetime.length - 1];
+  if (!thisCooldownDuration) return thisCooldownDuration;
 
-  if (totalLifetime > globalTime) {
-    console.error("Total lifetime is greater than global time", { totalLifetime, globalTime });
-    return cooldownDuration;
+  const totalLifetime = getTotalLifetime(newLifetime);
+  const remainingDuration = totalLifetime - globalTime;
+
+  const startOfThisCooldown = totalLifetime - thisCooldownDuration;
+
+  if (startOfThisCooldown > globalTime) {
+    console.error("This cooldown start is greater than the current global time and therefore should not have started yet", { startOfThisCooldown, globalTime });
+    return thisCooldownDuration;
   }
 
-  return remainingDuration || cooldownDuration;
+  return remainingDuration || thisCooldownDuration;
 }
 
-function getNextCooldownEnd({
-  lifetime,
-  nextEventDuration
-}: {
-  lifetime: number[];
-  nextEventDuration: number
-}) {
-  const totalLifetime = getTotalLifetime(lifetime);
-  return {
-    nextCardCooldownEnd: totalLifetime + nextEventDuration,
-    totalLifetime,
-  }
-}
-
-function getTotalLifetime(lifetime: number[]) {
+export function getTotalLifetime(lifetime: number[]) {
   return lifetime.reduce((acc, curr) => acc + curr, 0);
 }

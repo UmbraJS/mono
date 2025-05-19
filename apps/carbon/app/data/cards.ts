@@ -233,7 +233,7 @@ export const cards: Card[] = [
   {
     id: 'DoomCloak',
     name: 'Doom Cloak',
-    bash: { attack: 20, shield: 20, cooldown: 7 },
+    bash: { attack: 20, shield: 20, cooldown: 10 },
     index: 0,
     stats: {},
     level: 1,

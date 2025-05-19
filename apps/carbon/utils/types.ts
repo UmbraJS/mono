@@ -10,7 +10,9 @@ export type ModifierChunk = {
 export type OutputChunk = {
   type: "base" | ModifierType;
   duration: number;
-  toPercent: number;
+  to: number;
+  from: number;
+  start: number;
+  end: number;
   sourceIndex: number | null;
-  timestamp: number;
 };

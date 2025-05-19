@@ -19,7 +19,8 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
     </div>
     <div class="debugPanel">
       <div class="slowp">
-        <p>{{ cooldownDuration.toFixed(1) }}</p>
+        <!-- <p>{{ cooldownDuration.toFixed(1) }}</p> -->
+        <p>{{ cooldownDuration }}</p>
         <p>{{ time.toFixed(1) }}</p>
         <p>{{ Math.floor(cooldown) }}</p>
       </div>
