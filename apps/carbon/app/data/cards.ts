@@ -213,7 +213,7 @@ export const cards: Card[] = [
   {
     id: 'halberdier',
     name: 'Halberdier',
-    bash: { attack: 10, shield: 10, cooldown: 5 },
+    bash: { attack: 10, shield: 10, cooldown: 10 },
     index: 0,
     stats: {},
     level: 1,

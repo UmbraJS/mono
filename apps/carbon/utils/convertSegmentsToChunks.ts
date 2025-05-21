@@ -9,12 +9,13 @@ interface ChunkSegment {
 
 interface ChunksContainer {
   chunks: OutputChunk[];
-  lifetime: number[];
-  chunkLifetime: number[];
+  segmentedChunks: number[];
 }
+
 function getDifference(num1: number, num2: number) {
   return Math.abs(num1 - num2); // Use Math.abs to ensure the result is always positive
 }
+
 /**
  * Converts timeline segments into output chunks with their respective durations and percentages.
  * Take segments, calculate cooldown percent progress.
@@ -27,14 +28,49 @@ function getDifference(num1: number, num2: number) {
  * @returns {Object} An object containing the output chunks and total duration.
  */
 
-export function convertSegmentsToChunks(baseDuration: number, segments: ChunkSegment[], fallbackTime: number): ChunksContainer {
+export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegment[]): ChunksContainer {
   const baseSecondsPerPercent = baseDuration / 100;
-  const slowedSecondsPerPercent = (baseDuration * 4) / 100;
-  const hastedSecondsPerPercent = (baseDuration / 3) / 100;
+  const basePercentPerSecond = 100 / baseDuration; // 10% = 1 second
+
+  const slowMult = 2; // 2 = 2x slow
+  const slowedSecondsPerPercent = (baseDuration * slowMult) / 100; // 10% = 2 seconds
+  const slowedPercentPerSecond = 100 / (baseDuration * slowMult); // 1 second = 5%
+
+  const hasteMult = 2; // 2 = 2x haste
+  const hastedSecondsPerPercent = (baseDuration / hasteMult) / 100; // 10% = 0.5 seconds
+  const hastedPercentPerSecond = 100 / (baseDuration / hasteMult); // 1 second = 20%
 
   const chunks: OutputChunk[] = [];
   let currentPercent = 100;
   let previousPercent = 100;
+
+  // Add base start chunk
+  // base paddings
+
+  // There are no segments, so we add a base chunk
+  const noSegments = segments.length === 0; // false
+  const firstSegment = segments[0]; //  { start: 5, end: 6, type: 'haste', sourceIndex: 0 }
+  const firstSegmentDoesNotStartAtZero = firstSegment && firstSegment.start > 0; // true
+
+  if (noSegments) {
+    chunks.push({
+      type: "base",
+      sourceIndex: null,
+      from: 100, to: 0,
+      start: 0, end: baseDuration,
+      duration: baseDuration,
+    });
+  } else if (firstSegmentDoesNotStartAtZero) {
+    // There are segments but they don't start at 0 so we add a base chunk
+    const firstSegmentStart = firstSegment.start;
+    chunks.push({
+      type: "base",
+      sourceIndex: null,
+      from: 100, to: 100 - basePercentPerSecond * firstSegmentStart,
+      start: 0, end: firstSegmentStart,
+      duration: getDifference(0, firstSegment.start),
+    });
+  }
 
   for (const seg of segments) {
     const fullDuration = getDifference(seg.start, seg.end);
@@ -78,27 +114,43 @@ export function convertSegmentsToChunks(baseDuration: number, segments: ChunkSeg
       end: seg.end,
     });
 
+    const lastChunk = chunks[chunks.length - 1]; // { type: 'haste', duration: 1, to: 40, from: 100, sourceIndex: 0, start: 5, end: 6 }
+    const lastChunkIsBase = lastChunk?.type === "base"; // false
+
+    if (currentPercent >= 0 && !lastChunkIsBase && lastChunk) {
+      // Add base end chunk
+      const remainingPercent = lastChunk.to;
+      const remainingDuration = remainingPercent * baseSecondsPerPercent;
+
+      chunks.push({
+        type: "base",
+        to: 0,
+        from: lastChunk.to,
+        sourceIndex: null,
+        start: lastChunk.end,
+        end: lastChunk.end + remainingDuration,
+        duration: remainingDuration,
+      });
+
+      previousPercent = 100;
+      currentPercent = 100;
+    }
+
     // Reset percent if it reaches 0
     if (currentPercent <= 0) {
       previousPercent = 100;
       currentPercent = 100;
     }
-
   }
 
-  if (currentPercent >= 0) {
-    const duration = currentPercent * baseSecondsPerPercent;
-    chunks.push({
-      type: "base", duration,
-      to: 0,
-      from: previousPercent,
-      sourceIndex: null,
-      start: fallbackTime,
-      end: fallbackTime + duration,
-    });
-  }
+  // console.log("rex life:: chunky1: ", segments, chunks.map(e => ({
+  //   duration: e.duration,
+  //   startEnd: `${e.start} -> ${e.end}`,
+  //   fromTo: `${e.from} -> ${e.to}`,
+  //   type: e.type,
+  // })))
 
-  return { chunks, lifetime: countSegmentsAcrossChunks(chunks, segments), chunkLifetime: chunks.map(e => e.duration) }; // Return the total duration
+  return { chunks, segmentedChunks: countSegmentsAcrossChunks(chunks, segments) }; // Return the total duration
 }
 
 function countSegmentsAcrossChunks(chunks: OutputChunk[], segments: ChunkSegment[]) {

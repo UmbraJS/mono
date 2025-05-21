@@ -8,7 +8,7 @@ import { getTotalLifetime } from "./simulateCards";
 
 export interface CooldownEvent {
   baseDuration: number;
-  lifetime: number[];
+  segmentedChunks: number[];
   chunks: OutputChunk[];
   // timelineSegments: {
   //   start: number;
@@ -34,18 +34,14 @@ export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined 
 
   const resolvedModifiers = resolveOverlappingModifiers(modifiers);
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
-  const { chunks, lifetime, chunkLifetime } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime);
+
+  const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments);
   // const remainingModifiers = extractRemainingModifiers(modifiers, lifetime[lifetime.length - 1] || 0);
-
-  // if (card.name === "Halberdier") console.log("rex chunky: ", timelineSegments)
-
-  // if (card.name === "Halberdier") console.log("rex chunky: ", startTime, lifetime, chunkLifetime, card.simulation.lifetime, modifiers)
 
   return {
     baseDuration,
-    lifetime,
+    segmentedChunks,
     chunks,
-    // remainingModifiers,
   };
 }
 
