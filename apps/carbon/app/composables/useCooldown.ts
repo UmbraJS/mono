@@ -1,8 +1,7 @@
 import { gsap } from 'gsap'
-import type { ChainedCooldownEvent } from '../../utils/generateChainedCooldownEvents'
+import type { OutputChunk } from "../../utils/types";
 
-
-export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: ChainedCooldownEvent[]) {
+export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: OutputChunk[]) {
   const cooldown = ref(100)
   const cooldownDuration = ref(0)
   const slow = ref(0)
@@ -16,13 +15,17 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
   timeline.add(cardTimeline, 0)
 
   onMounted(() => {
-    cooldownEvents.forEach((event) => {
-      animateCooldown(event)
+    const segments = getSegments(cardSimulation)
+    console.log("segments", segments)
+    console.log("chunks", cardSimulation)
+
+    segments.forEach((segment) => {
+      animateCooldown(segment)
     })
   })
 
-  function animateCooldown(event: ChainedCooldownEvent) {
-    const timeChunks = event.chunks
+  function animateCooldown(segment: Segment) {
+    const timelineChunks = segment.chunks
 
     const modifierTimeline = gsap.timeline()
 
@@ -40,17 +43,17 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
     cardTimeline.add(cooldownTimeline)
 
     durationTimeline.fromTo(cooldownDuration, {
-      value: event.lifetime[event.lifetime.length - 1],
+      value: segment.duration,
     }, {
       value: 0,
-      duration: event.lifetime[event.lifetime.length - 1],
+      duration: segment.duration,
       ease: 'none',
       onComplete: () => {
         cooldown.value = 100
       },
     }, 0)
 
-    timeChunks.forEach((chunk) => {
+    timelineChunks.forEach((chunk) => {
       const duration = chunk.duration
       const toPercent = chunk.to
 
@@ -181,3 +184,47 @@ export function useCooldown(timeline: gsap.core.Timeline, cooldownEvents: Chaine
     frozenSource,
   }
 }
+
+
+interface Segment extends Pick<OutputChunk, "start" | "end" | "duration"> {
+  chunks: OutputChunk[]
+}
+
+function getSegments(chunks: OutputChunk[]): Segment[] {
+  const segments: Segment[] = [];
+
+  if (chunks.length === 0) return segments;
+
+  const sortedChunks = [...chunks].sort((a, b) => a.start - b.start);
+  let currentSegmentStartIndex = 0;
+
+  for (let i = 1; i <= sortedChunks.length; i++) {
+    const currentChunk = sortedChunks[i];
+    const prevChunk = sortedChunks[i - 1];
+
+    // Check if this is the end of a segment
+    const isEndOfSegment =
+      i === sortedChunks.length || (currentChunk && currentChunk.from === 100);
+
+    if (isEndOfSegment) {
+      const segmentChunks = sortedChunks.slice(currentSegmentStartIndex, i);
+      const first = segmentChunks[0];
+      const last = segmentChunks[segmentChunks.length - 1];
+
+      if (!first || !last) continue;
+
+      const totalDuration = segmentChunks.reduce((sum, c) => sum + c.duration, 0);
+      segments.push({
+        start: first.start,
+        end: last.end,
+        duration: totalDuration,
+        chunks: segmentChunks,
+      });
+
+      currentSegmentStartIndex = i;
+    }
+  }
+
+  return segments;
+}
+

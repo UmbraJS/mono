@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
-import type { ChainedCooldownEvent } from '../../../utils/generateChainedCooldownEvents'
+import type { OutputChunk } from "../../../utils/types";
 
 const props = defineProps<{
   time: number
   timeline: gsap.core.Timeline;
-  cooldownEvents: ChainedCooldownEvent[];
+  cooldownEvents: OutputChunk[];
 }>()
 
 const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.cooldownEvents)

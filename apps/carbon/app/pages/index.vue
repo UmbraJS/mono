@@ -44,7 +44,7 @@ const cardTimeline = simulateCooldownTimeline({
 
 console.log('rex cardTimeline', cardTimeline?.player.map((card) => ({
   name: card.name,
-  events: card.simulation.cooldownEvents,
+  chunks: card.simulation.chunks,
 })))
 
 // const audio = useAudioCue()

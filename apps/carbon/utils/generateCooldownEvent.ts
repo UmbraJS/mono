@@ -10,12 +10,6 @@ export interface CooldownEvent {
   baseDuration: number;
   segmentedChunks: number[];
   chunks: OutputChunk[];
-  // timelineSegments: {
-  //   start: number;
-  //   end: number;
-  //   type: "base" | "slow" | "haste" | "freeze";
-  //   sourceIndex: number | null;
-  // }[];
 }
 
 /**
@@ -35,7 +29,9 @@ export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined 
   const resolvedModifiers = resolveOverlappingModifiers(modifiers);
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
 
-  const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments);
+
+  const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime, card.name);
+  if (card.name === "Doom Cloak") console.log("rex gen ", startTime, timelineSegments.map(c => ({ startEnd: `${c.start} - ${c.end}`, type: c.type })), chunks.map(c => ({ startEnd: `${c.start} - ${c.end}`, type: c.type, duration: c.duration })));
   // const remainingModifiers = extractRemainingModifiers(modifiers, lifetime[lifetime.length - 1] || 0);
 
   return {

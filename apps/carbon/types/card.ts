@@ -122,11 +122,7 @@ export type Owner = 'player' | 'opponent';
 
 export interface SimCard extends Card {
   simulation: {
-    cooldownEvents: {
-      baseDuration: number;
-      lifetime: number[];
-      chunks: OutputChunk[];
-    }[];
+    chunks: OutputChunk[];
     nextCooldownTimestamp: number; // Amount of time passed for this card
     modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
     lifetime: number[]; // Amount of time in cooldowns passed for this card

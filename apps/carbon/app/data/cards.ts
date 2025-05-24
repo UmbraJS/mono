@@ -31,7 +31,7 @@ const hasteYourself: CardEffect = (card) => {
   return {
     sourceIndex: card.index,
     type: 'haste',
-    value: 0.2,
+    value: 1,
     trigger: {
       type: 'cooldown',
       playerTriggerIndexes: [card.index],
@@ -47,7 +47,7 @@ const hasteYourSibling: CardEffect = (card) => {
     value: 1,
     trigger: {
       type: 'cooldown',
-      playerTriggerIndexes: [card.index],
+      playerTriggerIndexes: [card.index + 1],
       opponentTriggerIndexes: [],
     },
   }
@@ -213,7 +213,7 @@ export const cards: Card[] = [
   {
     id: 'halberdier',
     name: 'Halberdier',
-    bash: { attack: 10, shield: 10, cooldown: 10 },
+    bash: { attack: 10, shield: 10, cooldown: 5 },
     index: 0,
     stats: {},
     level: 1,

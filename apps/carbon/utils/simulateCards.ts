@@ -43,10 +43,11 @@ export function simulateCooldownTimeline({
 
   let count = 0;
 
-  while (globalTime < 20 && count < 10) {
+  while (globalTime < 30 && count < 10) {
     // Calculate data
     const processedCards = processCards(simCards);
 
+    console.log("Simulating cards", processedCards)
     // Pass time
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
       globalTime += 1;
@@ -54,18 +55,13 @@ export function simulateCooldownTimeline({
     }; // No cards to finish
     globalTime = processedCards.nextCooldownEnd;
 
+
     // Mutate data
     for (const nextCardToFinish of processedCards.nextCardsToFinish) {
       if (!nextCardToFinish.allModifiers) continue; // No modifiers to apply so nothing to do
 
       // Store data on the next card
-      nextCardToFinish.card.simulation.cooldownEvents.push({
-        duration: nextCardToFinish.segmentedChunks[nextCardToFinish.segmentedChunks.length - 1] || nextCardToFinish.baseDuration,
-        baseDuration: nextCardToFinish.baseDuration,
-        lifetime: nextCardToFinish.segmentedChunks, // lifetime is not getting updated correctly
-        chunks: nextCardToFinish.chunks,
-      });
-
+      nextCardToFinish.card.simulation.chunks = nextCardToFinish.chunks;
       const nextCardCooldownDuration = nextCardToFinish.segmentedChunks[nextCardToFinish.segmentedChunks.length - 1];
       if (!nextCardCooldownDuration) continue;
 
@@ -193,7 +189,7 @@ export function simulateCooldownTimeline({
         index: card.index, // Important for tracking in the simulation
         effects: card.effects || [],
         simulation: {
-          cooldownEvents: [],
+          chunks: [],
           modifiers: [], // Start empty; "start" effects will populate
           lifetime: [], // Amount of time in cooldowns passed for this card
           owner: owner, // Owner of the card

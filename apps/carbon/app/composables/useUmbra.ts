@@ -68,10 +68,10 @@ export const useUmbra = defineStore('umbra', () => {
       accents: input.accents,
       inversed: input.inversed
         ? {
-            background: input.inversed.background,
-            foreground: input.inversed.foreground,
-            accents: input.inversed.accents,
-          }
+          background: input.inversed.background,
+          foreground: input.inversed.foreground,
+          accents: input.inversed.accents,
+        }
         : undefined,
     }
   }
