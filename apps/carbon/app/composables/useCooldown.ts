@@ -27,8 +27,6 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
   function animateCooldown(segment: Segment) {
     const timelineChunks = segment.chunks
 
-    const modifierTimeline = gsap.timeline()
-
     const durationTimeline = gsap.timeline()
     const chunkTimeline = gsap.timeline()
     const cooldownTimeline = gsap.timeline({
@@ -95,12 +93,14 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
       duration,
       sourceName,
     }: AnimationProp) {
+      const slowTimeline = gsap.timeline()
+
       chunkTimeline.to(cooldown, {
         value: toPercent,
         duration: duration,
         ease: 'none',
         onStart: () => {
-          modifierTimeline.fromTo(slow, {
+          slowTimeline.fromTo(slow, {
             value: duration,
           }, {
             value: 0,
@@ -122,8 +122,8 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
       duration,
       sourceName,
     }: AnimationProp) {
-      cooldownTimeline.add(modifierTimeline, 0)
       const hasteTimeline = gsap.timeline()
+      // cooldownTimeline.add(hasteTimeline, 0)
 
       chunkTimeline.to(cooldown, {
         value: toPercent,
@@ -137,11 +137,9 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
             duration: duration,
             ease: 'none',
             onStart: () => {
-              console.log("haste source", sourceName)
               hasteSource.value = sourceName || "haste"
             },
             onComplete: () => {
-              console.log("haste source complete", sourceName)
               hasteSource.value = "haste"
             },
           })
@@ -154,12 +152,14 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
       duration,
       sourceName,
     }: AnimationProp) {
+      const freezeTimeline = gsap.timeline()
+
       chunkTimeline.to(cooldown, {
         value: toPercent,
         duration: duration,
         ease: 'none',
         onStart: () => {
-          modifierTimeline.fromTo(frozen, {
+          freezeTimeline.fromTo(frozen, {
             value: duration,
           }, {
             value: 0,
