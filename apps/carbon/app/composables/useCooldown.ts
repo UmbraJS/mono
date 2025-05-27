@@ -39,7 +39,6 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
 
     cooldownTimeline.add(chunkTimeline, 0)
     cooldownTimeline.add(durationTimeline, 0)
-    cooldownTimeline.add(modifierTimeline, 0)
     cardTimeline.add(cooldownTimeline)
 
     durationTimeline.fromTo(cooldownDuration, {
@@ -123,21 +122,26 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
       duration,
       sourceName,
     }: AnimationProp) {
+      cooldownTimeline.add(modifierTimeline, 0)
+      const hasteTimeline = gsap.timeline()
+
       chunkTimeline.to(cooldown, {
         value: toPercent,
         duration: duration,
         ease: 'none',
         onStart: () => {
-          modifierTimeline.fromTo(haste, {
+          hasteTimeline.fromTo(haste, {
             value: duration,
           }, {
             value: 0,
             duration: duration,
             ease: 'none',
             onStart: () => {
+              console.log("haste source", sourceName)
               hasteSource.value = sourceName || "haste"
             },
             onComplete: () => {
+              console.log("haste source complete", sourceName)
               hasteSource.value = "haste"
             },
           })

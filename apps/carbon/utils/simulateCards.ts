@@ -47,7 +47,6 @@ export function simulateCooldownTimeline({
     // Calculate data
     const processedCards = processCards(simCards);
 
-    console.log("Simulating cards", processedCards)
     // Pass time
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
       globalTime += 1;
@@ -55,13 +54,14 @@ export function simulateCooldownTimeline({
     }; // No cards to finish
     globalTime = processedCards.nextCooldownEnd;
 
-
     // Mutate data
     for (const nextCardToFinish of processedCards.nextCardsToFinish) {
       if (!nextCardToFinish.allModifiers) continue; // No modifiers to apply so nothing to do
+      // if (nextCardToFinish.card.name === "Doom Cloak") console.log("tick")
 
       // Store data on the next card
       nextCardToFinish.card.simulation.chunks = nextCardToFinish.chunks;
+      if (nextCardToFinish.card.name === "Doom Cloak") console.log("chunk store: ", nextCardToFinish.chunks)
       const nextCardCooldownDuration = nextCardToFinish.segmentedChunks[nextCardToFinish.segmentedChunks.length - 1];
       if (!nextCardCooldownDuration) continue;
 
@@ -105,7 +105,6 @@ export function simulateCooldownTimeline({
     const nextCardsToFinish = cardEvents.filter(e => e.nextCooldownEnd === nextCardToFinish.nextCooldownEnd);
     if (nextCardsToFinish.length === 0) return;
 
-
     const remainingCooldowns = nextCardsToFinish.map(e => e.remainingCooldown);
     const nextCardRemainingCooldown = remainingCooldowns[0];
     if (!nextCardRemainingCooldown) return;
@@ -121,6 +120,15 @@ export function simulateCooldownTimeline({
     // Generate event using previously stored modifiers
     const cooldownEvent = generateCooldownEvent(card);
     if (!cooldownEvent) return;
+
+    // if (card.name === "Doom Cloak") console.log("source: ", {
+    //   segmentedChunks: cooldownEvent.segmentedChunks,
+    //   chunks: cooldownEvent.chunks.map(c => ({
+    //     startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
+    //     fromTo: `${c.from} -> ${c.to}`,
+    //     type: c.type,
+    //   }))
+    // })
 
     const totalLifetime = getTotalLifetime(card.simulation.lifetime);
     const nextCooldownEnd = getTotalLifetime(cooldownEvent.segmentedChunks);

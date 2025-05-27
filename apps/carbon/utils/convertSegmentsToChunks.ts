@@ -41,7 +41,6 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
   const hastedPercentPerSecond = 100 / (baseDuration / hasteMult); // 1 second = 20%
 
   const chunks: OutputChunk[] = [];
-  // let currentPercent = 100;
 
   // Add base start chunk
   // base paddings
@@ -75,6 +74,27 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     const fullDuration = getDifference(seg.start, seg.end);
     let duration = fullDuration
 
+    const priorChunk = chunks[chunks.length - 1];
+    const priorChunkWasAFinalChunkToACooldown = priorChunk && priorChunk.to === 0;
+
+    if (priorChunkWasAFinalChunkToACooldown) {
+      const nextSegment = segments.find((s => s.start > priorChunk.end));
+      const nextSegmentDoesNotStartAtTheEndOfPriorChunk = nextSegment && nextSegment.start > priorChunk.end;
+
+      if (nextSegmentDoesNotStartAtTheEndOfPriorChunk) {
+        const nextSegmentStart = nextSegment.start;
+        const priorChunkEnd = priorChunk.end;
+        const duration = getDifference(priorChunkEnd, nextSegmentStart)
+        chunks.push({
+          type: "base",
+          sourceIndex: null,
+          from: 100, to: 100 - duration * basePercentPerSecond,
+          start: priorChunkEnd, end: nextSegmentStart,
+          duration: duration,
+        });
+      }
+    }
+
     // if (seg.type === "freeze") {
     //   const cPercent = Math.round(currentPercent);
     //   chunks.push({
@@ -95,17 +115,13 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
         ? slowedSecondsPerPercent
         : hastedSecondsPerPercent;
 
-    const previousChunk = chunks[chunks.length - 1]; // { type: 'haste', duration: 1, to: 40, from: 100, sourceIndex: 0, start: 5, end: 6 }
+    const previousChunk = chunks[chunks.length - 1];
     const cPercent = previousChunk?.to || 100;
     const percentUsed = duration / secondsPerPercent;
     const nextChunkEnd = cPercent - percentUsed;
 
     const percentUsedScopedToRemainingPercent = Math.min(percentUsed, cPercent);
     duration = percentUsedScopedToRemainingPercent * secondsPerPercent;
-
-    // currentPercent -= percentUsed;
-
-    console.log("rex currentPercent: ", percentUsed);
 
     chunks.push({
       type: seg.type,
@@ -117,16 +133,16 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       end: seg.end,
     });
 
-    const lastChunk = chunks[chunks.length - 1]; // { type: 'haste', duration: 1, to: 40, from: 100, sourceIndex: 0, start: 5, end: 6 }
-    const lastChunkIsBase = lastChunk?.type === "base"; // false
+    const lastChunk = chunks[chunks.length - 1];
+    const lastChunkIsBase = lastChunk?.type === "base";
 
     if (cPercent >= 0 && !lastChunkIsBase && lastChunk) {
       // Add base end chunk
       const remainingPercent = lastChunk.to;
 
-      const remainingDuration = remainingPercent * baseSecondsPerPercent;
-      const thisCooldownEnd = lastChunk.end + remainingDuration;
-      const nextEnd = lastChunk.end + remainingDuration;
+      const remainingCooldownDuration = remainingPercent * baseSecondsPerPercent;
+      const thisCooldownEnd = lastChunk.end + remainingCooldownDuration;
+      const nextEnd = lastChunk.end + remainingCooldownDuration;
 
       const nextSegmentStart = segments[index + 1]?.start || nextEnd
       const baseCapEnd = Math.min(thisCooldownEnd, nextSegmentStart);
@@ -134,36 +150,15 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
 
       chunks.push({
         type: `base`,
-        to: 0,
+        to: remainingPercent - thisCapDuration * basePercentPerSecond,
         from: lastChunk.to,
         sourceIndex: null,
         start: lastChunk.end,
-        end: nextSegmentStart, //nextEnd,
+        end: Math.min(nextSegmentStart, thisCooldownEnd),
         duration: thisCapDuration,
       });
-
-      console.log("rex ven: ", chunks.map(c => ({
-        fromTo: `${c.from} -> ${c.to}`,
-        startEnd: `${c.start} - ${c.end}`,
-        duration: c.duration,
-        type: c.type,
-      })))
-
-      // Reset current percent to 100 after adding the ending base chunk
-      // currentPercent = 100;
     }
-
-    // Reset percent if it reaches 0
-    // if (currentPercent <= 0) currentPercent = 100;
   }))
-
-
-  // console.log("rex life:: chunky1: ", segments, chunks.map(e => ({
-  //   duration: e.duration,
-  //   startEnd: `${e.start} -> ${e.end}`,
-  //   fromTo: `${e.from} -> ${e.to}`,
-  //   type: e.type,
-  // })))
 
   // All previous chunks only catch up to the last applied modifier.
   // If there are no modifiers or if there should be additional chunks after the last modifier -
@@ -193,13 +188,6 @@ function countSegmentsAcrossChunks(chunks: OutputChunk[], segments: ChunkSegment
   const segmentDurations = [];
   let currentDuration = 0;
   let currentValue = null;
-
-  // console.log("rex chunky: ", segments, chunks.map(e => ({
-  //   duration: e.duration,
-  //   startEnd: `${e.start} -> ${e.end}`,
-  //   fromTo: `${e.from} -> ${e.to}`,
-  //   type: e.type,
-  // })))
 
   for (const chunk of chunks) {
     if (chunk.from === 100) {

@@ -10,7 +10,6 @@ const props = defineProps<{
 
 const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.cooldownEvents)
 
-
 </script>
 
 <template>
@@ -18,9 +17,9 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
     <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%` }">
     </div>
     <div class="debugPanel">
-      <div class="slowp">
-        <!-- <p>{{ cooldownDuration.toFixed(1) }}</p> -->
-        <p>{{ cooldownDuration }}</p>
+      <div class="slowp grid">
+        <p>{{ cooldownDuration.toFixed(1) }}</p>
+        <!-- <p>{{ cooldownDuration }}</p> -->
         <p>{{ time.toFixed(1) }}</p>
         <p>{{ Math.floor(cooldown) }}</p>
       </div>
@@ -46,6 +45,13 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   justify-content: space-between;
   background-color: var(--base-40);
   padding: var(--space-quark);
+}
+
+.slowp.grid {
+  display: grid;
+  /* justify-content: space-between; */
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
 }
 
 .slow .n2 {
