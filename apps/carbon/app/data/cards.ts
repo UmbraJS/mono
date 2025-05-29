@@ -1,7 +1,7 @@
 import type { Card, CardEffect } from '../../types/card'
 import { aspects } from './aspects'
 
-const stumble: CardEffect = (card) => {
+const stumble: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'slow',
@@ -14,7 +14,7 @@ const stumble: CardEffect = (card) => {
   }
 }
 
-const leap: CardEffect = (card) => {
+const leap: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'haste',
@@ -27,7 +27,7 @@ const leap: CardEffect = (card) => {
   }
 }
 
-const hasteYourself: CardEffect = (card) => {
+const hasteYourself: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'haste',
@@ -40,7 +40,7 @@ const hasteYourself: CardEffect = (card) => {
   }
 }
 
-const hasteYourSibling: CardEffect = (card) => {
+const hasteYourSibling: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'haste',
@@ -53,7 +53,7 @@ const hasteYourSibling: CardEffect = (card) => {
   }
 }
 
-const slowSibling: CardEffect = (card) => {
+const slowSibling: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'slow',

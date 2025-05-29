@@ -1,4 +1,5 @@
 import type { OutputChunk } from "./types";
+import type { SimCard } from "../types/card";
 
 interface ChunkSegment {
   start: number;
@@ -28,7 +29,7 @@ function getDifference(num1: number, num2: number) {
  * @returns {Object} An object containing the output chunks and total duration.
  */
 
-export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegment[], startTime: number, name: string): ChunksContainer {
+export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegment[], startTime: number, card: SimCard): ChunksContainer {
   const baseSecondsPerPercent = baseDuration / 100;
   const basePercentPerSecond = 100 / baseDuration; // 10% = 1 second
 
@@ -42,15 +43,12 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
 
   const chunks: OutputChunk[] = [];
 
-  // Add base start chunk
-  // base paddings
-
   // There are no segments, so we add a base chunk
-  const noSegments = segments.length === 0; // false
-  const firstSegment = segments[0]; //  { start: 5, end: 6, type: 'haste', sourceIndex: 0 }
-  const firstSegmentDoesNotStartAtZero = firstSegment && firstSegment.start > 0; // true
+  const firstSegment = segments[0];
+  const firstSegmentStartsAtZero = firstSegment?.start === 0;
 
-  if (noSegments) {
+  function setInitialWholeChunk() {
+    if (firstSegmentStartsAtZero) return // if the first segment is the initial chunk then we don't need to set an initial chunk
     chunks.push({
       type: "base",
       sourceIndex: null,
@@ -58,17 +56,62 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       start: 0, end: baseDuration,
       duration: baseDuration,
     });
-  } else if (firstSegmentDoesNotStartAtZero) {
-    // There are segments but they don't start at 0 so we add a base chunk
-    const firstSegmentStart = firstSegment.start;
+  }
+
+  function setInitialPaddingChunk(firstSegmentStart: number) {
+    const duration = getDifference(0, firstSegmentStart);
     chunks.push({
       type: "base",
       sourceIndex: null,
-      from: 100, to: 100 - basePercentPerSecond * firstSegmentStart,
+      from: 100, to: 100 - duration * basePercentPerSecond,
       start: 0, end: firstSegmentStart,
-      duration: getDifference(0, firstSegment.start),
+      duration: duration,
     });
   }
+
+  function setInitialChunk() {
+    const firstSegmentStartsBeforeBaseDuration = firstSegment?.start && firstSegment?.start < baseDuration;
+    firstSegmentStartsBeforeBaseDuration ? setInitialPaddingChunk(firstSegment?.start) : setInitialWholeChunk();
+  }
+
+  setInitialChunk();
+
+  function bridgeChunksTilNextSegment() {
+    let reachedSegments = false;
+    while (!reachedSegments) {
+      const nextSegment = segments.find((s) => s.start >= getTimestamp(chunks));
+
+      if (!nextSegment) {
+        // There is no segments, setting the initial chunk is enough
+        reachedSegments = true;
+        continue
+      }
+
+      const nextSegmentStart = nextSegment?.start;
+      const chunkStart = getTimestamp(chunks);
+      const chunkEnd = chunkStart + baseDuration;
+
+      // I think this is not needed because I think the segments.forEeach will pad its own base start of the cooldown. This section only needs to create base cooldowns up until the moment a cooldown contains a segment.
+      // const chunkEnd = Math.min(chunkEndUninterrupted, firstSegmentStart || chunkEndUninterrupted);
+
+      const chunkEndsAfterNextSegmentStarts = chunkEnd > nextSegmentStart;
+
+      if (chunkEndsAfterNextSegmentStarts) {
+        reachedSegments = true
+        continue
+      }
+
+      chunks.push({
+        type: "base",
+        sourceIndex: null,
+        from: 100, to: 0, //100 - basePercentPerSecond * duration,
+        start: chunkStart, end: chunkEnd,
+        duration: getDifference(chunkStart, chunkEnd),
+      });
+    }
+  }
+
+  bridgeChunksTilNextSegment()
 
   segments.forEach(((seg, index) => {
     const fullDuration = getDifference(seg.start, seg.end);
@@ -77,8 +120,9 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     const priorChunk = chunks[chunks.length - 1];
     const priorChunkWasAFinalChunkToACooldown = priorChunk && priorChunk.to === 0;
 
+    // set padding for the next mod chunk
     if (priorChunkWasAFinalChunkToACooldown) {
-      const nextSegment = segments.find((s => s.start > priorChunk.end));
+      const nextSegment = segments.find((s => s.start >= priorChunk.end));
       const nextSegmentDoesNotStartAtTheEndOfPriorChunk = nextSegment && nextSegment.start > priorChunk.end;
 
       if (nextSegmentDoesNotStartAtTheEndOfPriorChunk) {
@@ -109,6 +153,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     //   return;
     // }
 
+    // set mod chunk
     const secondsPerPercent = seg.type === "base"
       ? baseSecondsPerPercent
       : seg.type === "slow"
@@ -136,7 +181,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     const lastChunk = chunks[chunks.length - 1];
     const lastChunkIsBase = lastChunk?.type === "base";
 
-    if (cPercent >= 0 && !lastChunkIsBase && lastChunk) {
+    if (cPercent >= 0 && !lastChunkIsBase && lastChunk && lastChunk.to > 0) {
       // Add base end chunk
       const remainingPercent = lastChunk.to;
 
@@ -164,7 +209,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
   // If there are no modifiers or if there should be additional chunks after the last modifier -
   // we need to add chunks until we get have a total lifetime that exceeds the startTime of this simulation call.
   // TLDR: Keep adding base chunks until we reach a total lifetime which exceeds the startTime
-  while (getTotalLifetime(chunks) < startTime) {
+  while (getTimestamp(chunks) < startTime) {
     const lastChunk = chunks[chunks.length - 1];
     const lastChunkEnd = lastChunk ? lastChunk.end : 0;
     chunks.push({
@@ -177,11 +222,17 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     });
   }
 
-  function getTotalLifetime(chunks: OutputChunk[]) {
-    return chunks.reduce((total, chunk) => total + chunk.duration, 0);
-  }
-
   return { chunks, segmentedChunks: countSegmentsAcrossChunks(chunks, segments) }; // Return the total duration
+}
+
+function getTimestamp(chunks: OutputChunk[]) {
+  const lastChunk = chunks[chunks.length - 1];
+  if (!lastChunk) return 0;
+  return lastChunk.end;
+}
+
+function getTotalLifetime(chunks: OutputChunk[]) {
+  return chunks.reduce((total, chunk) => total + chunk.duration, 0);
 }
 
 function countSegmentsAcrossChunks(chunks: OutputChunk[], segments: ChunkSegment[]) {

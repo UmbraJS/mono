@@ -16,8 +16,22 @@ export function useCooldown(timeline: gsap.core.Timeline, cardSimulation: Output
 
   onMounted(() => {
     const segments = getSegments(cardSimulation)
-    console.log("segments", segments)
-    console.log("chunks", cardSimulation)
+    console.log("segments", segments.map((s) => ({
+      start: s.start,
+      end: s.end,
+      duration: s.duration,
+      chunks: s.chunks.map(c => ({
+        startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
+        fromTo: `${c.from} -> ${c.to}`,
+        type: c.type,
+      }))
+    })))
+
+    console.log("chunks", cardSimulation.map(c => ({
+      startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
+      fromTo: `${c.from} -> ${c.to}`,
+      type: c.type,
+    })))
 
     segments.forEach((segment) => {
       animateCooldown(segment)

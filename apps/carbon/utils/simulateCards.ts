@@ -1,6 +1,5 @@
 import { generateCooldownEvent } from "./generateCooldownEvent";
 import type { Card, SimCard, CardModifier } from "../types/card"
-// import { logCard } from "./logEvent";
 
 interface SimulateCooldownTimelineArgs {
   playerDeck: Card[];
@@ -15,6 +14,12 @@ export function simulateCooldownTimeline({
 }: SimulateCooldownTimelineArgs) {
   const playerSimCards = initializeSimCards(playerDeck, "player");
   const opponentSimCards = initializeSimCards(opponentDeck, "opponent");
+
+  // return {
+  //   player: playerSimCards,
+  //   opponent: opponentSimCards,
+  // }
+
   const simCards = [...playerSimCards, ...opponentSimCards];
   let globalTime = 0;
 
@@ -43,9 +48,10 @@ export function simulateCooldownTimeline({
 
   let count = 0;
 
-  while (globalTime < 30 && count < 10) {
+  while (globalTime < 30 && count < 100) {
     // Calculate data
     const processedCards = processCards(simCards);
+
 
     // Pass time
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
@@ -57,16 +63,13 @@ export function simulateCooldownTimeline({
     // Mutate data
     for (const nextCardToFinish of processedCards.nextCardsToFinish) {
       if (!nextCardToFinish.allModifiers) continue; // No modifiers to apply so nothing to do
-      // if (nextCardToFinish.card.name === "Doom Cloak") console.log("tick")
 
       // Store data on the next card
       nextCardToFinish.card.simulation.chunks = nextCardToFinish.chunks;
-      if (nextCardToFinish.card.name === "Doom Cloak") console.log("chunk store: ", nextCardToFinish.chunks)
       const nextCardCooldownDuration = nextCardToFinish.segmentedChunks[nextCardToFinish.segmentedChunks.length - 1];
       if (!nextCardCooldownDuration) continue;
 
       nextCardToFinish.card.simulation.lifetime.push(nextCardCooldownDuration);
-      nextCardToFinish.card.simulation.nextCooldownTimestamp = nextCardToFinish.nextCooldownEnd;
 
       if (((nextCardToFinish?.totalLifetime ?? 0)) > 30) continue;
       if (!nextCardToFinish) continue;
@@ -75,6 +78,11 @@ export function simulateCooldownTimeline({
       for (const modifier of nextCardToFinish.allModifiers) {
         modifier.playerModifiers.forEach(mod => {
           const targetCard = playerSimCards.find(c => c.index === mod.index);
+          if (!targetCard) return;
+          targetCard.simulation.modifiers.push(mod);
+        })
+        modifier.opponentModifiers.forEach(mod => {
+          const targetCard = opponentSimCards.find(c => c.index === mod.index);
           if (!targetCard) return;
           targetCard.simulation.modifiers.push(mod);
         })
@@ -105,13 +113,8 @@ export function simulateCooldownTimeline({
     const nextCardsToFinish = cardEvents.filter(e => e.nextCooldownEnd === nextCardToFinish.nextCooldownEnd);
     if (nextCardsToFinish.length === 0) return;
 
-    const remainingCooldowns = nextCardsToFinish.map(e => e.remainingCooldown);
-    const nextCardRemainingCooldown = remainingCooldowns[0];
-    if (!nextCardRemainingCooldown) return;
-
     return {
       nextCardsToFinish: nextCardsToFinish,
-      nextCardRemainingCooldown: nextCardRemainingCooldown,
       nextCooldownEnd: nextCardsToFinish[0]?.nextCooldownEnd ?? 0,
     }
   }
@@ -121,21 +124,16 @@ export function simulateCooldownTimeline({
     const cooldownEvent = generateCooldownEvent(card);
     if (!cooldownEvent) return;
 
-    // if (card.name === "Doom Cloak") console.log("source: ", {
-    //   segmentedChunks: cooldownEvent.segmentedChunks,
-    //   chunks: cooldownEvent.chunks.map(c => ({
-    //     startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
-    //     fromTo: `${c.from} -> ${c.to}`,
-    //     type: c.type,
-    //   }))
-    // })
-
     const totalLifetime = getTotalLifetime(card.simulation.lifetime);
     const nextCooldownEnd = getTotalLifetime(cooldownEvent.segmentedChunks);
 
     // Get modifiers for next events
     const allModifiers = card.effects.map(effect => {
-      const cardModifier = effect(card);
+      const cardModifier = effect({
+        card,
+        opponentCards: opponentSimCards,
+        playerCards: playerSimCards,
+      });
       if (cardModifier.trigger.type !== "cooldown") return;
 
       return getModifiers({
@@ -146,12 +144,10 @@ export function simulateCooldownTimeline({
 
     }).filter(mod => mod !== undefined);
 
-    const remainingCooldown = getRemainingCooldown(cooldownEvent.segmentedChunks, globalTime);
 
     return {
       ...cooldownEvent,
       card: card,
-      remainingCooldown,
       totalLifetime,
       nextCooldownEnd,
       allModifiers
@@ -187,44 +183,20 @@ export function simulateCooldownTimeline({
   }
 
   function initializeSimCards(deck: Card[], owner: "player" | "opponent"): SimCard[] {
-    const simCards: SimCard[] = []
-
-    for (const card of deck) {
-      const cooldown = card.bash.cooldown;
-      if (!cooldown) continue;
-      simCards.push({
-        ...card,
-        index: card.index, // Important for tracking in the simulation
-        effects: card.effects || [],
+    return deck.map((thisCard, index) => {
+      return {
+        ...thisCard,
+        index: index, // Important for tracking in the simulation
+        effects: thisCard.effects || [],
         simulation: {
           chunks: [],
           modifiers: [], // Start empty; "start" effects will populate
           lifetime: [], // Amount of time in cooldowns passed for this card
           owner: owner, // Owner of the card
-          nextCooldownTimestamp: 0, // Amount of time passed for this card
         },
-      })
-    }
-
-    return simCards
+      }
+    });
   }
-}
-
-export function getRemainingCooldown(newLifetime: number[], globalTime: number) {
-  const thisCooldownDuration = newLifetime[newLifetime.length - 1];
-  if (!thisCooldownDuration) return thisCooldownDuration;
-
-  const totalLifetime = getTotalLifetime(newLifetime);
-  const remainingDuration = totalLifetime - globalTime;
-
-  const startOfThisCooldown = totalLifetime - thisCooldownDuration;
-
-  if (startOfThisCooldown > globalTime) {
-    console.error("This cooldown start is greater than the current global time and therefore should not have started yet", { startOfThisCooldown, globalTime });
-    return thisCooldownDuration;
-  }
-
-  return remainingDuration || thisCooldownDuration;
 }
 
 export function getTotalLifetime(lifetime: number[]) {
