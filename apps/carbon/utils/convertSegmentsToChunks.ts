@@ -96,11 +96,11 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     while (props.currentSegment.start > getTimestamp(chunks)) {
       modPadding()
     }
-    const overflowingSegment = genetateModChunk();
+    const overflowingSegment = generateModChunk();
     modCap()
     return overflowingSegment
 
-    function genetateModChunk() {
+    function generateModChunk() {
       // if (seg.type === "freeze") {
       //   const cPercent = Math.round(currentPercent);
       //   chunks.push({
