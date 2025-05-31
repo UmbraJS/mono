@@ -86,12 +86,6 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     });
   }
 
-  // if (card.name === "Skeleton Archer") console.log("rex: chunks", chunks.map(c => ({
-  //   startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
-  //   fromTo: `${c.from} -> ${c.to}`,
-  //   type: c.type,
-  // })));
-
   return { chunks, segmentedChunks: countSegmentsAcrossChunks(chunks) }; // Return the total duration
 
   function handleSegment(props: {

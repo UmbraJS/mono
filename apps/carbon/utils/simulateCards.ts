@@ -170,10 +170,13 @@ export function simulateCooldownTimeline({
         index: index,
       }
     }
+
+    // Reverse the player/opponent modifiers when simulating the opponents deck
+    const isPlayer = sourceCard.simulation.owner === "player";
     return {
       type: modifier.type,
-      playerModifiers: trigger.playerTriggerIndexes.map(mapModifier),
-      opponentModifiers: trigger.opponentTriggerIndexes.map(mapModifier),
+      playerModifiers: isPlayer ? trigger.playerTriggerIndexes.map(mapModifier) : trigger.opponentTriggerIndexes.map(mapModifier),
+      opponentModifiers: isPlayer ? trigger.opponentTriggerIndexes.map(mapModifier) : trigger.playerTriggerIndexes.map(mapModifier),
     }
   }
 
