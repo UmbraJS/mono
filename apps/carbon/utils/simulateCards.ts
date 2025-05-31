@@ -15,11 +15,6 @@ export function simulateCooldownTimeline({
   const playerSimCards = initializeSimCards(playerDeck, "player");
   const opponentSimCards = initializeSimCards(opponentDeck, "opponent");
 
-  // return {
-  //   player: playerSimCards,
-  //   opponent: opponentSimCards,
-  // }
-
   const simCards = [...playerSimCards, ...opponentSimCards];
   let globalTime = 0;
 

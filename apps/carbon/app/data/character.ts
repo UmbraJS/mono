@@ -68,8 +68,8 @@ const skeletonKing: Character = {
   age: adultHumanAge,
   perks: [],
   deck: [
-    // cards.find((card) => card.name === 'Skeleton Archer')!,
-    // cards.find((card) => card.name === 'Skeleton Soldier')!,
+    cards.find((card) => card.name === 'Skeleton Archer')!,
+    cards.find((card) => card.name === 'Skeleton Soldier')!,
     // cards.find((card) => card.name === 'Skeleton Healer')!,
     // cards.find((card) => card.name === 'Skeleton Horseman')!,
   ],

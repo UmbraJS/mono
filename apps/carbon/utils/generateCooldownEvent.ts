@@ -2,7 +2,6 @@ import type { OutputChunk } from "./types";
 import { resolveOverlappingModifiers } from "./resolveOverlappingModifiers";
 import { buildTimelineSegments } from "./buildTimelineSegments";
 import { convertSegmentsToChunks } from "./convertSegmentsToChunks";
-import { extractRemainingModifiers } from "./extractRemainingModifiers";
 import type { SimCard } from "../types/card";
 import { getTotalLifetime } from "./simulateCards";
 
@@ -28,9 +27,7 @@ export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined 
 
   const resolvedModifiers = resolveOverlappingModifiers(modifiers);
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
-
   const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime, card);
-  // const remainingModifiers = extractRemainingModifiers(modifiers, lifetime[lifetime.length - 1] || 0);
 
   return {
     baseDuration,

@@ -47,6 +47,205 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
   const firstSegment = segments[0];
   const firstSegmentStartsAtZero = firstSegment?.start === 0;
 
+  setInitialChunk();
+  bridgeChunksTilNextSegment()
+
+  segments.forEach(((segment, index) => {
+    const nextSegment = segments[index + 1] || null;
+
+    const overflowingSegment = handleSegment({
+      currentSegment: segment,
+      nextSegment,
+      index,
+    });
+
+    if (overflowingSegment) {
+      console.log("Overflowing segment detected:", overflowingSegment);
+      const lol = handleSegment({
+        currentSegment: overflowingSegment,
+        nextSegment,
+        index,
+      });
+    }
+  }))
+
+  // All previous chunks only catch up to the last applied modifier.
+  // If there are no modifiers or if there should be additional chunks after the last modifier -
+  // we need to add chunks until we get have a total lifetime that exceeds the startTime of this simulation call.
+  // TLDR: Keep adding base chunks until we reach a total lifetime which exceeds the startTime
+  while (getTimestamp(chunks) < startTime) {
+    const lastChunk = chunks[chunks.length - 1];
+    const lastChunkEnd = lastChunk ? lastChunk.end : 0;
+    chunks.push({
+      type: "base",
+      sourceIndex: null,
+      from: 100, to: 0,
+      start: lastChunkEnd,
+      end: lastChunkEnd + baseDuration,
+      duration: baseDuration,
+    });
+  }
+
+  // if (card.name === "Skeleton Archer") console.log("rex: chunks", chunks.map(c => ({
+  //   startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
+  //   fromTo: `${c.from} -> ${c.to}`,
+  //   type: c.type,
+  // })));
+
+  return { chunks, segmentedChunks: countSegmentsAcrossChunks(chunks) }; // Return the total duration
+
+  function handleSegment(props: {
+    currentSegment: ChunkSegment,
+    nextSegment: ChunkSegment | null,
+    index: number,
+  }) {
+    while (props.currentSegment.start > getTimestamp(chunks)) {
+      modPadding()
+    }
+    const overflowingSegment = genetateModChunk();
+    modCap()
+    return overflowingSegment
+
+    function genetateModChunk() {
+      // if (seg.type === "freeze") {
+      //   const cPercent = Math.round(currentPercent);
+      //   chunks.push({
+      //     type: "freeze",
+      //     duration,
+      //     to: cPercent,
+      //     from: cPercent,
+      //     sourceIndex: seg.sourceIndex,
+      //     start: seg.start,
+      //     end: seg.end,
+      //   });
+      //   return;
+      // }
+
+      const previousChunk = chunks[chunks.length - 1];
+      const currentPercent = previousChunk?.to || 100;
+
+      const secondsPerPercent = props.currentSegment.type === "base"
+        ? baseSecondsPerPercent
+        : props.currentSegment.type === "slow"
+          ? slowedSecondsPerPercent
+          : hastedSecondsPerPercent;
+
+      const fullDuration = getDifference(props.currentSegment.start, props.currentSegment.end);
+
+      const percentUsed = fullDuration / secondsPerPercent;
+      const nextChunkEnd = currentPercent - percentUsed;
+
+      const percentUsedScopedToRemainingPercent = Math.min(percentUsed, currentPercent);
+      const duration = percentUsedScopedToRemainingPercent * secondsPerPercent;
+      const roundedDuration = Math.round(duration * 1e12) / 1e12; // Round to 12 decimal places
+
+      const chunkEnd = Math.min(props.currentSegment.end, props.currentSegment.start + roundedDuration)
+
+      chunks.push({
+        type: props.currentSegment.type,
+        duration: roundedDuration,
+        from: previousChunk?.to || 100, // Use previous chunk's to value or 100 if no previous chunk
+        to: Math.max(nextChunkEnd, 0), // possibly this is the only place that can decide if we are overlapping with the next cooldown.
+        sourceIndex: props.currentSegment.sourceIndex,
+        start: props.currentSegment.start,
+        end: chunkEnd,
+      });
+
+      // if (overflowingChunk) {
+      //   // Consume overflowing chunk if it exists
+      //   chunks.push(overflowingChunk);
+      //   overflowingChunk = null; // Reset the overflowing chunk
+      // }
+
+      return nextChunkEnd < 0 ? {
+        type: props.currentSegment.type,
+        sourceIndex: props.currentSegment.sourceIndex,
+        start: chunkEnd,
+        end: props.currentSegment.end,
+      } : null; // Return null if no overflowing segment is needed
+
+      // set an overflowing chunk with all the info of the remaining modifier
+
+      // const percentPerSecond = props.currentSegment.type === "base"
+      //   ? basePercentPerSecond
+      //   : props.currentSegment.type === "slow"
+      //     ? slowedPercentPerSecond
+      //     : hastedPercentPerSecond;
+
+      // const remainingDuration = Math.abs(nextChunkEnd) * secondsPerPercent; // Calculate the remaining duration based on the negative percentage
+      // const roundedRemainingDuration = Math.round(remainingDuration * 1e12) / 1e12; // Round to 12 decimal places
+
+      // {
+      //   type: props.currentSegment.type,
+      //   duration: roundedRemainingDuration,
+      //   from: 100,
+      //   to: Math.min(100 - roundedRemainingDuration * percentPerSecond, 0),
+      //   sourceIndex: props.currentSegment.sourceIndex,
+      //   start: chunkEnd,
+      //   end: props.currentSegment.end,
+      // }
+
+    }
+
+    function modPadding() {
+      const priorChunk = chunks[chunks.length - 1];
+      const priorChunkWasAFinalChunkToACooldown = priorChunk && priorChunk.to === 0;
+      if (!priorChunkWasAFinalChunkToACooldown) return
+
+      const nextSegment = props.currentSegment // segments.find((s => s.start >= priorChunk.end));
+      const nextSegmentDoesNotStartAtTheEndOfPriorChunk = nextSegment && nextSegment.start > priorChunk.end;
+      if (!nextSegmentDoesNotStartAtTheEndOfPriorChunk) return
+
+      const nextSegmentStart = nextSegment.start;
+      const baseChunkEnd = priorChunk.end + baseDuration;
+      const chunkEnd = Math.min(baseChunkEnd, nextSegmentStart);
+      const priorChunkEnd = priorChunk.end;
+      const duration = getDifference(priorChunkEnd, chunkEnd)
+
+      chunks.push({
+        type: "base",
+        sourceIndex: null,
+        from: 100, to: 100 - duration * basePercentPerSecond,
+        start: priorChunkEnd, end: chunkEnd,
+        duration: duration,
+      });
+    }
+
+    function modCap() {
+      const previousChunk = chunks[chunks.length - 1];
+      const currentPercent = previousChunk?.to || 100;
+
+      const lastChunk = chunks[chunks.length - 1];
+      const lastChunkIsBase = lastChunk?.type === "base";
+      if (!lastChunk || lastChunkIsBase) return; // No last chunk or last chunk is base, nothing to cap
+      if (lastChunk.to <= 0) return; // Last chunk already capped, nothing to do
+      if (currentPercent <= 0) return; // Current percent is already at or below 0, nothing to cap
+
+      // Add base end chunk
+      const remainingPercent = lastChunk.to;
+
+      const remainingCooldownDuration = remainingPercent * baseSecondsPerPercent;
+      const baseChunkEnd = lastChunk.end + remainingCooldownDuration;
+
+      const nextSegmentStart = props.nextSegment?.start || baseChunkEnd
+      const chunkEnd = Math.min(baseChunkEnd, nextSegmentStart);
+      const duration = chunkEnd - lastChunk.end;
+      const chunkTo = remainingPercent - duration * basePercentPerSecond
+      const chunkToRoundedTo12DecimalPlaces = Math.round(chunkTo * 1e12) / 1e12;
+
+      chunks.push({
+        type: `base`,
+        to: chunkToRoundedTo12DecimalPlaces,
+        from: lastChunk.to,
+        sourceIndex: null,
+        start: lastChunk.end,
+        end: chunkEnd,
+        duration: duration,
+      });
+    }
+  }
+
+
   function setInitialWholeChunk() {
     if (firstSegmentStartsAtZero) return // if the first segment is the initial chunk then we don't need to set an initial chunk
     chunks.push({
@@ -74,8 +273,6 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     firstSegmentStartsBeforeBaseDuration ? setInitialPaddingChunk(firstSegment?.start) : setInitialWholeChunk();
   }
 
-  setInitialChunk();
-
   function bridgeChunksTilNextSegment() {
     let reachedSegments = false;
     while (!reachedSegments) {
@@ -90,10 +287,6 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       const nextSegmentStart = nextSegment?.start;
       const chunkStart = getTimestamp(chunks);
       const chunkEnd = chunkStart + baseDuration;
-
-      // I think this is not needed because I think the segments.forEeach will pad its own base start of the cooldown. This section only needs to create base cooldowns up until the moment a cooldown contains a segment.
-      // const chunkEnd = Math.min(chunkEndUninterrupted, firstSegmentStart || chunkEndUninterrupted);
-
       const chunkEndsAfterNextSegmentStarts = chunkEnd > nextSegmentStart;
 
       if (chunkEndsAfterNextSegmentStarts) {
@@ -110,119 +303,6 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       });
     }
   }
-
-  bridgeChunksTilNextSegment()
-
-  segments.forEach(((seg, index) => {
-    const fullDuration = getDifference(seg.start, seg.end);
-    let duration = fullDuration
-
-    const priorChunk = chunks[chunks.length - 1];
-    const priorChunkWasAFinalChunkToACooldown = priorChunk && priorChunk.to === 0;
-
-    // set padding for the next mod chunk
-    if (priorChunkWasAFinalChunkToACooldown) {
-      const nextSegment = segments.find((s => s.start >= priorChunk.end));
-      const nextSegmentDoesNotStartAtTheEndOfPriorChunk = nextSegment && nextSegment.start > priorChunk.end;
-
-      if (nextSegmentDoesNotStartAtTheEndOfPriorChunk) {
-        const nextSegmentStart = nextSegment.start;
-        const priorChunkEnd = priorChunk.end;
-        const duration = getDifference(priorChunkEnd, nextSegmentStart)
-        chunks.push({
-          type: "base",
-          sourceIndex: null,
-          from: 100, to: 100 - duration * basePercentPerSecond,
-          start: priorChunkEnd, end: nextSegmentStart,
-          duration: duration,
-        });
-      }
-    }
-
-    // if (seg.type === "freeze") {
-    //   const cPercent = Math.round(currentPercent);
-    //   chunks.push({
-    //     type: "freeze",
-    //     duration,
-    //     to: cPercent,
-    //     from: cPercent,
-    //     sourceIndex: seg.sourceIndex,
-    //     start: seg.start,
-    //     end: seg.end,
-    //   });
-    //   return;
-    // }
-
-    // set mod chunk
-    const secondsPerPercent = seg.type === "base"
-      ? baseSecondsPerPercent
-      : seg.type === "slow"
-        ? slowedSecondsPerPercent
-        : hastedSecondsPerPercent;
-
-    const previousChunk = chunks[chunks.length - 1];
-    const cPercent = previousChunk?.to || 100;
-    const percentUsed = duration / secondsPerPercent;
-    const nextChunkEnd = cPercent - percentUsed;
-
-    const percentUsedScopedToRemainingPercent = Math.min(percentUsed, cPercent);
-    duration = percentUsedScopedToRemainingPercent * secondsPerPercent;
-
-    chunks.push({
-      type: seg.type,
-      duration,
-      from: previousChunk?.to || 100, // Use previous chunk's to value or 100 if no previous chunk
-      to: Math.max(nextChunkEnd, 0), // possibly this is the only place that can decide if we are overlapping with the next cooldown.
-      sourceIndex: seg.sourceIndex,
-      start: seg.start,
-      end: seg.end,
-    });
-
-    const lastChunk = chunks[chunks.length - 1];
-    const lastChunkIsBase = lastChunk?.type === "base";
-
-    if (cPercent >= 0 && !lastChunkIsBase && lastChunk && lastChunk.to > 0) {
-      // Add base end chunk
-      const remainingPercent = lastChunk.to;
-
-      const remainingCooldownDuration = remainingPercent * baseSecondsPerPercent;
-      const thisCooldownEnd = lastChunk.end + remainingCooldownDuration;
-      const nextEnd = lastChunk.end + remainingCooldownDuration;
-
-      const nextSegmentStart = segments[index + 1]?.start || nextEnd
-      const baseCapEnd = Math.min(thisCooldownEnd, nextSegmentStart);
-      const thisCapDuration = Math.abs(lastChunk.end - baseCapEnd);
-
-      chunks.push({
-        type: `base`,
-        to: remainingPercent - thisCapDuration * basePercentPerSecond,
-        from: lastChunk.to,
-        sourceIndex: null,
-        start: lastChunk.end,
-        end: Math.min(nextSegmentStart, thisCooldownEnd),
-        duration: thisCapDuration,
-      });
-    }
-  }))
-
-  // All previous chunks only catch up to the last applied modifier.
-  // If there are no modifiers or if there should be additional chunks after the last modifier -
-  // we need to add chunks until we get have a total lifetime that exceeds the startTime of this simulation call.
-  // TLDR: Keep adding base chunks until we reach a total lifetime which exceeds the startTime
-  while (getTimestamp(chunks) < startTime) {
-    const lastChunk = chunks[chunks.length - 1];
-    const lastChunkEnd = lastChunk ? lastChunk.end : 0;
-    chunks.push({
-      type: "base",
-      sourceIndex: null,
-      from: 100, to: 0,
-      start: lastChunkEnd,
-      end: lastChunkEnd + baseDuration,
-      duration: baseDuration,
-    });
-  }
-
-  return { chunks, segmentedChunks: countSegmentsAcrossChunks(chunks, segments) }; // Return the total duration
 }
 
 function getTimestamp(chunks: OutputChunk[]) {
@@ -231,11 +311,7 @@ function getTimestamp(chunks: OutputChunk[]) {
   return lastChunk.end;
 }
 
-function getTotalLifetime(chunks: OutputChunk[]) {
-  return chunks.reduce((total, chunk) => total + chunk.duration, 0);
-}
-
-function countSegmentsAcrossChunks(chunks: OutputChunk[], segments: ChunkSegment[]) {
+function countSegmentsAcrossChunks(chunks: OutputChunk[]) {
   const segmentDurations = [];
   let currentDuration = 0;
   let currentValue = null;
@@ -250,7 +326,6 @@ function countSegmentsAcrossChunks(chunks: OutputChunk[], segments: ChunkSegment
       currentDuration += chunk.duration;
       currentValue = chunk.to;
     }
-
     if (currentValue === 0) {
       // End of segment
       segmentDurations.push(currentDuration);

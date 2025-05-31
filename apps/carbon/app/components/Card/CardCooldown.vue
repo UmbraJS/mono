@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
 import type { OutputChunk } from "../../../utils/types";
+import type { SimCard } from '../../../types'
 
 const props = defineProps<{
   time: number
   timeline: gsap.core.Timeline;
-  cooldownEvents: OutputChunk[];
+  card: SimCard;
 }>()
 
-const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.cooldownEvents)
+const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.card)
 
 </script>
 

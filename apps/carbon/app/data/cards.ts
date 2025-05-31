@@ -178,7 +178,7 @@ export const cards: Card[] = [
     bash: { attack: 7, shield: 3, cooldown: 3 },
     level: 1,
     unique: false,
-    effects: [],
+    effects: [hasteYourSibling],
     maxLevel: 5,
     description: 'A basic skeleton archer',
     rarity: 1,
