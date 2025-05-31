@@ -122,15 +122,9 @@ export type Owner = 'player' | 'opponent';
 
 export interface SimCard extends Card {
   simulation: {
-    cooldownEvents: {
-      baseDuration: number;
-      duration: number;
-      chunks: OutputChunk[];
-    }[];
-    nextCooldownTimestamp: number; // Amount of time passed for this card
+    chunks: OutputChunk[];
     modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
-    remainingCooldown: number; // Seconds left until trigger
-    count: number; // Number of times this card has been played
+    lifetime: number[]; // Amount of time in cooldowns passed for this card
     owner: Owner; // Owner of the card
   }
 }
@@ -183,7 +177,11 @@ export interface CardModifier {
   }
 }
 
-export type CardEffect = (card: Card) => CardModifier
+export type CardEffect = (props: {
+  card: Card
+  opponentCards: Card[]
+  playerCards: Card[]
+}) => CardModifier
 
 export interface CardAction {
   bash: CardBash

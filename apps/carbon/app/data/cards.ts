@@ -1,7 +1,7 @@
 import type { Card, CardEffect } from '../../types/card'
 import { aspects } from './aspects'
 
-const stumble: CardEffect = (card) => {
+const stumble: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'slow',
@@ -14,7 +14,7 @@ const stumble: CardEffect = (card) => {
   }
 }
 
-const leap: CardEffect = (card) => {
+const leap: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'haste',
@@ -27,20 +27,7 @@ const leap: CardEffect = (card) => {
   }
 }
 
-const hasteYourself: CardEffect = (card) => {
-  return {
-    sourceIndex: card.index,
-    type: 'haste',
-    value: 0.2,
-    trigger: {
-      type: 'cooldown',
-      playerTriggerIndexes: [card.index],
-      opponentTriggerIndexes: [],
-    },
-  }
-}
-
-const hasteYourSibling: CardEffect = (card) => {
+const hasteYourself: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'haste',
@@ -53,7 +40,20 @@ const hasteYourSibling: CardEffect = (card) => {
   }
 }
 
-const slowSibling: CardEffect = (card) => {
+const hasteYourSibling: CardEffect = ({ card }) => {
+  return {
+    sourceIndex: card.index,
+    type: 'haste',
+    value: 1,
+    trigger: {
+      type: 'cooldown',
+      playerTriggerIndexes: [card.index + 1],
+      opponentTriggerIndexes: [],
+    },
+  }
+}
+
+const slowSibling: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
     type: 'slow',
@@ -178,7 +178,7 @@ export const cards: Card[] = [
     bash: { attack: 7, shield: 3, cooldown: 3 },
     level: 1,
     unique: false,
-    effects: [],
+    effects: [hasteYourSibling],
     maxLevel: 5,
     description: 'A basic skeleton archer',
     rarity: 1,
@@ -233,7 +233,7 @@ export const cards: Card[] = [
   {
     id: 'DoomCloak',
     name: 'Doom Cloak',
-    bash: { attack: 20, shield: 20, cooldown: 7 },
+    bash: { attack: 20, shield: 20, cooldown: 10 },
     index: 0,
     stats: {},
     level: 1,

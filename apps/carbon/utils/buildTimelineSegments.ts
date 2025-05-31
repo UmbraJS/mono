@@ -40,7 +40,9 @@ export function buildTimelineSegments(modifiers: ModifierChunk[]): TimelineSegme
   for (const event of events) {
     if (lastTime !== null && event.time > lastTime) {
       const current = getCurrent();
-      segments.push({ start: lastTime, end: event.time, ...current });
+      if (current.type !== "base") {
+        segments.push({ start: lastTime, end: event.time, ...current });
+      }
     }
 
     lastTime = event.time;

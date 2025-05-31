@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
-import type { ChainedCooldownEvent } from '../../../utils/generateChainedCooldownEvents'
+import type { OutputChunk } from "../../../utils/types";
+import type { SimCard } from '../../../types'
 
 const props = defineProps<{
   time: number
   timeline: gsap.core.Timeline;
-  cooldownEvents: ChainedCooldownEvent[];
+  card: SimCard;
 }>()
 
-const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.cooldownEvents)
-
+const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.card)
 
 </script>
 
@@ -18,8 +18,9 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
     <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%` }">
     </div>
     <div class="debugPanel">
-      <div class="slowp">
+      <div class="slowp grid">
         <p>{{ cooldownDuration.toFixed(1) }}</p>
+        <!-- <p>{{ cooldownDuration }}</p> -->
         <p>{{ time.toFixed(1) }}</p>
         <p>{{ Math.floor(cooldown) }}</p>
       </div>
@@ -45,6 +46,13 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   justify-content: space-between;
   background-color: var(--base-40);
   padding: var(--space-quark);
+}
+
+.slowp.grid {
+  display: grid;
+  /* justify-content: space-between; */
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
 }
 
 .slow .n2 {
