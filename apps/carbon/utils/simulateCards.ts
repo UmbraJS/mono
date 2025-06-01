@@ -1,5 +1,6 @@
 import { generateCooldownEvent } from "./generateCooldownEvent";
-import type { Card, SimCard, CardModifier } from "../types/card"
+import type { CooldownEvent } from "./generateCooldownEvent";
+import type { Card, SimCard, TimeEffect } from "../types/card"
 
 interface SimulateCooldownTimelineArgs {
   playerDeck: Card[];
@@ -43,18 +44,41 @@ export function simulateCooldownTimeline({
 
   let count = 0;
 
-  while (globalTime < 30 && count < 100) {
-    // Calculate data
+  while (globalTime < 60 && count < 100) {
     const processedCards = processCards(simCards);
-
-
-    // Pass time
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
       globalTime += 1;
       continue;
-    }; // No cards to finish
+    };
     globalTime = processedCards.nextCooldownEnd;
 
+
+    mutateTime(processedCards)
+    // console.log("rex test: ", {
+    //   name: card.name,
+    //   segmentedChunks,
+    //   chunks: chunks.map(c => ({
+    //     startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
+    //     fromTo: `${c.from} -> ${c.to}`,
+    //     type: c.type,
+    //   })),
+    // })
+
+    // console.log("rex text: ", simCards.map(c => ({
+    //   name: c.name,
+    //   lifetime: c.simulation.lifetime,
+    // })))
+
+    count++;
+  }
+
+  // --- Return results ---
+  return {
+    player: playerSimCards,
+    opponent: opponentSimCards,
+  }
+
+  function mutateTime(processedCards: Exclude<ReturnType<typeof processCards>, undefined>) {
     // Mutate data
     for (const nextCardToFinish of processedCards.nextCardsToFinish) {
       if (!nextCardToFinish.allModifiers) continue; // No modifiers to apply so nothing to do
@@ -83,22 +107,82 @@ export function simulateCooldownTimeline({
         })
       }
     }
-
-    count++;
-  }
-
-  // --- Return results ---
-  return {
-    player: playerSimCards,
-    opponent: opponentSimCards,
   }
 
   /**
   * Processes the cooldown events for the next cards and returns the cards that will finish next.
   */
   function processCards(cards: SimCard[]) {
-    const cardEvents = cards
-      .map((card) => cooldownEvent(card))
+    const processedCards: (ProcessedCard | undefined)[] = cards
+      .map((card) => {
+        // Generate event using previously stored modifiers
+        const cooldownEvent = generateCooldownEvent(card);
+        if (!cooldownEvent) return;
+
+        const totalLifetime = getTotalLifetime(card.simulation.lifetime);
+        const nextCooldownEnd = getTotalLifetime(cooldownEvent.segmentedChunks);
+
+        // A side effect is an effect of another card which is triggered by this card
+        const sideEffects = cards.filter(c => c.effects.some(effect => {
+          const isPlayer = card.simulation.owner === "player";
+          const comparisonCardIsPlayer = c.simulation.owner === "player";
+          const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
+
+          const trigger = effect({
+            card: c,
+            opponentCards: comparisonCardIsPlayer ? opponentSimCards : playerSimCards,
+            playerCards: comparisonCardIsPlayer ? playerSimCards : opponentSimCards,
+          }).trigger;
+
+          const playerTriggerIndexes = trigger.playerTriggerIndexes
+          const isPlayerTriggerUndefined = playerTriggerIndexes === undefined;
+
+          return cardsAreOnTheSameSide
+            ? isPlayerTriggerUndefined ? c.index === card.index : playerTriggerIndexes.includes(card.index)
+            : trigger.opponentTriggerIndexes?.includes(card.index);
+        }))
+
+        // Get modifiers for next events
+        const allModifiers = sideEffects.flatMap(c => c.effects.map(e => ({
+          effect: e,
+          sourceCard: c,
+        }))).map(({ effect, sourceCard }) => {
+          const cardModifier = effect({
+            card: sourceCard,
+            opponentCards: opponentSimCards,
+            playerCards: playerSimCards,
+          });
+          if (cardModifier.trigger.triggerType !== "cooldown") return;
+
+          return getModifiers({
+            sourceCard: sourceCard,
+            timestamp: getTotalLifetime(cooldownEvent.segmentedChunks),
+            modifier: cardModifier
+          });
+
+        }).filter(mod => mod !== undefined);
+
+        return {
+          ...cooldownEvent,
+          card: card,
+          totalLifetime,
+          nextCooldownEnd,
+          allModifiers
+        }
+      })
+
+    return getNextCardsToFinish(processedCards)
+  }
+
+  interface ProcessedCard extends CooldownEvent {
+    card: SimCard;
+    totalLifetime: number;
+    nextCooldownEnd: number;
+    allModifiers?: ReturnType<typeof getModifiers>[];
+  }
+
+  function getNextCardsToFinish(processedCards: (ProcessedCard | undefined)[]) {
+    const cardEvents = processedCards
       .filter(e => e !== undefined)
       .sort((a, b) => a.nextCooldownEnd - b.nextCooldownEnd);
     if (cardEvents.length === 0) return;
@@ -114,45 +198,10 @@ export function simulateCooldownTimeline({
     }
   }
 
-  function cooldownEvent(card: SimCard) {
-    // Generate event using previously stored modifiers
-    const cooldownEvent = generateCooldownEvent(card);
-    if (!cooldownEvent) return;
-
-    const totalLifetime = getTotalLifetime(card.simulation.lifetime);
-    const nextCooldownEnd = getTotalLifetime(cooldownEvent.segmentedChunks);
-
-    // Get modifiers for next events
-    const allModifiers = card.effects.map(effect => {
-      const cardModifier = effect({
-        card,
-        opponentCards: opponentSimCards,
-        playerCards: playerSimCards,
-      });
-      if (cardModifier.trigger.type !== "cooldown") return;
-
-      return getModifiers({
-        sourceCard: card,
-        timestamp: getTotalLifetime(cooldownEvent.segmentedChunks),
-        modifier: cardModifier
-      });
-
-    }).filter(mod => mod !== undefined);
-
-
-    return {
-      ...cooldownEvent,
-      card: card,
-      totalLifetime,
-      nextCooldownEnd,
-      allModifiers
-    };
-  }
-
   interface GetModifiersProps {
     sourceCard: SimCard,
     timestamp: number,
-    modifier: CardModifier
+    modifier: TimeEffect
   }
 
   function getModifiers({
@@ -160,10 +209,11 @@ export function simulateCooldownTimeline({
     timestamp,
     modifier
   }: GetModifiersProps) {
-    const trigger = modifier.trigger;
+    const target = modifier.target;
     function mapModifier(index: number) {
+      sourceCard.index
       return {
-        type: modifier.type,
+        type: modifier.timeType,
         duration: modifier.value,
         timestamp: timestamp,
         sourceIndex: sourceCard.index,
@@ -174,9 +224,9 @@ export function simulateCooldownTimeline({
     // Reverse the player/opponent modifiers when simulating the opponents deck
     const isPlayer = sourceCard.simulation.owner === "player";
     return {
-      type: modifier.type,
-      playerModifiers: isPlayer ? trigger.playerTriggerIndexes.map(mapModifier) : trigger.opponentTriggerIndexes.map(mapModifier),
-      opponentModifiers: isPlayer ? trigger.opponentTriggerIndexes.map(mapModifier) : trigger.playerTriggerIndexes.map(mapModifier),
+      type: modifier.timeType,
+      playerModifiers: isPlayer ? target.playerTargetIndexes.map(mapModifier) : target.opponentTargetIndexes.map(mapModifier),
+      opponentModifiers: isPlayer ? target.opponentTargetIndexes.map(mapModifier) : target.playerTargetIndexes.map(mapModifier),
     }
   }
 

@@ -167,13 +167,17 @@ export interface CardBash {
   cooldown?: number // in milliseconds
 }
 
-export interface CardModifier {
+export interface TimeEffect {
   value: number
-  type: "haste" | "slow" | "freeze"
+  timeType: "haste" | "slow" | "freeze"
   trigger: {
-    type: "trigger" | "cooldown" | "start" | "end" | "banter" | "attack" | "shield" | "heal"
-    playerTriggerIndexes: number[]
-    opponentTriggerIndexes: number[]
+    triggerType: "event" | "cooldown" | "start" | "end"
+    playerTriggerIndexes?: number[]
+    opponentTriggerIndexes?: number[]
+  },
+  target: {
+    playerTargetIndexes: number[]
+    opponentTargetIndexes: number[]
   }
 }
 
@@ -181,7 +185,7 @@ export type CardEffect = (props: {
   card: Card
   opponentCards: Card[]
   playerCards: Card[]
-}) => CardModifier
+}) => TimeEffect
 
 export interface CardAction {
   bash: CardBash
