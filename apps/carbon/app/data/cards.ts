@@ -1,70 +1,90 @@
 import type { Card, CardEffect } from '../../types/card'
 import { aspects } from './aspects'
 
-const stumble: CardEffect = ({ card }) => {
-  return {
-    sourceIndex: card.index,
-    type: 'slow',
-    value: 2,
-    trigger: {
-      type: 'start',
-      playerTriggerIndexes: [card.index],
-      opponentTriggerIndexes: [],
-    },
-  }
-}
+// const stumble: CardEffect = ({ card }) => {
+//   return {
+//     sourceIndex: card.index,
+//     timeType: 'slow',
+//     value: 2,
+//     trigger: {
+//       type: 'start',
+//       playerTriggerIndexes: [card.index],
+//       opponentTriggerIndexes: [],
+//     },
+//   }
+// }
 
-const leap: CardEffect = ({ card }) => {
-  return {
-    sourceIndex: card.index,
-    type: 'haste',
-    value: 1,
-    trigger: {
-      type: 'start',
-      playerTriggerIndexes: [card.index],
-      opponentTriggerIndexes: [],
-    },
-  }
-}
+// const leap: CardEffect = ({ card }) => {
+//   return {
+//     sourceIndex: card.index,
+//     timeType: 'haste',
+//     value: 1,
+//     trigger: {
+//       type: 'start',
+//       playerTriggerIndexes: [card.index],
+//       opponentTriggerIndexes: [],
+//     },
+//   }
+// }
 
-const hasteYourself: CardEffect = ({ card }) => {
-  return {
-    sourceIndex: card.index,
-    type: 'haste',
-    value: 1,
-    trigger: {
-      type: 'cooldown',
-      playerTriggerIndexes: [card.index],
-      opponentTriggerIndexes: [],
-    },
-  }
-}
+// const hasteYourself: CardEffect = ({ card }) => {
+//   return {
+//     sourceIndex: card.index,
+//     timeType: 'haste',
+//     value: 1,
+//     trigger: {
+//       type: 'cooldown',
+//       playerTriggerIndexes: [card.index],
+//       opponentTriggerIndexes: [],
+//     },
+//   }
+// }
 
 const hasteYourSibling: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
-    type: 'haste',
+    timeType: 'haste',
     value: 1,
     trigger: {
-      type: 'cooldown',
+      triggerType: 'cooldown',
       playerTriggerIndexes: [card.index + 1],
-      opponentTriggerIndexes: [],
+    },
+    target: {
+      playerTargetIndexes: [card.index + 1],
+      opponentTargetIndexes: [],
     },
   }
 }
 
-const slowSibling: CardEffect = ({ card }) => {
+const mirrorHaste: CardEffect = ({ card }) => {
   return {
     sourceIndex: card.index,
-    type: 'slow',
-    value: 2,
+    timeType: 'haste',
+    value: 1,
     trigger: {
-      type: 'cooldown',
-      playerTriggerIndexes: [card.index + 1],
-      opponentTriggerIndexes: [],
+      triggerType: 'cooldown',
+      playerTriggerIndexes: [],
+      opponentTriggerIndexes: [card.index],
+    },
+    target: {
+      playerTargetIndexes: [card.index],
+      opponentTargetIndexes: [],
     },
   }
 }
+
+// const slowSibling: CardEffect = ({ card }) => {
+//   return {
+//     sourceIndex: card.index,
+//     type: 'slow',
+//     value: 2,
+//     trigger: {
+//       type: 'cooldown',
+//       playerTriggerIndexes: [card.index + 1],
+//       opponentTriggerIndexes: [],
+//     },
+//   }
+// }
 
 export const fields: Card[] = [
   {
@@ -178,7 +198,7 @@ export const cards: Card[] = [
     bash: { attack: 7, shield: 3, cooldown: 3 },
     level: 1,
     unique: false,
-    effects: [hasteYourSibling],
+    effects: [],
     maxLevel: 5,
     description: 'A basic skeleton archer',
     rarity: 1,

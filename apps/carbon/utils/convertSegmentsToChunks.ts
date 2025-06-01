@@ -29,7 +29,7 @@ function getDifference(num1: number, num2: number) {
  * @returns {Object} An object containing the output chunks and total duration.
  */
 
-export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegment[], startTime: number, card: SimCard): ChunksContainer {
+export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegment[], startTime: number): ChunksContainer {
   const baseSecondsPerPercent = baseDuration / 100;
   const basePercentPerSecond = 100 / baseDuration; // 10% = 1 second
 

@@ -27,7 +27,7 @@ export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined 
 
   const resolvedModifiers = resolveOverlappingModifiers(modifiers);
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
-  const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime, card);
+  const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime);
 
   return {
     baseDuration,
