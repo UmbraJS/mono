@@ -1,4 +1,4 @@
-import type { Character } from '../../types'
+import type { Character, User } from '../../types'
 import { cards } from './cards'
 
 const soldierStats = {
@@ -35,12 +35,16 @@ const warrior: Character = {
   health: 150,
   maxHealth: 150,
   stats: soldierStats,
-  field: cards.find((card) => card.name === 'Village')!,
   image: {
     default: 'soldier.jpg',
   },
   age: adultHumanAge,
   perks: [],
+}
+
+const user: User = {
+  characters: [warrior],
+  field: cards.find((card) => card.name === 'Village')!,
   deck: [
     cards.find((card) => card.name === 'Archer')!,
     cards.find((card) => card.name === 'Halberdier')!,
@@ -60,12 +64,16 @@ const skeletonKing: Character = {
   health: 200,
   maxHealth: 200,
   stats: mageStats,
-  field: cards.find((card) => card.name === 'Abandoned Halls')!,
   image: {
     default: 'skeletonKing.jpg',
   },
   age: adultHumanAge,
   perks: [],
+}
+
+const bot: User = {
+  characters: [skeletonKing],
+  field: cards.find((card) => card.name === 'Abandoned Halls')!,
   deck: [
     cards.find((card) => card.name === 'Skeleton Archer')!,
     cards.find((card) => card.name === 'Skeleton Soldier')!,
@@ -78,4 +86,4 @@ const skeletonKing: Character = {
   ],
 }
 
-export { warrior, skeletonKing }
+export { user, bot }

@@ -5,7 +5,6 @@ import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
 import type { BashRecords } from '~/composables/useBashRecords'
-import type { ChainedCooldownEvent } from '../../../utils/generateChainedCooldownEvents'
 
 defineProps<{
   card: SimCard

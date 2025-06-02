@@ -1,6 +1,6 @@
 import { generateCooldownEvent } from "./time/generateCooldownEvent";
 import type { CooldownEvent } from "./time/generateCooldownEvent";
-import type { Card, SimCard, TimeEffect } from "../types/card"
+import type { CardStats, SimCard, PreSimulationCard, TimeEffect } from "../types/card"
 
 interface ProcessedCard extends CooldownEvent {
   card: SimCard;
@@ -9,28 +9,23 @@ interface ProcessedCard extends CooldownEvent {
   allModifiers?: ReturnType<typeof getModifiers>[];
 }
 
-interface CharacterProps {
-  deck: Card[];
-  onTrigger: (triggeredCard: ProcessedCard) => void;
-}
-
-
 interface SimulateCooldownTimelineArgs {
-  player: CharacterProps;
-  opponent: CharacterProps;
+  playerDeck: PreSimulationCard[];
+  opponentDeck: PreSimulationCard[];
+  onTrigger: (triggeredCard: ProcessedCard) => void;
   matchCondition: () => boolean;
 }
 
 export function simulateTime({
-  player,
-  opponent,
+  onTrigger,
+  playerDeck,
+  opponentDeck,
   matchCondition,
 }: SimulateCooldownTimelineArgs) {
-  const playerSimCards = initializeSimCards(player.deck, "player");
-  const opponentSimCards = initializeSimCards(opponent.deck, "opponent");
+  const playerSimCards = initializeSimCards(playerDeck, "player");
+  const opponentSimCards = initializeSimCards(opponentDeck, "opponent");
 
   const simCards = [...playerSimCards, ...opponentSimCards];
-  let globalTime = 0;
 
   // --- Apply all "start" modifier effects ---
   // for (const card of simCards) {
@@ -64,11 +59,8 @@ export function simulateTime({
     };
 
     processedCards.nextCardsToFinish.map(c => {
-      c.card.simulation.owner === "player"
-        ? player.onTrigger(c)
-        : opponent.onTrigger(c);
+      onTrigger(c)
     })
-
 
     mutateTime(processedCards)
     // console.log("rex test: ", {
@@ -140,9 +132,9 @@ export function simulateTime({
         const nextCooldownEnd = getTotalLifetime(cooldownEvent.segmentedChunks);
 
         // A side effect is an effect of another card which is triggered by this card
-        const sideEffects = cards.filter(c => c.effects.some(effect => {
-          const isPlayer = card.simulation.owner === "player";
-          const comparisonCardIsPlayer = c.simulation.owner === "player";
+        const sideEffects = cards.filter(c => c.stats.effects.some(effect => {
+          const isPlayer = card.owner.user === "player";
+          const comparisonCardIsPlayer = c.owner.user === "player";
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
 
           const trigger = effect({
@@ -160,7 +152,7 @@ export function simulateTime({
         }))
 
         // Get modifiers for next events
-        const allModifiers = sideEffects.flatMap(c => c.effects.map(e => ({
+        const allModifiers = sideEffects.flatMap(c => c.stats.effects.map(e => ({
           effect: e,
           sourceCard: c,
         }))).map(({ effect, sourceCard }) => {
@@ -208,17 +200,18 @@ export function simulateTime({
     }
   }
 
-  function initializeSimCards(deck: Card[], owner: "player" | "opponent"): SimCard[] {
-    return deck.map((thisCard, index) => {
+  function initializeSimCards(deck: PreSimulationCard[], owner: "player" | "opponent"): SimCard[] {
+    return deck.map((thisCard) => {
       return {
         ...thisCard,
-        index: index, // Important for tracking in the simulation
-        effects: thisCard.effects || [],
+        owner: {
+          user: owner,
+          characterIndex: 0, // Default to 0, can be set later if needed
+        }, // Owner of the card
         simulation: {
           chunks: [],
           modifiers: [], // Start empty; "start" effects will populate
           lifetime: [], // Amount of time in cooldowns passed for this card
-          owner: owner, // Owner of the card
         },
       }
     });
@@ -253,7 +246,7 @@ function getModifiers({
   }
 
   // Reverse the player/opponent modifiers when simulating the opponents deck
-  const isPlayer = sourceCard.simulation.owner === "player";
+  const isPlayer = sourceCard.owner.user === "player";
   return {
     type: modifier.timeType,
     playerModifiers: isPlayer ? target.playerTargetIndexes.map(mapModifier) : target.opponentTargetIndexes.map(mapModifier),

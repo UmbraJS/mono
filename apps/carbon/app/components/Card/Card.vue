@@ -5,8 +5,6 @@ import CardCooldown from './CardCooldown.vue'
 import CardStats from './CardStats.vue'
 import type { UsePlayerReturn } from '../../composables/usePlayer'
 import { useBashRecords } from '~/composables/useBashRecords'
-import type { ChainedCooldownEvent } from '../../../utils/generateChainedCooldownEvents'
-// import type { SimCard } from '../../../utils/simulateCards'
 
 const props = defineProps<{
   card: SimCard

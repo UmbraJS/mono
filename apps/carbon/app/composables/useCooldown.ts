@@ -1,5 +1,5 @@
 import { gsap } from 'gsap'
-import type { OutputChunk } from "../../utils/types";
+import type { OutputChunk } from "../../utils/time/types";
 import type { SimCard } from '../../types'
 
 export function useCooldown(timeline: gsap.core.Timeline, card: SimCard) {

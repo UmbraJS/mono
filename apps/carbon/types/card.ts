@@ -1,5 +1,5 @@
 import type { ElementRef } from './utils'
-import type { ModifierChunk, OutputChunk } from "../utils/types";
+import type { ModifierChunk, OutputChunk } from "../utils/time/types";
 
 interface CardImage {
   default?: string
@@ -117,15 +117,22 @@ export interface ReactiveCard extends Card {
   setHaste: (duration: number) => void;
 }
 
-
 export type Owner = 'player' | 'opponent';
 
-export interface SimCard extends Card {
+export interface PreSimulationCard {
+  index: number;
+  stats: CardStats;
+}
+
+export interface SimCard extends PreSimulationCard {
+  owner: {
+    user: Owner;
+    characterIndex: number;
+  };
   simulation: {
     chunks: OutputChunk[];
     modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
     lifetime: number[]; // Amount of time in cooldowns passed for this card
-    owner: Owner; // Owner of the card
   }
 }
 
@@ -133,22 +140,29 @@ export interface Card {
   id: string
   index: number
   name: CardName
-  bash: CardBash
-  effects: CardEffect[]
-  stats: CardStats
-  level: number
-  maxLevel: number
+  levels: CardStats[]
   description: string
   rarity: number
   unique: boolean
-  baseCost: number
-  cost: number
-  tags: CardTag[]
-  aspects: Aspect[]
   image?: CardImage
+  stats: {
+    base: CardStats
+    quest?: CardStats
+    campaign?: CardStats
+  }
 }
 
-interface CardStats {
+export interface CardStats {
+  cost: number
+  bash: CardBash
+  effects: CardEffect[]
+  aspects: Aspect[]
+  tags: CardTag[]
+  record: CardRecord
+  level: number
+}
+
+interface CardRecord {
   banter?: number
   attack?: number
   shield?: number
@@ -164,7 +178,7 @@ export interface CardBash {
   critChance?: number
   critDamage?: number
   actionCount?: number
-  cooldown?: number // in milliseconds
+  cooldown?: number
 }
 
 export interface TimeEffect {
@@ -182,14 +196,14 @@ export interface TimeEffect {
 }
 
 export type CardEffect = (props: {
-  card: Card
-  opponentCards: Card[]
-  playerCards: Card[]
+  card: SimCard
+  opponentCards: SimCard[]
+  playerCards: SimCard[]
 }) => TimeEffect
 
 export interface CardAction {
   bash: CardBash
   index: number
   timestamp: number
-  card: Card
+  card: SimCard
 }

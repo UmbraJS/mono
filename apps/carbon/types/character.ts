@@ -63,16 +63,20 @@ export interface Character {
   description: string
   health: number
   maxHealth: number
-  field: Card
-  deck: Card[]
   stats: CharacterStats
-  inventory: Card[]
   perks: Perks[]
   image?: CharacterImage
   age: {
     years: number
     stage: 'child' | 'adult' | 'elder'
   }
+}
+
+export interface User {
+  characters: Character[]
+  field: Card
+  deck: Card[]
+  inventory: Card[]
 }
 
 export interface Perks {

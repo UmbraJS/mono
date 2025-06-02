@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
-import type { OutputChunk } from "../../../utils/types";
+import type { OutputChunk } from "../../../utils/time/types";
 import type { SimCard } from '../../../types'
 
 const props = defineProps<{

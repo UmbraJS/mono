@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import PlayerCard from '~/components/Card/Card.vue'
-import { warrior, skeletonKing } from '../data/character'
+import { user, bot } from '../data/character'
 import Board from '~/components/Board.vue'
 import { gsap } from 'gsap'
 // import { useAudioCue } from '@/composables/useAudioCue'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
-import { simulateCooldownTimeline } from '../../utils/simulateCards'
-import type { timestamp } from '@vueuse/core'
+import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
 
 const time = ref(0)
 
@@ -36,9 +35,9 @@ const player = usePlayer({
   },
 })
 
-const cardTimeline = simulateCooldownTimeline({
-  opponentDeck: opponent.deck,
-  playerDeck: player.deck,
+const cardTimeline = spaceTimeSimulation({
+  player: user,
+  opponent: bot,
   matchDuration: 30
 })
 
