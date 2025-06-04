@@ -105,12 +105,12 @@ export function simulateTime({
       // Store data on every card modified by this next card
       for (const modifier of nextCardToFinish.allModifiers) {
         modifier.playerModifiers.forEach(mod => {
-          const targetCard = playerSimCards.find(c => c.index === mod.index);
+          const targetCard = playerSimCards.find(c => c.card.index === mod.index);
           if (!targetCard) return;
           targetCard.simulation.modifiers.push(mod);
         })
         modifier.opponentModifiers.forEach(mod => {
-          const targetCard = opponentSimCards.find(c => c.index === mod.index);
+          const targetCard = opponentSimCards.find(c => c.card.index === mod.index);
           if (!targetCard) return;
           targetCard.simulation.modifiers.push(mod);
         })
@@ -132,7 +132,7 @@ export function simulateTime({
         const nextCooldownEnd = getTotalLifetime(cooldownEvent.segmentedChunks);
 
         // A side effect is an effect of another card which is triggered by this card
-        const sideEffects = cards.filter(c => c.stats.effects.some(effect => {
+        const sideEffects = cards.filter(c => c.cardStats.effects.some(effect => {
           const isPlayer = card.owner.user === "player";
           const comparisonCardIsPlayer = c.owner.user === "player";
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
@@ -147,12 +147,12 @@ export function simulateTime({
           const isPlayerTriggerUndefined = playerTriggerIndexes === undefined;
 
           return cardsAreOnTheSameSide
-            ? isPlayerTriggerUndefined ? c.index === card.index : playerTriggerIndexes.includes(card.index)
-            : trigger.opponentTriggerIndexes?.includes(card.index);
+            ? isPlayerTriggerUndefined ? c.card.index === card.card.index : playerTriggerIndexes.includes(card.card.index)
+            : trigger.opponentTriggerIndexes?.includes(card.card.index);
         }))
 
         // Get modifiers for next events
-        const allModifiers = sideEffects.flatMap(c => c.stats.effects.map(e => ({
+        const allModifiers = sideEffects.flatMap(c => c.cardStats.effects.map(e => ({
           effect: e,
           sourceCard: c,
         }))).map(({ effect, sourceCard }) => {
@@ -235,12 +235,12 @@ function getModifiers({
 }: GetModifiersProps) {
   const target = modifier.target;
   function mapModifier(index: number) {
-    sourceCard.index
+    sourceCard.card.index
     return {
       type: modifier.timeType,
       duration: modifier.value,
       timestamp: timestamp,
-      sourceIndex: sourceCard.index,
+      sourceIndex: sourceCard.card.index,
       index: index,
     }
   }

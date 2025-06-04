@@ -44,16 +44,16 @@ const warrior: Character = {
 
 const user: User = {
   characters: [warrior],
-  field: cards.find((card) => card.name === 'Village')!,
+  field: cards.find((card) => card.info.name === 'Village')!,
   deck: [
-    cards.find((card) => card.name === 'Archer')!,
-    cards.find((card) => card.name === 'Halberdier')!,
-    cards.find((card) => card.name === 'Doom Cloak')!,
-    cards.find((card) => card.name === 'Glimmer Cloak')!,
+    { ...cards.find((card) => card.info.name === 'Archer')!, index: 0 },
+    // { ...cards.find((card) => card.info.name === 'Halberdier')!, index: 1, },
+    // { ...cards.find((card) => card.info.name === 'Doom Cloak')!, index: 2 },
+    // { ...cards.find((card) => card.info.name === 'Glimmer Cloak')!, index: 3 },
   ],
   inventory: [
-    cards.find((card) => card.name === 'Village')!,
-    cards.find((card) => card.name === 'Swamp')!,
+    cards.find((card) => card.info.name === 'Village')!,
+    cards.find((card) => card.info.name === 'Swamp')!,
   ],
 }
 
@@ -73,16 +73,16 @@ const skeletonKing: Character = {
 
 const bot: User = {
   characters: [skeletonKing],
-  field: cards.find((card) => card.name === 'Abandoned Halls')!,
+  field: cards.find((card) => card.info.name === 'Abandoned Halls')!,
   deck: [
-    cards.find((card) => card.name === 'Skeleton Archer')!,
-    cards.find((card) => card.name === 'Skeleton Soldier')!,
-    cards.find((card) => card.name === 'Skeleton Healer')!,
-    cards.find((card) => card.name === 'Skeleton Horseman')!,
+    { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, index: 0 },
+    // { ...cards.find((card) => card.info.name === 'Skeleton Soldier')!, index: 1 },
+    // { ...cards.find((card) => card.info.name === 'Skeleton Healer')!, index: 2 },
+    // { ...cards.find((card) => card.info.name === 'Skeleton Horseman')!, index: 3 },
   ],
   inventory: [
-    cards.find((card) => card.name === 'Alien Halls')!,
-    cards.find((card) => card.name === 'Abandoned Halls')!,
+    cards.find((card) => card.info.name === 'Alien Halls')!,
+    cards.find((card) => card.info.name === 'Abandoned Halls')!,
   ],
 }
 

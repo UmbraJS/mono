@@ -1,36 +1,24 @@
 <script setup lang="ts">
-import type { Card } from '../../../types'
+import type { CardBash } from '../../../types'
 
 defineProps<{
-  card: Card
+  bash?: CardBash
 }>()
 </script>
 
 <template>
   <div class="stats">
-    <div
-      v-if="card.bash.attack"
-      class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus"
-    >
-      {{ card.bash.attack }}
+    <div v-if="bash?.attack" class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus">
+      {{ bash.attack }}
     </div>
-    <div
-      v-if="card.bash.heal"
-      class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus"
-    >
-      {{ card.bash.heal }}
+    <div v-if="bash?.heal" class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus">
+      {{ bash.heal }}
     </div>
-    <div
-      v-if="card.bash.shield"
-      class="chip base-info button buttonText buttonHover buttonActive buttonFocus focus"
-    >
-      {{ card.bash.shield }}
+    <div v-if="bash?.shield" class="chip base-info button buttonText buttonHover buttonActive buttonFocus focus">
+      {{ bash.shield }}
     </div>
-    <div
-      v-if="card.bash.banter"
-      class="chip base-yellow button buttonText buttonHover buttonActive buttonFocus focus"
-    >
-      {{ card.bash.banter }}
+    <div v-if="bash?.banter" class="chip base-yellow button buttonText buttonHover buttonActive buttonFocus focus">
+      {{ bash.banter }}
     </div>
   </div>
 </template>
@@ -55,7 +43,7 @@ defineProps<{
   border-bottom-left-radius: var(--radius);
 }
 
-/* if there are less than 5 chips children inside .stats give the last chip boder radius */
+/* if there are less than 5 chips children inside .stats give the last chip border radius */
 .stats:not(:has(.chip:nth-child(4n))) .chip:last-child {
   border-top-right-radius: var(--radius);
 }

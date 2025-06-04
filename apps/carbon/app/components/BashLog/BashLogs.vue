@@ -2,14 +2,15 @@
 import { Icon } from '@iconify/vue'
 import BashLog from '~/components/BashLog/BashLog.vue'
 import { Tabs, Button } from '@nobel/core'
-
-import type { UsePlayerReturn } from '../../composables/usePlayer'
+import type { CardInfo } from '../../../types/card'
 import BashLogModal from './BashLogModal.vue'
+import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 
 defineProps<{
-  player: UsePlayerReturn
-  opponent: UsePlayerReturn
-  modalButton: boolean
+  opponentInfoDeck: CardInfo[]
+  playerInfoDeck: CardInfo[]
+  modalButton: boolean,
+  logs: Pick<SpaceOutput, "healthLog" | "shieldLog">
 }>()
 </script>
 
@@ -19,17 +20,17 @@ defineProps<{
     { label: 'Player', icon: 'mdi:shield' },
   ]">
     <template #buttons v-if="modalButton">
-      <BashLogModal :player="player" :opponent="opponent">
+      <BashLogModal :logs="logs" :playerInfoDeck="playerInfoDeck" :opponentInfoDeck="opponentInfoDeck">
         <Button variant="primary" size="small">
           <Icon icon="mdi:history" />
         </Button>
       </BashLogModal>
     </template>
     <template #tab1>
-      <BashLog :player="opponent" :opponent="player" :playerDeck="opponent.deck" :opponentDeck="player.deck" />
+      <BashLog :logs="logs" :playerInfoDeck="playerInfoDeck" :opponentInfoDeck="opponentInfoDeck" />
     </template>
     <template #tab2>
-      <BashLog :player="player" :opponent="opponent" :playerDeck="player.deck" :opponentDeck="opponent.deck" />
+      <BashLog :logs="logs" :playerInfoDeck="playerInfoDeck" :opponentInfoDeck="opponentInfoDeck" />
     </template>
   </Tabs>
 </template>

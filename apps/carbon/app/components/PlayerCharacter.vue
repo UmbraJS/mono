@@ -1,42 +1,46 @@
 <script setup lang="ts">
-import type { Character } from '~~/types'
+import type { Character, User } from '~~/types'
 import ValueBar from './ValueBar/ValueBar.vue'
 import FrostLayer from './FrostLayer.vue'
 
-defineProps<{
+const props = defineProps<{
   reverse: boolean
-  character: Character
+  characters: Character[]
   health: number
-  healthDelayed: number
-  morale: number
   shield: number
 }>()
+const maxHealth = getMaxHealth()
 
+function getMaxHealth(): number {
+  return props.characters.reduce((max, character) => {
+    return Math.max(max, character.maxHealth)
+  }, 0)
+}
 </script>
 
 <template>
   <section class="character" :class="{ reverse }">
     <header>
-      <div class="character-avatar">
+      <div class="character-avatar" v-for="character in characters">
         <img v-if="character.image" :src="character.image.default" alt="Character Image" />
       </div>
       <div class="character-sheet">
-        <h2>{{ character.name }}</h2>
-        <p>{{ character.description }}</p>
+        <!-- <h2>{{ character.name }}</h2>
+        <p>{{ character.description }}</p> -->
       </div>
       <div class="healthImpact">
-        <FrostLayer :reversed="reverse" :health="health" :maxHealth="character.maxHealth" />
+        <FrostLayer :reversed="reverse" :health="health" :maxHealth="maxHealth" />
       </div>
     </header>
 
-    <ValueBar :character="character" :value="shield" :maxValue="Math.max(character.maxHealth, shield)"
-      barColor="var(--info-90)" delayColor="var(--info-50)" gridArea="shield">
-      {{ shield }}
+    <ValueBar :value="shield" :maxValue="Math.max(maxHealth, shield)" barColor="var(--info-90)"
+      delayColor="var(--info-50)" gridArea="shield">
+      {{ Math.abs(shield) }}
     </ValueBar>
 
-    <ValueBar :character="character" :value="health" :maxValue="character.maxHealth" barColor="var(--success-50)"
-      delayColor="var(--warning-50)" gridArea="health">
-      {{ health }} / {{ character.maxHealth }}
+    <ValueBar :value="health" :maxValue="maxHealth" barColor="var(--success-50)" delayColor="var(--warning-50)"
+      gridArea="health">
+      {{ Math.abs(health) }} / {{ maxHealth }}
     </ValueBar>
   </section>
 </template>

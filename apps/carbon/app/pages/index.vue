@@ -6,6 +6,8 @@ import { gsap } from 'gsap'
 // import { useAudioCue } from '@/composables/useAudioCue'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
 import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
+import { useSpace } from '~/composables/useSpace'
+import type { Card } from '../../types/card'
 
 const time = ref(0)
 
@@ -21,34 +23,14 @@ function handleReset() {
   // Reset the health and morale of both players
 }
 
-const opponent = usePlayer({
-  timeline,
-  character: skeletonKing,
-  onAttack: (opponentAttack, index) => player.hurt(opponentAttack, time.value, index),
-})
-
-const player = usePlayer({
-  timeline,
-  character: warrior,
-  onAttack: (playerAttack, index) => {
-    opponent.hurt(playerAttack, time.value, index)
-  },
-})
-
 const cardTimeline = spaceTimeSimulation({
   player: user,
   opponent: bot,
   matchDuration: 30
 })
 
-console.log('rex cardTimeline', cardTimeline?.player.map((card) => ({
-  name: card.name,
-  chunks: card.simulation.chunks.map(c => ({
-    startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
-    fromTo: `${c.from} -> ${c.to}`,
-    type: c.type,
-  }))
-})))
+const us = useSpace(timeline, cardTimeline.space.player, user.characters)
+const op = useSpace(timeline, cardTimeline.space.opponent, bot.characters)
 
 // const audio = useAudioCue()
 
@@ -62,34 +44,40 @@ function triggerFlipSound() {
     recentlyClickedFlipSound.value = false
   }, 200)
 }
+
+function getInfoDeck(deck: Card[]) {
+  return deck.map(d => d.info)
+}
 </script>
 
 <template>
   <div class="conflict-wrapper">
     <section class="sides">
       <div class="location border">
-        <img :src="skeletonKing.field?.image?.default" alt="Location" />
+        <!-- <img :src="skeletonKing.field?.image?.default" alt="Location" /> -->
       </div>
-      <PlayerCharacter :character="skeletonKing" :health="opponent.health.value"
-        :healthDelayed="opponent.healthDelayed.value" :morale="opponent.morale.value" :shield="opponent.shield.value"
+      <PlayerCharacter :characters="bot.characters" :health="op.health.value" :shield="op.shield.value"
         :reverse="false" />
-      <BashLogs :player="opponent" :opponent="player" :modal-button="true" />
+      <BashLogs :logs="cardTimeline.space.opponent" :playerInfoDeck="getInfoDeck(user.deck)"
+        :opponentInfoDeck="getInfoDeck(bot.deck)" :modal-button="true" />
     </section>
     <Board>
-      <PlayerCard v-for="card in cardTimeline.opponent" :key="card.index" :card="card" :opponent="player"
-        :player="opponent" :time="time" :timeline="timeline" />
+      <PlayerCard v-for="card in cardTimeline.time.opponent" :key="card.card.id" :card="card"
+        :opponentLogs="cardTimeline.space.player" :playerLogs="cardTimeline.space.opponent" :time="time"
+        :timeline="timeline" />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>
-      <PlayerCard v-for="card in cardTimeline.player" :key="card.index" :card="card" :opponent="opponent"
-        :player="player" :time="time" :timeline="timeline" />
+      <PlayerCard v-for="card in cardTimeline.time.player" :key="card.card.id" :card="card"
+        :opponentLogs="cardTimeline.space.opponent" :playerLogs="cardTimeline.space.player" :time="time"
+        :timeline="timeline" />
     </Board>
     <section class="sides">
       <div class="location border">
         <img src="/treasure.jpg" alt="Location" />
       </div>
-      <PlayerCharacter :character="warrior" :health="player.health.value" :healthDelayed="player.healthDelayed.value"
-        :morale="player.morale.value" :shield="player.shield.value" :reverse="true" />
+      <PlayerCharacter :characters="user.characters" :health="us.health.value" :shield="us.shield.value"
+        :reverse="false" />
       <div class="location border">
         <img src="/treasure.jpg" alt="Location" />
       </div>

@@ -120,8 +120,8 @@ export interface ReactiveCard extends Card {
 export type Owner = 'player' | 'opponent';
 
 export interface PreSimulationCard {
-  index: number;
-  stats: CardStats;
+  card: Card;
+  cardStats: CardStats;
 }
 
 export interface SimCard extends PreSimulationCard {
@@ -139,12 +139,8 @@ export interface SimCard extends PreSimulationCard {
 export interface Card {
   id: string
   index: number
-  name: CardName
-  levels: CardStats[]
-  description: string
-  rarity: number
-  unique: boolean
-  image?: CardImage
+  info: CardInfo
+  //stats: key of stats
   stats: {
     base: CardStats
     quest?: CardStats
@@ -152,9 +148,18 @@ export interface Card {
   }
 }
 
+export interface CardInfo {
+  name: CardName
+  levels: CardStats[]
+  description: string
+  rarity: number
+  unique: boolean
+  image?: CardImage
+}
+
 export interface CardStats {
   cost: number
-  bash: CardBash
+  bash?: CardBash
   effects: CardEffect[]
   aspects: Aspect[]
   tags: CardTag[]
@@ -170,6 +175,17 @@ interface CardRecord {
   value?: number
 }
 
+// interface StatComposite {
+//   value: number // Total value of the stat
+//   baseValue: number // Base value of the stat
+//   upgrades: {
+//     name: string // Name of the upgrade card
+//     tier: number // Tier of the upgrade
+//     times: number // How many times this upgrade has been applied
+//     value: number // Total value of the upgrade
+//   }[]
+// }
+
 export interface CardBash {
   attack?: number
   shield?: number
@@ -178,7 +194,7 @@ export interface CardBash {
   critChance?: number
   critDamage?: number
   actionCount?: number
-  cooldown?: number
+  cooldown: number
 }
 
 export interface TimeEffect {

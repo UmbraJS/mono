@@ -2,38 +2,38 @@
 import type { SimCard } from '../../../types'
 import CardModal from './CardModal.vue'
 import CardCooldown from './CardCooldown.vue'
-import CardStats from './CardStats.vue'
-import type { UsePlayerReturn } from '../../composables/usePlayer'
+import CardStatsComponent from './CardStats.vue'
 import { useBashRecords } from '~/composables/useBashRecords'
+import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 
 const props = defineProps<{
   card: SimCard
-  opponent: UsePlayerReturn
-  player: UsePlayerReturn
+  playerLogs: SpaceOutput
+  opponentLogs: SpaceOutput
   time: number
   timeline: gsap.core.Timeline;
 }>()
 
 const cardBashRecords = useBashRecords({
-  player: props.player,
-  opponent: props.opponent,
-  index: props.card.index,
+  playerLogs: props.playerLogs,
+  opponentLogs: props.opponentLogs,
+  index: props.card.card.index,
 })
 </script>
 
 <template>
   <div class="carder">
-    <CardModal :card="card" :opponent="opponent" :player="player" :bash-records="cardBashRecords" :time="time"
-      :timeline="timeline" :cooldownEvents="card.simulation.chunks">
+    <CardModal :card="card" :cardStats="card.cardStats" :cardInfo="card.card.info" :bash-records="cardBashRecords"
+      :time="time" :timeline="timeline" :cooldownEvents="card.simulation.chunks">
       <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
-        <CardCooldown v-if="card.bash.cooldown" :time="time" :timeline="timeline" :card="card" />
+        <CardCooldown v-if="card.cardStats.bash?.cooldown" :time="time" :timeline="timeline" :card="card" />
         <!-- <div class="RecordedValue">
           <p class="border"> {{ cardBashRecords.totalValue.value }}</p>
           <p class="border base-warning"> {{ Number(card.slow.value.toFixed(1)) }}</p>
           <p class="border base-success"> {{ Number(card.haste.value.toFixed(1)) }}</p>
         </div> -->
-        <img v-if="card.image" :src="card.image.default" alt="Card Image" />
-        <CardStats :card="card" />
+        <img v-if="card.card.info.image" :src="card.card.info.image.default" alt="Card Image" />
+        <CardStatsComponent :bash="card.cardStats.bash" />
       </button>
     </CardModal>
   </div>

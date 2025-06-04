@@ -22,8 +22,8 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
   function handleShieldDown(attackEntry: AttackEntry) {
     if (shield.getShield() <= 0) return
     shield.shieldDown({
-      actualChange: attackEntry.attack,
-      attemptedChange: attackEntry.attack,
+      actualChange: -attackEntry.attack,
+      attemptedChange: -attackEntry.attack,
       timestamp: attackEntry.timestamp,
       type: 'attack',
       index: attackEntry.index,
@@ -106,6 +106,9 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
   }
 
   return {
+    healthLog: health.healthLog,
+    shieldLog: shield.shieldLog,
+    moraleLog: morale.moraleLog,
     getHealth: health.getHealth,
     getShield: shield.getShield,
     getMorale: morale.getMorale,
