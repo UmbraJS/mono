@@ -35,12 +35,12 @@ function getMaxHealth(): number {
 
     <ValueBar :value="shield" :maxValue="Math.max(maxHealth, shield)" barColor="var(--info-90)"
       delayColor="var(--info-50)" gridArea="shield">
-      {{ Math.abs(shield) }}
+      {{ Math.floor(shield) }}
     </ValueBar>
 
     <ValueBar :value="health" :maxValue="maxHealth" barColor="var(--success-50)" delayColor="var(--warning-50)"
       gridArea="health">
-      {{ Math.abs(health) }} / {{ maxHealth }}
+      {{ Math.floor(health) }} / {{ maxHealth }}
     </ValueBar>
   </section>
 </template>

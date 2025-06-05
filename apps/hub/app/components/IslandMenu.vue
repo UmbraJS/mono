@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, ButtonGroup, IconPaint, IconText } from '@nobel/core'
+import { Button, ButtonGroup } from '@nobel/core'
 import { onClickOutside } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import UserPanelWrapper from './UserPanelWrapper.vue'
@@ -35,14 +35,8 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
 </script>
 
 <template>
-  <nav
-    id="island-menu"
-    ref="islandMenu"
-    class="inverted-theme border"
-    :class="{ expanded: expandedTab }"
-    @mouseover="hover = true"
-    @mouseleave="hover = false"
-  >
+  <nav id="island-menu" ref="islandMenu" class="inverted-theme border" :class="{ expanded: expandedTab }"
+    @mouseover="hover = true" @mouseleave="hover = false">
     <div class="island-panel">
       <UserPanelWrapper v-if="activeTab === 'user'" />
       <SettingsPanel v-if="activeTab === 'settings'" />
@@ -53,11 +47,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
         <Icon name="pixelarticons:user" size="1em" />
       </Button>
 
-      <Button
-        size="small"
-        :variant="activeVariant('settings')"
-        @click="() => switchTab('settings')"
-      >
+      <Button size="small" :variant="activeVariant('settings')" @click="() => switchTab('settings')">
         <Icon name="pixelarticons:sliders-2" size="1em" />
       </Button>
 
