@@ -1,78 +1,79 @@
 import type { UsePlayerReturn } from './usePlayer'
 import type { ValueLogCore } from './useBash'
+import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
 
 interface BashRecordProps {
-  player: UsePlayerReturn
-  opponent: UsePlayerReturn
+  playerLogs: SpaceOutput
+  opponentLogs: SpaceOutput
   index: number
 }
 
 export function useBashRecords(props: BashRecordProps) {
-const attackRecord = computed(() => {
-  const filteredHealthAttackLogs = props.opponent.healthLog.value.filter((entry) => {
-    if (entry.type !== 'attack') return
-    return entry.index === props.index
+  const attackRecord = computed(() => {
+    const filteredHealthAttackLogs = props.playerLogs.healthLog.filter((entry) => {
+      if (entry.type !== 'attack') return
+      return entry.index === props.index
+    })
+
+    let shieldAttackLogs: ValueLogCore[] = []
+    props.opponentLogs.shieldLog.forEach((entry) => {
+      const shieldDebuffs = entry.banter.debuffs
+      if (!shieldDebuffs.length) return
+      shieldAttackLogs = [
+        ...shieldAttackLogs,
+        ...shieldDebuffs
+      ]
+    })
+
+    const filteredShieldAttackLogs = shieldAttackLogs.filter((entry) => {
+      if (entry.type !== 'attack') return
+      return entry.index === props.index
+    })
+
+    const accumulatedHealtAttack = filteredHealthAttackLogs.reduce((acc, entry) => {
+      return acc + entry.actualChange
+    }, 0)
+
+    const accumulatedShieldAttack = filteredShieldAttackLogs.reduce((acc, entry) => {
+      return acc + entry.actualChange
+    }, 0)
+
+    return {
+      health: accumulatedHealtAttack,
+      shield: accumulatedShieldAttack,
+      total: accumulatedHealtAttack + accumulatedShieldAttack,
+      logs: filteredHealthAttackLogs
+    }
   })
 
-  let shieldAttackLogs: ValueLogCore[] = []
-  props.opponent.shieldLog.value.forEach((entry) => {
-    const shieldDebuffs = entry.banter.debuffs
-    if (!shieldDebuffs.length) return
-    shieldAttackLogs = [
-      ...shieldAttackLogs,
-      ...shieldDebuffs
-    ]
+  const healingRecord = computed(() => {
+    return props.playerLogs.healthLog.filter((entry) => {
+      if (entry.type !== 'heal') return
+      return entry.index === props.index
+    }).reduce((acc, entry) => {
+      return acc + entry.actualChange
+    }, 0)
   })
 
-  const filteredShieldAttackLogs = shieldAttackLogs.filter((entry) => {
-    if (entry.type !== 'attack') return
-    return entry.index === props.index
+  const shieldRecord = computed(() => {
+    return props.playerLogs.shieldLog.filter((entry) => {
+      if (entry.type !== 'shield') return
+      return entry.index === props.index
+    }).reduce((acc, entry) => {
+      return acc + entry.attemptedChange
+    }, 0)
   })
 
-  const accumulatedHealtAttack = filteredHealthAttackLogs.reduce((acc, entry) => {
-    return acc + entry.actualChange
-  }, 0)
-
-  const accumulatedShieldAttack = filteredShieldAttackLogs.reduce((acc, entry) => {
-    return acc + entry.actualChange
-  }, 0)
+  const totalValue = computed(() => {
+    return healingRecord.value + attackRecord.value.total + shieldRecord.value
+  })
 
   return {
-    health: accumulatedHealtAttack,
-    shield: accumulatedShieldAttack,
-    total: accumulatedHealtAttack + accumulatedShieldAttack,
-    logs: filteredHealthAttackLogs
+    attackRecord,
+    healingRecord,
+    shieldRecord,
+    totalValue
   }
-})
-
-const healingRecord = computed(() => {
-  return props.player.healthLog.value.filter((entry) => {
-    if (entry.type !== 'heal') return
-    return entry.index === props.index
-  }).reduce((acc, entry) => {
-    return acc + entry.actualChange
-  }, 0)
-})
-
-const shieldRecord = computed(() => {
-  return props.player.shieldLog.value.filter((entry) => {
-    if (entry.type !== 'shield') return
-    return entry.index === props.index
-  }).reduce((acc, entry) => {
-    return acc + entry.attemptedChange
-  }, 0)
-})
-
-const totalValue = computed(() => {
-  return healingRecord.value + attackRecord.value.total + shieldRecord.value
-})
-
-return {
-  attackRecord,
-  healingRecord,
-  shieldRecord,
-  totalValue
-}
 }
 
 export type BashRecords = ReturnType<typeof useBashRecords>

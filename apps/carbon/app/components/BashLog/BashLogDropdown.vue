@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Card } from '../../../types/card'
+import type { CardInfo } from '../../../types/card'
 import type { ValueLogCore } from '../../composables/useBash'
 import BashLogEntryContent from './BashLogEntryContent.vue'
 
 defineProps<{
-  opponentDeck: Card[]
-  playerDeck: Card[]
+  opponentInfoDeck: CardInfo[]
+  playerInfoDeck: CardInfo[]
   logEntry: ValueLogCore
 }>()
 
@@ -18,8 +18,8 @@ const open = ref(false)
       <Icon name="carbon:chevron-down" size="1.5rem" />
     </div>
     <div class="dropdown">
-      <BashLogEntryContent v-for="log in logEntry.banter.debuffs" :opponentDeck="opponentDeck" :player-deck="playerDeck"
-        :logEntry="log" />
+      <BashLogEntryContent v-for="log in logEntry.banter.debuffs" :opponentInfoDeck="opponentInfoDeck"
+        :playerInfoDeck="playerInfoDeck" :logEntry="log" />
     </div>
   </div>
 </template>

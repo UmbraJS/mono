@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { gsap } from 'gsap'
-import type { Character } from '~~/types'
 import MeterLines from './MeterLines.vue'
 
 const props = defineProps<{
-  character: Character
   value: number
   maxValue: number
   barColor: string
@@ -27,16 +25,15 @@ watch(percentage, (newValue) => {
 </script>
 
 <template>
-  <div
-    class="character-health"
-    :style="{
-      '--barColor': props.barColor,
-      '--delayColor': props.delayColor,
-      gridArea: props.gridArea,
-    }"
-  >
+  <div class="character-health" :style="{
+    '--barColor': props.barColor,
+    '--delayColor': props.delayColor,
+    gridArea: props.gridArea,
+  }">
     <MeterLines :value="props.maxValue" :meter="30" />
-    <p class="digits"><slot /></p>
+    <p class="digits">
+      <slot />
+    </p>
     <div class="death bar"></div>
     <div class="delayedLife bar"></div>
     <div class="life bar"></div>

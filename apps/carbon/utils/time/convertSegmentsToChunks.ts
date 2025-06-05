@@ -1,5 +1,4 @@
 import type { OutputChunk } from "./types";
-import type { SimCard } from "../types/card";
 
 interface ChunkSegment {
   start: number;

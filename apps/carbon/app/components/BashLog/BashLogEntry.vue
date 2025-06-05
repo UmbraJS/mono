@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Card } from '../../../types/card'
+import type { CardInfo } from '../../../types/card'
 import type { ValueLogCore } from '../../composables/useBash'
 import BashLogDropdown from './BashLogDropdown.vue'
 import BashLogEntryContent from './BashLogEntryContent.vue'
 
 const props = defineProps<{
-  opponentDeck: Card[]
-  playerDeck: Card[]
+  opponentInfoDeck: CardInfo[]
+  playerInfoDeck: CardInfo[]
   logEntry: ValueLogCore
 }>()
 </script>
@@ -19,11 +19,11 @@ const props = defineProps<{
     'base-yellow': logEntry.type === 'banter',
     dud: logEntry.actualChange === 0,
   }">
-    <BashLogEntryContent :opponentDeck="props.opponentDeck" :player-deck="props.playerDeck" :log-entry="logEntry"
-      :can-have-strikethrough="true" />
+    <BashLogEntryContent :opponentInfoDeck="props.opponentInfoDeck" :playerInfoDeck="props.playerInfoDeck"
+      :log-entry="logEntry" :can-have-strikethrough="true" />
 
-    <BashLogDropdown v-if="logEntry.banter.debuffs.length > 0" :player-deck="props.playerDeck"
-      :opponentDeck="props.opponentDeck" :log-entry="logEntry" />
+    <BashLogDropdown v-if="logEntry.banter.debuffs.length > 0" :playerInfoDeck="props.playerInfoDeck"
+      :opponentInfoDeck="props.opponentInfoDeck" :log-entry="logEntry" />
   </li>
 </template>
 

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { DialogTitle, Tabs, Graph } from '@nobel/core'
-import type { SimCard } from '../../../types'
+import type { CardInfo, CardStats } from '../../../types'
 import CardModalDetails from './CardModalDetails.vue'
 import { Icon } from '@iconify/vue'
-import type { UsePlayerReturn } from '../../composables/usePlayer'
 import type { BashRecords } from '~/composables/useBashRecords'
 import { ScrollArea } from '@nobel/core'
 
@@ -15,9 +14,8 @@ type DataRecord = {
 }
 
 const props = defineProps<{
-  card: SimCard
-  opponent: UsePlayerReturn
-  player: UsePlayerReturn
+  cardStats: CardStats
+  cardInfo: CardInfo
   bashRecords: BashRecords
 }>()
 
@@ -35,7 +33,7 @@ const recordedData = computed(() => {
 <template>
   <div class="cardMeta">
     <DialogTitle>
-      <span>lvl {{ card.level }} - </span>{{ card.name }}
+      <span>lvl {{ cardStats.level }} - </span>{{ cardInfo.name }}
     </DialogTitle>
 
     <Tabs class="BashLogTabs" ariaLabel="Actions" :tabs="[
@@ -43,14 +41,14 @@ const recordedData = computed(() => {
       { label: 'Stats', icon: 'mdi:star-four-points-circle' },
     ]">
       <template #tab1>
-        <CardModalDetails :card="card" />
+        <CardModalDetails :info="cardInfo" :stats="cardStats" />
       </template>
       <template #tab2>
         <ScrollArea class="CardModalRecords">
           <div class="bashRecords">
-            <div class="chip base-yellow" v-if="card.stats?.banter">
+            <div class="chip base-yellow" v-if="cardStats.bash?.banter">
               <Icon icon="mdi:account-injury-outline" />
-              Bash: {{ card.stats.banter }}
+              Bash: {{ cardStats.bash.banter }}
             </div>
             <div class="chip base-warning" v-if="bashRecords.attackRecord.value.total">
               <Icon icon="mdi:account-injury-outline" />

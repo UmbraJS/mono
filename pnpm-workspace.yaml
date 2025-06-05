@@ -117,6 +117,7 @@ ignoredBuiltDependencies:
   - sharp
   - vue-demi
   - workerd
+
 catalogs:
   conflicts_gsap_h3_13_0:
     gsap: ^3.13.0
@@ -176,3 +177,9 @@ catalogs:
     vite: 6.1.1
   conflicts_vite-plugin-dts_h4_5_0:
     vite-plugin-dts: ^4.5.0
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
+  - maplibre-gl
+  - unrs-resolver

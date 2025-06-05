@@ -1,0 +1,62 @@
+import { gsap } from 'gsap'
+import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
+import type { Character } from '../../types'
+
+export function useSpace(timeline: gsap.core.Timeline, space: SpaceOutput, characters: Character[]) {
+  const maxHealth = characters.reduce((total, character) => total + character.maxHealth, 0)
+
+  const health = ref(maxHealth)
+  const healthDelayed = ref(0)
+  const healthTimeline = gsap.timeline()
+  timeline.add(healthTimeline, 0)
+
+  const shield = ref(0)
+  const shieldDelayed = ref(0)
+  const shieldTimeline = gsap.timeline()
+  timeline.add(shieldTimeline, 0)
+
+  const morale = ref(0)
+  const moraleDelayed = ref(0)
+
+  console.log('useSpace', space)
+
+  space.healthLog.forEach(({ timestamp, newValue }) => {
+    healthTimeline.to(health, {
+      duration: 0.1,
+      ease: 'power2.inOut',
+      value: newValue,
+      onStart: () => {
+        healthTimeline.to(healthDelayed, {
+          duration: 0.5,
+          ease: 'power2.inOut',
+          value: newValue,
+        }, timestamp)
+      }
+    }, timestamp)
+  })
+
+
+  space.shieldLog.forEach(({ timestamp, newValue }) => {
+    shieldTimeline.to(shield, {
+      duration: 0.1,
+      ease: 'power2.inOut',
+      value: newValue,
+      onStart: () => {
+        shieldTimeline.to(shieldDelayed, {
+          duration: 0.5,
+          ease: 'power2.inOut',
+          value: newValue,
+        }, timestamp)
+      }
+    }, timestamp)
+  })
+
+  return {
+    health,
+    healthDelayed,
+    shield,
+    shieldDelayed,
+    morale,
+    moraleDelayed,
+  }
+}

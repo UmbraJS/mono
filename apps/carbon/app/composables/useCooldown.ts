@@ -1,5 +1,5 @@
 import { gsap } from 'gsap'
-import type { OutputChunk } from "../../utils/types";
+import type { OutputChunk } from "../../utils/time/types";
 import type { SimCard } from '../../types'
 
 export function useCooldown(timeline: gsap.core.Timeline, card: SimCard) {
@@ -19,7 +19,7 @@ export function useCooldown(timeline: gsap.core.Timeline, card: SimCard) {
 
   onMounted(() => {
     const segments = getSegments(cardSimulation)
-    console.log("segments", card.name, segments.map((s) => ({
+    console.log("segments", segments.map((s) => ({
       start: s.start,
       end: s.end,
       duration: s.duration,
@@ -30,7 +30,7 @@ export function useCooldown(timeline: gsap.core.Timeline, card: SimCard) {
       }))
     })))
 
-    console.log("chunks", card.name, cardSimulation.map(c => ({
+    console.log("chunks", cardSimulation.map(c => ({
       startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
       fromTo: `${c.from} -> ${c.to}`,
       type: c.type,

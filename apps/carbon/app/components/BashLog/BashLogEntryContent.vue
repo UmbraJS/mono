@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import type { Card } from '../../../types/card'
+import type { CardInfo } from '../../../types/card'
 import type { ValueLogCore } from '../../composables/useBash'
 
 const {
   logEntry,
-  opponentDeck,
-  playerDeck,
+  opponentInfoDeck,
+  playerInfoDeck,
   canHaveStrikethrough = false,
 } = defineProps<{
-  opponentDeck: Card[]
-  playerDeck: Card[]
+  opponentInfoDeck: CardInfo[]
+  playerInfoDeck: CardInfo[]
   logEntry: ValueLogCore
   canHaveStrikethrough?: boolean
 }>()
 
 const card = computed(() => {
-  if (logEntry.type === 'heal') return playerDeck[logEntry.index]
-  if (logEntry.type === 'attack') return opponentDeck[logEntry.index]
-  if (logEntry.type === 'shield') return playerDeck[logEntry.index]
-  if (logEntry.type === 'banter') return playerDeck[logEntry.index]
+  if (logEntry.type === 'heal') return playerInfoDeck[logEntry.index]
+  if (logEntry.type === 'attack') return opponentInfoDeck[logEntry.index]
+  if (logEntry.type === 'shield') return playerInfoDeck[logEntry.index]
+  if (logEntry.type === 'banter') return playerInfoDeck[logEntry.index]
 })
 
 const valueText = computed(() => {

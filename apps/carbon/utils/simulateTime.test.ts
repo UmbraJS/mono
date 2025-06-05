@@ -1,4 +1,4 @@
-import { getRemainingCooldown } from "./simulateCards";
+import { getRemainingCooldown } from "./simulateTime";
 import { describe, it, expect, vi } from "vitest";
 
 describe("getRemainingCooldown", () => {

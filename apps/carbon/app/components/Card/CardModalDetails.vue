@@ -1,47 +1,48 @@
 <script setup lang="ts">
 import { DialogDescription, ScrollArea } from '@nobel/core'
-import type { Card } from '../../../types'
+import type { Card, CardInfo, CardStats } from '../../../types'
 import AttackIcon from '../icons/Attack.vue'
 import BanterIcon from '../icons/Banter.vue'
 import CardModalBash from './CardModalBash.vue'
 
 const props = defineProps<{
-  card: Card
+  info: CardInfo
+  stats: CardStats
 }>()
 
-const bash = props.card.bash
+const bash = props.stats.bash
 </script>
 
 <template>
   <ScrollArea class="CardModalDetailsScrollArea">
     <div class="CardModalDetails">
       <DialogDescription>
-        {{ card.description }}
+        {{ info.description }}
       </DialogDescription>
 
       <div class="bash">
-        <div v-if="bash.cooldown" class="chip">
+        <div v-if="bash?.cooldown" class="chip">
           <BanterIcon />
           Cooldown: {{ bash.cooldown }}s
         </div>
         <div class="chip">
-          <AttackIcon />Cost: {{ card.cost }}
+          <AttackIcon />Cost: {{ stats.cost }}
         </div>
       </div>
 
-      <CardModalBash :card="card" />
+      <CardModalBash :cardStats="stats" />
 
       <div>
         <div class="tags">
           <p>Aspects:</p>
-          <div v-for="aspect in card.aspects" class="chip">
+          <div v-for="aspect in stats.aspects" class="chip">
             {{ aspect.name }}
           </div>
         </div>
 
         <div class="tags">
           <p>Tags:</p>
-          <div v-for="tag in card.tags" class="chip">
+          <div v-for="tag in stats.tags" class="chip">
             {{ tag }}
           </div>
         </div>

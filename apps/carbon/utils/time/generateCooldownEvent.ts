@@ -2,8 +2,8 @@ import type { OutputChunk } from "./types";
 import { resolveOverlappingModifiers } from "./resolveOverlappingModifiers";
 import { buildTimelineSegments } from "./buildTimelineSegments";
 import { convertSegmentsToChunks } from "./convertSegmentsToChunks";
-import type { SimCard } from "../types/card";
-import { getTotalLifetime } from "./simulateCards";
+import type { SimCard } from "../../types/card";
+import { getTotalLifetime } from "../simulateTime";
 
 export interface CooldownEvent {
   baseDuration: number;
@@ -19,7 +19,7 @@ export interface CooldownEvent {
  * @returns {Object} An object containing the base duration, total duration, output chunks, and remaining modifiers.
  */
 export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined {
-  const baseDuration = card.bash.cooldown;
+  const baseDuration = card.cardStats.bash?.cooldown;
   const modifiers = card.simulation.modifiers;
   const startTime = getTotalLifetime(card.simulation.lifetime);
 

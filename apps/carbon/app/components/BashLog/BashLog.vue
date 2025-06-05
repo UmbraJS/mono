@@ -1,30 +1,27 @@
 <script setup lang="ts">
-import type { UsePlayerReturn } from '../../composables/usePlayer'
 import { ScrollArea } from '@nobel/core'
-import type { Card } from '../../../types/card'
+import type { CardInfo } from '../../../types/card'
 import BashLogEntry from './BashLogEntry.vue'
+import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 
 const props = defineProps<{
-  player: UsePlayerReturn
-  opponent: UsePlayerReturn
-  playerDeck: Card[]
-  opponentDeck: Card[]
+  logs: Pick<SpaceOutput, "healthLog" | "shieldLog">
+  opponentInfoDeck: CardInfo[]
+  playerInfoDeck: CardInfo[]
 }>()
 
-const allLogsOrderedByTime = computed(() => {
-  const allLogs = [...props.player.healthLog.value, ...props.player.shieldLog.value]
-  return allLogs
-    .sort((a, b) => a.timestamp - b.timestamp)
-    .slice()
-    .reverse()
-})
+const allLogs = [...props.logs.healthLog, ...props.logs.shieldLog]
+const allLogsOrderedByTime = allLogs
+  .sort((a, b) => a.timestamp - b.timestamp)
+  .slice()
+  .reverse()
 </script>
 
 <template>
   <ScrollArea class="ScrollArea">
     <ul>
       <BashLogEntry v-for="log in allLogsOrderedByTime" :key="log.timestamp" :log-entry="log"
-        :opponent-deck="props.opponentDeck" :player-deck="props.playerDeck" />
+        :opponentInfoDeck="props.opponentInfoDeck" :playerInfoDeck="props.playerInfoDeck" />
     </ul>
   </ScrollArea>
 </template>
