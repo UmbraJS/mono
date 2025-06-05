@@ -34,7 +34,9 @@ watch(percentage, (newValue) => {
     <p class="digits">
       <slot />
     </p>
-    <div class="death bar"></div>
+    <div class="death bar" :style="{
+      width: percentage === 0 ? '100%' : `calc(100% - ${percentageDelayed}% - var(--space-quark))`
+    }"></div>
     <div class="delayedLife bar"></div>
     <div class="life bar"></div>
   </div>

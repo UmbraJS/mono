@@ -11,7 +11,9 @@ const amountOfMeterLines = computed(() => {
 
 <template>
   <div class="meterLines">
-    <div class="meter" v-for="i in amountOfMeterLines" :key="i"></div>
+    <div class="meter" v-for="i in amountOfMeterLines" :key="i" :style="{
+      opacity: i === 1 ? 0 : 1,
+    }"></div>
   </div>
 </template>
 

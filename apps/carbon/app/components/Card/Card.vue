@@ -22,21 +22,14 @@ const cardBashRecords = useBashRecords({
 </script>
 
 <template>
-  <div class="carder">
-    <CardModal :card="card" :cardStats="card.cardStats" :cardInfo="card.card.info" :bash-records="cardBashRecords"
-      :time="time" :timeline="timeline" :cooldownEvents="card.simulation.chunks">
-      <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
-        <CardCooldown v-if="card.cardStats.bash?.cooldown" :time="time" :timeline="timeline" :card="card" />
-        <!-- <div class="RecordedValue">
-          <p class="border"> {{ cardBashRecords.totalValue.value }}</p>
-          <p class="border base-warning"> {{ Number(card.slow.value.toFixed(1)) }}</p>
-          <p class="border base-success"> {{ Number(card.haste.value.toFixed(1)) }}</p>
-        </div> -->
-        <img v-if="card.card.info.image" :src="card.card.info.image.default" alt="Card Image" />
-        <CardStatsComponent :bash="card.cardStats.bash" />
-      </button>
-    </CardModal>
-  </div>
+  <CardModal :card="card" :cardStats="card.cardStats" :cardInfo="card.card.info" :bash-records="cardBashRecords"
+    :time="time" :timeline="timeline" :cooldownEvents="card.simulation.chunks">
+    <button class="carder card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
+      <CardCooldown v-if="card.cardStats.bash?.cooldown" :time="time" :timeline="timeline" :card="card" />
+      <img v-if="card.card.info.image" :src="card.card.info.image.default" alt="Card Image" />
+      <CardStatsComponent :bash="card.cardStats.bash" />
+    </button>
+  </CardModal>
 </template>
 
 <style lang="scss">
