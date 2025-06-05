@@ -22,5 +22,10 @@
     "eslint-plugin-format": "catalog:",
     "vite": "catalog:"
   },
-  "packageManager": "pnpm@10.8.1"
+  "packageManager": "pnpm@10.11.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  }
 }
