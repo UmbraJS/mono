@@ -24,10 +24,6 @@ function getMaxHealth(): number {
       <div class="character-avatar" v-for="character in characters">
         <img v-if="character.image" :src="character.image.default" alt="Character Image" />
       </div>
-      <div class="character-sheet">
-        <!-- <h2>{{ character.name }}</h2>
-        <p>{{ character.description }}</p> -->
-      </div>
       <div class="healthImpact">
         <FrostLayer :reversed="reverse" :health="health" :maxHealth="maxHealth" />
       </div>
@@ -103,9 +99,5 @@ function getMaxHealth(): number {
   height: 100%;
   object-fit: cover;
   object-position: top;
-}
-
-.character-sheet {
-  padding: var(--space-2);
 }
 </style>

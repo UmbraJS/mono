@@ -5,6 +5,8 @@ import CardCooldown from './CardCooldown.vue'
 import CardStatsComponent from './CardStats.vue'
 import { useBashRecords } from '~/composables/useBashRecords'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
+import { useAudioCue } from '@/composables/useAudioCue'
+
 
 const props = defineProps<{
   card: SimCard
@@ -19,12 +21,26 @@ const cardBashRecords = useBashRecords({
   opponentLogs: props.opponentLogs,
   index: props.card.card.index,
 })
+
+const audio = useAudioCue()
+
+const recentlyClickedFlipSound = ref(false)
+
+function triggerFlipSound() {
+  if (recentlyClickedFlipSound.value) return
+  recentlyClickedFlipSound.value = true
+  audio?.playCardFlip()
+  setTimeout(() => {
+    recentlyClickedFlipSound.value = false
+  }, 200)
+}
 </script>
 
 <template>
   <CardModal :card="card" :cardStats="card.cardStats" :cardInfo="card.card.info" :bash-records="cardBashRecords"
     :time="time" :timeline="timeline" :cooldownEvents="card.simulation.chunks">
-    <button class="carder card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
+    <button class="carder card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
+      @click="triggerFlipSound">
       <CardCooldown v-if="card.cardStats.bash?.cooldown" :time="time" :timeline="timeline" :card="card" />
       <img v-if="card.card.info.image" :src="card.card.info.image.default" alt="Card Image" />
       <CardStatsComponent :bash="card.cardStats.bash" />

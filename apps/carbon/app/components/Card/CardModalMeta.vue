@@ -36,7 +36,7 @@ const recordedData = computed(() => {
       <span>lvl {{ cardStats.level }} - </span>{{ cardInfo.name }}
     </DialogTitle>
 
-    <Tabs class="BashLogTabs" ariaLabel="Actions" :tabs="[
+    <Tabs class="ModalBashLogTabs" ariaLabel="Actions" :tabs="[
       { label: 'Details', icon: 'mdi:account-card-outline' },
       { label: 'Stats', icon: 'mdi:star-four-points-circle' },
     ]">
@@ -78,7 +78,7 @@ const recordedData = computed(() => {
 </template>
 
 <style>
-.BashLogTabs {
+.ModalBashLogTabs {
   height: 100%;
 }
 

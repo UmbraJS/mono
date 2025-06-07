@@ -76,3 +76,5 @@ function prepareSimDeck(deck: Card[]): PreSimulationCard[] {
     cardStats: card.stats.base,
   }));
 }
+
+export type SpaceTimeSimulationOutput = ReturnType<typeof spaceTimeSimulation>;
