@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { DialogRoot, DialogTrigger, DialogModal } from '@nobel/core'
-import type { SimCard, CardStats, CardInfo } from '../../../types'
+import type { CardStats, CardInfo } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
 import type { BashRecords } from '~/composables/useBashRecords'
+import type { OutputChunk } from "../../../utils/time/types";
 
 defineProps<{
-  card: SimCard
+  chunks?: OutputChunk[]
   cardStats: CardStats
   cardInfo: CardInfo
-  bashRecords: BashRecords
-  time: number
+  bashRecords?: BashRecords
   timeline: gsap.core.Timeline;
 }>()
 </script>
@@ -22,7 +22,7 @@ defineProps<{
     </DialogTrigger>
     <DialogModal variant="accent">
       <div class="DialogWrapper">
-        <CardModalAvatar :card="card" :cardStats="cardStats" :cardInfo="cardInfo" :time="time" :timeline="timeline" />
+        <CardModalAvatar :chunks="chunks" :cardInfo="cardInfo" :timeline="timeline" />
         <CardModalMeta :cardStats="cardStats" :cardInfo="cardInfo" :bashRecords="bashRecords" />
       </div>
     </DialogModal>

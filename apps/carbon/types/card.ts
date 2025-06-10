@@ -136,16 +136,17 @@ export interface SimCard extends PreSimulationCard {
   }
 }
 
+export interface CardStatRealms {
+  base: CardStats
+  quest?: CardStats
+  campaign?: CardStats
+}
+
 export interface Card {
   id: string
   index: number
   info: CardInfo
-  //stats: key of stats
-  stats: {
-    base: CardStats
-    quest?: CardStats
-    campaign?: CardStats
-  }
+  stats: CardStatRealms
 }
 
 export interface CardInfo {

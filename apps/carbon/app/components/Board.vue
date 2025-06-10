@@ -24,6 +24,10 @@
   height: 100%;
 }
 
+.board-wrapper .board-title {
+  grid-column: 1 / -1;
+}
+
 .board {
   --rotateAmount: 15;
 

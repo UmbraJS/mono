@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { user, bot } from '../data/character'
 import { gsap } from 'gsap'
-import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
-import { useSpace } from '~/composables/useSpace'
 
 const time = ref(0)
 
@@ -13,26 +10,19 @@ const timeline = gsap.timeline({
   },
 })
 
-const cardTimeline = spaceTimeSimulation({
-  player: user,
-  opponent: bot,
-  matchDuration: 30
-})
-
-const us = useSpace(timeline, cardTimeline.space.player, user.characters)
-
 interface EventCard {
   id: string;
   image: string;
   name: string;
   description: string;
   effects: {
+    id: string;
     image: string;
     description: string;
   }[];
 }
 
-const events = [
+const events: EventCard[] = [
   {
     id: 'village',
     image: '/village.jpg',
@@ -75,43 +65,24 @@ const events = [
 </script>
 
 <template>
-  <main class="quest-wrapper">
-    <div class="quest-events">
-
-      <div v-for="event in events" :key="event.id" class="event">
-        <img :src="event.image" alt="Location" />
-        <div class="prose">
-          <h3>{{ event.name }}</h3>
-          <p>{{ event.description }}</p>
-        </div>
-        <div v-for="effect in event.effects" :key="effect.id" class="eventEffects">
-          <div class="effect base-accent">
-            <img :src="effect.image" alt="Location" />
-            <p>{{ effect.description }}</p>
-          </div>
+  <div class="quest-events">
+    <div v-for="event in events" :key="event.id" class="event">
+      <img :src="event.image" alt="Location" />
+      <div class="prose">
+        <h3>{{ event.name }}</h3>
+        <p>{{ event.description }}</p>
+      </div>
+      <div v-for="effect in event.effects" :key="effect.id" class="eventEffects">
+        <div class="effect base-accent">
+          <img :src="effect.image" alt="Location" />
+          <p>{{ effect.description }}</p>
         </div>
       </div>
-
     </div>
-
-    <PlayerHeader :userCharacters="user.characters" :health="us.health.value" :shield="us.shield.value" />
-  </main>
+  </div>
 </template>
 
 <style>
-main.quest-wrapper {
-  --side-size: 17vh;
-
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: 1fr var(--side-size);
-  gap: var(--space-1);
-
-  height: 100vh;
-
-  padding: var(--space-1);
-}
-
 .quest-events {
   display: flex;
   justify-content: center;

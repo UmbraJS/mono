@@ -9,7 +9,6 @@ const props = defineProps<{
   time: number
 }>()
 
-
 function handleReset() {
   props.timeline.restart()
   // Reset the health and morale of both players
@@ -22,6 +21,9 @@ function handleReset() {
       <PlayerCard v-for="card in cardTimeline.time.opponent" :key="card.card.id" :card="card"
         :opponentLogs="cardTimeline.space.player" :playerLogs="cardTimeline.space.opponent" :time="time"
         :timeline="timeline" />
+
+      <PlayerCard v-for="card in cardTimeline.time.opponent" :key="card.id" :cardInfo="card.info"
+        :cardStats="getCardStats(card)" :index="card.index" :time="time" :timeline="timeline" />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>

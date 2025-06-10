@@ -46,14 +46,13 @@ const user: User = {
   characters: [warrior],
   field: cards.find((card) => card.info.name === 'Village')!,
   deck: [
-    { ...cards.find((card) => card.info.name === 'Archer')!, index: 0 },
-    // { ...cards.find((card) => card.info.name === 'Halberdier')!, index: 1, },
+    { ...cards.find((card) => card.info.name === 'Halberdier')!, index: 0, },
+    { ...cards.find((card) => card.info.name === 'Archer')!, index: 1 },
     // { ...cards.find((card) => card.info.name === 'Doom Cloak')!, index: 2 },
     // { ...cards.find((card) => card.info.name === 'Glimmer Cloak')!, index: 3 },
   ],
   inventory: [
-    cards.find((card) => card.info.name === 'Village')!,
-    cards.find((card) => card.info.name === 'Swamp')!,
+    cards.find((card) => card.info.name === 'Viking')!,
   ],
 }
 

@@ -1,58 +1,36 @@
 <script setup lang="ts">
-import type { SimCard } from '../../../types'
-import CardModal from './CardModal.vue'
+import type { SimCard, CardInfo, CardStats } from '../../../types'
 import CardCooldown from './CardCooldown.vue'
 import CardStatsComponent from './CardStats.vue'
-import { useBashRecords } from '~/composables/useBashRecords'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
-import { useAudioCue } from '@/composables/useAudioCue'
-
+import type { OutputChunk } from "../../../utils/time/types";
 
 const props = defineProps<{
-  card: SimCard
-  playerLogs: SpaceOutput
-  opponentLogs: SpaceOutput
-  time: number
+  index: number;
+  chunks?: OutputChunk[];
+  cardInfo: CardInfo
+  cardStats?: CardStats
+  playerLogs?: SpaceOutput
+  opponentLogs?: SpaceOutput
   timeline: gsap.core.Timeline;
 }>()
 
-const cardBashRecords = useBashRecords({
-  playerLogs: props.playerLogs,
-  opponentLogs: props.opponentLogs,
-  index: props.card.card.index,
-})
-
-const audio = useAudioCue()
-
-const recentlyClickedFlipSound = ref(false)
-
-function triggerFlipSound() {
-  if (recentlyClickedFlipSound.value) return
-  recentlyClickedFlipSound.value = true
-  audio?.playCardFlip()
-  setTimeout(() => {
-    recentlyClickedFlipSound.value = false
-  }, 200)
-}
+console.log("Card component loaded", props.cardStats)
 </script>
 
 <template>
-  <CardModal :card="card" :cardStats="card.cardStats" :cardInfo="card.card.info" :bash-records="cardBashRecords"
-    :time="time" :timeline="timeline" :cooldownEvents="card.simulation.chunks">
-    <button class="carder card border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
-      @click="triggerFlipSound">
-      <CardCooldown v-if="card.cardStats.bash?.cooldown" :time="time" :timeline="timeline" :card="card" />
-      <img v-if="card.card.info.image" :src="card.card.info.image.default" alt="Card Image" />
-      <CardStatsComponent :bash="card.cardStats.bash" />
-    </button>
-  </CardModal>
+  <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
+  <CardWrapper v-else :index="index" :chunks="chunks" :cardInfo="cardInfo" :cardStats="cardStats" :timeline="timeline"
+    :playerLogs="playerLogs" :opponentLogs="opponentLogs">
+
+    <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />
+
+    <img v-if="cardInfo.image" :src="cardInfo.image.default" alt="Card Image" />
+    <CardStatsComponent :bash="cardStats.bash" />
+  </CardWrapper>
 </template>
 
 <style lang="scss">
-.carder {
-  grid-column: span 3;
-}
-
 .RecordedValue {
   display: flex;
   flex-direction: column;
@@ -75,17 +53,7 @@ function triggerFlipSound() {
   border-radius: var(--radius);
 }
 
-.card {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
-
-.card img {
+.CardWrapper img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -94,7 +62,7 @@ function triggerFlipSound() {
   z-index: 0;
 }
 
-.card img {
+.CardWrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;

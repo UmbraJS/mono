@@ -12,7 +12,10 @@ defineProps<{
 <template>
   <PartyBoard>
     <div class="location border">
-      <!-- <img src="/treasure.jpg" alt="Location" /> -->
+      <div class="money">
+        <Icon name="carbon:wallet" size="1.5em" />
+        <p>inventory</p>
+      </div>
     </div>
     <PlayerCharacter :characters="userCharacters" :health="health" :shield="shield" :reverse="false" />
     <div class="location border">
