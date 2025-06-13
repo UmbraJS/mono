@@ -1,10 +1,16 @@
+<script setup lang="ts">
+defineProps<{
+  board?: "deck" | "inventory";
+}>();
+</script>
+
 <template>
   <div class="board-wrapper">
     <div class="board">
       <slot />
     </div>
     <div class="subSpace">
-      <CardSpace v-for="index in 12" :key="index" />
+      <CardSpace v-for="index in 12" :key="index" :index="`${board}-${index - 1}`" />
     </div>
   </div>
 </template>

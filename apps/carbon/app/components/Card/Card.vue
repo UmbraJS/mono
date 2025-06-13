@@ -7,12 +7,14 @@ import type { OutputChunk } from "../../../utils/time/types";
 
 const props = defineProps<{
   index: number;
+  size: number;
   chunks?: OutputChunk[];
   cardInfo: CardInfo
   cardStats?: CardStats
   playerLogs?: SpaceOutput
   opponentLogs?: SpaceOutput
   timeline: gsap.core.Timeline;
+  board?: "deck" | "inventory"
 }>()
 
 console.log("Card component loaded", props.cardStats)
@@ -20,12 +22,12 @@ console.log("Card component loaded", props.cardStats)
 
 <template>
   <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
-  <CardWrapper v-else :index="index" :chunks="chunks" :cardInfo="cardInfo" :cardStats="cardStats" :timeline="timeline"
-    :playerLogs="playerLogs" :opponentLogs="opponentLogs">
+  <CardWrapper v-else :index="index" :size="size" :chunks="chunks" :cardInfo="cardInfo" :cardStats="cardStats"
+    :timeline="timeline" :playerLogs="playerLogs" :opponentLogs="opponentLogs" :board="board">
 
-    <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />
+    <!-- <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" /> -->
 
-    <img v-if="cardInfo.image" :src="cardInfo.image.default" alt="Card Image" />
+    <!-- <img v-if="cardInfo.image" :src="cardInfo.image.default" alt="Card Image" /> -->
     <CardStatsComponent :bash="cardStats.bash" />
   </CardWrapper>
 </template>

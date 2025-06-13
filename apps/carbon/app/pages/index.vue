@@ -5,34 +5,34 @@ import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
 import { useSpace } from '~/composables/useSpace'
 import QuestBoard from '~/components/QuestBoard.vue'
 
-const time = ref(0)
+// const time = ref(0)
 
-const timeline = gsap.timeline({
-  paused: true,
-  onUpdate: () => {
-    time.value = timeline.time()
-  },
-})
+// const timeline = gsap.timeline({
+//   paused: true,
+//   onUpdate: () => {
+//     time.value = timeline.time()
+//   },
+// })
 
-const cardTimeline = spaceTimeSimulation({
-  player: user,
-  opponent: bot,
-  matchDuration: 30
-})
+// const cardTimeline = spaceTimeSimulation({
+//   player: user,
+//   opponent: bot,
+//   matchDuration: 30
+// })
 
-const us = useSpace(timeline, cardTimeline.space.player, user.characters)
-const op = useSpace(timeline, cardTimeline.space.opponent, bot.characters)
+// const us = useSpace(timeline, cardTimeline.space.player, user.characters)
+// const op = useSpace(timeline, cardTimeline.space.opponent, bot.characters)
 </script>
 
 <template>
-  <div class="CarbonLayout">
+  <!-- <div class="CarbonLayout">
     <OpponentHeader :health="op.health.value" :shield="op.shield.value" :logs="cardTimeline.space.opponent" :bot="bot"
       :user="user" />
 
     <MatchBoard :cardTimeline="cardTimeline" :timeline="timeline" :time="time" />
 
     <PlayerHeader :userCharacters="user.characters" :health="us.health.value" :shield="us.shield.value" />
-  </div>
+  </div> -->
 </template>
 
 <style>

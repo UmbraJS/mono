@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{
+  index: string;
+}>();
+</script>
 
 <template>
-  <div class="cardSpace border" data-dropzone>
+  <div class="cardSpace border" :data-dropzone="index">
     <Icon name="carbon:navaid-ndb-dme" size="4em" />
   </div>
 </template>

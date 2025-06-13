@@ -12,20 +12,19 @@ const props = defineProps<{
 }>()
 
 function getCardStats(card: Card) {
-  console.log("rex with realm:", props.realm)
   return card.stats[props.realm]
 }
 </script>
 
 <template>
   <div class="MatchBoard">
-    <Board>
+    <Board board="inventory">
       <PlayerCard v-for="card in inventory" :key="card.id" :cardInfo="card.info" :cardStats="getCardStats(card)"
-        :index="card.index" :time="time" :timeline="timeline" />
+        :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="inventory" />
     </Board>
-    <Board>
+    <Board board="deck">
       <PlayerCard v-for="card in deck" :key="card.id" :cardInfo="card.info" :cardStats="getCardStats(card)"
-        :index="card.index" :time="time" :timeline="timeline" />
+        :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="deck" />
     </Board>
   </div>
 </template>

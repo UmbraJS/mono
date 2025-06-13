@@ -1,33 +1,16 @@
 <script setup lang="ts">
-import { user, bot } from '../data/character'
-import { gsap } from 'gsap'
-import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
-import { useSpace } from '~/composables/useSpace'
-
-const time = ref(0)
-
-const timeline = gsap.timeline({
-  paused: true,
-  onUpdate: () => {
-    time.value = timeline.time()
-  },
-})
-
-const cardTimeline = spaceTimeSimulation({
-  player: user,
-  opponent: bot,
-  matchDuration: 30
-})
-
-const us = useSpace(timeline, cardTimeline.space.player, user.characters)
+import { useStore } from '~/stores/useStore'
+console.log("quest page loaded")
+const store = useStore()
 </script>
 
 <template>
   <main class="quest-wrapper">
     <QuestBoard v-if="false" />
-    <InventoryBoard v-else :timeline="timeline" :time="time" :deck="user.deck" :inventory="user.inventory"
-      realm="base" />
-    <PlayerHeader :userCharacters="user.characters" :health="us.health.value" :shield="us.shield.value" />
+    <InventoryBoard v-else :timeline="store.simulation.timeline" :time="store.simulation.time" :deck="store.user.deck"
+      :inventory="store.user.inventory" realm="base" />
+    <PlayerHeader :userCharacters="store.user.characters" :health="store.simulation.user.health"
+      :shield="store.simulation.user.shield" />
   </main>
 </template>
 

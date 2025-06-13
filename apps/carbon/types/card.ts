@@ -145,6 +145,7 @@ export interface CardStatRealms {
 export interface Card {
   id: string
   index: number
+  size: number
   info: CardInfo
   stats: CardStatRealms
 }
