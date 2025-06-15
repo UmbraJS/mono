@@ -1,7 +1,25 @@
 <script setup lang="ts">
-defineProps<{
+import { useStore } from '~/stores/useStore'
+
+const prop = defineProps<{
   board?: "deck" | "inventory";
 }>();
+
+const store = useStore()
+
+function range(start: number, end: number) {
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+}
+
+const dragHit = computed(() => {
+  const hoveredBoard = store.user.hoveredSpace?.hovered.board
+  if (!hoveredBoard) return []
+  if (prop.board !== hoveredBoard) return []
+  const hoveredStart = store.user.hoveredSpace?.hovered.start
+  const hoveredEnd = store.user.hoveredSpace?.hovered.end
+  if (hoveredStart === undefined || hoveredEnd === undefined) return []
+  return range(hoveredStart, hoveredEnd)
+})
 </script>
 
 <template>
@@ -10,7 +28,8 @@ defineProps<{
       <slot />
     </div>
     <div class="subSpace">
-      <CardSpace v-for="index in 12" :key="index" :index="`${board}-${index - 1}`" />
+      <CardSpace v-for="index in 12" :key="index" :index="`${board}-${index - 1}`"
+        :hovered="dragHit.includes(index - 1)" />
     </div>
   </div>
 </template>

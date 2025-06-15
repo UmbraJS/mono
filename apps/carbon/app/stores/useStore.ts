@@ -11,10 +11,13 @@ interface Space {
   end: number
 }
 
-interface SpaceBoard {
+interface SpaceBoard extends Space {
   board: 'deck' | 'inventory'
-  origin: Space,
-  hovered: Space
+}
+
+interface SpaceBoards {
+  origin: SpaceBoard,
+  hovered: SpaceBoard
 }
 
 function usePerson(user: User) {
@@ -22,7 +25,7 @@ function usePerson(user: User) {
   const inventory = ref(user.inventory)
   const characters = ref(user.characters)
 
-  const hoveredSpace = ref<SpaceBoard | null>(null)
+  const hoveredSpace = ref<SpaceBoards | null>(null)
 
   const availableInventorySpace = computed(() => {
     const totalSpaceUsed = inventory.value.reduce((acc, card) => acc + card.size, 0)
@@ -34,7 +37,7 @@ function usePerson(user: User) {
     return MAX_BOARD_SLOTS - totalSpaceUsed
   })
 
-  function setHoveredSpace(space: SpaceBoard | null) {
+  function setHoveredSpace(space: SpaceBoards | null) {
     hoveredSpace.value = space
   }
 

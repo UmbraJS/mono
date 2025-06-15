@@ -1,11 +1,12 @@
 <script setup lang="ts">
 defineProps<{
   index: string;
+  hovered?: boolean;
 }>();
 </script>
 
 <template>
-  <div class="cardSpace border" :data-dropzone="index">
+  <div class="cardSpace border" :class="{ 'drag-hit-real': hovered }" :data-dropzone="index">
     <Icon name="carbon:navaid-ndb-dme" size="4em" />
   </div>
 </template>
@@ -24,7 +25,7 @@ defineProps<{
   color: var(--base-50);
 }
 
-.cardSpace.drag-hit {
+.cardSpace.drag-hit-real {
   background-color: var(--base-100);
   color: var(--base-0);
   transition: .02s ease-in-out;

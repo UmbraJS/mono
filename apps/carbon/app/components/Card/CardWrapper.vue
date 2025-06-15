@@ -104,12 +104,13 @@ onMounted(() => {
         if (!props.board) return;
 
         setHoveredSpace({
-          board: props.board,
           hovered: {
+            board: firstZoneAttributes.board,
             start: firstZoneAttributes.index,
-            end: lastZoneAttributes.index, // +1 because the end is exclusive
+            end: firstZoneAttributes.index + props.size - 1, // +1 because the end is exclusive
           },
           origin: {
+            board: props.board,
             start: props.index,
             end: props.index + props.size - 1, // +1 because the end is exclusive
           },
@@ -227,11 +228,15 @@ const columnEnd = computed(() => {
   return props.index + 1 + props.size
 })
 
-const isBeingDraggedOver = computed(() => {
+type HoverHit = "not-hit" | "shift-left" | "shift-right" | "swap-board" | "rejected"
+
+const isBeingDraggedOver = computed<HoverHit>(() => {
   const cardStart = props.index
   const cardEnd = props.index + props.size - 1
-  if (!store.user.hoveredSpace) return false
-  const hoveredBoard = store.user.hoveredSpace.board
+  if (!store.user.hoveredSpace) return "not-hit"
+  // if (!props.board || store.user.hoveredSpace.hovered.board !== props.board) return false
+
+  const hoveredBoard = store.user.hoveredSpace.origin.board
   const originStart = store.user.hoveredSpace?.origin.start
   const originEnd = store.user.hoveredSpace?.origin.end
   const hoveredStart = store.user.hoveredSpace?.hovered.start
@@ -248,31 +253,52 @@ const isBeingDraggedOver = computed(() => {
   // Prevent the dragged card from being counted as being dragged over itself
   const isFromSameBoard = hoveredBoard === props.board
   const isFromSameSpace = originStart <= cardStart && originEnd >= cardEnd
-  if (isFromSameBoard && isFromSameSpace) return false
+  if (isFromSameBoard && isFromSameSpace) return "not-hit"
 
-  if (cardStart === 3) {
-    console.log("isBeingDraggedOver", {
-      isOverStart,
-      isOverEnd,
-      isOverBoth,
-      isInside,
-      isWrapping,
-    })
+  // if (cardStart === 3) {
+  //   console.log("isBeingDraggedOver", {
+  //     isOverStart,
+  //     isOverEnd,
+  //     isOverBoth,
+  //     isInside,
+  //     isWrapping,
+  //   })
+  // }
+
+  if (availableInventorySpace <= 0 && hoveredBoard === "inventory") {
+    return "rejected"
   }
 
-  if (isOver) return true
-  return false
+  if (avialableDeckSpace <= 0 && hoveredBoard === "deck") {
+    return "rejected"
+  }
+
+  if (isOverStart) {
+    return "shift-right"
+  }
+
+  if (isOverEnd) {
+    return "shift-left"
+  }
+
+  if (isOver) return "swap-board"
+  return "not-hit"
 })
 
+
+watch(isBeingDraggedOver, (newValue) => {
+  const cardStart = props.index
+  if (cardStart !== 3) return
+  console.log("isBeingDraggedOver", newValue)
+})
 </script>
 
 <template>
   <CardModal :chunks="chunks" :cardStats="cardStats" :cardInfo="cardInfo" :bashRecords="cardBashRecords"
     :timeline="timeline">
     <button ref="fragElement" id="CardWrapper"
-      class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" :class="{
-        draggedOver: isBeingDraggedOver
-      }" @click="triggerFlipSound">
+      class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
+      :class="isBeingDraggedOver" @click="triggerFlipSound">
 
       <slot></slot>
 
@@ -285,11 +311,28 @@ button#CardWrapper {
   grid-column: span v-bind(size);
   grid-column: v-bind(columnStart) / v-bind(columnEnd);
   transition: 0.0s !important;
-
 }
 
-button#CardWrapper.draggedOver {
+button#CardWrapper.swap-board {
   transform: translateY(var(--space-3)) !important;
+}
+
+button#CardWrapper.shift-left {
+  --shift: calc(0px - var(--space-3));
+  transform: translateX(var(--shift)) !important;
+  position: relative;
+  z-index: 1000;
+}
+
+button#CardWrapper.shift-right {
+  transform: translateX(var(--space-3)) !important;
+  position: relative;
+  z-index: 1000;
+}
+
+button#CardWrapper.rejected {
+  opacity: 0.5 !important;
+  pointer-events: none !important;
 }
 
 /* button.dragging {
