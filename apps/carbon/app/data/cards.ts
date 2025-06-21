@@ -245,7 +245,7 @@ export const cards: Card[] = [
   {
     id: 'archer',
     index: 0,
-    size: 3,
+    size: 2,
     info: {
       name: 'Archer',
       description: 'A basic archer',

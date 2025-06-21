@@ -12,11 +12,11 @@ function range(start: number, end: number) {
 }
 
 const dragHit = computed(() => {
-  const hoveredBoard = store.user.hoveredSpace?.hovered.board
+  const hoveredBoard = store.user.hoveredSpace?.immigrant.board
   if (!hoveredBoard) return []
   if (prop.board !== hoveredBoard) return []
-  const hoveredStart = store.user.hoveredSpace?.hovered.start
-  const hoveredEnd = store.user.hoveredSpace?.hovered.end
+  const hoveredStart = store.user.hoveredSpace?.immigrant.start
+  const hoveredEnd = store.user.hoveredSpace?.immigrant.end
   if (hoveredStart === undefined || hoveredEnd === undefined) return []
   return range(hoveredStart, hoveredEnd)
 })

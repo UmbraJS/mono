@@ -14,18 +14,10 @@ const edit = ref(false)
   <div class="argument bodycopy">
     <header :class="{ hasImage: props.reason.background }">
       <ReasonConclution :reason="props.reason" />
-      <NuxtImg
-        v-if="props.reason.background"
-        :src="props.reason.background.url"
-        :alt="props.reason.background.alt"
-        :style="{ objectPosition: props.reason.background.offset }"
-      />
+      <NuxtImg v-if="props.reason.background" :src="props.reason.background.url" :alt="props.reason.background.alt"
+        :style="{ objectPosition: props.reason.background.offset }" />
       <ButtonGroup class="controls">
-        <Button
-          size="medium"
-          :variant="bookmarked ? 'primary' : 'base'"
-          @click="bookmarked = !bookmarked"
-        >
+        <Button size="medium" :variant="bookmarked ? 'primary' : 'base'" @click="bookmarked = !bookmarked">
           <Icon v-if="bookmarked" name="material-symbols:bookmark" size="1em" />
           <Icon v-else name="material-symbols:bookmark-add-outline-rounded" size="1em" />
         </Button>

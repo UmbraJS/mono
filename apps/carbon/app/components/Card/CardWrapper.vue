@@ -13,6 +13,12 @@ import { gsap } from "gsap"
 import { Flip } from "gsap/Flip";
 import { Draggable } from "gsap/Draggable";
 
+interface ZoneHitOptions {
+  hit: (zones: Element[], el: Draggable) => void,
+  mis?: (zones: Element[], el: Draggable) => void,
+  dud?: (el: Draggable) => void
+}
+
 const props = defineProps<{
   index: number;
   size: number;
@@ -43,13 +49,7 @@ const {
   moveCardFromDeckToInventory,
   moveCardFromInventoryToDeck,
   setHoveredSpace,
-  availableInventorySpace,
-  avialableDeckSpace,
-  tempDragAndReturn
 } = store.user
-
-const fromDeck = props.board === "deck"
-const fromInventory = props.board === "inventory"
 
 function triggerFlipSound() {
   if (recentlyClickedFlipSound.value) return
@@ -72,26 +72,13 @@ onMounted(() => {
   gsap.registerPlugin(Flip, Draggable)
   const zones = document.querySelectorAll('[data-dropzone]')
 
-  const temp = tempDragAndReturn({
-    board: board,
-    index: props.index,
-  })
-
   new Draggable(fragElement.value, {
     onDrag,
     onRelease,
   })
 
-  interface ZoneHitOptions {
-    hit: (zones: Element[], el: Draggable) => void,
-    mis?: (zones: Element[], el: Draggable) => void,
-    dud?: (el: Draggable) => void
-  }
-
   function onDrag(this: Draggable) {
     fragElement.value?.classList.add("dragging")
-
-    // temp.removeDraggingElement()
 
     checkZoneHit(this, {
       hit: (zones) => {
@@ -104,7 +91,8 @@ onMounted(() => {
         if (!props.board) return;
 
         setHoveredSpace({
-          hovered: {
+          size: props.size,
+          immigrant: {
             board: firstZoneAttributes.board,
             start: firstZoneAttributes.index,
             end: firstZoneAttributes.index + props.size - 1, // +1 because the end is exclusive
@@ -125,7 +113,6 @@ onMounted(() => {
 
     setHoveredSpace(null)
 
-    // temp.returnDraggingElement()
     checkZoneHit(this, {
       hit: landHit,
       mis: landMis,
@@ -136,7 +123,7 @@ onMounted(() => {
   function getDropZones(zones: Element[]) {
     return Array.from(zones).map((zone) => {
       const boardAndId = zone.getAttribute("data-dropzone")
-      // Board and ID are described like "deck-0" or "inventory-1". I ned to make an object that contains the board and index as seperate properties
+      // Board and ID are described like "deck-0" or "inventory-1". I ned to make an object that contains the board and index as separate properties
       if (!boardAndId) return null;
       const [board, index] = boardAndId.split("-");
       if (!board || !index) return null;
@@ -227,78 +214,12 @@ const columnStart = computed(() => {
 const columnEnd = computed(() => {
   return props.index + 1 + props.size
 })
-
-type HoverHit = "not-hit" | "shift-left" | "shift-right" | "swap-board" | "rejected"
-
-const isBeingDraggedOver = computed<HoverHit>(() => {
-  const cardStart = props.index
-  const cardEnd = props.index + props.size - 1
-  if (!store.user.hoveredSpace) return "not-hit"
-  // if (!props.board || store.user.hoveredSpace.hovered.board !== props.board) return false
-
-  const hoveredBoard = store.user.hoveredSpace.origin.board
-  const originStart = store.user.hoveredSpace?.origin.start
-  const originEnd = store.user.hoveredSpace?.origin.end
-  const hoveredStart = store.user.hoveredSpace?.hovered.start
-  const hoveredEnd = store.user.hoveredSpace?.hovered.end
-
-  const isOverStart = hoveredStart <= cardStart && hoveredEnd >= cardStart
-  const isOverEnd = hoveredStart <= cardEnd && hoveredEnd >= cardEnd
-  const isOverBoth = hoveredStart <= cardStart && hoveredEnd >= cardEnd
-  const isOver = isOverStart || isOverEnd || isOverBoth
-
-  const isInside = hoveredStart <= cardStart && hoveredEnd >= cardEnd
-  const isWrapping = hoveredStart > cardStart && hoveredEnd <= cardEnd
-
-  // Prevent the dragged card from being counted as being dragged over itself
-  const isFromSameBoard = hoveredBoard === props.board
-  const isFromSameSpace = originStart <= cardStart && originEnd >= cardEnd
-  if (isFromSameBoard && isFromSameSpace) return "not-hit"
-
-  // if (cardStart === 3) {
-  //   console.log("isBeingDraggedOver", {
-  //     isOverStart,
-  //     isOverEnd,
-  //     isOverBoth,
-  //     isInside,
-  //     isWrapping,
-  //   })
-  // }
-
-  if (availableInventorySpace <= 0 && hoveredBoard === "inventory") {
-    return "rejected"
-  }
-
-  if (avialableDeckSpace <= 0 && hoveredBoard === "deck") {
-    return "rejected"
-  }
-
-  if (isOverStart) {
-    return "shift-right"
-  }
-
-  if (isOverEnd) {
-    return "shift-left"
-  }
-
-  if (isOver) return "swap-board"
-  return "not-hit"
-})
-
-
-watch(isBeingDraggedOver, (newValue) => {
-  const cardStart = props.index
-  if (cardStart !== 3) return
-  console.log("isBeingDraggedOver", newValue)
-})
 </script>
-
 <template>
   <CardModal :chunks="chunks" :cardStats="cardStats" :cardInfo="cardInfo" :bashRecords="cardBashRecords"
     :timeline="timeline">
     <button ref="fragElement" id="CardWrapper"
-      class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
-      :class="isBeingDraggedOver" @click="triggerFlipSound">
+      class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" @click="triggerFlipSound">
 
       <slot></slot>
 

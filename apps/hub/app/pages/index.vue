@@ -5,17 +5,21 @@ import ReasonList from '~/components/Reason/List.vue'
 </script>
 
 <template>
-  <div class="artickle">
+  <div class="article voice">
+    <h1 class="title">Voice of Reason</h1>
+    <p class="subtitle">A place to share your thoughts and ideas.</p>
+  </div>
+  <div class="article">
     <ReasonList />
   </div>
-  <div class="artickle">
+  <div class="article">
     <RichText />
   </div>
   <PostFeed />
 </template>
 
 <style scoped lang="scss">
-.artickle {
+.article {
   margin-top: 200px;
 
   display: grid;

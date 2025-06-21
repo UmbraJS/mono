@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Button } from '@nobel/core'
+import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
 import type { Character } from '~~/types'
 
@@ -7,15 +9,22 @@ defineProps<{
   health: number
   shield: number
 }>()
+
+const view = useView()
+
+function toggleInventory() {
+  view.setView(view.view === 'inventory' ? null : 'inventory')
+}
 </script>
 
 <template>
   <PartyBoard>
     <div class="location border">
-      <div class="money">
+      <Button class="viewButton" :color="view.view === 'inventory' ? 'default' : 'default'"
+        :variant="view.view === 'inventory' ? 'primary' : 'base'" @click="toggleInventory">
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>
-      </div>
+      </Button>
     </div>
     <PlayerCharacter :characters="userCharacters" :health="health" :shield="shield" :reverse="false" />
     <div class="location border">
@@ -51,5 +60,16 @@ section.PartyBoard .location .money {
   color: var(--base-120);
   border-radius: var(--radius);
   padding: var(--space-1);
+  cursor: pointer;
 }
+
+section.PartyBoard .location .viewButton {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+/* section.PartyBoard .location .money.active {
+} */
 </style>

@@ -36,5 +36,6 @@ function getCardStats(card: Card) {
   grid-template-rows: 1fr 1fr;
   gap: var(--space-1);
   grid-column: span 12;
+  height: 100%;
 }
 </style>
