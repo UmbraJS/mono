@@ -4,6 +4,8 @@ import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
 import type { Character } from '~~/types'
 
+const store = useStore()
+
 defineProps<{
   userCharacters: Character[]
   health: number
@@ -30,8 +32,8 @@ function toggleInventory() {
     <div class="location border">
       <div class="money">
         <Icon name="carbon:money" size="1.5em" />
-        <p>9</p>
-        <p>(+3)</p>
+        <p>{{ store.money.value }}</p>
+        <p>(+{{ store.money.income }})</p>
       </div>
     </div>
   </PartyBoard>

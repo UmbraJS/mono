@@ -1,30 +1,9 @@
 import type { User, Card } from '../../types'
+import type { CardSegment, DraggedCard, SpaceBoards } from '../../types/cardDrag'
+
 import { getInsertedCard } from '../../utils/cardSwap/insertCard'
 
-interface CardSegment {
-  id: string;
-  start: number;
-  end: number;
-  size: number; // Optional size for segments that are not empty
-  empty: boolean;
-}
-
 const MAX_BOARD_SLOTS = 12
-
-interface Space {
-  start: number
-  end: number
-}
-
-interface SpaceBoard extends Space {
-  board: 'deck' | 'inventory'
-}
-
-export interface SpaceBoards {
-  size: number
-  origin: SpaceBoard,
-  immigrant: SpaceBoard
-}
 
 export function usePerson(user: User) {
   const deck = ref(user.deck)
@@ -32,23 +11,15 @@ export function usePerson(user: User) {
   const characters = ref(user.characters)
 
   const hoveredSpace = ref<SpaceBoards | null>(null)
-  const hoveredElement = ref<HTMLElement | null>(null)
+  const draggedCard = ref<DraggedCard | null>(null)
 
-  function setHoveredElement(element: HTMLElement | null) {
-    hoveredElement.value = element
+  function setDraggedCard(dc: DraggedCard | null) {
+    draggedCard.value = dc
   }
 
   function setHoveredSpace(space: SpaceBoards | null) {
     hoveredSpace.value = space
   }
-
-  const remapCardToSegment = (card: Card): CardSegment => ({
-    id: card.id,
-    start: card.index,
-    end: card.index + card.size - 1,
-    size: card.size,
-    empty: false
-  })
 
   const remapCardsToSegments = (cards: Card[]): CardSegment[] => {
     return cards.map(card => remapCardToSegment(card))
@@ -134,18 +105,39 @@ export function usePerson(user: User) {
     insertCardFromInventory(props)
   }
 
+  function removeDraggedCard() {
+    const cardIndex = draggedCard.value?.cardIndex
+    if (draggedCard.value?.originBoard === 'deck') {
+      deck.value = deck.value.filter(card => card.index !== cardIndex)
+      return deck.value.find(card => card.index === cardIndex)
+    } else if (draggedCard.value?.originBoard === 'inventory') {
+      inventory.value = inventory.value.filter(card => card.index !== cardIndex)
+      return inventory.value.find(card => card.index === cardIndex)
+    }
+  }
+
   return {
     deck,
     inventory,
     characters,
+    draggedCard,
     hoveredSpace,
+    setDraggedCard,
     setHoveredSpace,
-    setHoveredElement,
     moveCardInsideDeck,
     moveCardInsideInventory,
     moveCardFromDeckToInventory,
     moveCardFromInventoryToDeck,
+    removeDraggedCard,
   }
 }
 
 export type UsePerson = ReturnType<typeof usePerson>
+
+const remapCardToSegment = (card: Card): CardSegment => ({
+  id: card.id,
+  start: card.index,
+  end: card.index + card.size - 1,
+  size: card.size,
+  empty: false
+})

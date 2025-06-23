@@ -1,36 +1,55 @@
 import { defineStore } from 'pinia'
 import { user, bot } from '../data/character'
+import type { Card, CardStatRealms } from '../../types'
 import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
 import { gsap } from 'gsap'
 import { usePerson } from '../composables/usePerson'
 import type { UsePerson } from '../composables/usePerson'
-import { set } from '@vueuse/core'
-
-interface Space {
-  start: number
-  end: number
-}
-
-interface SpaceBoard extends Space {
-  board: 'deck' | 'inventory'
-}
-
-export interface SpaceBoards {
-  size: number
-  origin: SpaceBoard,
-  immigrant: SpaceBoard
-}
 
 export const useStore = defineStore('store', () => {
+  const realm = ref<keyof CardStatRealms>("quest")
+
   const userStore = usePerson(user)
   const botStore = usePerson(bot)
   const simulation = useSimulation(userStore, botStore)
+
+  const money = useMoney({
+    removeDraggedCard: userStore.removeDraggedCard,
+    realm: realm.value
+  })
+
   return {
     user: userStore,
     bot: botStore,
-    simulation
+    simulation,
+    money
   }
 })
+
+function useMoney(props: { removeDraggedCard: () => Card | undefined, realm: keyof CardStatRealms }) {
+  const money = reactive({
+    value: 0,
+    income: 2,
+  })
+
+  return {
+    value: computed(() => money.value),
+    income: computed(() => money.income),
+    setMoney: (newMoney: number) => {
+      money.value = newMoney
+    },
+    setIncome: (newIncome: number) => {
+      money.income = newIncome
+    },
+    sellDraggedCard: () => {
+      const card = props.removeDraggedCard()
+      const cardStats = card?.stats[props.realm]
+      if (!cardStats) return
+      money.value += cardStats.cost
+    }
+  }
+
+}
 
 function useSimulation(userStore: UsePerson, botStore: UsePerson) {
   const time = ref(0)

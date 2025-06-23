@@ -24,6 +24,8 @@ export function getInsertedCard(
     maxSlots: number
   }
 ): InsertResult {
+  console.log("rex debug 1: ")
+
   if (props.deck.length === 0) {
     if (props.newCard.size > props.maxSlots) {
       return { success: false, cards: props.deck };
@@ -52,7 +54,6 @@ export function getInsertedCard(
       : rightDeck.push(card);
   }
 
-
   const rightShiftedCards = shiftCardsOnTheRight({
     deck: rightDeck,
     newCardEnd: newCardEnd
@@ -62,13 +63,11 @@ export function getInsertedCard(
     newCardStart: newCardStart
   });
 
-  const newDeckTemp = [
+  const newDeck = [
     ...leftShiftedCards,
     newCard,
     ...rightShiftedCards
   ]
-
-  const newDeck = newDeckTemp // shiftRight();
 
   // Now that we have inserted the new card we can check if the result is invalid for the max slots and reject the entire operation if it is
   const getTheTotalSizeOfNewDeck = newDeck.reduce((acc, card) => acc + card.size, 0)

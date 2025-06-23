@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { SimCard, CardInfo, CardStats } from '../../../types'
+import type { CardInfo, CardStats } from '../../../types'
 import CardCooldown from './CardCooldown.vue'
 import CardStatsComponent from './CardStats.vue'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 import type { OutputChunk } from "../../../utils/time/types";
 
-const props = defineProps<{
+defineProps<{
   index: number;
   size: number;
   chunks?: OutputChunk[];
@@ -16,8 +16,6 @@ const props = defineProps<{
   timeline: gsap.core.Timeline;
   board?: "deck" | "inventory"
 }>()
-
-console.log("Card component loaded", props.cardStats)
 </script>
 
 <template>
@@ -25,7 +23,9 @@ console.log("Card component loaded", props.cardStats)
   <CardWrapper v-else :index="index" :size="size" :chunks="chunks" :cardInfo="cardInfo" :cardStats="cardStats"
     :timeline="timeline" :playerLogs="playerLogs" :opponentLogs="opponentLogs" :board="board">
 
-    <!-- <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" /> -->
+    <p>{{ index }}</p>
+
+    <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />
 
     <!-- <img v-if="cardInfo.image" :src="cardInfo.image.default" alt="Card Image" /> -->
     <CardStatsComponent :bash="cardStats.bash" />

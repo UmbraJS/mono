@@ -10,7 +10,6 @@ const props = defineProps<{
   inventory: Card[]
   realm: keyof CardStatRealms
 }>()
-
 function getCardStats(card: Card) {
   return card.stats[props.realm]
 }
@@ -18,11 +17,11 @@ function getCardStats(card: Card) {
 
 <template>
   <div class="MatchBoard">
-    <Board board="inventory">
+    <Board board="inventory" :maxSlots="12">
       <PlayerCard v-for="card in inventory" :key="card.id" :cardInfo="card.info" :cardStats="getCardStats(card)"
         :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="inventory" />
     </Board>
-    <Board board="deck">
+    <Board board="deck" :maxSlots="12">
       <PlayerCard v-for="card in deck" :key="card.id" :cardInfo="card.info" :cardStats="getCardStats(card)"
         :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="deck" />
     </Board>

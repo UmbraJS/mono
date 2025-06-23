@@ -1,7 +1,6 @@
 import { ref, computed } from 'vue'
 import { timeStates } from '../../types'
 import type { Card, Player, Character, GameTime, GameState, TimeState } from '../../types'
-import { fields } from '@/data/cards'
 
 const defaultEndurance = 100
 
@@ -25,11 +24,8 @@ const initialPlayer: Player = {
   money: 50,
   interest: 5,
   endurance: defaultEndurance,
-  deck: [],
-  field: fields[0] as Card,
   experience: 0,
   level: 1,
-  inventory: [],
   image: {
     default: 'https://example.com/player.png',
   },
