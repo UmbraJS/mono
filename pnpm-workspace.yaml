@@ -40,10 +40,6 @@ catalog:
   '@typescript-eslint/eslint-plugin': ^8.30.1
   '@typescript-eslint/parser': ^8.30.1
   '@umbrajs/core': ^0.0.456
-  '@unocss/core': 66.1.0-beta.6
-  '@unocss/nuxt': 66.1.0-beta.6
-  '@unocss/preset-mini': 66.1.0-beta.6
-  '@unocss/transformer-variant-group': 66.1.0-beta.6
   '@unovis/ts': ^1.5.1
   '@unovis/vue': ^1.5.1
   '@vitejs/plugin-vue': ^5.2.3
@@ -98,7 +94,6 @@ catalog:
   ufo: ^1.6.1
   unified: ^11.0.5
   unist-util-visit: ^5.0.0
-  unocss: 66.1.0-beta.6
   vfile: ^6.0.3
   vite: 6.3.1
   vite-plugin-dts: ^4.5.3
@@ -109,14 +104,6 @@ catalog:
   vue-sonner: ^1.3.2
   vue-tsc: ^2.2.8
   wrangler: 4.12.0
-
-ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - better-sqlite3
-  - esbuild
-  - sharp
-  - vue-demi
-  - workerd
 
 catalogs:
   conflicts_gsap_h3_13_0:
@@ -159,16 +146,10 @@ catalogs:
     '@tiptap/starter-kit': ^2.11.7
   conflicts_@tiptap/vue-3_h2_11_7:
     '@tiptap/vue-3': ^2.11.7
-  conflicts_@unocss/core_h66_1_0mbeta_6:
-    '@unocss/core': ^66.1.0-beta.6
-  conflicts_@unocss/transformer-variant-group_h66_1_0mbeta_6:
-    '@unocss/transformer-variant-group': ^66.1.0-beta.6
   conflicts_vue-router_h4_5_0:
     vue-router: ^4.5.0
   conflicts_eslint_h9_24_0:
     eslint: ^9.24.0
-  conflicts_unocss_h66_1_0mbeta_6:
-    unocss: ^66.1.0-beta.6
   conflicts_@types/node_h22_13_4:
     '@types/node': ^22.13.4
   conflicts_typescript_h5_7_3:
@@ -227,10 +208,6 @@ catalogs:
     '@tiptap/starter-kit': ^2.22.3
   conflicts_conflicts_@tiptap/vue-3_h2_11_7_h2_22_3:
     '@tiptap/vue-3': ^2.22.3
-  conflicts_conflicts_@unocss/core_h66_1_0mbeta_6_h66_3_2:
-    '@unocss/core': ^66.3.2
-  conflicts_conflicts_@unocss/transformer-variant-group_h66_1_0mbeta_6_h66_3_2:
-    '@unocss/transformer-variant-group': ^66.3.2
   conflicts_@vueuse/core_13_4_0:
     '@vueuse/core': 13.4.0
   conflicts_@vueuse/nuxt_13_4_0:
@@ -255,16 +232,10 @@ catalogs:
     vue: ^3.5.17
   conflicts_@nuxt/eslint-config_1_4_1:
     '@nuxt/eslint-config': 1.4.1
-  conflicts_@unocss/nuxt_66_3_2:
-    '@unocss/nuxt': 66.3.2
-  conflicts_@unocss/preset-mini_66_3_2:
-    '@unocss/preset-mini': 66.3.2
   conflicts_drizzle-kit_h0_31_2:
     drizzle-kit: ^0.31.2
   conflicts_conflicts_eslint_h9_26_0_h9_29_0:
     eslint: ^9.29.0
-  conflicts_conflicts_unocss_h66_1_0mbeta_6_h66_3_2:
-    unocss: ^66.3.2
   conflicts_wrangler_4_22_0:
     wrangler: 4.22.0
   conflicts_conflicts_typescript_h5_8_3_h5_7_3:
@@ -286,8 +257,17 @@ catalogs:
   conflicts_conflicts_wrangler_h4_14_1_4_22_0:
     wrangler: 4.22.0
 
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - better-sqlite3
+  - esbuild
+  - sharp
+  - vue-demi
+  - workerd
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
+  - better-sqlite3
   - esbuild
   - maplibre-gl
   - unrs-resolver

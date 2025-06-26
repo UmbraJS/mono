@@ -44,8 +44,6 @@
     "@types/hast": "catalog:",
     "@types/mdast": "catalog:",
     "@umbrajs/core": "workspace:*",
-    "@unocss/core": "catalog:conflicts_conflicts_@unocss/core_h66_1_0mbeta_6_h66_3_2",
-    "@unocss/transformer-variant-group": "catalog:conflicts_conflicts_@unocss/transformer-variant-group_h66_1_0mbeta_6_h66_3_2",
     "@vueuse/core": "catalog:conflicts_@vueuse/core_13_4_0",
     "@vueuse/nuxt": "catalog:conflicts_@vueuse/nuxt_13_4_0",
     "better-auth": "catalog:conflicts_better-auth_h1_2_10",
@@ -84,12 +82,9 @@
   "devDependencies": {
     "@iconify-json/pixelarticons": "catalog:",
     "@nuxt/eslint-config": "catalog:conflicts_@nuxt/eslint-config_h1_3_0",
-    "@unocss/nuxt": "catalog:conflicts_@unocss/nuxt_66_3_2",
-    "@unocss/preset-mini": "catalog:conflicts_@unocss/preset-mini_66_3_2",
     "drizzle-kit": "catalog:conflicts_drizzle-kit_h0_31_2",
     "eslint": "catalog:conflicts_conflicts_eslint_h9_26_0_h9_29_0",
     "typescript": "catalog:conflicts_typescript_h5_8_3",
-    "unocss": "catalog:conflicts_conflicts_unocss_h66_1_0mbeta_6_h66_3_2",
     "vue-tsc": "catalog:conflicts_vue-tsc_h2_2_10",
     "wrangler": "catalog:conflicts_wrangler_h4_14_1"
   }
