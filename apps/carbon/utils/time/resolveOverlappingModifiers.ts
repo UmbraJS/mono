@@ -17,7 +17,7 @@ export function resolveOverlappingModifiers(modifiers: ModifierChunk[]): Modifie
   }
 
   // Resolve overlaps inside each group
-  for (const [type, list] of grouped.entries()) {
+  for (const [_type, list] of grouped.entries()) {
     const sorted = list.sort((a, b) => a.timestamp - b.timestamp);
     const result: ModifierChunk[] = [];
 

@@ -49,9 +49,11 @@ export function getInsertedCard(
 
   for (const card of props.deck) {
     const cardStartsBeforeNewCard = card.start < newCardStart;
-    cardStartsBeforeNewCard
-      ? leftDeck.push(card)
-      : rightDeck.push(card);
+    if (cardStartsBeforeNewCard) {
+      leftDeck.push(card);
+    } else {
+      rightDeck.push(card);
+    }
   }
 
   const rightShiftedCards = shiftCardsOnTheRight({

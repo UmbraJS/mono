@@ -1,6 +1,6 @@
 import { generateCooldownEvent } from './time/generateCooldownEvent';
 import type { CooldownEvent } from './time/generateCooldownEvent';
-import type { CardStats, SimCard, PreSimulationCard, TimeEffect } from '../types/card'
+import type { SimCard, PreSimulationCard, TimeEffect } from '../types/card'
 
 interface ProcessedCard extends CooldownEvent {
   card: SimCard;
@@ -235,7 +235,6 @@ function getModifiers({
 }: GetModifiersProps) {
   const target = modifier.target;
   function mapModifier(index: number) {
-    sourceCard.card.index
     return {
       type: modifier.timeType,
       duration: modifier.value,

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Character, User } from '~~/types'
+import type { Character } from '~~/types'
 import ValueBar from './ValueBar/ValueBar.vue'
 import FrostLayer from './FrostLayer.vue'
 
@@ -21,22 +21,20 @@ function getMaxHealth(): number {
 <template>
   <section class="character" :class="{ reverse }">
     <header>
-      <div v-for="character in characters" class="character-avatar">
-        <img v-if="character.image" :src="character.image.default" alt="Character Image" >
+      <div v-for="character in characters" :key="character.id" class="character-avatar">
+        <img v-if="character.image" :src="character.image.default" alt="Character Image">
       </div>
       <div class="healthImpact">
         <FrostLayer :reversed="reverse" :health="health" :max-health="maxHealth" />
       </div>
     </header>
 
-    <ValueBar
-:value="shield" :max-value="Math.max(maxHealth, shield)" bar-color="var(--info-90)"
+    <ValueBar :value="shield" :max-value="Math.max(maxHealth, shield)" bar-color="var(--info-90)"
       delay-color="var(--info-50)" grid-area="shield">
       {{ Math.floor(shield) }}
     </ValueBar>
 
-    <ValueBar
-:value="health" :max-value="maxHealth" bar-color="var(--success-50)" delay-color="var(--warning-50)"
+    <ValueBar :value="health" :max-value="maxHealth" bar-color="var(--success-50)" delay-color="var(--warning-50)"
       grid-area="health">
       {{ Math.floor(health) }} / {{ maxHealth }}
     </ValueBar>

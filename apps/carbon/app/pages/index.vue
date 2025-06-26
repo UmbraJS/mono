@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { user, bot } from '../data/character'
-import { gsap } from 'gsap'
-import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
-import { useSpace } from '~/composables/useSpace'
-import QuestBoard from '~/components/QuestBoard.vue'
+// import { user, bot } from '../data/character'
+// import { gsap } from 'gsap'
+// import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
+// import { useSpace } from '~/composables/useSpace'
+// import QuestBoard from '~/components/QuestBoard.vue'
 
 // const time = ref(0)
 
@@ -25,6 +25,7 @@ import QuestBoard from '~/components/QuestBoard.vue'
 </script>
 
 <template>
+  <p>remove this</p>
   <!-- <div class="CarbonLayout">
     <OpponentHeader :health="op.health.value" :shield="op.shield.value" :logs="cardTimeline.space.opponent" :bot="bot"
       :user="user" />

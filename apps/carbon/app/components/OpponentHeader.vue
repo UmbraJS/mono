@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import PartyBoard from './PartyBoard.vue'
-import type { Character } from '~~/types'
 import type { User } from '../../types'
 import type { Card } from '../../types/card'
 import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
@@ -25,8 +24,7 @@ function getInfoDeck(deck: Card[]) {
       <!-- <img :src="skeletonKing.field?.image?.default" alt="Location" /> -->
     </div>
     <PlayerCharacter :characters="bot.characters" :health="health" :shield="shield" :reverse="false" />
-    <BashLogs
-:logs="logs" :player-info-deck="getInfoDeck(user.deck)" :opponent-info-deck="getInfoDeck(bot.deck)"
+    <BashLogs :logs="logs" :player-info-deck="getInfoDeck(user.deck)" :opponent-info-deck="getInfoDeck(bot.deck)"
       :modal-button="true" />
   </PartyBoard>
 </template>

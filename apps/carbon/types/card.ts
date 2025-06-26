@@ -63,7 +63,7 @@ export interface Aspect {
   effect?: () => void
 }
 
-const cardNames = [
+const _cardNames = [
   'Fireball',
   'Water Splash',
   'Earth Quake',
@@ -104,7 +104,7 @@ const cardNames = [
   'Treasure',
 ] as const
 
-export type CardName = (typeof cardNames)[number]
+export type CardName = (typeof _cardNames)[number]
 
 export interface ReactiveCard extends Card {
   index: number;

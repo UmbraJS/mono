@@ -1,4 +1,3 @@
-import type { UsePlayerReturn } from './usePlayer'
 import type { ValueLogCore } from './useBash'
 import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
 

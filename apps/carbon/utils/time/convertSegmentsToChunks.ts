@@ -34,11 +34,9 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
 
   const slowMult = 2; // 2 = 2x slow
   const slowedSecondsPerPercent = (baseDuration * slowMult) / 100; // 10% = 2 seconds
-  const slowedPercentPerSecond = 100 / (baseDuration * slowMult); // 1 second = 5%
 
   const hasteMult = 2; // 2 = 2x haste
   const hastedSecondsPerPercent = (baseDuration / hasteMult) / 100; // 10% = 0.5 seconds
-  const hastedPercentPerSecond = 100 / (baseDuration / hasteMult); // 1 second = 20%
 
   const chunks: OutputChunk[] = [];
 
@@ -59,8 +57,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     });
 
     if (overflowingSegment) {
-      console.log('Overflowing segment detected:', overflowingSegment);
-      const lol = handleSegment({
+      handleSegment({
         currentSegment: overflowingSegment,
         nextSegment,
         index,
@@ -263,7 +260,11 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
 
   function setInitialChunk() {
     const firstSegmentStartsBeforeBaseDuration = firstSegment?.start && firstSegment?.start < baseDuration;
-    firstSegmentStartsBeforeBaseDuration ? setInitialPaddingChunk(firstSegment?.start) : setInitialWholeChunk();
+    if (firstSegmentStartsBeforeBaseDuration) {
+      setInitialPaddingChunk(firstSegment?.start);
+    } else {
+      setInitialWholeChunk();
+    }
   }
 
   function bridgeChunksTilNextSegment() {
