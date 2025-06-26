@@ -19,7 +19,7 @@ const view = useView()
       <PlayerHeader :userCharacters="store.user.characters" :health="store.simulation.user.health"
         :shield="store.simulation.user.shield" />
       <div class="ViewOverlay clipPath2" :class="{ hidden: store.user.draggedCard === null }">
-        <div class="Seller border base-warning">
+        <div data-sellzone class="Seller border base-warning">
           <h1>Drop To Sell {{ store.user.draggedCard?.cardStats.cost }}</h1>
         </div>
       </div>
@@ -92,6 +92,7 @@ main.quest-wrapper .clipPath2.hidden {
 
 main.quest-wrapper .HeadBoard {
   position: relative;
+  z-index: 1;
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
@@ -99,12 +100,19 @@ main.quest-wrapper .HeadBoard {
 
 main.quest-wrapper .ViewOverlay .Seller {
   position: relative;
+  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--base-20);
+  color: var(--base-50);
   height: 100%;
   width: 100%;
   border-radius: var(--radius);
+  transition: var(--slow);
+}
+
+main.quest-wrapper .ViewOverlay .Seller.active-zone {
+  border-width: var(--space-1);
 }
 </style>

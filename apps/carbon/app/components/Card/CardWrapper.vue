@@ -6,6 +6,7 @@ import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 import { useAudioCue } from '@/composables/useAudioCue'
 import type { OutputChunk } from "../../../utils/time/types";
 import { useCardDrag } from '../../composables/useCardDrag'
+import { checkZoneHit } from '../../../utils/cardSwap/zoneHit'
 
 import { useTemplateRef } from 'vue'
 
@@ -44,6 +45,7 @@ function triggerFlipSound() {
 }
 
 const fragElement = useTemplateRef('fragElement')
+const store = useStore()
 
 onMounted(() => {
   const board = props.board
@@ -62,9 +64,38 @@ onMounted(() => {
   })
 
   new Draggable(fragElement.value, {
-    onDrag: cardDrag.onDrag,
+    onDrag: function () {
+      cardDrag.onDrag(this)
+      checkZoneHit(this, {
+        threshold: "40%",
+        zones: document.querySelectorAll('[data-sellzone]'),
+        hit: (zones) => {
+          console.log('Card dragged into sell zone')
+          if (!fragElement.value) return
+          fragElement.value.classList.add('active-zone')
+          zones.forEach((zone) => {
+            zone.classList.add('active-zone')
+          })
+        },
+        mis: (zones) => {
+          if (!fragElement.value) return
+          fragElement.value.classList.remove('active-zone')
+          zones.forEach((zone) => {
+            zone.classList.remove('active-zone')
+          })
+        },
+      })
+    },
     onRelease: function () {
       cardDrag.onRelease(this, props.index)
+      checkZoneHit(this, {
+        threshold: "40%",
+        zones: document.querySelectorAll('[data-sellzone]'),
+        hit: () => {
+          console.log('Card dropped in sell zone')
+          store.money.sellDraggedCard()
+        },
+      })
     },
   })
 })
@@ -91,9 +122,15 @@ const columnEnd = computed(() => {
 
 <style lang="scss">
 button#CardWrapper {
+  position: relative;
+  z-index: 99;
   grid-column: span v-bind(size);
   grid-column: v-bind(columnStart) / v-bind(columnEnd);
   transition: 0.0s !important;
+}
+
+button#CardWrapper.active-zone {
+  border-width: 40px;
 }
 
 button#CardWrapper.swap-board {

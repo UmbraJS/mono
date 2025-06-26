@@ -106,6 +106,7 @@ export function usePerson(user: User) {
   }
 
   function removeDraggedCard() {
+    console.log('Removing dragged card:', draggedCard.value)
     const cardIndex = draggedCard.value?.cardIndex
     if (draggedCard.value?.originBoard === 'deck') {
       deck.value = deck.value.filter(card => card.index !== cardIndex)

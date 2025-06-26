@@ -10,6 +10,7 @@ const props = defineProps<{
   inventory: Card[]
   realm: keyof CardStatRealms
 }>()
+
 function getCardStats(card: Card) {
   return card.stats[props.realm]
 }

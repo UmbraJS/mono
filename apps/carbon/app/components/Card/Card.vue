@@ -23,8 +23,6 @@ defineProps<{
   <CardWrapper v-else :index="index" :size="size" :chunks="chunks" :cardInfo="cardInfo" :cardStats="cardStats"
     :timeline="timeline" :playerLogs="playerLogs" :opponentLogs="opponentLogs" :board="board">
 
-    <p>{{ index }}</p>
-
     <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />
 
     <!-- <img v-if="cardInfo.image" :src="cardInfo.image.default" alt="Card Image" /> -->

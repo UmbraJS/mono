@@ -2,7 +2,6 @@ import type { CardStats } from '../../types'
 import { useStore } from '~/stores/useStore'
 
 import { gsap } from "gsap"
-import { Draggable } from "gsap/Draggable";
 import { checkZoneHit } from '../../utils/cardSwap/zoneHit'
 
 interface useCardDragProps {
@@ -26,7 +25,7 @@ export function useCardDrag(props: useCardDragProps) {
     setDraggedCard
   } = store.user
 
-  function onDrag(this: Draggable) {
+  function onDrag(draggable: Draggable.Vars) {
     props.fragElement?.classList.add("dragging")
     const board = props.board
     if (!board) return
@@ -39,7 +38,7 @@ export function useCardDrag(props: useCardDragProps) {
       cardStats: props.cardStats,
     })
 
-    checkZoneHit(this, {
+    checkZoneHit(draggable, {
       zones: zones,
       mis: (zones) => zones.forEach((zone) => zone.classList.remove("drag-hit")),
       hit: (zones) => {
@@ -71,14 +70,17 @@ export function useCardDrag(props: useCardDragProps) {
   function onRelease(draggable: Draggable.Vars, cardIndex: number) {
     props.fragElement?.classList.remove("drag")
 
-    setHoveredSpace(null)
-    setDraggedCard(null)
-
     checkZoneHit(draggable, {
       zones: zones,
       mis: landMis,
       hit: (zones) => landHit(zones, draggable, cardIndex),
       dud: (el) => gsap.to(el.target, { duration: 0.5, x: 0, y: 0 }),
+    })
+
+    // It's important to reset the state after we have done everything else so that we are able to look at the dragged card when
+    setTimeout(() => {
+      setHoveredSpace(null)
+      setDraggedCard(null)
     })
   }
 

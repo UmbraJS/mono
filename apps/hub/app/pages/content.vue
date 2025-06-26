@@ -22,13 +22,7 @@ const defaultText = source.value
     <RichText :value="defaultText" @update:model-value="source = $event" />
 
     <div contenteditable="true" class="buttonHover buttonFocus focus rounded border">
-      <RenderMDC
-        v-if="ast"
-        :body="ast!.body"
-        :data="ast!.data"
-        tag="article"
-        class="content post"
-      />
+      <RenderMDC v-if="ast" :body="ast!.body" :data="ast!.data" tag="article" class="content post" />
     </div>
 
     <!-- <Editor v-model:code="samllDemo" /> -->
