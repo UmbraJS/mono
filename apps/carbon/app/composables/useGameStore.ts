@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { timeStates } from '../../types'
-import type { Card, Player, Character, GameTime, GameState, TimeState } from '../../types'
+import type { Player, Character, GameTime, GameState, TimeState } from '../../types'
 
 const defaultEndurance = 100
 
@@ -80,11 +80,6 @@ export const useGameStore = () => {
 
   const generateInitialNPCs = (): Character[] => {
     // Placeholder - implement NPC generation logic
-    return []
-  }
-
-  const generateShopInventory = (): Card[] => {
-    // Placeholder - implement shop inventory generation logic
     return []
   }
 

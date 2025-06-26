@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { value = 0, meter = 30 } = defineProps<{
-  value: number
+  value?: number
   meter?: number
 }>()
 
@@ -11,10 +11,9 @@ const amountOfMeterLines = computed(() => {
 
 <template>
   <div class="meterLines">
-    <div
-v-for="i in amountOfMeterLines" :key="i" class="meter" :style="{
+    <div v-for="i in amountOfMeterLines" :key="i" class="meter" :style="{
       opacity: i === 1 ? 0 : 1,
-    }"/>
+    }" />
   </div>
 </template>
 

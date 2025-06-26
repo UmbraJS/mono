@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { Graph, ScrollArea  } from '@nobel/core'
+import { Graph, ScrollArea } from '@nobel/core'
 import type { CardStats } from '../../../types'
 import { Icon } from '@iconify/vue'
 import type { BashRecords } from '~/composables/useBashRecords'
 
-type DataRecord = {
-  x: number
-  y: number
-  y1: number
-  y2: number
-}
+// type DataRecord = {
+//   x: number
+//   y: number
+//   y1: number
+//   y2: number
+// }
 
 const props = defineProps<{
   cardStats: CardStats

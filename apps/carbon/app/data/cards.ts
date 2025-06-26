@@ -56,22 +56,22 @@ const hasteYourSibling: CardEffect = ({ card }) => {
   }
 }
 
-const mirrorHaste: CardEffect = ({ card }) => {
-  return {
-    sourceIndex: card.card.index,
-    timeType: 'haste',
-    value: 1,
-    trigger: {
-      triggerType: 'cooldown',
-      playerTriggerIndexes: [],
-      opponentTriggerIndexes: [card.card.index],
-    },
-    target: {
-      playerTargetIndexes: [card.card.index],
-      opponentTargetIndexes: [],
-    },
-  }
-}
+// const mirrorHaste: CardEffect = ({ card }) => {
+//   return {
+//     sourceIndex: card.card.index,
+//     timeType: 'haste',
+//     value: 1,
+//     trigger: {
+//       triggerType: 'cooldown',
+//       playerTriggerIndexes: [],
+//       opponentTriggerIndexes: [card.card.index],
+//     },
+//     target: {
+//       playerTargetIndexes: [card.card.index],
+//       opponentTargetIndexes: [],
+//     },
+//   }
+// }
 
 // const slowSibling: CardEffect = ({ card }) => {
 //   return {

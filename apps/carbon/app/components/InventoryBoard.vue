@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PlayerCard from '~/components/Card/Card.vue'
-import Board from '~/components/Board.vue'
+import CardBoard from '~/components/CardBoard.vue'
 import type { Card, CardStatRealms } from '../../types'
 
 const props = defineProps<{
@@ -18,16 +18,14 @@ function getCardStats(card: Card) {
 
 <template>
   <div class="MatchBoard">
-    <Board board="inventory" :max-slots="12">
-      <PlayerCard
-v-for="card in inventory" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
+    <CardBoard board="inventory" :max-slots="12">
+      <PlayerCard v-for="card in inventory" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
         :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="inventory" />
-    </Board>
-    <Board board="deck" :max-slots="12">
-      <PlayerCard
-v-for="card in deck" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
+    </CardBoard>
+    <CardBoard board="deck" :max-slots="12">
+      <PlayerCard v-for="card in deck" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
         :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="deck" />
-    </Board>
+    </CardBoard>
   </div>
 </template>
 

@@ -203,7 +203,6 @@ function getSegments(chunks: OutputChunk[]): Segment[] {
 
   for (let i = 1; i <= sortedChunks.length; i++) {
     const currentChunk = sortedChunks[i];
-    const prevChunk = sortedChunks[i - 1];
 
     // Check if this is the end of a segment
     const isEndOfSegment =
