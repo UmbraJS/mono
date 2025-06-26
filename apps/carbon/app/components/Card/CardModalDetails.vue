@@ -30,7 +30,7 @@ const bash = props.stats.bash
         </div>
       </div>
 
-      <CardModalBash :cardStats="stats" />
+      <CardModalBash :card-stats="stats" />
 
       <div>
         <div class="tags">

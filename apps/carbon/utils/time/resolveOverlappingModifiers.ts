@@ -1,4 +1,4 @@
-import type { ModifierChunk, ModifierType } from "./types";
+import type { ModifierChunk, ModifierType } from './types';
 
 /**
  * Resolves overlapping modifiers by adjusting their durations based on their timestamps.

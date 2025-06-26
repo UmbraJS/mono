@@ -1,4 +1,4 @@
-export type ModifierType = "slow" | "haste" | "freeze";
+export type ModifierType = 'slow' | 'haste' | 'freeze';
 
 export type ModifierChunk = {
   type: ModifierType;
@@ -8,7 +8,7 @@ export type ModifierChunk = {
 };
 
 export type OutputChunk = {
-  type: "base" | ModifierType;
+  type: 'base' | ModifierType;
   duration: number;
   to: number;
   from: number;

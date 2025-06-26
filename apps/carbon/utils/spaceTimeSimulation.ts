@@ -1,6 +1,6 @@
-import type { Card } from "../types/card"
+import type { Card } from '../types/card'
 import { simulateTime } from './simulateTime'
-import { spaceStore } from "./space/spaceStore";
+import { spaceStore } from './space/spaceStore';
 import type { User, PreSimulationCard } from '../types'
 
 interface SpaceTimeProps {
@@ -11,7 +11,7 @@ interface SpaceTimeProps {
   matchDuration?: number;
 }
 
-export type SpaceOutput = Pick<ReturnType<typeof spaceStore>, 'healthLog' | "shieldLog" | "moraleLog">
+export type SpaceOutput = Pick<ReturnType<typeof spaceStore>, 'healthLog' | 'shieldLog' | 'moraleLog'>
 
 export function spaceTimeSimulation(props: SpaceTimeProps) {
   console.log('spaceTimeSimulation', props);

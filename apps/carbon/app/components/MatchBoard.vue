@@ -18,17 +18,20 @@ function handleReset() {
 <template>
   <div class="MatchBoard">
     <Board>
-      <PlayerCard v-for="card in cardTimeline.time.opponent" :key="card.card.id" :card="card"
-        :opponentLogs="cardTimeline.space.player" :playerLogs="cardTimeline.space.opponent" :time="time"
+      <PlayerCard
+v-for="card in cardTimeline.time.opponent" :key="card.card.id" :card="card"
+        :opponent-logs="cardTimeline.space.player" :player-logs="cardTimeline.space.opponent" :time="time"
         :timeline="timeline" />
 
-      <PlayerCard v-for="card in cardTimeline.time.opponent" :key="card.id" :cardInfo="card.info"
-        :cardStats="getCardStats(card)" :index="card.index" :time="time" :timeline="timeline" />
+      <PlayerCard
+v-for="card in cardTimeline.time.opponent" :key="card.id" :card-info="card.info"
+        :card-stats="getCardStats(card)" :index="card.index" :time="time" :timeline="timeline" />
     </Board>
     <TimeControls :timeline="timeline" :time="time" @on-restart="handleReset" />
     <Board>
-      <PlayerCard v-for="card in cardTimeline.time.player" :key="card.card.id" :card="card"
-        :opponentLogs="cardTimeline.space.opponent" :playerLogs="cardTimeline.space.player" :time="time"
+      <PlayerCard
+v-for="card in cardTimeline.time.player" :key="card.card.id" :card="card"
+        :opponent-logs="cardTimeline.space.opponent" :player-logs="cardTimeline.space.player" :time="time"
         :timeline="timeline" />
     </Board>
   </div>

@@ -22,7 +22,8 @@ function toggleInventory() {
 <template>
   <PartyBoard>
     <div class="location border">
-      <Button class="viewButton" :color="view.view === 'inventory' ? 'default' : 'default'"
+      <Button
+class="viewButton" :color="view.view === 'inventory' ? 'default' : 'default'"
         :variant="view.view === 'inventory' ? 'primary' : 'base'" @click="toggleInventory">
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>

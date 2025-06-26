@@ -37,7 +37,8 @@ const valueText = computed(() => {
 </script>
 
 <template>
-  <div class="EntryContent" :class="{
+  <div
+class="EntryContent" :class="{
     'base-success': logEntry.type === 'heal',
     'base-warning': logEntry.type === 'attack',
     'base-info': logEntry.type === 'shield',
@@ -45,7 +46,7 @@ const valueText = computed(() => {
     strike: canHaveStrikethrough,
   }">
     <div class="avatar border">
-      <img :src="card?.image?.default" alt="Card avatar" />
+      <img :src="card?.image?.default" alt="Card avatar" >
     </div>
     <p>{{ card?.name }} {{ logEntry.index }}</p>
     <div class="value border">

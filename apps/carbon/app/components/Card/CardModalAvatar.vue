@@ -2,7 +2,7 @@
 import CardCooldown from './CardCooldown.vue'
 import type { CardInfo } from '../../../types'
 import BanterIcon from '../icons/Banter.vue'
-import type { OutputChunk } from "../../../utils/time/types";
+import type { OutputChunk } from '../../../utils/time/types';
 
 defineProps<{
   chunks?: OutputChunk[]
@@ -24,7 +24,7 @@ defineProps<{
         Unique
       </div>
     </div>
-    <img :src="cardInfo.image?.default" alt="card image" class="dialog-image border" />
+    <img :src="cardInfo.image?.default" alt="card image" class="dialog-image border" >
   </div>
 </template>
 

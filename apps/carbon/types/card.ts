@@ -1,5 +1,5 @@
 import type { ElementRef } from './utils'
-import type { ModifierChunk, OutputChunk } from "../utils/time/types";
+import type { ModifierChunk, OutputChunk } from '../utils/time/types';
 
 interface CardImage {
   default?: string
@@ -91,8 +91,8 @@ const cardNames = [
   'Alien Halls',
   'Abandoned Halls',
   'Village',
-  "Idun's Apple",
-  "Freyja's Tears",
+  'Idun\'s Apple',
+  'Freyja\'s Tears',
   'Skeleton Healer',
   'Skeleton Horseman',
   'Gauntlet of Sigmar',
@@ -201,9 +201,9 @@ export interface CardBash {
 
 export interface TimeEffect {
   value: number
-  timeType: "haste" | "slow" | "freeze"
+  timeType: 'haste' | 'slow' | 'freeze'
   trigger: {
-    triggerType: "event" | "cooldown" | "start" | "end"
+    triggerType: 'event' | 'cooldown' | 'start' | 'end'
     playerTriggerIndexes?: number[]
     opponentTriggerIndexes?: number[]
   },

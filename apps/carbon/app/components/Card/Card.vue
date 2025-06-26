@@ -3,7 +3,7 @@ import type { CardInfo, CardStats } from '../../../types'
 import CardCooldown from './CardCooldown.vue'
 import CardStatsComponent from './CardStats.vue'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
-import type { OutputChunk } from "../../../utils/time/types";
+import type { OutputChunk } from '../../../utils/time/types';
 
 defineProps<{
   index: number;
@@ -14,14 +14,15 @@ defineProps<{
   playerLogs?: SpaceOutput
   opponentLogs?: SpaceOutput
   timeline: gsap.core.Timeline;
-  board?: "deck" | "inventory"
+  board?: 'deck' | 'inventory'
 }>()
 </script>
 
 <template>
   <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
-  <CardWrapper v-else :index="index" :size="size" :chunks="chunks" :cardInfo="cardInfo" :cardStats="cardStats"
-    :timeline="timeline" :playerLogs="playerLogs" :opponentLogs="opponentLogs" :board="board">
+  <CardWrapper
+v-else :index="index" :size="size" :chunks="chunks" :card-info="cardInfo" :card-stats="cardStats"
+    :timeline="timeline" :player-logs="playerLogs" :opponent-logs="opponentLogs" :board="board">
 
     <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />
 

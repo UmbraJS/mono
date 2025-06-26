@@ -1,5 +1,5 @@
 export function useAudioCue() {
-  if (!process.client) return
+  if (!import.meta.client) return
   const audioContext = new AudioContext()
   let audioBuffer: AudioBuffer
 

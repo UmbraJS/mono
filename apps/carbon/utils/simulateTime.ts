@@ -1,6 +1,6 @@
-import { generateCooldownEvent } from "./time/generateCooldownEvent";
-import type { CooldownEvent } from "./time/generateCooldownEvent";
-import type { CardStats, SimCard, PreSimulationCard, TimeEffect } from "../types/card"
+import { generateCooldownEvent } from './time/generateCooldownEvent';
+import type { CooldownEvent } from './time/generateCooldownEvent';
+import type { CardStats, SimCard, PreSimulationCard, TimeEffect } from '../types/card'
 
 interface ProcessedCard extends CooldownEvent {
   card: SimCard;
@@ -22,8 +22,8 @@ export function simulateTime({
   opponentDeck,
   matchCondition,
 }: SimulateCooldownTimelineArgs) {
-  const playerSimCards = initializeSimCards(playerDeck, "player");
-  const opponentSimCards = initializeSimCards(opponentDeck, "opponent");
+  const playerSimCards = initializeSimCards(playerDeck, 'player');
+  const opponentSimCards = initializeSimCards(opponentDeck, 'opponent');
 
   const simCards = [...playerSimCards, ...opponentSimCards];
 
@@ -133,8 +133,8 @@ export function simulateTime({
 
         // A side effect is an effect of another card which is triggered by this card
         const sideEffects = cards.filter(c => c.cardStats.effects.some(effect => {
-          const isPlayer = card.owner.user === "player";
-          const comparisonCardIsPlayer = c.owner.user === "player";
+          const isPlayer = card.owner.user === 'player';
+          const comparisonCardIsPlayer = c.owner.user === 'player';
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
 
           const trigger = effect({
@@ -161,7 +161,7 @@ export function simulateTime({
             opponentCards: opponentSimCards,
             playerCards: playerSimCards,
           });
-          if (cardModifier.trigger.triggerType !== "cooldown") return;
+          if (cardModifier.trigger.triggerType !== 'cooldown') return;
 
           return getModifiers({
             sourceCard: sourceCard,
@@ -200,7 +200,7 @@ export function simulateTime({
     }
   }
 
-  function initializeSimCards(deck: PreSimulationCard[], owner: "player" | "opponent"): SimCard[] {
+  function initializeSimCards(deck: PreSimulationCard[], owner: 'player' | 'opponent'): SimCard[] {
     return deck.map((thisCard) => {
       return {
         ...thisCard,
@@ -246,7 +246,7 @@ function getModifiers({
   }
 
   // Reverse the player/opponent modifiers when simulating the opponents deck
-  const isPlayer = sourceCard.owner.user === "player";
+  const isPlayer = sourceCard.owner.user === 'player';
   return {
     type: modifier.timeType,
     playerModifiers: isPlayer ? target.playerTargetIndexes.map(mapModifier) : target.opponentTargetIndexes.map(mapModifier),

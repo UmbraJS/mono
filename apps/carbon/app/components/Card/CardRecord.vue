@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { Graph } from '@nobel/core'
+import { Graph, ScrollArea  } from '@nobel/core'
 import type { CardStats } from '../../../types'
 import { Icon } from '@iconify/vue'
 import type { BashRecords } from '~/composables/useBashRecords'
-import { ScrollArea } from '@nobel/core'
 
 type DataRecord = {
   x: number
@@ -30,25 +29,25 @@ const recordedData = computed(() => {
 
 <template>
   <ScrollArea class="CardModalRecords">
-    <div class="bashRecords" v-if="bashRecords">
-      <div class="chip base-yellow" v-if="cardStats.bash?.banter">
+    <div v-if="bashRecords" class="bashRecords">
+      <div v-if="cardStats.bash?.banter" class="chip base-yellow">
         <Icon icon="mdi:account-injury-outline" />
         Bash: {{ cardStats.bash.banter }}
       </div>
-      <div class="chip base-warning" v-if="bashRecords.attackRecord.value?.total">
+      <div v-if="bashRecords.attackRecord.value?.total" class="chip base-warning">
         <Icon icon="mdi:account-injury-outline" />
         Attack: {{ bashRecords.attackRecord.value.total }} ({{ bashRecords.attackRecord.value.health }} + {{
           bashRecords.attackRecord.value.shield }})
       </div>
-      <div class="chip base-info" v-if="bashRecords.shieldRecord.value">
+      <div v-if="bashRecords.shieldRecord.value" class="chip base-info">
         <Icon icon="mdi:account-injury-outline" />
         Shield: {{ bashRecords.shieldRecord.value }}
       </div>
-      <div class="chip base-success" v-if="bashRecords.healingRecord.value">
+      <div v-if="bashRecords.healingRecord.value" class="chip base-success">
         <Icon icon="mdi:account-injury-outline" />
         Heal: {{ bashRecords.healingRecord.value }}
       </div>
-      <div class="chip" v-if="bashRecords.totalValue.value">
+      <div v-if="bashRecords.totalValue.value" class="chip">
         <Icon icon="mdi:account-injury-outline" />
         Total Value: {{ bashRecords.totalValue.value }}
       </div>

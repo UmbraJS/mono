@@ -7,7 +7,7 @@ interface ZoneHitOptions {
 }
 
 export function checkZoneHit(draggable: Draggable.Vars, { zones,
-  threshold = "50%",
+  threshold = '50%',
   hit, mis = () => { }, dud = () => { } }: ZoneHitOptions) {
   const allHitZones = Array.from(zones).filter((zone) => draggable.hitTest(zone, threshold));
   const allMissedZones = Array.from(zones).filter((zone) => !draggable.hitTest(zone, threshold));

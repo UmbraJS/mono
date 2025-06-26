@@ -1,6 +1,6 @@
 <template>
   <section class="PartyBoard">
-    <slot></slot>
+    <slot/>
   </section>
 </template>
 

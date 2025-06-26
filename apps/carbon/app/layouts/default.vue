@@ -10,7 +10,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="layout" :class="{
+  <div
+class="layout" :class="{
     dark: theme.isDark,
   }">
     <slot />

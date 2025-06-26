@@ -1,9 +1,9 @@
-import type { OutputChunk } from "./types";
+import type { OutputChunk } from './types';
 
 interface ChunkSegment {
   start: number;
   end: number;
-  type: OutputChunk["type"];
+  type: OutputChunk['type'];
   sourceIndex: number | null;
 }
 
@@ -59,7 +59,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     });
 
     if (overflowingSegment) {
-      console.log("Overflowing segment detected:", overflowingSegment);
+      console.log('Overflowing segment detected:', overflowingSegment);
       const lol = handleSegment({
         currentSegment: overflowingSegment,
         nextSegment,
@@ -76,7 +76,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     const lastChunk = chunks[chunks.length - 1];
     const lastChunkEnd = lastChunk ? lastChunk.end : 0;
     chunks.push({
-      type: "base",
+      type: 'base',
       sourceIndex: null,
       from: 100, to: 0,
       start: lastChunkEnd,
@@ -117,9 +117,9 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       const previousChunk = chunks[chunks.length - 1];
       const currentPercent = previousChunk?.to || 100;
 
-      const secondsPerPercent = props.currentSegment.type === "base"
+      const secondsPerPercent = props.currentSegment.type === 'base'
         ? baseSecondsPerPercent
-        : props.currentSegment.type === "slow"
+        : props.currentSegment.type === 'slow'
           ? slowedSecondsPerPercent
           : hastedSecondsPerPercent;
 
@@ -196,7 +196,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       const duration = getDifference(priorChunkEnd, chunkEnd)
 
       chunks.push({
-        type: "base",
+        type: 'base',
         sourceIndex: null,
         from: 100, to: 100 - duration * basePercentPerSecond,
         start: priorChunkEnd, end: chunkEnd,
@@ -209,7 +209,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       const currentPercent = previousChunk?.to || 100;
 
       const lastChunk = chunks[chunks.length - 1];
-      const lastChunkIsBase = lastChunk?.type === "base";
+      const lastChunkIsBase = lastChunk?.type === 'base';
       if (!lastChunk || lastChunkIsBase) return; // No last chunk or last chunk is base, nothing to cap
       if (lastChunk.to <= 0) return; // Last chunk already capped, nothing to do
       if (currentPercent <= 0) return; // Current percent is already at or below 0, nothing to cap
@@ -227,7 +227,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       const chunkToRoundedTo12DecimalPlaces = Math.round(chunkTo * 1e12) / 1e12;
 
       chunks.push({
-        type: `base`,
+        type: 'base',
         to: chunkToRoundedTo12DecimalPlaces,
         from: lastChunk.to,
         sourceIndex: null,
@@ -242,7 +242,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
   function setInitialWholeChunk() {
     if (firstSegmentStartsAtZero) return // if the first segment is the initial chunk then we don't need to set an initial chunk
     chunks.push({
-      type: "base",
+      type: 'base',
       sourceIndex: null,
       from: 100, to: 0,
       start: 0, end: baseDuration,
@@ -253,7 +253,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
   function setInitialPaddingChunk(firstSegmentStart: number) {
     const duration = getDifference(0, firstSegmentStart);
     chunks.push({
-      type: "base",
+      type: 'base',
       sourceIndex: null,
       from: 100, to: 100 - duration * basePercentPerSecond,
       start: 0, end: firstSegmentStart,
@@ -288,7 +288,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
       }
 
       chunks.push({
-        type: "base",
+        type: 'base',
         sourceIndex: null,
         from: 100, to: 0, //100 - basePercentPerSecond * duration,
         start: chunkStart, end: chunkEnd,

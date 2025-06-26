@@ -7,7 +7,7 @@ import { usePerson } from '../composables/usePerson'
 import type { UsePerson } from '../composables/usePerson'
 
 export const useStore = defineStore('store', () => {
-  const realm = ref<keyof CardStatRealms>("quest")
+  const realm = ref<keyof CardStatRealms>('quest')
 
   const userStore = usePerson(user)
   const botStore = usePerson(bot)

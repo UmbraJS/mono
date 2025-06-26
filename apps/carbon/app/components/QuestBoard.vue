@@ -67,14 +67,14 @@ const events: EventCard[] = [
 <template>
   <div class="quest-events">
     <div v-for="event in events" :key="event.id" class="event">
-      <img :src="event.image" alt="Location" />
+      <img :src="event.image" alt="Location" >
       <div class="prose">
         <h3>{{ event.name }}</h3>
         <p>{{ event.description }}</p>
       </div>
       <div v-for="effect in event.effects" :key="effect.id" class="eventEffects">
         <div class="effect base-accent">
-          <img :src="effect.image" alt="Location" />
+          <img :src="effect.image" alt="Location" >
           <p>{{ effect.description }}</p>
         </div>
       </div>

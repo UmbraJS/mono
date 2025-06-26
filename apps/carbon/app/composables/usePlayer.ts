@@ -179,7 +179,7 @@ function getDeck(character: Character, timeline: gsap.core.Timeline, onCooldown:
       currentTween = gsap.to(cooldown, {
         value: 0,
         duration: newDuration,
-        ease: "none",
+        ease: 'none',
         onComplete: () => {
           if (!baseDuration) return
           animateAction(cardRef.value);
@@ -194,10 +194,10 @@ function getDeck(character: Character, timeline: gsap.core.Timeline, onCooldown:
     // Start initial cooldown
     playCooldown(baseDuration);
 
-    function applyTimeEffect(multiplier: number, effectDuration: number, type: "slow" | "haste") {
+    function applyTimeEffect(multiplier: number, effectDuration: number, type: 'slow' | 'haste') {
       if (!baseDuration) return
-      const activeRef = type === "slow" ? slow : haste;
-      const otherRef = type === "slow" ? haste : slow;
+      const activeRef = type === 'slow' ? slow : haste;
+      const otherRef = type === 'slow' ? haste : slow;
 
       activeRef.value = effectDuration;
       otherRef.value = 0; // Can't be both slowed and hasted at once
@@ -206,7 +206,7 @@ function getDeck(character: Character, timeline: gsap.core.Timeline, onCooldown:
       gsap.to(activeRef, {
         value: 0,
         duration: effectDuration,
-        ease: "linear",
+        ease: 'linear',
       });
 
       // Adjust cooldown speed
@@ -222,11 +222,11 @@ function getDeck(character: Character, timeline: gsap.core.Timeline, onCooldown:
     }
 
     function setSlow(duration: number) {
-      applyTimeEffect(0.5, duration, "slow");
+      applyTimeEffect(0.5, duration, 'slow');
     }
 
     function setHaste(duration: number) {
-      applyTimeEffect(2.0, duration, "haste");
+      applyTimeEffect(2.0, duration, 'haste');
     }
 
     return {

@@ -18,8 +18,9 @@ const open = ref(false)
       <Icon name="carbon:chevron-down" size="1.5rem" />
     </div>
     <div class="dropdown">
-      <BashLogEntryContent v-for="log in logEntry.banter.debuffs" :opponentInfoDeck="opponentInfoDeck"
-        :playerInfoDeck="playerInfoDeck" :logEntry="log" />
+      <BashLogEntryContent
+v-for="log in logEntry.banter.debuffs" :opponent-info-deck="opponentInfoDeck"
+        :player-info-deck="playerInfoDeck" :log-entry="log" />
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
-import type { OutputChunk } from "../../../utils/time/types";
+import type { OutputChunk } from '../../../utils/time/types';
 
 const {
   timeline,
@@ -17,8 +17,7 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
 
 <template>
   <div :class="{ slow, haste, frozen }">
-    <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%` }">
-    </div>
+    <div v-if="cooldown > 0" class="cooldown" :style="{ height: `${cooldown}%` }"/>
     <div v-if="debug" class="debugPanel">
       <div class="debug grid">
         <p>{{ cooldownDuration.toFixed(1) }}</p>

@@ -17,15 +17,16 @@ defineProps<{
       <span>lvl {{ cardStats.level }} - </span>{{ cardInfo.name }}
     </DialogTitle>
 
-    <Tabs class="ModalBashLogTabs" ariaLabel="Actions" :tabs="[
+    <Tabs
+class="ModalBashLogTabs" aria-label="Actions" :tabs="[
       { label: 'Details', icon: 'mdi:account-card-outline' },
       { label: 'Stats', icon: 'mdi:star-four-points-circle' },
     ]">
       <template #tab1>
         <CardModalDetails :info="cardInfo" :stats="cardStats" />
       </template>
-      <template #tab2 v-if="bashRecords">
-        <CardRecord :cardStats="cardStats" :bashRecords="bashRecords" />
+      <template v-if="bashRecords" #tab2>
+        <CardRecord :card-stats="cardStats" :bash-records="bashRecords" />
       </template>
     </Tabs>
   </div>

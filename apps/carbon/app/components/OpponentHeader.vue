@@ -11,7 +11,7 @@ defineProps<{
   user: User;
   health: number
   shield: number
-  logs: Pick<SpaceOutput, "healthLog" | "shieldLog">
+  logs: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>
 }>()
 
 function getInfoDeck(deck: Card[]) {
@@ -25,7 +25,8 @@ function getInfoDeck(deck: Card[]) {
       <!-- <img :src="skeletonKing.field?.image?.default" alt="Location" /> -->
     </div>
     <PlayerCharacter :characters="bot.characters" :health="health" :shield="shield" :reverse="false" />
-    <BashLogs :logs="logs" :playerInfoDeck="getInfoDeck(user.deck)" :opponentInfoDeck="getInfoDeck(bot.deck)"
+    <BashLogs
+:logs="logs" :player-info-deck="getInfoDeck(user.deck)" :opponent-info-deck="getInfoDeck(bot.deck)"
       :modal-button="true" />
   </PartyBoard>
 </template>

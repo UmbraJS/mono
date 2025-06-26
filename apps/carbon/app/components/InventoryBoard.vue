@@ -18,12 +18,14 @@ function getCardStats(card: Card) {
 
 <template>
   <div class="MatchBoard">
-    <Board board="inventory" :maxSlots="12">
-      <PlayerCard v-for="card in inventory" :key="card.id" :cardInfo="card.info" :cardStats="getCardStats(card)"
+    <Board board="inventory" :max-slots="12">
+      <PlayerCard
+v-for="card in inventory" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
         :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="inventory" />
     </Board>
-    <Board board="deck" :maxSlots="12">
-      <PlayerCard v-for="card in deck" :key="card.id" :cardInfo="card.info" :cardStats="getCardStats(card)"
+    <Board board="deck" :max-slots="12">
+      <PlayerCard
+v-for="card in deck" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
         :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="deck" />
     </Board>
   </div>

@@ -2,7 +2,7 @@
 import { useStore } from '~/stores/useStore'
 
 const prop = defineProps<{
-  board?: "deck" | "inventory";
+  board?: 'deck' | 'inventory';
   maxSlots: number;
 }>();
 
@@ -29,7 +29,8 @@ const dragHit = computed(() => {
       <slot />
     </div>
     <div class="subSpace">
-      <CardSpace v-for="index in prop.maxSlots" :key="index" :index="`${board}-${index - 1}`"
+      <CardSpace
+v-for="index in prop.maxSlots" :key="index" :index="`${board}-${index - 1}`"
         :hovered="dragHit.includes(index - 1)" />
     </div>
   </div>
