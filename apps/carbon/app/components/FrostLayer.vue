@@ -38,12 +38,12 @@ function tweenStrength(newValue: number) {
     .to(strength, {
       value: newValue,
       duration: duration / 1.4,
-      ease: "power2.out"
+      ease: 'power2.out'
     })
     .to(strength, {
       value: 0,
       duration: duration,
-      ease: "power2.in"
+      ease: 'power2.in'
     });
 }
 
@@ -99,7 +99,7 @@ const getLayerStyle = (index: number, entry: number) => {
 
   return {
     zIndex: 7 - index,
-    backdropFilter: `blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast))`,
+    backdropFilter: 'blur(var(--blurSize)) brightness(var(--blur-brightness)) contrast(var(--blur-contrast))',
     WebkitMaskImage: `linear-gradient(${direction},${gradient})`,
     maskImage: `linear-gradient(${direction},${gradient})`,
     '--blurSize': `${entry}px`,
@@ -112,7 +112,7 @@ const getLayerStyle = (index: number, entry: number) => {
     {{ mappedStrength }} -
   </p> -->
   <div class="frost-layers" :class="{ reversed }">
-    <div class="layer" v-for="(entry, i) in exponentialLayers" :key="entry" :style="getLayerStyle(i - 1, entry)"></div>
+    <div v-for="(entry, i) in exponentialLayers" :key="entry" class="layer" :style="getLayerStyle(i - 1, entry)"/>
   </div>
 </template>
 

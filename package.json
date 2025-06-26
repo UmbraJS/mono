@@ -1,6 +1,7 @@
 {
   "name": "umbrajs",
   "private": true,
+  "packageManager": "pnpm@10.12.3",
   "scripts": {
     "dev": "cd apps/nobel && pnpm run dev",
     "ui": "cd apps/ui && pnpm run dev",
@@ -15,17 +16,12 @@
     "publish": "cd packages/core/dist && npm publish",
     "tree": "tree -I 'node_modules|dist'",
     "db:generate": "cd apps/hub && pnpm run drizzle-kit generate",
-    "lint": "eslint . --ext .js,.ts,.vue"
+    "lint": "eslint . --ext .js,.ts,.vue && cd apps/carbon && pnpm lint && cd ../hub && pnpm lint",
+    "lint:fix": "eslint . --ext .js,.ts,.vue --fix && cd apps/carbon && pnpm lint --fix && cd ../hub && pnpm lint --fix"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
     "eslint-plugin-format": "catalog:",
     "vite": "catalog:"
-  },
-  "packageManager": "pnpm@10.11.1",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
-    ]
   }
 }

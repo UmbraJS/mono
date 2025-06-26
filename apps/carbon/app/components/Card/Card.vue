@@ -1,49 +1,37 @@
 <script setup lang="ts">
-import type { SimCard } from '../../../types'
-import CardModal from './CardModal.vue'
+import type { CardInfo, CardStats } from '../../../types'
 import CardCooldown from './CardCooldown.vue'
 import CardStatsComponent from './CardStats.vue'
-import { useBashRecords } from '~/composables/useBashRecords'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
+import type { OutputChunk } from '../../../utils/time/types';
 
-const props = defineProps<{
-  card: SimCard
-  playerLogs: SpaceOutput
-  opponentLogs: SpaceOutput
-  time: number
+defineProps<{
+  index: number;
+  size: number;
+  chunks?: OutputChunk[];
+  cardInfo: CardInfo
+  cardStats?: CardStats
+  playerLogs?: SpaceOutput
+  opponentLogs?: SpaceOutput
   timeline: gsap.core.Timeline;
+  board?: 'deck' | 'inventory'
 }>()
-
-const cardBashRecords = useBashRecords({
-  playerLogs: props.playerLogs,
-  opponentLogs: props.opponentLogs,
-  index: props.card.card.index,
-})
 </script>
 
 <template>
-  <div class="carder">
-    <CardModal :card="card" :cardStats="card.cardStats" :cardInfo="card.card.info" :bash-records="cardBashRecords"
-      :time="time" :timeline="timeline" :cooldownEvents="card.simulation.chunks">
-      <button class="card border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
-        <CardCooldown v-if="card.cardStats.bash?.cooldown" :time="time" :timeline="timeline" :card="card" />
-        <!-- <div class="RecordedValue">
-          <p class="border"> {{ cardBashRecords.totalValue.value }}</p>
-          <p class="border base-warning"> {{ Number(card.slow.value.toFixed(1)) }}</p>
-          <p class="border base-success"> {{ Number(card.haste.value.toFixed(1)) }}</p>
-        </div> -->
-        <img v-if="card.card.info.image" :src="card.card.info.image.default" alt="Card Image" />
-        <CardStatsComponent :bash="card.cardStats.bash" />
-      </button>
-    </CardModal>
-  </div>
+  <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
+  <CardWrapper
+v-else :index="index" :size="size" :chunks="chunks" :card-info="cardInfo" :card-stats="cardStats"
+    :timeline="timeline" :player-logs="playerLogs" :opponent-logs="opponentLogs" :board="board">
+
+    <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />
+
+    <!-- <img v-if="cardInfo.image" :src="cardInfo.image.default" alt="Card Image" /> -->
+    <CardStatsComponent :bash="cardStats.bash" />
+  </CardWrapper>
 </template>
 
 <style lang="scss">
-.carder {
-  grid-column: span 3;
-}
-
 .RecordedValue {
   display: flex;
   flex-direction: column;
@@ -66,17 +54,7 @@ const cardBashRecords = useBashRecords({
   border-radius: var(--radius);
 }
 
-.card {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
-
-.card img {
+.CardWrapper img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -85,7 +63,7 @@ const cardBashRecords = useBashRecords({
   z-index: 0;
 }
 
-.card img {
+.CardWrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;

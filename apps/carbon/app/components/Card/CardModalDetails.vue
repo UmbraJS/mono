@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DialogDescription, ScrollArea } from '@nobel/core'
-import type { Card, CardInfo, CardStats } from '../../../types'
+import type { CardInfo, CardStats } from '../../../types'
 import AttackIcon from '../icons/Attack.vue'
 import BanterIcon from '../icons/Banter.vue'
 import CardModalBash from './CardModalBash.vue'
@@ -30,19 +30,19 @@ const bash = props.stats.bash
         </div>
       </div>
 
-      <CardModalBash :cardStats="stats" />
+      <CardModalBash :card-stats="stats" />
 
       <div>
         <div class="tags">
           <p>Aspects:</p>
-          <div v-for="aspect in stats.aspects" class="chip">
+          <div v-for="aspect in stats.aspects" :key="aspect.name" class="chip">
             {{ aspect.name }}
           </div>
         </div>
 
         <div class="tags">
           <p>Tags:</p>
-          <div v-for="tag in stats.tags" class="chip">
+          <div v-for="tag in stats.tags" :key="tag" class="chip">
             {{ tag }}
           </div>
         </div>

@@ -1,3 +1,4 @@
+√
 <script setup lang="ts">
 import { Button } from '@nobel/core'
 
@@ -12,7 +13,11 @@ const isPaused = ref(props.timeline.paused())
 
 function pausePlay(bool: boolean) {
   isPaused.value = bool
-  bool ? props.timeline.pause() : props.timeline.play()
+  if (bool) {
+    props.timeline.pause()
+  } else {
+    props.timeline.play()
+  }
 }
 
 const timesSpeed = ref(1)

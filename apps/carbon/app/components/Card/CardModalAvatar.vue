@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import CardCooldown from './CardCooldown.vue'
-import type { SimCard, CardStats, CardInfo } from '../../../types'
+import type { CardInfo } from '../../../types'
 import BanterIcon from '../icons/Banter.vue'
+import type { OutputChunk } from '../../../utils/time/types';
 
 defineProps<{
-  card: SimCard
-  cardStats: CardStats
+  chunks?: OutputChunk[]
   cardInfo: CardInfo
-  time: number
   timeline: gsap.core.Timeline;
 }>()
 </script>
 
 <template>
   <div class="avatar">
-    <CardCooldown v-if="cardStats.bash?.cooldown" :time="time" :timeline="timeline" :card="card" />
+    <CardCooldown v-if="chunks" :timeline="timeline" :chunks="chunks" />
     <div class="chips">
       <div v-if="cardInfo.rarity" class="chip base-yellow">
         <BanterIcon />
@@ -25,7 +24,7 @@ defineProps<{
         Unique
       </div>
     </div>
-    <img :src="cardInfo.image?.default" alt="card image" class="dialog-image border" />
+    <img :src="cardInfo.image?.default" alt="card image" class="dialog-image border" >
   </div>
 </template>
 

@@ -1,38 +1,37 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
-import type { OutputChunk } from "../../../utils/time/types";
-import type { SimCard } from '../../../types'
+import type { OutputChunk } from '../../../utils/time/types';
 
-const props = defineProps<{
-  time: number
+const {
+  timeline,
+  chunks,
+  debug = false
+} = defineProps<{
   timeline: gsap.core.Timeline;
-  card: SimCard;
+  chunks: OutputChunk[];
+  debug?: boolean;
 }>()
 
-const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(props.timeline, props.card)
-
+const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(timeline, chunks)
 </script>
 
 <template>
   <div :class="{ slow, haste, frozen }">
-    <div class="cooldown" v-if="cooldown > 0" :style="{ height: `${cooldown}%` }">
-    </div>
-    <div class="debugPanel">
-      <div class="slowp grid">
+    <div v-if="cooldown > 0" class="cooldown" :style="{ height: `${cooldown}%` }"/>
+    <div v-if="debug" class="debugPanel">
+      <div class="debug grid">
         <p>{{ cooldownDuration.toFixed(1) }}</p>
-        <!-- <p>{{ cooldownDuration }}</p> -->
-        <p>{{ time.toFixed(1) }}</p>
         <p>{{ Math.floor(cooldown) }}</p>
       </div>
-      <div class="slowp n2">
+      <div class="debug n2">
         <p>{{ slow.toFixed(1) }}</p>
         <p>{{ slowSource }}</p>
       </div>
-      <div class="slowp n3">
+      <div class="debug n3">
         <p>{{ haste.toFixed(1) }}</p>
         <p>{{ hasteSource }}</p>
       </div>
-      <div class="slowp n4">
+      <div class="debug n4">
         <p>{{ frozen.toFixed(1) }}</p>
         <p>{{ frozenSource }}</p>
       </div>
@@ -41,16 +40,15 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
 </template>
 
 <style>
-.slowp {
+.debug {
   display: flex;
   justify-content: space-between;
   background-color: var(--base-40);
   padding: var(--space-quark);
 }
 
-.slowp.grid {
+.debug.grid {
   display: grid;
-  /* justify-content: space-between; */
   grid-template-columns: 1fr 1fr 1fr;
   width: 100%;
 }

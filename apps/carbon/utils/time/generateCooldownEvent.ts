@@ -1,9 +1,9 @@
-import type { OutputChunk } from "./types";
-import { resolveOverlappingModifiers } from "./resolveOverlappingModifiers";
-import { buildTimelineSegments } from "./buildTimelineSegments";
-import { convertSegmentsToChunks } from "./convertSegmentsToChunks";
-import type { SimCard } from "../../types/card";
-import { getTotalLifetime } from "../simulateTime";
+import type { OutputChunk } from './types';
+import { resolveOverlappingModifiers } from './resolveOverlappingModifiers';
+import { buildTimelineSegments } from './buildTimelineSegments';
+import { convertSegmentsToChunks } from './convertSegmentsToChunks';
+import type { SimCard } from '../../types/card';
+import { getTotalLifetime } from '../simulateTime';
 
 export interface CooldownEvent {
   baseDuration: number;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Card, CardStats } from '../../../types'
+import type { CardStats } from '../../../types'
 import AttackIcon from '../icons/Attack.vue'
 import HealIcon from '../icons/Heal.vue'
 import ShieldIcon from '../icons/Shield.vue'

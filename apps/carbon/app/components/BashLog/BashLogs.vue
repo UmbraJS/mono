@@ -10,27 +10,28 @@ defineProps<{
   opponentInfoDeck: CardInfo[]
   playerInfoDeck: CardInfo[]
   modalButton: boolean,
-  logs: Pick<SpaceOutput, "healthLog" | "shieldLog">
+  logs: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>
 }>()
 </script>
 
 <template>
-  <Tabs class="BashLogTabs" ariaLabel="Actions" :tabs="[
+  <Tabs
+class="BashLogTabs" aria-label="Actions" :tabs="[
     { label: 'Opponent', icon: 'mdi:crosshairs-gps' },
     { label: 'Player', icon: 'mdi:shield' },
   ]">
-    <template #buttons v-if="modalButton">
-      <BashLogModal :logs="logs" :playerInfoDeck="playerInfoDeck" :opponentInfoDeck="opponentInfoDeck">
+    <template v-if="modalButton" #buttons>
+      <BashLogModal :logs="logs" :player-info-deck="playerInfoDeck" :opponent-info-deck="opponentInfoDeck">
         <Button variant="primary" size="small">
           <Icon icon="mdi:history" />
         </Button>
       </BashLogModal>
     </template>
     <template #tab1>
-      <BashLog :logs="logs" :playerInfoDeck="playerInfoDeck" :opponentInfoDeck="opponentInfoDeck" />
+      <BashLog :logs="logs" :player-info-deck="playerInfoDeck" :opponent-info-deck="opponentInfoDeck" />
     </template>
     <template #tab2>
-      <BashLog :logs="logs" :playerInfoDeck="playerInfoDeck" :opponentInfoDeck="opponentInfoDeck" />
+      <BashLog :logs="logs" :player-info-deck="playerInfoDeck" :opponent-info-deck="opponentInfoDeck" />
     </template>
   </Tabs>
 </template>

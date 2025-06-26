@@ -1,4 +1,4 @@
-import type { ModifierChunk, ModifierType } from "./types";
+import type { ModifierChunk, ModifierType } from './types';
 
 /**
  * Resolves overlapping modifiers by adjusting their durations based on their timestamps.
@@ -17,7 +17,7 @@ export function resolveOverlappingModifiers(modifiers: ModifierChunk[]): Modifie
   }
 
   // Resolve overlaps inside each group
-  for (const [type, list] of grouped.entries()) {
+  for (const [_type, list] of grouped.entries()) {
     const sorted = list.sort((a, b) => a.timestamp - b.timestamp);
     const result: ModifierChunk[] = [];
 

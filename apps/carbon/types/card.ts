@@ -1,5 +1,5 @@
 import type { ElementRef } from './utils'
-import type { ModifierChunk, OutputChunk } from "../utils/time/types";
+import type { ModifierChunk, OutputChunk } from '../utils/time/types';
 
 interface CardImage {
   default?: string
@@ -63,7 +63,7 @@ export interface Aspect {
   effect?: () => void
 }
 
-const cardNames = [
+const _cardNames = [
   'Fireball',
   'Water Splash',
   'Earth Quake',
@@ -91,8 +91,8 @@ const cardNames = [
   'Alien Halls',
   'Abandoned Halls',
   'Village',
-  "Idun's Apple",
-  "Freyja's Tears",
+  'Idun\'s Apple',
+  'Freyja\'s Tears',
   'Skeleton Healer',
   'Skeleton Horseman',
   'Gauntlet of Sigmar',
@@ -104,7 +104,7 @@ const cardNames = [
   'Treasure',
 ] as const
 
-export type CardName = (typeof cardNames)[number]
+export type CardName = (typeof _cardNames)[number]
 
 export interface ReactiveCard extends Card {
   index: number;
@@ -136,16 +136,18 @@ export interface SimCard extends PreSimulationCard {
   }
 }
 
+export interface CardStatRealms {
+  base: CardStats
+  quest?: CardStats
+  campaign?: CardStats
+}
+
 export interface Card {
   id: string
   index: number
+  size: number
   info: CardInfo
-  //stats: key of stats
-  stats: {
-    base: CardStats
-    quest?: CardStats
-    campaign?: CardStats
-  }
+  stats: CardStatRealms
 }
 
 export interface CardInfo {
@@ -199,9 +201,9 @@ export interface CardBash {
 
 export interface TimeEffect {
   value: number
-  timeType: "haste" | "slow" | "freeze"
+  timeType: 'haste' | 'slow' | 'freeze'
   trigger: {
-    triggerType: "event" | "cooldown" | "start" | "end"
+    triggerType: 'event' | 'cooldown' | 'start' | 'end'
     playerTriggerIndexes?: number[]
     opponentTriggerIndexes?: number[]
   },

@@ -40,10 +40,6 @@ catalog:
   '@typescript-eslint/eslint-plugin': ^8.30.1
   '@typescript-eslint/parser': ^8.30.1
   '@umbrajs/core': ^0.0.456
-  '@unocss/core': 66.1.0-beta.6
-  '@unocss/nuxt': 66.1.0-beta.6
-  '@unocss/preset-mini': 66.1.0-beta.6
-  '@unocss/transformer-variant-group': 66.1.0-beta.6
   '@unovis/ts': ^1.5.1
   '@unovis/vue': ^1.5.1
   '@vitejs/plugin-vue': ^5.2.3
@@ -98,7 +94,6 @@ catalog:
   ufo: ^1.6.1
   unified: ^11.0.5
   unist-util-visit: ^5.0.0
-  unocss: 66.1.0-beta.6
   vfile: ^6.0.3
   vite: 6.3.1
   vite-plugin-dts: ^4.5.3
@@ -109,14 +104,6 @@ catalog:
   vue-sonner: ^1.3.2
   vue-tsc: ^2.2.8
   wrangler: 4.12.0
-
-ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - better-sqlite3
-  - esbuild
-  - sharp
-  - vue-demi
-  - workerd
 
 catalogs:
   conflicts_gsap_h3_13_0:
@@ -159,16 +146,10 @@ catalogs:
     '@tiptap/starter-kit': ^2.11.7
   conflicts_@tiptap/vue-3_h2_11_7:
     '@tiptap/vue-3': ^2.11.7
-  conflicts_@unocss/core_h66_1_0mbeta_6:
-    '@unocss/core': ^66.1.0-beta.6
-  conflicts_@unocss/transformer-variant-group_h66_1_0mbeta_6:
-    '@unocss/transformer-variant-group': ^66.1.0-beta.6
   conflicts_vue-router_h4_5_0:
     vue-router: ^4.5.0
   conflicts_eslint_h9_24_0:
     eslint: ^9.24.0
-  conflicts_unocss_h66_1_0mbeta_6:
-    unocss: ^66.1.0-beta.6
   conflicts_@types/node_h22_13_4:
     '@types/node': ^22.13.4
   conflicts_typescript_h5_7_3:
@@ -177,9 +158,116 @@ catalogs:
     vite: 6.1.1
   conflicts_vite-plugin-dts_h4_5_0:
     vite-plugin-dts: ^4.5.0
+  conflicts_@nuxt/eslint_h1_3_0:
+    '@nuxt/eslint': ^1.3.0
+  conflicts_@nuxthub/core_h0_8_26:
+    '@nuxthub/core': ^0.8.26
+  conflicts_nuxt_h3_17_2:
+    nuxt: ^3.17.2
+  conflicts_@nuxt/eslint-config_h1_3_0:
+    '@nuxt/eslint-config': ^1.3.0
+  conflicts_wrangler_h4_14_1:
+    wrangler: ^4.14.1
+  conflicts_@nuxt/content_h3_6_1:
+    '@nuxt/content': ^3.6.1
+  conflicts_@nuxt/eslint_1_4_1:
+    '@nuxt/eslint': 1.4.1
+  conflicts_@nuxt/icon_1_14_0:
+    '@nuxt/icon': 1.14.0
+  conflicts_@nuxthub/core_h0_9_0:
+    '@nuxthub/core': ^0.9.0
+  conflicts_@nuxtjs/mdc_0_17_0:
+    '@nuxtjs/mdc': 0.17.0
+  conflicts_@nuxtlabs/monarch-mdc_h0_8_0:
+    '@nuxtlabs/monarch-mdc': ^0.8.0
+  conflicts_@pinia/nuxt_0_11_1:
+    '@pinia/nuxt': 0.11.1
+  conflicts_conflicts_@tiptap/core_h2_11_7_h2_22_3:
+    '@tiptap/core': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-bold_h2_11_7_h2_22_3:
+    '@tiptap/extension-bold': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-character-count_h2_11_7_h2_22_3:
+    '@tiptap/extension-character-count': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-document_h2_11_7_h2_22_3:
+    '@tiptap/extension-document': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-heading_h2_11_7_h2_22_3:
+    '@tiptap/extension-heading': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-history_h2_11_7_h2_22_3:
+    '@tiptap/extension-history': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-italic_h2_11_7_h2_22_3:
+    '@tiptap/extension-italic': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-paragraph_h2_11_7_h2_22_3:
+    '@tiptap/extension-paragraph': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-placeholder_h2_11_7_h2_22_3:
+    '@tiptap/extension-placeholder': ^2.22.3
+  conflicts_conflicts_@tiptap/extension-text_h2_11_7_h2_22_3:
+    '@tiptap/extension-text': ^2.22.3
+  conflicts_conflicts_@tiptap/pm_h2_11_7_h2_22_3:
+    '@tiptap/pm': ^2.22.3
+  conflicts_conflicts_@tiptap/starter-kit_h2_11_7_h2_22_3:
+    '@tiptap/starter-kit': ^2.22.3
+  conflicts_conflicts_@tiptap/vue-3_h2_11_7_h2_22_3:
+    '@tiptap/vue-3': ^2.22.3
+  conflicts_@vueuse/core_13_4_0:
+    '@vueuse/core': 13.4.0
+  conflicts_@vueuse/nuxt_13_4_0:
+    '@vueuse/nuxt': 13.4.0
+  conflicts_better-auth_h1_2_10:
+    better-auth: ^1.2.10
+  conflicts_drizzle-orm_h0_44_2:
+    drizzle-orm: ^0.44.2
+  conflicts_nuxt_h3_17_5:
+    nuxt: ^3.17.5
+  conflicts_conflicts_pinia_3_0_2_3_0_3:
+    pinia: 3.0.3
+  conflicts_property-information_h7_1_0:
+    property-information: ^7.1.0
+  conflicts_remark-mdc_h3_6_0:
+    remark-mdc: ^3.6.0
+  conflicts_sass_h1_89_2:
+    sass: ^1.89.2
+  conflicts_shiki_h3_7_0:
+    shiki: ^3.7.0
+  conflicts_vue_h3_5_17:
+    vue: ^3.5.17
+  conflicts_@nuxt/eslint-config_1_4_1:
+    '@nuxt/eslint-config': 1.4.1
+  conflicts_drizzle-kit_h0_31_2:
+    drizzle-kit: ^0.31.2
+  conflicts_conflicts_eslint_h9_26_0_h9_29_0:
+    eslint: ^9.29.0
+  conflicts_wrangler_4_22_0:
+    wrangler: 4.22.0
+  conflicts_conflicts_typescript_h5_8_3_h5_7_3:
+    typescript: ^5.7.3
+  conflicts_conflicts_@pinia/nuxt_0_11_1_0_11_0:
+    '@pinia/nuxt': 0.11.0
+  conflicts_conflicts_@vueuse/core_13_4_0_13_1_0:
+    '@vueuse/core': 13.1.0
+  conflicts_conflicts_vue_h3_5_17_h3_5_13:
+    vue: ^3.5.13
+  conflicts_conflicts_@nuxt/eslint_h1_3_0_1_4_1:
+    '@nuxt/eslint': 1.4.1
+  conflicts_conflicts_@nuxthub/core_h0_8_26_h0_9_0:
+    '@nuxthub/core': ^0.9.0
+  conflicts_conflicts_nuxt_h3_17_2_h3_17_5:
+    nuxt: ^3.17.5
+  conflicts_conflicts_@nuxt/eslint-config_h1_3_0_1_4_1:
+    '@nuxt/eslint-config': 1.4.1
+  conflicts_conflicts_wrangler_h4_14_1_4_22_0:
+    wrangler: 4.22.0
+
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - better-sqlite3
+  - esbuild
+  - sharp
+  - vue-demi
+  - workerd
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
+  - better-sqlite3
   - esbuild
   - maplibre-gl
   - unrs-resolver

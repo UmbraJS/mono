@@ -1,6 +1,6 @@
 import { toast } from 'vue-sonner'
-import { presetNobel } from './uno.config'
 
+export { default as Graph } from './components/graph/Graph.vue'
 export { default as Button } from './components/ui/Button/Button.vue'
 export { default as ButtonGroup } from './components/ui/Button/ButtonGroup.vue'
 export { default as AddButton } from './components/ui/Button/presets/AddButton.vue'
@@ -24,6 +24,5 @@ export { default as TabButton } from './components/ui/Tabs/TabButton.vue'
 export { default as Tabs } from './components/ui/Tabs/Tabs.vue'
 export { default as Toaster } from './components/ui/Toaster.vue'
 export { default as Toggle } from './components/ui/Toggle.vue'
-export { default as Graph } from './components/graph/Graph.vue'
 
-export { presetNobel, toast }
+export { toast }

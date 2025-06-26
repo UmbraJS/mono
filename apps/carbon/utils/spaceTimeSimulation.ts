@@ -1,35 +1,38 @@
-import type { Card } from "../types/card"
+import type { Card } from '../types/card'
 import { simulateTime } from './simulateTime'
-import { spaceStore } from "./space/spaceStore";
+import { spaceStore } from './space/spaceStore';
 import type { User, PreSimulationCard } from '../types'
 
 interface SpaceTimeProps {
-  player: User;
-  opponent: User;
+  playerCharacters: User['characters'];
+  opponentCharacters: User['characters'];
+  playerDeck: User['deck'];
+  opponentDeck: User['deck'];
   matchDuration?: number;
 }
 
-export type SpaceOutput = Pick<ReturnType<typeof spaceStore>, 'healthLog' | "shieldLog" | "moraleLog">
+export type SpaceOutput = Pick<ReturnType<typeof spaceStore>, 'healthLog' | 'shieldLog' | 'moraleLog'>
 
 export function spaceTimeSimulation(props: SpaceTimeProps) {
+  console.log('spaceTimeSimulation', props);
 
   const player = spaceStore({
-    maxHealth: props.player.characters.reduce((acc, char) => acc + char.maxHealth, 0),
+    maxHealth: props.playerCharacters.reduce((acc, char) => acc + char.maxHealth, 0),
     onAttack: (attackEntry) => {
       opponent.hurt(attackEntry)
     }
   });
 
   const opponent = spaceStore({
-    maxHealth: props.opponent.characters.reduce((acc, char) => acc + char.maxHealth, 0),
+    maxHealth: props.opponentCharacters.reduce((acc, char) => acc + char.maxHealth, 0),
     onAttack: (attackEntry) => {
       player.hurt(attackEntry)
     }
   });
 
   const time = simulateTime({
-    opponentDeck: prepareSimDeck(props.opponent.deck),
-    playerDeck: prepareSimDeck(props.player.deck),
+    opponentDeck: prepareSimDeck(props.opponentDeck),
+    playerDeck: prepareSimDeck(props.playerDeck),
     onTrigger: ({ card, nextCooldownEnd }) => {
       const isPlayer = card.owner.user === 'player';
       const target = isPlayer ? player : opponent;
@@ -76,3 +79,5 @@ function prepareSimDeck(deck: Card[]): PreSimulationCard[] {
     cardStats: card.stats.base,
   }));
 }
+
+export type SpaceTimeSimulationOutput = ReturnType<typeof spaceTimeSimulation>;

@@ -38,14 +38,14 @@
     "publish": "cd dist && npm publish"
   },
   "dependencies": {
-    "apca-w3": "^0.1.9",
-    "colord": "^2.9.3",
-    "colorparsley": "^0.1.8"
+    "apca-w3": "catalog:",
+    "colord": "catalog:",
+    "colorparsley": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^22.13.4",
-    "typescript": "^5.7.3",
-    "vite": "6.1.1",
-    "vite-plugin-dts": "^4.5.0"
+    "@types/node": "catalog:conflicts_@types/node_h22_13_4",
+    "typescript": "catalog:conflicts_conflicts_typescript_h5_8_3_h5_7_3",
+    "vite": "catalog:conflicts_vite_6_1_1",
+    "vite-plugin-dts": "catalog:conflicts_vite-plugin-dts_h4_5_0"
   }
 }

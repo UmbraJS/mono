@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.12.3",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -11,28 +11,29 @@
     "deploy": "npx nuxthub deploy",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "vitest"
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
     "@nobel/core": "workspace:*",
-    "@nuxt/eslint": "^1.3.0",
-    "@nuxthub/core": "^0.8.26",
-    "@pinia/nuxt": "0.11.0",
+    "@nuxt/eslint": "catalog:conflicts_@nuxt/eslint_h1_3_0",
+    "@nuxthub/core": "catalog:conflicts_@nuxthub/core_h0_8_26",
+    "@pinia/nuxt": "catalog:conflicts_@pinia/nuxt_0_11_1",
     "@umbrajs/core": "workspace:*",
-    "@vueuse/core": "13.1.0",
-    "gsap": "^3.13.0",
-    "nuxt": "^3.17.2",
-    "pinia": "3.0.2",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.1"
+    "@vueuse/core": "catalog:conflicts_@vueuse/core_13_4_0",
+    "gsap": "catalog:conflicts_gsap_h3_13_0",
+    "nuxt": "catalog:conflicts_nuxt_h3_17_2",
+    "pinia": "catalog:conflicts_pinia_3_0_2",
+    "vue": "catalog:conflicts_vue_h3_5_17",
+    "vue-router": "catalog:conflicts_vue-router_h4_5_1"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "^1.3.0",
-    "eslint": "^9.26.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.1.3",
-    "vue-tsc": "^2.2.10",
-    "wrangler": "^4.14.1"
+    "@nuxt/eslint-config": "catalog:conflicts_@nuxt/eslint-config_h1_3_0",
+    "eslint": "catalog:conflicts_eslint_h9_26_0",
+    "typescript": "catalog:conflicts_typescript_h5_8_3",
+    "vitest": "catalog:",
+    "vue-tsc": "catalog:conflicts_vue-tsc_h2_2_10",
+    "wrangler": "catalog:conflicts_wrangler_h4_14_1"
   }
 }

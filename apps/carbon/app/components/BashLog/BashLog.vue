@@ -5,7 +5,7 @@ import BashLogEntry from './BashLogEntry.vue'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 
 const props = defineProps<{
-  logs: Pick<SpaceOutput, "healthLog" | "shieldLog">
+  logs: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>
   opponentInfoDeck: CardInfo[]
   playerInfoDeck: CardInfo[]
 }>()
@@ -20,8 +20,9 @@ const allLogsOrderedByTime = allLogs
 <template>
   <ScrollArea class="ScrollArea">
     <ul>
-      <BashLogEntry v-for="log in allLogsOrderedByTime" :key="log.timestamp" :log-entry="log"
-        :opponentInfoDeck="props.opponentInfoDeck" :playerInfoDeck="props.playerInfoDeck" />
+      <BashLogEntry
+v-for="log in allLogsOrderedByTime" :key="log.timestamp" :log-entry="log"
+        :opponent-info-deck="props.opponentInfoDeck" :player-info-deck="props.playerInfoDeck" />
     </ul>
   </ScrollArea>
 </template>

@@ -1,15 +1,18 @@
-import type { UsePlayerReturn } from './usePlayer'
 import type { ValueLogCore } from './useBash'
 import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
 
 interface BashRecordProps {
-  playerLogs: SpaceOutput
-  opponentLogs: SpaceOutput
+  playerLogs?: SpaceOutput
+  opponentLogs?: SpaceOutput
   index: number
 }
 
 export function useBashRecords(props: BashRecordProps) {
+  if (!props.playerLogs || !props.opponentLogs) return
+
   const attackRecord = computed(() => {
+    if (!props.playerLogs || !props.opponentLogs) return
+
     const filteredHealthAttackLogs = props.playerLogs.healthLog.filter((entry) => {
       if (entry.type !== 'attack') return
       return entry.index === props.index
@@ -47,6 +50,7 @@ export function useBashRecords(props: BashRecordProps) {
   })
 
   const healingRecord = computed(() => {
+    if (!props.playerLogs) return
     return props.playerLogs.healthLog.filter((entry) => {
       if (entry.type !== 'heal') return
       return entry.index === props.index
@@ -56,6 +60,7 @@ export function useBashRecords(props: BashRecordProps) {
   })
 
   const shieldRecord = computed(() => {
+    if (!props.playerLogs) return
     return props.playerLogs.shieldLog.filter((entry) => {
       if (entry.type !== 'shield') return
       return entry.index === props.index
@@ -65,6 +70,7 @@ export function useBashRecords(props: BashRecordProps) {
   })
 
   const totalValue = computed(() => {
+    if (!attackRecord.value || !healingRecord.value || !shieldRecord.value) return 0
     return healingRecord.value + attackRecord.value.total + shieldRecord.value
   })
 

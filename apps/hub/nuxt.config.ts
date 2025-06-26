@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     '@nuxt/image',
-    '@nuxt/icon', // '@unocss/nuxt',
+    '@nuxt/icon',
     '@nuxt/content',
     '@nuxtjs/mdc',
     'nuxt-time',
@@ -42,6 +42,12 @@ export default defineNuxtConfig({
     cache: true,
   },
 
+  vite: {
+    define: {
+      global: 'globalThis',
+    },
+  },
+
   // postcss: {
   //   plugins: {
   //     tailwindcss: {},
@@ -52,6 +58,14 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       openAPI: true,
+    },
+    alias: {
+      'pkg-types': 'unenv/runtime/mock/proxy',
+      'mlly': 'unenv/runtime/mock/proxy',
+      'local-pkg': 'unenv/runtime/mock/proxy',
+      'tinyexec': 'unenv/runtime/mock/proxy',
+      'package-manager-detector': 'unenv/runtime/mock/proxy',
+      '@antfu/install-pkg': 'unenv/runtime/mock/proxy',
     },
   },
 

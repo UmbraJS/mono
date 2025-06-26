@@ -2,19 +2,18 @@
 import { DialogRoot, DialogTrigger, DialogModal, DialogTitle, DialogDescription } from '@nobel/core'
 import type { CardInfo } from '../../../types/card'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
-import type { UsePlayerReturn } from '../../composables/usePlayer'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 
 defineProps<{
   opponentInfoDeck: CardInfo[]
   playerInfoDeck: CardInfo[]
-  logs: Pick<SpaceOutput, "healthLog" | "shieldLog">
+  logs: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>
 }>()
 </script>
 
 <template>
   <DialogRoot>
-    <DialogTrigger asChild>
+    <DialogTrigger as-child>
       <slot />
     </DialogTrigger>
     <DialogModal variant="accent">
@@ -25,7 +24,7 @@ defineProps<{
         <DialogDescription>
           logs of bash
         </DialogDescription>
-        <BashLogs :logs="logs" :playerInfoDeck="playerInfoDeck" :opponentInfoDeck="opponentInfoDeck"
+        <BashLogs :logs="logs" :player-info-deck="playerInfoDeck" :opponent-info-deck="opponentInfoDeck"
           :modal-button="false" />
       </div>
     </DialogModal>

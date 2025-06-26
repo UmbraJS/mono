@@ -47,7 +47,7 @@ const hasteYourSibling: CardEffect = ({ card }) => {
     value: 1,
     trigger: {
       triggerType: 'cooldown',
-      playerTriggerIndexes: [card.card.index + 1],
+      playerTriggerIndexes: [card.card.index],
     },
     target: {
       playerTargetIndexes: [card.card.index + 1],
@@ -56,22 +56,22 @@ const hasteYourSibling: CardEffect = ({ card }) => {
   }
 }
 
-const mirrorHaste: CardEffect = ({ card }) => {
-  return {
-    sourceIndex: card.card.index,
-    timeType: 'haste',
-    value: 1,
-    trigger: {
-      triggerType: 'cooldown',
-      playerTriggerIndexes: [],
-      opponentTriggerIndexes: [card.card.index],
-    },
-    target: {
-      playerTargetIndexes: [card.card.index],
-      opponentTargetIndexes: [],
-    },
-  }
-}
+// const mirrorHaste: CardEffect = ({ card }) => {
+//   return {
+//     sourceIndex: card.card.index,
+//     timeType: 'haste',
+//     value: 1,
+//     trigger: {
+//       triggerType: 'cooldown',
+//       playerTriggerIndexes: [],
+//       opponentTriggerIndexes: [card.card.index],
+//     },
+//     target: {
+//       playerTargetIndexes: [card.card.index],
+//       opponentTargetIndexes: [],
+//     },
+//   }
+// }
 
 // const slowSibling: CardEffect = ({ card }) => {
 //   return {
@@ -91,6 +91,7 @@ export const fields: Card[] = [
   {
     id: 'Swamp',
     index: 0,
+    size: 3,
     info: {
       name: 'Swamp',
       description: 'A basic swamp',
@@ -115,6 +116,7 @@ export const fields: Card[] = [
   {
     id: 'AlienHalls',
     index: 0,
+    size: 3,
     info: {
       name: 'Alien Halls',
       description: 'A basic alien halls',
@@ -139,6 +141,7 @@ export const fields: Card[] = [
   {
     id: 'AbandonedHalls',
     index: 0,
+    size: 3,
     info: {
       name: 'Abandoned Halls',
       description: 'A basic abandoned halls',
@@ -163,6 +166,7 @@ export const fields: Card[] = [
   {
     id: 'Village',
     index: 0,
+    size: 3,
     info: {
       name: 'Village',
       description: 'A basic village',
@@ -189,6 +193,7 @@ export const cards: Card[] = [
   {
     id: 'skeleton-soldier',
     index: 0,
+    size: 3,
     info: {
       name: 'Skeleton Soldier',
       description: 'A basic skeleton',
@@ -214,6 +219,7 @@ export const cards: Card[] = [
   {
     id: 'skeleton-archer',
     index: 0,
+    size: 1,
     info: {
       name: 'Skeleton Archer',
       description: 'A basic skeleton archer',
@@ -239,6 +245,7 @@ export const cards: Card[] = [
   {
     id: 'archer',
     index: 0,
+    size: 2,
     info: {
       name: 'Archer',
       description: 'A basic archer',
@@ -264,6 +271,7 @@ export const cards: Card[] = [
   {
     id: 'halberdier',
     index: 0,
+    size: 3,
     info: {
       name: 'Halberdier',
       description: 'A basic halberdier',
@@ -289,6 +297,7 @@ export const cards: Card[] = [
   {
     id: 'DoomCloak',
     index: 0,
+    size: 3,
     info: {
       name: 'Doom Cloak',
       description: 'A basic doom cloak',
@@ -314,6 +323,7 @@ export const cards: Card[] = [
   {
     id: 'Skeleton Healer',
     index: 0,
+    size: 3,
     info: {
       name: 'Skeleton Healer',
       description: 'A basic skeleton healer',
@@ -339,6 +349,7 @@ export const cards: Card[] = [
   {
     id: 'Skeleton Horseman',
     index: 0,
+    size: 3,
     info: {
       name: 'Skeleton Horseman',
       description: 'A basic skeleton horseman',
@@ -364,6 +375,7 @@ export const cards: Card[] = [
   {
     id: 'Gauntlet of Sigmar',
     index: 0,
+    size: 3,
     info: {
       name: 'Gauntlet of Sigmar',
       description: 'A basic gauntlet of sigmar',
@@ -389,6 +401,7 @@ export const cards: Card[] = [
   {
     id: 'Glimmer Cloak',
     index: 0,
+    size: 3,
     info: {
       name: 'Glimmer Cloak',
       description:
@@ -415,6 +428,7 @@ export const cards: Card[] = [
   {
     id: 'viking',
     index: 0,
+    size: 3,
     info: {
       name: 'Viking',
       description: 'A basic viking',
@@ -440,6 +454,7 @@ export const cards: Card[] = [
   {
     id: 'Thunder Cannon',
     index: 0,
+    size: 3,
     info: {
       name: 'Thunder Cannon',
       description: 'A basic thunder cannon',
@@ -465,6 +480,7 @@ export const cards: Card[] = [
   {
     id: 'Treasure',
     index: 0,
+    size: 3,
     info: {
       name: 'Treasure',
       description: 'A basic treasure',

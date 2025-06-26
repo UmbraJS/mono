@@ -10,11 +10,15 @@ $desktop: 1200px;
   --space-m: calc(2 * var(--space));
   --space-l: calc(4 * var(--space));
   --space-xl: calc(8 * var(--space));
-  
+
   --inner-radius: 3px;
   --radius: 10px;
   --outer-radius: calc(var(--radius) + var(--space-s));
 
-  @media only screen and (max-width: $tablet) {--space: 12px;}
-  @media only screen and (max-width: $mobile) {--space: 6px;}
+  @media only screen and (max-width: $tablet) {
+    --space: 12px;
+  }
+  @media only screen and (max-width: $mobile) {
+    --space: 6px;
+  }
 }
