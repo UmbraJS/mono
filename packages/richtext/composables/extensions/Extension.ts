@@ -1,4 +1,4 @@
-import { mergeAttributes, Node, Mark } from '@tiptap/core'
+import { mergeAttributes, Node } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
 import Component from '../../components/Component.vue'

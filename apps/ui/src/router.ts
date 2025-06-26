@@ -1,7 +1,7 @@
-import { createWebHistory, createRouter } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import CarbonBoard from './pages/CarbonBoard.vue'
-import Typography from './pages/Typography.vue'
 import Sizes from './pages/Sizes.vue'
+import Typography from './pages/Typography.vue'
 import UI from './pages/UI.vue'
 import Colors from './pages/Umbra.vue'
 

@@ -4,4 +4,4 @@ import { getServerAuth } from '../../utils/auth' // path to your auth file
 //   return auth.handler(toWebRequest(event))
 // })
 
-export default eventHandler((event) => getServerAuth().handler(toWebRequest(event)))
+export default eventHandler(event => getServerAuth().handler(toWebRequest(event)))

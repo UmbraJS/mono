@@ -2,7 +2,8 @@ import { eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
-  if (!id) throw new Error('Missing id')
+  if (!id)
+    throw new Error('Missing id')
 
   const db = useDrizzle()
 
@@ -10,6 +11,7 @@ export default defineEventHandler(async (event) => {
     where: eq(tables.user.id, id),
   })
 
-  if (!user) throw new Error('User not found')
+  if (!user)
+    throw new Error('User not found')
   return user
 })
