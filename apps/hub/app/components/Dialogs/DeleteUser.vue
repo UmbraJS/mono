@@ -19,20 +19,25 @@ const deleteUser = async () => {
 </script>
 
 <template>
-  <DialogRoot>
-    <DialogTrigger asChild>
-      <Button size="medium" color="warning"> Delete user </Button>
-    </DialogTrigger>
+  <ClientOnly>
+    <DialogRoot>
+      <DialogTrigger asChild>
+        <Button size="medium" color="warning"> Delete user </Button>
+      </DialogTrigger>
 
-    <DialogModal variant="warning">
-      <div class="dialog-warning-title">
-        <Icon name="pixelarticons:warning-box" size="2rem" />
-        <DialogTitle> Are you sure? </DialogTitle>
-      </div>
-      <DialogDescription> Deleting this user is irreversible </DialogDescription>
-      <DialogClose>
-        <Button size="medium" color="warning" @click="deleteUser"> Delete user </Button>
-      </DialogClose>
-    </DialogModal>
-  </DialogRoot>
+      <DialogModal variant="warning">
+        <div class="dialog-warning-title">
+          <Icon name="pixelarticons:warning-box" size="2rem" />
+          <DialogTitle> Are you sure? </DialogTitle>
+        </div>
+        <DialogDescription> Deleting this user is irreversible </DialogDescription>
+        <DialogClose>
+          <Button size="medium" color="warning" @click="deleteUser"> Delete user </Button>
+        </DialogClose>
+      </DialogModal>
+    </DialogRoot>
+    <template #fallback>
+      <Button size="medium" color="warning"> Delete user </Button>
+    </template>
+  </ClientOnly>
 </template>

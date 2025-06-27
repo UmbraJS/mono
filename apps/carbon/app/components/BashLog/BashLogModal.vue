@@ -12,23 +12,28 @@ defineProps<{
 </script>
 
 <template>
-  <DialogRoot>
-    <DialogTrigger as-child>
+  <ClientOnly>
+    <DialogRoot>
+      <DialogTrigger as-child>
+        <slot />
+      </DialogTrigger>
+      <DialogModal variant="accent">
+        <div class="BashLogsDialogWrapper">
+          <DialogTitle>
+            Bash Logs
+          </DialogTitle>
+          <DialogDescription>
+            logs of bash
+          </DialogDescription>
+          <BashLogs :logs="logs" :player-info-deck="playerInfoDeck" :opponent-info-deck="opponentInfoDeck"
+            :modal-button="false" />
+        </div>
+      </DialogModal>
+    </DialogRoot>
+    <template #fallback>
       <slot />
-    </DialogTrigger>
-    <DialogModal variant="accent">
-      <div class="BashLogsDialogWrapper">
-        <DialogTitle>
-          Bash Logs
-        </DialogTitle>
-        <DialogDescription>
-          logs of bash
-        </DialogDescription>
-        <BashLogs :logs="logs" :player-info-deck="playerInfoDeck" :opponent-info-deck="opponentInfoDeck"
-          :modal-button="false" />
-      </div>
-    </DialogModal>
-  </DialogRoot>
+    </template>
+  </ClientOnly>
 </template>
 
 <style>

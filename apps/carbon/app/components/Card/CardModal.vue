@@ -16,17 +16,22 @@ defineProps<{
 </script>
 
 <template>
-  <!-- <DialogRoot>
-    <DialogTrigger as-child> -->
-  <slot />
-  <!-- </DialogTrigger>
-    <DialogModal variant="accent">
-      <div class="DialogWrapper">
-        <CardModalAvatar :chunks="chunks" :card-info="cardInfo" :timeline="timeline" />
-        <CardModalMeta :card-stats="cardStats" :card-info="cardInfo" :bash-records="bashRecords" />
-      </div>
-    </DialogModal>
-  </DialogRoot> -->
+  <ClientOnly>
+    <DialogRoot>
+      <DialogTrigger as-child>
+        <slot />
+      </DialogTrigger>
+      <DialogModal variant="accent">
+        <div class="DialogWrapper">
+          <CardModalAvatar :chunks="chunks" :card-info="cardInfo" :timeline="timeline" />
+          <CardModalMeta :card-stats="cardStats" :card-info="cardInfo" :bash-records="bashRecords" />
+        </div>
+      </DialogModal>
+    </DialogRoot>
+    <template #fallback>
+      <slot />
+    </template>
+  </ClientOnly>
 </template>
 
 <style>

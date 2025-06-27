@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CardInfo, CardStats } from '../../../types'
-import CardModal from './CardModal.vue'
-import { useBashRecords } from '~/composables/useBashRecords'
+// import CardModal from './CardModal.vue'
+// import { useBashRecords } from '~/composables/useBashRecords'
 import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 import { useAudioCue } from '@/composables/useAudioCue'
 import type { OutputChunk } from '../../../utils/time/types';
@@ -25,11 +25,11 @@ const props = defineProps<{
   board?: 'deck' | 'inventory'
 }>()
 
-const cardBashRecords = useBashRecords({
-  playerLogs: props.playerLogs,
-  opponentLogs: props.opponentLogs,
-  index: props.index,
-})
+// const cardBashRecords = useBashRecords({
+//   playerLogs: props.playerLogs,
+//   opponentLogs: props.opponentLogs,
+//   index: props.index,
+// })
 
 const audio = useAudioCue()
 
@@ -53,6 +53,7 @@ onMounted(() => {
   if (typeof window === 'undefined') return
   if (!board) return
 
+
   gsap.registerPlugin(Draggable)
 
   const cardDrag = useCardDrag({
@@ -65,6 +66,9 @@ onMounted(() => {
 
   new Draggable(fragElement.value, {
     onDrag: function () {
+
+      console.log('Card is being dragged')
+
       cardDrag.onDrag(this)
       checkZoneHit(this, {
         threshold: '40%',
@@ -109,15 +113,16 @@ const columnEnd = computed(() => {
 })
 </script>
 <template>
-  <CardModal :chunks="chunks" :card-stats="cardStats" :card-info="cardInfo" :bash-records="cardBashRecords"
-    :timeline="timeline">
-    <button id="CardWrapper" ref="fragElement"
-      class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" @click="triggerFlipSound">
+  <!-- <CardModal :chunks="chunks" :card-stats="cardStats" :card-info="cardInfo" :bash-records="cardBashRecords" -->
+  <!-- :timeline="timeline"> -->
 
-      <slot />
+  <button id="CardWrapper" ref="fragElement"
+    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" @click="triggerFlipSound">
 
-    </button>
-  </CardModal>
+    <slot />
+
+  </button>
+  <!-- </CardModal> -->
 </template>
 
 <style lang="scss">
