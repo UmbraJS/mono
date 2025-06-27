@@ -43,9 +43,9 @@
     "colorparsley": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "catalog:conflicts_@types/node_h22_13_4",
-    "typescript": "catalog:conflicts_conflicts_typescript_h5_8_3_h5_7_3",
-    "vite": "catalog:conflicts_vite_6_1_1",
-    "vite-plugin-dts": "catalog:conflicts_vite-plugin-dts_h4_5_0"
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
   }
 }

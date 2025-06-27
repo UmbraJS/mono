@@ -65,7 +65,6 @@
     "tippy.js": "catalog:"
   },
   "devDependencies": {
-    "@nuxt/image": "catalog:",
     "@rushstack/eslint-patch": "catalog:",
     "@tsconfig/node20": "catalog:",
     "@types/node": "catalog:",

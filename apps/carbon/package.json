@@ -17,23 +17,23 @@
   "dependencies": {
     "@iconify/vue": "catalog:",
     "@nobel/core": "workspace:*",
-    "@nuxt/eslint": "catalog:conflicts_@nuxt/eslint_h1_3_0",
-    "@nuxthub/core": "catalog:conflicts_@nuxthub/core_h0_8_26",
-    "@pinia/nuxt": "catalog:conflicts_@pinia/nuxt_0_11_1",
+    "@nuxt/eslint": "catalog:",
+    "@nuxthub/core": "catalog:",
+    "@pinia/nuxt": "catalog:",
     "@umbrajs/core": "workspace:*",
-    "@vueuse/core": "catalog:conflicts_@vueuse/core_13_4_0",
-    "gsap": "catalog:conflicts_gsap_h3_13_0",
-    "nuxt": "catalog:conflicts_nuxt_h3_17_2",
-    "pinia": "catalog:conflicts_pinia_3_0_2",
-    "vue": "catalog:conflicts_vue_h3_5_17",
-    "vue-router": "catalog:conflicts_vue-router_h4_5_1"
+    "@vueuse/core": "catalog:",
+    "gsap": "catalog:",
+    "nuxt": "catalog:",
+    "pinia": "catalog:",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "catalog:conflicts_@nuxt/eslint-config_h1_3_0",
-    "eslint": "catalog:conflicts_eslint_h9_26_0",
-    "typescript": "catalog:conflicts_typescript_h5_8_3",
+    "@nuxt/eslint-config": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
     "vitest": "catalog:",
-    "vue-tsc": "catalog:conflicts_vue-tsc_h2_2_10",
-    "wrangler": "catalog:conflicts_wrangler_h4_14_1"
+    "vue-tsc": "catalog:",
+    "wrangler": "catalog:"
   }
 }

@@ -110,19 +110,25 @@ blockquote {
   @media (max-width: 2000px) {
     max-width: clamp(300px, 100vw, 700px);
   }
+}
 
-  &.display {
-    font-size: clamp(14px, 1.3vw, 24px);
-  }
+p.display-bold {
+  font-size: clamp(14px, 2vw, 40px);
+  font-variation-settings: var(--font-bold);
+}
 
-  &.caption {
-    font-size: 1rem;
-    line-height: 1rem;
-    font-variation-settings: var(--font-light);
-  }
+p.display {
+  font-size: clamp(14px, 1.3vw, 24px);
+}
+
+p.caption {
+  font-size: 1rem;
+  line-height: 1rem;
+  font-variation-settings: var(--font-light);
 }
 
 span,
 strong {
   font-variation-settings: var(--font-semibold);
+  color: var(--base-120)
 }

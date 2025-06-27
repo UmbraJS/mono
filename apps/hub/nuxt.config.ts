@@ -6,8 +6,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxthub/core',
     '@nuxt/eslint',
-    '@pinia/nuxt',
     '@nuxt/image',
+    '@pinia/nuxt',
     '@nuxt/icon',
     '@nuxt/content',
     '@nuxtjs/mdc',
@@ -18,6 +18,23 @@ export default defineNuxtConfig({
   // https://devtools.nuxt.com
   devtools: { enabled: true },
   // css: ['@nobel/core/styles/main.scss'],
+
+  // Image configuration
+  image: {
+    quality: 80,
+    formats: ['webp'],
+    // You can disable IPX entirely
+    // provider: 'none',
+    // Or configure specific behavior
+    // provider: 'static',
+    provider: "ipx",
+    // ipx: {
+    //   fs: { dir: process.env.NUXT_IMAGES_ROOT },
+    // },
+    target: 'static',
+    domains: [],
+    alias: {},
+  },
 
   // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
   runtimeConfig: {

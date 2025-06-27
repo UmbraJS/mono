@@ -20,13 +20,10 @@ onKeyStroke('Escape', () => {
 </script>
 
 <template>
-  <div
-    class="layout"
-    :class="{
-      reveal: reveal,
-      dark: theme.isDark,
-    }"
-  >
+  <div class="layout" :class="{
+    reveal: reveal,
+    dark: theme.isDark,
+  }">
     <div class="burger" @click="toggleReveal" />
     <FrostLayer />
     <div class="content-layer">
@@ -37,7 +34,7 @@ onKeyStroke('Escape', () => {
     </div>
     <div class="underbar inverted-theme">
       <header>
-        <h1>title</h1>
+        <h1>CarelessCourage</h1>
       </header>
       <div class="content" />
       <div class="sidebar">
@@ -126,6 +123,7 @@ onKeyStroke('Escape', () => {
 .layout.reveal .content-layer {
   pointer-events: none;
   transform: translateY(var(--header-height)) translateX(calc(0px - var(--sidebar-width) + 1px));
+
   @media (max-width: 800px) {
     transform: translateY(0) translateX(calc(0px - var(--sidebar-width) + 1px));
     transition: var(--slower);
