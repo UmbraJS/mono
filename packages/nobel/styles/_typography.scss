@@ -113,12 +113,14 @@ blockquote {
 }
 
 p.display-bold {
-  font-size: clamp(14px, 2vw, 40px);
+  line-height: 1.4;
+  font-size: clamp(14px, 4vw, 40px);
   font-variation-settings: var(--font-bold);
 }
 
 p.display {
-  font-size: clamp(14px, 1.3vw, 24px);
+  line-height: 1.6;
+  font-size: clamp(14px, 4vw, 24px);
 }
 
 p.caption {

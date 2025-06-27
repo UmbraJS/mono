@@ -20,8 +20,7 @@ defineProps<{
 
 <template>
   <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
-  <CardWrapper
-v-else :index="index" :size="size" :chunks="chunks" :card-info="cardInfo" :card-stats="cardStats"
+  <CardWrapper v-else :index="index" :size="size" :chunks="chunks" :card-info="cardInfo" :card-stats="cardStats"
     :timeline="timeline" :player-logs="playerLogs" :opponent-logs="opponentLogs" :board="board">
 
     <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />

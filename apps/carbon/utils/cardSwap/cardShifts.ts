@@ -114,11 +114,5 @@ export const shiftNorm = (props: { deck: CardSegment[], maxBoardSlots: number })
     deck: negative,
     maxBoardSlots: props.maxBoardSlots
   });
-
-  console.log('rex debug: ', {
-    deck: props.deck,
-    outOfBounds,
-    negative,
-  })
   return outOfBounds;
 }

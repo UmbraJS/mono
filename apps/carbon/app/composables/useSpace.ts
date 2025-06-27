@@ -18,8 +18,6 @@ export function useSpace(timeline: gsap.core.Timeline, space: SpaceOutput, chara
   const morale = ref(0)
   const moraleDelayed = ref(0)
 
-  console.log('useSpace', space)
-
   space.healthLog.forEach(({ timestamp, newValue }) => {
     healthTimeline.to(health, {
       duration: 0.1,

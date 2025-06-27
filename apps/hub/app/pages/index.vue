@@ -10,7 +10,7 @@ useSeoMeta({
 <template>
   <div id="BlogFrontPage">
     <div id="BlogHero">
-      <NuxtImg src="/sword.jpg" alt="Samuel Bednarz" width="200" height="200" class="rounded-full" />
+      <NuxtImg class="avatar" src="/sam.jpg" alt="Samuel Bednarz" width="400" height="400" fit="contain" />
 
       <div class="BlogHeaderCluster">
         <p class="subtitle display-bold"><span class="base-success">
@@ -77,6 +77,11 @@ useSeoMeta({
   background: var(--base);
   padding: var(--space-4);
   border-radius: var(--radius);
+}
+
+#BlogHero .avatar {
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 #BlogPostList {

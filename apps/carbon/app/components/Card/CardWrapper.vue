@@ -109,14 +109,12 @@ const columnEnd = computed(() => {
 })
 </script>
 <template>
-  <CardModal
-:chunks="chunks" :card-stats="cardStats" :card-info="cardInfo" :bash-records="cardBashRecords"
+  <CardModal :chunks="chunks" :card-stats="cardStats" :card-info="cardInfo" :bash-records="cardBashRecords"
     :timeline="timeline">
-    <button
-id="CardWrapper" ref="fragElement"
+    <button id="CardWrapper" ref="fragElement"
       class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" @click="triggerFlipSound">
 
-      <slot/>
+      <slot />
 
     </button>
   </CardModal>

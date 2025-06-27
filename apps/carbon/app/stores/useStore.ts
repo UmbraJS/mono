@@ -44,11 +44,6 @@ function useMoney(props: { removeDraggedCard: () => Card | undefined, realm: key
     sellDraggedCard: () => {
       const card = props.removeDraggedCard()
       const cardStats = card?.stats[props.realm]
-      console.log('Selling card:', {
-        cardStats,
-        realm: props.realm,
-        card,
-      })
       if (!cardStats) return
       money.value += cardStats.cost
     }

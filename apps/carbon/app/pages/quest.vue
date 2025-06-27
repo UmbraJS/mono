@@ -11,14 +11,12 @@ const view = useView()
         <QuestBoard />
       </div>
       <div class="ViewOverlay clipPath" :class="{ hidden: view.view !== 'inventory' }">
-        <InventoryBoard
-:timeline="store.simulation.timeline" :time="store.simulation.time" :deck="store.user.deck"
+        <InventoryBoard :timeline="store.simulation.timeline" :time="store.simulation.time" :deck="store.user.deck"
           :inventory="store.user.inventory" realm="base" />
       </div>
     </div>
     <div class="HeadBoard">
-      <PlayerHeader
-:user-characters="store.user.characters" :health="store.simulation.user.health"
+      <PlayerHeader :user-characters="store.user.characters" :health="store.simulation.user.health"
         :shield="store.simulation.user.shield" />
       <div class="ViewOverlay clipPath2" :class="{ hidden: store.user.draggedCard === null }">
         <div data-sellzone class="Seller border base-warning">

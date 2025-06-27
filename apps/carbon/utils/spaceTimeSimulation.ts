@@ -14,8 +14,6 @@ interface SpaceTimeProps {
 export type SpaceOutput = Pick<ReturnType<typeof spaceStore>, 'healthLog' | 'shieldLog' | 'moraleLog'>
 
 export function spaceTimeSimulation(props: SpaceTimeProps) {
-  console.log('spaceTimeSimulation', props);
-
   const player = spaceStore({
     maxHealth: props.playerCharacters.reduce((acc, char) => acc + char.maxHealth, 0),
     onAttack: (attackEntry) => {
