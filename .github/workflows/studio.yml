@@ -44,17 +44,17 @@ jobs:
           echo "cache=$cache" >> $GITHUB_OUTPUT
           echo "package_manager=$package_manager" >> $GITHUB_OUTPUT
 
-      - uses: pnpm/action-setup@v2.4.0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: ${{ steps.pkgman.outputs.cache }}
+
+      - uses: pnpm/action-setup@v3
         if: ${{ steps.pkgman.outputs.package_manager == 'pnpm' }}
         name: Install pnpm
         id: pnpm-install
         with:
           version: 10.12.3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-          cache: ${{ steps.pkgman.outputs.cache }}
 
       - name: Install dependencies
         run: ${{ steps.pkgman.outputs.package_manager }} install
