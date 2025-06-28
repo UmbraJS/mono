@@ -87,8 +87,15 @@ function getBaseURL() {
   let baseURL = process.env.BETTER_AUTH_URL
   if (!baseURL) {
     try {
-      baseURL = getRequestURL(useEvent()).origin
-    } catch (e) {}
+      const event = useEvent()
+      if (event) {
+        baseURL = getRequestURL(event).origin
+      }
+    } catch (e) {
+      // During prerendering, event might not be available
+      // Fall back to a default or environment variable
+      baseURL = process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    }
   }
   return baseURL
 }

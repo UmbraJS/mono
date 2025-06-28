@@ -2,10 +2,19 @@ export default defineNuxtPlugin({
   name: 'better-auth-fetch-plugin',
   enforce: 'pre',
   async setup(nuxtApp) {
-    // Flag if request is cached
-    nuxtApp.payload.isCached = Boolean(useRequestEvent()?.context.cache)
-    if (nuxtApp.payload.serverRendered && !nuxtApp.payload.prerenderedAt && !nuxtApp.payload.isCached) {
-      await useAuth().fetchSession()
+    try {
+      // Flag if request is cached
+      const event = useRequestEvent()
+      nuxtApp.payload.isCached = Boolean(event?.context.cache)
+
+      // Only fetch session if we have a real request context (not during prerendering)
+      if (nuxtApp.payload.serverRendered && !nuxtApp.payload.prerenderedAt && !nuxtApp.payload.isCached && event) {
+        await useAuth().fetchSession()
+      }
+    } catch (e) {
+      // During prerendering, useRequestEvent() might fail
+      // Just skip auth fetching in this case
+      console.warn('Auth plugin: Skipping session fetch during prerendering')
     }
   },
 })

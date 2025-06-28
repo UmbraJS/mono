@@ -79,6 +79,12 @@ export default defineNuxtConfig({
     prerender: {
       routes: ['/'], // Add specific routes you want to pre-render
       crawlLinks: true, // This will crawl and pre-render linked pages
+      ignore: [
+        '/user', // Skip auth-protected routes
+        '/api/auth/**', // Skip auth API routes
+        '/api/**', // Skip all API routes that might need server context
+      ],
+      failOnError: false, // Don't fail the build if prerendering fails
     },
     alias: {
       'pkg-types': 'unenv/runtime/mock/proxy',

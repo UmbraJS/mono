@@ -10,7 +10,17 @@ interface RuntimeAuthConfig {
 
 export function useAuth() {
   const url = useRequestURL()
-  const headers = import.meta.server ? useRequestHeaders() : undefined
+  // Safely get headers only when available (not during prerendering)
+  const headers = import.meta.server
+    ? (() => {
+      try {
+        return useRequestHeaders()
+      } catch (e) {
+        // During prerendering, headers might not be available
+        return undefined
+      }
+    })()
+    : undefined
 
   const client = createAuthClient({
     baseURL: url.origin,
