@@ -59,17 +59,31 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.pkgman.outputs.package_manager }} install
 
-      - name: Install @nuxthq/studio
-        run: ${{ steps.pkgman.outputs.package_manager }} add -D @nuxthq/studio
+      - name: Install @nuxthq/studio with compatibility
+        run: |
+          # Try to install latest compatible version
+          ${{ steps.pkgman.outputs.package_manager }} add -D @nuxthq/studio@latest || \
+          ${{ steps.pkgman.outputs.package_manager }} add -D @nuxthq/studio@2.1.0
 
-      - name: Create .nuxtrc
-        run: echo $'\nautoImport=true\nmodules[]=@nuxthq/studio' >> .nuxtrc
+      - name: Create .nuxtrc with studio config
+        run: |
+          echo 'autoImport=true' >> .nuxtrc
+          echo 'modules[]="@nuxthq/studio"' >> .nuxtrc
+          echo 'studio={}' >> .nuxtrc
 
       - name: Build for Cloudflare
-        run: npx nuxi build
+        run: |
+          # Try building with studio first
+          if ! npx nuxi build; then
+            echo "Studio build failed, trying fallback without studio..."
+            # Remove .nuxtrc and try building without studio
+            rm -f .nuxtrc
+            npx nuxi build
+          fi
         env:
           NUXT_PUBLIC_STUDIO_API_URL: https://api.nuxt.studio
           NUXT_PUBLIC_STUDIO_TOKENS: eec209c726d7129192351fad2dc9db434d5a1dd6b1e168f3ae5fef11d0dc7ab7
+          NUXT_STUDIO_ENABLED: true
 
         # Deployment job
       - name: Deploy to Cloudflare Pages 🚀

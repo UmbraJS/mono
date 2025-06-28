@@ -94,6 +94,7 @@ function getBaseURL() {
     } catch (e) {
       // During prerendering, event might not be available
       // Fall back to a default or environment variable
+      // TODO: This environment variable is not set. It should probably exist in the github repo for the CI to work properly
       baseURL = process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000'
     }
   }

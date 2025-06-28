@@ -152,4 +152,18 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  // Auto-import configuration for Studio compatibility
+  imports: {
+    dirs: [
+      'composables/**',
+    ],
+    // Explicitly provide useContentState for @nuxthq/studio compatibility
+    presets: [
+      {
+        from: '~/composables/useContentState',
+        imports: ['useContentState'],
+      },
+    ],
+  },
 })
