@@ -76,6 +76,10 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: true,
     },
+    prerender: {
+      routes: ['/'], // Add specific routes you want to pre-render
+      crawlLinks: true, // This will crawl and pre-render linked pages
+    },
     alias: {
       'pkg-types': 'unenv/runtime/mock/proxy',
       'mlly': 'unenv/runtime/mock/proxy',
@@ -119,6 +123,9 @@ export default defineNuxtConfig({
   // },
 
   content: {
+    preview: {
+      api: 'https://api.nuxt.studio'
+    },
     build: {
       markdown: {
         highlight: {

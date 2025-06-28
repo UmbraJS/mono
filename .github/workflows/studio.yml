@@ -65,17 +65,18 @@ jobs:
       - name: Create .nuxtrc
         run: echo $'\nautoImport=true\nmodules[]=@nuxthq/studio' >> .nuxtrc
 
-      - name: Generate
-        run: npx nuxi generate
+      - name: Build for Cloudflare
+        run: npx nuxi build
         env:
           NUXT_PUBLIC_STUDIO_API_URL: https://api.nuxt.studio
           NUXT_PUBLIC_STUDIO_TOKENS: eec209c726d7129192351fad2dc9db434d5a1dd6b1e168f3ae5fef11d0dc7ab7
 
-      - name: Add .nojekyll file
-        run: touch .output/public/.nojekyll
-
         # Deployment job
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Deploy to Cloudflare Pages 🚀
+        uses: cloudflare/pages-action@v1
         with:
-          folder: apps/hub/.output/public
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: your-project-name # Replace with your actual Cloudflare project name
+          directory: apps/hub/.output/public
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
