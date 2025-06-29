@@ -5,6 +5,7 @@ import { useStore } from '~/stores/useStore'
 export function useCooldown(cardSimulation: OutputChunk[]) {
   const store = useStore()
 
+
   const cooldown = ref(100)
   const cooldownDuration = ref(0)
   const slow = ref(0)
@@ -15,20 +16,12 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
   const frozenSource = ref<string>('freeze')
 
   const cardTimeline = gsap.timeline()
-  store.simulation.timeline.add(cardTimeline, 0)
+  // store.simulation.timeline.add(cardTimeline, 0)
 
   onMounted(() => {
     const segments = getSegments(cardSimulation)
-    console.log('Segments found:', segments.length)
-    segments.forEach((segment, index) => {
-      console.log(`Processing segment ${index}:`, segment)
+    segments.forEach((segment) => {
       animateCooldown(segment)
-    })
-    
-    // Ensure the timeline starts
-    nextTick(() => {
-      console.log('Card timeline duration:', cardTimeline.duration())
-      console.log('Card timeline progress:', cardTimeline.progress())
     })
   })
 
@@ -47,12 +40,6 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
     cooldownTimeline.add(chunkTimeline, 0)
     cooldownTimeline.add(durationTimeline, 0)
     cardTimeline.add(cooldownTimeline)
-    
-    console.log('Timeline structure created for segment:', {
-      cooldownTimelineDuration: cooldownTimeline.duration(),
-      chunkTimelineDuration: chunkTimeline.duration(),
-      durationTimelineDuration: durationTimeline.duration()
-    })
 
     durationTimeline.fromTo(cooldownDuration, {
       value: segment.duration,
@@ -96,30 +83,15 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
       toPercent,
       duration,
     }: AnimationProp) {
-      console.log('Function triggered: gsapBase called with', { toPercent, duration })
-      console.log('ChunkTimeline before adding tween:', {
-        duration: chunkTimeline.duration(),
-        progress: chunkTimeline.progress(),
-        paused: chunkTimeline.paused()
-      })
-      
-      const tween = chunkTimeline.to(cooldown, {
+      console.log('Function triggered: gsapBase called with', `from: ${cooldown.value} to: ${toPercent}, duration: ${duration}`)
+
+      chunkTimeline.to(cooldown, {
         value: toPercent,
         duration: duration,
         ease: 'none',
         onStart: () => {
           console.log('Base animation started: tween is now running')
         },
-        onComplete: () => {
-          console.log('Base animation completed')
-        }
-      })
-      
-      console.log('Tween added:', tween)
-      console.log('ChunkTimeline after adding tween:', {
-        duration: chunkTimeline.duration(),
-        progress: chunkTimeline.progress(),
-        paused: chunkTimeline.paused()
       })
     }
 
