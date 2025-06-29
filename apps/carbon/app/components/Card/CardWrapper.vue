@@ -37,6 +37,7 @@ onMounted(() => {
   if (!fragElement.value) return
   if (typeof window === 'undefined') return
   if (!board) return
+  const dataSellzone = document.querySelectorAll('[data-sellzone]')
 
   gsap.registerPlugin(Draggable)
 
@@ -48,15 +49,15 @@ onMounted(() => {
     cardSize: props.size,
   })
 
+  console.log('drag init: ', dataSellzone)
 
   new Draggable(fragElement.value, {
     onDrag: function () {
       cardDrag.onDrag(this)
       checkZoneHit(this, {
         threshold: '40%',
-        zones: document.querySelectorAll('[data-sellzone]'),
+        zones: dataSellzone,
         hit: (zones) => {
-          console.log('Card dragged into sell zone')
           if (!fragElement.value) return
           fragElement.value.classList.add('active-zone')
           zones.forEach((zone) => {
@@ -76,10 +77,12 @@ onMounted(() => {
       cardDrag.onRelease(this, props.index)
       checkZoneHit(this, {
         threshold: '40%',
-        zones: document.querySelectorAll('[data-sellzone]'),
+        zones: dataSellzone,
         hit: () => {
-          console.log('Card dropped in sell zone')
-          store.money.sellDraggedCard()
+          store.money.sellDraggedCard({
+            originBoard: board,
+            cardIndex: props.index,
+          })
         },
       })
     },

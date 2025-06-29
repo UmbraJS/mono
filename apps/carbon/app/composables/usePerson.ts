@@ -105,16 +105,19 @@ export function usePerson(user: User) {
     insertCardFromInventory(props)
   }
 
-  function removeDraggedCard() {
-    console.log('Removing dragged card:', draggedCard.value)
-    const cardIndex = draggedCard.value?.cardIndex
-    if (draggedCard.value?.originBoard === 'deck') {
-      deck.value = deck.value.filter(card => card.index !== cardIndex)
-      return deck.value.find(card => card.index === cardIndex)
-    } else if (draggedCard.value?.originBoard === 'inventory') {
-      inventory.value = inventory.value.filter(card => card.index !== cardIndex)
-      return inventory.value.find(card => card.index === cardIndex)
+  function removeDraggedCard(props: {
+    originBoard: 'deck' | 'inventory',
+    cardIndex: number
+  }) {
+    let removedCard: Card | undefined = undefined
+    if (props.originBoard === 'deck') {
+      removedCard = deck.value.find(card => card.index === props.cardIndex)
+      deck.value = deck.value.filter(card => card.index !== props.cardIndex)
+    } else {
+      removedCard = inventory.value.find(card => card.index === props.cardIndex)
+      inventory.value = inventory.value.filter(card => card.index !== props.cardIndex)
     }
+    return removedCard
   }
 
   return {

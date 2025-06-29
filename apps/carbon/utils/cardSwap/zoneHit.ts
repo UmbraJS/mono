@@ -12,7 +12,7 @@ export function checkZoneHit(draggable: Draggable.Vars, { zones,
   const allHitZones = Array.from(zones).filter((zone) => draggable.hitTest(zone, threshold));
   const allMissedZones = Array.from(zones).filter((zone) => !draggable.hitTest(zone, threshold));
   const noHitsAllMisses = allHitZones.length === 0
-  hit(allHitZones, draggable);
-  mis(allMissedZones, draggable);
+  if (allHitZones.length) hit(allHitZones, draggable);
+  if (allMissedZones) mis(allMissedZones, draggable);
   if (noHitsAllMisses) dud(draggable);
 }

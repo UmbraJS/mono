@@ -24,8 +24,6 @@ export function getInsertedCard(
     maxSlots: number
   }
 ): InsertResult {
-  console.log('rex debug 1: ')
-
   if (props.deck.length === 0) {
     if (props.newCard.size > props.maxSlots) {
       return { success: false, cards: props.deck };

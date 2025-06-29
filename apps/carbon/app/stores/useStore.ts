@@ -7,7 +7,7 @@ import { usePerson } from '../composables/usePerson'
 import type { UsePerson } from '../composables/usePerson'
 
 export const useStore = defineStore('store', () => {
-  const realm = ref<keyof CardStatRealms>('quest')
+  const realm = ref<keyof CardStatRealms>('base')
 
   const userStore = usePerson(user)
   const botStore = usePerson(bot)
@@ -26,7 +26,12 @@ export const useStore = defineStore('store', () => {
   }
 })
 
-function useMoney(props: { removeDraggedCard: () => Card | undefined, realm: keyof CardStatRealms }) {
+function useMoney(props: {
+  removeDraggedCard: (props: {
+    originBoard: 'deck' | 'inventory',
+    cardIndex: number
+  }) => Card | undefined, realm: keyof CardStatRealms
+}) {
   const money = reactive({
     value: 0,
     income: 2,
@@ -41,8 +46,11 @@ function useMoney(props: { removeDraggedCard: () => Card | undefined, realm: key
     setIncome: (newIncome: number) => {
       money.income = newIncome
     },
-    sellDraggedCard: () => {
-      const card = props.removeDraggedCard()
+    sellDraggedCard: (passedProps: {
+      originBoard: 'deck' | 'inventory',
+      cardIndex: number
+    }) => {
+      const card = props.removeDraggedCard(passedProps)
       const cardStats = card?.stats[props.realm]
       if (!cardStats) return
       money.value += cardStats.cost
