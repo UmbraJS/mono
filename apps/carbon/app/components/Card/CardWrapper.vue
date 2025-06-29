@@ -48,11 +48,9 @@ onMounted(() => {
     cardSize: props.size,
   })
 
+
   new Draggable(fragElement.value, {
     onDrag: function () {
-
-      console.log('Card is being dragged')
-
       cardDrag.onDrag(this)
       checkZoneHit(this, {
         threshold: '40%',

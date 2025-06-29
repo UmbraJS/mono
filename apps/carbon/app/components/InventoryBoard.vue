@@ -1,31 +1,17 @@
 <script setup lang="ts">
 import PlayerCard from '~/components/Card/Card.vue'
 import CardBoard from '~/components/CardBoard.vue'
-import type { Card } from '../../types'
-import { useView } from '~/stores/useStore'
-
-defineProps<{
-  timeline: gsap.core.Timeline
-  time: number
-  deck: Card[]
-  inventory: Card[]
-}>()
-
-const view = useView()
-function getCardStats(card: Card) {
-  return card.stats[view.realm]
-}
+import { useStore } from '~/stores/useStore'
+const store = useStore()
 </script>
 
 <template>
   <div class="MatchBoard">
     <CardBoard board="inventory" :max-slots="12">
-      <PlayerCard v-for="card in inventory" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
-        :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="inventory" />
+      <PlayerCard v-for="card in store.user.inventory" :key="card.id" :card="card" board="inventory" />
     </CardBoard>
     <CardBoard board="deck" :max-slots="12">
-      <PlayerCard v-for="card in deck" :key="card.id" :card-info="card.info" :card-stats="getCardStats(card)"
-        :index="card.index" :size="card.size" :time="time" :timeline="timeline" board="deck" />
+      <PlayerCard v-for="card in store.user.deck" :key="card.id" :card="card" board="deck" />
     </CardBoard>
   </div>
 </template>
