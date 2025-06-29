@@ -3,21 +3,19 @@ import { useCooldown } from '../../composables/useCooldown'
 import type { OutputChunk } from '../../../utils/time/types';
 
 const {
-  timeline,
   chunks,
   debug = false
 } = defineProps<{
-  timeline: gsap.core.Timeline;
   chunks: OutputChunk[];
   debug?: boolean;
 }>()
 
-const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(timeline, chunks)
+const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(chunks)
 </script>
 
 <template>
   <div :class="{ slow, haste, frozen }">
-    <div v-if="cooldown > 0" class="cooldown" :style="{ height: `${cooldown}%` }"/>
+    <div v-if="cooldown > 0" class="cooldown" :style="{ height: `${cooldown}%` }" />
     <div v-if="debug" class="debugPanel">
       <div class="debug grid">
         <p>{{ cooldownDuration.toFixed(1) }}</p>

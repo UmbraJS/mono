@@ -1,21 +1,11 @@
 <script setup lang="ts">
 import PartyBoard from './PartyBoard.vue'
-import type { User } from '../../types'
-import type { Card } from '../../types/card'
-import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
-import BashLogs from '~/components/BashLog/BashLogs.vue'
+import { useStore } from '~/stores/useStore'
+const store = useStore()
 
-defineProps<{
-  bot: User;
-  user: User;
-  health: number
-  shield: number
-  logs: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>
-}>()
-
-function getInfoDeck(deck: Card[]) {
-  return deck.map(d => d.info)
-}
+// function getInfoDeck(deck: Card[]) {
+//   return deck.map(d => d.info)
+// }
 </script>
 
 <template>
@@ -23,9 +13,13 @@ function getInfoDeck(deck: Card[]) {
     <div class="location border">
       <!-- <img :src="skeletonKing.field?.image?.default" alt="Location" /> -->
     </div>
-    <PlayerCharacter :characters="bot.characters" :health="health" :shield="shield" :reverse="false" />
-    <BashLogs :logs="logs" :player-info-deck="getInfoDeck(user.deck)" :opponent-info-deck="getInfoDeck(bot.deck)"
-      :modal-button="true" />
+    <PlayerCharacter :characters="store.bot.characters" :health="store.simulation.bot.health"
+      :shield="store.simulation.bot.shield" :reverse="false" />
+    <div class="location border">
+      <div class="money" />
+    </div>
+    <!-- <BashLogs :logs="logs" :player-info-deck="getInfoDeck(user.deck)" :opponent-info-deck="getInfoDeck(bot.deck)"
+      :modal-button="true" /> -->
   </PartyBoard>
 </template>
 

@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import PlayerCard from '~/components/Card/Card.vue'
 import CardBoard from '~/components/CardBoard.vue'
-import type { Card, CardStatRealms } from '../../types'
+import type { Card } from '../../types'
+import { useView } from '~/stores/useStore'
 
-const props = defineProps<{
+defineProps<{
   timeline: gsap.core.Timeline
   time: number
   deck: Card[]
   inventory: Card[]
-  realm: keyof CardStatRealms
 }>()
 
+const view = useView()
 function getCardStats(card: Card) {
-  return card.stats[props.realm]
+  return card.stats[view.realm]
 }
 </script>
 

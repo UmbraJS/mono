@@ -2,16 +2,8 @@
 import { Button } from '@nobel/core'
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
-import type { Character } from '~~/types'
 
 const store = useStore()
-
-defineProps<{
-  userCharacters: Character[]
-  health: number
-  shield: number
-}>()
-
 const view = useView()
 
 function toggleInventory() {
@@ -22,14 +14,14 @@ function toggleInventory() {
 <template>
   <PartyBoard>
     <div class="location border">
-      <Button
-class="viewButton" :color="view.view === 'inventory' ? 'default' : 'default'"
+      <Button class="viewButton" :color="view.view === 'inventory' ? 'default' : 'default'"
         :variant="view.view === 'inventory' ? 'primary' : 'base'" @click="toggleInventory">
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>
       </Button>
     </div>
-    <PlayerCharacter :characters="userCharacters" :health="health" :shield="shield" :reverse="false" />
+    <PlayerCharacter :characters="store.user.characters" :health="store.simulation.user.health"
+      :shield="store.simulation.user.shield" :reverse="false" />
     <div class="location border">
       <div class="money">
         <Icon name="carbon:money" size="1.5em" />

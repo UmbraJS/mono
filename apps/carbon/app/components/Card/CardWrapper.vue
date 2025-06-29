@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import type { CardInfo, CardStats } from '../../../types'
-// import CardModal from './CardModal.vue'
-// import { useBashRecords } from '~/composables/useBashRecords'
-import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
+import type { CardStats } from '../../../types'
 import { useAudioCue } from '@/composables/useAudioCue'
-import type { OutputChunk } from '../../../utils/time/types';
 import { useCardDrag } from '../../composables/useCardDrag'
 import { checkZoneHit } from '../../../utils/cardSwap/zoneHit'
 
@@ -16,20 +12,9 @@ import { Draggable } from 'gsap/Draggable';
 const props = defineProps<{
   index: number;
   size: number;
-  chunks?: OutputChunk[];
-  cardInfo: CardInfo
   cardStats: CardStats
-  playerLogs?: SpaceOutput
-  opponentLogs?: SpaceOutput
-  timeline: gsap.core.Timeline;
   board?: 'deck' | 'inventory'
 }>()
-
-// const cardBashRecords = useBashRecords({
-//   playerLogs: props.playerLogs,
-//   opponentLogs: props.opponentLogs,
-//   index: props.index,
-// })
 
 const audio = useAudioCue()
 
@@ -52,7 +37,6 @@ onMounted(() => {
   if (!fragElement.value) return
   if (typeof window === 'undefined') return
   if (!board) return
-
 
   gsap.registerPlugin(Draggable)
 
@@ -113,16 +97,12 @@ const columnEnd = computed(() => {
 })
 </script>
 <template>
-  <!-- <CardModal :chunks="chunks" :card-stats="cardStats" :card-info="cardInfo" :bash-records="cardBashRecords" -->
-  <!-- :timeline="timeline"> -->
-
   <button id="CardWrapper" ref="fragElement"
     class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" @click="triggerFlipSound">
 
     <slot />
 
   </button>
-  <!-- </CardModal> -->
 </template>
 
 <style lang="scss">

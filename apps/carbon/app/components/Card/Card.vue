@@ -1,31 +1,27 @@
 <script setup lang="ts">
-import type { CardInfo, CardStats } from '../../../types'
+import type { Card } from '../../../types'
 import CardCooldown from './CardCooldown.vue'
 import CardStatsComponent from './CardStats.vue'
-import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
 import type { OutputChunk } from '../../../utils/time/types';
 
-defineProps<{
-  index: number;
-  size: number;
+const props = defineProps<{
   chunks?: OutputChunk[];
-  cardInfo: CardInfo
-  cardStats?: CardStats
-  playerLogs?: SpaceOutput
-  opponentLogs?: SpaceOutput
-  timeline: gsap.core.Timeline;
+  card: Card;
   board?: 'deck' | 'inventory'
 }>()
+
+const view = useView()
+
+const cardStats = computed(() => {
+  return props.card.stats[view.realm]
+})
 </script>
 
 <template>
   <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
-  <CardWrapper v-else :index="index" :size="size" :chunks="chunks" :card-info="cardInfo" :card-stats="cardStats"
-    :timeline="timeline" :player-logs="playerLogs" :opponent-logs="opponentLogs" :board="board">
-
-    <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :timeline="timeline" :chunks="chunks" />
-
-    <!-- <img v-if="cardInfo.image" :src="cardInfo.image.default" alt="Card Image" /> -->
+  <CardWrapper v-else :index="card.index" :size="card.size" :card-stats="cardStats" :board="board">
+    <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :chunks="chunks" />
+    <!-- <img v-if="card.cardInfo.image" :src="card.cardInfo.image.default" alt="Card Image" /> -->
     <CardStatsComponent :bash="cardStats.bash" />
   </CardWrapper>
 </template>

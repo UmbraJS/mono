@@ -1,7 +1,10 @@
 import { gsap } from 'gsap'
 import type { OutputChunk } from '../../utils/time/types';
+import { useStore } from '~/stores/useStore'
 
-export function useCooldown(timeline: gsap.core.Timeline, chunks: OutputChunk[]) {
+export function useCooldown(cardSimulation: OutputChunk[]) {
+  const store = useStore()
+
   const cooldown = ref(100)
   const cooldownDuration = ref(0)
   const slow = ref(0)
@@ -12,14 +15,20 @@ export function useCooldown(timeline: gsap.core.Timeline, chunks: OutputChunk[])
   const frozenSource = ref<string>('freeze')
 
   const cardTimeline = gsap.timeline()
-  timeline.add(cardTimeline, 0)
-
-  const cardSimulation = chunks
+  store.simulation.timeline.add(cardTimeline, 0)
 
   onMounted(() => {
     const segments = getSegments(cardSimulation)
-    segments.forEach((segment) => {
+    console.log('Segments found:', segments.length)
+    segments.forEach((segment, index) => {
+      console.log(`Processing segment ${index}:`, segment)
       animateCooldown(segment)
+    })
+    
+    // Ensure the timeline starts
+    nextTick(() => {
+      console.log('Card timeline duration:', cardTimeline.duration())
+      console.log('Card timeline progress:', cardTimeline.progress())
     })
   })
 
@@ -30,6 +39,7 @@ export function useCooldown(timeline: gsap.core.Timeline, chunks: OutputChunk[])
     const chunkTimeline = gsap.timeline()
     const cooldownTimeline = gsap.timeline({
       onStart: () => {
+        console.log('Cooldown timeline started for segment')
         cooldown.value = 100
       },
     })
@@ -37,6 +47,12 @@ export function useCooldown(timeline: gsap.core.Timeline, chunks: OutputChunk[])
     cooldownTimeline.add(chunkTimeline, 0)
     cooldownTimeline.add(durationTimeline, 0)
     cardTimeline.add(cooldownTimeline)
+    
+    console.log('Timeline structure created for segment:', {
+      cooldownTimelineDuration: cooldownTimeline.duration(),
+      chunkTimelineDuration: chunkTimeline.duration(),
+      durationTimelineDuration: durationTimeline.duration()
+    })
 
     durationTimeline.fromTo(cooldownDuration, {
       value: segment.duration,
@@ -80,10 +96,30 @@ export function useCooldown(timeline: gsap.core.Timeline, chunks: OutputChunk[])
       toPercent,
       duration,
     }: AnimationProp) {
-      chunkTimeline.to(cooldown, {
+      console.log('Function triggered: gsapBase called with', { toPercent, duration })
+      console.log('ChunkTimeline before adding tween:', {
+        duration: chunkTimeline.duration(),
+        progress: chunkTimeline.progress(),
+        paused: chunkTimeline.paused()
+      })
+      
+      const tween = chunkTimeline.to(cooldown, {
         value: toPercent,
         duration: duration,
         ease: 'none',
+        onStart: () => {
+          console.log('Base animation started: tween is now running')
+        },
+        onComplete: () => {
+          console.log('Base animation completed')
+        }
+      })
+      
+      console.log('Tween added:', tween)
+      console.log('ChunkTimeline after adding tween:', {
+        duration: chunkTimeline.duration(),
+        progress: chunkTimeline.progress(),
+        paused: chunkTimeline.paused()
       })
     }
 
@@ -122,7 +158,6 @@ export function useCooldown(timeline: gsap.core.Timeline, chunks: OutputChunk[])
       sourceName,
     }: AnimationProp) {
       const hasteTimeline = gsap.timeline()
-      // cooldownTimeline.add(hasteTimeline, 0)
 
       chunkTimeline.to(cooldown, {
         value: toPercent,

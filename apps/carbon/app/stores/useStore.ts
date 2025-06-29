@@ -55,10 +55,17 @@ function useSimulation(userStore: UsePerson, botStore: UsePerson) {
   const time = ref(0)
 
   const timeline = gsap.timeline({
-    paused: true,
+    paused: false,
     onUpdate: () => {
       time.value = timeline.time()
     },
+  })
+
+  // Ensure timeline starts after all tweens are added
+  nextTick(() => {
+    if (timeline.paused()) {
+      timeline.play()
+    }
   })
 
   const cardTimeline = spaceTimeSimulation({
@@ -74,11 +81,13 @@ function useSimulation(userStore: UsePerson, botStore: UsePerson) {
     timeline,
     user: useSpace(timeline, cardTimeline.space.player, user.characters),
     bot: useSpace(timeline, cardTimeline.space.opponent, bot.characters),
+    cardTimeline: cardTimeline.time,
   }
 }
 
 export const useView = defineStore('view', () => {
   const view = ref<null | 'inventory'>(null)
+  const realm = ref<keyof CardStatRealms>('base')
 
   function setView(newView: 'inventory' | null) {
     view.value = newView
@@ -86,6 +95,7 @@ export const useView = defineStore('view', () => {
 
   return {
     view,
+    realm,
     setView,
   }
 })
