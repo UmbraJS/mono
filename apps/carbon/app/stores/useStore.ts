@@ -54,19 +54,12 @@ function useMoney(props: { removeDraggedCard: () => Card | undefined, realm: key
 function useSimulation(userStore: UsePerson, botStore: UsePerson) {
   const time = ref(0)
 
-  const timeline = gsap.timeline({
-    paused: false,
+  const timeline = markRaw(gsap.timeline({
+    paused: true,
     onUpdate: () => {
       time.value = timeline.time()
     },
-  })
-
-  // Ensure timeline starts after all tweens are added
-  nextTick(() => {
-    if (timeline.paused()) {
-      timeline.play()
-    }
-  })
+  }))
 
   const cardTimeline = spaceTimeSimulation({
     playerDeck: userStore.deck.value,

@@ -16,7 +16,7 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
   const frozenSource = ref<string>('freeze')
 
   const cardTimeline = gsap.timeline()
-  // store.simulation.timeline.add(cardTimeline, 0)
+  store.simulation.timeline.add(cardTimeline, 0)
 
   onMounted(() => {
     const segments = getSegments(cardSimulation)
@@ -32,7 +32,6 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
     const chunkTimeline = gsap.timeline()
     const cooldownTimeline = gsap.timeline({
       onStart: () => {
-        console.log('Cooldown timeline started for segment')
         cooldown.value = 100
       },
     })
@@ -83,15 +82,10 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
       toPercent,
       duration,
     }: AnimationProp) {
-      console.log('Function triggered: gsapBase called with', `from: ${cooldown.value} to: ${toPercent}, duration: ${duration}`)
-
       chunkTimeline.to(cooldown, {
         value: toPercent,
         duration: duration,
         ease: 'none',
-        onStart: () => {
-          console.log('Base animation started: tween is now running')
-        },
       })
     }
 
