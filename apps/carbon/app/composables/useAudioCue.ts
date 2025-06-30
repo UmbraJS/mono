@@ -1,5 +1,13 @@
 export function useAudioCue() {
   if (!import.meta.client) return
+  const playCardFlip = cardFlipSounds()
+
+  return {
+    playCardFlip,
+  }
+}
+
+function cardFlipSounds() {
   const audioContext = new AudioContext()
   let audioBuffer: AudioBuffer
 
@@ -30,7 +38,5 @@ export function useAudioCue() {
     source.start(0, start, duration)
   }
 
-  return {
-    playCardFlip,
-  }
+  return playCardFlip
 }
