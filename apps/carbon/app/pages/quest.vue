@@ -35,7 +35,6 @@ main.quest-wrapper {
   gap: var(--space-1);
 
   height: 100vh;
-
   padding: var(--space-1);
 }
 
@@ -52,7 +51,6 @@ main.quest-wrapper .Viewboard .ActiveBoard {
   filter: blur(0px);
   transition: var(--time);
 }
-
 
 main.quest-wrapper .Viewboard .ActiveBoard.blured {
   filter: blur(20px);
@@ -76,7 +74,6 @@ main.quest-wrapper .clipPath.hidden {
   overflow: hidden;
   clip-path: circle(0% at 10% 100%);
 }
-
 
 main.quest-wrapper .clipPath2 {
   clip-path: circle(100% at 50% 100%);
