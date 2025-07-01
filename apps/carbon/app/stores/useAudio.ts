@@ -14,6 +14,11 @@ export const useAudio = defineStore('audio', () => {
   const sound = soundFactory()
 
   return {
+    speak: async (text: string) => {
+      const voices = await getAvailableVoices()
+      const norwegian = voices.find(v => v.lang.startsWith('no'))
+      sound.speak(text, { voice: norwegian, pitch: 1.1 })
+    },
     playCardFlip: async () => {
       await sound.play(cardFlipSound)
     },
@@ -74,6 +79,7 @@ function soundFactory() {
     return {
       play: async () => { },
       preLoad: async () => { },
+      speak: () => { },
       volumes: {}
     }
   }
@@ -112,6 +118,32 @@ function soundFactory() {
     const gain = audioContext.createGain()
     gain.connect(masterGain)
     return gain
+  }
+
+
+  function speak(text: string, options?: {
+    voice?: SpeechSynthesisVoice
+    pitch?: number
+    rate?: number
+    volume?: number
+  }) {
+    if (!('speechSynthesis' in window)) {
+      console.warn('[soundFactory] SpeechSynthesis not supported')
+      return
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text)
+
+    const effectiveVolume = options?.volume ?? volumes.voice
+    utterance.volume = Math.max(0, Math.min(effectiveVolume, 1))
+    utterance.pitch = options?.pitch ?? 1
+    utterance.rate = options?.rate ?? 1
+
+    if (options?.voice) {
+      utterance.voice = options.voice
+    }
+
+    speechSynthesis.speak(utterance)
   }
 
   const bufferCache = new Map<string, AudioBuffer>()
@@ -155,7 +187,22 @@ function soundFactory() {
 
   return {
     play,
+    speak,
     preLoad: loadSound,
     volumes
   }
+}
+
+
+export function getAvailableVoices(): Promise<SpeechSynthesisVoice[]> {
+  return new Promise((resolve) => {
+    const voices = speechSynthesis.getVoices()
+    if (voices.length) {
+      resolve(voices)
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        resolve(speechSynthesis.getVoices())
+      }
+    }
+  })
 }
