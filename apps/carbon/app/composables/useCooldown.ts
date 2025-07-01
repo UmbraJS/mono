@@ -1,10 +1,12 @@
 import { gsap } from 'gsap'
 import type { OutputChunk } from '../../utils/time/types';
 import { useStore } from '~/stores/useStore'
+import { useAudio } from '../stores/useAudio'
 
 export function useCooldown(cardSimulation: OutputChunk[]) {
   const store = useStore()
 
+  const audio = useAudio()
 
   const cooldown = ref(100)
   const cooldownDuration = ref(0)
@@ -33,6 +35,9 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
     const cooldownTimeline = gsap.timeline({
       onStart: () => {
         cooldown.value = 100
+      },
+      onComplete: () => {
+        audio.playPunchSound()
       },
     })
 
@@ -108,6 +113,7 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
             duration: duration,
             ease: 'none',
             onStart: () => {
+              audio.playCardFlip()
               slowSource.value = sourceName || 'slow'
             },
             onComplete: () => {
@@ -137,6 +143,7 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
             duration: duration,
             ease: 'none',
             onStart: () => {
+              audio.playCardFlip()
               hasteSource.value = sourceName || 'haste'
             },
             onComplete: () => {
@@ -166,6 +173,7 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
             duration: duration,
             ease: 'none',
             onStart: () => {
+              audio.playCardFlip()
               frozenSource.value = sourceName || 'freeze'
             },
             onComplete: () => {

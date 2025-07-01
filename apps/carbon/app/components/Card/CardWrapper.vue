@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CardStats } from '../../../types'
-import { useAudioCue } from '@/composables/useAudioCue'
+import { useStore } from '~/stores/useStore'
 import { useCardDrag } from '../../composables/useCardDrag'
 import { checkZoneHit } from '../../../utils/cardSwap/zoneHit'
 
@@ -8,6 +8,7 @@ import { useTemplateRef } from 'vue'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable';
+import { useAudio } from '../../stores/useAudio'
 
 const props = defineProps<{
   index: number;
@@ -16,14 +17,14 @@ const props = defineProps<{
   board?: 'deck' | 'inventory'
 }>()
 
-const audio = useAudioCue()
+const audio = useAudio()
 
 const recentlyClickedFlipSound = ref(false)
 
 function triggerFlipSound() {
   if (recentlyClickedFlipSound.value) return
   recentlyClickedFlipSound.value = true
-  audio?.playCardFlip()
+  audio.playCardFlip()
   setTimeout(() => {
     recentlyClickedFlipSound.value = false
   }, 200)

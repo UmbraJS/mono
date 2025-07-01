@@ -7,27 +7,25 @@ interface SoundPath {
   }
 }
 
-export function useAudioCue() {
+export const useAudio = defineStore('audio', () => {
+  const cardFlipSound = getFlipSound()
+  const punchSound = getPunchSound()
+
   const sound = soundFactory()
 
   return {
     playCardFlip: async () => {
-      const cardFlipSound = getFlipSound()
       await sound.play(cardFlipSound)
     },
     playPunchSound: async () => {
-      const punchSound = getPunchSound()
       await sound.play(punchSound)
     },
     preLoadSounds: async () => {
-      const punchSound = getPunchSound()
-      const cardFlipSound = getFlipSound()
-
       await sound.preLoad(cardFlipSound.path)
       await sound.preLoad(punchSound.path)
     },
   }
-}
+})
 
 function getFlipSound(): SoundPath {
   const cardFlipPath = 'sounds/cardFlips.mp3'
@@ -55,7 +53,6 @@ function getPunchSound(): SoundPath {
 
   const punchSounds = [punch1, punch2, punch3, punch4]
   const randomIndex = Math.floor(Math.random() * punchSounds.length)
-  console.log('Punch sound:', randomIndex)
   return {
     category: 'action',
     path: punchSounds[randomIndex] || punch1
