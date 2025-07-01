@@ -54,6 +54,7 @@
     "gsap": "catalog:",
     "gsap-trial": "catalog:",
     "reka-ui": "catalog:",
+    "vaul-vue": "^0.4.1",
     "vue-router": "catalog:",
     "vue-sonner": "catalog:"
   },

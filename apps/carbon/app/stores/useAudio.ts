@@ -13,11 +13,19 @@ export const useAudio = defineStore('audio', () => {
 
   const sound = soundFactory()
 
+
   return {
     speak: async (text: string) => {
       const voices = await getAvailableVoices()
       const norwegian = voices.find(v => v.lang.startsWith('no'))
-      sound.speak(text, { voice: norwegian, pitch: 1.1 })
+      await sound.speak(text, { voice: norwegian, pitch: 1.1 })
+    },
+    speakElevenLabs: async (text: string, voice: ElevenLabsVoice) => {
+      const url = await fetchElevenLabsSpeech(text, voice)
+      await sound.play({
+        category: 'voice',
+        path: url
+      })
     },
     playCardFlip: async () => {
       await sound.play(cardFlipSound)
@@ -205,4 +213,39 @@ export function getAvailableVoices(): Promise<SpeechSynthesisVoice[]> {
       }
     }
   })
+}
+
+const ElevenLabs = {
+  rusticCowboy: 'YXpFCvM1S3JbWEJhoskW',
+  germanSage: 'A9evEp8yGjv4c3WsIKuY',
+  grandpa: 'zQzvQBubVkDWYuqJYMFn',
+} as const
+
+type ElevenLabsVoice = keyof typeof ElevenLabs
+
+async function fetchElevenLabsSpeech(text: string, voice: ElevenLabsVoice): Promise<string> {
+  const voiceId = ElevenLabs[voice]
+
+  const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'xi-api-key': import.meta.env.VITE_ELEVEN_API_KEY // use env var!
+    },
+    body: JSON.stringify({
+      text,
+      model_id: 'eleven_multilingual_v2',
+      voice_settings: {
+        stability: 0.6,
+        similarity_boost: 0.8
+      }
+    })
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ElevenLabs TTS: ${res.status}`)
+  }
+
+  const blob = await res.blob()
+  return URL.createObjectURL(blob)
 }

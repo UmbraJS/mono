@@ -2,6 +2,7 @@
 import type { Character } from '~~/types'
 import ValueBar from './ValueBar/ValueBar.vue'
 import FrostLayer from './FrostLayer.vue'
+import { Button, Drawer } from '@nobel/core'
 
 const props = defineProps<{
   reverse: boolean
@@ -20,10 +21,34 @@ function getMaxHealth(): number {
 
 <template>
   <section class="character" :class="{ reverse }">
-    <header>
+    <header id="Party">
       <div v-for="character in characters" :key="character.id" class="character-avatar">
         <img v-if="character.image" :src="character.image.default" alt="Character Image">
       </div>
+      <div v-for="character in characters" :key="character.id" class="character-avatar">
+        <img v-if="character.image" :src="character.image.default" alt="Character Image">
+      </div>
+      <div v-for="character in characters" :key="character.id" class="character-avatar">
+        <img v-if="character.image" :src="character.image.default" alt="Character Image">
+      </div>
+
+      <div class="PlayerSettings">
+
+        <Drawer>
+          <template #trigger>
+            <Button variant="base" size="small">
+              <Icon name="carbon:settings" size="1.5em" />
+            </Button>
+          </template>
+
+          <template #content>
+            <h3>Player Settings</h3>
+            <p>Configure your character settings here.</p>
+            <!-- Add your player settings components here -->
+          </template>
+        </Drawer>
+      </div>
+
       <div class="healthImpact">
         <FrostLayer :reversed="reverse" :health="health" :max-health="maxHealth" />
       </div>
@@ -53,6 +78,18 @@ function getMaxHealth(): number {
   z-index: 1;
   display: grid;
   overflow: hidden;
+  pointer-events: none;
+}
+
+#Party {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-area: avatar;
+}
+
+#Party .PlayerSettings {
+  padding: var(--space-quark);
 }
 
 .character {

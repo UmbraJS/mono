@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs, Graph } from '@nobel/core'
+import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs, Graph, Drawer } from '@nobel/core'
+
+const open = ref(false)
 </script>
 
 <template>
@@ -109,7 +112,22 @@ import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs, G
           <p>Content for Tab 2</p>
         </template>
       </Tabs>
+    </section>
 
+    <section>
+      <Drawer>
+        <template #trigger>
+          <Button variant="primary">
+            <Icon icon="pixelarticons:home" />
+          </Button>
+        </template>
+
+        <template #content>
+          <h2>Drawer Content</h2>
+          <p>This is the content inside the drawer.</p>
+          <Button variant="secondary">Close Drawer</Button>
+        </template>
+      </Drawer>
     </section>
 
     <section class="graph">
