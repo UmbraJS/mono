@@ -4,13 +4,17 @@ import { DrawerContent, DrawerOverlay, DrawerPortal, DrawerRoot, DrawerTrigger, 
 defineProps<{
   title?: string
   description?: string
+  class?: string
 }>()
 </script>
 
 <template>
   <DrawerRoot :preventScrollRestoration="true" :shouldScaleBackground="true">
     <DrawerTrigger id="DrawerTrigger">
-      <slot name="trigger" />
+      <Button :class="class" color="default" variant="base">
+        <Icon name="carbon:settings" size="1.5em" />
+        <p>settings</p>
+      </Button>
     </DrawerTrigger>
     <DrawerPortal>
       <DrawerOverlay id="DrawerOverlay" />
