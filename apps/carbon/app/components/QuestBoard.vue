@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+const audio = useAudio()
+
 interface EventCard {
   id: string;
   image: string;
@@ -13,9 +16,9 @@ interface EventCard {
 
 const events: EventCard[] = [
   {
-    id: 'village',
+    id: 'Ormond',
     image: '/village.jpg',
-    name: 'Village',
+    name: 'Ormond',
     description: 'A peaceful village where you can rest and gather supplies.',
     effects: [
       {
@@ -25,9 +28,9 @@ const events: EventCard[] = [
       }
     ],
   }, {
-    id: 'burial',
+    id: 'Saint Denis',
     image: '/burial.jpg',
-    name: 'Burial',
+    name: 'Saint Denis',
     description: 'A solemn burial ground where you can pay your respects.',
     effects: [
       {
@@ -37,9 +40,9 @@ const events: EventCard[] = [
       }
     ],
   }, {
-    id: 'swamp',
+    id: 'Borg Bog',
     image: '/swamp.jpg',
-    name: 'Swamp',
+    name: 'Borg Bog',
     description: 'A murky swamp filled with dangers and hidden treasures.',
     effects: [
       {
@@ -55,7 +58,8 @@ const events: EventCard[] = [
 
 <template>
   <div class="quest-events">
-    <div v-for="event in events" :key="event.id" class="event">
+    <div v-for="event in events" :key="event.id" class="event"
+      @click="() => audio.speakElevenLabs(event.name + event.description, 'germanSage')">
       <img :src="event.image" alt="Location">
       <div class="prose">
         <h3>{{ event.name }}</h3>
@@ -90,6 +94,21 @@ const events: EventCard[] = [
   padding: var(--space-1);
   background: var(--base-20);
   border-radius: var(--radius);
+  border: solid 1px var(--base);
+  transition: var(--slow);
+}
+
+.quest-events .event:hover {
+  background: var(--base-30);
+  cursor: pointer;
+  border: solid 1px var(--base-50);
+}
+
+.quest-events .event:active {
+  background: var(--accent-30);
+  color: var(--accent-100);
+  border: solid 1px var(--accent-50);
+  transition: var(--time);
 }
 
 .quest-events .event img {
