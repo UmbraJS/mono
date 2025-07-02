@@ -46,16 +46,6 @@ defineProps<{
   border-radius: var(--radius) var(--radius) 0 0;
   padding: var(--space-4);
   padding-top: var(--space-2);
-  transform: translateY(100%);
-  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-#DrawerContent[data-state="open"] {
-  transform: translateY(0);
-}
-
-#DrawerContent[data-state="closed"] {
-  transform: translateY(100%);
 }
 
 #DrawerContent:focus {
