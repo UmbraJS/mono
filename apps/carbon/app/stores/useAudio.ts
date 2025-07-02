@@ -13,7 +13,6 @@ export const useAudio = defineStore('audio', () => {
 
   const sound = soundFactory()
 
-
   return {
     speak: async (text: string) => {
       const voices = await getAvailableVoices()
@@ -200,7 +199,6 @@ function soundFactory() {
     volumes
   }
 }
-
 
 export function getAvailableVoices(): Promise<SpeechSynthesisVoice[]> {
   return new Promise((resolve) => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Button } from '@nobel/core'
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
+import { Button, Drawer } from '@nobel/core'
 
 const store = useStore()
 const view = useView()
@@ -19,6 +19,22 @@ function toggleInventory() {
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>
       </Button>
+      <ClientOnly>
+        <Drawer>
+          <template #trigger>
+            <Button class="viewButton" color="default" variant="base">
+              <Icon name="carbon:settings" size="1.5em" />
+              <p>settings</p>
+            </Button>
+          </template>
+
+          <template #content>
+            <h3>Player Settings</h3>
+            <p>Configure your character settings here.</p>
+            <!-- Add your player settings components here -->
+          </template>
+        </Drawer>
+      </ClientOnly>
     </div>
     <PlayerCharacter :characters="store.user.characters" :health="store.simulation.user.health"
       :shield="store.simulation.user.shield" :reverse="false" />
@@ -34,9 +50,17 @@ function toggleInventory() {
 
 <style>
 section.PartyBoard .location {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
   position: relative;
   height: 100%;
   padding: var(--space-1);
+}
+
+section.PartyBoard .location #DrawerTrigger {
+  width: 100%;
 }
 
 section.PartyBoard img {
