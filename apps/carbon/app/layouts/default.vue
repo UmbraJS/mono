@@ -10,8 +10,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-class="layout" :class="{
+  <div data-vaul-drawer-wrapper class="layout" :class="{
     dark: theme.isDark,
   }">
     <slot />

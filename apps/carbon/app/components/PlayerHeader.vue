@@ -19,22 +19,20 @@ function toggleInventory() {
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>
       </Button>
-      <ClientOnly>
-        <Drawer>
-          <template #trigger>
-            <Button class="viewButton" color="default" variant="base">
-              <Icon name="carbon:settings" size="1.5em" />
-              <p>settings</p>
-            </Button>
-          </template>
+      <Drawer title="Player Settings" description="Configure your character settings and preferences">
+        <template #trigger>
+          <Button class="viewButton" color="default" variant="base">
+            <Icon name="carbon:settings" size="1.5em" />
+            <p>settings</p>
+          </Button>
+        </template>
 
-          <template #content>
-            <h3>Player Settings</h3>
-            <p>Configure your character settings here.</p>
-            <!-- Add your player settings components here -->
-          </template>
-        </Drawer>
-      </ClientOnly>
+        <template #content>
+          <h3>Player Settings</h3>
+          <p>Configure your character settings here.</p>
+          <!-- Add your player settings components here -->
+        </template>
+      </Drawer>
     </div>
     <PlayerCharacter :characters="store.user.characters" :health="store.simulation.user.health"
       :shield="store.simulation.user.shield" :reverse="false" />

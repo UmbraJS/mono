@@ -117,9 +117,9 @@ const open = ref(false)
     <section>
       <Drawer>
         <template #trigger>
-          <Button variant="primary">
+          <div variant="primary">
             <Icon icon="pixelarticons:home" />
-          </Button>
+          </div>
         </template>
 
         <template #content>

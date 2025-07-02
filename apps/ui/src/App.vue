@@ -67,7 +67,7 @@ function toggleTheme() {
       </ButtonGroup>
     </nav>
   </header>
-  <main>
+  <main data-vaul-drawer-wrapper>
     <router-view :key="route.path"></router-view>
   </main>
 </template>
