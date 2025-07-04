@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useStore, useView } from '~/stores/useStore'
-const store = useStore()
+import { useView } from '~/stores/useStore'
 const view = useView()
 </script>
 
@@ -13,12 +12,7 @@ const view = useView()
       </template>
     </ViewBoard>
 
-    <div class="HeadBoard">
-      <PlayerHeader />
-      <ViewOverlay :hidden="store.user.draggedCard === null">
-        <SellZone />
-      </ViewOverlay>
-    </div>
+    <PlayerHeader />
   </main>
 </template>
 
@@ -51,13 +45,5 @@ main.quest-wrapper .Viewboard .ActiveBoard {
 
 main.quest-wrapper .Viewboard .ActiveBoard.blured {
   filter: blur(20px);
-}
-
-main.quest-wrapper .HeadBoard {
-  position: relative;
-  z-index: 1;
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
 }
 </style>

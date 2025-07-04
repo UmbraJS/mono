@@ -34,8 +34,10 @@ function toggleInventory() {
         </template>
       </Drawer>
     </div>
+
     <PlayerCharacter :characters="store.user.characters" :health="store.simulation.user.health"
       :shield="store.simulation.user.shield" :reverse="false" />
+
     <div class="location border">
       <div class="money">
         <Icon name="carbon:money" size="1.5em" />
@@ -43,11 +45,15 @@ function toggleInventory() {
         <p>(+{{ store.money.income }})</p>
       </div>
     </div>
+
+    <ViewOverlay :hidden="store.user.draggedCard === null">
+      <SellZone />
+    </ViewOverlay>
   </PartyBoard>
 </template>
 
 <style>
-section.PartyBoard .location {
+section#PartyBoard .location {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -57,11 +63,11 @@ section.PartyBoard .location {
   padding: var(--space-1);
 }
 
-section.PartyBoard .location #DrawerTrigger {
+section#PartyBoard .location #DrawerTrigger {
   width: 100%;
 }
 
-section.PartyBoard img {
+section#PartyBoard img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -69,7 +75,7 @@ section.PartyBoard img {
   border-radius: var(--radius);
 }
 
-section.PartyBoard .location .money {
+section#PartyBoard .location .money {
   display: flex;
   align-items: center;
   gap: var(--space-1);
@@ -80,7 +86,7 @@ section.PartyBoard .location .money {
   cursor: pointer;
 }
 
-section.PartyBoard .location .viewButton {
+section#PartyBoard .location .viewButton {
   display: flex;
   justify-content: flex-start;
   gap: var(--space-1);
