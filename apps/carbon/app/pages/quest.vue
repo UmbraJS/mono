@@ -6,21 +6,18 @@ const view = useView()
 
 <template>
   <main class="quest-wrapper">
-    <div class="Viewboard">
-      <div class="ActiveBoard" :class="{ blured: view.view !== null }">
-        <QuestBoard />
-      </div>
-      <div class="ViewOverlay clipPath" :class="{ hidden: view.view !== 'inventory' }">
+    <ViewBoard :overlay="view.view !== null">
+      <QuestBoard />
+      <template #overlay>
         <InventoryBoard />
-      </div>
-    </div>
+      </template>
+    </ViewBoard>
+
     <div class="HeadBoard">
       <PlayerHeader />
-      <div class="ViewOverlay clipPath2" :class="{ hidden: store.user.draggedCard === null }">
-        <div data-sellzone class="Seller border base-warning">
-          <h1>Drop To Sell {{ store.user.draggedCard?.cardStats.cost }}</h1>
-        </div>
-      </div>
+      <ViewOverlay :hidden="store.user.draggedCard === null">
+        <SellZone />
+      </ViewOverlay>
     </div>
   </main>
 </template>
@@ -56,58 +53,11 @@ main.quest-wrapper .Viewboard .ActiveBoard.blured {
   filter: blur(20px);
 }
 
-main.quest-wrapper .ViewOverlay {
-  position: absolute;
-  z-index: 99;
-
-  top: 0;
-  height: 100%;
-  width: 100%;
-}
-
-main.quest-wrapper .clipPath {
-  clip-path: circle(100% at 50% 100%);
-  transition: var(--slower);
-}
-
-main.quest-wrapper .clipPath.hidden {
-  overflow: hidden;
-  clip-path: circle(0% at 10% 100%);
-}
-
-main.quest-wrapper .clipPath2 {
-  clip-path: circle(100% at 50% 100%);
-  transition: var(--slow);
-}
-
-main.quest-wrapper .clipPath2.hidden {
-  overflow: hidden;
-  clip-path: circle(0% at 50% 100%);
-}
-
 main.quest-wrapper .HeadBoard {
   position: relative;
   z-index: 1;
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: subgrid;
-}
-
-main.quest-wrapper .ViewOverlay .Seller {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--base-20);
-  color: var(--base-50);
-  height: 100%;
-  width: 100%;
-  border-radius: var(--radius);
-  transition: var(--slow);
-}
-
-main.quest-wrapper .ViewOverlay .Seller.active-zone {
-  border-width: var(--space-1);
 }
 </style>

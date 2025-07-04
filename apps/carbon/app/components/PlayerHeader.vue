@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
-import { Button, Drawer } from '@nobel/core'
+import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
 
 const store = useStore()
 const view = useView()
@@ -22,9 +22,15 @@ function toggleInventory() {
       <Drawer class="viewButton" title="Player Settings"
         description="Configure your character settings and preferences">
         <template #content>
-          <h3>Player Settings</h3>
-          <p>Configure your character settings here.</p>
-          <!-- Add your player settings components here -->
+          <div class="content">
+            <DrawerTitle id="drawer-title" class="">
+              Player Settings
+            </DrawerTitle>
+            <DrawerDescription id="drawer-content-description">
+              Configure your character settings here.
+            </DrawerDescription>
+            <Slider />
+          </div>
         </template>
       </Drawer>
     </div>
@@ -80,7 +86,4 @@ section.PartyBoard .location .viewButton {
   gap: var(--space-1);
   width: 100%;
 }
-
-/* section.PartyBoard .location .money.active {
-} */
 </style>

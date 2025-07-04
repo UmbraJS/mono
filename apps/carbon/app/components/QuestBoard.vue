@@ -1,64 +1,13 @@
 <script setup lang="ts">
 
 const audio = useAudio()
-
-interface EventCard {
-  id: string;
-  image: string;
-  name: string;
-  description: string;
-  effects: {
-    id: string;
-    image: string;
-    description: string;
-  }[];
-}
-
-const events: EventCard[] = [
-  {
-    id: 'Ormond',
-    image: '/village.jpg',
-    name: 'Ormond',
-    description: 'A peaceful village where you can rest and gather supplies.',
-    effects: [
-      {
-        id: 'swamp-effect',
-        image: '/village.jpg',
-        description: 'Opens a store'
-      }
-    ],
-  }, {
-    id: 'Saint Denis',
-    image: '/burial.jpg',
-    name: 'Saint Denis',
-    description: 'A solemn burial ground where you can pay your respects.',
-    effects: [
-      {
-        id: 'swamp-effect',
-        image: '/burial.jpg',
-        description: 'Opens a store'
-      }
-    ],
-  }, {
-    id: 'Borg Bog',
-    image: '/swamp.jpg',
-    name: 'Borg Bog',
-    description: 'A murky swamp filled with dangers and hidden treasures.',
-    effects: [
-      {
-        id: 'swamp-effect',
-        image: '/swamp.jpg',
-        description: 'A free item'
-      }
-    ],
-  }
-]
+const quest = useQuest()
 
 </script>
 
 <template>
   <div class="quest-events">
-    <div v-for="event in events" :key="event.id" class="event"
+    <div v-for="event in quest.currentEvents" :key="event.id" class="event"
       @click="() => audio.speakElevenLabs(event.name + event.description, 'germanSage')">
       <img :src="event.image" alt="Location">
       <div class="prose">
