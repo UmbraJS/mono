@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // https://nuxt.com/modules
-  modules: ['@nuxthub/core', '@nuxt/eslint', '@pinia/nuxt', '@nuxt/icon'],
+  modules: ['@nuxthub/core', '@nuxt/eslint', '@nuxt/image', '@pinia/nuxt', '@nuxt/icon'],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
@@ -19,6 +19,22 @@ export default defineNuxtConfig({
 
   // https://hub.nuxt.com/docs/getting-started/installation#options
   hub: {},
+
+  image: {
+    quality: 80,
+    formats: ['webp'],
+    // You can disable IPX entirely
+    // provider: 'none',
+    // Or configure specific behavior
+    // provider: 'static',
+    provider: 'ipx',
+    // ipx: {
+    //   fs: { dir: process.env.NUXT_IMAGES_ROOT },
+    // },
+    target: 'static',
+    domains: [],
+    alias: {},
+  },
 
   nitro: {
     experimental: {

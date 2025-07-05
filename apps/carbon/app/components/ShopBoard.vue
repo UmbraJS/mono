@@ -5,14 +5,15 @@ const quest = useQuest()
 
 <template>
   <div id="ShopBoard">
-    <PlayerCard v-for="event in quest.currentShop" :key="event.id" :card="event" :placement="false" />
+    <CardModal v-for="card in quest.currentShop" :key="card.id" :card="card">
+      <PlayerCard :card="card" :free-size="true" />
+    </CardModal>
   </div>
 </template>
 
 <style>
 #ShopBoard {
-  display: grid;
-  grid-template-columns: subgrid;
+  display: flex;
   gap: var(--space-1);
   grid-column: 1 / -1;
   height: 150px;

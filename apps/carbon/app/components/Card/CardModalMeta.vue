@@ -1,39 +1,40 @@
 <script setup lang="ts">
 import { DialogTitle, Tabs } from '@nobel/core'
-import type { CardInfo, CardStats } from '../../../types'
+import type { Card } from '../../../types'
 import CardModalDetails from './CardModalDetails.vue'
 import type { BashRecords } from '~/composables/useBashRecords'
 
-defineProps<{
-  cardStats: CardStats
-  cardInfo: CardInfo
+const props = defineProps<{
+  card: Card;
   bashRecords?: BashRecords
 }>()
+
+const view = useView()
+const stats = computed(() => view.getCardStats(props.card))
 </script>
 
 <template>
   <div class="cardMeta">
     <DialogTitle>
-      <span>lvl {{ cardStats.level }} - </span>{{ cardInfo.name }}
+      <span>lvl {{ stats.level }} - </span>{{ card.info.name }}
     </DialogTitle>
 
-    <Tabs
-class="ModalBashLogTabs" aria-label="Actions" :tabs="[
+    <Tabs id="ModalBashLogTabs" :tabs="[
       { label: 'Details', icon: 'mdi:account-card-outline' },
       { label: 'Stats', icon: 'mdi:star-four-points-circle' },
     ]">
       <template #tab1>
-        <CardModalDetails :info="cardInfo" :stats="cardStats" />
+        <CardModalDetails :card="card" />
       </template>
       <template v-if="bashRecords" #tab2>
-        <CardRecord :card-stats="cardStats" :bash-records="bashRecords" />
+        <CardRecord :card="card" :bash-records="bashRecords" />
       </template>
     </Tabs>
   </div>
 </template>
 
 <style>
-.ModalBashLogTabs {
+#ModalBashLogTabs {
   height: 100%;
 }
 </style>

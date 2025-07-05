@@ -8,7 +8,7 @@ const props = defineProps<{
   chunks?: OutputChunk[];
   card: Card;
   board?: 'deck' | 'inventory'
-  placement?: boolean; // Default to false if not provided
+  freeSize?: boolean;
 }>()
 
 const view = useView()
@@ -21,9 +21,12 @@ const cardStats = computed(() => {
 <template>
   <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
   <CardWrapper v-else :index="card.index" :size="card.size" :card-stats="cardStats" :board="board"
-    :placement="placement">
+    :free-size="freeSize">
     <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :chunks="chunks" />
-    <!-- <img v-if="card.cardInfo.image" :src="card.cardInfo.image.default" alt="Card Image" /> -->
+
+    <NuxtImg v-if="card.info.image" class="avatar" :src="card.info.image.default" :alt="card.info.description"
+      width="450" height="400" />
+
     <CardStatsComponent :bash="cardStats.bash" />
   </CardWrapper>
 </template>
@@ -51,16 +54,17 @@ const cardStats = computed(() => {
   border-radius: var(--radius);
 }
 
-.CardWrapper img {
+#CardWrapper img {
   position: absolute;
   width: 100%;
   height: 100%;
+  object-fit: cover;
   top: 0px;
   left: 0px;
   z-index: 0;
 }
 
-.CardWrapper img {
+#CardWrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;

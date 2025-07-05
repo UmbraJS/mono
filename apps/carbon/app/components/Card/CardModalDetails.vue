@@ -1,23 +1,24 @@
 <script setup lang="ts">
 import { DialogDescription, ScrollArea } from '@nobel/core'
-import type { CardInfo, CardStats } from '../../../types'
+import type { Card } from '../../../types'
 import AttackIcon from '../icons/Attack.vue'
 import BanterIcon from '../icons/Banter.vue'
 import CardModalBash from './CardModalBash.vue'
 
 const props = defineProps<{
-  info: CardInfo
-  stats: CardStats
+  card: Card;
 }>()
 
-const bash = props.stats.bash
+const view = useView()
+const stats = view.getCardStats(props.card)
+const bash = stats.bash
 </script>
 
 <template>
   <ScrollArea class="CardModalDetailsScrollArea">
     <div class="CardModalDetails">
       <DialogDescription>
-        {{ info.description }}
+        {{ card.info.description }}
       </DialogDescription>
 
       <div class="bash">

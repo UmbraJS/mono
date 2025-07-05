@@ -7,13 +7,12 @@ import type { OutputChunk } from '../../../utils/time/types';
 defineProps<{
   chunks?: OutputChunk[]
   cardInfo: CardInfo
-  timeline: gsap.core.Timeline;
 }>()
 </script>
 
 <template>
   <div class="avatar">
-    <CardCooldown v-if="chunks" :timeline="timeline" :chunks="chunks" />
+    <CardCooldown v-if="chunks" :chunks="chunks" />
     <div class="chips">
       <div v-if="cardInfo.rarity" class="chip base-yellow">
         <BanterIcon />
@@ -24,7 +23,7 @@ defineProps<{
         Unique
       </div>
     </div>
-    <img :src="cardInfo.image?.default" alt="card image" class="dialog-image border" >
+    <img :src="cardInfo.image?.default" alt="card image" class="dialog-image border">
   </div>
 </template>
 

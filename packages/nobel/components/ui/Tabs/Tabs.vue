@@ -12,7 +12,6 @@ const {
 } = defineProps<{
   size?: ButtonSize
   defaultValue?: string
-  ariaLabel: string
   tabs: {
     label?: string
     icon?: string
@@ -27,7 +26,7 @@ function tabID(index: number) {
 
 <template>
   <TabsRoot class="TabsRoot" :default-value="defaultValue" orientation="horizontal" v-model="valX">
-    <TabsList class="Tabs" :aria-label="ariaLabel">
+    <TabsList class="Tabs" aria-label="actions">
       <div class="TabsList button-group">
         <TabButton v-for="(tab, index) in tabs" :key="tab.label" :value="tabID(index)" :size="size"
           :active="valX === tabID(index)" :disabled="false">

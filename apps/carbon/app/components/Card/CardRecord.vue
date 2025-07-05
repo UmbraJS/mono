@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Graph, ScrollArea } from '@nobel/core'
-import type { CardStats } from '../../../types'
+import type { Card } from '../../../types'
 import { Icon } from '@iconify/vue'
 import type { BashRecords } from '~/composables/useBashRecords'
 
@@ -12,7 +12,7 @@ import type { BashRecords } from '~/composables/useBashRecords'
 // }
 
 const props = defineProps<{
-  cardStats: CardStats
+  card: Card;
   bashRecords: BashRecords
 }>()
 
@@ -25,6 +25,9 @@ const recordedData = computed(() => {
     y2: 10,
   }))
 })
+
+const view = useView()
+const cardStats = view.getCardStats(props.card)
 </script>
 
 <template>

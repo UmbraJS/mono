@@ -90,6 +90,12 @@ export const useView = defineStore('view', () => {
   const view = ref<null | 'inventory'>(null)
   const realm = ref<keyof CardStatRealms>('base')
 
+  function getCardStats(card: Card) {
+    const cardStats = card.stats[realm.value]
+    if (!cardStats) return card.stats.base
+    return cardStats
+  }
+
   function setView(newView: 'inventory' | null) {
     view.value = newView
   }
@@ -97,6 +103,7 @@ export const useView = defineStore('view', () => {
   return {
     view,
     realm,
+    getCardStats,
     setView,
   }
 })

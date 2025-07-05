@@ -15,8 +15,7 @@ defineProps<{
 </script>
 
 <template>
-  <Tabs
-class="BashLogTabs" aria-label="Actions" :tabs="[
+  <Tabs class="BashLogTabs" aria-label="Actions" :tabs="[
     { label: 'Opponent', icon: 'mdi:crosshairs-gps' },
     { label: 'Player', icon: 'mdi:shield' },
   ]">

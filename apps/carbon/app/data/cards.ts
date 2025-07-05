@@ -391,14 +391,14 @@ export const gauntletOfSigmar: Card = {
     rarity: 1,
     unique: false,
     image: {
-      default: 'gauntletOfSigmar.jpg',
+      default: 'sigmarGauntlet.jpg',
     },
   },
   stats: {
     base: {
       level: 1,
       cost: 10,
-      bash: { attack: 10, shield: 10, actionCount: 1, cooldown: 5 },
+      bash: { attack: 20, shield: 10, actionCount: 1, cooldown: 5 },
       effects: [],
       tags: ['weapon'],
       aspects: [aspects.metal],

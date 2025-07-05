@@ -15,13 +15,14 @@ const {
   index,
   size,
   cardStats,
-  placement = true, // Default to false if not provided
+  freeSize = false
 } = defineProps<{
   index: number;
   size: number;
   cardStats: CardStats
   board?: 'deck' | 'inventory'
-  placement?: boolean
+  noPlacement?: boolean
+  freeSize?: boolean
 }>()
 
 const audio = useAudio()
@@ -106,7 +107,7 @@ const columnEnd = computed(() => {
 </script>
 <template>
   <button id="CardWrapper" ref="fragElement"
-    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" :class="{ placement }"
+    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" :class="{ freeSize }"
     @click="triggerFlipSound">
 
     <slot />
@@ -119,11 +120,12 @@ button#CardWrapper {
   position: relative;
   z-index: 99;
   transition: 0.0s !important;
-  grid-column: span v-bind(size);
+  grid-column: v-bind(columnStart) / v-bind(columnEnd);
 }
 
-button#CardWrapper.placement {
-  grid-column: v-bind(columnStart) / v-bind(columnEnd);
+button#CardWrapper.freeSize {
+  height: 150px;
+  width: calc(v-bind(size) * 70px);
 }
 
 button#CardWrapper.active-zone {
