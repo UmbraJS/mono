@@ -189,318 +189,345 @@ export const fields: Card[] = [
     },
   }
 ]
+
+const skeletonSoldier: Card = {
+  id: 'skeleton-soldier',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Skeleton Soldier',
+    description: 'A basic skeleton',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'skeletonSoldier.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 2, shield: 5, cooldown: 2 },
+      effects: [],
+      tags: ['servant', 'undead'],
+      aspects: [aspects.shadow],
+      record: {},
+    },
+  },
+}
+
+const skeletonArcher: Card = {
+  id: 'skeleton-archer',
+  index: 0,
+  size: 1,
+  info: {
+    name: 'Skeleton Archer',
+    description: 'A basic skeleton archer',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'skeletonArcher.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 7, shield: 3, cooldown: 3 },
+      effects: [],
+      tags: ['servant', 'undead'],
+      aspects: [aspects.shadow],
+      record: {},
+    },
+  },
+}
+
+const archer: Card = {
+  id: 'archer',
+  index: 0,
+  size: 2,
+  info: {
+    name: 'Archer',
+    description: 'A basic archer',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'archer.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 7, cooldown: 2 },
+      effects: [],
+      tags: ['servant'],
+      aspects: [aspects.wood],
+      record: {},
+    },
+  },
+}
+
+
+const halberdier: Card = {
+  id: 'halberdier',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Halberdier',
+    description: 'A basic halberdier',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'halberdier.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 10, shield: 10, cooldown: 5 },
+      effects: [hasteYourSibling],
+      tags: ['servant'],
+      aspects: [aspects.metal],
+      record: {},
+    },
+  },
+}
+
+const doomCloak: Card = {
+  id: 'DoomCloak',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Doom Cloak',
+    description: 'A basic doom cloak',
+    levels: [],
+    rarity: 2,
+    unique: false,
+    image: {
+      default: 'doomCloak.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 20, shield: 20, cooldown: 10 },
+      effects: [],
+      tags: ['friend'],
+      aspects: [aspects.shadow],
+      record: {},
+    },
+  },
+}
+
+const skeletonHealer: Card = {
+  id: 'Skeleton Healer',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Skeleton Healer',
+    description: 'A basic skeleton healer',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'skeletonHealer.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { heal: 10, cooldown: 3 },
+      effects: [],
+      tags: ['servant'],
+      aspects: [aspects.shadow],
+      record: {},
+    },
+  },
+}
+
+const skeletonHorseman: Card = {
+  id: 'Skeleton Horseman',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Skeleton Horseman',
+    description: 'A basic skeleton horseman',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'skeletonCavalry.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 7, shield: 5, cooldown: 3.5 },
+      effects: [],
+      tags: ['servant'],
+      aspects: [aspects.shadow],
+      record: {},
+    },
+  },
+}
+
+export const gauntletOfSigmar: Card = {
+  id: 'Gauntlet of Sigmar',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Gauntlet of Sigmar',
+    description: 'A basic gauntlet of sigmar',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'gauntletOfSigmar.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 10, shield: 10, actionCount: 1, cooldown: 5 },
+      effects: [],
+      tags: ['weapon'],
+      aspects: [aspects.metal],
+      record: {},
+    },
+  },
+}
+
+export const glimmerCloak: Card = {
+  id: 'Glimmer Cloak',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Glimmer Cloak',
+    description:
+      'When this enchantment enters, if its your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.',
+    levels: [],
+    rarity: 1,
+    unique: true,
+    image: {
+      default: 'glimmerCloak.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 5, banter: 5, heal: 5, shield: 10, cooldown: 3 },
+      effects: [],
+      tags: ['friend'],
+      aspects: [aspects.light],
+      record: {},
+    },
+  },
+}
+
+export const viking: Card = {
+  id: 'viking',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Viking',
+    description: 'A basic viking',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'viking.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 10, shield: 5, actionCount: 1, cooldown: 5 },
+      effects: [],
+      tags: ['servant'],
+      aspects: [aspects.metal],
+      record: {},
+    },
+  },
+}
+
+const thunderCannon: Card = {
+  id: 'Thunder Cannon',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Thunder Cannon',
+    description: 'A basic thunder cannon',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'thunderCannon.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 20, actionCount: 1, cooldown: 5 },
+      effects: [],
+      tags: ['weapon'],
+      aspects: [aspects.charge],
+      record: {},
+    },
+  },
+}
+
+const treasure: Card = {
+  id: 'Treasure',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Treasure',
+    description: 'A basic treasure',
+    levels: [],
+    rarity: 1,
+    unique: false,
+    image: {
+      default: 'treasure.jpg',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { cooldown: 5 },
+      effects: [],
+      tags: ['trinket'],
+      aspects: [aspects.metal],
+      record: {},
+    },
+  },
+}
+
+
 export const cards: Card[] = [
-  {
-    id: 'skeleton-soldier',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Skeleton Soldier',
-      description: 'A basic skeleton',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'skeletonSoldier.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 2, shield: 5, cooldown: 2 },
-        effects: [],
-        tags: ['servant', 'undead'],
-        aspects: [aspects.shadow],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'skeleton-archer',
-    index: 0,
-    size: 1,
-    info: {
-      name: 'Skeleton Archer',
-      description: 'A basic skeleton archer',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'skeletonArcher.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 7, shield: 3, cooldown: 3 },
-        effects: [],
-        tags: ['servant', 'undead'],
-        aspects: [aspects.shadow],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'archer',
-    index: 0,
-    size: 2,
-    info: {
-      name: 'Archer',
-      description: 'A basic archer',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'archer.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 7, cooldown: 2 },
-        effects: [],
-        tags: ['servant'],
-        aspects: [aspects.wood],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'halberdier',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Halberdier',
-      description: 'A basic halberdier',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'halberdier.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 10, shield: 10, cooldown: 5 },
-        effects: [hasteYourSibling],
-        tags: ['servant'],
-        aspects: [aspects.metal],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'DoomCloak',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Doom Cloak',
-      description: 'A basic doom cloak',
-      levels: [],
-      rarity: 2,
-      unique: false,
-      image: {
-        default: 'doomCloak.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 20, shield: 20, cooldown: 10 },
-        effects: [],
-        tags: ['friend'],
-        aspects: [aspects.shadow],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'Skeleton Healer',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Skeleton Healer',
-      description: 'A basic skeleton healer',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'skeletonHealer.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { heal: 10, cooldown: 3 },
-        effects: [],
-        tags: ['servant'],
-        aspects: [aspects.shadow],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'Skeleton Horseman',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Skeleton Horseman',
-      description: 'A basic skeleton horseman',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'skeletonCavalry.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 7, shield: 5, cooldown: 3.5 },
-        effects: [],
-        tags: ['servant'],
-        aspects: [aspects.shadow],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'Gauntlet of Sigmar',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Gauntlet of Sigmar',
-      description: 'A basic gauntlet of sigmar',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'gauntletOfSigmar.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 10, shield: 10, actionCount: 1, cooldown: 5 },
-        effects: [],
-        tags: ['weapon'],
-        aspects: [aspects.metal],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'Glimmer Cloak',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Glimmer Cloak',
-      description:
-        'When this enchantment enters, if its your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.',
-      levels: [],
-      rarity: 1,
-      unique: true,
-      image: {
-        default: 'glimmerCloak.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 5, banter: 5, heal: 5, shield: 10, cooldown: 3 },
-        effects: [],
-        tags: ['friend'],
-        aspects: [aspects.light],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'viking',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Viking',
-      description: 'A basic viking',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'viking.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 10, shield: 5, actionCount: 1, cooldown: 5 },
-        effects: [],
-        tags: ['servant'],
-        aspects: [aspects.metal],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'Thunder Cannon',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Thunder Cannon',
-      description: 'A basic thunder cannon',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'thunderCannon.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { attack: 20, actionCount: 1, cooldown: 5 },
-        effects: [],
-        tags: ['weapon'],
-        aspects: [aspects.charge],
-        record: {},
-      },
-    },
-  },
-  {
-    id: 'Treasure',
-    index: 0,
-    size: 3,
-    info: {
-      name: 'Treasure',
-      description: 'A basic treasure',
-      levels: [],
-      rarity: 1,
-      unique: false,
-      image: {
-        default: 'treasure.jpg',
-      },
-    },
-    stats: {
-      base: {
-        level: 1,
-        cost: 10,
-        bash: { cooldown: 5 },
-        effects: [],
-        tags: ['trinket'],
-        aspects: [aspects.metal],
-        record: {},
-      },
-    },
-  },
+  skeletonSoldier,
+  skeletonArcher,
+  archer,
+  halberdier,
+  doomCloak,
+  skeletonHealer,
+  skeletonHorseman,
+  gauntletOfSigmar,
+  glimmerCloak,
+  viking,
+  thunderCannon,
+  treasure,
 ]

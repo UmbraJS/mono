@@ -8,6 +8,7 @@ const props = defineProps<{
   chunks?: OutputChunk[];
   card: Card;
   board?: 'deck' | 'inventory'
+  placement?: boolean; // Default to false if not provided
 }>()
 
 const view = useView()
@@ -19,7 +20,8 @@ const cardStats = computed(() => {
 
 <template>
   <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
-  <CardWrapper v-else :index="card.index" :size="card.size" :card-stats="cardStats" :board="board">
+  <CardWrapper v-else :index="card.index" :size="card.size" :card-stats="cardStats" :board="board"
+    :placement="placement">
     <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :chunks="chunks" />
     <!-- <img v-if="card.cardInfo.image" :src="card.cardInfo.image.default" alt="Card Image" /> -->
     <CardStatsComponent :bash="cardStats.bash" />

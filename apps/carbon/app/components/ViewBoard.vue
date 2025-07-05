@@ -1,7 +1,7 @@
 <script setup lang="ts">
-defineProps<{
-  overlay: boolean
-}>()
+const view = useView()
+const overlay = computed(() => view.view !== null)
+
 </script>
 
 <template>

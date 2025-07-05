@@ -1,18 +1,18 @@
 import { defineStore } from 'pinia'
 import type { Card } from '../../types'
-import { cards } from '../data/cards'
+import { gauntletOfSigmar, glimmerCloak, viking } from '../data/cards'
 
 export const useQuest = defineStore('quest', () => {
   const currentEvents = ref([Ormond, SaintDenis, BorgBog])
   const currentShop = ref<Card[] | null>([
-    cards.find((card) => card.info.name === 'Halberdier')!,
-    cards.find((card) => card.info.name === 'Archer')!,
-    cards.find((card) => card.info.name === 'Viking')!,
-    cards.find((card) => card.info.name === 'Skeleton Archer')!,
+    gauntletOfSigmar,
+    glimmerCloak,
+    viking,
   ])
 
   return {
     currentEvents,
+    currentShop
   }
 })
 

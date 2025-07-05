@@ -10,11 +10,18 @@ import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable';
 import { useAudio } from '../../stores/useAudio'
 
-const props = defineProps<{
+const {
+  board,
+  index,
+  size,
+  cardStats,
+  placement = true, // Default to false if not provided
+} = defineProps<{
   index: number;
   size: number;
   cardStats: CardStats
   board?: 'deck' | 'inventory'
+  placement?: boolean
 }>()
 
 const audio = useAudio()
@@ -34,7 +41,6 @@ const fragElement = useTemplateRef('fragElement')
 const store = useStore()
 
 onMounted(() => {
-  const board = props.board
   if (!fragElement.value) return
   if (typeof window === 'undefined') return
   if (!board) return
@@ -44,10 +50,10 @@ onMounted(() => {
 
   const cardDrag = useCardDrag({
     fragElement: fragElement.value,
-    board: props.board,
-    cardIndex: props.index,
-    cardStats: props.cardStats,
-    cardSize: props.size,
+    board: board,
+    cardIndex: index,
+    cardStats: cardStats,
+    cardSize: size,
   })
 
   console.log('drag init: ', dataSellzone)
@@ -75,14 +81,14 @@ onMounted(() => {
       })
     },
     onRelease: function () {
-      cardDrag.onRelease(this, props.index)
+      cardDrag.onRelease(this, index)
       checkZoneHit(this, {
         threshold: '40%',
         zones: dataSellzone,
         hit: () => {
           store.money.sellDraggedCard({
             originBoard: board,
-            cardIndex: props.index,
+            cardIndex: index,
           })
         },
       })
@@ -91,16 +97,17 @@ onMounted(() => {
 })
 
 const columnStart = computed(() => {
-  return props.index + 1
+  return index + 1
 })
 
 const columnEnd = computed(() => {
-  return props.index + 1 + props.size
+  return index + 1 + size
 })
 </script>
 <template>
   <button id="CardWrapper" ref="fragElement"
-    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" @click="triggerFlipSound">
+    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" :class="{ placement }"
+    @click="triggerFlipSound">
 
     <slot />
 
@@ -111,9 +118,12 @@ const columnEnd = computed(() => {
 button#CardWrapper {
   position: relative;
   z-index: 99;
-  grid-column: span v-bind(size);
-  grid-column: v-bind(columnStart) / v-bind(columnEnd);
   transition: 0.0s !important;
+  grid-column: span v-bind(size);
+}
+
+button#CardWrapper.placement {
+  grid-column: v-bind(columnStart) / v-bind(columnEnd);
 }
 
 button#CardWrapper.active-zone {

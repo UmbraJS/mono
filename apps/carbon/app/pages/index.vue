@@ -1,19 +1,7 @@
 <template>
-  <div class="CarbonLayout">
+  <CarbonGrid grid-layout="match">
     <OpponentHeader />
     <MatchBoard />
     <PlayerHeader />
-  </div>
+  </CarbonGrid>
 </template>
-
-<style>
-.CarbonLayout {
-  display: grid;
-  --side-size: 17vh;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: var(--side-size) 1fr var(--side-size);
-  gap: var(--space-1);
-  height: 100vh;
-  padding: var(--space-1);
-}
-</style>
