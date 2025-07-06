@@ -64,6 +64,7 @@ export interface Aspect {
 }
 
 const _cardNames = [
+  'Saint Denis',
   'Fireball',
   'Water Splash',
   'Earth Quake',
@@ -156,6 +157,7 @@ export interface CardInfo {
   description: string
   rarity: number
   unique: boolean
+  quote?: string
   image?: CardImage
 }
 

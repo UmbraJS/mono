@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  gridLayout: 'event' | 'match'
+  gridLayout: 'event' | 'match' | 'shop'
 }>()
 </script>
 
@@ -30,6 +30,9 @@ defineProps<{
 
 #CarbonGrid.match {
   grid-template-rows: var(--side-size) 1fr var(--side-size);
+}
 
+#CarbonGrid.shop {
+  grid-template-rows: auto 1fr var(--side-size);
 }
 </style>

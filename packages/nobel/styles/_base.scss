@@ -104,3 +104,7 @@ a:hover {
   color: var(--accent-constrast);
   background: var(--accent);
 }
+
+img {
+  -webkit-user-drag: none;
+}

@@ -126,6 +126,7 @@ button#CardWrapper {
 button#CardWrapper.freeSize {
   height: 150px;
   width: calc(v-bind(size) * 70px);
+  grid-column: span 1;
 }
 
 button#CardWrapper.active-zone {

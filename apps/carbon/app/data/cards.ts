@@ -86,7 +86,6 @@ const hasteYourSibling: CardEffect = ({ card }) => {
 //   }
 // }
 
-
 export const fields: Card[] = [
   {
     id: 'Swamp',
@@ -386,7 +385,8 @@ export const gauntletOfSigmar: Card = {
   size: 3,
   info: {
     name: 'Gauntlet of Sigmar',
-    description: 'A basic gauntlet of sigmar',
+    description: 'Once worn by the Stormwarden, the gauntlet now chooses its bearer. It pulses with crimson sigils – runes of ancient power that glow only in the presence of true resolve or immense wrath. The one who dons it is said to become a conduit of divine judgment, capable of turning the tide of any battle – or collapsing entire armies in a single strike.',
+    quote: '"The gods do not strike with mercy – only precision." — Inquisitor Varran, last bearer of the Gauntlet',
     levels: [],
     rarity: 1,
     unique: false,
@@ -517,6 +517,44 @@ const treasure: Card = {
 }
 
 
+export const saintDenis: Card = {
+  id: 'Saint Denis',
+  index: 0,
+  size: 3,
+  info: {
+    name: 'Saint Denis',
+    description: `
+    Denis was born with a rare condition: his body grew quickly—tall, broad, and powerful—but he could not feel pain. Nor exhaustion. Nor even the heat of a flame against his skin. A monster’s blessing, some would say. But along with this came something stranger still—a hypersensitive empathy and a violent aversion to causing harm. His nerves did not register agony, but his heart felt everything.
+    His parents, both addicts, abandoned him not long after birth. He was raised by other street children who mocked his silence and exploited his gentleness. He craved affection but received none. And when the cruelty of others grew too much, Denis’s mind shut the door. Emotionally numbed, he let go of gentleness and survived instead by letting others fear him.
+    When a drunken adult once tried to rob him, Denis struck back without thinking. The man died instantly. It was his first taste of violence. It would not be his last. Denis drifted to the edges of villages and camps, keeping to himself, surviving off fear and detachment.
+    Then came the famine.
+    As the world starved, Denis did not weaken. His strength made him untouchable. One by one, the others around him perished. He buried no one. He mourned no one. He simply endured. He scavenged the remains of his village, until he came across the body of a traveling priest—beaten, half-eaten, and lying in a gutter. Denis took his robes. They were the finest clothes he had ever seen.
+    Wearing them, he wandered.
+    Soon, he encountered a migrating band of starving farmers—families and stragglers seeking better lands in the south. They saw the robe and fell to their knees. “Father,” they called him. “We are saved.” Denis said nothing. He was too stunned. And too afraid to correct them.
+    Then something happened that Denis had never known. They trusted him. They offered him their bread. They looked to him with hope, not fear. Children reached for his hand without flinching. In that moment—cracked open by unexpected kindness—something in Denis returned. Not fully. Not with ease. But he began to serve. And he never stopped.`,
+    quote: '"I am not hungry." — Saint Denis, comforting a child crying for him to eat',
+    levels: [],
+    rarity: 10,
+    unique: true,
+    image: {
+      default: 'saintDeni.png',
+    },
+  },
+  stats: {
+    base: {
+      level: 1,
+      cost: 10,
+      bash: { attack: 0, shield: 40, cooldown: 0 },
+      effects: [],
+      tags: ['location'],
+      aspects: [aspects.light],
+      record: {},
+    },
+  },
+
+}
+
+
 export const cards: Card[] = [
   skeletonSoldier,
   skeletonArcher,
@@ -530,4 +568,5 @@ export const cards: Card[] = [
   viking,
   thunderCannon,
   treasure,
+  saintDenis
 ]

@@ -7,12 +7,13 @@ const quest = useQuest()
 
 <template>
   <div class="quest-events">
-    <div v-for="event in quest.currentEvents" :key="event.id" class="event"
+    <div v-for="event in quest.currentEvents" :key="event.id" class="event" @mouseover="quest.setHoveredEvent(event)"
+      @mouseleave="quest.setHoveredEvent(null)"
       @click="() => audio.speakElevenLabs(event.name + event.description, 'germanSage')">
-      <img :src="event.image" alt="Location">
+      <img :src="event.images.default" alt="Location">
       <div class="prose">
         <h3>{{ event.name }}</h3>
-        <p>{{ event.description }}</p>
+        <p>{{ event.shortDescription }}</p>
       </div>
       <div v-for="effect in event.effects" :key="effect.id" class="eventEffects">
         <div class="effect base-accent">
