@@ -416,20 +416,20 @@ export const glimmerCloak: Card = {
     description:
       'When this enchantment enters, if its your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.',
     levels: [],
-    rarity: 1,
+    rarity: 4,
     unique: true,
     image: {
-      default: 'glimmerCloak.jpg',
+      default: 'glimmerCloak.png',
     },
   },
   stats: {
     base: {
       level: 1,
-      cost: 10,
-      bash: { attack: 5, banter: 5, heal: 5, shield: 10, cooldown: 3 },
+      cost: 100,
+      bash: { attack: 10, banter: 10, heal: 10, shield: 10, cooldown: 3 },
       effects: [],
       tags: ['friend'],
-      aspects: [aspects.light],
+      aspects: [aspects.light, aspects.warpWeave],
       record: {},
     },
   },
