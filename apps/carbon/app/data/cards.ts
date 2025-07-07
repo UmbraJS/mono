@@ -413,8 +413,17 @@ export const glimmerCloak: Card = {
   size: 3,
   info: {
     name: 'Glimmer Cloak',
-    description:
-      'When this enchantment enters, if its your main phase, there is an additional combat phase after this phase followed by an additional main phase. When you next attack this turn, untap each creature you control.',
+    description: `
+    The Glimmer Cloak carries the shimmer of forgotten constellations. It is not merely reflective—it radiates echoes of a sky that no longer exists, as if the birth of the universe itself were woven into its fibers. The starlight clinging to its folds doesn’t illuminate; it remembers. Some say it does not shine—it mourns.
+    Its origin is unknown. Some claim it was stitched by void-born spirits; others believe it was never made, only found—wrapped around a nameless, kneeling corpse at the threshold of a collapsed temple. The one who dared touch it vanished. Those who wear it speak of cold voices like wind through crystal, of stars that seem to blink in response to questions never asked aloud.
+    And always, they see it:
+    A single pale dot, alone in the dark.
+    They do not know what it is. Only that it contains everything they've ever feared to lose.
+    To the naked eye, it is mesmerizing.
+    To those attuned to magic, it is disturbing.
+    For within its shimmer, something watches back.
+    `,
+    quote: '"The stars are not dead. They are waiting." — Muttered by a mad-man close to where the Glimmer Cloak was found',
     levels: [],
     rarity: 4,
     unique: true,
