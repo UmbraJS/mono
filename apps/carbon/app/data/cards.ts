@@ -410,7 +410,7 @@ export const gauntletOfSigmar: Card = {
 export const glimmerCloak: Card = {
   id: 'Glimmer Cloak',
   index: 0,
-  size: 3,
+  size: 2,
   info: {
     name: 'Glimmer Cloak',
     description: `
