@@ -19,7 +19,6 @@ const quest = useQuest()
 
     <ViewUnderlay v-if="quest.shop.current" :src="quest.shop.current.images.inside || quest.shop.current.images.default"
       :visible="true" />
-
   </div>
 
 </template>

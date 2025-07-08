@@ -37,18 +37,25 @@ defineProps<{
   cursor: pointer;
   padding: 0px;
   min-width: max-content;
+  border-color: var(--base-120);
+
+  border-bottom: 0px;
+  border-left: 0px;
+  border-right: 0px;
+
+  /* border-top: 0px; */
 }
 
 .stats .chip:first-child {
-  border-bottom-left-radius: var(--radius);
+  /* border-bottom-left-radius: var(--radius); */
 }
 
 /* if there are less than 5 chips children inside .stats give the last chip border radius */
 .stats:not(:has(.chip:nth-child(4n))) .chip:last-child {
-  border-top-right-radius: var(--radius);
+  /* border-top-right-radius: var(--radius); */
 }
 
 .stats:has(.chip:nth-child(4n)) .chip:last-child {
-  border-bottom-right-radius: var(--radius);
+  /* border-bottom-right-radius: var(--radius); */
 }
 </style>

@@ -15,14 +15,14 @@ const {
   index,
   size,
   cardStats,
-  freeSize = false
+  variant = 'default',
 } = defineProps<{
   index: number;
   size: number;
   cardStats: CardStats
   board?: 'deck' | 'inventory'
   noPlacement?: boolean
-  freeSize?: boolean
+  variant?: 'default' | 'freeSize' | 'cardSize'
 }>()
 
 const audio = useAudio()
@@ -56,8 +56,6 @@ onMounted(() => {
     cardStats: cardStats,
     cardSize: size,
   })
-
-  console.log('drag init: ', dataSellzone)
 
   new Draggable(fragElement.value, {
     onDrag: function () {
@@ -107,7 +105,7 @@ const columnEnd = computed(() => {
 </script>
 <template>
   <button id="CardWrapper" ref="fragElement"
-    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" :class="{ freeSize }"
+    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" :class="variant"
     @click="triggerFlipSound">
 
     <slot />
@@ -120,13 +118,20 @@ button#CardWrapper {
   position: relative;
   z-index: 99;
   transition: 0.0s !important;
+}
+
+button#CardWrapper.default {
   grid-column: v-bind(columnStart) / v-bind(columnEnd);
+}
+
+button#CardWrapper.cardSize {
+  height: 150px;
+  width: calc(3 * 70px);
 }
 
 button#CardWrapper.freeSize {
   height: 150px;
   width: calc(v-bind(size) * 70px);
-  grid-column: span 1;
 }
 
 button#CardWrapper.active-zone {

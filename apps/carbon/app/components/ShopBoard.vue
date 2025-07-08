@@ -13,28 +13,29 @@ function getRarity(rarity: number): string {
     default: return 'Unknown'
   }
 }
-
 </script>
 
 <template>
   <div v-if="quest.shop.current" id="ShopBoard">
     <div class="shopInventory">
-
       <div v-for="card in quest.shop.inventory" id="ShopCard" :key="card.id">
-
         <div id="BuyBox">
-          <div class="cost border">
+          <div class="cost border" :style="{ 'border-bottom': '0px', 'border-right': '0px' }">
             <p class="caption">buy</p>
           </div>
-          <div class="cost border">
+          <div class="cost border" :style="{ 'border-bottom': '0px' }">
             <Icon name="carbon:purchase" size="1rem" />
             <p class="caption">{{ view.getCardStats(card).cost }}</p>
           </div>
+          <div class="cost border" :style="{ 'border-bottom': '0px' }">
+            <Icon name="carbon:pan-horizontal" size="1rem" />
+            <p class="caption">{{ card.size }}</p>
+          </div>
         </div>
         <CardModal :card="card">
-          <PlayerCard :card="card" :free-size="true" />
+          <PlayerCard :card="card" variant="cardSize" />
         </CardModal>
-        <div class="cost border">
+        <div class="cost border" :style="{ 'border-bottom': '0px', 'border-top': '0px' }">
           <p class="caption title">{{ card.info.name }}</p>
         </div>
         <div class="cost border">
@@ -54,7 +55,7 @@ function getRarity(rarity: number): string {
 <style>
 #BuyBox {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr 1fr;
 }
 
 #ShopBoard {
@@ -74,11 +75,12 @@ function getRarity(rarity: number): string {
 #ShopCard {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-1);
+  /* gap: var(--space-quark); */
 }
 
 #ShopCard .quote {
   font-style: italic;
+  padding: var(--space-quark);
 }
 
 #ShopCard .title {
