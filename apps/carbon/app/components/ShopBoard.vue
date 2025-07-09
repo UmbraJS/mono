@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import type { Card } from '../../types'
+
 import PlayerCard from '~/components/Card/Card.vue'
+import CardBuyBox from './CardBuyBox.vue'
 const quest = useQuest()
 const view = useView()
+const store = useStore()
 
 function getRarity(rarity: number): string {
   switch (rarity) {
@@ -13,35 +17,55 @@ function getRarity(rarity: number): string {
     default: return 'Unknown'
   }
 }
+
+
+const purchaseError = ref<string | null>(null)
+
+function buyCard(card: Card) {
+  const remainingInventorySlots = store.user.remainingSlots.inventory
+  const remainingDeckSlots = store.user.remainingSlots.deck
+  const cardSize = card.size
+
+  const notEnoughInventorySlots = remainingInventorySlots < cardSize
+  const notEnoughDeckSlots = remainingDeckSlots < cardSize
+  const notEnoughSlots = notEnoughInventorySlots && notEnoughDeckSlots
+
+  if (notEnoughSlots) {
+    purchaseError.value = 'Not enough inventory slots available.'
+    return
+  }
+
+  const availableFunds = store.money.value
+  const cardCost = view.getCardStats(card).cost
+  const insufficientFunds = availableFunds < cardCost
+
+  if (insufficientFunds) {
+    purchaseError.value = 'Not enough funds to buy this card.'
+    return
+  }
+
+  const tre = store.user.insertAcquiredCard(card, notEnoughInventorySlots ? 'deck' : 'inventory')
+  quest.shop.buyCard(card)
+  console.log('rex: ', tre)
+}
 </script>
 
 <template>
   <div v-if="quest.shop.current" id="ShopBoard">
+    <p>error: {{ purchaseError }}</p>
     <div class="shopInventory">
-      <div v-for="card in quest.shop.inventory" id="ShopCard" :key="card.id">
-        <div id="BuyBox">
-          <div class="cost border" :style="{ 'border-bottom': '0px', 'border-right': '0px' }">
-            <p class="caption">buy</p>
-          </div>
-          <div class="cost border" :style="{ 'border-bottom': '0px' }">
-            <Icon name="carbon:purchase" size="1rem" />
-            <p class="caption">{{ view.getCardStats(card).cost }}</p>
-          </div>
-          <div class="cost border" :style="{ 'border-bottom': '0px' }">
-            <Icon name="carbon:pan-horizontal" size="1rem" />
-            <p class="caption">{{ card.size }}</p>
-          </div>
-        </div>
+      <div v-for="card in quest.shop.shopInventory" id="ShopCard" :key="card.id">
+        <CardBuyBox :card="card" @click="() => buyCard(card)" />
         <CardModal :card="card">
           <PlayerCard :card="card" variant="cardSize" />
         </CardModal>
-        <div class="cost border" :style="{ 'border-bottom': '0px', 'border-top': '0px' }">
+        <CardMetaChip :style="{ 'border-bottom': '0px', 'border-top': '0px' }">
           <p class="caption title">{{ card.info.name }}</p>
-        </div>
-        <div class="cost border">
+        </CardMetaChip>
+        <CardMetaChip>
           <p class="caption">lvl {{ view.getCardStats(card).level }} -</p>
           <p class="caption">{{ getRarity(card.info.rarity) }}</p>
-        </div>
+        </CardMetaChip>
         <p class="caption quote">{{ card.info.quote }}</p>
       </div>
     </div>
@@ -76,6 +100,7 @@ function getRarity(rarity: number): string {
   display: grid;
   grid-template-columns: 1fr;
   /* gap: var(--space-quark); */
+  width: var(--cardWindowWidth);
 }
 
 #ShopCard .quote {

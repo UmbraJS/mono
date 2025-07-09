@@ -101,7 +101,7 @@ const _cardNames = [
   'Longsword',
   'Moon Harp',
   'Thunder Cannon',
-  'Viking',
+  'Fenrir Viking',
   'Treasure',
 ] as const
 

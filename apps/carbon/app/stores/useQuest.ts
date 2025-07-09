@@ -21,16 +21,25 @@ export const useQuest = defineStore('quest', () => {
 
 function useShop() {
   const current = ref<EventCard | null>(Ormond)
-  const inventory = ref<Card[] | null>([
+  const shopInventory = ref<Card[] | null>([
     gauntletOfSigmar,
     glimmerCloak,
     saintDenis,
     viking
   ])
 
+  function buyCard(card: Card) {
+    if (!shopInventory.value) return
+    const index = shopInventory.value.findIndex(c => c.id === card.id)
+    if (index !== -1) {
+      shopInventory.value.splice(index, 1)
+    }
+  }
+
   return {
     current,
-    inventory
+    shopInventory,
+    buyCard
   }
 }
 

@@ -117,7 +117,6 @@ const columnEnd = computed(() => {
 button#CardWrapper {
   position: relative;
   z-index: 99;
-  transition: 0.0s !important;
 }
 
 button#CardWrapper.default {
@@ -125,8 +124,8 @@ button#CardWrapper.default {
 }
 
 button#CardWrapper.cardSize {
-  height: 150px;
-  width: calc(3 * 70px);
+  height: var(--cardWindowHeight);
+  width: var(--cardWindowWidth);
 }
 
 button#CardWrapper.freeSize {

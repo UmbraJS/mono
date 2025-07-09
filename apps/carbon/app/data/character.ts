@@ -52,7 +52,7 @@ const user: User = {
     // { ...cards.find((card) => card.info.name === 'Glimmer Cloak')!, index: 3 },
   ],
   inventory: [
-    { ...cards.find((card) => card.info.name === 'Viking')!, index: 0, },
+    { ...cards.find((card) => card.info.name === 'Fenrir Viking')!, index: 0, },
     { ...cards.find((card) => card.info.name === 'Halberdier')!, index: 3 },
     { ...cards.find((card) => card.info.name === 'Archer')!, index: 6 },
     { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, index: 9 },

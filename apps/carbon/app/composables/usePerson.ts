@@ -10,6 +10,23 @@ export function usePerson(user: User) {
   const inventory = ref(user.inventory)
   const characters = ref(user.characters)
 
+  watch(deck, (newDeck) => {
+    console.log('Deck updated:', newDeck)
+  })
+
+  const remainingSlots = computed(() => {
+    const remainingDeckSlots = MAX_BOARD_SLOTS - deck.value.length
+    const remainingInventorySlots = MAX_BOARD_SLOTS - inventory.value.length
+    const allRemainingSlots = remainingDeckSlots + remainingInventorySlots
+    return {
+      deck: remainingDeckSlots,
+      inventory: remainingInventorySlots,
+      all: allRemainingSlots
+    }
+  })
+
+
+
   const hoveredSpace = ref<SpaceBoards | null>(null)
   const draggedCard = ref<DraggedCard | null>(null)
 
@@ -43,6 +60,21 @@ export function usePerson(user: User) {
       newCard: remapCardToSegment(newCard),
       maxSlots: MAX_BOARD_SLOTS
     })
+  }
+
+  function insertAcquiredCard(card: Card, target: 'deck' | 'inventory') {
+    const insertedCards = insertCard({
+      ...card,
+      index: target === 'deck' ? deck.value.length : inventory.value.length,
+    }, target === 'deck' ? deck.value : inventory.value)
+
+    if (!insertedCards.success) return insertedCards
+    if (target === 'deck') {
+      deck.value = remapSegmentsToCards(insertedCards.cards)
+    } else {
+      inventory.value = remapSegmentsToCards(insertedCards.cards)
+    }
+    return insertedCards
   }
 
   function insertCardFromDeck(props: { deckIndex: number, inventoryIndex: number }) {
@@ -126,11 +158,14 @@ export function usePerson(user: User) {
     characters,
     draggedCard,
     hoveredSpace,
+    remainingSlots,
     setDraggedCard,
     setHoveredSpace,
+    insertAcquiredCard,
     moveCardInsideDeck,
     moveCardInsideInventory,
     moveCardFromDeckToInventory,
+
     moveCardFromInventoryToDeck,
     removeDraggedCard,
   }

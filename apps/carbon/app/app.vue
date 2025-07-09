@@ -16,3 +16,10 @@ useSeoMeta({
   </NuxtLayout>
   <Toaster />
 </template>
+
+<style>
+:root {
+  --cardWindowWidth: calc(3 * 70px);
+  --cardWindowHeight: 150px;
+}
+</style>

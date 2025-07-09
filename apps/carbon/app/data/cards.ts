@@ -447,22 +447,22 @@ export const glimmerCloak: Card = {
 export const viking: Card = {
   id: 'viking',
   index: 0,
-  size: 3,
+  size: 2,
   info: {
-    name: 'Viking',
+    name: 'Fenrir Viking',
     description: 'A basic viking',
     levels: [],
-    rarity: 1,
+    rarity: 2,
     unique: false,
     image: {
-      default: 'viking.jpg',
+      default: 'fenrirViking.png',
     },
   },
   stats: {
     base: {
       level: 1,
       cost: 10,
-      bash: { attack: 10, shield: 5, actionCount: 1, cooldown: 5 },
+      bash: { attack: 10, shield: 10, actionCount: 1, cooldown: 2 },
       effects: [],
       tags: ['servant'],
       aspects: [aspects.metal],
@@ -560,9 +560,7 @@ export const saintDenis: Card = {
       record: {},
     },
   },
-
 }
-
 
 export const cards: Card[] = [
   skeletonSoldier,
