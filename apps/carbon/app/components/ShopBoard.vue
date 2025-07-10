@@ -31,7 +31,7 @@ function buyCard(card: Card) {
   const notEnoughSlots = notEnoughInventorySlots && notEnoughDeckSlots
 
   if (notEnoughSlots) {
-    purchaseError.value = 'Not enough inventory slots available.'
+    purchaseError.value = 'Not enough space in inventory or deck to place this card.'
     return
   }
 
@@ -45,8 +45,16 @@ function buyCard(card: Card) {
   }
 
   const tre = store.user.insertAcquiredCard(card, notEnoughInventorySlots ? 'deck' : 'inventory')
+
+  // Check if the insertion was successful
+  if (!tre.success) {
+    purchaseError.value = 'Not enough space to place this card.'
+    return
+  }
+
+  // Only proceed with the purchase if insertion was successful
   quest.shop.buyCard(card)
-  console.log('rex: ', tre)
+  purchaseError.value = null // Clear any previous errors
 }
 </script>
 

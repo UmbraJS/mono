@@ -14,7 +14,10 @@ const props = defineProps<{
 const view = useView()
 
 const cardStats = computed(() => {
-  return props.card.stats[view.realm]
+  if (!props.card?.stats) return undefined
+  const stats = props.card.stats[view.realm]
+  // Fallback to base stats if the requested realm doesn't exist
+  return stats || props.card.stats.base
 })
 </script>
 

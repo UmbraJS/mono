@@ -15,9 +15,13 @@ export function usePerson(user: User) {
   })
 
   const remainingSlots = computed(() => {
-    const remainingDeckSlots = MAX_BOARD_SLOTS - deck.value.length
-    const remainingInventorySlots = MAX_BOARD_SLOTS - inventory.value.length
+    const deckSpaceUsed = deck.value.reduce((total, card) => total + card.size, 0)
+    const inventorySpaceUsed = inventory.value.reduce((total, card) => total + card.size, 0)
+
+    const remainingDeckSlots = MAX_BOARD_SLOTS - deckSpaceUsed
+    const remainingInventorySlots = MAX_BOARD_SLOTS - inventorySpaceUsed
     const allRemainingSlots = remainingDeckSlots + remainingInventorySlots
+
     return {
       deck: remainingDeckSlots,
       inventory: remainingInventorySlots,
@@ -42,11 +46,19 @@ export function usePerson(user: User) {
     return cards.map(card => remapCardToSegment(card))
   }
 
-  function remapSegmentsToCards(segments: CardSegment[]): Card[] {
+  function remapSegmentsToCards(segments: CardSegment[], newCard?: Card): Card[] {
     const allCardsThatBelongToUser = [...inventory.value, ...deck.value]
+    // If we have a new card, add it to the available cards for lookup
+    if (newCard) {
+      allCardsThatBelongToUser.push(newCard)
+    }
+
     return segments.map(segment => {
-      // I'm not a huge fan of typecasting here, but I'm pretty sure we can guarantee that there is a card with the same id in the user's inventory or deck
-      const card = allCardsThatBelongToUser.find(c => c.id === segment.id) as Card
+      const card = allCardsThatBelongToUser.find(c => c.id === segment.id)
+      if (!card) {
+        console.error(`Card with id ${segment.id} not found in user inventory or deck`)
+        throw new Error(`Card with id ${segment.id} not found`)
+      }
       return {
         ...card,
         index: segment.start,
@@ -70,9 +82,9 @@ export function usePerson(user: User) {
 
     if (!insertedCards.success) return insertedCards
     if (target === 'deck') {
-      deck.value = remapSegmentsToCards(insertedCards.cards)
+      deck.value = remapSegmentsToCards(insertedCards.cards, card)
     } else {
-      inventory.value = remapSegmentsToCards(insertedCards.cards)
+      inventory.value = remapSegmentsToCards(insertedCards.cards, card)
     }
     return insertedCards
   }
