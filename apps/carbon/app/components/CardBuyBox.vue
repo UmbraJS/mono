@@ -9,15 +9,12 @@ const view = useView()
 </script>
 
 <template>
-  <div id="BuyBox">
-    <CardMetaChip :style="{ 'border-bottom': '0px', 'border-right': '0px' }">
-      <p class="caption">buy</p>
-    </CardMetaChip>
-    <CardMetaChip :style="{ 'border-bottom': '0px' }">
+  <div id="BuyBox" class="border">
+    <CardMetaChip>
       <Icon name="carbon:purchase" size="1rem" />
       <p class="caption">{{ view.getCardStats(card).cost }}</p>
     </CardMetaChip>
-    <CardMetaChip :style="{ 'border-bottom': '0px' }">
+    <CardMetaChip>
       <Icon name="carbon:pan-horizontal" size="1rem" />
       <p class="caption">{{ card.size }}</p>
     </CardMetaChip>
@@ -27,6 +24,7 @@ const view = useView()
 <style>
 #BuyBox {
   display: grid;
-  grid-template-columns: auto 1fr 1fr;
+  grid-template-columns: 1fr auto;
+  overflow: hidden;
 }
 </style>

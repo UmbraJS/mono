@@ -35,7 +35,7 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
 
     <!-- Shop Inventory -->
     <div class="shop-inventory">
-      <article v-for="card in quest.shop.shopInventory" :key="card.id" class="shop-card"
+      <article v-for="card in quest.shop.shopInventory" id="ShopCard" :key="card.id"
         :class="{ 'purchasing': isPurchasing }">
         <!-- Purchase Button -->
         <button class="buy-button" :disabled="isPurchasing"
@@ -49,16 +49,18 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
         </CardModal>
 
         <!-- Card Information -->
-        <div class="card-info">
-          <CardMetaChip class="card-name">
-            <p class="caption title">{{ card.info.name }}</p>
-          </CardMetaChip>
+        <div id="CardInfo">
+          <div id="CardMainInfo" class="border">
+            <CardMetaChip id="CardName">
+              <p class="caption title">{{ card.info.name }}</p>
+            </CardMetaChip>
 
-          <CardMetaChip class="card-meta">
-            <p class="caption">lvl {{ view.getCardStats(card).level }}</p>
-            <span class="separator">-</span>
-            <p class="caption">{{ getRarity(card.info.rarity) }}</p>
-          </CardMetaChip>
+            <CardMetaChip id="CardMeta">
+              <p class="caption">lvl {{ view.getCardStats(card).level }}</p>
+              <span class="separator">-</span>
+              <p class="caption">{{ getRarity(card.info.rarity) }}</p>
+            </CardMetaChip>
+          </div>
 
           <p v-if="card.info.quote" class="caption quote">{{ card.info.quote }}</p>
         </div>
@@ -98,15 +100,17 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
   overflow-x: auto;
 }
 
-.shop-card {
+#ShopCard {
   display: grid;
   grid-template-rows: auto auto 1fr;
+  gap: var(--space-1);
+
   width: var(--cardWindowWidth);
   min-width: var(--cardWindowWidth);
   transition: opacity var(--transition-duration, 0.2s);
 }
 
-.shop-card.purchasing {
+#ShopCard.purchasing {
   opacity: 0.7;
   pointer-events: none;
 }
@@ -121,17 +125,19 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
   opacity: 0.5;
 }
 
-.card-info {
-  display: flex;
-  flex-direction: column;
+#CardMainInfo {
+  box-shadow: 1px 58px 100px -24px rgba(0, 0, 0, 0.77);
+  overflow: hidden;
 }
 
-.card-name {
+#CardName {
   border-bottom: 0;
   border-top: 0;
+  border-bottom: var(--border);
+  border-bottom-style: dotted;
 }
 
-.card-meta {
+#CardMeta {
   display: flex;
   align-items: center;
   gap: var(--space-quark);

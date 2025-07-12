@@ -1,11 +1,11 @@
 <template>
-  <div id="CardMetaChip" class="border">
+  <div class="CardMetaChip">
     <slot />
   </div>
 </template>
 
 <style>
-#CardMetaChip {
+.CardMetaChip {
   display: flex;
   align-items: center;
   gap: var(--space-quark);

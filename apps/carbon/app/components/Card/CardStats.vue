@@ -12,6 +12,12 @@ defineProps<{
 
 <template>
   <div class="topRowStats">
+    <div v-if="bash?.actionCount && bash.actionCount > 1" class="PillChip border">
+      <p class="caption">
+        <strong>x{{ bash.actionCount }}</strong>
+      </p>
+    </div>
+
     <div v-if="bash?.cooldown" class="PillChip border">
       <Icon name="carbon:timer" size="1rem" />
       <p class="caption">
