@@ -165,9 +165,13 @@ button#CardWrapper.rejected {
 } */
 
 #CardWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "top"
+    "middle"
+    "bottom";
 
   position: relative;
   height: 100%;

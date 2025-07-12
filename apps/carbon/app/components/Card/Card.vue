@@ -66,5 +66,7 @@ const cardStats = computed(() => {
   height: 100%;
   object-fit: cover;
   object-position: top;
+
+  border-radius: var(--radius);
 }
 </style>

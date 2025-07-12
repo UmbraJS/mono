@@ -46,6 +46,10 @@ $desktop: 1200px;
 }
 
 :root {
+  --svg-color: var(--base-120);
+}
+
+:root {
   --base: #16121f;
   --base-10: #1f1b27;
   --base-20: #28242f;

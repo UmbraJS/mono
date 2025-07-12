@@ -78,7 +78,6 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  width: 50vw;
 }
 
 .error-message {
