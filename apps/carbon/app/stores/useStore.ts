@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { user, bot } from '../data/character'
 import type { Card, CardStatRealms } from '../../types'
-import { spaceTimeSimulation } from '../../utils/spaceTimeSimulation'
+import { matchSimulator } from '../../utils/matchSimulator'
 import { gsap } from 'gsap'
 import { usePerson } from '../composables/usePerson'
 import type { UsePerson } from '../composables/usePerson'
@@ -69,7 +69,7 @@ function useSimulation(userStore: UsePerson, botStore: UsePerson) {
     },
   }))
 
-  const cardTimeline = spaceTimeSimulation({
+  const cardTimeline = matchSimulator({
     playerDeck: userStore.deck.value,
     opponentDeck: botStore.deck.value,
     playerCharacters: userStore.characters.value,

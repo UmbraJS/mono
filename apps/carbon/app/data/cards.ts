@@ -40,19 +40,26 @@ import { aspects } from './aspects'
 //   }
 // }
 
-const hasteYourSibling: CardEffect = ({ card }) => {
-  return {
-    sourceIndex: card.card.index,
-    timeType: 'haste',
-    value: 1,
-    trigger: {
-      triggerType: 'cooldown',
-      playerTriggerIndexes: [card.card.index],
-    },
-    target: {
-      playerTargetIndexes: [card.card.index + 1],
-      opponentTargetIndexes: [],
-    },
+const hasteYourSibling: CardEffect = {
+  name: 'Haste Your Sibling',
+  description: 'Haste your siblings 1 second',
+  image: {
+    default: 'hasteYourSibling.jpg',
+  },
+  action: ({ card }) => {
+    return {
+      sourceIndex: card.card.index,
+      timeType: 'haste',
+      value: 1,
+      trigger: {
+        triggerType: 'cooldown',
+        playerTriggerIndexes: [card.card.index],
+      },
+      target: {
+        playerTargetIndexes: [card.card.index + 1],
+        opponentTargetIndexes: [],
+      },
+    }
   }
 }
 
@@ -399,7 +406,7 @@ export const gauntletOfSigmar: Card = {
       level: 1,
       cost: 10,
       bash: { attack: 20, shield: 10, actionCount: 1, cooldown: 5 },
-      effects: [],
+      effects: [hasteYourSibling],
       tags: ['weapon'],
       aspects: [aspects.metal],
       record: {},
@@ -437,8 +444,8 @@ export const glimmerCloak: Card = {
       cost: 100,
       bash: { attack: 10, banter: 10, heal: 10, shield: 10, cooldown: 3 },
       effects: [],
-      tags: ['friend'],
-      aspects: [aspects.light, aspects.warpWeave],
+      tags: ['action', 'artifact'],
+      aspects: [aspects.light],
       record: {},
     },
   },
@@ -553,7 +560,7 @@ export const saintDenis: Card = {
     base: {
       level: 1,
       cost: 10,
-      bash: { attack: 0, shield: 40, cooldown: 0 },
+      bash: { attack: 0, shield: 50, cooldown: 4 },
       effects: [],
       tags: ['location'],
       aspects: [aspects.light],

@@ -1,4 +1,4 @@
-import type { SpaceBoards } from '../../app/stores/useStore';
+import type { SpaceBoards } from '../../types/cardDrag';
 
 export interface CardPlacementResult {
   index: number;

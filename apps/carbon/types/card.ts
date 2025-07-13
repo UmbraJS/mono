@@ -215,11 +215,16 @@ export interface TimeEffect {
   }
 }
 
-export type CardEffect = (props: {
-  card: SimCard
-  opponentCards: SimCard[]
-  playerCards: SimCard[]
-}) => TimeEffect
+export interface CardEffect {
+  name: string,
+  description: string,
+  image?: CardImage
+  action: (props: {
+    card: SimCard
+    opponentCards: SimCard[]
+    playerCards: SimCard[]
+  }) => TimeEffect
+}
 
 export interface CardAction {
   bash: CardBash

@@ -272,11 +272,11 @@ export function usePerson(user: User) {
   // === PUBLIC API ===
   return {
     // Reactive state
-    deck: readonly(deck),
-    inventory: readonly(inventory),
-    characters: readonly(characters),
-    draggedCard: readonly(draggedCard),
-    hoveredSpace: readonly(hoveredSpace),
+    deck: deck,
+    inventory: inventory,
+    characters: characters,
+    draggedCard: draggedCard,
+    hoveredSpace: hoveredSpace,
     remainingSlots,
 
     // Drag & Drop

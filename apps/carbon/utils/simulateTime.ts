@@ -2,6 +2,8 @@ import { generateCooldownEvent } from './time/generateCooldownEvent';
 import type { CooldownEvent } from './time/generateCooldownEvent';
 import type { SimCard, PreSimulationCard, TimeEffect } from '../types/card'
 
+const MAX_SIMULATION_ITERATIONS = 300;
+
 interface ProcessedCard extends CooldownEvent {
   card: SimCard;
   totalLifetime: number;
@@ -52,7 +54,7 @@ export function simulateTime({
 
   let count = 0;
 
-  while (!matchCondition() && count < 100) {
+  while (!matchCondition() && count < MAX_SIMULATION_ITERATIONS) {
     const processedCards = processCards(simCards);
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
       continue;
@@ -63,21 +65,6 @@ export function simulateTime({
     })
 
     mutateTime(processedCards)
-    // console.log("rex test: ", {
-    //   name: card.name,
-    //   segmentedChunks,
-    //   chunks: chunks.map(c => ({
-    //     startEnd: `${c.start} -> ${c.end} = ${c.duration}`,
-    //     fromTo: `${c.from} -> ${c.to}`,
-    //     type: c.type,
-    //   })),
-    // })
-
-    // console.log("rex text: ", simCards.map(c => ({
-    //   name: c.name,
-    //   lifetime: c.simulation.lifetime,
-    // })))
-
     count++;
   }
 
@@ -137,7 +124,7 @@ export function simulateTime({
           const comparisonCardIsPlayer = c.owner.user === 'player';
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
 
-          const trigger = effect({
+          const trigger = effect.action({
             card: c,
             opponentCards: comparisonCardIsPlayer ? opponentSimCards : playerSimCards,
             playerCards: comparisonCardIsPlayer ? playerSimCards : opponentSimCards,
@@ -156,7 +143,7 @@ export function simulateTime({
           effect: e,
           sourceCard: c,
         }))).map(({ effect, sourceCard }) => {
-          const cardModifier = effect({
+          const cardModifier = effect.action({
             card: sourceCard,
             opponentCards: opponentSimCards,
             playerCards: playerSimCards,

@@ -1,5 +1,5 @@
 import { gsap } from 'gsap'
-import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
+import type { SpaceOutput } from '../../utils/matchSimulator'
 import type { Character } from '../../types'
 
 export function useSpace(timeline: gsap.core.Timeline, space: SpaceOutput, characters: Character[]) {

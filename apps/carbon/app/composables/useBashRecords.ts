@@ -1,5 +1,5 @@
 import type { ValueLogCore } from './useBash'
-import type { SpaceOutput } from '../../utils/spaceTimeSimulation'
+import type { SpaceOutput } from '../../utils/matchSimulator'
 
 interface BashRecordProps {
   playerLogs?: SpaceOutput

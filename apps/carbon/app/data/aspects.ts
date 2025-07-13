@@ -92,7 +92,7 @@ const charge: Aspect = {
 }
 
 const warpWeave: Aspect = {
-  name: 'warpWeave',
+  name: 'warp weave',
   description: 'Threads of energy from the fabric of the warp',
   type: 'psychic',
   level: 1,

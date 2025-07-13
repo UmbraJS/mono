@@ -4,7 +4,7 @@ import BashLog from '~/components/BashLog/BashLog.vue'
 import { Tabs, Button } from '@nobel/core'
 import type { CardInfo } from '../../../types/card'
 import BashLogModal from './BashLogModal.vue'
-import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
+import type { SpaceOutput } from '../../../utils/matchSimulator'
 
 defineProps<{
   opponentInfoDeck: CardInfo[]

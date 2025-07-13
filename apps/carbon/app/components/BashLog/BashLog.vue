@@ -2,7 +2,7 @@
 import { ScrollArea } from '@nobel/core'
 import type { CardInfo } from '../../../types/card'
 import BashLogEntry from './BashLogEntry.vue'
-import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
+import type { SpaceOutput } from '../../../utils/matchSimulator'
 
 const props = defineProps<{
   logs: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>
@@ -20,8 +20,7 @@ const allLogsOrderedByTime = allLogs
 <template>
   <ScrollArea class="ScrollArea">
     <ul>
-      <BashLogEntry
-v-for="log in allLogsOrderedByTime" :key="log.timestamp" :log-entry="log"
+      <BashLogEntry v-for="log in allLogsOrderedByTime" :key="log.timestamp" :log-entry="log"
         :opponent-info-deck="props.opponentInfoDeck" :player-info-deck="props.playerInfoDeck" />
     </ul>
   </ScrollArea>

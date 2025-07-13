@@ -2,7 +2,7 @@
 import { DialogRoot, DialogTrigger, DialogModal, DialogTitle, DialogDescription } from '@nobel/core'
 import type { CardInfo } from '../../../types/card'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
-import type { SpaceOutput } from '../../../utils/spaceTimeSimulation'
+import type { SpaceOutput } from '../../../utils/matchSimulator'
 
 defineProps<{
   opponentInfoDeck: CardInfo[]

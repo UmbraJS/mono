@@ -60,6 +60,23 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
               <span class="separator">-</span>
               <p class="caption">{{ getRarity(card.info.rarity) }}</p>
             </CardMetaChip>
+
+            <CardMetaChip id="CardTypes">
+              <div v-for="type in view.getCardStats(card).tags" :key="type" class="CardTag base-yellow">
+                <p class="caption">{{ type }}</p>
+              </div>
+              <div v-for="type in view.getCardStats(card).aspects" :key="type.name" class="CardTag base-info">
+                <p class="caption">{{ type.name }}</p>
+              </div>
+            </CardMetaChip>
+
+            <CardMetaChip id="CardEffects">
+              <!-- <p class="caption">Effect</p> -->
+              <div v-for="type in view.getCardStats(card).effects" :key="type.name" class="CardEffect">
+                <p class="caption">{{ type.description }}</p>
+              </div>
+            </CardMetaChip>
+
           </div>
 
           <p v-if="card.info.quote" class="caption quote">{{ card.info.quote }}</p>
@@ -76,6 +93,23 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
 </template>
 
 <style scoped>
+.CardTag {
+  display: inline-block;
+  padding: var(--space-quark);
+  background-color: var(--base-20);
+  color: var(--base-120);
+  border-radius: var(--radius);
+}
+
+.CardEffect {
+  display: inline-block;
+  padding: var(--space-quark);
+  background-color: var(--base-20);
+  color: var(--base-120);
+  border-radius: var(--radius);
+  width: 100%;
+}
+
 .shop-board {
   display: flex;
   flex-direction: column;

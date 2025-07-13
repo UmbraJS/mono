@@ -27,7 +27,7 @@ const cardStats = computed(() => {
     <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :chunks="chunks" />
 
     <NuxtImg v-if="card.info.image" class="avatar" :src="card.info.image.default" :alt="card.info.description"
-      width="450" height="400" />
+      width="450" height="400" placeholder format="webp" fit="cover" />
 
     <CardStatsComponent :bash="cardStats.bash" />
   </CardWrapper>
