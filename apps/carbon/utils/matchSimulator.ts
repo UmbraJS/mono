@@ -3,13 +3,16 @@ import { simulateTime } from './simulateTime'
 import { spaceStore } from './space/spaceStore';
 import type { User, PreSimulationCard } from '../types'
 
-interface SpaceTimeProps extends SpaceProps {
-  playerDeck: User['deck'];
-  opponentDeck: User['deck'];
-  matchDuration?: number;
+interface SpaceTimeProps extends Decks, Characters {
+  matchDuration?: number; // TODO: this is not used currently
 }
 
-interface SpaceProps {
+interface Decks {
+  playerDeck: User['deck'];
+  opponentDeck: User['deck'];
+}
+
+interface Characters {
   playerCharacters: User['characters'];
   opponentCharacters: User['characters'];
 }
@@ -46,16 +49,23 @@ export function matchSimulator(props: SpaceTimeProps) {
   }
 }
 
-export function performanceSimulator(props: SpaceTimeProps) {
+export function performanceSimulator(props: Decks) {
   const player = spaceStore({
     maxHealth: 3000,
     onAttack: (attackEntry) => opponent.hurt(attackEntry)
   });
 
   const opponent = spaceStore({
-    maxHealth: 3000,
+    maxHealth: 0,
     onAttack: (attackEntry) => player.hurt(attackEntry)
   });
+
+
+  player.hurt({
+    attack: 3000,
+    timestamp: 0,
+    index: 0,
+  })
 
   const space = simulateSpaceWrapper({ player, opponent })
 
@@ -73,10 +83,9 @@ export function performanceSimulator(props: SpaceTimeProps) {
         card: card,
       })
     },
-    matchCondition: () => {
-      const playerIsDead = space.player.getHealth() <= 0;
-      const opponentIsDead = space.opponent.getHealth() <= 0;
-      return playerIsDead || opponentIsDead;
+    matchCondition: (nextCooldownEnd) => {
+      if (nextCooldownEnd > 30) return true;
+      return false;
     }
   })
 
@@ -86,7 +95,7 @@ export function performanceSimulator(props: SpaceTimeProps) {
   }
 }
 
-function simulateSpace(props: SpaceProps) {
+function simulateSpace(props: Characters) {
   const player = spaceStore({
     maxHealth: props.playerCharacters.reduce((acc, char) => acc + char.maxHealth, 0),
     onAttack: (attackEntry) => opponent.hurt(attackEntry)

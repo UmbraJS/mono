@@ -1,6 +1,7 @@
 import type { Card } from '../../types'
 import { defineStore } from 'pinia'
 import { gauntletOfSigmar, glimmerCloak, viking, saintDenis } from '../data/cards'
+import { performanceSimulator } from '../../utils/matchSimulator'
 
 export const useQuest = defineStore('quest', () => {
   const currentEvents = ref([Ormond, SaintDenis, BorgBog])
@@ -20,13 +21,41 @@ export const useQuest = defineStore('quest', () => {
 })
 
 function useShop() {
+  const view = useView()
+
   const current = ref<EventCard | null>(Ormond)
   const shopInventory = ref<Card[] | null>([
-    gauntletOfSigmar,
-    glimmerCloak,
-    saintDenis,
-    viking
+    getCardCost(gauntletOfSigmar),
+    getCardCost(glimmerCloak),
+    getCardCost(saintDenis),
+    getCardCost(viking),
   ])
+
+  function getCardCost(card: Card) {
+    const realm = view.realm
+    const sim = performanceSimulator({
+      opponentDeck: [],
+      playerDeck: [card],
+    })
+
+    const attackValue = Math.abs(sim.space.opponent.healthLog[sim.space.opponent.healthLog.length - 1]?.newValue || 0);
+    const shieldValue = Math.abs(sim.space.player.shieldLog[sim.space.player.shieldLog.length - 1]?.newValue || 0);
+    const healthValue = Math.abs(sim.space.player.healthLog[sim.space.player.healthLog.length - 1]?.newValue || 0);
+
+    const cardCost = Math.max(10, attackValue + shieldValue + healthValue);
+
+    return {
+      ...card,
+      stats: {
+        ...card.stats,
+        [realm]: {
+          ...card.stats[realm],
+          cost: cardCost
+        }
+      }
+    }
+  }
+
 
   function buyCard(card: Card) {
     if (!shopInventory.value) return

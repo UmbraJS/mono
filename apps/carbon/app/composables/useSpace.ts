@@ -2,7 +2,7 @@ import { gsap } from 'gsap'
 import type { SpaceOutput } from '../../utils/matchSimulator'
 import type { Character } from '../../types'
 
-export function useSpace(timeline: gsap.core.Timeline, space: SpaceOutput, characters: Character[]) {
+export function useSpace(timeline: gsap.core.Timeline, space: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>, characters: Character[]) {
   const maxHealth = characters.reduce((total, character) => total + character.maxHealth, 0)
 
   const health = ref(maxHealth)

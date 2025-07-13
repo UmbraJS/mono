@@ -74,7 +74,6 @@ function useSimulation(userStore: UsePerson, botStore: UsePerson) {
     opponentDeck: botStore.deck.value,
     playerCharacters: userStore.characters.value,
     opponentCharacters: botStore.characters.value,
-    matchDuration: 30
   })
 
   return {

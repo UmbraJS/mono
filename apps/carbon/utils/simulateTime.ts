@@ -15,7 +15,7 @@ interface SimulateCooldownTimelineArgs {
   playerDeck: PreSimulationCard[];
   opponentDeck: PreSimulationCard[];
   onTrigger: (triggeredCard: ProcessedCard) => void;
-  matchCondition: () => boolean;
+  matchCondition: (nextCooldownEnd: number) => boolean;
 }
 
 export function simulateTime({
@@ -54,11 +54,16 @@ export function simulateTime({
 
   let count = 0;
 
-  while (!matchCondition() && count < MAX_SIMULATION_ITERATIONS) {
+  while (count < MAX_SIMULATION_ITERATIONS) {
     const processedCards = processCards(simCards);
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
       continue;
     };
+
+    // Check match condition with the current nextCooldownEnd
+    if (matchCondition(processedCards.nextCooldownEnd)) {
+      break;
+    }
 
     processedCards.nextCardsToFinish.map(c => {
       onTrigger(c)
