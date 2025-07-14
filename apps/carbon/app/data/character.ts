@@ -1,4 +1,4 @@
-import type { Character, User } from '../../types'
+import type { Character, User, Card } from '../../types'
 import { cards } from './cards'
 
 const soldierStats = {
@@ -44,20 +44,19 @@ const warrior: Character = {
 
 const user: User = {
   characters: [warrior],
-  field: cards.find((card) => card.info.name === 'Village')!,
+  field: cards.find((card) => card.info.name === 'Village') || cards[0]!, // Use first card as fallback
   deck: [
-    { ...cards.find((card) => card.info.name === 'Halberdier')!, index: 0, },
-    { ...cards.find((card) => card.info.name === 'Archer')!, index: 8 },
+    cards.find((card) => card.info.name === 'Halberdier'),
+    cards.find((card) => card.info.name === 'Archer'),
     // { ...cards.find((card) => card.info.name === 'Doom Cloak')!, index: 2 },
     // { ...cards.find((card) => card.info.name === 'Glimmer Cloak')!, index: 3 },
-  ],
+  ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index * 8 })),
   inventory: [
-    { ...cards.find((card) => card.info.name === 'Fenrir Viking')!, index: 0, },
-    { ...cards.find((card) => card.info.name === 'Halberdier')!, index: 3 },
-    { ...cards.find((card) => card.info.name === 'Archer')!, index: 6 },
-    { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, index: 9 },
-
-  ],
+    cards.find((card) => card.info.name === 'Fenrir Viking'),
+    cards.find((card) => card.info.name === 'Halberdier'),
+    cards.find((card) => card.info.name === 'Archer'),
+    cards.find((card) => card.info.name === 'Skeleton Archer'),
+  ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index * 3 })),
 }
 
 const skeletonKing: Character = {
@@ -76,17 +75,17 @@ const skeletonKing: Character = {
 
 const bot: User = {
   characters: [skeletonKing],
-  field: cards.find((card) => card.info.name === 'Abandoned Halls')!,
+  field: cards.find((card) => card.info.name === 'Abandoned Halls') || cards[0]!,
   deck: [
-    { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, index: 0 },
+    cards.find((card) => card.info.name === 'Skeleton Archer'),
     // { ...cards.find((card) => card.info.name === 'Skeleton Soldier')!, index: 1 },
     // { ...cards.find((card) => card.info.name === 'Skeleton Healer')!, index: 2 },
     // { ...cards.find((card) => card.info.name === 'Skeleton Horseman')!, index: 3 },
-  ],
+  ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index })),
   inventory: [
-    cards.find((card) => card.info.name === 'Alien Halls')!,
-    cards.find((card) => card.info.name === 'Abandoned Halls')!,
-  ],
+    cards.find((card) => card.info.name === 'Alien Halls'),
+    cards.find((card) => card.info.name === 'Abandoned Halls'),
+  ].filter((card): card is Card => card !== undefined),
 }
 
 export { user, bot }

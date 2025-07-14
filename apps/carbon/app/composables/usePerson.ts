@@ -39,7 +39,7 @@ export function usePerson(user: User) {
   // Create a card cost calculator for the current realm
   const calculateCardCost = createCardCostCalculator(view.realm)
 
-  const deck = ref(user.deck)
+  const deck = ref(user.deck.map(card => calculateCardCost(card)))
   const inventory = ref(user.inventory.map(card => calculateCardCost(card)))
   const characters = ref(user.characters)
   const hoveredSpace = ref<SpaceBoards | null>(null)

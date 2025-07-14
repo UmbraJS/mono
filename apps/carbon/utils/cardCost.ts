@@ -76,5 +76,7 @@ export function getCardCost(card: Card, realm: keyof Card['stats']): Card {
  * @returns A function that calculates cost for cards in the specified realm
  */
 export function createCardCostCalculator(realm: keyof Card['stats']) {
-  return (card: Card) => getCardCost(card, realm)
+  return (card: Card) => {
+    return getCardCost(card, realm)
+  }
 }
