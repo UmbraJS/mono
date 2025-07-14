@@ -10,7 +10,7 @@ const quest = useQuest()
       <slot />
     </div>
 
-    <ViewOverlay :hidden="!overlay">
+    <ViewOverlay :hidden="!overlay" stack-layer="top">
       <slot name="overlay" />
     </ViewOverlay>
 

@@ -12,7 +12,6 @@ const store = useStore()
 <style>
 #SellZone {
   position: relative;
-  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;

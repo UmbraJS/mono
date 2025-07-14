@@ -46,7 +46,7 @@ function toggleInventory() {
       </div>
     </div>
 
-    <ViewOverlay :hidden="store.user.draggedCard === null">
+    <ViewOverlay :hidden="store.user.draggedCard === null" stack-layer="bottom">
       <SellZone />
     </ViewOverlay>
   </PartyBoard>

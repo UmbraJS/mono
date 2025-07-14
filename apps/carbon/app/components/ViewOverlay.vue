@@ -1,11 +1,14 @@
 <script setup lang="ts">
 defineProps<{
   hidden: boolean;
+  stackLayer: 'top' | 'bottom';
 }>();
 </script>
 
 <template>
-  <div id="ViewOverlay" class="clipPath" :class="{ hidden }">
+  <div id="ViewOverlay" class="clipPath" :class="{ hidden }" :style="{
+    'z-index': stackLayer === 'top' ? 99 : 98,
+  }">
     <slot />
   </div>
 </template>
@@ -13,7 +16,6 @@ defineProps<{
 <style>
 #ViewOverlay {
   position: absolute;
-  z-index: 99;
   top: 0;
   height: 100%;
   width: 100%;
@@ -26,6 +28,6 @@ defineProps<{
 
 #ViewOverlay.hidden {
   overflow: hidden;
-  clip-path: circle(0% at 10% 100%);
+  clip-path: circle(0% at 50% 100%);
 }
 </style>

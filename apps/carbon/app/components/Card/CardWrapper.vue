@@ -159,10 +159,10 @@ button#CardWrapper.rejected {
   pointer-events: none !important;
 }
 
-/* button.dragging {
+button.dragging {
   position: absolute;
   z-index: 50;
-} */
+}
 
 #CardWrapper {
   display: grid;
