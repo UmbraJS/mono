@@ -62,6 +62,9 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
             </CardMetaChip>
 
             <CardMetaChip id="CardTypes">
+              <div class="CardTag base-accent">
+                <p class="caption">{{ view.getCardStats(card).slot }}</p>
+              </div>
               <div v-for="type in view.getCardStats(card).tags" :key="type" class="CardTag base-yellow">
                 <p class="caption">{{ type }}</p>
               </div>
@@ -71,7 +74,6 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
             </CardMetaChip>
 
             <CardMetaChip id="CardEffects">
-              <!-- <p class="caption">Effect</p> -->
               <div v-for="type in view.getCardStats(card).effects" :key="type.name" class="CardEffect">
                 <p class="caption">{{ type.description }}</p>
               </div>

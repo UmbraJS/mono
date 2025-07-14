@@ -1,53 +1,68 @@
 <script setup lang="ts">
-import type { CardBash } from '../../../types'
+import type { CardStats } from '../../../types'
 import BanterIcon from '../icons/Banter.vue'
 import AttackIcon from '../icons/Attack.vue'
 import HealIcon from '../icons/Heal.vue'
 import ShieldIcon from '../icons/Shield.vue'
 
 defineProps<{
-  bash?: CardBash
+  cardStats: CardStats
 }>()
 </script>
 
 <template>
   <div class="topRowStats">
-    <div v-if="bash?.actionCount && bash.actionCount > 1" class="PillChip border">
+
+
+    <div v-if="cardStats.cost" class="PillChip border">
+      <Icon name="carbon:purchase" size="1rem" />
       <p class="caption">
-        <strong>x{{ bash.actionCount }}</strong>
+        <strong>{{ cardStats.cost }}</strong>
       </p>
     </div>
 
-    <div v-if="bash?.cooldown" class="PillChip border">
+    <!-- <p class="caption">{{ view.getCardStats(card).cost }}</p> -->
+
+    <div v-if="cardStats.bash?.actionCount && cardStats.bash.actionCount > 1" class="PillChip border">
+      <p class="caption">
+        <strong>x{{ cardStats.bash.actionCount }}</strong>
+      </p>
+    </div>
+
+    <div v-if="cardStats.bash?.cooldown" class="PillChip border">
       <Icon name="carbon:timer" size="1rem" />
       <p class="caption">
-        <strong>{{ bash.cooldown }}</strong>
+        <strong>{{ cardStats.bash.cooldown }}</strong>
       </p>
     </div>
   </div>
   <div class="stats">
-    <div v-if="bash?.attack" class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus">
+    <div v-if="cardStats.bash?.attack"
+      class="chip base-warning button buttonText buttonHover buttonActive buttonFocus focus">
       <AttackIcon />
       <p class="caption">
-        <strong>{{ bash.attack }}</strong>
+        <strong>{{ cardStats.bash.attack }}</strong>
       </p>
     </div>
-    <div v-if="bash?.heal" class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus">
+    <div v-if="cardStats.bash?.heal"
+      class="chip base-success button buttonText buttonHover buttonActive buttonFocus focus">
       <HealIcon />
       <p class="caption">
-        <strong>{{ bash.heal }}</strong>
+        <strong>{{ cardStats.bash.heal }}</strong>
       </p>
     </div>
-    <div v-if="bash?.shield" class="chip base-info button buttonText buttonHover buttonActive buttonFocus focus">
+    <div v-if="cardStats.bash?.shield"
+      class="chip base-info button buttonText buttonHover buttonActive buttonFocus focus">
       <ShieldIcon />
       <p class="caption">
-        <strong>{{ bash.shield }}</strong>
+        <strong>{{ cardStats.bash.shield }}</strong>
       </p>
     </div>
-    <div v-if="bash?.banter" class="chip base-yellow button buttonText buttonHover buttonActive buttonFocus focus">
+    <div v-if="cardStats.bash?.banter"
+      class="chip base-yellow button buttonText buttonHover buttonActive buttonFocus focus">
       <BanterIcon />
       <p class="caption">
-        <strong>{{ bash.banter }}</strong>
+        <strong>{{ cardStats.bash.banter }}</strong>
       </p>
     </div>
   </div>

@@ -29,7 +29,7 @@ const cardStats = computed(() => {
     <NuxtImg v-if="card.info.image" class="avatar" :src="card.info.image.default" :alt="card.info.description"
       width="450" height="400" placeholder format="webp" fit="cover" />
 
-    <CardStatsComponent :bash="cardStats.bash" />
+    <CardStatsComponent :card-stats="cardStats" />
   </CardWrapper>
 </template>
 

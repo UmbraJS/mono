@@ -15,26 +15,18 @@ interface AspectImage {
   6?: string
 }
 
+type CardSlot = 'main hand' | 'off hand' | 'head' | 'armor' | 'feet' | 'hands' | 'neck' | 'ring' | 'cloak' | 'mount' | 'technique' | 'pet' | 'army' | 'knowledge' | 'field' | 'building' | 'transport' | 'character' | 'utility'
+
 type CardTag =
   | 'tool'
   | 'weapon'
-  | 'armor'
-  | 'spell'
-  | 'friend'
   | 'undead'
-  | 'servant'
-  | 'location'
-  | 'land'
   | 'artifact'
   | 'trap'
-  | 'trinket'
-  | 'event'
-  | 'furniture'
   | 'food'
-  | 'drink'
-  | 'mount'
-  | 'pet'
-  | 'action'
+  | 'potion'
+  | 'saint'
+  | 'guard'
 
 type AspectType =
   | 'fire'
@@ -167,6 +159,7 @@ export interface CardStats {
   effects: CardEffect[]
   aspects: Aspect[]
   tags: CardTag[]
+  slot: CardSlot
   record: CardRecord
   level: number
 }

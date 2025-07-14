@@ -1,5 +1,6 @@
 import type { User, Card } from '../../types'
 import type { CardSegment, DraggedCard, SpaceBoards } from '../../types/cardDrag'
+import { createCardCostCalculator } from '../../utils/cardCost'
 
 import { getInsertedCard } from '../../utils/cardSwap/insertCard'
 
@@ -33,8 +34,13 @@ interface InsertCardResult {
  * Provides reactive state management and card manipulation methods
  */
 export function usePerson(user: User) {
+  const view = useView()
+
+  // Create a card cost calculator for the current realm
+  const calculateCardCost = createCardCostCalculator(view.realm)
+
   const deck = ref(user.deck)
-  const inventory = ref(user.inventory)
+  const inventory = ref(user.inventory.map(card => calculateCardCost(card)))
   const characters = ref(user.characters)
   const hoveredSpace = ref<SpaceBoards | null>(null)
   const draggedCard = ref<DraggedCard | null>(null)

@@ -1,6 +1,6 @@
 import { generateCooldownEvent } from './time/generateCooldownEvent';
 import type { CooldownEvent } from './time/generateCooldownEvent';
-import type { SimCard, PreSimulationCard, TimeEffect } from '../types/card'
+import type { SimCard, PreSimulationCard, TimeEffect, Card } from '../types/card'
 
 const MAX_SIMULATION_ITERATIONS = 300;
 
@@ -16,6 +16,7 @@ interface SimulateCooldownTimelineArgs {
   opponentDeck: PreSimulationCard[];
   onTrigger: (triggeredCard: ProcessedCard) => void;
   matchCondition: (nextCooldownEnd: number) => boolean;
+  realm: keyof Card['stats'];
 }
 
 export function simulateTime({
@@ -23,6 +24,7 @@ export function simulateTime({
   playerDeck,
   opponentDeck,
   matchCondition,
+  realm
 }: SimulateCooldownTimelineArgs) {
   const playerSimCards = initializeSimCards(playerDeck, 'player');
   const opponentSimCards = initializeSimCards(opponentDeck, 'opponent');
@@ -66,7 +68,11 @@ export function simulateTime({
     }
 
     processedCards.nextCardsToFinish.map(c => {
-      onTrigger(c)
+      const actionCount = c.card.card.stats[realm]?.bash?.actionCount || 0;
+
+      for (let i = 0; i < actionCount; i++) {
+        onTrigger(c);
+      }
     })
 
     mutateTime(processedCards)

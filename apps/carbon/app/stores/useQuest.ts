@@ -1,13 +1,38 @@
 import type { Card } from '../../types'
 import { defineStore } from 'pinia'
 import { gauntletOfSigmar, glimmerCloak, viking, saintDenis } from '../data/cards'
-import { performanceSimulator } from '../../utils/matchSimulator'
+import { createCardCostCalculator } from '../../utils/cardCost'
 
+// Types
+interface EventEffect {
+  id: string
+  image: string
+  description: string
+}
+
+interface EventCard {
+  id: string
+  images: {
+    default: string
+    inside?: string
+  }
+  name: string
+  description: string
+  shortDescription: string
+  quote?: string
+  effects: EventEffect[]
+}
+
+/**
+ * Quest store for managing quest events and shop functionality
+ */
 export const useQuest = defineStore('quest', () => {
-  const currentEvents = ref([Ormond, SaintDenis, BorgBog])
+  // State
+  const currentEvents = ref<EventCard[]>([Ormond, SaintDenis, BorgBog])
   const hoveredEvent = ref<EventCard | null>(null)
   const shop = useShop()
 
+  // Actions
   const setHoveredEvent = (event: EventCard | null) => {
     hoveredEvent.value = event
   }
@@ -16,49 +41,35 @@ export const useQuest = defineStore('quest', () => {
     shop,
     hoveredEvent,
     currentEvents,
-    setHoveredEvent
+    setHoveredEvent,
   }
 })
 
+/**
+ * Shop composable for managing shop inventory and purchases
+ */
 function useShop() {
   const view = useView()
 
+  // Create a card cost calculator for the current realm
+  const calculateCardCost = createCardCostCalculator(view.realm)
+
+  // State
   const current = ref<EventCard | null>(Ormond)
   const shopInventory = ref<Card[] | null>([
-    getCardCost(gauntletOfSigmar),
-    getCardCost(glimmerCloak),
-    getCardCost(saintDenis),
-    getCardCost(viking),
+    calculateCardCost(gauntletOfSigmar),
+    calculateCardCost(glimmerCloak),
+    calculateCardCost(saintDenis),
+    calculateCardCost(viking),
   ])
 
-  function getCardCost(card: Card) {
-    const realm = view.realm
-    const sim = performanceSimulator({
-      opponentDeck: [],
-      playerDeck: [card],
-    })
-
-    const attackValue = Math.abs(sim.space.opponent.healthLog[sim.space.opponent.healthLog.length - 1]?.newValue || 0);
-    const shieldValue = Math.abs(sim.space.player.shieldLog[sim.space.player.shieldLog.length - 1]?.newValue || 0);
-    const healthValue = Math.abs(sim.space.player.healthLog[sim.space.player.healthLog.length - 1]?.newValue || 0);
-
-    const cardCost = Math.max(10, attackValue + shieldValue + healthValue);
-
-    return {
-      ...card,
-      stats: {
-        ...card.stats,
-        [realm]: {
-          ...card.stats[realm],
-          cost: cardCost
-        }
-      }
-    }
-  }
-
-
-  function buyCard(card: Card) {
+  /**
+   * Removes a card from the shop inventory when purchased
+   * @param card - The card to purchase
+   */
+  function buyCard(card: Card): void {
     if (!shopInventory.value) return
+
     const index = shopInventory.value.findIndex(c => c.id === card.id)
     if (index !== -1) {
       shopInventory.value.splice(index, 1)
@@ -68,45 +79,27 @@ function useShop() {
   return {
     current,
     shopInventory,
-    buyCard
+    buyCard,
   }
 }
 
-interface EventEffect {
-  id: string;
-  image: string;
-  description: string;
-}
-
-interface EventCard {
-  id: string;
-  images: {
-    default: string;
-    inside?: string;
-  };
-  name: string;
-  description: string;
-  shortDescription: string;
-  quote?: string;
-  effects: EventEffect[];
-}
-
+// Event Effects
 const FreeItem: EventEffect = {
-  id: 'swamp-effect',
+  id: 'free-item',
   image: '/swamp.jpg',
-  description: 'A free item'
+  description: 'A free item',
 }
 
 const OpensStore: EventEffect = {
-  id: 'swamp-effect',
+  id: 'opens-store',
   image: '/swanKeep.png',
-  description: 'Opens a store'
+  description: 'Opens a store',
 }
 
 const Match: EventEffect = {
   id: 'match',
   image: '/match.jpg',
-  description: 'Fight a battle'
+  description: 'Fight a battle',
 }
 
 const Ormond: EventCard = {
@@ -169,7 +162,7 @@ const BorgBog: EventCard = {
   id: 'Borg Bog',
   images: {
     default: '/swamp.jpg',
-    inside: '/borgBog.png ',
+    inside: '/borgBog.png',
   },
   name: 'Borg Bog',
   description: BorgBogDescription,
