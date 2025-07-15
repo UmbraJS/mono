@@ -6,14 +6,14 @@ import Button from '../Button/Button.vue'
 defineProps<{
   title?: string
   description?: string
-  class?: string
+  className?: string
 }>()
 </script>
 
 <template>
   <DrawerRoot :preventScrollRestoration="true" :shouldScaleBackground="true">
     <DrawerTrigger id="DrawerTrigger" asChild>
-      <Button :class="class" color="default" variant="base">
+      <Button :class="className" color="default" variant="base">
         <Icon name="carbon:settings" size="1.5em" />
         <p>settings</p>
       </Button>

@@ -16,6 +16,7 @@ export {
   DialogTrigger,
 } from './components/ui/Dialog/index'
 export { default as Input } from './components/ui/Input.vue'
+export { default as PixelTransition } from './components/ui/PixelTransition.vue'
 export { default as Radio } from './components/ui/Radio/Radio.vue'
 export { default as ScrollArea } from './components/ui/ScrollArea.vue'
 export { default as Select } from './components/ui/Select.vue'

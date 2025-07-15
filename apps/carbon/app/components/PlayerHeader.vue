@@ -19,7 +19,7 @@ function toggleInventory() {
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>
       </Button>
-      <Drawer class="viewButton" title="Player Settings"
+      <Drawer class-name="viewButton" title="Player Settings"
         description="Configure your character settings and preferences">
         <template #content>
           <div class="content">

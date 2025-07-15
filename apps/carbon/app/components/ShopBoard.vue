@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PlayerCard from '~/components/Card/Card.vue'
 import CardBuyBox from './CardBuyBox.vue'
+import { PixelTransition } from '@nobel/core'
 import { useCardPurchase } from '~/composables/useCardPurchase'
 
 /**
@@ -32,6 +33,15 @@ const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
       <Icon name="carbon:warning" size="1rem" />
       <p>{{ purchaseError }}</p>
     </div>
+
+    <PixelTransition :grid-size="8" pixel-color="#ff6b6b">
+      <template #default>
+        <NuxtImg src="/borgBog.png" alt="Default" />
+      </template>
+      <template #active>
+        <NuxtImg src="/burial.jpg" alt="Active" />
+      </template>
+    </PixelTransition>
 
     <!-- Shop Inventory -->
     <div class="shop-inventory">

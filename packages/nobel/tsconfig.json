@@ -2,8 +2,11 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
     // ...
     "allowJs": true,
@@ -14,6 +17,16 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./**/*.ts", "./**/*.d.ts", "./**/*.vue", "index.ts", "src", "components", "*.vue"],
-  "exclude": ["./**/__tests__/*"]
+  "include": [
+    "./**/*.ts",
+    "./**/*.d.ts",
+    "./**/*.vue",
+    "index.ts",
+    "src",
+    "components",
+    "*.vue"
+  ],
+  "exclude": [
+    "./**/__tests__/*"
+  ]
 }
