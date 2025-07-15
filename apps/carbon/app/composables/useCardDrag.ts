@@ -1,20 +1,39 @@
 import type { CardStats } from '../../types'
 import { useStore } from '~/stores/useStore'
-
 import { gsap } from 'gsap'
+import { Flip } from 'gsap/Flip'
 import { checkZoneHit } from '../../utils/cardSwap/zoneHit'
 
-interface useCardDragProps {
-  fragElement: HTMLElement | null,
-  board: 'deck' | 'inventory' | null,
-  cardIndex: number,
-  cardStats: CardStats,
-  cardSize: number,
+// Register FLIP plugin
+gsap.registerPlugin(Flip)
+
+/**
+ * Props for useCardDrag composable
+ */
+export interface CardDragProps {
+  fragElement: HTMLElement | null;
+  board: 'deck' | 'inventory' | null;
+  cardIndex: number;
+  cardStats: CardStats;
+  cardSize: number;
 }
 
-export function useCardDrag(props: useCardDragProps) {
-  const zones = document.querySelectorAll('[data-dropzone]')
-  const store = useStore()
+/**
+ * Drop zone attributes
+ */
+interface DropZoneAttributes {
+  board: 'deck' | 'inventory';
+  index: number;
+}
+
+/**
+ * useCardDrag composable for handling card drag-and-drop logic
+ * @param props CardDragProps
+ * @returns onDrag and onRelease handlers
+ */
+export function useCardDrag(props: CardDragProps) {
+  const zones = document.querySelectorAll('[data-dropzone]') as NodeListOf<HTMLElement>;
+  const store = useStore();
 
   const {
     moveCardInsideDeck,
@@ -23,146 +42,179 @@ export function useCardDrag(props: useCardDragProps) {
     moveCardFromInventoryToDeck,
     setHoveredSpace,
     setDraggedCard
-  } = store.user
+  } = store.user;
 
-  function onDrag(draggable: Draggable.Vars) {
-    props.fragElement?.classList.add('dragging')
-    const board = props.board
-    if (!board) return
-    if (!props.fragElement) return
+  /**
+   * Handler for drag event
+   * @param draggable Draggable.Vars
+   */
+  function onDrag(draggable: Draggable.Vars): void {
+    if (!props.fragElement || !props.board) return;
+    props.fragElement.classList.add('dragging');
 
     setDraggedCard({
       element: props.fragElement,
-      originBoard: board,
+      originBoard: props.board,
       cardIndex: props.cardIndex,
       cardStats: props.cardStats,
-    })
+    });
 
     checkZoneHit(draggable, {
-      zones: zones,
-      mis: (zones) => zones.forEach((zone) => zone.classList.remove('drag-hit')),
-      hit: (zones) => {
-        zones.forEach((zone) => zone.classList.add('drag-hit'))
-
-        const dropZones = getDropZones(zones);
-        const firstZoneAttributes = dropZones[0];
-        const lastZoneAttributes = dropZones[zones.length - 1];
-        if (!firstZoneAttributes || !lastZoneAttributes) return;
-        if (!props.board) return;
-
-        setHoveredSpace({
-          size: props.cardSize,
-          immigrant: {
-            board: firstZoneAttributes.board,
-            start: firstZoneAttributes.index,
-            end: firstZoneAttributes.index + props.cardSize - 1, // +1 because the end is exclusive
-          },
-          origin: {
-            board: props.board,
-            start: props.cardIndex,
-            end: props.cardIndex + props.cardSize - 1, // +1 because the end is exclusive
-          },
-        })
-      },
-    })
+      zones,
+      mis: handleZoneMiss,
+      hit: handleZoneHit,
+    });
   }
 
-  function onRelease(draggable: Draggable.Vars, cardIndex: number) {
-    props.fragElement?.classList.remove('drag')
+  /**
+   * Handler for release event
+   * @param draggable Draggable.Vars
+   * @param cardIndex number
+   */
+  function onRelease(draggable: Draggable.Vars, cardIndex: number): void {
+    props.fragElement?.classList.remove('dragging');
 
     checkZoneHit(draggable, {
-      zones: zones,
-      mis: landMis,
-      hit: (zones) => landHit(zones, draggable, cardIndex),
-      dud: (el) => gsap.to(el.target, { duration: 0.5, x: 0, y: 0 }),
-    })
+      zones,
+      mis: handleZoneMiss,
+      hit: (hitZones) => handleZoneLand(hitZones, draggable, cardIndex),
+      dud: handleZoneDud,
+    });
 
-    // It's important to reset the state after we have done everything else so that we are able to look at the dragged card when
+    // Reset state after drag completes
     setTimeout(() => {
-      setHoveredSpace(null)
-      setDraggedCard(null)
-    })
+      setHoveredSpace(null);
+      setDraggedCard(null);
+    });
+  }
+
+  /**
+   * Parse a drop zone element into DropZoneAttributes
+   */
+  function parseDropZone(zone: Element): DropZoneAttributes | null {
+    const boardAndId = zone.getAttribute('data-dropzone');
+    if (!boardAndId) return null;
+    const split = boardAndId.split('-');
+    if (split.length !== 2) return null;
+    const [board, index] = split;
+    if ((board !== 'deck' && board !== 'inventory') || typeof index !== 'string' || isNaN(Number(index))) return null;
+    return { board, index: parseInt(index, 10) };
+  }
+
+  /**
+   * Get all drop zones as DropZoneAttributes[]
+   */
+  function getDropZones(zones: NodeListOf<HTMLElement> | Element[]): DropZoneAttributes[] {
+    return Array.from(zones)
+      .map(parseDropZone)
+      .filter((z): z is DropZoneAttributes => z !== null);
+  }
+
+  /**
+   * Handle when zones are hit during drag
+   */
+  function handleZoneHit(zones: Element[]): void {
+    zones.forEach((zone) => zone.classList.add('drag-hit'));
+    const dropZones = getDropZones(zones);
+    const firstZone = dropZones[0];
+    const lastZone = dropZones[dropZones.length - 1];
+    if (!firstZone || !lastZone || !props.board) return;
+
+    setHoveredSpace({
+      size: props.cardSize,
+      immigrant: {
+        board: firstZone.board,
+        start: firstZone.index,
+        end: firstZone.index + props.cardSize - 1, // end is inclusive
+      },
+      origin: {
+        board: props.board,
+        start: props.cardIndex,
+        end: props.cardIndex + props.cardSize - 1, // end is inclusive
+      },
+    });
+  }
+
+  /**
+   * Handle when zones are missed during drag
+   */
+  function handleZoneMiss(zones: Element[]): void {
+    zones.forEach((zone) => {
+      zone.classList.remove('drag-hit');
+      zone.classList.remove('land-hit');
+    });
+  }
+
+  /**
+   * Handle when a card is dropped on a valid zone
+   */
+  function handleZoneLand(zones: Element[], draggable: Draggable.Vars, cardIndex: number): void {
+    zones.forEach((zone) => {
+      zone.classList.remove('drag-hit');
+      zone.classList.add('land-hit');
+    });
+
+    const dropZones = getDropZones(zones);
+    const firstZone = dropZones[0];
+    if (!firstZone || !props.board) return;
+
+    const fromDeck = props.board === 'deck';
+    const fromInventory = props.board === 'inventory';
+    const toDeck = firstZone.board === 'deck';
+    const toInventory = firstZone.board === 'inventory';
+
+    function reorganizeCard() {
+      if (!firstZone) return;
+      if (fromDeck && toDeck) {
+        moveCardInsideDeck({
+          index: cardIndex,
+          newIndex: firstZone.index,
+        });
+      } else if (fromInventory && toInventory) {
+        moveCardInsideInventory({
+          index: cardIndex,
+          newIndex: firstZone.index,
+        });
+      } else if (fromDeck && toInventory) {
+        moveCardFromDeckToInventory({
+          deckIndex: cardIndex,
+          inventoryIndex: firstZone.index,
+        });
+      } else if (fromInventory && toDeck) {
+        moveCardFromInventoryToDeck({
+          inventoryIndex: cardIndex,
+          deckIndex: firstZone.index,
+        });
+      }
+    }
+
+    // Use FLIP to smoothly transition from current position to new DOM position
+    // const state = Flip.getState(draggable.target);
+
+    // Reset the draggable transform and update the DOM
+    reorganizeCard();
+    gsap.set(draggable.target, {
+      duration: 0,
+      x: 0, y: 0
+    });
+
+    // Animate from the old position to the new position
+    // Flip.from(state, {
+    //   duration: 0.4,
+    //   ease: 'power2.out',
+    //   targets: draggable.target,
+    // });
+  }
+
+  /**
+   * Handle when a card is dropped on a dud zone
+   */
+  function handleZoneDud(el: Draggable.Vars): void {
+    gsap.to(el.target, { duration: 0.5, x: 0, y: 0 });
   }
 
   return {
     onDrag,
     onRelease,
-  }
-
-  function getDropZones(zones: Element[]) {
-    return Array.from(zones).map((zone) => {
-      const boardAndId = zone.getAttribute('data-dropzone')
-      // Board and ID are described like "deck-0" or "inventory-1". I ned to make an object that contains the board and index as separate properties
-      if (!boardAndId) return null;
-      const [board, index] = boardAndId.split('-');
-      if (!board || !index) return null;
-      return {
-        board: board as 'deck' | 'inventory',
-        index: parseInt(index),
-      };
-    }).filter(z => z !== null)
-  }
-
-  function landHit(zones: Element[], draggable: Draggable.Vars, cardIndex: number) {
-    zones.forEach((zone) => {
-      zone.classList.remove('drag-hit')
-      zone.classList.add('land-hit')
-    })
-
-    const dropZones = getDropZones(zones);
-
-    const firstZone = zones[0];
-    const firstZoneAttributes = dropZones[0];
-    if (!firstZone || !firstZoneAttributes) return;
-
-    const fromDeck = props.board === 'deck'
-    const fromInventory = props.board === 'inventory'
-    const toDeck = firstZoneAttributes.board === 'deck'
-    const toInventory = firstZoneAttributes.board === 'inventory'
-
-    if (fromDeck && toDeck) {
-      moveCardInsideDeck({
-        index: cardIndex,
-        newIndex: firstZoneAttributes.index,
-      })
-    } else if (fromInventory && toInventory) {
-      moveCardInsideInventory({
-        index: cardIndex,
-        newIndex: firstZoneAttributes.index,
-      })
-    } else if (fromDeck && toInventory) {
-      moveCardFromDeckToInventory({
-        deckIndex: cardIndex,
-        inventoryIndex: firstZoneAttributes.index,
-      })
-    } else if (fromInventory && toDeck) {
-      moveCardFromInventoryToDeck({
-        inventoryIndex: cardIndex,
-        deckIndex: firstZoneAttributes.index
-      })
-    }
-
-    gsap.to(draggable.target, { duration: 0, x: 0, y: 0 })
-
-    // Flip.fit(el.target, firstZone, {
-    //   duration: 0.1,
-    //   fitWidth: false,
-    //   fitHeight: false,
-    //   onComplete: () => {
-    //     store.user.moveCard({
-    //       index: props.index,
-    //       newIndex: firstZoneIndex - 1, // Adjust for zero-based index
-    //     })
-    //     gsap.to(el.target, { duration: 0, x: 0, y: 0 })
-    //   },
-    // })
-  }
-
-  function landMis(zones: Element[]) {
-    zones.forEach((zone) => {
-      zone.classList.remove('drag-hit')
-      zone.classList.remove('land-hit')
-    })
-  }
-
+  };
 }
