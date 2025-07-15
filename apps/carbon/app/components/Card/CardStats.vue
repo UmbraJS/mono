@@ -70,7 +70,8 @@ defineProps<{
 
 <style>
 .topRowStats {
-  position: relative;
+  position: absolute;
+  top: 0;
   width: min-content;
   display: flex;
   justify-self: flex-end;

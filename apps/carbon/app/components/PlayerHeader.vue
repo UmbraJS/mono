@@ -92,4 +92,7 @@ section#PartyBoard .location .viewButton {
   gap: var(--space-1);
   width: 100%;
 }
+
+.viewButton span,
+.viewButton p {}
 </style>

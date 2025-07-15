@@ -117,6 +117,7 @@ const columnEnd = computed(() => {
 button#CardWrapper {
   position: relative;
   z-index: 99;
+  transition: .0s;
 }
 
 button#CardWrapper.default {
