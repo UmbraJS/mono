@@ -8,8 +8,6 @@ interface Props {
   gridSize?: number
   pixelColor?: string
   animationStepDuration?: number
-  className?: string
-  style?: Record<string, any>
   aspectRatio?: string
 }
 
@@ -17,9 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
   gridSize: 7,
   pixelColor: 'currentColor',
   animationStepDuration: 0.3,
-  className: '',
-  style: () => ({}),
-  aspectRatio: '100%'
+  aspectRatio: '40%'
 })
 
 const containerRef = ref<HTMLElement>()
@@ -119,7 +115,6 @@ const handleMouseLeave = () => {
 }
 
 const handleClick = () => {
-  console.log('Card clicked')
   animatePixels(!isActive.value)
 }
 
@@ -133,10 +128,8 @@ watch([() => props.gridSize, () => props.pixelColor], () => {
 </script>
 
 <template>
-  <div ref="containerRef" :class="['pixelated-image-card', className]" :style="style"
-    @mouseenter="!isTouchDevice ? handleMouseEnter() : undefined"
+  <div ref="containerRef" class="pixelated-image-card" @mouseenter="!isTouchDevice ? handleMouseEnter() : undefined"
     @mouseleave="!isTouchDevice ? handleMouseLeave() : undefined" @click="isTouchDevice ? handleClick() : undefined">
-    <div :style="{ paddingTop: aspectRatio }" />
     <div class="pixelated-image-card__default">
       <slot name="default" :is-active="isActive">
         {{ firstContent }}
@@ -151,46 +144,46 @@ watch([() => props.gridSize, () => props.pixelColor], () => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style>
 .pixelated-image-card {
-  background-color: #222;
-  color: var(--color-primary, #fff);
-  border-radius: 15px;
-  border: 2px solid #fff;
-  width: 300px;
-  max-width: 100%;
+  background-color: var(--base-20);
   position: relative;
   overflow: hidden;
-  cursor: pointer;
 
-  &__default,
-  &__active,
-  &__pixels {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+  height: 300px;
+  width: 300px;
+}
 
-  &__active {
-    z-index: 2;
-    display: none;
-  }
+.pixelated-image-card__default,
+.pixelated-image-card__active,
+.pixelated-image-card__pixels {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
-  &__pixels {
-    pointer-events: none;
-    position: absolute;
-    z-index: 3;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
+.pixelated-image-card__active {
+  z-index: 2;
+}
 
-  &__pixel {
-    display: none;
-    position: absolute;
-  }
+.pixelated-image-card__active {
+  display: none;
+}
+
+.pixelated-image-card__pixels {
+  pointer-events: none;
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pixelated-image-card__pixel {
+  display: none;
+  position: absolute;
 }
 </style>
