@@ -11,7 +11,7 @@ const { buyCard } = useCardPurchase()
 
 function toggleInventory() {
   view.setView(view.view === 'inventory' ? null : 'inventory')
-}
+}
 </script>
 
 <template>

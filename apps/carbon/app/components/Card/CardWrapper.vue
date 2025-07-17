@@ -13,6 +13,11 @@ import { Flip } from 'gsap/Flip'
 import { gsap } from 'gsap'
 gsap.registerPlugin(Flip)
 
+// Disable automatic attribute inheritance since we have multiple root elements
+defineOptions({
+  inheritAttrs: false
+})
+
 const {
   board,
   index,
@@ -156,7 +161,7 @@ const columnEnd = computed(() => {
     'border base-accent button buttonText buttonHover buttonActive buttonFocus focus',
     variant,
     { 'zoneHit': hitZone, 'dragging': dragging, 'accent-warning': hitZone }
-  ]" @click="triggerFlipSound">
+  ]" v-bind="$attrs" @click="triggerFlipSound">
 
 
     <slot />
@@ -165,6 +170,12 @@ const columnEnd = computed(() => {
 </template>
 
 <style lang="scss">
+.card-wrapper-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
 button#CardWrapper {
   position: relative;
   z-index: 100;
