@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PlayerCard from '~/components/Card/Card.vue'
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
 import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
@@ -6,9 +7,11 @@ import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/c
 const store = useStore()
 const view = useView()
 
+const { buyCard } = useCardPurchase()
+
 function toggleInventory() {
   view.setView(view.view === 'inventory' ? null : 'inventory')
-}
+}
 </script>
 
 <template>
@@ -21,6 +24,10 @@ function toggleInventory() {
       </Button>
       <Drawer class-name="viewButton" title="Player Settings"
         description="Configure your character settings and preferences">
+        <template #trigger>
+          <Icon name="carbon:settings" size="1.5em" />
+          <p>settings</p>
+        </template>
         <template #content>
           <div class="content">
             <DrawerTitle id="drawer-title" class="">
@@ -39,10 +46,37 @@ function toggleInventory() {
       :shield="store.simulation.user.shield" :reverse="false" />
 
     <div class="location border">
-      <div class="money">
-        <Icon name="carbon:money" size="1.5em" />
-        <p>{{ store.money.value }}</p>
-        <p>(+{{ store.money.income }})</p>
+      <div class="finances">
+        <div class="money">
+          <Icon name="carbon:money" size="1.5em" />
+          <p>{{ store.money.value }}</p>
+          <p>(+{{ store.money.income }})</p>
+        </div>
+
+        <Drawer class-name="viewButton" title="Player Settings"
+          description="Configure your character settings and preferences">
+          <template #trigger>
+            <Icon name="carbon:money" size="1.5em" />
+            <p>buyback</p>
+          </template>
+          <template #content>
+            <div class="content">
+              <DrawerTitle id="drawer-title" class="">
+                Buyback
+              </DrawerTitle>
+              <DrawerDescription id="drawer-content-description">
+                Buy back your sold cards.
+              </DrawerDescription>
+              <div class="cards">
+                <div v-for="(card, index) in store.money.soldCards" :key="index" class="card">
+                  <!-- <CardModal :card="card">
+                    <PlayerCard :card="card" variant="cardSize" />
+                  </CardModal> -->
+                </div>
+              </div>
+            </div>
+          </template>
+        </Drawer>
       </div>
     </div>
 
@@ -75,6 +109,12 @@ section#PartyBoard img {
   border-radius: var(--radius);
 }
 
+section#PartyBoard .location .finances {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-1);
+}
+
 section#PartyBoard .location .money {
   display: flex;
   align-items: center;
@@ -92,7 +132,4 @@ section#PartyBoard .location .viewButton {
   gap: var(--space-1);
   width: 100%;
 }
-
-.viewButton span,
-.viewButton p {}
 </style>

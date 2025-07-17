@@ -32,6 +32,7 @@ function useMoney(props: {
     cardIndex: number
   }) => Card | undefined, realm: keyof CardStatRealms
 }) {
+  const soldCards = ref<Card[]>([])
   const money = reactive({
     value: 0,
     income: 2,
@@ -40,6 +41,7 @@ function useMoney(props: {
   return {
     value: computed(() => money.value),
     income: computed(() => money.income),
+    soldCards: soldCards,
     setMoney: (newMoney: number) => {
       money.value = newMoney
     },
@@ -53,6 +55,7 @@ function useMoney(props: {
       const card = props.removeDraggedCard(passedProps)
       const cardStats = card?.stats[props.realm]
       if (!cardStats) return
+      soldCards.value.push(card)
       money.value += cardStats.cost
     }
   }

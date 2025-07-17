@@ -14,8 +14,7 @@ defineProps<{
   <DrawerRoot :preventScrollRestoration="true" :shouldScaleBackground="true">
     <DrawerTrigger id="DrawerTrigger" asChild>
       <Button :class="className" color="default" variant="base">
-        <Icon name="carbon:settings" size="1.5em" />
-        <p>settings</p>
+        <slot name="trigger" />
       </Button>
     </DrawerTrigger>
     <DrawerPortal>

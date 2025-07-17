@@ -2,7 +2,6 @@
 import PlayerCard from '~/components/Card/Card.vue'
 import CardBuyBox from './CardBuyBox.vue'
 import { PixelTransition } from '@nobel/core'
-import { useCardPurchase } from '~/composables/useCardPurchase'
 
 /**
  * Maps a rarity number to its corresponding label
