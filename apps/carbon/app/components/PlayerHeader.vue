@@ -30,10 +30,10 @@ function toggleInventory() {
         </template>
         <template #content>
           <div class="content">
-            <DrawerTitle id="drawer-title" class="">
+            <DrawerTitle id="drawer-settings-title">
               Player Settings
             </DrawerTitle>
-            <DrawerDescription id="drawer-content-description">
+            <DrawerDescription id="drawer-settings-description">
               Configure your character settings here.
             </DrawerDescription>
             <Slider />
@@ -53,18 +53,17 @@ function toggleInventory() {
           <p>(+{{ store.money.income }})</p>
         </div>
 
-        <Drawer class-name="viewButton" title="Player Settings"
-          description="Configure your character settings and preferences">
+        <Drawer class-name="viewButton" title="Buyback Store" description="Buy back your previously sold cards">
           <template #trigger>
             <Icon name="carbon:money" size="1.5em" />
             <p>buyback</p>
           </template>
           <template #content>
             <div class="content">
-              <DrawerTitle id="drawer-title" class="">
+              <DrawerTitle id="drawer-buyback-title">
                 Buyback
               </DrawerTitle>
-              <DrawerDescription id="drawer-content-description">
+              <DrawerDescription id="drawer-buyback-description">
                 Buy back your sold cards.
               </DrawerDescription>
               <div class="cards">
