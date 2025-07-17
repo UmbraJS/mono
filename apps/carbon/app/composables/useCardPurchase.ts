@@ -12,7 +12,19 @@ export interface PurchaseValidationResult {
  * Composable for handling card purchases in the shop
  * Provides validation, purchase logic, and reactive state management
  */
-export function useCardPurchase() {
+export function useCardPurchase({
+  remainingSlots,
+  availableFunds
+}: {
+  remainingSlots: Ref<{
+    inventory: number;
+    deck: number;
+  }>,
+  availableFunds: Ref<{
+    value: number
+    income: number
+  }>
+}) {
   const store = useStore()
   const quest = useQuest()
   const view = useView()
@@ -35,14 +47,12 @@ export function useCardPurchase() {
    * @returns Validation result with error message if invalid
    */
   function validatePurchase(card: Card): PurchaseValidationResult {
-    const { remainingSlots } = store.user
     const cardSize = card.size
     const cardCost = view.getCardStats(card).cost
-    const availableFunds = store.money.value
 
     // Check space availability
-    const hasInventorySpace = remainingSlots.inventory >= cardSize
-    const hasDeckSpace = remainingSlots.deck >= cardSize
+    const hasInventorySpace = remainingSlots.value.inventory >= cardSize
+    const hasDeckSpace = remainingSlots.value.deck >= cardSize
     const hasAnySpace = hasInventorySpace || hasDeckSpace
 
     if (!hasAnySpace) {
@@ -53,7 +63,7 @@ export function useCardPurchase() {
     }
 
     // Check funds
-    if (availableFunds < cardCost) {
+    if (availableFunds.value.value < cardCost) {
       return {
         canPurchase: false,
         error: 'Not enough funds to buy this card.'
@@ -122,6 +132,7 @@ export function useCardPurchase() {
       isPurchasing.value = false
     }
   }
+
 
   return {
     // State

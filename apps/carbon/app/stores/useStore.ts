@@ -15,7 +15,8 @@ export const useStore = defineStore('store', () => {
 
   const money = useMoney({
     removeDraggedCard: userStore.removeDraggedCard,
-    realm: realm.value
+    realm: realm.value,
+    remainingSlots: userStore.remainingSlots,
   })
 
   return {
@@ -30,24 +31,44 @@ function useMoney(props: {
   removeDraggedCard: (props: {
     originBoard: 'deck' | 'inventory',
     cardIndex: number
-  }) => Card | undefined, realm: keyof CardStatRealms
+  }) => Card | undefined,
+  realm: keyof CardStatRealms,
+  remainingSlots: Ref<{
+    inventory: number;
+    deck: number;
+  }>,
 }) {
   const soldCards = ref<Card[]>([])
-  const money = reactive({
+
+  const soldCardsLimited = computed(() => {
+    return soldCards.value.slice(0, 3)
+  })
+
+  const money = ref({
     value: 0,
     income: 2,
   })
 
+  const cardPurchase = useCardPurchase({
+    remainingSlots: props.remainingSlots,
+    availableFunds: money
+  })
+
+  const buyBackCard = (card: Card) => {
+    cardPurchase.buyCard(card)
+    const purchaseError = cardPurchase.purchaseError
+    if (purchaseError.value) return
+    soldCards.value = soldCards.value.filter(c => c.id !== card.id)
+  }
+
   return {
-    value: computed(() => money.value),
-    income: computed(() => money.income),
-    soldCards: soldCards,
-    setMoney: (newMoney: number) => {
-      money.value = newMoney
-    },
-    setIncome: (newIncome: number) => {
-      money.income = newIncome
-    },
+    value: computed(() => money.value.value),
+    income: computed(() => money.value.income),
+    cardPurchase,
+    soldCards: soldCardsLimited,
+    buyBackCard,
+    setMoney: (newMoney: number) => money.value.value = newMoney,
+    setIncome: (newIncome: number) => money.value.income = newIncome,
     sellDraggedCard: (passedProps: {
       originBoard: 'deck' | 'inventory',
       cardIndex: number
@@ -56,7 +77,7 @@ function useMoney(props: {
       const cardStats = card?.stats[props.realm]
       if (!cardStats) return
       soldCards.value.push(card)
-      money.value += cardStats.cost
+      money.value.value += cardStats.cost
     }
   }
 

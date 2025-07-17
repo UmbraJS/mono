@@ -7,8 +7,6 @@ import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/c
 const store = useStore()
 const view = useView()
 
-const { buyCard } = useCardPurchase()
-
 function toggleInventory() {
   view.setView(view.view === 'inventory' ? null : 'inventory')
 }
@@ -53,24 +51,27 @@ function toggleInventory() {
           <p>(+{{ store.money.income }})</p>
         </div>
 
-        <Drawer class-name="viewButton" title="Buyback Store" description="Buy back your previously sold cards">
+        <Drawer v-if="store.money.soldCards.length > 0" class-name="viewButton" title="Buyback Store"
+          description="Buy back your previously sold cards">
           <template #trigger>
             <Icon name="carbon:money" size="1.5em" />
             <p>buyback</p>
           </template>
           <template #content>
             <div class="content">
-              <DrawerTitle id="drawer-buyback-title">
+              <!-- <DrawerTitle id="drawer-buyback-title">
                 Buyback
-              </DrawerTitle>
-              <DrawerDescription id="drawer-buyback-description">
+              </DrawerTitle> -->
+              <!-- <DrawerDescription id="drawer-buyback-description">
                 Buy back your sold cards.
-              </DrawerDescription>
-              <div class="cards">
+              </DrawerDescription> -->
+              <div id="BuyBackCards">
+                <div v-if="store.money.cardPurchase.purchaseError">
+                  <Icon name="carbon:warning" size="1rem" />
+                  <p>{{ store.money.cardPurchase.purchaseError }}</p>
+                </div>
                 <div v-for="(card, index) in store.money.soldCards" :key="index" class="card">
-                  <!-- <CardModal :card="card">
-                    <PlayerCard :card="card" variant="cardSize" />
-                  </CardModal> -->
+                  <PlayerCard :card="card" variant="cardSize" @click="() => store.money.buyBackCard(card)" />
                 </div>
               </div>
             </div>
@@ -86,6 +87,13 @@ function toggleInventory() {
 </template>
 
 <style>
+#BuyBackCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+
 section#PartyBoard .location {
   display: flex;
   flex-direction: column;

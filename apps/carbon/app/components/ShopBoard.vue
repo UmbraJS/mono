@@ -22,7 +22,8 @@ function getRarity(rarity: number): string {
 
 const quest = useQuest()
 const view = useView()
-const { purchaseError, isPurchasing, buyCard } = useCardPurchase()
+const store = useStore()
+const { purchaseError, isPurchasing, buyCard } = store.money.cardPurchase
 </script>
 
 <template>
