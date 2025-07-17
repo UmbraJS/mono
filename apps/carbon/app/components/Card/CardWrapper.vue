@@ -6,9 +6,12 @@ import { checkZoneHit } from '../../../utils/cardSwap/zoneHit'
 
 import { useTemplateRef } from 'vue'
 
-import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable';
 import { useAudio } from '../../stores/useAudio'
+
+import { Flip } from 'gsap/Flip'
+import { gsap } from 'gsap'
+gsap.registerPlugin(Flip)
 
 const {
   board,
@@ -39,7 +42,10 @@ function triggerFlipSound() {
 }
 
 const fragElement = useTemplateRef('fragElement')
+const actionBall = useTemplateRef('actionBall')
 const store = useStore()
+
+const hitZone = ref<Element | null>(null)
 
 onMounted(() => {
   if (!fragElement.value) return
@@ -48,6 +54,27 @@ onMounted(() => {
   const dataSellzone = document.querySelectorAll('[data-sellzone]')
 
   gsap.registerPlugin(Draggable)
+
+  function syncBall(fragElement: HTMLButtonElement | null) {
+    // Initialize ActionBall position and size to match CardWrapper
+    if (!actionBall.value || !fragElement) return
+    const cardRect = fragElement.getBoundingClientRect()
+    gsap.set(actionBall.value, {
+      x: fragElement.offsetLeft,
+      y: fragElement.offsetTop,
+      width: cardRect.width,
+      height: cardRect.height
+    })
+  }
+
+  function fitBallToSellZone(zone: Element) {
+    Flip.fit(actionBall.value, zone, {
+      duration: 0.2,
+      ease: 'power1.inOut',
+    })
+  }
+
+  syncBall(fragElement.value)
 
   const cardDrag = useCardDrag({
     fragElement: fragElement.value,
@@ -60,27 +87,44 @@ onMounted(() => {
   new Draggable(fragElement.value, {
     onDrag: function () {
       cardDrag.onDrag(this)
+
+      const firstHit = hitZone.value
+
+      syncBall(fragElement.value)
+
+      // if (firstHit) {
+      //   fitBallToSellZone(firstHit as Element)
+      // } else {
+      //   syncBall()
+      // }
+
       checkZoneHit(this, {
         threshold: '40%',
         zones: dataSellzone,
         hit: (zones) => {
-          if (!fragElement.value) return
-          fragElement.value.classList.add('active-zone')
+          const firstHit = zones[0]
+          if (!firstHit) return
+
           zones.forEach((zone) => {
             zone.classList.add('active-zone')
           })
+
+          hitZone.value = firstHit
         },
         mis: (zones) => {
-          if (!fragElement.value) return
-          fragElement.value.classList.remove('active-zone')
           zones.forEach((zone) => {
             zone.classList.remove('active-zone')
           })
+        },
+        dud: () => {
+          if (!fragElement.value) return
+          hitZone.value = null
         },
       })
     },
     onRelease: function () {
       cardDrag.onRelease(this, index)
+
       checkZoneHit(this, {
         threshold: '40%',
         zones: dataSellzone,
@@ -91,6 +135,9 @@ onMounted(() => {
           })
         },
       })
+
+      syncBall()
+
     },
   })
 })
@@ -104,9 +151,13 @@ const columnEnd = computed(() => {
 })
 </script>
 <template>
-  <button id="CardWrapper" ref="fragElement"
-    class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus" :class="variant"
-    @click="triggerFlipSound">
+  <div id="ActionBall" ref="actionBall" :class="{ 'activeBall': hitZone }" />
+  <button id="CardWrapper" ref="fragElement" :class="[
+    'border base-accent button buttonText buttonHover buttonActive buttonFocus focus',
+    variant,
+    { 'zoneHit': hitZone }
+  ]" @click="triggerFlipSound">
+
 
     <slot />
 
@@ -117,7 +168,24 @@ const columnEnd = computed(() => {
 button#CardWrapper {
   position: relative;
   z-index: 99;
-  transition: .0s;
+}
+
+#ActionBall {
+  position: absolute;
+  z-index: 999999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius);
+  background-color: red;
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity var(--time, 0.2s);
+}
+
+#ActionBall.activeBall {
+  opacity: 0.8;
 }
 
 button#CardWrapper.default {
@@ -160,11 +228,6 @@ button#CardWrapper.rejected {
   pointer-events: none !important;
 }
 
-button.dragging {
-  position: absolute;
-  z-index: 50;
-}
-
 #CardWrapper {
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -177,5 +240,15 @@ button.dragging {
   position: relative;
   height: 100%;
   width: 100%;
+  transition: opacity var(--slower), filter var(--slower);
+}
+
+#CardWrapper.dragging {
+  transition: none;
+}
+
+.MatchBoard:has(#CardWrapper.dragging) #CardWrapper:not(.dragging) {
+  opacity: 0.8;
+  filter: blur(4px);
 }
 </style>

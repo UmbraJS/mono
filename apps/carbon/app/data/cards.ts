@@ -482,7 +482,7 @@ export const viking: Card = {
     base: {
       level: 1,
       cost: 10,
-      bash: { attack: 10, shield: 10, actionCount: 2, cooldown: 2 },
+      bash: { attack: 2, shield: 2, actionCount: 2, cooldown: 2 },
       slot: 'army',
       effects: [],
       tags: ['guard'],

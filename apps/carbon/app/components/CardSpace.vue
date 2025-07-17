@@ -23,11 +23,12 @@ defineProps<{
 
   background-color: var(--base);
   color: var(--base-50);
+
+  transition: var(--slower);
 }
 
 .cardSpace.drag-hit-real {
   background-color: var(--base-100);
   color: var(--base-0);
-  transition: .02s ease-in-out;
 }
 </style>
