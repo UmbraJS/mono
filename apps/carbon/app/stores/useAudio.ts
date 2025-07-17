@@ -1,6 +1,6 @@
 interface SoundPath {
   category: SoundCategories
-  path: string
+  getPath: () => string
   segment?: {
     start: number
     duration: number
@@ -10,6 +10,7 @@ interface SoundPath {
 export const useAudio = defineStore('audio', () => {
   const cardFlipSound = getFlipSound()
   const punchSound = getPunchSound()
+  const coinSound = getCoinSound()
 
   const sound = soundFactory()
 
@@ -23,7 +24,7 @@ export const useAudio = defineStore('audio', () => {
       const url = await fetchElevenLabsSpeech(text, voice)
       await sound.play({
         category: 'voice',
-        path: url
+        getPath: () => url
       })
     },
     playCardFlip: async () => {
@@ -32,9 +33,8 @@ export const useAudio = defineStore('audio', () => {
     playPunchSound: async () => {
       await sound.play(punchSound)
     },
-    preLoadSounds: async () => {
-      await sound.preLoad(cardFlipSound.path)
-      await sound.preLoad(punchSound.path)
+    playCoinSound: async () => {
+      await sound.play(coinSound)
     },
   }
 })
@@ -52,7 +52,7 @@ function getFlipSound(): SoundPath {
 
   return {
     category: 'ui',
-    path: cardFlipPath,
+    getPath: () => cardFlipPath,
     segment: segment
   }
 }
@@ -67,7 +67,21 @@ function getPunchSound(): SoundPath {
   const randomIndex = Math.floor(Math.random() * punchSounds.length)
   return {
     category: 'action',
-    path: punchSounds[randomIndex] || punch1
+    getPath: () => punchSounds[randomIndex] || punch1
+  }
+}
+
+function getCoinSound(): SoundPath {
+  const coin1 = 'sounds/coin/coin1.mp3'
+  const coin2 = 'sounds/coin/coin2.mp3'
+  const coin3 = 'sounds/coin/coin3.mp3'
+  const coin4 = 'sounds/coin/coin4.mp3'
+
+  const coinSounds = [coin1, coin2, coin3, coin4]
+  const randomIndex = Math.floor(Math.random() * coinSounds.length)
+  return {
+    category: 'action',
+    getPath: () => coinSounds[randomIndex] || coin1
   }
 }
 
@@ -179,7 +193,7 @@ function soundFactory() {
     }
 
     await resumeAudioContext()
-    const buffer = await loadSound(sound.path)
+    const buffer = await loadSound(sound.getPath())
     const source = audioContext.createBufferSource()
     source.buffer = buffer
     source.connect(categoryGains[sound.category as SoundCategories])

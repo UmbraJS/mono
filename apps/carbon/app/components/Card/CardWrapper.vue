@@ -122,6 +122,7 @@ onMounted(() => {
         threshold: '40%',
         zones: dataSellzone,
         hit: () => {
+          audio.playCoinSound()
           store.money.sellDraggedCard({
             originBoard: board,
             cardIndex: index,
@@ -199,7 +200,7 @@ button#CardWrapper {
 }
 
 #ActionBallWrapper.activeBall #ActionBall {
-  animation: shakeExponential 3s ease-in;
+  animation: shakeExponential 3s ease-in forwards
 }
 
 #ActionBallWrapper #ActionBall>* {
@@ -439,12 +440,12 @@ button#CardWrapper.rejected {
   }
 
   97.5% {
-    transform: translateX(-18px);
+    transform: translateX(-18px) scale(1.1);
   }
 
   100% {
     background-color: var(--warning);
-    transform: translateX(0);
+    transform: translateX(0) scale(1.2);
   }
 }
 </style>
