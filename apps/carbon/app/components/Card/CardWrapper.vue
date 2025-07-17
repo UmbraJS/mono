@@ -46,6 +46,7 @@ const actionBall = useTemplateRef('actionBall')
 const store = useStore()
 
 const hitZone = ref<Element | null>(null)
+const dragging = ref(false)
 
 onMounted(() => {
   if (!fragElement.value) return
@@ -56,21 +57,15 @@ onMounted(() => {
   gsap.registerPlugin(Draggable)
 
   function syncBall(fragElement: HTMLButtonElement | null) {
-    // Initialize ActionBall position and size to match CardWrapper
     if (!actionBall.value || !fragElement) return
-    const cardRect = fragElement.getBoundingClientRect()
-    gsap.set(actionBall.value, {
-      x: fragElement.offsetLeft,
-      y: fragElement.offsetTop,
-      width: cardRect.width,
-      height: cardRect.height
+    Flip.fit(actionBall.value, fragElement, {
+      duration: 0.2,
     })
   }
 
   function fitBallToSellZone(zone: Element) {
     Flip.fit(actionBall.value, zone, {
       duration: 0.2,
-      ease: 'power1.inOut',
     })
   }
 
@@ -87,16 +82,13 @@ onMounted(() => {
   new Draggable(fragElement.value, {
     onDrag: function () {
       cardDrag.onDrag(this)
+      dragging.value = true
 
-      const firstHit = hitZone.value
-
-      syncBall(fragElement.value)
-
-      // if (firstHit) {
-      //   fitBallToSellZone(firstHit as Element)
-      // } else {
-      //   syncBall()
-      // }
+      if (hitZone.value) {
+        fitBallToSellZone(hitZone.value as Element)
+      } else {
+        syncBall(fragElement.value)
+      }
 
       checkZoneHit(this, {
         threshold: '40%',
@@ -124,6 +116,7 @@ onMounted(() => {
     },
     onRelease: function () {
       cardDrag.onRelease(this, index)
+      dragging.value = false
 
       checkZoneHit(this, {
         threshold: '40%',
@@ -136,8 +129,9 @@ onMounted(() => {
         },
       })
 
-      syncBall()
-
+      setTimeout(() => {
+        syncBall(fragElement.value)
+      }, 0)
     },
   })
 })
@@ -151,11 +145,16 @@ const columnEnd = computed(() => {
 })
 </script>
 <template>
-  <div id="ActionBall" ref="actionBall" :class="{ 'activeBall': hitZone }" />
+  <div id="ActionBallWrapper" ref="actionBall" :class="{ 'activeBall': hitZone, 'dragging': dragging }">
+    <div id="ActionBall" class="base-accent">
+      <h1>Please God! Don't sell me!</h1>
+    </div>
+  </div>
+
   <button id="CardWrapper" ref="fragElement" :class="[
     'border base-accent button buttonText buttonHover buttonActive buttonFocus focus',
     variant,
-    { 'zoneHit': hitZone }
+    { 'zoneHit': hitZone, 'dragging': dragging, 'accent-warning': hitZone }
   ]" @click="triggerFlipSound">
 
 
@@ -167,25 +166,52 @@ const columnEnd = computed(() => {
 <style lang="scss">
 button#CardWrapper {
   position: relative;
+  z-index: 100;
+}
+
+#ActionBallWrapper {
+  display: grid;
+  gap: var(--space-1);
+
+  position: absolute;
   z-index: 99;
+  pointer-events: none;
+  transition: gap var(--time, 0.2s);
+  ;
 }
 
 #ActionBall {
-  position: absolute;
-  z-index: 999999;
-  top: 0;
-  left: 0;
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   height: 100%;
+  width: 100%;
   border-radius: var(--radius);
-  background-color: red;
-  pointer-events: none;
-  opacity: 0.6;
-  transition: opacity var(--time, 0.2s);
+  background-color: var(--base);
+  opacity: 0;
+  transition: opacity var(--time, 0.2s), width var(--time, 0.2s), height var(--time, 0.2s);
 }
 
-#ActionBall.activeBall {
-  opacity: 0.8;
+#ActionBallWrapper.dragging #ActionBall {
+  opacity: 1;
+  border-radius: var(--radius);
+}
+
+#ActionBallWrapper.activeBall #ActionBall {
+  animation: shakeExponential 3s ease-in;
+}
+
+#ActionBallWrapper #ActionBall>* {
+  opacity: 0;
+}
+
+#ActionBallWrapper.activeBall #ActionBall>* {
+  opacity: 1;
+}
+
+#ActionBallWrapper.activeBall {
+  gap: 0;
 }
 
 button#CardWrapper.default {
@@ -250,5 +276,175 @@ button#CardWrapper.rejected {
 .MatchBoard:has(#CardWrapper.dragging) #CardWrapper:not(.dragging) {
   opacity: 0.8;
   filter: blur(4px);
+}
+
+@keyframes shakeExponential {
+  0% {
+    background-color: var(--accent);
+    transform: translateX(0);
+  }
+
+  2.5% {
+    transform: translateX(-0.5px);
+  }
+
+  5% {
+    transform: translateX(0.5px);
+  }
+
+  7.5% {
+    transform: translateX(-1px);
+  }
+
+  10% {
+    transform: translateX(1px);
+  }
+
+  12.5% {
+    transform: translateX(-1.5px);
+  }
+
+  15% {
+    transform: translateX(1.5px);
+  }
+
+  17.5% {
+    transform: translateX(-2px);
+  }
+
+  20% {
+    transform: translateX(2px);
+  }
+
+  22.5% {
+    transform: translateX(-3px);
+  }
+
+  25% {
+    transform: translateX(3px);
+  }
+
+  27.5% {
+    transform: translateX(-4px);
+  }
+
+  30% {
+    transform: translateX(4px);
+  }
+
+  32.5% {
+    transform: translateX(-5px);
+  }
+
+  35% {
+    background-color: var(--accent);
+    transform: translateX(5px);
+  }
+
+  37.5% {
+    transform: translateX(-6px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  42.5% {
+    transform: translateX(-7px);
+  }
+
+  45% {
+    transform: translateX(7px);
+  }
+
+  47.5% {
+    transform: translateX(-8px);
+  }
+
+  50% {
+    transform: translateX(8px);
+  }
+
+  52.5% {
+    transform: translateX(-9px);
+  }
+
+  55% {
+    transform: translateX(9px);
+  }
+
+  57.5% {
+    transform: translateX(-10px);
+  }
+
+  60% {
+    background-color: var(--warning);
+    transform: translateX(10px);
+  }
+
+  62.5% {
+    transform: translateX(-11px);
+  }
+
+  65% {
+    transform: translateX(11px);
+  }
+
+  67.5% {
+    transform: translateX(-12px);
+  }
+
+  70% {
+    transform: translateX(12px);
+  }
+
+  72.5% {
+    transform: translateX(-13px);
+  }
+
+  75% {
+    transform: translateX(13px);
+  }
+
+  77.5% {
+    transform: translateX(-14px);
+  }
+
+  80% {
+    transform: translateX(14px);
+  }
+
+  82.5% {
+    transform: translateX(-15px);
+  }
+
+  85% {
+    transform: translateX(15px);
+  }
+
+  87.5% {
+    transform: translateX(-16px);
+  }
+
+  90% {
+    transform: translateX(16px);
+  }
+
+  92.5% {
+    transform: translateX(-17px);
+  }
+
+  95% {
+    transform: translateX(17px);
+  }
+
+  97.5% {
+    transform: translateX(-18px);
+  }
+
+  100% {
+    background-color: var(--warning);
+    transform: translateX(0);
+  }
 }
 </style>
