@@ -18,7 +18,7 @@ export const useAudio = defineStore('audio', () => {
     speak: async (text: string) => {
       const voices = await getAvailableVoices()
       const norwegian = voices.find(v => v.lang.startsWith('no'))
-      await sound.speak(text, { voice: norwegian, pitch: 1.1 })
+      sound.speak(text, { voice: norwegian, pitch: 1.1 })
     },
     speakElevenLabs: async (text: string, voice: ElevenLabsVoice) => {
       const url = await fetchElevenLabsSpeech(text, voice)

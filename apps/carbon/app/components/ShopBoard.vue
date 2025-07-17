@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import PlayerCard from '~/components/Card/Card.vue'
 import CardBuyBox from './CardBuyBox.vue'
-import { PixelTransition } from '@nobel/core'
 
 /**
  * Maps a rarity number to its corresponding label
@@ -34,14 +33,14 @@ const { purchaseError, isPurchasing, buyCard } = store.money.cardPurchase
       <p>{{ purchaseError }}</p>
     </div>
 
-    <PixelTransition :grid-size="8" pixel-color="#ff6b6b">
+    <!-- <PixelTransition :grid-size="8" pixel-color="#ff6b6b">
       <template #default>
         <NuxtImg src="/borgBog.png" alt="Default" />
       </template>
-      <template #active>
+<template #active>
         <NuxtImg src="/burial.jpg" alt="Active" />
       </template>
-    </PixelTransition>
+</PixelTransition> -->
 
     <!-- Shop Inventory -->
     <div class="shop-inventory">
@@ -49,7 +48,9 @@ const { purchaseError, isPurchasing, buyCard } = store.money.cardPurchase
         :class="{ 'purchasing': isPurchasing }">
         <!-- Purchase Button -->
         <button class="buy-button" :disabled="isPurchasing"
-          :aria-label="`Buy ${card.info.name} for ${view.getCardStats(card).cost} coins`" @click="buyCard(card)">
+          :aria-label="`Buy ${card.info.name} for ${view.getCardStats(card).cost} coins`" @click="() => {
+            buyCard(card)
+          }">
           <CardBuyBox :card="card" />
         </button>
 

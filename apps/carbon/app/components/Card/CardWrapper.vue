@@ -40,7 +40,6 @@ const recentlyClickedFlipSound = ref(false)
 function triggerFlipSound() {
   if (recentlyClickedFlipSound.value) return
   recentlyClickedFlipSound.value = true
-  audio.playCardFlip()
   setTimeout(() => {
     recentlyClickedFlipSound.value = false
   }, 200)

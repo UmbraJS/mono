@@ -71,7 +71,9 @@ function toggleInventory() {
                   <p>{{ store.money.cardPurchase.purchaseError }}</p>
                 </div>
                 <div v-for="(card, index) in store.money.soldCards" :key="index" class="card">
-                  <PlayerCard :card="card" variant="cardSize" @click="() => store.money.buyBackCard(card)" />
+                  <PlayerCard :card="card" variant="cardSize" @click="() => {
+                    store.money.buyBackCard(card)
+                  }" />
                 </div>
               </div>
             </div>

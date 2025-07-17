@@ -28,6 +28,7 @@ export function useCardPurchase({
   const store = useStore()
   const quest = useQuest()
   const view = useView()
+  const audio = useAudio()
 
   // Reactive state
   const purchaseError = ref<string | null>(null)
@@ -113,8 +114,8 @@ export function useCardPurchase({
    * @param card - The card to purchase
    * @returns Promise that resolves when purchase is complete
    */
-  async function buyCard(card: Card): Promise<void> {
-    if (isPurchasing.value) return
+  async function buyCard(card: Card): Promise<string | null> {
+    if (isPurchasing.value) return purchaseError.value
 
     isPurchasing.value = true
     purchaseError.value = null
@@ -122,6 +123,7 @@ export function useCardPurchase({
     try {
       const result = purchaseCard(card)
 
+      if (result.success) audio.playCoinSound()
       if (!result.success) {
         purchaseError.value = result.error || 'Purchase failed'
       }
@@ -131,6 +133,8 @@ export function useCardPurchase({
     } finally {
       isPurchasing.value = false
     }
+
+    return purchaseError.value
   }
 
 
