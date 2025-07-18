@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PlayerCard from '~/components/Card/Card.vue'
+import PlayerCard from '~/components/Card/CardHeader.vue'
 import CardBoard from '~/components/CardBoard.vue'
 import { useStore } from '~/stores/useStore'
 const store = useStore()

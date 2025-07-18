@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PlayerCard from '~/components/Card/Card.vue'
+import PlayerCard from '~/components/Card/CardHeader.vue'
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
 import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
@@ -45,11 +45,7 @@ function toggleInventory() {
 
     <div class="location border">
       <div class="finances">
-        <div class="money">
-          <Icon name="carbon:money" size="1.5em" />
-          <p>{{ store.money.value }}</p>
-          <p>(+{{ store.money.income }})</p>
-        </div>
+        <ChipPassiveFinance />
 
         <Drawer v-if="store.money.soldCards.length > 0" class-name="viewButton" title="Buyback Store"
           description="Buy back your previously sold cards">
@@ -122,17 +118,6 @@ section#PartyBoard .location .finances {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: var(--space-1);
-}
-
-section#PartyBoard .location .money {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  background-color: var(--base-20);
-  color: var(--base-120);
-  border-radius: var(--radius);
-  padding: var(--space-1);
-  cursor: pointer;
 }
 
 section#PartyBoard .location .viewButton {
