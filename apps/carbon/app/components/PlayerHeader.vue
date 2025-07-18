@@ -45,7 +45,7 @@ function toggleInventory() {
 
     <div class="location border">
       <div class="finances">
-        <ChipPassiveFinance />
+        <ChipChipPassiveFinance />
 
         <Drawer v-if="store.money.soldCards.length > 0" class-name="viewButton" title="Buyback Store"
           description="Buy back your previously sold cards">

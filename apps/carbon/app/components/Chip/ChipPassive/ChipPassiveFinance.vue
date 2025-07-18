@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ChipPassive from './ChipPassive.vue'
 const store = useStore()
 </script>
 
