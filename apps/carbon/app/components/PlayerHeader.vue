@@ -59,7 +59,6 @@ function toggleInventory() {
   gap: var(--space-1);
 }
 
-
 section#PartyBoard .location {
   display: flex;
   flex-direction: column;

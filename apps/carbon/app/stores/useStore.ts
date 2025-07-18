@@ -16,6 +16,8 @@ export const useStore = defineStore('store', () => {
   const money = useMoney({
     removeDraggedCard: userStore.removeDraggedCard,
     realm: realm.value,
+    inventory: userStore.inventory,
+    deck: userStore.deck,
     remainingSlots: userStore.remainingSlots,
   })
 
@@ -33,6 +35,8 @@ function useMoney(props: {
     cardIndex: number
   }) => Card | undefined,
   realm: keyof CardStatRealms,
+  inventory: Ref<Card[]>,
+  deck: Ref<Card[]>,
   remainingSlots: Ref<{
     inventory: number;
     deck: number;
@@ -61,9 +65,20 @@ function useMoney(props: {
     soldCards.value = soldCards.value.filter(c => c.id !== card.id)
   }
 
+  function getTotalValue(cards: Card[]) {
+    return cards.reduce((acc, card) => {
+      const cardStats = card.stats[props.realm]
+      return acc + (cardStats ? cardStats.cost : 0)
+    }, 0)
+  }
+
   return {
     value: computed(() => money.value.value),
     income: computed(() => money.value.income),
+    inventoryValue: computed(() => getTotalValue(props.inventory.value)),
+    deckValue: computed(() => getTotalValue(props.deck.value)),
+    totalValue: computed(() => getTotalValue([...props.inventory.value, ...props.deck.value])),
+    remainingSlots: props.remainingSlots,
     cardPurchase,
     soldCards: soldCardsLimited,
     buyBackCard,
