@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PlayerCard from '~/components/Card/Card.vue'
-import CardBuyBox from './CardBuyBox.vue'
+import PurchaseButton from './PurchaseButton.vue'
 
 /**
  * Maps a rarity number to its corresponding label
@@ -22,37 +22,18 @@ function getRarity(rarity: number): string {
 const quest = useQuest()
 const view = useView()
 const store = useStore()
-const { purchaseError, isPurchasing, buyCard } = store.money.cardPurchase
+const { isPurchasing } = store.money.cardPurchase
 </script>
 
 <template>
   <div v-if="quest.shop.current" class="shop-board">
-    <!-- Error Display -->
-    <div v-if="purchaseError" class="error-message" role="alert" aria-live="polite">
-      <Icon name="carbon:warning" size="1rem" />
-      <p>{{ purchaseError }}</p>
-    </div>
-
-    <!-- <PixelTransition :grid-size="8" pixel-color="#ff6b6b">
-      <template #default>
-        <NuxtImg src="/borgBog.png" alt="Default" />
-      </template>
-<template #active>
-        <NuxtImg src="/burial.jpg" alt="Active" />
-      </template>
-</PixelTransition> -->
+    <PurchaseError />
 
     <!-- Shop Inventory -->
     <div class="shop-inventory">
       <article v-for="card in quest.shop.shopInventory" id="ShopCard" :key="card.id"
         :class="{ 'purchasing': isPurchasing }">
-        <!-- Purchase Button -->
-        <button class="buy-button" :disabled="isPurchasing"
-          :aria-label="`Buy ${card.info.name} for ${view.getCardStats(card).cost} coins`" @click="() => {
-            buyCard(card)
-          }">
-          <CardBuyBox :card="card" />
-        </button>
+        <PurchaseButton :card="card" />
 
         <!-- Card Preview -->
         <CardModal :card="card">
@@ -160,16 +141,6 @@ const { purchaseError, isPurchasing, buyCard } = store.money.cardPurchase
 #ShopCard.purchasing {
   opacity: 0.7;
   pointer-events: none;
-}
-
-.buy-button {
-  all: unset;
-  cursor: pointer;
-}
-
-.buy-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
 }
 
 #CardMainInfo {

@@ -36,6 +36,8 @@ export const useAudio = defineStore('audio', () => {
     playCoinSound: async () => {
       await sound.play(coinSound)
     },
+    masterVolume: sound.masterVolume,
+    volumes: sound.volumes,
   }
 })
 
@@ -101,7 +103,8 @@ function soundFactory() {
       play: async () => { },
       preLoad: async () => { },
       speak: () => { },
-      volumes: {}
+      volumes: {},
+      masterVolume: ref(0.1)
     }
   }
 
@@ -127,6 +130,9 @@ function soundFactory() {
     masterGain.gain.value = Math.max(0, Math.min(v, 1))
   })
 
+  // Set initial master volume
+  masterGain.gain.value = masterVolume.value
+
   watch(volumes, (newVal) => {
     for (const category in newVal) {
       if (!(category in categoryGains)) return
@@ -134,6 +140,13 @@ function soundFactory() {
       gain.gain.value = Math.max(0, Math.min(newVal[category as SoundCategories], 1))
     }
   })
+
+  // Set initial volumes for category gains
+  for (const category in volumes) {
+    if (!(category in categoryGains)) continue
+    const gain = categoryGains[category as SoundCategories]
+    gain.gain.value = Math.max(0, Math.min(volumes[category as SoundCategories], 1))
+  }
 
   function getGain() {
     const gain = audioContext.createGain()
@@ -210,7 +223,8 @@ function soundFactory() {
     play,
     speak,
     preLoad: loadSound,
-    volumes
+    volumes,
+    masterVolume
   }
 }
 

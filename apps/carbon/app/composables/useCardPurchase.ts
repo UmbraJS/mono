@@ -105,7 +105,10 @@ export function useCardPurchase({
 
     // Complete the purchase
     quest.shop.buyCard(card)
-
+    audio.playCoinSound()
+    store.money.setMoney(
+      store.money.value - view.getCardStats(card).cost
+    )
     return { success: true }
   }
 
@@ -123,7 +126,6 @@ export function useCardPurchase({
     try {
       const result = purchaseCard(card)
 
-      if (result.success) audio.playCoinSound()
       if (!result.success) {
         purchaseError.value = result.error || 'Purchase failed'
       }
