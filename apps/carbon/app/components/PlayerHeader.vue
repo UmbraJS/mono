@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import PlayerCard from '~/components/Card/CardHeader.vue'
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
 import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
@@ -44,38 +43,7 @@ function toggleInventory() {
       :shield="store.simulation.user.shield" :reverse="false" />
 
     <div class="location border">
-      <div class="finances">
-        <ChipChipPassiveFinance />
-
-        <Drawer v-if="store.money.soldCards.length > 0" class-name="viewButton" title="Buyback Store"
-          description="Buy back your previously sold cards">
-          <template #trigger>
-            <Icon name="carbon:money" size="1.5em" />
-            <p>buyback</p>
-          </template>
-          <template #content>
-            <div class="content">
-              <!-- <DrawerTitle id="drawer-buyback-title">
-                Buyback
-              </DrawerTitle> -->
-              <!-- <DrawerDescription id="drawer-buyback-description">
-                Buy back your sold cards.
-              </DrawerDescription> -->
-              <div id="BuyBackCards">
-                <div v-if="store.money.cardPurchase.purchaseError">
-                  <Icon name="carbon:warning" size="1rem" />
-                  <p>{{ store.money.cardPurchase.purchaseError }}</p>
-                </div>
-                <div v-for="(card, index) in store.money.soldCards" :key="index" class="card">
-                  <PlayerCard :card="card" variant="cardSize" @click="() => {
-                    store.money.buyBackCard(card)
-                  }" />
-                </div>
-              </div>
-            </div>
-          </template>
-        </Drawer>
-      </div>
+      <ChipChipPassiveFinance />
     </div>
 
     <ViewOverlay :hidden="store.user.draggedCard === null" stack-layer="bottom">
