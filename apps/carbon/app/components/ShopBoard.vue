@@ -8,10 +8,10 @@ const { isPurchasing } = store.money.cardPurchase
 </script>
 
 <template>
-  <div v-if="quest.shop.current" class="shop-board">
-    <PurchaseError />
+  <div v-if="quest.shop.current" id="ShopBoard">
+    <ShopHeader />
 
-    <div class="shop-inventory">
+    <div v-if="quest.shop.shopInventory && quest.shop.shopInventory.length > 0" class="shop-inventory">
       <article v-for="card in quest.shop.shopInventory" id="ShopCard" :key="card.id"
         :class="{ 'purchasing': isPurchasing }">
         <PurchaseButton :card="card" />
@@ -23,8 +23,15 @@ const { isPurchasing } = store.money.cardPurchase
         <CardMetaInfo :card="card" />
       </article>
     </div>
+    <div v-else class="error-message base-warning">
+      <Icon name="carbon:error" size="1.5em" />
+      <p>No cards available in the shop.</p>
+    </div>
   </div>
+
   <ShopFallback v-else />
+  <PurchaseError v-if="quest.shop.shopInventory && quest.shop.shopInventory.length > 0" />
+
 </template>
 
 <style scoped>
@@ -45,10 +52,10 @@ const { isPurchasing } = store.money.cardPurchase
   width: 100%;
 }
 
-.shop-board {
+#ShopBoard {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-3);
 }
 
 .error-message {

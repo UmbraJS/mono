@@ -10,7 +10,7 @@ const store = useStore()
       <p>{{ store.money.value }}</p>
       <p>(+{{ store.money.income }})</p>
     </ChipPassive>
-    <ChipPassive>
+    <ChipPassive v-if="store.money.totalValue > 0">
       <Icon name="carbon:money" size="1.5em" />
       <p>{{ store.money.totalValue }}</p>
     </ChipPassive>
