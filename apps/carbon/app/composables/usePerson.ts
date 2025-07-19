@@ -41,7 +41,7 @@ export function usePerson(user: User) {
 
   const deck = ref(user.deck.map(card => calculateCardCost(card)))
   const inventory = ref(user.inventory.map(card => calculateCardCost(card)))
-  const maxSlots = ref(MAX_BOARD_SLOTS)
+  const maxSlots = ref(8)
 
   const characters = ref(user.characters)
   const hoveredSpace = ref<SpaceBoards | null>(null)
@@ -51,7 +51,7 @@ export function usePerson(user: User) {
     const deckSpaceUsed = deck.value.reduce((total, card) => total + card.size, 0)
     const inventorySpaceUsed = inventory.value.reduce((total, card) => total + card.size, 0)
 
-    const remainingDeckSlots = MAX_BOARD_SLOTS - deckSpaceUsed
+    const remainingDeckSlots = maxSlots.value - deckSpaceUsed
     const remainingInventorySlots = MAX_BOARD_SLOTS - inventorySpaceUsed
     const allRemainingSlots = remainingDeckSlots + remainingInventorySlots
 
@@ -122,12 +122,13 @@ export function usePerson(user: User) {
    * Generic card insertion function
    * @param newCard - Card to insert
    * @param targetDeck - Target deck to insert into
+   * @param maxSlots - Maximum slots available for the target deck
    */
-  function insertCard(newCard: Card, targetDeck: Card[]): InsertCardResult {
+  function insertCard(newCard: Card, targetDeck: Card[], maxSlots: number): InsertCardResult {
     const result = getInsertedCard({
       deck: remapCardsToSegments(targetDeck),
       newCard: remapCardToSegment(newCard),
-      maxSlots: MAX_BOARD_SLOTS
+      maxSlots
     })
 
     return {
@@ -147,13 +148,14 @@ export function usePerson(user: User) {
   function insertAcquiredCard(card: Card, target: 'deck' | 'inventory'): InsertCardResult {
     const targetDeck = target === 'deck' ? deck.value : inventory.value
     const targetIndex = targetDeck.length
+    const targetMaxSlots = target === 'deck' ? maxSlots.value : MAX_BOARD_SLOTS
 
     const cardToInsert = {
       ...card,
       index: targetIndex,
     }
 
-    const result = insertCard(cardToInsert, targetDeck)
+    const result = insertCard(cardToInsert, targetDeck, targetMaxSlots)
 
     if (result.success && result.cards) {
       const updatedCards = remapSegmentsToCards(result.cards, card)
@@ -180,7 +182,7 @@ export function usePerson(user: User) {
       index: props.inventoryIndex,
     }
 
-    const result = insertCard(cardToMove, inventory.value)
+    const result = insertCard(cardToMove, inventory.value, MAX_BOARD_SLOTS)
 
     if (result.success && result.cards) {
       inventory.value = remapSegmentsToCards(result.cards)
@@ -203,7 +205,7 @@ export function usePerson(user: User) {
       index: props.deckIndex,
     }
 
-    const result = insertCard(cardToMove, deck.value)
+    const result = insertCard(cardToMove, deck.value, maxSlots.value)
 
     if (result.success && result.cards) {
       deck.value = remapSegmentsToCards(result.cards)
@@ -227,7 +229,7 @@ export function usePerson(user: User) {
       index: props.newIndex,
     }
 
-    const result = insertCard(cardToMove, otherCards)
+    const result = insertCard(cardToMove, otherCards, MAX_BOARD_SLOTS)
 
     if (result.success && result.cards) {
       inventory.value = remapSegmentsToCards(result.cards)
@@ -250,7 +252,7 @@ export function usePerson(user: User) {
       index: props.newIndex,
     }
 
-    const result = insertCard(cardToMove, otherCards)
+    const result = insertCard(cardToMove, otherCards, maxSlots.value)
 
     if (result.success && result.cards) {
       deck.value = remapSegmentsToCards(result.cards)
