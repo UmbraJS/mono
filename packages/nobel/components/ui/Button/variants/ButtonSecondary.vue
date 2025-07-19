@@ -13,6 +13,6 @@
 
 .button.secondary p,
 .button.secondary span {
-  color: var(--base-10);
+  color: inherit;
 }
 </style>
