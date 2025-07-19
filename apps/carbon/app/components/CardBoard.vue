@@ -6,6 +6,15 @@ const prop = defineProps<{
   maxSlots: number;
 }>();
 
+const templateAreas = computed(() => {
+  const maxSlots = prop.maxSlots;
+  let areas = '';
+  for (let i = 0; i < maxSlots; i++) {
+    areas += '"stack"';
+  }
+  return areas;
+})
+
 const store = useStore()
 
 function range(start: number, end: number) {
@@ -39,9 +48,10 @@ const dragHit = computed(() => {
 .board-wrapper {
   position: relative;
   display: grid;
-  grid-column: span 12;
-  grid-template-columns: subgrid;
-  grid-template-areas: 'stack stack stack stack stack stack stack stack stack stack stack stack';
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(v-bind(maxSlots), minmax(0, 150px));
+  grid-template-areas: v-bind(templateAreas);
+  justify-content: center;
   height: 100%;
 
   padding: var(--space-1);

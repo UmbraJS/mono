@@ -1,32 +1,31 @@
 <script setup lang="ts">
-import PlayerCard from '~/components/Card/CardHeader.vue'
-import Board from '~/components/CardBoard.vue'
-
 const store = useStore()
 const opponentTimeline = store.simulation.cardTimeline.opponent
 const playerTimeline = store.simulation.cardTimeline.player
+
+const maxUserSlots = computed(() => store.user.maxSlots)
+const maxBotSlots = computed(() => store.bot.maxSlots)
 </script>
 
 <template>
   <div class="MatchBoard">
-    <Board board="deck" :max-slots="12">
-      <PlayerCard v-for="card in opponentTimeline" :key="card.card.id" :card="card.card"
+    <CardBoard board="deck" :max-slots="maxBotSlots">
+      <CardHeader v-for="card in opponentTimeline" :key="card.card.id" :card="card.card"
         :chunks="card.simulation.chunks" />
-    </Board>
+    </CardBoard>
     <TimeControls />
-    <Board board="deck" :max-slots="12">
-      <PlayerCard v-for="card in playerTimeline" :key="card.card.id" :card="card.card"
+    <CardBoard board="deck" :max-slots="maxUserSlots">
+      <CardHeader v-for="card in playerTimeline" :key="card.card.id" :card="card.card"
         :chunks="card.simulation.chunks" />
-    </Board>
+    </CardBoard>
   </div>
 </template>
 
 <style>
 .MatchBoard {
   display: grid;
-  grid-template-columns: subgrid;
   grid-template-rows: 1fr auto 1fr;
   gap: var(--space-1);
-  grid-column: span 12;
+  grid-column: 1 / -1;
 }
 </style>

@@ -41,6 +41,8 @@ export function usePerson(user: User) {
 
   const deck = ref(user.deck.map(card => calculateCardCost(card)))
   const inventory = ref(user.inventory.map(card => calculateCardCost(card)))
+  const maxSlots = ref(MAX_BOARD_SLOTS)
+
   const characters = ref(user.characters)
   const hoveredSpace = ref<SpaceBoards | null>(null)
   const draggedCard = ref<DraggedCard | null>(null)
@@ -56,7 +58,7 @@ export function usePerson(user: User) {
     return {
       deck: remainingDeckSlots,
       inventory: remainingInventorySlots,
-      all: allRemainingSlots
+      all: allRemainingSlots,
     }
   })
 
@@ -284,6 +286,7 @@ export function usePerson(user: User) {
     draggedCard: draggedCard,
     hoveredSpace: hoveredSpace,
     remainingSlots,
+    maxSlots: maxSlots,
 
     // Drag & Drop
     setDraggedCard,
