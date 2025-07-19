@@ -5,7 +5,7 @@ import { createCardCostCalculator } from '../../utils/cardCost'
 import { getInsertedCard } from '../../utils/cardSwap/insertCard'
 
 // Constants
-const MAX_BOARD_SLOTS = 12
+const MAX_BOARD_SLOTS = 8
 
 // Types
 interface MoveCardProps {

@@ -10,7 +10,7 @@ const store = useStore()
     <CardBoard board="inventory" :max-slots="12">
       <PlayerCard v-for="card in store.user.inventory" :key="card.id" :card="card" board="inventory" />
     </CardBoard>
-    <CardBoard board="deck" :max-slots="12">
+    <CardBoard board="deck" :max-slots="store.user.maxSlots">
       <PlayerCard v-for="card in store.user.deck" :key="card.id" :card="card" board="deck" />
     </CardBoard>
   </div>
