@@ -1,4 +1,5 @@
 import type { Card } from '../../types'
+import { toast } from '@nobel/core'
 
 /**
  * Result interface for purchase validation
@@ -86,6 +87,7 @@ export function useCardPurchase({
     const validation = validatePurchase(card)
 
     if (!validation.canPurchase) {
+      toast.error(validation.error!)
       return { success: false, error: validation.error! }
     }
 
@@ -100,7 +102,9 @@ export function useCardPurchase({
     )
 
     if (!insertResult.success) {
-      return { success: false, error: 'Not enough space to place this card.' }
+      const errorMessage = 'Not enough space to place this card.'
+      toast.error(errorMessage)
+      return { success: false, error: errorMessage }
     }
 
     // Complete the purchase

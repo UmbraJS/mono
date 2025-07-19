@@ -30,8 +30,6 @@ const { isPurchasing } = store.money.cardPurchase
   </div>
 
   <ShopFallback v-else />
-  <PurchaseError v-if="quest.shop.shopInventory && quest.shop.shopInventory.length > 0" />
-
 </template>
 
 <style scoped>

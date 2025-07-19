@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import { Toaster } from 'vue-sonner'
+
+defineProps<{
+  position?: "top-right" | "top-left" | "bottom-right" | "bottom-left" | "top-center" | "bottom-center"
+}>()
 </script>
 
 <template>
-  <Toaster
-    position="top-center"
-    :toastOptions="{
-      classes: {
-        toast: 'toast inverted-theme',
-        title: 'toast-title p',
-        description: 'toast-description p',
-        actionButton: 'toast-action-button',
-        cancelButton: 'toast-cancel-button',
-        closeButton: 'toast-close-button',
-        error: 'toast-error',
-        success: 'toast-success',
-        info: 'toast-info',
-      },
-    }"
-  />
+  <Toaster :position="position || 'top-center'" :expand="false" :visibleToasts="3" :toastOptions="{
+    classes: {
+      toast: 'toast inverted-theme',
+      title: 'toast-title p',
+      description: 'toast-description p',
+      actionButton: 'toast-action-button',
+      cancelButton: 'toast-cancel-button',
+      closeButton: 'toast-close-button',
+      error: 'toast-error',
+      success: 'toast-success',
+      info: 'toast-info',
+    },
+  }" />
 </template>
 
 <style lang="scss">
