@@ -2,7 +2,21 @@
 import PlayerCard from '~/components/Card/CardHeader.vue'
 import CardBoard from '~/components/CardBoard.vue'
 import { useStore } from '~/stores/useStore'
+import { createDeckCostCalculator } from '../../utils/cardCost'
 const store = useStore()
+const view = useView()
+
+const deckCostCalculator = createDeckCostCalculator(view.realm)
+
+function getDeckValue() {
+  const synergetic = deckCostCalculator(store.user.deck)
+  const generic = store.user.deck.reduce((sum, card) => sum + card.stats.base.cost, 0)
+  if (synergetic.totalCost === generic) {
+    return synergetic.totalCost
+  } else {
+    return `${synergetic.totalCost} (${generic})`
+  }
+}
 </script>
 
 <template>
@@ -14,8 +28,7 @@ const store = useStore()
     <div id="DeckPerformance">
       <ChipCardMeta
         :text="'Average: ' + Math.floor((store.user.deck.reduce((sum, card) => sum + card.stats.base.cost, 0) / store.user.deck.length))" />
-      <ChipCardMeta class="caption"
-        :text="'Deck Value: ' + store.user.deck.reduce((sum, card) => sum + card.stats.base.cost, 0)" />
+      <ChipCardMeta class="caption" :text="'Deck Cost: ' + getDeckValue()" />
       <ChipCardMeta class="caption" :text="'Deck: ' + store.user.deck.length" />
       <ChipCardMeta class="caption" :text="'Deck Slots: ' + store.user.maxSlots" />
     </div>

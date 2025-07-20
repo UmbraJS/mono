@@ -5,13 +5,9 @@ defineProps<{
 </script>
 
 <template>
-
   <div id="ChipCardMeta">
     <p class="caption">{{ text }}</p>
-
-    <p>lol </p>
   </div>
-
 </template>
 
 <style>
