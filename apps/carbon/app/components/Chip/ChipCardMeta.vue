@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type { Card } from '../../../types/card'
-
 defineProps<{
-  card: Card
   text: string
 }>()
 </script>
@@ -11,6 +8,8 @@ defineProps<{
 
   <div id="ChipCardMeta">
     <p class="caption">{{ text }}</p>
+
+    <p>lol </p>
   </div>
 
 </template>

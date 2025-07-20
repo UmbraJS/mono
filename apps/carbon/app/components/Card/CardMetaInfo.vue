@@ -39,10 +39,9 @@ const view = useView()
       </CardMetaWrapper>
 
       <CardMetaWrapper id="CardTypes">
-        <ChipCardMeta class="base-accent" :card="card" :text="view.getCardStats(card).slot" />
-        <ChipCardMeta v-for="type in view.getCardStats(card).tags" :key="type" class="base-yellow" :card="card"
-          :text="type" />
-        <ChipCardMeta v-for="type in view.getCardStats(card).aspects" :key="type.name" class="base-info" :card="card"
+        <ChipCardMeta class="base-accent" :text="view.getCardStats(card).slot" />
+        <ChipCardMeta v-for="type in view.getCardStats(card).tags" :key="type" class="base-yellow" :text="type" />
+        <ChipCardMeta v-for="type in view.getCardStats(card).aspects" :key="type.name" class="base-info"
           :text="type.name" />
       </CardMetaWrapper>
 

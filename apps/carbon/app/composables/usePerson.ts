@@ -4,8 +4,8 @@ import { createCardCostCalculator } from '../../utils/cardCost'
 
 import { getInsertedCard } from '../../utils/cardSwap/insertCard'
 
-// Constants
-const MAX_BOARD_SLOTS = 8
+// Constants - should remain 12
+const MAX_BOARD_SLOTS = 12
 
 // Types
 interface MoveCardProps {
@@ -41,7 +41,7 @@ export function usePerson(user: User) {
 
   const deck = ref(user.deck.map(card => calculateCardCost(card)))
   const inventory = ref(user.inventory.map(card => calculateCardCost(card)))
-  const maxSlots = ref(8)
+  const maxSlots = ref(12)
 
   const characters = ref(user.characters)
   const hoveredSpace = ref<SpaceBoards | null>(null)
