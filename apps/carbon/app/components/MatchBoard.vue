@@ -1,12 +1,9 @@
 <script setup lang="ts">
+import { useSimulationInject } from '~/composables/useSimulationProvider'
+
 const store = useStore()
 
-const simulation = useSimulation({
-  userDeck: store.user.deck,
-  botDeck: store.bot.deck,
-  userCharacters: store.user.characters,
-  botCharacters: store.bot.characters
-})
+const simulation = useSimulationInject()
 
 const opponentTimeline = simulation.cardTimeline.opponent
 const playerTimeline = simulation.cardTimeline.player
@@ -18,13 +15,15 @@ const maxBotSlots = computed(() => store.bot.maxSlots)
 <template>
   <div class="MatchBoard">
     <CardBoard board="deck" :max-slots="maxBotSlots">
-      <CardHeader v-for="card in opponentTimeline" :key="card.card.id" :card="card.card"
-        :chunks="card.simulation.chunks" />
+      <CardHeader v-for="card in opponentTimeline" :key="card.card.id" :card="card.card">
+        <CardCooldown :chunks="card.simulation.chunks" />
+      </CardHeader>
     </CardBoard>
     <TimeControls />
     <CardBoard board="deck" :max-slots="maxUserSlots">
-      <CardHeader v-for="card in playerTimeline" :key="card.card.id" :card="card.card"
-        :chunks="card.simulation.chunks" />
+      <CardHeader v-for="card in playerTimeline" :key="card.card.id" :card="card.card">
+        <CardCooldown :chunks="card.simulation.chunks" />
+      </CardHeader>
     </CardBoard>
   </div>
 </template>

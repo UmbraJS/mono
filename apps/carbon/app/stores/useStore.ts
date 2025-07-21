@@ -120,8 +120,8 @@ export function useSimulation(props: {
   return {
     time,
     timeline,
-    user: useSpace(timeline, cardTimeline.space.player, user.characters),
-    bot: useSpace(timeline, cardTimeline.space.opponent, bot.characters),
+    user: useSpace(timeline, cardTimeline.space.player, props.userCharacters),
+    bot: useSpace(timeline, cardTimeline.space.opponent, props.botCharacters),
     cardTimeline: cardTimeline.time,
   }
 }

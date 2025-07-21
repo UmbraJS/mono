@@ -1,22 +1,23 @@
 √
 <script setup lang="ts">
-import { Button } from '@nobel/core'
+// import { Button } from '@nobel/core'
+import { useSimulationInject } from '~/composables/useSimulationProvider'
 
-const store = useStore()
+const simulation = useSimulationInject()
 
 function handleReset() {
-  store.simulation.timeline.restart()
+  simulation.timeline.restart()
   // Reset the health and morale of both players
 }
 
-const isPaused = ref(store.simulation.timeline.paused())
+const isPaused = ref(simulation.timeline.paused())
 
 function pausePlay(bool: boolean) {
   isPaused.value = bool
   if (bool) {
-    store.simulation.timeline.pause()
+    simulation.timeline.pause()
   } else {
-    store.simulation.timeline.play()
+    simulation.timeline.play()
   }
 }
 
@@ -25,12 +26,12 @@ const timesSpeed = ref(1)
 function setSpeed() {
   timesSpeed.value = timesSpeed.value + 1
   if (timesSpeed.value > 10) timesSpeed.value = 1
-  store.simulation.timeline.timeScale(timesSpeed.value)
+  simulation.timeline.timeScale(timesSpeed.value)
 }
 
 const timeInMinutesAndSeconds = computed(() => {
-  const minutes = Math.floor(store.simulation.time / 60)
-  const seconds = Math.floor(store.simulation.time % 60)
+  const minutes = Math.floor(simulation.time.value / 60)
+  const seconds = Math.floor(simulation.time.value % 60)
   if (minutes === 0) return `${seconds < 10 ? '0' : ''}${seconds}s`
   return `${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`
 })
@@ -47,19 +48,22 @@ const timeInMinutesAndSeconds = computed(() => {
         <Icon name="carbon:time" size="1.5rem" />
         {{ timeInMinutesAndSeconds }}
       </h3>
-      <Button variant="base" size="small" color="default" @click="handleReset">
+      <button @click="handleReset">
         <Icon name="carbon:restart" size="2rem" />
-      </Button>
-      <Button v-if="!isPaused" variant="base" size="small" color="default" @click="() => pausePlay(true)">
+        Reset
+      </button>
+      <button v-if="!isPaused" @click="() => pausePlay(true)">
         <Icon name="carbon:pause-filled" size="2rem" />
-      </Button>
-      <Button v-else variant="base" size="small" color="default" @click="() => pausePlay(false)">
+        Pause
+      </button>
+      <button v-else @click="() => pausePlay(false)">
         <Icon name="carbon:play-filled-alt" size="2rem" />
-      </Button>
+        Play
+      </button>
 
-      <Button variant="base" size="small" color="default" @click="setSpeed">
+      <button @click="setSpeed">
         <p>Speed: {{ timesSpeed }}</p>
-      </Button>
+      </button>
     </div>
   </div>
 </template>

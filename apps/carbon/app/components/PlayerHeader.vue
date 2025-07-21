@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { useView, useSimulation } from '~/stores/useStore'
+import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
 import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
 
 const store = useStore()
 const view = useView()
 
-const simulation = useSimulation({
-  userDeck: store.user.deck,
-  botDeck: store.bot.deck,
-  userCharacters: store.user.characters,
-  botCharacters: store.bot.characters
-})
+const {
+  health = store.bot.maxHealth,
+  shield = 0
+} = defineProps<{
+  health?: number;
+  shield?: number;
+}>()
 
 function toggleInventory() {
   view.setView(view.view === 'inventory' ? null : 'inventory')
@@ -46,8 +47,7 @@ function toggleInventory() {
       </Drawer>
     </div>
 
-    <PlayerCharacter :characters="store.user.characters" :health="simulation.user.health.value"
-      :shield="simulation.user.shield.value" :reverse="false" />
+    <PlayerCharacter :characters="store.user.characters" :health="health" :shield="shield" :reverse="false" />
 
     <div class="location border">
       <ChipChipPassiveFinance />

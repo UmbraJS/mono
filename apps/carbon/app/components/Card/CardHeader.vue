@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { Card } from '../../../types'
-import CardCooldown from './CardCooldown.vue'
 import CardStatsComponent from './CardStats.vue'
-import type { OutputChunk } from '../../../utils/time/types';
 
 const props = defineProps<{
-  chunks?: OutputChunk[];
   card: Card;
   board?: 'deck' | 'inventory'
   variant?: 'default' | 'freeSize' | 'cardSize';
@@ -24,7 +21,8 @@ const cardStats = computed(() => {
 <template>
   <div v-if="!cardStats">BUG: Missing card stats for. Returning nothing</div>
   <CardWrapper v-else :index="card.index" :size="card.size" :card-stats="cardStats" :board="board" :variant="variant">
-    <CardCooldown v-if="cardStats.bash?.cooldown && chunks" :chunks="chunks" />
+
+    <slot />
 
     <NuxtImg v-if="card.info.image" class="avatar" :src="card.info.image.default" :alt="card.info.description"
       width="450" height="400" placeholder format="webp" fit="cover" />

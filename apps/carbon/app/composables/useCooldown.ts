@@ -1,11 +1,9 @@
 import { gsap } from 'gsap'
 import type { OutputChunk } from '../../utils/time/types';
-import { useStore } from '~/stores/useStore'
 import { useAudio } from '../stores/useAudio'
+import { useSimulationInject } from '~/composables/useSimulationProvider'
 
 export function useCooldown(cardSimulation: OutputChunk[]) {
-  const store = useStore()
-
   const audio = useAudio()
 
   const cooldown = ref(100)
@@ -17,8 +15,13 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
   const frozen = ref(0)
   const frozenSource = ref<string>('freeze')
 
+  const simulation = useSimulationInject()
+
   const cardTimeline = gsap.timeline()
-  store.simulation.timeline.add(cardTimeline, 0)
+
+  if (simulation) {
+    simulation.timeline.add(cardTimeline, 0)
+  }
 
   onMounted(() => {
     const segments = getSegments(cardSimulation)
