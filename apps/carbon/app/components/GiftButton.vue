@@ -9,8 +9,7 @@ const view = useView()
 const store = useStore()
 
 function giftCard() {
-  const fullDiscount = 100
-  store.money.cardPurchase.buyCard(props.card, fullDiscount)
+  store.money.cardPurchase.getCard(props.card)
 }
 
 const ariaLabel = computed(() => {

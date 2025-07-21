@@ -1,4 +1,4 @@
-import type { User, Card } from '../../types'
+import type { User, Card, Character } from '../../types'
 import type { CardSegment, DraggedCard, SpaceBoards } from '../../types/cardDrag'
 import { createCardCostCalculator } from '../../utils/cardCost'
 
@@ -39,11 +39,11 @@ export function usePerson(user: User) {
   // Create a card cost calculator for the current realm
   const calculateCardCost = createCardCostCalculator(view.realm)
 
-  const deck = ref(user.deck.map(card => calculateCardCost(card)))
-  const inventory = ref(user.inventory.map(card => calculateCardCost(card)))
+  const deck = ref<Card[]>(user.deck.map(card => calculateCardCost(card)))
+  const inventory = ref<Card[]>(user.inventory.map(card => calculateCardCost(card)))
   const maxSlots = ref(12)
 
-  const characters = ref(user.characters)
+  const characters = ref<Character[]>(user.characters)
   const hoveredSpace = ref<SpaceBoards | null>(null)
   const draggedCard = ref<DraggedCard | null>(null)
 

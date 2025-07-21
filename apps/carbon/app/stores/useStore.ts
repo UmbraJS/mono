@@ -1,17 +1,15 @@
 import { defineStore } from 'pinia'
 import { user, bot } from '../data/character'
-import type { Card, CardStatRealms } from '../../types'
+import type { Card, CardStatRealms, Character } from '../../types'
 import { matchSimulator } from '../../utils/matchSimulator'
 import { gsap } from 'gsap'
 import { usePerson } from '../composables/usePerson'
-import type { UsePerson } from '../composables/usePerson'
 
 export const useStore = defineStore('store', () => {
   const realm = ref<keyof CardStatRealms>('base')
 
   const userStore = usePerson(user)
   const botStore = usePerson(bot)
-  const simulation = useSimulation(userStore, botStore)
 
   const money = useMoney({
     removeDraggedCard: userStore.removeDraggedCard,
@@ -24,7 +22,6 @@ export const useStore = defineStore('store', () => {
   return {
     user: userStore,
     bot: botStore,
-    simulation,
     money
   }
 })
@@ -95,10 +92,15 @@ function useMoney(props: {
       money.value.value += cardStats.cost
     }
   }
-
 }
 
-function useSimulation(userStore: UsePerson, botStore: UsePerson) {
+
+export function useSimulation(props: {
+  userDeck: Card[],
+  botDeck: Card[],
+  userCharacters: Character[],
+  botCharacters: Character[],
+}) {
   const time = ref(0)
 
   const timeline = markRaw(gsap.timeline({
@@ -109,10 +111,10 @@ function useSimulation(userStore: UsePerson, botStore: UsePerson) {
   }))
 
   const cardTimeline = matchSimulator({
-    playerDeck: userStore.deck.value,
-    opponentDeck: botStore.deck.value,
-    playerCharacters: userStore.characters.value,
-    opponentCharacters: botStore.characters.value,
+    playerDeck: props.botDeck,
+    opponentDeck: props.userDeck,
+    playerCharacters: props.botCharacters,
+    opponentCharacters: props.userCharacters,
   })
 
   return {

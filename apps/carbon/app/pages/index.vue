@@ -1,7 +1,3 @@
 <template>
-  <CarbonGrid grid-layout="match">
-    <OpponentHeader />
-    <MatchBoard />
-    <PlayerHeader />
-  </CarbonGrid>
+  <h1>lol</h1>
 </template>

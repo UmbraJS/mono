@@ -1,7 +1,15 @@
 <script setup lang="ts">
 const store = useStore()
-const opponentTimeline = store.simulation.cardTimeline.opponent
-const playerTimeline = store.simulation.cardTimeline.player
+
+const simulation = useSimulation({
+  userDeck: store.user.deck,
+  botDeck: store.bot.deck,
+  userCharacters: store.user.characters,
+  botCharacters: store.bot.characters
+})
+
+const opponentTimeline = simulation.cardTimeline.opponent
+const playerTimeline = simulation.cardTimeline.player
 
 const maxUserSlots = computed(() => store.user.maxSlots)
 const maxBotSlots = computed(() => store.bot.maxSlots)

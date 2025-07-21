@@ -14,9 +14,10 @@ function triggerEffects(event: EventCard) {
     navigateTo('/shop')
   } else if (freeItem) {
     // quest.openFreeItem()
+    navigateTo('/gift')
   } else if (match) {
     // quest.openMatch()
-    navigateTo('/')
+    navigateTo('/match')
   }
 }
 </script>

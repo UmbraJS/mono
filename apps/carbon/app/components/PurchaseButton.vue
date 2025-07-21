@@ -23,8 +23,7 @@ const purchaseValidity = computed(() => {
 </script>
 
 <template>
-  <PickButton :disabled="store.money.cardPurchase.isPurchasing" :aria-label="ariaLabel"
-    :color="purchaseValidity.canPurchase ? 'default' : 'warning'" @click="handleBuyCard">
+  <PickButton :aria-label="ariaLabel" :color="purchaseValidity.valid ? 'default' : 'warning'" @click="handleBuyCard">
     <ButtonSection>
       <Icon name="carbon:purchase" size="1rem" />
       <p class="caption">{{ view.getCardStats(card).cost }}</p>

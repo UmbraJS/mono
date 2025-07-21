@@ -5,7 +5,7 @@ import { toast } from '@nobel/core'
  * Result interface for purchase validation
  */
 export interface PurchaseValidationResult {
-  canPurchase: boolean
+  valid: boolean
   error: string | null
 }
 
@@ -33,7 +33,6 @@ export function useCardPurchase({
 
   // Reactive state
   const purchaseError = ref<string | null>(null)
-  const isPurchasing = ref(false)
 
   // Auto-clear error after 5 seconds
   watchEffect(() => {
@@ -49,8 +48,27 @@ export function useCardPurchase({
    * @returns Validation result with error message if invalid
    */
   function validatePurchase(card: Card): PurchaseValidationResult {
-    const cardSize = card.size
+    const pick = validatePick(card)
+    if (!pick.valid) return pick
+
     const cardCost = view.getCardStats(card).cost
+
+    // Check funds
+    if (availableFunds.value.value < cardCost) {
+      return {
+        valid: false,
+        error: 'Not enough funds to buy this card.'
+      }
+    }
+
+    return {
+      valid: true,
+      error: null
+    }
+  }
+
+  function validatePick(card: Card): PurchaseValidationResult {
+    const cardSize = card.size
 
     // Check space availability
     const hasInventorySpace = remainingSlots.value.inventory >= cardSize
@@ -59,21 +77,13 @@ export function useCardPurchase({
 
     if (!hasAnySpace) {
       return {
-        canPurchase: false,
+        valid: false,
         error: 'Not enough space in inventory or deck to place this card.'
       }
     }
 
-    // Check funds
-    if (availableFunds.value.value < cardCost) {
-      return {
-        canPurchase: false,
-        error: 'Not enough funds to buy this card.'
-      }
-    }
-
     return {
-      canPurchase: true,
+      valid: true,
       error: null
     }
   }
@@ -83,10 +93,10 @@ export function useCardPurchase({
    * @param card - The card to purchase
    * @returns Purchase result with success status and error message if failed
    */
-  function purchaseCard(card: Card, discount?: number): { success: boolean; error?: string } {
-    const validation = validatePurchase(card)
+  function purchaseCard(card: Card, validation: PurchaseValidationResult): { success: boolean; error?: string } {
+    // const purchase = validatePurchase(card)
 
-    if (!validation.canPurchase) {
+    if (!validation.valid) {
       toast.error(validation.error!)
       return { success: false, error: validation.error! }
     }
@@ -107,13 +117,6 @@ export function useCardPurchase({
       return { success: false, error: errorMessage }
     }
 
-    // Complete the purchase
-    quest.shop.buyCard(card)
-    audio.playCoinSound()
-
-    store.money.setMoney(
-      store.money.value - getCost(card, discount)
-    )
     return { success: true }
   }
 
@@ -122,42 +125,45 @@ export function useCardPurchase({
    * @param card - The card to purchase
    * @returns Promise that resolves when purchase is complete
    */
-  async function buyCard(card: Card, discount?: number): Promise<string | null> {
-    if (isPurchasing.value) return purchaseError.value
-
-    isPurchasing.value = true
+  async function buyCard(card: Card): Promise<string | null> {
     purchaseError.value = null
+    const validation = validatePurchase(card)
+    const result = purchaseCard(card, validation)
 
-    try {
-      const result = purchaseCard(card, discount)
-
-      if (!result.success) {
-        purchaseError.value = result.error || 'Purchase failed'
-      }
-    } catch (error) {
-      purchaseError.value = 'An unexpected error occurred during purchase'
-      console.error('Purchase error:', error)
-    } finally {
-      isPurchasing.value = false
+    if (!result.success) {
+      purchaseError.value = result.error || 'Purchase failed'
     }
+
+    // Complete the purchase
+    quest.shop.removeFromShop(card)
+    audio.playCoinSound()
+    store.money.setMoney(
+      store.money.value - view.getCardStats(card).cost
+    )
 
     return purchaseError.value
   }
 
+  async function getCard(card: Card) {
+    purchaseError.value = null
+    const validation = validatePick(card)
+    const result = purchaseCard(card, validation)
 
-  function getCost(card: Card, discount?: number): number {
-    const cost = view.getCardStats(card).cost
-    return discount ? cost - (cost * discount / 100) : cost
+    if (!result.success) {
+      purchaseError.value = result.error || 'Purchase failed'
+    }
+
+    quest.gift.removeFromShop(card)
+    audio.playCardFlip()
+
+    return purchaseError.value
   }
 
   return {
-    // State
     purchaseError: readonly(purchaseError),
-    isPurchasing: readonly(isPurchasing),
-
-    // Methods
     validatePurchase,
     purchaseCard,
-    buyCard
+    buyCard,
+    getCard,
   }
 }

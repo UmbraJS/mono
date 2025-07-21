@@ -31,7 +31,13 @@ export const useQuest = defineStore('quest', () => {
   // State
   const currentEvents = ref<EventCard[]>([Ormond, SaintDenis, BorgBog])
   const hoveredEvent = ref<EventCard | null>(null)
-  const shop = useShop()
+  const shop = useShop([
+    gauntletOfSigmar,
+    glimmerCloak,
+    saintDenis,
+    viking,
+  ])
+  const gift = useShop([gauntletOfSigmar])
 
   // Actions
   const setHoveredEvent = (event: EventCard | null) => {
@@ -40,6 +46,7 @@ export const useQuest = defineStore('quest', () => {
 
   return {
     shop,
+    gift,
     hoveredEvent,
     currentEvents,
     setHoveredEvent,
@@ -49,7 +56,7 @@ export const useQuest = defineStore('quest', () => {
 /**
  * Shop composable for managing shop inventory and purchases
  */
-function useShop() {
+function useShop(cards: Card[]) {
   const view = useView()
 
   // Create a card cost calculator for the current realm
@@ -57,30 +64,25 @@ function useShop() {
 
   // State
   const current = ref<EventCard | null>(Ormond)
-  const shopInventory = ref<Card[] | null>([
-    calculateCardCost(gauntletOfSigmar),
-    calculateCardCost(glimmerCloak),
-    calculateCardCost(saintDenis),
-    calculateCardCost(viking),
-  ])
+  const inventory = ref<Card[] | null>(cards.map(calculateCardCost))
 
   /**
    * Removes a card from the shop inventory when purchased
    * @param card - The card to purchase
    */
-  function buyCard(card: Card): void {
-    if (!shopInventory.value) return
+  function removeFromShop(card: Card): void {
+    if (!inventory.value) return
 
-    const index = shopInventory.value.findIndex(c => c.id === card.id)
+    const index = inventory.value.findIndex(c => c.id === card.id)
     if (index !== -1) {
-      shopInventory.value.splice(index, 1)
+      inventory.value.splice(index, 1)
     }
   }
 
   return {
     current,
-    shopInventory,
-    buyCard,
+    inventory,
+    removeFromShop,
   }
 }
 

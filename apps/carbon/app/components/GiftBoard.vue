@@ -1,52 +1,23 @@
 <script setup lang="ts">
 import CardHeader from '~/components/Card/CardHeader.vue'
-
 const quest = useQuest()
-const store = useStore()
-const { isPurchasing } = store.money.cardPurchase
 </script>
 
 <template>
-  <div v-if="quest.shop.current" id="ShopBoard">
-    <div v-if="quest.shop.shopInventory && quest.shop.shopInventory.length > 0" class="shop-inventory">
-      <article v-for="card in quest.shop.shopInventory" id="ShopCard" :key="card.id"
-        :class="{ 'purchasing': isPurchasing }">
-        <GiftButton :card="card" />
+  <div v-if="quest.gift.inventory && quest.gift.inventory.length > 0" class="shop-inventory">
+    <article v-for="card in quest.gift.inventory" id="ShopCard" :key="card.id">
+      <GiftButton :card="card" />
 
-        <CardModal :card="card">
-          <CardHeader :card="card" variant="cardSize" />
-        </CardModal>
+      <CardModal :card="card">
+        <CardHeader :card="card" variant="cardSize" />
+      </CardModal>
 
-        <CardMetaInfo :card="card" />
-      </article>
-    </div>
+      <CardMetaInfo :card="card" />
+    </article>
   </div>
 </template>
 
-<style scoped>
-.CardTag {
-  display: inline-block;
-  padding: var(--space-quark);
-  background-color: var(--base-20);
-  color: var(--base-120);
-  border-radius: var(--radius);
-}
-
-.CardEffect {
-  display: inline-block;
-  padding: var(--space-quark);
-  background-color: var(--base-20);
-  color: var(--base-120);
-  border-radius: var(--radius);
-  width: 100%;
-}
-
-#ShopBoard {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
+<style>
 .error-message {
   display: flex;
   align-items: center;
@@ -72,10 +43,5 @@ const { isPurchasing } = store.money.cardPurchase
   width: var(--cardWindowWidth);
   min-width: var(--cardWindowWidth);
   transition: opacity var(--transition-duration, 0.2s);
-}
-
-#ShopCard.purchasing {
-  opacity: 0.7;
-  pointer-events: none;
 }
 </style>
