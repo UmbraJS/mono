@@ -9,8 +9,6 @@ const { isPurchasing } = store.money.cardPurchase
 
 <template>
   <div v-if="quest.shop.current" id="ShopBoard">
-    <ShopHeader />
-
     <div v-if="quest.shop.shopInventory && quest.shop.shopInventory.length > 0" class="shop-inventory">
       <article v-for="card in quest.shop.shopInventory" id="ShopCard" :key="card.id"
         :class="{ 'purchasing': isPurchasing }">

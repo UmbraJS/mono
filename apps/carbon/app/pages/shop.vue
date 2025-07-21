@@ -1,5 +1,6 @@
 <template>
   <CarbonGrid grid-layout="event">
+    <ShopHeader />
 
     <ViewBoard>
       <ShopBoard />

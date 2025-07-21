@@ -8,15 +8,23 @@ const view = useView()
 
 const deckCostCalculator = createDeckCostCalculator(view.realm)
 
-function getDeckValue() {
-  const synergetic = deckCostCalculator(store.user.deck)
-  const generic = store.user.deck.reduce((sum, card) => sum + card.stats.base.cost, 0)
-  if (synergetic.totalCost === generic) {
-    return synergetic.totalCost
-  } else {
-    return `${synergetic.totalCost} (${generic})`
+const deckStats = computed(() => {
+  const deck = store.user.deck
+  const totalGenericCost = deck.reduce((sum, card) => sum + card.stats.base.cost, 0)
+  const averageCost = Math.floor(totalGenericCost / deck.length)
+
+  const synergetic = deckCostCalculator(deck)
+  const deckCost = synergetic.totalCost === totalGenericCost
+    ? synergetic.totalCost.toString()
+    : `${synergetic.totalCost} (${totalGenericCost})`
+
+  return {
+    average: averageCost,
+    cost: deckCost,
+    count: deck.length,
+    maxSlots: store.user.maxSlots
   }
-}
+})
 </script>
 
 <template>
@@ -26,11 +34,9 @@ function getDeckValue() {
     </CardBoard>
 
     <div id="DeckPerformance">
-      <ChipCardMeta
-        :text="'Average: ' + Math.floor((store.user.deck.reduce((sum, card) => sum + card.stats.base.cost, 0) / store.user.deck.length))" />
-      <ChipCardMeta class="caption" :text="'Deck Cost: ' + getDeckValue()" />
-      <ChipCardMeta class="caption" :text="'Deck: ' + store.user.deck.length" />
-      <ChipCardMeta class="caption" :text="'Deck Slots: ' + store.user.maxSlots" />
+      <ChipCardMeta :text="`Average: ${deckStats.average}`" />
+      <ChipCardMeta class="caption" :text="`Cost: ${deckStats.cost}`" />
+      <ChipCardMeta class="caption" :text="`Cards: ${deckStats.count}/${deckStats.maxSlots}`" />
     </div>
 
     <CardBoard board="deck" :max-slots="store.user.maxSlots">

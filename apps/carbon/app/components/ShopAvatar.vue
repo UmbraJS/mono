@@ -5,7 +5,7 @@ const quest = useQuest()
 <template>
   <div v-if="quest.shop.current" id="ShopAvatar">
     <NuxtImg v-if="quest.shop.current.images.inside" class="avatar" :src="quest.shop.current.images.inside"
-      :alt="quest.shop.current.description" width="200" height="200" placeholder format="webp" fit="cover" />
+      :alt="quest.shop.current.description" width="100" height="100" placeholder format="webp" fit="cover" />
   </div>
 </template>
 
@@ -15,7 +15,7 @@ const quest = useQuest()
   justify-content: center;
   align-items: center;
   background-color: var(--base-40);
-  padding: var(--space-1);
+  padding: var(--space-quark);
   border-radius: var(--radius);
 }
 

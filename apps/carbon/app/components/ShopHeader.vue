@@ -6,16 +6,11 @@ const quest = useQuest()
 <template>
   <header v-if="quest.shop.current" id="ShopHeader">
     <ShopAvatar />
-    <div id="ShopMetaInfo">
-      <h2>{{ quest.shop.current.name }}</h2>
-      <p>{{ quest.shop.current.description }}</p>
-
-      <div id="ShopActions">
-        <Button variant="base">
-          <Icon name="carbon:arrow-left" size="1em" />
-          <p>Exit</p>
-        </Button>
-      </div>
+    <div id="ShopActions">
+      <Button variant="base">
+        <Icon name="carbon:arrow-left" size="1em" />
+        <p>Exit</p>
+      </Button>
     </div>
   </header>
 </template>
@@ -26,15 +21,12 @@ const quest = useQuest()
   grid-template-columns: auto 1fr;
   gap: var(--space-2);
 
-  background-color: var(--base);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   padding: var(--space-2);
-  border-radius: var(--radius);
-}
-
-#ShopMetaInfo {
-  display: grid;
-  gap: var(--space-1);
-  grid-template-rows: auto 1fr auto;
+  z-index: 1;
 }
 
 #ShopActions {
