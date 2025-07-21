@@ -69,7 +69,6 @@ const { isPurchasing } = store.money.cardPurchase
   gap: var(--space-1);
   grid-column: 1 / -1;
   min-height: 150px;
-  overflow-x: auto;
 }
 
 #ShopCard {

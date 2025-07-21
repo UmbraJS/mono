@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { Button } from '@nobel/core'
 const quest = useQuest()
+
+function exitShop() {
+  navigateTo('/quest')
+}
 </script>
 
 <template>
   <header v-if="quest.shop.current" id="ShopHeader">
     <ShopAvatar />
     <div id="ShopActions">
-      <Button variant="base">
+      <Button variant="base" @click="exitShop">
         <Icon name="carbon:arrow-left" size="1em" />
         <p>Exit</p>
       </Button>

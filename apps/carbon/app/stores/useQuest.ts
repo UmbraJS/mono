@@ -4,13 +4,14 @@ import { gauntletOfSigmar, glimmerCloak, viking, saintDenis } from '../data/card
 import { createCardCostCalculator } from '../../utils/cardCost'
 
 // Types
-interface EventEffect {
+export interface EventEffect {
   id: string
   image: string
   description: string
+  type: 'store' | 'item' | 'match'
 }
 
-interface EventCard {
+export interface EventCard {
   id: string
   images: {
     default: string
@@ -88,18 +89,21 @@ const FreeItem: EventEffect = {
   id: 'free-item',
   image: '/swamp.jpg',
   description: 'A free item',
+  type: 'item',
 }
 
 const OpensStore: EventEffect = {
   id: 'opens-store',
   image: '/swanKeep.png',
   description: 'Opens a store',
+  type: 'store',
 }
 
 const Match: EventEffect = {
   id: 'match',
   image: '/match.jpg',
   description: 'Fight a battle',
+  type: 'match',
 }
 
 const Ormond: EventCard = {

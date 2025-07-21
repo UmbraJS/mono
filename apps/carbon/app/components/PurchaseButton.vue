@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Card } from '../../types'
-import { Button } from '@nobel/core'
 
 const props = defineProps<{
   card: Card
@@ -24,35 +23,15 @@ const purchaseValidity = computed(() => {
 </script>
 
 <template>
-  <Button id="BuyButton" :disabled="store.money.cardPurchase.isPurchasing" :aria-label="ariaLabel"
+  <PickButton :disabled="store.money.cardPurchase.isPurchasing" :aria-label="ariaLabel"
     :color="purchaseValidity.canPurchase ? 'default' : 'warning'" @click="handleBuyCard">
-    <div class="ButtonSection">
+    <ButtonSection>
       <Icon name="carbon:purchase" size="1rem" />
       <p class="caption">{{ view.getCardStats(card).cost }}</p>
-    </div>
-    <div class="ButtonSection">
+    </ButtonSection>
+    <ButtonSection>
       <Icon name="carbon:pan-horizontal" size="1rem" />
       <p class="caption">{{ card.size }}</p>
-    </div>
-  </Button>
-
+    </ButtonSection>
+  </PickButton>
 </template>
-
-<style scoped>
-#BuyBox {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  overflow: hidden;
-}
-
-.ButtonSection {
-  display: flex;
-  gap: var(--space-quark);
-}
-
-#BuyButton {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  overflow: hidden;
-}
-</style>

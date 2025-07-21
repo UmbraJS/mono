@@ -1,15 +1,30 @@
 <script setup lang="ts">
-
-const audio = useAudio()
+import type { EventCard } from '~/stores/useQuest'
+// const audio = useAudio()
 const quest = useQuest()
 
+function triggerEffects(event: EventCard) {
+  const opensStore = event.effects.some(effect => effect.type === 'store')
+  const freeItem = event.effects.some(effect => effect.type === 'item')
+  const match = event.effects.some(effect => effect.type === 'match')
+
+  // audio.speakElevenLabs(event.name + event.description, 'germanSage')
+
+  if (opensStore) {
+    navigateTo('/shop')
+  } else if (freeItem) {
+    // quest.openFreeItem()
+  } else if (match) {
+    // quest.openMatch()
+    navigateTo('/')
+  }
+}
 </script>
 
 <template>
   <div class="quest-events">
     <div v-for="event in quest.currentEvents" :key="event.id" class="event" @mouseover="quest.setHoveredEvent(event)"
-      @mouseleave="quest.setHoveredEvent(null)"
-      @click="() => audio.speakElevenLabs(event.name + event.description, 'germanSage')">
+      @mouseleave="quest.setHoveredEvent(null)" @click="() => triggerEffects(event)">
       <img :src="event.images.default" alt="Location">
       <div class="prose">
         <h3>{{ event.name }}</h3>

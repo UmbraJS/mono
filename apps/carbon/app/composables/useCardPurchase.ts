@@ -83,7 +83,7 @@ export function useCardPurchase({
    * @param card - The card to purchase
    * @returns Purchase result with success status and error message if failed
    */
-  function purchaseCard(card: Card): { success: boolean; error?: string } {
+  function purchaseCard(card: Card, discount?: number): { success: boolean; error?: string } {
     const validation = validatePurchase(card)
 
     if (!validation.canPurchase) {
@@ -110,8 +110,9 @@ export function useCardPurchase({
     // Complete the purchase
     quest.shop.buyCard(card)
     audio.playCoinSound()
+
     store.money.setMoney(
-      store.money.value - view.getCardStats(card).cost
+      store.money.value - getCost(card, discount)
     )
     return { success: true }
   }
@@ -121,14 +122,14 @@ export function useCardPurchase({
    * @param card - The card to purchase
    * @returns Promise that resolves when purchase is complete
    */
-  async function buyCard(card: Card): Promise<string | null> {
+  async function buyCard(card: Card, discount?: number): Promise<string | null> {
     if (isPurchasing.value) return purchaseError.value
 
     isPurchasing.value = true
     purchaseError.value = null
 
     try {
-      const result = purchaseCard(card)
+      const result = purchaseCard(card, discount)
 
       if (!result.success) {
         purchaseError.value = result.error || 'Purchase failed'
@@ -143,6 +144,11 @@ export function useCardPurchase({
     return purchaseError.value
   }
 
+
+  function getCost(card: Card, discount?: number): number {
+    const cost = view.getCardStats(card).cost
+    return discount ? cost - (cost * discount / 100) : cost
+  }
 
   return {
     // State
