@@ -5,7 +5,6 @@ onMounted(() => {
   theme.inverse()
   theme.inverse()
   theme.inverse()
-
 })
 </script>
 

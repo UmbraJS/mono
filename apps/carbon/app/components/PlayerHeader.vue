@@ -17,6 +17,12 @@ const shield = props.shield ?? 0
 function toggleInventory() {
   view.setView(view.view === 'inventory' ? null : 'inventory')
 }
+
+const theme = useUmbra()
+
+function inverseTheme() {
+  theme.inverse()
+}
 </script>
 
 <template>
@@ -41,6 +47,12 @@ function toggleInventory() {
             <DrawerDescription id="drawer-settings-description">
               Configure your character settings here.
             </DrawerDescription>
+
+            <CarbonButton @click="inverseTheme">
+              <Icon name="carbon:3d-curve-auto-vessels" size="1.5em" />
+              <p>Toggle Theme</p>
+            </CarbonButton>
+
             <Slider />
           </div>
         </template>
