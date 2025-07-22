@@ -6,13 +6,13 @@ import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/c
 const store = useStore()
 const view = useView()
 
-const {
-  health = store.bot.maxHealth,
-  shield = 0
-} = defineProps<{
-  health?: number;
-  shield?: number;
+const props = defineProps<{
+  health?: globalThis.Ref<number>;
+  shield?: globalThis.Ref<number>;
 }>()
+
+const health = props.health ?? store.bot.maxHealth
+const shield = props.shield ?? 0
 
 function toggleInventory() {
   view.setView(view.view === 'inventory' ? null : 'inventory')

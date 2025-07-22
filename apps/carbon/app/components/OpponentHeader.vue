@@ -4,13 +4,13 @@ import { useStore } from '~/stores/useStore'
 
 const store = useStore()
 
-const {
-  health = store.bot.maxHealth,
-  shield = 0
-} = defineProps<{
-  health?: number;
-  shield?: number;
+const props = defineProps<{
+  health?: globalThis.Ref<number>;
+  shield?: globalThis.Ref<number>;
 }>()
+
+const health = props.health ?? store.bot.maxHealth
+const shield = props.shield ?? 0
 
 // function getInfoDeck(deck: Card[]) {
 //   return deck.map(d => d.info)

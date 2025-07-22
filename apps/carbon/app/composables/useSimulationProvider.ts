@@ -1,6 +1,7 @@
 import { inject, provide } from 'vue'
 import type { InjectionKey } from 'vue'
 import { useSimulation } from '~/stores/useStore'
+import type { Card, Character } from '../../types'
 
 // Define the simulation type based on what useSimulation returns
 type SimulationType = ReturnType<typeof useSimulation>
@@ -9,15 +10,13 @@ type SimulationType = ReturnType<typeof useSimulation>
 const simulationKey: InjectionKey<SimulationType> = Symbol('simulation')
 
 // Composable to provide simulation to child components
-export function useSimulationProvider() {
-  const store = useStore()
-
-  const simulation = useSimulation({
-    userDeck: store.user.deck,
-    botDeck: store.bot.deck,
-    userCharacters: store.user.characters,
-    botCharacters: store.bot.characters
-  })
+export function useSimulationProvider(props: {
+  userDeck: Card[],
+  botDeck: Card[],
+  userCharacters: Character[],
+  botCharacters: Character[],
+}) {
+  const simulation = useSimulation(props)
 
   provide(simulationKey, simulation)
 
