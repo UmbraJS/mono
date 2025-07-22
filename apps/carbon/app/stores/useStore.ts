@@ -111,10 +111,10 @@ export function useSimulation(props: {
   }))
 
   const cardTimeline = matchSimulator({
-    playerDeck: props.botDeck,
-    opponentDeck: props.userDeck,
-    playerCharacters: props.botCharacters,
-    opponentCharacters: props.userCharacters,
+    playerDeck: props.userDeck,
+    opponentDeck: props.botDeck,
+    playerCharacters: props.userCharacters,
+    opponentCharacters: props.botCharacters,
   })
 
   return {

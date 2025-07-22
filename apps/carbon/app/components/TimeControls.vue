@@ -1,6 +1,5 @@
-√
 <script setup lang="ts">
-// import { Button } from '@nobel/core'
+import { Button } from '@nobel/core'
 import { useSimulationInject } from '~/composables/useSimulationProvider'
 
 const simulation = useSimulationInject()
@@ -44,26 +43,19 @@ const timeInMinutesAndSeconds = computed(() => {
       {{ timeInMinutesAndSeconds }}
     </h3>
     <div class="controls">
-      <h3>
-        <Icon name="carbon:time" size="1.5rem" />
-        {{ timeInMinutesAndSeconds }}
-      </h3>
-      <button @click="handleReset">
+      <Button @click="handleReset">
         <Icon name="carbon:restart" size="2rem" />
-        Reset
-      </button>
-      <button v-if="!isPaused" @click="() => pausePlay(true)">
+      </Button>
+      <Button v-if="!isPaused" @click="() => pausePlay(true)">
         <Icon name="carbon:pause-filled" size="2rem" />
-        Pause
-      </button>
-      <button v-else @click="() => pausePlay(false)">
+      </Button>
+      <Button v-else @click="() => pausePlay(false)">
         <Icon name="carbon:play-filled-alt" size="2rem" />
-        Play
-      </button>
+      </Button>
 
-      <button @click="setSpeed">
+      <Button @click="setSpeed">
         <p>Speed: {{ timesSpeed }}</p>
-      </button>
+      </Button>
     </div>
   </div>
 </template>

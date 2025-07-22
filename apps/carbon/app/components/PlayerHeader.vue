@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
-import { Button, Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
+import { Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
 
 const store = useStore()
 const view = useView()
@@ -22,12 +22,12 @@ function toggleInventory() {
 <template>
   <PartyBoard>
     <div class="location border">
-      <Button class="viewButton" :color="view.view === 'inventory' ? 'default' : 'default'"
+      <CarbonButton :color="view.view === 'inventory' ? 'default' : 'default'"
         :variant="view.view === 'inventory' ? 'primary' : 'base'" @click="toggleInventory">
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>
-      </Button>
-      <Drawer class-name="viewButton" title="Player Settings"
+      </CarbonButton>
+      <Drawer class-name="CarbonButton" title="Player Settings"
         description="Configure your character settings and preferences">
         <template #trigger>
           <Icon name="carbon:settings" size="1.5em" />
@@ -92,12 +92,5 @@ section#PartyBoard .location .finances {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: var(--space-1);
-}
-
-section#PartyBoard .location .viewButton {
-  display: flex;
-  justify-content: flex-start;
-  gap: var(--space-1);
-  width: 100%;
 }
 </style>
