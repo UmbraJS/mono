@@ -11,37 +11,90 @@ export interface EventEffect {
   type: 'store' | 'item' | 'match'
 }
 
+interface EventImages {
+  default: string
+  inside: string
+}
+
 export interface EventCard {
   id: string
-  images: {
-    default: string
-    inside?: string
-  }
   name: string
   description: string
   shortDescription: string
-  quote?: string
+  quote: string
+  images: EventImages
   effects: EventEffect[]
+}
+
+interface EventDecision {
+  id: string
+  description: string
+  quote: string
+  image: string
+  events: [EventCard, EventCard, EventCard]
+}
+
+interface Quest {
+  id: string
+  name: string
+  description: string
+  quote: string
+  acts: [QuestAct, QuestAct, QuestAct]
+}
+
+interface QuestAct {
+  id: string
+  name: string
+  description: string
+  quote: string
+  pilot: EventDecision
+  events: [EventDecision, EventDecision, EventDecision, EventDecision, EventDecision]
+  finale: EventDecision
 }
 
 /**
  * Quest store for managing quest events and shop functionality
  */
 export const useQuest = defineStore('quest', () => {
-  // State
-  const currentEvents = ref<EventCard[]>([Ormond, SaintDenis, BorgBog])
+  const quest = ref<Quest>(quest1)
+
+  const progress = ref({
+    act: 0,
+    day: 1,
+  })
+
+  const currentAct = computed(() => {
+    return quest.value.acts[progress.value.act]
+  })
+
+  const currentEvents = computed(() => {
+    return currentAct.value?.events[progress.value.day - 1]
+  })
+
   const hoveredEvent = ref<EventCard | null>(null)
+
+  // TODO: Implement current event logic - switching between gift, shop and match
+  const gift = useShop([gauntletOfSigmar])
   const shop = useShop([
     gauntletOfSigmar,
     glimmerCloak,
     saintDenis,
     viking,
   ])
-  const gift = useShop([gauntletOfSigmar])
 
-  // Actions
   const setHoveredEvent = (event: EventCard | null) => {
     hoveredEvent.value = event
+  }
+
+  function passDay() {
+    const daysInAct = quest.value.acts[progress.value.act]?.events.length
+    if (!daysInAct) return
+    if (progress.value.day < daysInAct) {
+      progress.value.day++
+    } else if (progress.value.act < quest.value.acts.length - 1) {
+      progress.value.act++
+      progress.value.day = 1
+    }
   }
 
   return {
@@ -50,6 +103,7 @@ export const useQuest = defineStore('quest', () => {
     hoveredEvent,
     currentEvents,
     setHoveredEvent,
+    passDay,
   }
 })
 
@@ -57,10 +111,7 @@ export const useQuest = defineStore('quest', () => {
  * Shop composable for managing shop inventory and purchases
  */
 function useShop(cards: Card[]) {
-  const view = useView()
-
-  // Create a card cost calculator for the current realm
-  const calculateCardCost = createCardCostCalculator(view.realm)
+  const calculateCardCost = createCardCostCalculator('quest')
 
   // State
   const current = ref<EventCard | null>(Ormond)
@@ -72,7 +123,6 @@ function useShop(cards: Card[]) {
    */
   function removeFromShop(card: Card): void {
     if (!inventory.value) return
-
     const index = inventory.value.findIndex(c => c.id === card.id)
     if (index !== -1) {
       inventory.value.splice(index, 1)
@@ -117,6 +167,7 @@ const Ormond: EventCard = {
   name: 'Ormond',
   description: 'A peaceful village where you can rest and gather supplies.',
   shortDescription: 'A tranquil village with a welcoming atmosphere.',
+  quote: '"Welcome to Ormond, traveler. Rest your weary feet and gather your strength." — Villager',
   effects: [OpensStore],
 }
 
@@ -177,4 +228,72 @@ const BorgBog: EventCard = {
   effects: [Match],
 }
 
+const act1: QuestAct = {
+  id: 'act1',
+  name: 'The Journey Begins',
+  description: 'Set out on your quest to find Eldoria.',
+  quote: '"Every journey begins with a single step."',
+  pilot: {
+    id: 'pilot1',
+    description: 'Choose your path wisely.',
+    quote: '"The choices you make will shape your destiny."',
+    image: '/path.jpg',
+    events: [
+      Ormond,
+      SaintDenis,
+      BorgBog,
+    ],
+  },
+  events: [
+    {
+      id: 'event1',
+      description: 'Encounter a mysterious traveler.',
+      quote: '"Not all who wander are lost."',
+      image: '/traveler.jpg',
+      events: [Ormond, SaintDenis, BorgBog],
+    },
+    {
+      id: 'event2',
+      description: 'Discover an ancient ruin.',
+      quote: '"History is written by those who dare to explore."',
+      image: '/ruin.jpg',
+      events: [Ormond, SaintDenis, BorgBog],
+    },
+    {
+      id: 'event3',
+      description: 'midpoint - Face a dangerous beast.',
+      quote: '"Courage is not the absence of fear, but the triumph over it."',
+      image: '/beast.jpg',
+      events: [Ormond, SaintDenis, BorgBog],
+    },
+    {
+      id: 'event4',
+      description: 'Encounter a mysterious traveler.',
+      quote: '"Not all who wander are lost."',
+      image: '/traveler.jpg',
+      events: [Ormond, SaintDenis, BorgBog],
+    },
+    {
+      id: 'event5',
+      description: 'Discover an ancient ruin.',
+      quote: '"History is written by those who dare to explore."',
+      image: '/ruin.jpg',
+      events: [Ormond, SaintDenis, BorgBog],
+    },
+  ],
+  finale: {
+    id: 'finale1',
+    description: 'Face a player',
+    quote: '"Eldoria awaits those who are brave enough to seek it."',
+    image: '/eldoria.jpg',
+    events: [Ormond, SaintDenis, BorgBog],
+  },
+}
 
+const quest1: Quest = {
+  id: 'quest1',
+  name: 'The Lost Village',
+  description: 'A journey to find the lost village of Eldoria.',
+  quote: '"The path to Eldoria is fraught with danger, but the rewards are great."',
+  acts: [act1, act1, act1],
+}
