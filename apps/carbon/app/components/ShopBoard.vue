@@ -18,25 +18,15 @@ const quest = useQuest()
         <CardMetaInfo :card="card" />
       </article>
     </div>
-    <div v-else class="error-message base-warning">
+    <ChipMessage v-else class="base-warning">
       <Icon name="carbon:error" size="1.5em" />
       <p>No cards available in the shop.</p>
-    </div>
+    </ChipMessage>
   </div>
   <ShopFallback v-else />
 </template>
 
-<style scoped>
-.error-message {
-  display: flex;
-  align-items: center;
-  gap: var(--space-quark);
-  padding: var(--space-1);
-  background-color: var(--base);
-  color: var(--base-contrast);
-  border-radius: var(--radius);
-}
-
+<style>
 .shop-inventory {
   display: flex;
   gap: var(--space-1);

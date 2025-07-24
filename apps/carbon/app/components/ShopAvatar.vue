@@ -4,7 +4,7 @@ const quest = useQuest()
 
 <template>
   <div v-if="quest.shop.current" id="ShopAvatar">
-    <NuxtImg v-if="quest.shop.current.images.inside" class="avatar" :src="quest.shop.current.images.inside"
+    <NuxtImg v-if="quest.shop.current.image" class="avatar" :src="quest.shop.current.image"
       :alt="quest.shop.current.description" width="100" height="100" placeholder format="webp" fit="cover" />
   </div>
 </template>

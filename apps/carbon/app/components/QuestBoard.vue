@@ -7,6 +7,7 @@ function triggerEffects(event: EventCard) {
   const opensStore = event.effects.some(effect => effect.type === 'store')
   const freeItem = event.effects.some(effect => effect.type === 'item')
   const match = event.effects.some(effect => effect.type === 'match')
+  quest.setCurrentEvent(event)
 
   // audio.speakElevenLabs(event.name + event.description, 'germanSage')
 
@@ -24,8 +25,9 @@ function triggerEffects(event: EventCard) {
 
 <template>
   <div class="quest-events">
-    <div v-for="event in quest.currentEvents" :key="event.id" class="event" @mouseover="quest.setHoveredEvent(event)"
-      @mouseleave="quest.setHoveredEvent(null)" @click="() => triggerEffects(event)">
+    <div v-for="event in quest.currentEvents.events" :key="event.id" class="event"
+      @mouseover="quest.setHoveredEvent(event)" @mouseleave="quest.setHoveredEvent(null)"
+      @click="() => triggerEffects(event)">
       <img :src="event.images.default" alt="Location">
       <div class="prose">
         <h3>{{ event.name }}</h3>

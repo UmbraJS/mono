@@ -15,19 +15,10 @@ const quest = useQuest()
       <CardMetaInfo :card="card" />
     </article>
   </div>
+  <ShopFallback v-else />
 </template>
 
 <style>
-.error-message {
-  display: flex;
-  align-items: center;
-  gap: var(--space-quark);
-  padding: var(--space-1);
-  background-color: var(--base);
-  color: var(--base-contrast);
-  border-radius: var(--radius);
-}
-
 .shop-inventory {
   display: flex;
   gap: var(--space-1);

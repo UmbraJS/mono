@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useSimulationInject } from '~/composables/useSimulationProvider'
 
+const props = defineProps<{
+  maxSlots: number;
+}>()
+
 const store = useStore()
 
 const simulation = useSimulationInject()
@@ -9,7 +13,7 @@ const opponentTimeline = simulation.cardTimeline.opponent
 const playerTimeline = simulation.cardTimeline.player
 
 const maxUserSlots = computed(() => store.user.maxSlots)
-const maxBotSlots = computed(() => store.bot.maxSlots)
+const maxBotSlots = computed(() => props.maxSlots)
 </script>
 
 <template>

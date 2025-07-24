@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { user, bot } from '../data/character'
+import { user } from '../data/character'
 import type { Card, CardStatRealms, Character } from '../../types'
 import { matchSimulator } from '../../utils/matchSimulator'
 import { gsap } from 'gsap'
@@ -9,7 +9,6 @@ export const useStore = defineStore('store', () => {
   const realm = ref<keyof CardStatRealms>('base')
 
   const userStore = usePerson(user)
-  const botStore = usePerson(bot)
 
   const money = useMoney({
     removeDraggedCard: userStore.removeDraggedCard,
@@ -21,7 +20,6 @@ export const useStore = defineStore('store', () => {
 
   return {
     user: userStore,
-    bot: botStore,
     money
   }
 })

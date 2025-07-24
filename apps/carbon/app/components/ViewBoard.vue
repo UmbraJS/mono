@@ -14,11 +14,11 @@ const quest = useQuest()
       <slot name="overlay" />
     </ViewOverlay>
 
-    <ViewUnderlay v-for="event in quest.currentEvents" :key="event.id"
+    <ViewUnderlay v-if="quest.shop.current" :src="quest.shop.current.image" :visible="true" />
+
+    <ViewUnderlay v-for="event in quest.currentEvents.events" :key="event.id"
       :src="event.images.inside || event.images.default" :visible="quest.hoveredEvent?.id === event.id" />
 
-    <ViewUnderlay v-if="quest.shop.current" :src="quest.shop.current.images.inside || quest.shop.current.images.default"
-      :visible="true" />
   </div>
 
 </template>

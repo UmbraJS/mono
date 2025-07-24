@@ -1,19 +1,6 @@
 <template>
-  <div id="EmptyState">
-    <Icon name="carbon:shopping-cart" size="2rem" />
+  <ChipMessage class="base-warning">
+    <Icon name="carbon:shopping-cart" size="1.5rem" />
     <p>No shop available</p>
-  </div>
+  </ChipMessage>
 </template>
-
-<style>
-#EmptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-3);
-  color: var(--base-contrast);
-  background-color: var(--base-40);
-  border-radius: var(--radius);
-}
-</style>

@@ -1,14 +1,25 @@
-import type { Card } from '../../types'
+import type { Card, User } from '../../types'
 import { defineStore } from 'pinia'
-import { gauntletOfSigmar, glimmerCloak, viking, saintDenis } from '../data/cards'
+import { cards } from '../data/cards'
 import { createCardCostCalculator } from '../../utils/cardCost'
+import { bot } from '../data/character'
 
-// Types
-export interface EventEffect {
+export type EventEffect = ShopEffect | MatchEffect
+
+interface EffectBase {
   id: string
   image: string
   description: string
-  type: 'store' | 'item' | 'match'
+}
+
+export interface ShopEffect extends EffectBase {
+  amount: number
+  type: 'store' | 'item'
+}
+
+export interface MatchEffect extends EffectBase {
+  opponent: User
+  type: 'match'
 }
 
 interface EventImages {
@@ -67,22 +78,39 @@ export const useQuest = defineStore('quest', () => {
     return quest.value.acts[progress.value.act]
   })
 
-  const currentEvents = computed(() => {
-    return currentAct.value?.events[progress.value.day - 1]
+  const currentEvents = computed<EventDecision>(() => {
+    return currentAct.value?.events[progress.value.day - 1] as EventDecision
   })
 
   const hoveredEvent = ref<EventCard | null>(null)
+  const currentEvent = ref<EventCard | null>(null)
 
   // TODO: Implement current event logic - switching between gift, shop and match
-  const gift = useShop([gauntletOfSigmar])
-  const shop = useShop([
-    gauntletOfSigmar,
-    glimmerCloak,
-    saintDenis,
-    viking,
-  ])
+  const gift = useShop(cards)
+  const shop = useShop(cards)
+  const match = useMatch()
 
-  const setHoveredEvent = (event: EventCard | null) => {
+  watch(currentEvent, (newEvent) => {
+    const effect = newEvent?.effects[0]
+    if (!effect) return
+    setCurrentEffect(effect)
+  })
+
+  const setCurrentEffect = (effect: EventEffect) => {
+    if (effect.type === 'store') {
+      shop.setShop(effect)
+    } else if (effect.type === 'item') {
+      gift.setShop(effect)
+    } else if (effect.type === 'match') {
+      match.opponent.value = effect.opponent
+    }
+  }
+
+  function setCurrentEvent(event: EventCard | null) {
+    currentEvent.value = event
+  }
+
+  function setHoveredEvent(event: EventCard | null) {
     hoveredEvent.value = event
   }
 
@@ -100,22 +128,79 @@ export const useQuest = defineStore('quest', () => {
   return {
     shop,
     gift,
+    match,
     hoveredEvent,
     currentEvents,
     setHoveredEvent,
+    setCurrentEvent,
     passDay,
   }
 })
 
+
+function useMatch() {
+  const opponent = ref<User | null>(null)
+
+  function getMatch() {
+    if (!opponent.value) return null
+    const store = useStore()
+    const botStore = usePerson(opponent.value)
+
+    return useSimulationProvider({
+      userDeck: store.user.deck,
+      botDeck: botStore.deck.value,
+      userCharacters: store.user.characters,
+      botCharacters: botStore.characters.value
+    })
+  }
+
+  const match = computed(() => {
+    return getMatch()
+  })
+
+  return {
+    opponent,
+    match
+  }
+}
+
+
 /**
  * Shop composable for managing shop inventory and purchases
  */
-function useShop(cards: Card[]) {
+function useShop(bucket: Card[]) {
   const calculateCardCost = createCardCostCalculator('quest')
 
+  function getThreeCardsAtRandom(amount = 3): Card[] {
+    const shuffled = [...bucket].sort(() => 0.5 - Math.random())
+    return shuffled.slice(0, amount).map(calculateCardCost)
+  }
+
   // State
-  const current = ref<EventCard | null>(Ormond)
-  const inventory = ref<Card[] | null>(cards.map(calculateCardCost))
+  const current = ref<ShopEffect | null>(null)
+  const inventory = ref<Card[] | null>(null)
+
+  /**
+   * Resets the shop inventory to a new set of random cards
+   */
+  function resetInventory() {
+    if (!current.value) return
+    inventory.value = getThreeCardsAtRandom(current.value.amount)
+  }
+
+  /**
+   *  Sets the current event for the shop
+   * @param event
+   */
+  function setShop(effect: ShopEffect | null) {
+    current.value = effect
+    inventory.value = getThreeCardsAtRandom(effect?.amount)
+  }
+
+  function leaveShop() {
+    current.value = null
+    inventory.value = null
+  }
 
   /**
    * Removes a card from the shop inventory when purchased
@@ -132,30 +217,36 @@ function useShop(cards: Card[]) {
   return {
     current,
     inventory,
+    setShop,
+    leaveShop,
     removeFromShop,
+    resetInventory,
   }
 }
 
 // Event Effects
-const FreeItem: EventEffect = {
+const FreeItem: ShopEffect = {
   id: 'free-item',
   image: '/swamp.jpg',
   description: 'A free item',
   type: 'item',
+  amount: 1
 }
 
-const OpensStore: EventEffect = {
+const OpensStore: ShopEffect = {
   id: 'opens-store',
   image: '/swanKeep.png',
   description: 'Opens a store',
   type: 'store',
+  amount: 3
 }
 
-const Match: EventEffect = {
+const Match: MatchEffect = {
   id: 'match',
   image: '/match.jpg',
   description: 'Fight a battle',
   type: 'match',
+  opponent: bot
 }
 
 const Ormond: EventCard = {

@@ -51,7 +51,6 @@ export function usePerson(user: User) {
     return characters.value.reduce((total, character) => total + character.maxHealth, 0)
   })
 
-
   const remainingSlots = computed(() => {
     const deckSpaceUsed = deck.value.reduce((total, card) => total + card.size, 0)
     const inventorySpaceUsed = inventory.value.reduce((total, card) => total + card.size, 0)
