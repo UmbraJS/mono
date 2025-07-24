@@ -173,12 +173,16 @@ function useShop(bucket: Card[]) {
 
   function getThreeCardsAtRandom(amount = 3): Card[] {
     const shuffled = [...bucket].sort(() => 0.5 - Math.random())
-    return shuffled.slice(0, amount).map(calculateCardCost)
+    return shuffled.slice(0, amount)
   }
 
   // State
   const current = ref<ShopEffect | null>(null)
   const inventory = ref<Card[] | null>(null)
+
+  const calculatedInventory = computed(() => {
+    return inventory.value?.map(calculateCardCost) || []
+  })
 
   /**
    * Resets the shop inventory to a new set of random cards
@@ -216,7 +220,7 @@ function useShop(bucket: Card[]) {
 
   return {
     current,
-    inventory,
+    inventory: calculatedInventory,
     setShop,
     leaveShop,
     removeFromShop,
