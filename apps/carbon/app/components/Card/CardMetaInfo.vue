@@ -21,8 +21,6 @@ function getRarity(rarity: number): string {
     default: return 'Unknown'
   }
 }
-
-const view = useView()
 </script>
 
 <template>
@@ -33,20 +31,19 @@ const view = useView()
       </CardMetaWrapper>
 
       <CardMetaWrapper id="CardMeta">
-        <p class="caption">lvl {{ view.getCardStats(card).level }}</p>
+        <p class="caption">lvl {{ card.stats.level }}</p>
         <span class="separator">-</span>
         <p class="caption">{{ getRarity(card.info.rarity) }}</p>
       </CardMetaWrapper>
 
       <CardMetaWrapper id="CardTypes">
-        <ChipCardMeta class="base-accent" :text="view.getCardStats(card).slot" />
-        <ChipCardMeta v-for="type in view.getCardStats(card).tags" :key="type" class="base-yellow" :text="type" />
-        <ChipCardMeta v-for="type in view.getCardStats(card).aspects" :key="type.name" class="base-info"
-          :text="type.name" />
+        <ChipCardMeta class="base-accent" :text="card.stats.slot" />
+        <ChipCardMeta v-for="type in card.stats.tags" :key="type" class="base-yellow" :text="type" />
+        <ChipCardMeta v-for="type in card.stats.aspects" :key="type.name" class="base-info" :text="type.name" />
       </CardMetaWrapper>
 
       <CardMetaWrapper id="CardEffects">
-        <ChipCardEffect v-for="type in view.getCardStats(card).effects" :key="type.name" :text="type.description" />
+        <ChipCardEffect v-for="type in card.stats.effects" :key="type.name" :text="type.description" />
       </CardMetaWrapper>
     </div>
 

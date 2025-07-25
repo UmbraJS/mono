@@ -112,12 +112,7 @@ export interface ReactiveCard extends Card {
 
 export type Owner = 'player' | 'opponent';
 
-export interface PreSimulationCard {
-  card: Card;
-  cardStats: CardStats;
-}
-
-export interface SimCard extends PreSimulationCard {
+export interface SimCard extends Card {
   owner: {
     user: Owner;
     characterIndex: number;
@@ -129,18 +124,12 @@ export interface SimCard extends PreSimulationCard {
   }
 }
 
-export interface CardStatRealms {
-  base: CardStats
-  quest?: CardStats
-  campaign?: CardStats
-}
-
 export interface Card {
   id: string
   index: number
   size: number
   info: CardInfo
-  stats: CardStatRealms
+  stats: CardStats
 }
 
 export interface CardInfo {

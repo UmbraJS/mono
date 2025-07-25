@@ -1,18 +1,16 @@
 import { defineStore } from 'pinia'
 import { user } from '../data/character'
-import type { Card, CardStatRealms, Character } from '../../types'
+import type { Card, Character } from '../../types'
 import { matchSimulator } from '../../utils/matchSimulator'
 import { gsap } from 'gsap'
 import { usePerson } from '../composables/usePerson'
 
 export const useStore = defineStore('store', () => {
-  const realm = ref<keyof CardStatRealms>('base')
 
   const userStore = usePerson(user)
 
   const money = useMoney({
     removeDraggedCard: userStore.removeDraggedCard,
-    realm: realm.value,
     inventory: userStore.inventory,
     deck: userStore.deck,
     remainingSlots: userStore.remainingSlots,
@@ -29,7 +27,6 @@ function useMoney(props: {
     originBoard: 'deck' | 'inventory',
     cardIndex: number
   }) => Card | undefined,
-  realm: keyof CardStatRealms,
   inventory: Ref<Card[]>,
   deck: Ref<Card[]>,
   remainingSlots: Ref<{
@@ -62,7 +59,7 @@ function useMoney(props: {
 
   function getTotalValue(cards: Card[]) {
     return cards.reduce((acc, card) => {
-      const cardStats = card.stats[props.realm]
+      const cardStats = card.stats
       return acc + (cardStats ? cardStats.cost : 0)
     }, 0)
   }
@@ -84,7 +81,7 @@ function useMoney(props: {
       cardIndex: number
     }) => {
       const card = props.removeDraggedCard(passedProps)
-      const cardStats = card?.stats[props.realm]
+      const cardStats = card?.stats
       if (!cardStats) return
       soldCards.value.push(card)
       money.value.value += cardStats.cost
@@ -126,13 +123,6 @@ export function useSimulation(props: {
 
 export const useView = defineStore('view', () => {
   const view = ref<null | 'inventory'>(null)
-  const realm = ref<keyof CardStatRealms>('quest')
-
-  function getCardStats(card: Card) {
-    const cardStats = card.stats[realm.value]
-    if (!cardStats) return card.stats.base
-    return cardStats
-  }
 
   function setView(newView: 'inventory' | null) {
     view.value = newView
@@ -140,8 +130,6 @@ export const useView = defineStore('view', () => {
 
   return {
     view,
-    realm,
-    getCardStats,
     setView,
   }
 })

@@ -5,7 +5,6 @@ const props = defineProps<{
   card: Card
 }>()
 
-const view = useView()
 const store = useStore()
 
 function handleBuyCard() {
@@ -13,7 +12,7 @@ function handleBuyCard() {
 }
 
 const ariaLabel = computed(() => {
-  return `Buy ${props.card.info.name} for ${view.getCardStats(props.card).cost} coins`
+  return `Buy ${props.card.info.name} for ${props.card.stats.cost} coins`
 })
 
 const purchaseValidity = computed(() => {
@@ -26,7 +25,7 @@ const purchaseValidity = computed(() => {
   <PickButton :aria-label="ariaLabel" :color="purchaseValidity.valid ? 'default' : 'warning'" @click="handleBuyCard">
     <ButtonSection>
       <Icon name="carbon:purchase" size="1rem" />
-      <p class="caption">{{ view.getCardStats(card).cost }}</p>
+      <p class="caption">{{ card.stats.cost }}</p>
     </ButtonSection>
     <ButtonSection>
       <Icon name="carbon:pan-horizontal" size="1rem" />

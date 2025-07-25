@@ -4,19 +4,17 @@ import type { Card } from '../../../types'
 import CardModalDetails from './CardModalDetails.vue'
 import type { BashRecords } from '~/composables/useBashRecords'
 
-const props = defineProps<{
+defineProps<{
   card: Card;
   bashRecords?: BashRecords
 }>()
 
-const view = useView()
-const stats = computed(() => view.getCardStats(props.card))
 </script>
 
 <template>
   <div class="cardMeta">
     <DialogTitle>
-      <span>lvl {{ stats.level }} - </span>{{ card.info.name }}
+      <span>lvl {{ card.stats.level }} - </span>{{ card.info.name }}
     </DialogTitle>
 
     <Tabs id="ModalBashLogTabs" :tabs="[

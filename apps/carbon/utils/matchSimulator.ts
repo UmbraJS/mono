@@ -21,19 +21,17 @@ export type SpaceOutput = ReturnType<typeof spaceStore>
 
 export function matchSimulator(props: SpaceTimeProps) {
   const space = simulateSpace(props);
-  const view = useView();
 
   const time = simulateTime({
-    realm: view.realm,
     opponentDeck: prepareSimDeck(props.opponentDeck),
     playerDeck: prepareSimDeck(props.playerDeck),
     onTrigger: ({ card, nextCooldownEnd }) => {
       const isPlayer = card.owner.user === 'player';
       const target = isPlayer ? space.player : space.opponent;
-      if (!card.cardStats.bash) return;
+      if (!card.stats.bash) return;
       target.bash({
-        bash: card.cardStats.bash,
-        index: card.card.index,
+        bash: card.stats.bash,
+        index: card.index,
         timestamp: nextCooldownEnd,
         card: card,
       })
@@ -52,8 +50,6 @@ export function matchSimulator(props: SpaceTimeProps) {
 }
 
 export function performanceSimulator(props: Decks) {
-  const view = useView();
-
   const player = spaceStore({
     maxHealth: 3000,
     onAttack: (attackEntry) => opponent.hurt(attackEntry)
@@ -74,16 +70,15 @@ export function performanceSimulator(props: Decks) {
   const space = simulateSpaceWrapper({ player, opponent })
 
   const time = simulateTime({
-    realm: view.realm,
     opponentDeck: prepareSimDeck(props.opponentDeck),
     playerDeck: prepareSimDeck(props.playerDeck),
     onTrigger: ({ card, nextCooldownEnd }) => {
       const isPlayer = card.owner.user === 'player';
       const target = isPlayer ? space.player : space.opponent;
-      if (!card.cardStats.bash) return;
+      if (!card.stats.bash) return;
       target.bash({
-        bash: card.cardStats.bash,
-        index: card.card.index,
+        bash: card.stats.bash,
+        index: card.index,
         timestamp: nextCooldownEnd,
         card: card,
       })
@@ -139,7 +134,7 @@ function simulateSpaceWrapper(props: {
 function prepareSimDeck(deck: Card[]): PreSimulationCard[] {
   return deck.map((card: Card) => ({
     card: card,
-    cardStats: card.stats.base,
+    cardStats: card.stats,
   }));
 }
 

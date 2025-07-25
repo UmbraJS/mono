@@ -1,6 +1,6 @@
 import { generateCooldownEvent } from './time/generateCooldownEvent';
 import type { CooldownEvent } from './time/generateCooldownEvent';
-import type { SimCard, PreSimulationCard, TimeEffect, Card } from '../types/card'
+import type { SimCard, TimeEffect, Card } from '../types/card'
 
 const MAX_SIMULATION_ITERATIONS = 300;
 
@@ -12,11 +12,10 @@ interface ProcessedCard extends CooldownEvent {
 }
 
 interface SimulateCooldownTimelineArgs {
-  playerDeck: PreSimulationCard[];
-  opponentDeck: PreSimulationCard[];
+  playerDeck: Card[];
+  opponentDeck: Card[];
   onTrigger: (triggeredCard: ProcessedCard) => void;
   matchCondition: (nextCooldownEnd: number) => boolean;
-  realm: keyof Card['stats'];
 }
 
 export function simulateTime({
@@ -24,7 +23,6 @@ export function simulateTime({
   playerDeck,
   opponentDeck,
   matchCondition,
-  realm
 }: SimulateCooldownTimelineArgs) {
   const playerSimCards = initializeSimCards(playerDeck, 'player');
   const opponentSimCards = initializeSimCards(opponentDeck, 'opponent');
@@ -68,7 +66,7 @@ export function simulateTime({
     }
 
     processedCards.nextCardsToFinish.map(c => {
-      const actionCount = c.card.card.stats[realm]?.bash?.actionCount || 0;
+      const actionCount = c.card.stats.bash?.actionCount || 0;
 
       for (let i = 0; i < actionCount; i++) {
         onTrigger(c);
@@ -103,12 +101,12 @@ export function simulateTime({
       // Store data on every card modified by this next card
       for (const modifier of nextCardToFinish.allModifiers) {
         modifier.playerModifiers.forEach(mod => {
-          const targetCard = playerSimCards.find(c => c.card.index === mod.index);
+          const targetCard = playerSimCards.find(c => c.index === mod.index);
           if (!targetCard) return;
           targetCard.simulation.modifiers.push(mod);
         })
         modifier.opponentModifiers.forEach(mod => {
-          const targetCard = opponentSimCards.find(c => c.card.index === mod.index);
+          const targetCard = opponentSimCards.find(c => c.index === mod.index);
           if (!targetCard) return;
           targetCard.simulation.modifiers.push(mod);
         })
@@ -130,7 +128,7 @@ export function simulateTime({
         const nextCooldownEnd = getTotalLifetime(cooldownEvent.segmentedChunks);
 
         // A side effect is an effect of another card which is triggered by this card
-        const sideEffects = cards.filter(c => c.cardStats.effects.some(effect => {
+        const sideEffects = cards.filter(c => c.stats.effects.some(effect => {
           const isPlayer = card.owner.user === 'player';
           const comparisonCardIsPlayer = c.owner.user === 'player';
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
@@ -145,12 +143,12 @@ export function simulateTime({
           const isPlayerTriggerUndefined = playerTriggerIndexes === undefined;
 
           return cardsAreOnTheSameSide
-            ? isPlayerTriggerUndefined ? c.card.index === card.card.index : playerTriggerIndexes.includes(card.card.index)
-            : trigger.opponentTriggerIndexes?.includes(card.card.index);
+            ? isPlayerTriggerUndefined ? c.index === card.index : playerTriggerIndexes.includes(card.index)
+            : trigger.opponentTriggerIndexes?.includes(card.index);
         }))
 
         // Get modifiers for next events
-        const allModifiers = sideEffects.flatMap(c => c.cardStats.effects.map(e => ({
+        const allModifiers = sideEffects.flatMap(c => c.stats.effects.map(e => ({
           effect: e,
           sourceCard: c,
         }))).map(({ effect, sourceCard }) => {
@@ -198,7 +196,7 @@ export function simulateTime({
     }
   }
 
-  function initializeSimCards(deck: PreSimulationCard[], owner: 'player' | 'opponent'): SimCard[] {
+  function initializeSimCards(deck: Card[], owner: 'player' | 'opponent'): SimCard[] {
     return deck.map((thisCard) => {
       return {
         ...thisCard,
@@ -237,7 +235,7 @@ function getModifiers({
       type: modifier.timeType,
       duration: modifier.value,
       timestamp: timestamp,
-      sourceIndex: sourceCard.card.index,
+      sourceIndex: sourceCard.index,
       index: index,
     }
   }

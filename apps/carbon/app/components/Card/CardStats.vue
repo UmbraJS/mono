@@ -21,8 +21,6 @@ defineProps<{
       </p>
     </div>
 
-    <!-- <p class="caption">{{ view.getCardStats(card).cost }}</p> -->
-
     <div v-if="cardStats.bash?.actionCount && cardStats.bash.actionCount > 1" class="PillChip border">
       <p class="caption">
         <strong>x{{ cardStats.bash.actionCount }}</strong>

@@ -1,7 +1,7 @@
 import type { Card, User } from '../../types'
 import { defineStore } from 'pinia'
 import { cards } from '../data/cards'
-import { createCardCostCalculator } from '../../utils/cardCost'
+import { getCardCost } from '../../utils/cardCost'
 import { bot } from '../data/character'
 
 export type EventEffect = ShopEffect | MatchEffect
@@ -169,8 +169,6 @@ function useMatch() {
  * Shop composable for managing shop inventory and purchases
  */
 function useShop(bucket: Card[]) {
-  const calculateCardCost = createCardCostCalculator('quest')
-
   function getThreeCardsAtRandom(amount = 3): Card[] {
     const shuffled = [...bucket].sort(() => 0.5 - Math.random())
     return shuffled.slice(0, amount)
@@ -181,7 +179,7 @@ function useShop(bucket: Card[]) {
   const inventory = ref<Card[] | null>(null)
 
   const calculatedInventory = computed(() => {
-    return inventory.value?.map(calculateCardCost) || []
+    return inventory.value?.map(getCardCost) || []
   })
 
   /**

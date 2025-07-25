@@ -2,18 +2,15 @@
 import PlayerCard from '~/components/Card/CardHeader.vue'
 import CardBoard from '~/components/CardBoard.vue'
 import { useStore } from '~/stores/useStore'
-import { createDeckCostCalculator } from '../../utils/cardCost'
+import { getDeckCost } from '../../utils/cardCost'
 const store = useStore()
-const view = useView()
-
-const deckCostCalculator = createDeckCostCalculator(view.realm)
 
 const deckStats = computed(() => {
   const deck = store.user.deck
-  const totalGenericCost = deck.reduce((sum, card) => sum + card.stats.base.cost, 0)
+  const totalGenericCost = deck.reduce((sum, card) => sum + card.stats.cost, 0)
   const averageCost = Math.floor(totalGenericCost / deck.length)
 
-  const synergetic = deckCostCalculator(deck)
+  const synergetic = getDeckCost(deck)
   const deckCost = synergetic.totalCost === totalGenericCost
     ? synergetic.totalCost.toString()
     : `${synergetic.totalCost} (${totalGenericCost})`

@@ -109,15 +109,13 @@ export const fields: Card[] = [
       },
     },
     stats: {
-      base: {
-        level: 1,
-        effects: [],
-        tags: [],
-        aspects: [aspects.water],
-        slot: 'field',
-        cost: 10,
-        record: {},
-      }
+      level: 1,
+      effects: [],
+      tags: [],
+      aspects: [aspects.water],
+      slot: 'field',
+      cost: 10,
+      record: {},
     },
   },
   {
@@ -135,15 +133,13 @@ export const fields: Card[] = [
       },
     },
     stats: {
-      base: {
-        level: 1,
-        effects: [],
-        tags: [],
-        aspects: [aspects.light],
-        slot: 'field',
-        cost: 10,
-        record: {},
-      }
+      level: 1,
+      effects: [],
+      tags: [],
+      aspects: [aspects.light],
+      slot: 'field',
+      cost: 10,
+      record: {},
     },
   },
   {
@@ -161,15 +157,13 @@ export const fields: Card[] = [
       },
     },
     stats: {
-      base: {
-        level: 1,
-        effects: [],
-        tags: [],
-        aspects: [aspects.shadow],
-        slot: 'field',
-        cost: 10,
-        record: {},
-      }
+      level: 1,
+      effects: [],
+      tags: [],
+      aspects: [aspects.shadow],
+      slot: 'field',
+      cost: 10,
+      record: {},
     }
   },
   {
@@ -187,15 +181,13 @@ export const fields: Card[] = [
       },
     },
     stats: {
-      base: {
-        level: 1,
-        effects: [],
-        tags: [],
-        aspects: [aspects.wood],
-        slot: 'field',
-        cost: 10,
-        record: {},
-      }
+      level: 1,
+      effects: [],
+      tags: [],
+      aspects: [aspects.wood],
+      slot: 'field',
+      cost: 10,
+      record: {},
     },
   }
 ]
@@ -215,16 +207,14 @@ const skeletonSoldier: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 2, shield: 5, cooldown: 2, actionCount: 1 },
-      slot: 'army',
-      effects: [],
-      tags: ['guard', 'undead'],
-      aspects: [aspects.shadow],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 2, shield: 5, cooldown: 2, actionCount: 1 },
+    slot: 'army',
+    effects: [],
+    tags: ['guard', 'undead'],
+    aspects: [aspects.shadow],
+    record: {},
   },
 }
 
@@ -243,16 +233,14 @@ const skeletonArcher: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 7, shield: 3, cooldown: 3, actionCount: 1 },
-      effects: [],
-      slot: 'army',
-      tags: ['guard', 'undead'],
-      aspects: [aspects.shadow],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 7, shield: 3, cooldown: 3, actionCount: 1 },
+    effects: [],
+    slot: 'army',
+    tags: ['guard', 'undead'],
+    aspects: [aspects.shadow],
+    record: {},
   },
 }
 
@@ -271,16 +259,14 @@ const archer: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 7, cooldown: 2, actionCount: 1 },
-      slot: 'army',
-      effects: [],
-      tags: ['guard'],
-      aspects: [aspects.wood],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 7, cooldown: 2, actionCount: 1 },
+    slot: 'army',
+    effects: [],
+    tags: ['guard'],
+    aspects: [aspects.wood],
+    record: {},
   },
 }
 
@@ -300,16 +286,14 @@ const halberdier: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 10, shield: 10, cooldown: 5, actionCount: 1 },
-      effects: [hasteYourSibling],
-      slot: 'army',
-      tags: ['guard'],
-      aspects: [aspects.metal],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 10, shield: 10, cooldown: 5, actionCount: 1 },
+    effects: [hasteYourSibling],
+    slot: 'army',
+    tags: ['guard'],
+    aspects: [aspects.metal],
+    record: {},
   },
 }
 
@@ -328,16 +312,14 @@ const doomCloak: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 20, shield: 20, cooldown: 10, actionCount: 1 },
-      effects: [],
-      slot: 'cloak',
-      tags: ['guard'],
-      aspects: [aspects.shadow],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 20, shield: 20, cooldown: 10, actionCount: 1 },
+    effects: [],
+    slot: 'cloak',
+    tags: ['guard'],
+    aspects: [aspects.shadow],
+    record: {},
   },
 }
 
@@ -356,16 +338,14 @@ const skeletonHealer: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { heal: 10, cooldown: 3, actionCount: 1 },
-      slot: 'army',
-      effects: [],
-      tags: ['guard', 'undead'],
-      aspects: [aspects.shadow],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { heal: 10, cooldown: 3, actionCount: 1 },
+    slot: 'army',
+    effects: [],
+    tags: ['guard', 'undead'],
+    aspects: [aspects.shadow],
+    record: {},
   },
 }
 
@@ -384,16 +364,14 @@ const skeletonHorseman: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 7, shield: 5, cooldown: 3.5, actionCount: 1 },
-      slot: 'army',
-      effects: [],
-      tags: ['guard', 'undead'],
-      aspects: [aspects.shadow],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 7, shield: 5, cooldown: 3.5, actionCount: 1 },
+    slot: 'army',
+    effects: [],
+    tags: ['guard', 'undead'],
+    aspects: [aspects.shadow],
+    record: {},
   },
 }
 
@@ -413,16 +391,14 @@ export const gauntletOfSigmar: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 20, shield: 10, actionCount: 1, cooldown: 5 },
-      slot: 'hands',
-      effects: [hasteYourSibling],
-      tags: ['weapon'],
-      aspects: [aspects.metal],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 20, shield: 10, actionCount: 1, cooldown: 5 },
+    slot: 'hands',
+    effects: [hasteYourSibling],
+    tags: ['weapon'],
+    aspects: [aspects.metal],
+    record: {},
   },
 }
 
@@ -451,16 +427,14 @@ export const glimmerCloak: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 100,
-      bash: { attack: 10, banter: 10, heal: 10, shield: 10, cooldown: 3, actionCount: 1 },
-      slot: 'cloak',
-      effects: [],
-      tags: ['artifact'],
-      aspects: [aspects.light],
-      record: {},
-    },
+    level: 1,
+    cost: 100,
+    bash: { attack: 10, banter: 10, heal: 10, shield: 10, cooldown: 3, actionCount: 1 },
+    slot: 'cloak',
+    effects: [],
+    tags: ['artifact'],
+    aspects: [aspects.light],
+    record: {},
   },
 }
 
@@ -479,16 +453,14 @@ export const viking: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 2, shield: 2, actionCount: 2, cooldown: 2 },
-      slot: 'army',
-      effects: [],
-      tags: ['guard'],
-      aspects: [aspects.metal],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 2, shield: 2, actionCount: 2, cooldown: 2 },
+    slot: 'army',
+    effects: [],
+    tags: ['guard'],
+    aspects: [aspects.metal],
+    record: {},
   },
 }
 
@@ -507,16 +479,14 @@ const thunderCannon: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 20, actionCount: 1, cooldown: 5 },
-      slot: 'building',
-      effects: [],
-      tags: ['weapon'],
-      aspects: [aspects.charge],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 20, actionCount: 1, cooldown: 5 },
+    slot: 'building',
+    effects: [],
+    tags: ['weapon'],
+    aspects: [aspects.charge],
+    record: {},
   },
 }
 
@@ -535,16 +505,14 @@ const treasure: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { cooldown: 5, actionCount: 1 },
-      slot: 'utility',
-      effects: [],
-      tags: ['artifact'],
-      aspects: [aspects.metal],
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { cooldown: 5, actionCount: 1 },
+    slot: 'utility',
+    effects: [],
+    tags: ['artifact'],
+    aspects: [aspects.metal],
+    record: {},
   },
 }
 
@@ -573,16 +541,14 @@ export const saintDenis: Card = {
     },
   },
   stats: {
-    base: {
-      level: 1,
-      cost: 10,
-      bash: { attack: 0, shield: 50, cooldown: 4, actionCount: 1 },
-      effects: [],
-      tags: ['saint'],
-      aspects: [aspects.light],
-      slot: 'character',
-      record: {},
-    },
+    level: 1,
+    cost: 10,
+    bash: { attack: 0, shield: 50, cooldown: 4, actionCount: 1 },
+    effects: [],
+    tags: ['saint'],
+    aspects: [aspects.light],
+    slot: 'character',
+    record: {},
   },
 }
 

@@ -26,16 +26,14 @@ const recordedData = computed(() => {
   }))
 })
 
-const view = useView()
-const cardStats = view.getCardStats(props.card)
 </script>
 
 <template>
   <ScrollArea class="CardModalRecords">
     <div v-if="bashRecords" class="bashRecords">
-      <div v-if="cardStats.bash?.banter" class="chip base-yellow">
+      <div v-if="props.card.stats.bash?.banter" class="chip base-yellow">
         <Icon icon="mdi:account-injury-outline" />
-        Bash: {{ cardStats.bash.banter }}
+        Bash: {{ props.card.stats.bash.banter }}
       </div>
       <div v-if="bashRecords.attackRecord.value?.total" class="chip base-warning">
         <Icon icon="mdi:account-injury-outline" />

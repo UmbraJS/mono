@@ -1,6 +1,6 @@
 import type { User, Card, Character } from '../../types'
 import type { CardSegment, DraggedCard, SpaceBoards } from '../../types/cardDrag'
-import { createCardCostCalculator } from '../../utils/cardCost'
+import { getCardCost } from '../../utils/cardCost'
 
 import { getInsertedCard } from '../../utils/cardSwap/insertCard'
 
@@ -34,13 +34,8 @@ interface InsertCardResult {
  * Provides reactive state management and card manipulation methods
  */
 export function usePerson(user: User) {
-  const view = useView()
-
-  // Create a card cost calculator for the current realm
-  const calculateCardCost = createCardCostCalculator(view.realm)
-
-  const deck = ref<Card[]>(user.deck.map(card => calculateCardCost(card)))
-  const inventory = ref<Card[]>(user.inventory.map(card => calculateCardCost(card)))
+  const deck = ref<Card[]>(user.deck.map(card => getCardCost(card)))
+  const inventory = ref<Card[]>(user.inventory.map(card => getCardCost(card)))
   const maxSlots = ref(12)
 
   const characters = ref<Character[]>(user.characters)

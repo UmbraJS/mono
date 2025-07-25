@@ -28,7 +28,6 @@ export function useCardPurchase({
 }) {
   const store = useStore()
   const quest = useQuest()
-  const view = useView()
   const audio = useAudio()
 
   // Reactive state
@@ -51,7 +50,7 @@ export function useCardPurchase({
     const pick = validatePick(card)
     if (!pick.valid) return pick
 
-    const cardCost = view.getCardStats(card).cost
+    const cardCost = card.stats.cost
 
     // Check funds
     if (availableFunds.value.value < cardCost) {
@@ -139,7 +138,7 @@ export function useCardPurchase({
     quest.shop.removeFromShop(card)
     audio.playCoinSound()
     store.money.setMoney(
-      store.money.value - view.getCardStats(card).cost
+      store.money.value - card.stats.cost
     )
 
     return purchaseError.value

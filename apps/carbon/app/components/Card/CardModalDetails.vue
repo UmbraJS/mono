@@ -9,8 +9,7 @@ const props = defineProps<{
   card: Card;
 }>()
 
-const view = useView()
-const stats = view.getCardStats(props.card)
+const stats = props.card.stats
 const bash = stats.bash
 </script>
 

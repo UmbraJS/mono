@@ -5,7 +5,6 @@ const props = defineProps<{
   card: Card
 }>()
 
-const view = useView()
 const store = useStore()
 
 function giftCard() {
@@ -13,7 +12,7 @@ function giftCard() {
 }
 
 const ariaLabel = computed(() => {
-  return `Receive ${props.card.info.name} worth ${view.getCardStats(props.card).cost} coins`
+  return `Receive ${props.card.info.name} worth ${props.card.stats.cost} coins`
 })
 </script>
 
