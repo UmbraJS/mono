@@ -132,6 +132,7 @@ export function useCardPurchase({
 
     if (!result.success) {
       purchaseError.value = result.error || 'Purchase failed'
+      return purchaseError.value
     }
 
     // Complete the purchase
@@ -151,6 +152,7 @@ export function useCardPurchase({
 
     if (!result.success) {
       purchaseError.value = result.error || 'Purchase failed'
+      return purchaseError.value
     }
 
     quest.gift.removeFromShop(card)

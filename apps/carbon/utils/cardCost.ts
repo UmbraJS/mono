@@ -29,48 +29,37 @@ const DEFAULT_STAT_VALUE = 0
  * const deckCost = getDeckCost(myDeck, 'base')
  */
 export function getCardCost(card: Card, realm: keyof Card['stats']): Card {
-  try {
-    const sim = performanceSimulator({
-      opponentDeck: [],
-      playerDeck: [card],
-    })
+  const sim = performanceSimulator({
+    opponentDeck: [],
+    playerDeck: [card],
+  })
 
-    const attackValue = Math.abs(
-      sim.space.opponent.healthLog[sim.space.opponent.healthLog.length - 1]?.newValue || DEFAULT_STAT_VALUE
-    )
-    const shieldValue = Math.abs(
-      sim.space.player.shieldLog[sim.space.player.shieldLog.length - 1]?.newValue || DEFAULT_STAT_VALUE
-    )
-    const healthValue = Math.abs(
-      sim.space.player.healthLog[sim.space.player.healthLog.length - 1]?.newValue || DEFAULT_STAT_VALUE
-    )
+  const attackValue = Math.abs(
+    sim.space.opponent.healthLog[sim.space.opponent.healthLog.length - 1]?.newValue || DEFAULT_STAT_VALUE
+  )
+  const shieldValue = Math.abs(
+    sim.space.player.shieldLog[sim.space.player.shieldLog.length - 1]?.newValue || DEFAULT_STAT_VALUE
+  )
+  const healthValue = Math.abs(
+    sim.space.player.healthLog[sim.space.player.healthLog.length - 1]?.newValue || DEFAULT_STAT_VALUE
+  )
 
-    const cardCost = Math.max(MINIMUM_CARD_COST, attackValue + shieldValue + healthValue)
+  const totalValue = attackValue + shieldValue + healthValue
 
-    return {
-      ...card,
-      stats: {
-        ...card.stats,
-        [realm]: {
-          ...card.stats[realm],
-          cost: cardCost,
-        },
+
+  const cardCost = Math.max(MINIMUM_CARD_COST, totalValue)
+
+  return {
+    ...card,
+    stats: {
+      ...card.stats,
+      [realm]: {
+        ...card.stats[realm],
+        cost: cardCost,
       },
-    }
-  } catch (error) {
-    console.error('Error calculating card cost:', error)
-    // Return card with minimum cost as fallback
-    return {
-      ...card,
-      stats: {
-        ...card.stats,
-        [realm]: {
-          ...card.stats[realm],
-          cost: MINIMUM_CARD_COST,
-        },
-      },
-    }
+    },
   }
+
 }
 
 /**
@@ -83,11 +72,11 @@ export function getCardCost(card: Card, realm: keyof Card['stats']): Card {
  *
  * // Calculate deck cost for a specific realm
  * const deckCost = getDeckCost(myDeck, 'base')
- * console.log(`Total deck cost: ${deckCost.totalCost}`)
+ * console.log(`Total deck cost: ${ deckCost.totalCost }`)
  *
  * // Access individual card costs with synergy
  * deckCost.cardsWithCost.forEach(card => {
- *   console.log(`${card.info.name}: ${card.stats[realm].cost}`)
+ *   console.log(`${ card.info.name }: ${ card.stats[realm].cost }`)
  * })
  */
 export function getDeckCost(deck: Card[], realm: keyof Card['stats']): {

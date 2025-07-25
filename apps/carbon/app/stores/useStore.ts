@@ -126,7 +126,7 @@ export function useSimulation(props: {
 
 export const useView = defineStore('view', () => {
   const view = ref<null | 'inventory'>(null)
-  const realm = ref<keyof CardStatRealms>('base')
+  const realm = ref<keyof CardStatRealms>('quest')
 
   function getCardStats(card: Card) {
     const cardStats = card.stats[realm.value]

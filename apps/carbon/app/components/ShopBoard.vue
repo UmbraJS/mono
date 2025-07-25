@@ -3,6 +3,9 @@ import PurchaseButton from './PurchaseButton.vue'
 import CardHeader from '~/components/Card/CardHeader.vue'
 
 const quest = useQuest()
+
+console.log('Card', quest.shop.inventory)
+
 </script>
 
 <template>

@@ -22,15 +22,8 @@ function getMaxHealth(): number {
   <section class="character" :class="{ reverse }">
     <header id="Party">
       <div v-for="character in characters" :key="character.id" class="character-avatar">
-        <img v-if="character.image" :src="character.image.default" alt="Character Image">
+        <NuxtImg v-if="character.image" :src="character.image.default" alt="Character Image" placeholder />
       </div>
-      <div v-for="character in characters" :key="character.id" class="character-avatar">
-        <img v-if="character.image" :src="character.image.default" alt="Character Image">
-      </div>
-      <div v-for="character in characters" :key="character.id" class="character-avatar">
-        <img v-if="character.image" :src="character.image.default" alt="Character Image">
-      </div>
-
       <div class="healthImpact">
         <FrostLayer :reversed="reverse" :health="health" :max-health="maxHealth" />
       </div>
@@ -67,7 +60,9 @@ function getMaxHealth(): number {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-1);
   grid-area: avatar;
+  padding: var(--space-quark);
 }
 
 .character {
