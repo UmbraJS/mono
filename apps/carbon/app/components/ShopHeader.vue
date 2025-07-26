@@ -3,6 +3,7 @@ import { Button } from '@nobel/core'
 const quest = useQuest()
 
 function exitShop() {
+  quest.passDay()
   navigateTo('/quest')
 }
 </script>

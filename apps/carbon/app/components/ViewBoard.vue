@@ -9,6 +9,7 @@ const quest = useQuest()
     <div id="ActiveBoard" :class="{ blured: overlay }">
       <slot />
     </div>
+    <DayCompass />
 
     <ViewOverlay :hidden="!overlay" stack-layer="top">
       <slot name="overlay" />

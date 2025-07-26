@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import PlayerCard from '~/components/Card/CardHeader.vue'
 import CardBoard from '~/components/CardBoard.vue'
 import { useStore } from '~/stores/useStore'
 import { getDeckCost } from '../../utils/cardCost'
 const store = useStore()
 
 const deckStats = computed(() => {
-  const deck = store.user.deck
+  const deck = store.user?.deck ?? []
+  if (deck.length === 0) {
+    return {
+      average: 0,
+      cost: '0',
+      count: 0,
+      maxSlots: store.user?.maxSlots ?? 0
+    }
+  }
+
   const totalGenericCost = deck.reduce((sum, card) => sum + card.stats.cost, 0)
   const averageCost = Math.floor(totalGenericCost / deck.length)
 
@@ -19,7 +27,7 @@ const deckStats = computed(() => {
     average: averageCost,
     cost: deckCost,
     count: deck.length,
-    maxSlots: store.user.maxSlots
+    maxSlots: store.user?.maxSlots ?? 0
   }
 })
 </script>
@@ -27,7 +35,9 @@ const deckStats = computed(() => {
 <template>
   <div class="MatchBoard">
     <CardBoard board="inventory" :max-slots="12">
-      <PlayerCard v-for="card in store.user.inventory" :key="card.id" :card="card" board="inventory" />
+      <CardModal v-for="card in store.user?.inventory ?? []" :key="card.id" :card="card">
+        <CardHeader :card="card" board="inventory" />
+      </CardModal>
     </CardBoard>
 
     <div id="DeckPerformance">
@@ -36,8 +46,10 @@ const deckStats = computed(() => {
       <ChipCardMeta class="caption" :text="`Cards: ${deckStats.count}/${deckStats.maxSlots}`" />
     </div>
 
-    <CardBoard board="deck" :max-slots="store.user.maxSlots">
-      <PlayerCard v-for="card in store.user.deck" :key="card.id" :card="card" board="deck" />
+    <CardBoard board="deck" :max-slots="store.user?.maxSlots ?? 0">
+      <CardModal v-for="card in store.user?.deck ?? []" :key="card.id" :card="card">
+        <CardHeader :card="card" board="deck" />
+      </CardModal>
     </CardBoard>
   </div>
 </template>

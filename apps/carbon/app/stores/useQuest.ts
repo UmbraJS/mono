@@ -85,7 +85,6 @@ export const useQuest = defineStore('quest', () => {
   const hoveredEvent = ref<EventCard | null>(null)
   const currentEvent = ref<EventCard | null>(null)
 
-  // TODO: Implement current event logic - switching between gift, shop and match
   const gift = useShop(cards)
   const shop = useShop(cards)
   const match = useMatch()
@@ -114,7 +113,9 @@ export const useQuest = defineStore('quest', () => {
     hoveredEvent.value = event
   }
 
+  const store = useStore()
   function passDay() {
+    store.money.passDay()
     const daysInAct = quest.value.acts[progress.value.act]?.events.length
     if (!daysInAct) return
     if (progress.value.day < daysInAct) {
@@ -126,9 +127,11 @@ export const useQuest = defineStore('quest', () => {
   }
 
   return {
+    quest,
     shop,
     gift,
     match,
+    progress,
     hoveredEvent,
     currentEvents,
     setHoveredEvent,
@@ -245,7 +248,7 @@ const OpensStore: ShopEffect = {
 
 const Match: MatchEffect = {
   id: 'match',
-  image: '/match.jpg',
+  image: '/dog.png',
   description: 'Fight a battle',
   type: 'match',
   opponent: bot

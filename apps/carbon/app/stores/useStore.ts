@@ -67,6 +67,9 @@ function useMoney(props: {
   return {
     value: computed(() => money.value.value),
     income: computed(() => money.value.income),
+    passDay: () => {
+      money.value.value += money.value.income
+    },
     inventoryValue: computed(() => getTotalValue(props.inventory.value)),
     deckValue: computed(() => getTotalValue(props.deck.value)),
     totalValue: computed(() => getTotalValue([...props.inventory.value, ...props.deck.value])),

@@ -1,7 +1,6 @@
-import type { Card } from '../types/card'
 import { simulateTime } from './simulateTime'
 import { spaceStore } from './space/spaceStore';
-import type { User, PreSimulationCard } from '../types'
+import type { User } from '../types'
 
 interface SpaceTimeProps extends Decks, Characters {
   matchDuration?: number; // TODO: this is not used currently
@@ -23,8 +22,8 @@ export function matchSimulator(props: SpaceTimeProps) {
   const space = simulateSpace(props);
 
   const time = simulateTime({
-    opponentDeck: prepareSimDeck(props.opponentDeck),
-    playerDeck: prepareSimDeck(props.playerDeck),
+    opponentDeck: props.opponentDeck,
+    playerDeck: props.playerDeck,
     onTrigger: ({ card, nextCooldownEnd }) => {
       const isPlayer = card.owner.user === 'player';
       const target = isPlayer ? space.player : space.opponent;
@@ -43,6 +42,8 @@ export function matchSimulator(props: SpaceTimeProps) {
     }
   })
 
+  console.log('rex matchSimulator: time', time);
+
   return {
     time,
     space: space.space,
@@ -50,6 +51,7 @@ export function matchSimulator(props: SpaceTimeProps) {
 }
 
 export function performanceSimulator(props: Decks) {
+
   const player = spaceStore({
     maxHealth: 3000,
     onAttack: (attackEntry) => opponent.hurt(attackEntry)
@@ -70,8 +72,8 @@ export function performanceSimulator(props: Decks) {
   const space = simulateSpaceWrapper({ player, opponent })
 
   const time = simulateTime({
-    opponentDeck: prepareSimDeck(props.opponentDeck),
-    playerDeck: prepareSimDeck(props.playerDeck),
+    opponentDeck: props.opponentDeck,
+    playerDeck: props.playerDeck,
     onTrigger: ({ card, nextCooldownEnd }) => {
       const isPlayer = card.owner.user === 'player';
       const target = isPlayer ? space.player : space.opponent;
@@ -129,13 +131,6 @@ function simulateSpaceWrapper(props: {
       }
     }
   }
-}
-
-function prepareSimDeck(deck: Card[]): PreSimulationCard[] {
-  return deck.map((card: Card) => ({
-    card: card,
-    cardStats: card.stats,
-  }));
 }
 
 export type matchSimulatorOutput = ReturnType<typeof matchSimulator>;

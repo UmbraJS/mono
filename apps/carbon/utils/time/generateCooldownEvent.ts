@@ -19,7 +19,23 @@ export interface CooldownEvent {
  * @returns {Object} An object containing the base duration, total duration, output chunks, and remaining modifiers.
  */
 export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined {
-  const baseDuration = card.stats.bash?.cooldown;
+  // Add more robust checking
+  if (!card) {
+    console.error('generateCooldownEvent: card is undefined');
+    return;
+  }
+
+  if (!card.stats) {
+    console.error('generateCooldownEvent: card.stats is undefined', card);
+    return;
+  }
+
+  if (!card.stats.bash) {
+    // This is normal - not all cards have bash stats
+    return;
+  }
+
+  const baseDuration = card.stats.bash.cooldown;
   const modifiers = card.simulation.modifiers;
   const startTime = getTotalLifetime(card.simulation.lifetime);
 

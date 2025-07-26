@@ -6,8 +6,10 @@ const props = defineProps<{
 }>()
 
 const store = useStore()
+const quest = useQuest()
 
 function giftCard() {
+  quest.passDay()
   store.money.cardPurchase.getCard(props.card)
 }
 

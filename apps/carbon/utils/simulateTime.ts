@@ -129,6 +129,8 @@ export function simulateTime({
 
         // A side effect is an effect of another card which is triggered by this card
         const sideEffects = cards.filter(c => c.stats.effects.some(effect => {
+
+          console.log('rex matchSimulator: effect', effect);
           const isPlayer = card.owner.user === 'player';
           const comparisonCardIsPlayer = c.owner.user === 'player';
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;

@@ -48,15 +48,15 @@ const hasteYourSibling: CardEffect = {
   },
   action: ({ card }) => {
     return {
-      sourceIndex: card.card.index,
+      sourceIndex: card.index,
       timeType: 'haste',
       value: 1,
       trigger: {
         triggerType: 'cooldown',
-        playerTriggerIndexes: [card.card.index],
+        playerTriggerIndexes: [card.index],
       },
       target: {
-        playerTargetIndexes: [card.card.index + 1],
+        playerTargetIndexes: [card.index + 1],
         opponentTargetIndexes: [],
       },
     }

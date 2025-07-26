@@ -46,11 +46,11 @@ const user: User = {
   characters: [warrior],
   field: cards.find((card) => card.info.name === 'Village') || cards[0]!, // Use first card as fallback
   deck: [
-    cards.find((card) => card.info.name === 'Halberdier'),
-    cards.find((card) => card.info.name === 'Archer'),
-    // { ...cards.find((card) => card.info.name === 'Doom Cloak')!, index: 2 },
+    { ...cards.find((card) => card.info.name === 'Archer'), index: 0 },
+    { ...cards.find((card) => card.info.name === 'Halberdier'), index: 2 },
+    { ...cards.find((card) => card.info.name === 'Doom Cloak'), index: 5 },
     // { ...cards.find((card) => card.info.name === 'Glimmer Cloak')!, index: 3 },
-  ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index * 8 })),
+  ].filter((card): card is Card => card !== undefined),
   inventory: [
     cards.find((card) => card.info.name === 'Fenrir Viking'),
     cards.find((card) => card.info.name === 'Halberdier'),

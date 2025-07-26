@@ -21,7 +21,7 @@ defineProps<{
       </DialogTrigger>
       <DialogModal variant="accent">
         <div class="DialogWrapper">
-          <CardModalAvatar :chunks="chunks" :card-info="card.info" />
+          <CardModalAvatar :chunks="chunks" :card="card" />
           <CardModalMeta :card="card" :bash-records="bashRecords" />
         </div>
       </DialogModal>
@@ -51,7 +51,8 @@ defineProps<{
 }
 
 .DialogWrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 </style>

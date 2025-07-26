@@ -49,7 +49,6 @@ function getRarity(rarity: number): string {
 
     <p v-if="card.info.quote" class="caption quote">{{ card.info.quote }}</p>
   </div>
-
 </template>
 
 <style scoped>

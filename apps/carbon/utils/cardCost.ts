@@ -11,6 +11,12 @@ const DEFAULT_STAT_VALUE = 0
  * @returns Card with updated cost in stats
  */
 export function getCardCost(card: Card): Card {
+  // If the card doesn't have bash stats, it can't be simulated in combat
+  // Return the card with its original cost
+  if (!card.stats.bash) {
+    return card;
+  }
+
   const sim = performanceSimulator({
     opponentDeck: [],
     playerDeck: [card],
@@ -59,11 +65,23 @@ export function getDeckCost(deck: Card[]): {
     }
   }
 
+  // Filter out cards without bash stats for simulation
+  const simulatableCards = deck.filter(card => card.stats.bash);
+
+  // If no cards can be simulated, return basic costs
+  if (simulatableCards.length === 0) {
+    return {
+      totalCost: deck.reduce((sum, card) => sum + card.stats.cost, 0),
+      cardsWithCost: deck,
+      synergyBonus: 0
+    }
+  }
+
   try {
-    // Simulate the entire deck together to capture synergies
+    // Simulate only the cards that have bash stats
     const deckSim = performanceSimulator({
       opponentDeck: [],
-      playerDeck: deck,
+      playerDeck: simulatableCards,
     })
 
     // Extract performance metrics from the deck simulation
