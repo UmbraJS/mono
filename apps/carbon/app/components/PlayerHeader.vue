@@ -89,14 +89,6 @@ section#PartyBoard .location #DrawerTrigger {
   width: 100%;
 }
 
-section#PartyBoard img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: var(--radius);
-}
-
 section#PartyBoard .location .finances {
   display: grid;
   grid-template-columns: 1fr auto;

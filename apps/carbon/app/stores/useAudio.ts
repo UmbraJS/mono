@@ -1,7 +1,7 @@
 interface SoundPath {
   category: SoundCategories
   getPath: () => string
-  segment?: {
+  segment?: () => {
     start: number
     duration: number
   }
@@ -49,13 +49,14 @@ function getFlipSound(): SoundPath {
   const segment3 = { start: 2.2, duration: 0.5 }
   const flipSegments = [segment1, segment2, segment3]
 
-  const randomIndex = Math.floor(Math.random() * flipSegments.length)
-  const segment = flipSegments[randomIndex] || segment1
 
   return {
     category: 'ui',
     getPath: () => cardFlipPath,
-    segment: segment
+    segment: () => {
+      const randomIndex = Math.floor(Math.random() * flipSegments.length)
+      return flipSegments[randomIndex] || segment1
+    }
   }
 }
 
@@ -66,10 +67,12 @@ function getPunchSound(): SoundPath {
   const punch4 = 'sounds/punch/punch4.mp3'
 
   const punchSounds = [punch1, punch2, punch3, punch4]
-  const randomIndex = Math.floor(Math.random() * punchSounds.length)
   return {
     category: 'action',
-    getPath: () => punchSounds[randomIndex] || punch1
+    getPath: () => {
+      const randomIndex = Math.floor(Math.random() * punchSounds.length)
+      return punchSounds[randomIndex] || punch1
+    }
   }
 }
 
@@ -80,10 +83,12 @@ function getCoinSound(): SoundPath {
   const coin4 = 'sounds/coin/coin4.mp3'
 
   const coinSounds = [coin1, coin2, coin3, coin4]
-  const randomIndex = Math.floor(Math.random() * coinSounds.length)
   return {
     category: 'action',
-    getPath: () => coinSounds[randomIndex] || coin1
+    getPath: () => {
+      const randomIndex = Math.floor(Math.random() * coinSounds.length)
+      return coinSounds[randomIndex] || coin1
+    }
   }
 }
 
@@ -212,7 +217,7 @@ function soundFactory() {
     source.connect(categoryGains[sound.category as SoundCategories])
 
     if (sound.segment) {
-      const { start, duration } = sound.segment
+      const { start, duration } = sound.segment()
       source.start(0, start, Math.min(duration, buffer.duration - start))
     } else {
       source.start(0)

@@ -2,6 +2,7 @@
 import type { Character } from '~~/types'
 import ValueBar from './ValueBar/ValueBar.vue'
 import FrostLayer from './FrostLayer.vue'
+import CharacterModal from './Card/CharacterModal.vue';
 
 const props = defineProps<{
   reverse: boolean
@@ -21,9 +22,10 @@ function getMaxHealth(): number {
 <template>
   <section class="character" :class="{ reverse }">
     <header id="Party">
-      <div v-for="character in characters" :key="character.id" class="character-avatar">
-        <NuxtImg v-if="character.image" :src="character.image.default" alt="Character Image" placeholder />
-      </div>
+      <CharacterModal v-for="character in characters" :key="character.id" :character="character">
+        <NuxtImg v-if="character.image" id="CharacterImage" :src="character.image.default" alt="Character Image"
+          placeholder />
+      </CharacterModal>
       <div class="healthImpact">
         <FrostLayer :reversed="reverse" :health="health" :max-health="maxHealth" />
       </div>
@@ -42,6 +44,10 @@ function getMaxHealth(): number {
 </template>
 
 <style>
+#Characters {
+  background-color: red;
+}
+
 .healthImpact {
   position: absolute;
   top: 0;
@@ -97,17 +103,21 @@ function getMaxHealth(): number {
   overflow: hidden;
 }
 
-.character-avatar {
-  position: relative;
+#CharacterModalTrigger {
+  position: s;
+  width: 100%;
   height: 100%;
-  overflow: hidden;
+  background-color: red;
 }
 
-.character-avatar img {
+#CharacterImage {
   position: absolute;
+  top: 0px;
+  left: 0px;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 </style>
