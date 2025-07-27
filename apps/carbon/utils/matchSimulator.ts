@@ -25,7 +25,7 @@ export function matchSimulator(props: SpaceTimeProps) {
     opponentDeck: props.opponentDeck,
     playerDeck: props.playerDeck,
     onTrigger: ({ card, nextCooldownEnd }) => {
-      const isPlayer = card.owner.user === 'player';
+      const isPlayer = card.owner.board === 'player';
       const target = isPlayer ? space.player : space.opponent;
       if (!card.stats.bash) return;
       target.bash({
@@ -33,6 +33,7 @@ export function matchSimulator(props: SpaceTimeProps) {
         index: card.index,
         timestamp: nextCooldownEnd,
         card: card,
+        board: card.owner.board
       })
     },
     matchCondition: () => {
@@ -65,6 +66,7 @@ export function performanceSimulator(props: Decks) {
     attack: 3000,
     timestamp: 0,
     index: 0,
+    board: 'opponent',
   })
 
   const space = simulateSpaceWrapper({ player, opponent })
@@ -73,7 +75,7 @@ export function performanceSimulator(props: Decks) {
     opponentDeck: props.opponentDeck,
     playerDeck: props.playerDeck,
     onTrigger: ({ card, nextCooldownEnd }) => {
-      const isPlayer = card.owner.user === 'player';
+      const isPlayer = card.owner.board === 'player';
       const target = isPlayer ? space.player : space.opponent;
       if (!card.stats.bash) return;
       target.bash({
@@ -81,6 +83,7 @@ export function performanceSimulator(props: Decks) {
         index: card.index,
         timestamp: nextCooldownEnd,
         card: card,
+        board: card.owner.board
       })
     },
     matchCondition: (nextCooldownEnd) => {

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { DialogTitle, Tabs } from '@nobel/core'
 import type { Card } from '../../../types'
-import type { BashRecords } from '~/composables/useBashRecords'
 
 defineProps<{
   card: Card;
-  bashRecords?: BashRecords
+  // bashRecords?: BashRecords
 }>()
 
 /**
@@ -57,8 +56,8 @@ function getRarity(rarity: number): string {
         </div>
 
       </template>
-      <template v-if="bashRecords" #tab2>
-        <CardRecord :card="card" :bash-records="bashRecords" />
+      <template #tab2>
+        <CardRecord :card="card" />
       </template>
     </Tabs>
   </div>
@@ -74,6 +73,5 @@ function getRarity(rarity: number): string {
   flex-direction: column;
   gap: var(--space-1);
   background-color: var(--base-10);
-  min-height: 40vh;
 }
 </style>

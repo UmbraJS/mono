@@ -3,6 +3,7 @@ export interface ValueLogCore {
   attemptedChange: number
   timestamp: number
   index: number
+  board: 'opponent' | 'player'
   type: 'banter' | 'attack' | 'shield' | 'heal'
   banter: {
     debuffs: ValueLogCore[]

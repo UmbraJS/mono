@@ -9,7 +9,7 @@ export function shieldStore() {
     return lastLog.newValue
   }
 
-  function shieldUp({ actualChange, timestamp, index, banter }: ValueLogCore) {
+  function shieldUp({ actualChange, timestamp, index, banter, board }: ValueLogCore) {
     if (actualChange < 0) console.error('Shield up called with negative change', actualChange)
     const lastLog = shieldLog[shieldLog.length - 1]?.newValue || 0
     shieldLog.push({
@@ -21,6 +21,7 @@ export function shieldStore() {
       banter,
       timestamp,
       index,
+      board,
     })
   }
 
@@ -29,6 +30,7 @@ export function shieldStore() {
     index,
     timestamp,
     banter,
+    board,
   }: ValueLogCore) {
     if (getShield() <= 0) return
     const lastLog = shieldLog[shieldLog.length - 1]?.newValue || 0
@@ -41,6 +43,7 @@ export function shieldStore() {
       banter,
       timestamp,
       index,
+      board,
     })
 
   }

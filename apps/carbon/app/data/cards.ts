@@ -1,4 +1,4 @@
-import type { Card, CardEffect } from '../../types/card'
+import type { Card, CardEffect, CardOwner } from '../../types/card'
 import { aspects } from './aspects'
 
 // const stumble: CardEffect = ({ card }) => {
@@ -94,6 +94,11 @@ const hasteYourSibling: CardEffect = {
 //   }
 // }
 
+const defaultOwner: CardOwner = {
+  board: 'player',
+  characterIndex: 0,
+}
+
 export const fields: Card[] = [
   {
     id: 'Swamp',
@@ -118,6 +123,7 @@ export const fields: Card[] = [
       cost: 10,
       record: {},
     },
+    owner: defaultOwner,
   },
   {
     id: 'AlienHalls',
@@ -142,6 +148,7 @@ export const fields: Card[] = [
       cost: 10,
       record: {},
     },
+    owner: defaultOwner,
   },
   {
     id: 'AbandonedHalls',
@@ -165,7 +172,8 @@ export const fields: Card[] = [
       slot: 'field',
       cost: 10,
       record: {},
-    }
+    },
+    owner: defaultOwner,
   },
   {
     id: 'Village',
@@ -190,6 +198,7 @@ export const fields: Card[] = [
       cost: 10,
       record: {},
     },
+    owner: defaultOwner,
   }
 ]
 
@@ -217,6 +226,7 @@ const skeletonSoldier: Card = {
     aspects: [aspects.shadow],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 const skeletonArcher: Card = {
@@ -243,6 +253,7 @@ const skeletonArcher: Card = {
     aspects: [aspects.shadow],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 const archer: Card = {
@@ -269,6 +280,7 @@ const archer: Card = {
     aspects: [aspects.wood],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 
@@ -296,6 +308,7 @@ const halberdier: Card = {
     aspects: [aspects.metal],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 const doomCloak: Card = {
@@ -322,6 +335,7 @@ const doomCloak: Card = {
     aspects: [aspects.shadow],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 const skeletonHealer: Card = {
@@ -348,6 +362,7 @@ const skeletonHealer: Card = {
     aspects: [aspects.shadow],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 const skeletonHorseman: Card = {
@@ -374,6 +389,7 @@ const skeletonHorseman: Card = {
     aspects: [aspects.shadow],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 export const gauntletOfSigmar: Card = {
@@ -401,6 +417,7 @@ export const gauntletOfSigmar: Card = {
     aspects: [aspects.metal],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 export const glimmerCloak: Card = {
@@ -437,6 +454,7 @@ export const glimmerCloak: Card = {
     aspects: [aspects.light],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 export const viking: Card = {
@@ -463,6 +481,7 @@ export const viking: Card = {
     aspects: [aspects.metal],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 const thunderCannon: Card = {
@@ -489,6 +508,7 @@ const thunderCannon: Card = {
     aspects: [aspects.charge],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 const treasure: Card = {
@@ -515,6 +535,7 @@ const treasure: Card = {
     aspects: [aspects.metal],
     record: {},
   },
+  owner: defaultOwner,
 }
 
 
@@ -551,6 +572,7 @@ export const saintDenis: Card = {
     slot: 'character',
     record: {},
   },
+  owner: defaultOwner,
 }
 
 export const cards: Card[] = [

@@ -9,7 +9,7 @@ export function healthStore(maxHealth: number) {
     return lastLog.newValue
   }
 
-  function heal({ actualChange, timestamp, index, banter }: ValueLogCore) {
+  function heal({ actualChange, timestamp, index, banter, board }: ValueLogCore) {
     const currentHealth = getHealth()
     const healthDeficit = maxHealth - currentHealth
     healthLog.push({
@@ -18,13 +18,14 @@ export function healthStore(maxHealth: number) {
       oldValue: currentHealth,
       newValue: Math.min(maxHealth, currentHealth + actualChange),
       type: 'heal',
+      board,
       banter,
       timestamp,
       index,
     })
   }
 
-  function hurt({ actualChange, attemptedChange, timestamp, index, banter }: ValueLogCore) {
+  function hurt({ actualChange, attemptedChange, timestamp, index, banter, board }: ValueLogCore) {
     const currentHealth = getHealth()
     healthLog.push({
       actualChange: Math.max(0, actualChange),
@@ -35,6 +36,7 @@ export function healthStore(maxHealth: number) {
       banter,
       timestamp,
       index,
+      board,
     })
   }
 

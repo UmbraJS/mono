@@ -3,13 +3,11 @@ import { DialogRoot, DialogTrigger, DialogModal } from '@nobel/core'
 import type { Card } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
-import type { BashRecords } from '~/composables/useBashRecords'
 import type { OutputChunk } from '../../../utils/time/types';
 
 defineProps<{
   chunks?: OutputChunk[]
   card: Card;
-  bashRecords?: BashRecords
 }>()
 </script>
 
@@ -22,7 +20,7 @@ defineProps<{
       <DialogModal variant="accent">
         <div class="DialogWrapper">
           <CardModalAvatar :chunks="chunks" :card="card" />
-          <CardModalMeta :card="card" :bash-records="bashRecords" />
+          <CardModalMeta :card="card" />
         </div>
       </DialogModal>
     </DialogRoot>
@@ -54,5 +52,6 @@ defineProps<{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+  min-height: 50vh;
 }
 </style>

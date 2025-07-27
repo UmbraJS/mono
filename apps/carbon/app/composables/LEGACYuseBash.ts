@@ -6,6 +6,7 @@ export interface ValueLogCore {
   attemptedChange: number
   timestamp: number
   index: number
+  board: 'player' | 'opponent'
   type: 'banter' | 'attack' | 'shield' | 'heal'
   banter: {
     debuffs: ValueLogCore[]
@@ -36,7 +37,7 @@ export function useHealth(character: Character) {
     })
   })
 
-  function heal({ actualChange, timestamp, index, banter }: ValueLogCore) {
+  function heal({ actualChange, timestamp, index, banter, board }: ValueLogCore) {
     const healthDeficit = maxHealth - health.value
     const valueLog: ValueLog = {
       actualChange: Math.min(healthDeficit, actualChange),
@@ -47,11 +48,12 @@ export function useHealth(character: Character) {
       banter,
       timestamp,
       index,
+      board,
     }
     healthLog.value.push(valueLog)
   }
 
-  function hurt({ actualChange, attemptedChange, timestamp, index, banter }: ValueLogCore) {
+  function hurt({ actualChange, attemptedChange, timestamp, index, banter, board }: ValueLogCore) {
     healthLog.value.push({
       actualChange: Math.max(0, actualChange),
       attemptedChange: attemptedChange,
@@ -61,6 +63,7 @@ export function useHealth(character: Character) {
       banter,
       timestamp,
       index,
+      board,
     })
   }
 
@@ -85,7 +88,7 @@ export function useShield() {
     shieldLog.value = updateShieldLog
   }
 
-  function shieldUp({ actualChange, timestamp, index, banter }: ValueLogCore) {
+  function shieldUp({ actualChange, timestamp, index, banter, board }: ValueLogCore) {
     if (actualChange < 0) console.error('Shield up called with negative change', actualChange)
     const lastLog = shieldLog.value[shieldLog.value.length - 1]?.newValue || 0
 
@@ -98,6 +101,7 @@ export function useShield() {
       banter,
       timestamp,
       index,
+      board,
     })
     updateShield()
   }
@@ -141,6 +145,7 @@ export function useShield() {
               type: type,
               timestamp: timestamp,
               banter,
+              board: entry.board,
             },
           ],
         },
@@ -160,7 +165,7 @@ export function useMorale() {
   const moraleLog = ref<ValueLog[]>([])
   const morale = computed(() => moraleLog.value.reduce((acc, entry) => acc + entry.actualChange, 0))
 
-  function banter({ actualChange, timestamp, index, banter }: ValueLogCore) {
+  function banter({ actualChange, timestamp, index, banter, board }: ValueLogCore) {
     moraleLog.value.push({
       actualChange: actualChange,
       attemptedChange: actualChange,
@@ -170,6 +175,7 @@ export function useMorale() {
       type: 'banter',
       timestamp,
       index,
+      board
     })
   }
 

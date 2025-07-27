@@ -27,7 +27,7 @@ const maxBotSlots = computed(() => props.maxSlots)
     </CardBoard>
     <TimeControls />
     <CardBoard board="deck" :max-slots="maxUserSlots">
-      <CardModal v-for="card in playerTimeline" :key="card.id" :card="card">
+      <CardModal v-for="card in playerTimeline" :key="card.id" :card="card" :chunks="card.simulation.chunks">
         <CardHeader :card="card">
           <CardCooldown :chunks="card.simulation.chunks" />
         </CardHeader>

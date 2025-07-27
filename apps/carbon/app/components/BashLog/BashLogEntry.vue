@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CardInfo } from '../../../types/card'
-import type { ValueLogCore } from '../../composables/useBash'
+import type { ValueLogCore } from '../../composables/LEGACYuseBash'
 import BashLogDropdown from './BashLogDropdown.vue'
 import BashLogEntryContent from './BashLogEntryContent.vue'
 
@@ -12,20 +12,17 @@ const props = defineProps<{
 </script>
 
 <template>
-  <li
-class="change border" :class="{
+  <li class="change border" :class="{
     'base-success': logEntry.type === 'heal',
     'base-warning': logEntry.type === 'attack',
     'base-info': logEntry.type === 'shield',
     'base-yellow': logEntry.type === 'banter',
     dud: logEntry.actualChange === 0,
   }">
-    <BashLogEntryContent
-:opponent-info-deck="props.opponentInfoDeck" :player-info-deck="props.playerInfoDeck"
+    <BashLogEntryContent :opponent-info-deck="props.opponentInfoDeck" :player-info-deck="props.playerInfoDeck"
       :log-entry="logEntry" :can-have-strikethrough="true" />
 
-    <BashLogDropdown
-v-if="logEntry.banter.debuffs.length > 0" :player-info-deck="props.playerInfoDeck"
+    <BashLogDropdown v-if="logEntry.banter.debuffs.length > 0" :player-info-deck="props.playerInfoDeck"
       :opponent-info-deck="props.opponentInfoDeck" :log-entry="logEntry" />
   </li>
 </template>

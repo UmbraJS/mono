@@ -110,13 +110,13 @@ export interface ReactiveCard extends Card {
   setHaste: (duration: number) => void;
 }
 
-export type Owner = 'player' | 'opponent';
+export type OwnerBoard = 'player' | 'opponent';
+export interface CardOwner {
+  board: OwnerBoard;
+  characterIndex: number;
+}
 
 export interface SimCard extends Card {
-  owner: {
-    user: Owner;
-    characterIndex: number;
-  };
   simulation: {
     chunks: OutputChunk[];
     modifiers: ModifierChunk[]; // Modifiers waiting to be applied on next cooldown
@@ -130,6 +130,7 @@ export interface Card {
   size: number
   info: CardInfo
   stats: CardStats
+  owner: CardOwner;
 }
 
 export interface CardInfo {
@@ -211,6 +212,7 @@ export interface CardEffect {
 export interface CardAction {
   bash: CardBash
   index: number
+  board: 'player' | 'opponent'
   timestamp: number
   card: SimCard
 }

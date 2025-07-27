@@ -1,4 +1,4 @@
-import type { ValueLogCore } from './useBash'
+import type { ValueLogCore } from './LEGACYuseBash'
 import type { SpaceOutput } from '../../utils/matchSimulator'
 
 interface BashRecordProps {

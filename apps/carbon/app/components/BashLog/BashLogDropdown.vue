@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CardInfo } from '../../../types/card'
-import type { ValueLogCore } from '../../composables/useBash'
+import type { ValueLogCore } from '../../composables/LEGACYuseBash'
 import BashLogEntryContent from './BashLogEntryContent.vue'
 
 defineProps<{

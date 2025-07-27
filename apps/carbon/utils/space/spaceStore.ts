@@ -7,6 +7,7 @@ interface AttackEntry {
   attack: number,
   timestamp: number,
   index: number,
+  board: 'opponent' | 'player',
 }
 
 interface SpaceStoreProps {
@@ -28,6 +29,7 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
       type: 'attack',
       index: attackEntry.index,
       banter: createBanterObject(),
+      board: attackEntry.board,
     })
   }
 
@@ -40,6 +42,7 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
       type: 'attack',
       index: attackEntry.index,
       banter: createBanterObject(),
+      board: attackEntry.board,
     })
   }
 
@@ -59,6 +62,7 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
       index: entry.index,
       type: 'banter',
       banter: createBanterObject(),
+      board: entry.board,
     })
   }
 
@@ -69,6 +73,7 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
       attack: bash.attack,
       timestamp: entry.timestamp,
       index: entry.index,
+      board: entry.board,
     })
   }
 
@@ -82,6 +87,7 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
       type: 'shield',
       index: entry.index,
       banter: createBanterObject(),
+      board: entry.board,
     })
   }
 
@@ -95,6 +101,7 @@ export function spaceStore({ maxHealth, onAttack }: SpaceStoreProps) {
       type: 'heal',
       index: entry.index,
       banter: createBanterObject(),
+      board: entry.board,
     })
   }
 

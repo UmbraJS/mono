@@ -7,7 +7,7 @@ export function moraleStore() {
     return moraleLog.reduce((acc, entry) => acc + entry.actualChange, 0)
   }
 
-  function banter({ actualChange, timestamp, index, banter }: ValueLogCore) {
+  function banter({ actualChange, timestamp, index, banter, board }: ValueLogCore) {
     const morale = getMorale()
     moraleLog.push({
       actualChange: actualChange,
@@ -18,6 +18,7 @@ export function moraleStore() {
       type: 'banter',
       timestamp,
       index,
+      board,
     })
   }
 

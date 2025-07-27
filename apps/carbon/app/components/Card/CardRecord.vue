@@ -1,60 +1,37 @@
 <script setup lang="ts">
 import { Graph, ScrollArea } from '@nobel/core'
 import type { Card } from '../../../types'
-import { Icon } from '@iconify/vue'
-import type { BashRecords } from '~/composables/useBashRecords'
-
-// type DataRecord = {
-//   x: number
-//   y: number
-//   y1: number
-//   y2: number
-// }
+// import type { BashRecords } from '~/composables/LEGACYuseBashRecords'
 
 const props = defineProps<{
   card: Card;
-  bashRecords: BashRecords
 }>()
 
-const recordedData = computed(() => {
-  const d = props.bashRecords?.attackRecord.value?.logs
-  return d?.map((record) => ({
+const simulation = useSimulationInject()
+
+// opponent Health Logs With Player Owner
+const playerAttacks = simulation.simulatedMatch.space.opponent.healthLog.filter(
+  (record) => record.board === props.card.owner.board
+)
+
+const cardAttacks = playerAttacks.filter(
+  (record) => record.index === props.card.index
+)
+
+const mappedCardAttacks = cardAttacks.map((record) => {
+  return {
     x: record.timestamp,
     y: record.attemptedChange,
     y1: 10,
     y2: 10,
-  }))
+  }
 })
-
 </script>
 
 <template>
   <ScrollArea class="CardModalRecords">
-    <div v-if="bashRecords" class="bashRecords">
-      <div v-if="props.card.stats.bash?.banter" class="chip base-yellow">
-        <Icon icon="mdi:account-injury-outline" />
-        Bash: {{ props.card.stats.bash.banter }}
-      </div>
-      <div v-if="bashRecords.attackRecord.value?.total" class="chip base-warning">
-        <Icon icon="mdi:account-injury-outline" />
-        Attack: {{ bashRecords.attackRecord.value.total }} ({{ bashRecords.attackRecord.value.health }} + {{
-          bashRecords.attackRecord.value.shield }})
-      </div>
-      <div v-if="bashRecords.shieldRecord.value" class="chip base-info">
-        <Icon icon="mdi:account-injury-outline" />
-        Shield: {{ bashRecords.shieldRecord.value }}
-      </div>
-      <div v-if="bashRecords.healingRecord.value" class="chip base-success">
-        <Icon icon="mdi:account-injury-outline" />
-        Heal: {{ bashRecords.healingRecord.value }}
-      </div>
-      <div v-if="bashRecords.totalValue.value" class="chip">
-        <Icon icon="mdi:account-injury-outline" />
-        Total Value: {{ bashRecords.totalValue.value }}
-      </div>
-    </div>
     <div class="datavis">
-      <Graph v-if="recordedData" :data="recordedData" />
+      <Graph v-if="mappedCardAttacks" :data="mappedCardAttacks" />
     </div>
   </ScrollArea>
 </template>
@@ -73,31 +50,5 @@ const recordedData = computed(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.bashRecords {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.cardMeta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  width: 100%;
-  padding-top: var(--space-3);
-}
-
-.cardMeta .chip {
-  display: flex;
-  gap: var(--space-1);
-  align-items: center;
-  border: solid 2px var(--base-60);
-  padding: var(--space-quark);
-  width: 100%;
-  color: var(--base-120);
-  background-color: var(--base-20);
-  border-radius: var(--radius);
 }
 </style>
