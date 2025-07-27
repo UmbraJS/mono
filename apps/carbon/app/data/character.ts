@@ -73,7 +73,7 @@ const skeletonKing: Character = {
 }
 
 const bot: User = {
-  characters: [skeletonKing],
+  characters: [skeletonKing, skeletonKing],
   field: cards.find((card) => card.info.name === 'Abandoned Halls') || cards[0]!,
   deck: [
     { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, owner: { board: 'opponent', characterIndex: 0 } },

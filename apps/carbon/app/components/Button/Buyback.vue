@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Drawer } from '@nobel/core'
+import { DrawerButton } from '@nobel/core'
 const store = useStore()
 </script>
 
 <template>
-  <Drawer class-name="viewButton" title="Buyback Store" description="Buy back your previously sold cards">
+  <DrawerButton class-name="viewButton" title="Buyback Store" description="Buy back your previously sold cards">
     <template #trigger>
       <Icon name="carbon:money" size="1.5em" />
       <p>buyback</p>
@@ -30,5 +30,5 @@ const store = useStore()
         </div>
       </div>
     </template>
-  </Drawer>
+  </DrawerButton>
 </template>

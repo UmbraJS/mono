@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogRoot, DialogTrigger, DialogModal } from '@nobel/core'
+import { Drawer } from '@nobel/core'
 import type { Card } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'
@@ -12,42 +12,20 @@ defineProps<{
 </script>
 
 <template>
-  <ClientOnly>
-    <DialogRoot>
-      <DialogTrigger as-child>
-        <slot />
-      </DialogTrigger>
-      <DialogModal variant="accent">
-        <div class="DialogWrapper">
-          <CardModalAvatar :chunks="chunks" :card="card" />
-          <CardModalMeta :card="card" />
-        </div>
-      </DialogModal>
-    </DialogRoot>
-    <template #fallback>
+  <Drawer height="50vh">
+    <template #trigger>
       <slot />
     </template>
-  </ClientOnly>
+    <template #content>
+      <div class="DialogWrapper">
+        <CardModalAvatar :chunks="chunks" :card="card" />
+        <CardModalMeta :card="card" />
+      </div>
+    </template>
+  </Drawer>
 </template>
 
 <style>
-.DialogContent {
-  padding: var(--space-1);
-  max-width: 850px;
-}
-
-.DialogContent .chip {
-  display: flex;
-  gap: var(--space-1);
-  align-items: center;
-  border: solid 2px var(--base-60);
-  padding: var(--space-quark);
-  width: 100%;
-  color: var(--base-120);
-  background-color: var(--base-20);
-  border-radius: var(--radius);
-}
-
 .DialogWrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;

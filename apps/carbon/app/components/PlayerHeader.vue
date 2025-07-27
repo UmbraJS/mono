@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
-import { Drawer, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
+import { DrawerButton, DrawerTitle, DrawerDescription, Slider } from '@nobel/core'
 
 const store = useStore()
 const view = useView()
@@ -30,7 +30,7 @@ function inverseTheme() {
         <Icon name="carbon:wallet" size="1.5em" />
         <p>inventory</p>
       </CarbonButton>
-      <Drawer class-name="CarbonButton" title="Player Settings"
+      <DrawerButton class-name="CarbonButton" title="Player Settings"
         description="Configure your character settings and preferences">
         <template #trigger>
           <Icon name="carbon:settings" size="1.5em" />
@@ -53,7 +53,7 @@ function inverseTheme() {
             <Slider />
           </div>
         </template>
-      </Drawer>
+      </DrawerButton>
     </div>
 
     <PlayerCharacter :characters="store.user.characters" :health="health" :shield="shield" :reverse="false" />

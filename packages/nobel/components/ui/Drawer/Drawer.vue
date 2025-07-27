@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import { DrawerContent, DrawerOverlay, DrawerPortal, DrawerRoot, DrawerTrigger } from 'vaul-vue'
 import DrawerHandle from './DrawerHandle.vue'
-import Button from '../Button/Button.vue'
 
-defineProps<{
+const { asChild = true, height = '40vh' } = defineProps<{
   title?: string
   description?: string
   className?: string
+  asChild?: boolean
+  height?: string
 }>()
 </script>
 
 <template>
   <DrawerRoot :preventScrollRestoration="true" :shouldScaleBackground="true">
-    <DrawerTrigger id="DrawerTrigger" asChild>
-      <Button :class="className" color="default" variant="base">
-        <slot name="trigger" />
-      </Button>
+    <DrawerTrigger :asChild="asChild">
+      <slot name="trigger" />
     </DrawerTrigger>
     <DrawerPortal>
       <DrawerOverlay id="DrawerOverlay" />
@@ -40,7 +39,7 @@ defineProps<{
   gap: var(--space-2);
   z-index: 51000;
   width: 100vw;
-  height: 30vh;
+  height: v-bind(height);
   background-color: var(--base);
   border-radius: var(--radius) var(--radius) 0 0;
   padding: var(--space-4);

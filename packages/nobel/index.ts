@@ -27,6 +27,8 @@ export { default as Toaster } from './components/ui/Toaster.vue'
 export { default as Toggle } from './components/ui/Toggle.vue'
 export {
   Drawer,
+  DrawerButton,
+  DrawerHandle,
   DrawerContent,
   DrawerOverlay,
   DrawerPortal,
