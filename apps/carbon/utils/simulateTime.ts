@@ -24,9 +24,8 @@ export function simulateTime({
   opponentDeck,
   matchCondition,
 }: SimulateCooldownTimelineArgs) {
-  const playerSimCards = initializeSimCards(playerDeck, 'player');
-  const opponentSimCards = initializeSimCards(opponentDeck, 'opponent');
-
+  const playerSimCards = initializeSimCards(playerDeck);
+  const opponentSimCards = initializeSimCards(opponentDeck);
   const simCards = [...playerSimCards, ...opponentSimCards];
 
   // --- Apply all "start" modifier effects ---
@@ -127,9 +126,8 @@ export function simulateTime({
         // A side effect is an effect of another card which is triggered by this card
         const sideEffects = cards.filter(c => c.stats.effects.some(effect => {
 
-          // console.log('rex matchSimulator: effect', { card: c.info.name, effect });
-          const isPlayer = card.owner.user === 'player';
-          const comparisonCardIsPlayer = c.owner.user === 'player';
+          const isPlayer = card.owner.board === 'player';
+          const comparisonCardIsPlayer = c.owner.board === 'player';
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
 
           const trigger = effect.action({
@@ -197,14 +195,10 @@ export function simulateTime({
     }
   }
 
-  function initializeSimCards(deck: Card[], owner: 'player' | 'opponent'): SimCard[] {
+  function initializeSimCards(deck: Card[]): SimCard[] {
     return deck.map((thisCard) => {
       return {
         ...thisCard,
-        owner: {
-          user: owner,
-          characterIndex: 0, // Default to 0, can be set later if needed
-        }, // Owner of the card
         simulation: {
           chunks: [],
           modifiers: [], // Start empty; "start" effects will populate
@@ -242,7 +236,7 @@ function getModifiers({
   }
 
   // Reverse the player/opponent modifiers when simulating the opponents deck
-  const isPlayer = sourceCard.owner.user === 'player';
+  const isPlayer = sourceCard.owner.board === 'player';
   return {
     type: modifier.timeType,
     playerModifiers: isPlayer ? target.playerTargetIndexes.map(mapModifier) : target.opponentTargetIndexes.map(mapModifier),
