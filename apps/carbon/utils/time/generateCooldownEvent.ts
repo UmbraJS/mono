@@ -39,16 +39,19 @@ export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined 
   const modifiers = card.simulation.modifiers;
   const startTime = getTotalLifetime(card.simulation.lifetime);
 
-  console.log('rex generateCooldownEvent: card', {
-    name: card.info.name,
-    modifiers
-  });
 
   if (!baseDuration) return;
 
   const resolvedModifiers = resolveOverlappingModifiers(modifiers);
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
   const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime);
+
+  if (modifiers.length > 0) console.log('rex generateCooldownEvent: card', {
+    name: card.info.name,
+    timelineSegments,
+    segmentedChunks
+  });
+
 
   return {
     baseDuration,

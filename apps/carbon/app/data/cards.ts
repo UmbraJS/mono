@@ -47,16 +47,17 @@ const hasteYourSibling: CardEffect = {
     default: 'hasteYourSibling.jpg',
   },
   action: ({ card }) => {
+    const rightSiblingIndex = card.index + card.size;
     return {
       sourceIndex: card.index,
-      timeType: 'haste',
+      timeType: 'freeze',
       value: 1,
       trigger: {
         triggerType: 'cooldown',
         playerTriggerIndexes: [card.index],
       },
       target: {
-        playerTargetIndexes: [card.index + 1],
+        playerTargetIndexes: [rightSiblingIndex],
         opponentTargetIndexes: [],
       },
     }
