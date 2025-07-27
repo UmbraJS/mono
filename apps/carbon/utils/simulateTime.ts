@@ -8,7 +8,7 @@ interface ProcessedCard extends CooldownEvent {
   card: SimCard;
   totalLifetime: number;
   nextCooldownEnd: number;
-  allModifiers?: ReturnType<typeof getModifiers>[];
+  allCurrentModifiers?: ReturnType<typeof getModifiers>[];
 }
 
 interface SimulateCooldownTimelineArgs {
@@ -61,13 +61,10 @@ export function simulateTime({
     };
 
     // Check match condition with the current nextCooldownEnd
-    if (matchCondition(processedCards.nextCooldownEnd)) {
-      break;
-    }
+    if (matchCondition(processedCards.nextCooldownEnd)) break;
 
     processedCards.nextCardsToFinish.map(c => {
       const actionCount = c.card.stats.bash?.actionCount || 0;
-
       for (let i = 0; i < actionCount; i++) {
         onTrigger(c);
       }
@@ -86,7 +83,7 @@ export function simulateTime({
   function mutateTime(processedCards: Exclude<ReturnType<typeof processCards>, undefined>) {
     // Mutate data
     for (const nextCardToFinish of processedCards.nextCardsToFinish) {
-      if (!nextCardToFinish.allModifiers) continue; // No modifiers to apply so nothing to do
+      if (!nextCardToFinish.allCurrentModifiers) continue; // No modifiers to apply so nothing to do
 
       // Store data on the next card
       nextCardToFinish.card.simulation.chunks = nextCardToFinish.chunks;
@@ -99,7 +96,7 @@ export function simulateTime({
       if (!nextCardToFinish) continue;
 
       // Store data on every card modified by this next card
-      for (const modifier of nextCardToFinish.allModifiers) {
+      for (const modifier of nextCardToFinish.allCurrentModifiers) {
         modifier.playerModifiers.forEach(mod => {
           const targetCard = playerSimCards.find(c => c.index === mod.index);
           if (!targetCard) return;
@@ -130,7 +127,7 @@ export function simulateTime({
         // A side effect is an effect of another card which is triggered by this card
         const sideEffects = cards.filter(c => c.stats.effects.some(effect => {
 
-          console.log('rex matchSimulator: effect', effect);
+          // console.log('rex matchSimulator: effect', { card: c.info.name, effect });
           const isPlayer = card.owner.user === 'player';
           const comparisonCardIsPlayer = c.owner.user === 'player';
           const cardsAreOnTheSameSide = isPlayer === comparisonCardIsPlayer;
@@ -150,10 +147,12 @@ export function simulateTime({
         }))
 
         // Get modifiers for next events
-        const allModifiers = sideEffects.flatMap(c => c.stats.effects.map(e => ({
+        const flatMods = sideEffects.flatMap(c => c.stats.effects.map(e => ({
           effect: e,
           sourceCard: c,
-        }))).map(({ effect, sourceCard }) => {
+        })))
+
+        const allModifiers = flatMods.map(({ effect, sourceCard }) => {
           const cardModifier = effect.action({
             card: sourceCard,
             opponentCards: opponentSimCards,
@@ -169,12 +168,16 @@ export function simulateTime({
 
         }).filter(mod => mod !== undefined);
 
+        if (allModifiers.length > 0) {
+          console.log('rex matchSimulator: allModifiers', card.info.name, allModifiers.map((e) => (e.playerModifiers[0]?.timestamp)));
+        }
+
         return {
           ...cooldownEvent,
           card: card,
           totalLifetime,
           nextCooldownEnd,
-          allModifiers
+          allCurrentModifiers: allModifiers
         }
       })
 
