@@ -46,13 +46,6 @@ export function generateCooldownEvent(card: SimCard): CooldownEvent | undefined 
   const timelineSegments = buildTimelineSegments(resolvedModifiers);
   const { chunks, segmentedChunks } = convertSegmentsToChunks(baseDuration, timelineSegments, startTime);
 
-  if (modifiers.length > 0) console.log('rex generateCooldownEvent: card', {
-    name: card.info.name,
-    timelineSegments,
-    segmentedChunks
-  });
-
-
   return {
     baseDuration,
     segmentedChunks,

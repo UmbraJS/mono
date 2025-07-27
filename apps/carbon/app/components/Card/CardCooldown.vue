@@ -10,26 +10,34 @@ const {
   debug?: boolean;
 }>()
 
+const simulation = useSimulationInject()
+
+const opacity = computed(() => {
+  return simulation.time.value > 0 ? 1 : 0
+})
+
 const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(chunks)
 </script>
 
 <template>
   <div :class="{ slow, haste, frozen }">
-    <div v-if="cooldown > 0" class="cooldown" :style="{ height: `${cooldown}%` }" />
+    <div v-if="cooldown > 0" class="cooldown" :class="{
+      'base-warning': slow, 'base-success': haste, 'base-info': frozen
+    }" :style="{ height: `${cooldown}%` }" />
     <div v-if="debug" class="debugPanel">
       <div class="debug grid">
         <p>{{ cooldownDuration.toFixed(1) }}</p>
         <p>{{ Math.floor(cooldown) }}</p>
       </div>
-      <div class="debug n2">
+      <div class="debug slowed">
         <p>{{ slow.toFixed(1) }}</p>
         <p>{{ slowSource }}</p>
       </div>
-      <div class="debug n3">
+      <div class="debug hasted">
         <p>{{ haste.toFixed(1) }}</p>
         <p>{{ hasteSource }}</p>
       </div>
-      <div class="debug n4">
+      <div class="debug freezed">
         <p>{{ frozen.toFixed(1) }}</p>
         <p>{{ frozenSource }}</p>
       </div>
@@ -51,17 +59,17 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   width: 100%;
 }
 
-.slow .n2 {
+.slow .slowed {
   background-color: var(--warning-40);
   color: var(--warning-120);
 }
 
-.haste .n3 {
+.haste .hasted {
   background-color: var(--success-40);
   color: var(--success-120);
 }
 
-.frozen .n4 {
+.frozen .freezed {
   background-color: var(--info-40);
   color: var(--info-120);
 }
@@ -72,11 +80,28 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   left: 0;
   width: 100%;
   height: 50%;
-  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
-  border-top: solid 2px var(--base-40);
-  border-radius: var(--radius);
+  border-top: solid 2px var(--base-120);
   pointer-events: none;
+  opacity: v-bind(opacity);
+  transition: opacity var(--time);
+}
+
+.cooldown::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--base-80);
+  opacity: 0.2;
+}
+
+.slow .cooldown::after,
+.haste .cooldown::after,
+.frozen .cooldown::after {
+  opacity: 0.5;
 }
 
 .debugPanel {

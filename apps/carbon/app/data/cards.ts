@@ -50,7 +50,7 @@ const hasteYourSibling: CardEffect = {
     const rightSiblingIndex = card.index + card.size;
     return {
       sourceIndex: card.index,
-      timeType: 'freeze',
+      timeType: 'haste',
       value: 1,
       trigger: {
         triggerType: 'cooldown',

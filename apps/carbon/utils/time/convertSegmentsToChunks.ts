@@ -97,22 +97,26 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
     return overflowingSegment
 
     function generateModChunk() {
-      // if (seg.type === "freeze") {
-      //   const cPercent = Math.round(currentPercent);
-      //   chunks.push({
-      //     type: "freeze",
-      //     duration,
-      //     to: cPercent,
-      //     from: cPercent,
-      //     sourceIndex: seg.sourceIndex,
-      //     start: seg.start,
-      //     end: seg.end,
-      //   });
-      //   return;
-      // }
-
       const previousChunk = chunks[chunks.length - 1];
       const currentPercent = previousChunk?.to || 100;
+
+      // Handle freeze mechanic - cooldown stands still
+      if (props.currentSegment.type === 'freeze') {
+        const duration = getDifference(props.currentSegment.start, props.currentSegment.end);
+        const roundedDuration = Math.round(duration * 1e12) / 1e12; // Round to 12 decimal places
+
+        chunks.push({
+          type: 'freeze',
+          duration: roundedDuration,
+          to: currentPercent, // Percentage stays the same during freeze
+          from: currentPercent, // Percentage stays the same during freeze
+          sourceIndex: props.currentSegment.sourceIndex,
+          start: props.currentSegment.start,
+          end: props.currentSegment.end,
+        });
+
+        return null; // Freeze never overflows since it doesn't consume percentage
+      }
 
       const secondsPerPercent = props.currentSegment.type === 'base'
         ? baseSecondsPerPercent

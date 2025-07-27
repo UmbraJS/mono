@@ -168,10 +168,6 @@ export function simulateTime({
 
         }).filter(mod => mod !== undefined);
 
-        if (allModifiers.length > 0) {
-          console.log('rex matchSimulator: allModifiers', card.info.name, allModifiers.map((e) => (e.playerModifiers[0]?.timestamp)));
-        }
-
         return {
           ...cooldownEvent,
           card: card,

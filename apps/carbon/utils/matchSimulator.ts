@@ -42,8 +42,6 @@ export function matchSimulator(props: SpaceTimeProps) {
     }
   })
 
-  console.log('rex matchSimulator: time', time);
-
   return {
     time,
     space: space.space,
