@@ -37,12 +37,17 @@ const timeInMinutesAndSeconds = computed(() => {
 </script>
 
 <template>
-  <div class="controlPanel">
-    <h3>
-      <Icon name="carbon:time" size="1.5rem" />
-      {{ timeInMinutesAndSeconds }}
-    </h3>
-    <div class="controls">
+  <div id="ControlPanels">
+    <div class="ControlPanel">
+      <h3>
+        <Icon name="carbon:time" size="1.5rem" />
+        {{ timeInMinutesAndSeconds }}
+      </h3>
+    </div>
+
+    <slot />
+
+    <div class="ControlPanel">
       <Button @click="handleReset">
         <Icon name="carbon:restart" size="2rem" />
       </Button>
@@ -54,41 +59,30 @@ const timeInMinutesAndSeconds = computed(() => {
       </Button>
 
       <Button @click="setSpeed">
-        <p>Speed: {{ timesSpeed }}</p>
+        <p>x {{ timesSpeed }}</p>
       </Button>
     </div>
   </div>
 </template>
 
 <style>
-.controlPanel {
+#ControlPanels {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto 1fr auto;
   grid-column: 1 / -1;
   justify-content: space-between;
   align-items: center;
   gap: var(--space-1);
-  padding: var(--space-1);
-  background-color: var(--base-10);
-  border-radius: var(--radius);
-  width: 100%;
 }
 
-.controlPanel>* {
-  cursor: pointer;
-}
-
-.controlPanel .controls {
+#ControlPanels .ControlPanel {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: var(--space-1);
 }
 
-.controlPanel h3 {
-  display: flex;
-  align-items: center;
+#ControlPanels h3 {
   color: var(--accent-120);
-  width: 190px;
 }
 </style>

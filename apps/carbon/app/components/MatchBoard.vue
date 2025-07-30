@@ -21,15 +21,27 @@ const maxBotSlots = computed(() => props.maxSlots)
     <CardBoard board="deck" :max-slots="maxBotSlots">
       <CardModal v-for="card in opponentTimeline" :key="card.id" :card="card">
         <CardHeader :card="card">
-          <CardCooldown :chunks="card.simulation.chunks" />
+          <CardCooldown :card="card" />
         </CardHeader>
       </CardModal>
     </CardBoard>
-    <TimeControls />
+    <TimeControls>
+      <div id="DeckPanels">
+        <div id="DeckPanel" class="opponent">
+          <Icon name="carbon:3d-curve-auto-vessels" size="1.5rem" />
+          <p>Opponent</p>
+        </div>
+
+        <div id="DeckPanel" class="player">
+          <Icon name="carbon:3d-curve-auto-vessels" size="1.5rem" />
+          <p>{{ store.user.name }}</p>
+        </div>
+      </div>
+    </TimeControls>
     <CardBoard board="deck" :max-slots="maxUserSlots">
       <CardModal v-for="card in playerTimeline" :key="card.id" :card="card" :chunks="card.simulation.chunks">
         <CardHeader :card="card">
-          <CardCooldown :chunks="card.simulation.chunks" />
+          <CardCooldown :card="card" />
         </CardHeader>
       </CardModal>
     </CardBoard>
@@ -37,6 +49,35 @@ const maxBotSlots = computed(() => props.maxSlots)
 </template>
 
 <style>
+#DeckPanels {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+
+#DeckPanel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background-color: var(--base-10);
+  padding: var(--space-1);
+  border-radius: var(--radius);
+}
+
+#DeckPanel.player {
+  transform: translate(0%, var(--space-1));
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+#DeckPanel.opponent {
+  transform: translate(0%, calc(-1 * var(--space-1)));
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
 .MatchBoard {
   display: grid;
   grid-template-rows: 1fr auto 1fr;

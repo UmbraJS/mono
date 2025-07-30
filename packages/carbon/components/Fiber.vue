@@ -52,11 +52,7 @@ onMounted(() => {
 
 <template>
   <div :ref="(e) => fiber.set(e as HTMLDivElement)" id="rome" class="ancor">
-    <svg
-      :width="fiber.path.value.width"
-      :height="fiber.path.value.height"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg :width="fiber.path.value.width" :height="fiber.path.value.height" xmlns="http://www.w3.org/2000/svg">
       <path :d="data" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />
     </svg>
   </div>
@@ -73,4 +69,3 @@ onMounted(() => {
   stroke: var(--accent);
 }
 </style>
-../composables/useFiber

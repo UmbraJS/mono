@@ -108,35 +108,19 @@ function isRelatedConnection(connection: Connection) {
 
 <template>
   <div ref="carbonref" id="carbon">
-    <CarbonHooks
-      ref="inputs"
-      :carbon="carbon"
-      type="input"
-      @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)"
-    />
+    <CarbonHooks ref="inputs" :carbon="carbon" type="input"
+      @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)" />
     <div class="core">
-      <CarbonHooks
-        :carbon="carbon"
-        type="input"
-        @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)"
-      />
+      <CarbonHooks :carbon="carbon" type="input" @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)" />
       <div ref="draggHandle" class="content">
         <p>
           <strong>{{ title }}</strong>
         </p>
       </div>
-      <CarbonHooks
-        :carbon="carbon"
-        type="output"
-        @hookClick="(index) => addHookedCarbon(carbon.id, 'output', index)"
-      />
+      <CarbonHooks :carbon="carbon" type="output" @hookClick="(index) => addHookedCarbon(carbon.id, 'output', index)" />
     </div>
-    <CarbonHooks
-      ref="outputs"
-      :carbon="carbon"
-      type="output"
-      @hookClick="(index) => addHookedCarbon(carbon.id, 'output', index)"
-    />
+    <CarbonHooks ref="outputs" :carbon="carbon" type="output"
+      @hookClick="(index) => addHookedCarbon(carbon.id, 'output', index)" />
   </div>
 </template>
 

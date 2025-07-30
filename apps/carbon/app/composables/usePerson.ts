@@ -282,6 +282,7 @@ export function usePerson(user: User) {
   return {
     // Reactive state
     deck: deck,
+    name: user.name,
     inventory: inventory,
     characters: characters,
     draggedCard: draggedCard,

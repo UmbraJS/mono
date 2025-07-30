@@ -73,6 +73,7 @@ export interface Character {
 }
 
 export interface User {
+  name: string
   characters: Character[]
   field: Card
   deck: Card[]

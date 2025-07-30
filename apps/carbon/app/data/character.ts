@@ -43,6 +43,7 @@ const warrior: Character = {
 }
 
 const user: User = {
+  name: 'Northern Guard',
   characters: [warrior],
   field: cards.find((card) => card.info.name === 'Village') || cards[0]!, // Use first card as fallback
   deck: [
@@ -73,6 +74,7 @@ const skeletonKing: Character = {
 }
 
 const bot: User = {
+  name: 'Undead Legion',
   characters: [skeletonKing, skeletonKing],
   field: cards.find((card) => card.info.name === 'Abandoned Halls') || cards[0]!,
   deck: [
