@@ -47,35 +47,36 @@ Generated CSS variables:
 :root {
   // The base range logic for the whole theme
   --base: #0c0915; // Base background color stop
-  --base-10: #201c26; // Base background color stop
-  --base-20: #484349; // Base background color stop
-  --base-30: #524f56; // Base background color stop
-  --base-40: #615e64; // Base background color stop
-  --base-50: #6e6c70; // Base background color stop
-  --base-60: #8d8d8d; // Base background color stop
-  --base-70: #ababa8; // Base background color stop
-  --base-80: #bdbdb8; // Base background color stop
-  --base-90: #cacbc4; // Base background color stop
-  --base-100: #d4d6cd; // Base background color stop
-  --base-110: #e1e3da; // Base background color stop
-  --base-120: #eef0e7; // Base background color stop
+  --base-10: #201c26; 
+  --base-20: #484349; 
+  --base-30: #524f56; 
+  --base-40: #615e64; 
+  --base-50: #6e6c70; 
+  --base-60: #8d8d8d; 
+  --base-70: #ababa8; 
+  --base-80: #bdbdb8; 
+  --base-90: #cacbc4; 
+  --base-100: #d4d6cd; 
+  --base-110: #e1e3da; 
+  --base-120: #eef0e7; 
   --base-contrast: #d5c9c1; // Base foreground color stop
 
   // The accent range logic based on the base range
   --accent: #9999ff; // Original accent color - maintained to be exactly what the user provided
+  // base background stop -> accent color stop -> base foreground stop
   // The real accent starting color is the background stop for the base range not the accent
-  --accent-10: #1b1828; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-20: #201d31; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-30: #25223a; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-40: #2a2743; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-50: #39365c; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-60: #423f6b; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-70: #4a4779; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-80: #5d5a99; // accent color shade - mixed from base background stop towards the accent color stop
-  --accent-90: #6e6cb7; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-10: #1b1828;
+  --accent-20: #201d31;
+  --accent-30: #25223a;
+  --accent-40: #2a2743; 
+  --accent-50: #39365c;
+  --accent-60: #423f6b; 
+  --accent-70: #4a4779;
+  --accent-80: #5d5a99; 
+  --accent-90: #6e6cb7; 
   --accent-100: #9999ff; // Original accent color fit best into this part of the range so we put the accent here as a color stop
-  --accent-110: #b2affb; // accent color shade - mixed from the accent color stop towards the base foreground stop
-  --accent-120: #c3c0f7; // accent color shade - mixed from the accent color stop towards the base foreground stop
+  --accent-110: #b2affb; 
+  --accent-120: #c3c0f7; 
   --accent-contrast: #d5c9c1; // the same as the base foreground color stop
 }
 ```
@@ -88,85 +89,11 @@ Use in your CSS:
   border: 1px solid var(--accent-20);
 }
 ```
-
 > **💡 Tailwind CSS v4 Users:** CSS variables work directly in Tailwind v4! [See Tailwind setup guide →](#tailwind-css-integration)
 
 ## 📖 API Reference
 
 ### Core Function
-
-```typescript
-function umbra(input?: UmbraInput): Umbra
-```
-
-The main function that creates a theme system. All parameters are optional with intelligent defaults.
-
-**Example:**
-```typescript
-const theme = umbra({
-  background: '#ffffff',
-  foreground: '#000000',
-  accents: ['#007acc'],
-  settings: {
-    readability: 70, // Target readability score (APCA Lc value). Defines how far it will push the foreground color stop away from the background color stop to create the range if the two stops are too close.
-    // Default: 12 shades between stops (14 total colors)
-    // The amount of change between each shade as they move from the background to the foreground does not have to be linear. 
-    // And the dark theme and the light theme might require different non-linear curves through the range to their target.
-    // Therefore shades and tints are separated out. Shades to describe the colors moving from a light stop towards a dark stop ergo light mode. 
-    // And tints to describe the colors moving from a dark stop towards a light stop ergo dark mode.
-    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25], 
-    tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25]
-  }
-})
-```
-
-**Example 2: Manual accent placement**
-
-This example shows how you can control exactly where the accent color appears in the range. This demonstrates why the base range has 2 color stops and 12 shades, while accent ranges have 3 color stops (the same 2 from the base range, plus the accent color placed between them).
-
-```typescript
-const theme = umbra({
-  background: '#ffffff',
-  foreground: '#000000',
-  accents: [{
-    name: 'primary',
-    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, '#007acc', 25, 25],
-  }],
-})
-```
-
-**Example 3: Automatic accent placement**
-
-When you don't specify the exact placement, UmbraJS finds the optimal position between the two color stops that best aligns with your accent color, maximizing the available shade space.
-
-```typescript
-const theme = umbra({
-  background: '#ffffff',
-  foreground: '#000000',
-  accents: [{
-    name: 'primary',
-    color: '#007acc',
-    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25],
-  }],
-})
-```
-
-**Example 4: Multiple color stops**
-
-You can add as many color stops as needed within your shade array:
-
-```typescript
-const theme = umbra({
-  background: '#ffffff',
-  foreground: '#000000',
-  accents: [{
-    name: 'primary',
-    shades: [5, 5, 5, 5, 15, '#007acc', 10, 25, 30, '#0066aa', 25, 25],
-  }],
-})
-```
-
-### Theme Object Methods
 
 The `umbra()` function returns a theme object with these methods:
 
@@ -323,6 +250,78 @@ umbra({
       tints: [90, 80]
     }
   ]
+})
+```
+
+
+```typescript
+function umbra(input?: UmbraInput): Umbra
+```
+
+The main function that creates a theme system. All parameters are optional with intelligent defaults.
+
+**Example:**
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: ['#007acc'],
+  settings: {
+    readability: 70, // Target readability score (APCA Lc value). Defines how far it will push the foreground color stop away from the background color stop to create the range if the two stops are too close.
+    // Default: 12 shades between stops (14 total colors)
+    // The amount of change between each shade as they move from the background to the foreground does not have to be linear. 
+    // And the dark theme and the light theme might require different non-linear curves through the range to their target.
+    // Therefore shades and tints are separated out. Shades to describe the colors moving from a light stop towards a dark stop ergo light mode. 
+    // And tints to describe the colors moving from a dark stop towards a light stop ergo dark mode.
+    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25], 
+    tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25]
+  }
+})
+```
+
+**Example 2: Manual accent placement**
+
+This example shows how you can control exactly where the accent color appears in the range. This demonstrates why the base range has 2 color stops and 12 shades, while accent ranges have 3 color stops (the same 2 from the base range, plus the accent color placed between them).
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [{
+    name: 'primary',
+    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, '#007acc', 25, 25],
+  }],
+})
+```
+
+**Example 3: Automatic accent placement**
+
+When you don't specify the exact placement, UmbraJS finds the optimal position between the two color stops that best aligns with your accent color, maximizing the available shade space.
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [{
+    name: 'primary',
+    color: '#007acc',
+    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25],
+  }],
+})
+```
+
+**Example 4: Multiple color stops**
+
+You can add as many color stops as needed within your shade array:
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [{
+    name: 'primary',
+    shades: [5, 5, 5, 5, 15, '#007acc', 10, 25, 30, '#0066aa', 25, 25],
+  }],
 })
 ```
 
