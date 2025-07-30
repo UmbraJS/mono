@@ -85,13 +85,19 @@ export const format = ({
 
 export const defaultFormater = hex
 
+/**
+ * Formats a color as a hexadecimal string: `#ff0000`
+ */
 export function hex(color: Colord) {
   return color.toHex()
 }
 
+/**
+ * Formats a color as an RGB string: `rgb(255, 0, 0)`
+ */
 export function rgb(color: Colord) {
   const rgba = color.toRgb()
-  return `${rgba.r} ${rgba.g} ${rgba.b}`
+  return `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})`
 }
 
 export interface FlattenColor {
