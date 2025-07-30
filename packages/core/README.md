@@ -204,35 +204,44 @@ const theme = umbra({
   background: '#0c0915',
   foreground: '#c0aea3',
   accents: ['#c97074']
-})
-
-// Apply to your page
-theme.apply()
+}).apply();
 ```
 
 Generated CSS variables:
 ```css
 :root {
-  --base-background: #0c0915;
-  --base-10: #201c26;
-  --base-20: #484349;
-  --base-30: #524f56;
-  --base-40: #615e64;
-  --base-50: #6e6c70;
-  --base-60: #8d8d8d;
-  --base-70: #ababa8;
-  --base-80: #bdbdb8;
-  --base-90: #cacbc4;
-  --base-100: #d4d6cd;
-  --base-110: #e1e3da;
-  --base-120: #eef0e7;
-  --base-foreground: #d5c9c1;
-  
-  --accent-background: #e6bebf;
-  --accent-foreground: #0c0915;
-  --accent-10: #ba9a9d;
-  --accent-20: #79646a;
-  /* ... 12 shades total per accent ... */
+  // The base range logic for the whole theme
+  --base: #0c0915; // Base background color stop
+  --base-10: #201c26; // Base background color stop
+  --base-20: #484349; // Base background color stop
+  --base-30: #524f56; // Base background color stop
+  --base-40: #615e64; // Base background color stop
+  --base-50: #6e6c70; // Base background color stop
+  --base-60: #8d8d8d; // Base background color stop
+  --base-70: #ababa8; // Base background color stop
+  --base-80: #bdbdb8; // Base background color stop
+  --base-90: #cacbc4; // Base background color stop
+  --base-100: #d4d6cd; // Base background color stop
+  --base-110: #e1e3da; // Base background color stop
+  --base-120: #eef0e7; // Base background color stop
+  --base-contrast: #d5c9c1; // Base foreground color stop
+
+  // The accent range logic based on the base range
+  --accent: #9999ff; // Original accent color - maintained to be exactly what the user provided
+  // The real accent starting color is the background stop for the base range not the accent
+  --accent-10: #1b1828; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-20: #201d31; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-30: #25223a; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-40: #2a2743; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-50: #39365c; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-60: #423f6b; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-70: #4a4779; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-80: #5d5a99; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-90: #6e6cb7; // accent color shade - mixed from base background stop towards the accent color stop
+  --accent-100: #9999ff; // Original accent color fit best into this part of the range so we put the accent here as a color stop
+  --accent-110: #b2affb; // accent color shade - mixed from the accent color stop towards the base foreground stop
+  --accent-120: #c3c0f7; // accent color shade - mixed from the accent color stop towards the base foreground stop
+  --accent-contrast: #d5c9c1; // the same as the base foreground color stop
 }
 ```
 
@@ -240,7 +249,7 @@ Use in your CSS:
 ```css
 .card {
   background: var(--base-10);
-  color: var(--base-foreground);
+  color: var(--base-contrast);
   border: 1px solid var(--accent-20);
 }
 ```
@@ -264,12 +273,57 @@ const theme = umbra({
   foreground: '#000000',
   accents: ['#007acc'],
   settings: {
-    readability: 7,
+    readability: 70, // Target readability score (APCA Lc value). Defines how far it will push the foreground color stop away from the background color stop to create the range if the two stops are too close.
     // Default: 12 shades between stops (14 total colors)
-    // You can customize if needed:
-    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25],
+    // The amount of change between each shade as they move from the background to the foreground does not have to be linear. 
+    // And the dark theme and the light theme might require different non-linear curves through the range to their target.
+    // Therefore shades and tints are separated out. Shades to describe the colors moving from a light stop towards a dark stop ergo light mode. 
+    // And tints to describe the colors moving from a dark stop towards a light stop ergo dark mode.
+    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25], 
     tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25]
   }
+})
+```
+
+**Example 2:**
+
+  This example highlights how you can take control of where in the base range to drop the accent stop. Its also a good visual for how it works. This is why the base range has 2 color stops and 12 shades - while the accept range has 3 color stops. the same 2 the base range has - and a third one placed inbetween them.
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [{
+    name: 'primary',
+    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, '#007acc', 25, 25],
+  }],
+})
+```
+
+In this example we dont tell the accent explicitly where to put the color so umbra will find the place between the two color stops that best aligns with the given color - this ensures that the amount of space the shades have to work with in between the stops is maximised.
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [{
+    name: 'primary',
+    color: '#007acc',
+    shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25],
+  }],
+})
+```
+
+You can also add as many color stops as you want.
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [{
+    name: 'primary',
+    shades: [5, 5, 5, 5, 15, "#007acc", 10, 25, 30, '#007acc', 25, 25],
+  }],
 })
 ```
 
@@ -277,19 +331,34 @@ const theme = umbra({
 
 The `umbra()` function returns a theme object with these methods:
 
+The umbra theme generation pipeline has 3 steps. 1: generate the ranges and prepare them. 2: format the colors. 3: attach the colors to the DOM.
+
+```typescript
+const theme = umbra({ background: '#0c0915' }) // super quick dark theme
+
+// Apply css variables to a generated stylesheet
+const formated = theme.format((color) => color.toHex()) // Custom formatter to control output format
+const appliedOutput = theme.attach(document.querySelector('.my-component'))
+
+// .apply() is actually just a shortcut for .format().apply()
+theme.apply() // Applies the theme to the DOM
+```
+
+
 #### `theme.apply(options?)`
 Applies the theme to the DOM by setting CSS variables.
 
 ```typescript
-// Apply to document root (default)
+const theme = umbra({ background: '#0c0915' }) // super quick dark theme
+
+// Apply css variables to a generated stylesheet
 theme.apply()
 
-// Apply to specific element
+// Apply css variables to a specific element
 theme.apply({ target: document.querySelector('.my-component') })
 
-// Use custom CSS variable formatter
+// Use custom CSS variable formatter to control output format
 theme.apply({ 
-  alias: true,
   formater: (color) => color.toHex(),
 })
 ```
@@ -300,6 +369,22 @@ Creates an inverted version of the theme (useful for dark/light mode toggling).
 ```typescript
 const darkTheme = theme.inverse()
 darkTheme.apply({ target: '.dark-mode' })
+```
+
+The way theme.inverse works is by simply taking the background and foreground colorstops, switching them, and switching from the shader color mix range to the tint color mix range. It will then remember the original theme so it can consistently revert back.
+But you can take full control of this by providing the `inversed` property in the input object. This lets you tell umbra exactly what the inversed theme should be.
+
+```typescript
+const themeInput: UmbraInput = {
+  foreground: '#16121f',
+  background: '#f3f6ea',
+  accents: ['#9999ff'],
+  inversed: {
+    foreground: '#f3f6ea',
+    background: '#16121f',
+    accents: ['#9999ff'],
+  },
+}
 ```
 
 #### `theme.format(formater?)`
@@ -340,6 +425,36 @@ umbra({
   foreground: '#000000',
   accents: ['#007acc', '#ff6b6b']
 })
+```
+
+**More complex theme with multiple named accents:**
+```typescript
+const warningAccent: Accent = {
+  name: 'warning',
+  color: '#ff0000',
+}
+
+const infoAccent: Accent = {
+  name: 'info',
+  color: '#2bb8e6',
+}
+
+const yellowAccent: Accent = {
+  name: 'yellow',
+  color: '#ffff00',
+}
+
+const successAccent: Accent = {
+  name: 'success',
+  color: '#00ff00',
+}
+
+const themeInput: UmbraInput = {
+  foreground: '#16121f',
+  background: '#f3f6ea',
+  // unnamed accent colors will simply show up as --accent-* variables
+  accents: ['#9999ff', warningAccent, successAccent, infoAccent, yellowAccent],
+}
 ```
 
 **Advanced accent configuration:**
@@ -452,7 +567,7 @@ Each accent creates its own complete range:
 - `--success-background` (the accent color)
 - `--success-10`, `--success-20` (darker variations)
 - `--success-90`, `--success-80` (lighter variations)
-- `--success-foreground` (optimal contrast color)
+- `--success-contrast` (optimal contrast color)
 
 #### Smart Range Relationships
 
@@ -469,6 +584,7 @@ const theme = umbra({
   background: '#1a1a1a', // Dark theme base
   foreground: '#ffffff',
   accents: [
+    // it's recommended to name your accents if you have multiple
     { name: 'primary', color: '#3b82f6' },
     { name: 'success', color: '#10b981' },
     { name: 'danger', color: '#ef4444' }
@@ -481,7 +597,7 @@ const theme = umbra({
 
 #### Multiple Accents with Same Names
 
-When you create multiple accents with the same name, UmbraJS intelligently handles naming:
+When you create multiple accents with the same name, UmbraJS intelligently increments naming:
 
 ```typescript
 umbra({
@@ -491,6 +607,17 @@ umbra({
     { name: 'brand', color: '#3b82f6' },  // --brand-*
     { name: 'brand', color: '#8b5cf6' },  // --brand-2-*
     { name: 'brand', color: '#ec4899' }   // --brand-3-*
+  ]
+})
+
+// more typically this might happen when you just insert multiple accent colors without naming them
+umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [
+    '#3b82f6', // --accent-*
+    '#8b5cf6', // --accent-2-*
+    '#ec4899'  // --accent-3-*
   ]
 })
 ```
@@ -603,23 +730,41 @@ export default {
     colors: {
       // UmbraJS CSS variables work directly in Tailwind v4
       base: {
-        DEFAULT: 'var(--base-background)',
-        foreground: 'var(--base-foreground)',
+        background: 'var(--base)',
         10: 'var(--base-10)',
         20: 'var(--base-20)',
+        30: 'var(--base-30)',
+        40: 'var(--base-40)',
+        50: 'var(--base-50)',
+        60: 'var(--base-60)',
+        70: 'var(--base-70)',
+        80: 'var(--base-80)',
+        90: 'var(--base-90)',
+        100: 'var(--base-100)',
+        110: 'var(--base-110)',
+        120: 'var(--base-120)',
+        contrast: 'var(--base-contrast)',
       },
       accent: {
-        DEFAULT: 'var(--accent-background)',
-        foreground: 'var(--accent-foreground)',
+        background: 'var(--accent)',
         10: 'var(--accent-10)',
         20: 'var(--accent-20)',
+        30: 'var(--accent-30)',
+        40: 'var(--accent-40)',
+        50: 'var(--accent-50)',
+        60: 'var(--accent-60)',
+        70: 'var(--accent-70)',
+        80: 'var(--accent-80)',
+        90: 'var(--accent-90)',
+        100: 'var(--accent-100)',
+        110: 'var(--accent-110)',
+        120: 'var(--accent-120)',
+        contrast: 'var(--accent-contrast)',
       }
     }
   }
 }
 ```
-
-> **Note:** UmbraJS only adds numeric suffixes to accent variables when you have multiple accents. The first accent uses `--accent-*`, additional accents use `--accent-2-*`, `--accent-3-*`, etc.
 
 **Usage in Templates:**
 
