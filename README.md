@@ -103,17 +103,17 @@ UmbraJS theme generation follows a 3-step pipeline:
 
 1. **🎨 Generate**: Create color ranges and calculate optimal shades
 2. **📝 Format**: Convert colors to your preferred format (hex, rgb, hsl, etc.)
-3. **🔗 Apply**: Attach the formatted colors to the DOM as CSS variables
+3. **🔗 Attach**: Attach the formatted colors to the DOM as CSS variables
 
 ```typescript
 const theme = umbra({ background: '#0c0915' }) // Create theme
 
 // Manual pipeline control
 const formatted = theme.format('hex')     // Step 2: Format colors
-const applied = theme.apply()             // Step 3: Apply to DOM
+const applied = formatted.attach()             // Step 3: Attach to DOM
 
 // Or use the shortcut (recommended)
-theme.apply() // Combines format() + apply() automatically
+theme.apply() // Combines format() + attach() automatically
 ```
 
 
