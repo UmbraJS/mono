@@ -4,171 +4,6 @@
 
 A flexible, type-safe theme management library that creates semantic color systems based on the Umbra pattern - focusing on color relationships rather than specific element styling.
 
-[![NPM Version](https://img.shields.io/npm/v/@umbrajs/core.svg)](https://www.npmjs.com/package/@umbrajs/coreIt's completely harmless and doesn't affect performance—just a little gift for curious developers who inspect their CSS! 🎉
-
-## 🎨 The 12-Shade Color System
-
-UmbraJS generates **12 intermediate shades** between your background and foreground colors, creating a total of **14 colors** per range (including the two stops). This 12-shade system is specifically designed to align with the **[Radix Colors](https://radix-ui.com/colors)** methodology, providing a scientifically-backed approach to color scale design.
-
-### Why 12 Shades?
-
-The 12-shade system isn't arbitrary—it's based on extensive research and testing by the Radix team to create optimal color scales for user interfaces. Each of the 12 steps serves specific use cases:
-
-| Step | Use Case | CSS Variable |
-|------|----------|--------------|
-| 1 | App background | `--base-10` |
-| 2 | Subtle background | `--base-20` |
-| 3 | UI element background | `--base-30` |
-| 4 | Hovered UI element background | `--base-40` |
-| 5 | Active/Selected UI element background | `--base-50` |
-| 6 | Subtle borders and separators | `--base-60` |
-| 7 | UI element border and focus rings | `--base-70` |
-| 8 | Hovered UI element border | `--base-80` |
-| 9 | Solid backgrounds | `--base-90` |
-| 10 | Hovered solid backgrounds | `--base-100` |
-| 11 | Low-contrast text | `--base-110` |
-| 12 | High-contrast text | `--base-120` |
-
-> **Note:** The background and foreground colors become `--base-background` and `--base-foreground` respectively, with the 12 shades bridging between them.
-
-### Radix Colors Integration
-
-You can seamlessly integrate predefined Radix color scales with UmbraJS by importing them directly into your shade arrays:
-
-```typescript
-import { umbra } from '@umbrajs/core'
-// Import your preferred Radix color scale
-import { slate } from '@radix-ui/colors'
-
-const theme = umbra({
-  background: '#ffffff',
-  foreground: '#000000',
-  settings: {
-    // Use Radix color values in your shades
-    shades: slate
-  }
-})
-```
-
-### Benefits of the Unified System
-
-This approach provides several advantages:
-
-**🎯 **Consistency**: Whether you generate colors automatically or use predefined Radix scales, you get the same API and variable naming
-
-**🔄 **Flexibility**: Mix and match generated colors with carefully crafted Radix colors as needed
-
-**📐 **Standards-based**: Built on proven color theory and extensive usability testing
-
-**♿ **Accessibility**: Both generated and Radix colors maintain proper contrast relationships
-
-**🛠️ **Developer Experience**: Single system to learn, consistent tooling across your entire project
-
-### Credit to Radix Colors
-
-The 12-shade methodology is based on the excellent work by the [Radix UI team](https://radix-ui.com/). Their research into optimal color scales for user interfaces has informed UmbraJS's default configuration, ensuring that automatically generated themes follow the same scientific principles as their carefully crafted color palettes.
-
-**Learn more:** [Radix Colors Documentation](https://radix-ui.com/colors/docs/palette-composition/understanding-the-scale)
-
-## 🔬 Advanced Perceptual Contrast Algorithm (APCA)
-
-UmbraJS uses the **Accessible Perceptual Contrast Algorithm (APCA)** instead of the traditional WCAG 2.x contrast ratios. This makes UmbraJS ahead of its time—APCA will become the new standard in **WCAG 3.0** due to its superior accuracy in matching human visual perception.
-
-### Why APCA Over WCAG 2.x?
-
-Traditional WCAG 2.x contrast is **mathematically correct but perceptually wrong**. Here's why:
-
-**🧮 WCAG 2.x Problems:**
-- **Linear math vs. curved perception**: Uses simple mathematical ratios that don't match how humans actually see
-- **Dark mode failures**: Becomes functionally unreadable with dark colors
-- **Binary pass/fail**: Oversimplified thresholds that don't serve the range of human vision
-- **Context-blind**: Ignores font size, weight, and spatial characteristics
-
-**🧠 APCA Advantages:**
-- **Perceptually uniform**: Matches the curve of human visual perception
-- **Context-aware**: Considers font size, weight, and spatial characteristics  
-- **Dark mode optimized**: Works accurately across all color combinations
-- **Range-based**: Provides nuanced guidance instead of binary pass/fail
-
-### How UmbraJS Uses APCA
-
-UmbraJS leverages APCA throughout its color generation process:
-
-```typescript
-import { umbra } from '@umbrajs/core'
-
-const theme = umbra({
-  background: '#ffffff',
-  foreground: '#000000',
-  settings: {
-    readability: 70  // APCA Lc value, not WCAG ratio
-  }
-})
-```
-
-**APCA Integration Points:**
-
-1. **Intelligent Color Adjustment**: When generating shades, UmbraJS uses APCA to ensure each step maintains proper perceptual contrast
-2. **Adaptive Readability**: The `readability` setting uses APCA's Lc (lightness contrast) values for precise control
-3. **Dark Mode Accuracy**: Unlike WCAG 2.x, APCA ensures dark themes remain readable
-4. **Contextual Optimization**: APCA's spatial awareness helps optimize contrast based on expected usage
-
-### APCA Readability Scale
-
-UmbraJS uses APCA's Lc (lightness contrast) values, which range from 0 to ±106:
-
-| Lc Value | Use Case | UmbraJS Application |
-|----------|----------|-------------------|
-| **Lc 90** | Body text, reading content | High-contrast text variables |
-| **Lc 75** | Important text, minimum readability | Primary text elements |
-| **Lc 60** | Content text, headlines | Secondary text, larger elements |
-| **Lc 45** | Large headings, pictograms | UI accents, interactive elements |
-| **Lc 30** | Placeholder text, disabled elements | Subtle UI elements |
-| **Lc 15** | Minimal visibility threshold | Borders, dividers |
-
-### The Future of Contrast
-
-By using APCA, UmbraJS themes are **future-ready** for WCAG 3.0 while providing **better accessibility today**:
-
-```typescript
-// Traditional approach (WCAG 2.x)
-// ❌ May pass ratios that are actually unreadable in dark mode
-// ❌ May fail ratios that are perfectly readable
-
-// UmbraJS with APCA
-// ✅ Perceptually accurate across all color combinations
-// ✅ Consistent readability in light and dark modes
-// ✅ Context-aware contrast optimization
-const theme = umbra({
-  background: '#1a1a1a',  // Dark background
-  foreground: '#ffffff',  // Light text
-  settings: {
-    readability: 75  // APCA ensures this is truly readable
-  }
-})
-```
-
-### Visual Comparison
-
-The difference is dramatic, especially in dark mode:
-
-```css
-/* WCAG 2.x "passing" colors that are actually hard to read */
-background: #2a2a2a;
-color: #757575; /* Passes WCAG 2.x but hard to read */
-
-/* APCA-optimized colors from UmbraJS */
-background: var(--base-background); /* #1a1a1a */
-color: var(--base-foreground);      /* Truly readable */
-```
-
-**The science is clear**: Human perception follows curves, not linear math. APCA's perceptual uniformity means that Lc 60 represents the same perceived contrast whether you're using light or dark colors—something impossible with WCAG 2.x ratios.
-
-**Learn more:** [APCA Documentation](https://git.apcacontrast.com/documentation/APCAeasyIntro) | [The Realities And Myths Of Contrast And Color](https://www.smashingmagazine.com/2022/09/realities-myths-contrast-color/)
-
-## 🌈 Advanced Usage![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 ## ✨ Features
 
 - **🎯 Simple** - Single function call to generate complete theme systems
@@ -285,9 +120,9 @@ const theme = umbra({
 })
 ```
 
-**Example 2:**
+**Example 2: Manual accent placement**
 
-  This example highlights how you can take control of where in the base range to drop the accent stop. Its also a good visual for how it works. This is why the base range has 2 color stops and 12 shades - while the accept range has 3 color stops. the same 2 the base range has - and a third one placed inbetween them.
+This example shows how you can control exactly where the accent color appears in the range. This demonstrates why the base range has 2 color stops and 12 shades, while accent ranges have 3 color stops (the same 2 from the base range, plus the accent color placed between them).
 
 ```typescript
 const theme = umbra({
@@ -300,7 +135,9 @@ const theme = umbra({
 })
 ```
 
-In this example we dont tell the accent explicitly where to put the color so umbra will find the place between the two color stops that best aligns with the given color - this ensures that the amount of space the shades have to work with in between the stops is maximised.
+**Example 3: Automatic accent placement**
+
+When you don't specify the exact placement, UmbraJS finds the optimal position between the two color stops that best aligns with your accent color, maximizing the available shade space.
 
 ```typescript
 const theme = umbra({
@@ -314,7 +151,9 @@ const theme = umbra({
 })
 ```
 
-You can also add as many color stops as you want.
+**Example 4: Multiple color stops**
+
+You can add as many color stops as needed within your shade array:
 
 ```typescript
 const theme = umbra({
@@ -322,7 +161,7 @@ const theme = umbra({
   foreground: '#000000',
   accents: [{
     name: 'primary',
-    shades: [5, 5, 5, 5, 15, "#007acc", 10, 25, 30, '#007acc', 25, 25],
+    shades: [5, 5, 5, 5, 15, '#007acc', 10, 25, 30, '#0066aa', 25, 25],
   }],
 })
 ```
@@ -331,17 +170,23 @@ const theme = umbra({
 
 The `umbra()` function returns a theme object with these methods:
 
-The umbra theme generation pipeline has 3 steps. 1: generate the ranges and prepare them. 2: format the colors. 3: attach the colors to the DOM.
+#### Understanding the Pipeline
+
+UmbraJS theme generation follows a 3-step pipeline:
+
+1. **🎨 Generate**: Create color ranges and calculate optimal shades
+2. **📝 Format**: Convert colors to your preferred format (hex, rgb, hsl, etc.)
+3. **🔗 Apply**: Attach the formatted colors to the DOM as CSS variables
 
 ```typescript
-const theme = umbra({ background: '#0c0915' }) // super quick dark theme
+const theme = umbra({ background: '#0c0915' }) // Create theme
 
-// Apply css variables to a generated stylesheet
-const formated = theme.format((color) => color.toHex()) // Custom formatter to control output format
-const appliedOutput = theme.attach(document.querySelector('.my-component'))
+// Manual pipeline control
+const formatted = theme.format('hex')     // Step 2: Format colors
+const applied = theme.apply()             // Step 3: Apply to DOM
 
-// .apply() is actually just a shortcut for .format().apply()
-theme.apply() // Applies the theme to the DOM
+// Or use the shortcut (recommended)
+theme.apply() // Combines format() + apply() automatically
 ```
 
 
@@ -349,17 +194,17 @@ theme.apply() // Applies the theme to the DOM
 Applies the theme to the DOM by setting CSS variables.
 
 ```typescript
-const theme = umbra({ background: '#0c0915' }) // super quick dark theme
+const theme = umbra({ background: '#0c0915' }) // Create dark theme
 
-// Apply css variables to a generated stylesheet
+// Apply to document root (default)
 theme.apply()
 
-// Apply css variables to a specific element
+// Apply to specific element
 theme.apply({ target: document.querySelector('.my-component') })
 
-// Use custom CSS variable formatter to control output format
+// Use custom formatter for CSS variables
 theme.apply({ 
-  formater: (color) => color.toHex(),
+  formatter: (color) => color.toHex() // Control output format
 })
 ```
 
@@ -371,8 +216,9 @@ const darkTheme = theme.inverse()
 darkTheme.apply({ target: '.dark-mode' })
 ```
 
-The way theme.inverse works is by simply taking the background and foreground colorstops, switching them, and switching from the shader color mix range to the tint color mix range. It will then remember the original theme so it can consistently revert back.
-But you can take full control of this by providing the `inversed` property in the input object. This lets you tell umbra exactly what the inversed theme should be.
+**How inversion works:** UmbraJS switches the background and foreground color stops and changes from the shade color mixing range to the tint color mixing range. It remembers the original theme for consistent reverting.
+
+**Custom inversion control:** You can define exactly what the inversed theme should be:
 
 ```typescript
 const themeInput: UmbraInput = {
@@ -387,12 +233,16 @@ const themeInput: UmbraInput = {
 }
 ```
 
-#### `theme.format(formater?)`
+#### `theme.format(formatter?)`
 Returns formatted color data without applying to DOM.
 
 ```typescript
 const formatted = theme.format('hex')
 console.log(formatted.colors) // Array of formatted color ranges
+
+// Custom formatter function
+const customFormatted = theme.format((color) => color.toRgb())
+console.log(customFormatted.colors) // RGB formatted ranges
 ```
 
 #### `theme.isDark()`
@@ -484,7 +334,7 @@ interface UmbraSettings {
   iterations?: number      // Color adjustment iterations (default: 20)
   shades?: (number | string)[]  // Darker shade percentages (default: 12 shades)
   tints?: (number | string)[]   // Lighter tint percentages (default: 12 tints)
-  formater?: Formater      // Output format ('hex', 'rgb', 'hsl')
+  formatter?: Formatter      // Output format ('hex', 'rgb', 'hsl')
   aliases?: Alias | true   // CSS variable aliases
   callback?: (output: UmbraOutputs) => void  // Apply callback
 }
@@ -496,7 +346,7 @@ umbra({
   background: '#ffffff',
   foreground: '#333333',
   settings: {
-    readability: 12  // Higher score = better contrast
+    readability: 75  // Higher score = better contrast (APCA Lc value)
   }
 })
 ```
@@ -515,7 +365,7 @@ umbra({
 })
 ```
 
-## � Understanding Color Ranges
+## 🎨 Understanding Color Ranges
 
 ### The Umbra Philosophy
 
@@ -636,25 +486,170 @@ This range-based approach provides several key benefits:
 
 **📱 Scalability**: Add new accent ranges without breaking existing relationships
 
-### 🥚 Easter Egg: Generation Counter
 
-Here's a fun secret! UmbraJS includes a hidden counter in the generated CSS that tracks how many times themes have been applied to your page. Look for it in your browser's DevTools:
+# 📚 Methodology
 
-```css
-/* Each time you apply a theme, UmbraJS creates a selector like this: */
-theme-2-15, :root { 
-  --base-background: #ffffff;
-  /* ... your variables ... */
-}
+## 🎨 The 12-Shade Color System
+
+UmbraJS generates **12 intermediate shades** between your background and foreground colors, creating a total of **14 colors** per range (including the two stops). This 12-shade system is specifically designed to align with the **[Radix Colors](https://radix-ui.com/colors)** methodology, providing a scientifically-backed approach to color scale design.
+
+### Why 12 Shades?
+
+The 12-shade system isn't arbitrary—it's based on extensive research and testing by the Radix team to create optimal color scales for user interfaces. Each of the 12 steps serves specific use cases:
+
+| Step | Use Case | CSS Variable |
+|------|----------|--------------|
+| 1 | App background | `--base-10` |
+| 2 | Subtle background | `--base-20` |
+| 3 | UI element background | `--base-30` |
+| 4 | Hovered UI element background | `--base-40` |
+| 5 | Active/Selected UI element background | `--base-50` |
+| 6 | Subtle borders and separators | `--base-60` |
+| 7 | UI element border and focus rings | `--base-70` |
+| 8 | Hovered UI element border | `--base-80` |
+| 9 | Solid backgrounds | `--base-90` |
+| 10 | Hovered solid backgrounds | `--base-100` |
+| 11 | Low-contrast text | `--base-110` |
+| 12 | High-contrast text | `--base-120` |
+
+> **Note:** The background and foreground colors become `--base-background` and `--base-foreground` respectively, with the 12 shades bridging between them.
+
+### Radix Colors Integration
+
+You can seamlessly integrate predefined Radix color scales with UmbraJS by importing them directly into your shade arrays:
+
+```typescript
+import { umbra } from '@umbrajs/core'
+// Import your preferred Radix color scale
+import { slate } from '@radix-ui/colors'
+
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  settings: {
+    // Use Radix color values in your shades
+    shades: slate
+  }
+})
 ```
 
-The numbers mean:
-- **First number**: How many times this specific selector has been updated  
-- **Second number**: Total theme applications across your entire page
+### Benefits of the Unified System
 
-It's completely harmless and doesn't affect performance—just a little gift for curious developers who inspect their CSS! 🎉
+This approach provides several advantages:
 
-## �🌈 Advanced Usage
+**🎯 Consistency**: Whether you generate colors automatically or use predefined Radix scales, you get the same API and variable naming
+
+**🔄 Flexibility**: Mix and match generated colors with carefully crafted Radix colors as needed
+
+**📐 Standards-based**: Built on proven color theory and extensive usability testing
+
+**♿ Accessibility**: Both generated and Radix colors maintain proper contrast relationships
+
+**🛠️ Developer Experience**: Single system to learn, consistent tooling across your entire project
+
+### Credit to Radix Colors
+
+The 12-shade methodology is based on the excellent work by the [Radix UI team](https://radix-ui.com/). Their research into optimal color scales for user interfaces has informed UmbraJS's default configuration, ensuring that automatically generated themes follow the same scientific principles as their carefully crafted color palettes.
+
+**Learn more:** [Radix Colors Documentation](https://radix-ui.com/colors/docs/palette-composition/understanding-the-scale)
+
+## 🔬 Advanced Perceptual Contrast Algorithm (APCA)
+
+UmbraJS uses the **Accessible Perceptual Contrast Algorithm (APCA)** instead of the traditional WCAG 2.x contrast ratios. This makes UmbraJS ahead of its time—APCA will become the new standard in **WCAG 3.0** due to its superior accuracy in matching human visual perception.
+
+### Why APCA Over WCAG 2.x?
+
+Traditional WCAG 2.x contrast is **mathematically correct but perceptually wrong**. Here's why:
+
+**🧮 WCAG 2.x Problems:**
+- **Linear math vs. curved perception**: Uses simple mathematical ratios that don't match how humans actually see
+- **Dark mode failures**: Becomes functionally unreadable with dark colors
+- **Binary pass/fail**: Oversimplified thresholds that don't serve the range of human vision
+- **Context-blind**: Ignores font size, weight, and spatial characteristics
+
+**🧠 APCA Advantages:**
+- **Perceptually uniform**: Matches the curve of human visual perception
+- **Context-aware**: Considers font size, weight, and spatial characteristics  
+- **Dark mode optimized**: Works accurately across all color combinations
+- **Range-based**: Provides nuanced guidance instead of binary pass/fail
+
+### How UmbraJS Uses APCA
+
+UmbraJS leverages APCA throughout its color generation process:
+
+```typescript
+import { umbra } from '@umbrajs/core'
+
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  settings: {
+    readability: 70  // APCA Lc value, not WCAG ratio
+  }
+})
+```
+
+**APCA Integration Points:**
+
+1. **Intelligent Color Adjustment**: When generating shades, UmbraJS uses APCA to ensure each step maintains proper perceptual contrast
+2. **Adaptive Readability**: The `readability` setting uses APCA's Lc (lightness contrast) values for precise control
+3. **Dark Mode Accuracy**: Unlike WCAG 2.x, APCA ensures dark themes remain readable
+4. **Contextual Optimization**: APCA's spatial awareness helps optimize contrast based on expected usage
+
+### APCA Readability Scale
+
+UmbraJS uses APCA's Lc (lightness contrast) values, which range from 0 to ±106:
+
+| Lc Value | Use Case | UmbraJS Application |
+|----------|----------|-------------------|
+| **Lc 90** | Body text, reading content | High-contrast text variables |
+| **Lc 75** | Important text, minimum readability | Primary text elements |
+| **Lc 60** | Content text, headlines | Secondary text, larger elements |
+| **Lc 45** | Large headings, pictograms | UI accents, interactive elements |
+| **Lc 30** | Placeholder text, disabled elements | Subtle UI elements |
+| **Lc 15** | Minimal visibility threshold | Borders, dividers |
+
+### The Future of Contrast
+
+By using APCA, UmbraJS themes are **future-ready** for WCAG 3.0 while providing **better accessibility today**:
+
+```typescript
+// Traditional approach (WCAG 2.x)
+// ❌ May pass ratios that are actually unreadable in dark mode
+// ❌ May fail ratios that are perfectly readable
+
+// UmbraJS with APCA
+// ✅ Perceptually accurate across all color combinations
+// ✅ Consistent readability in light and dark modes
+// ✅ Context-aware contrast optimization
+const theme = umbra({
+  background: '#1a1a1a',  // Dark background
+  foreground: '#ffffff',  // Light text
+  settings: {
+    readability: 75  // APCA ensures this is truly readable
+  }
+})
+```
+
+### Visual Comparison
+
+The difference is dramatic, especially in dark mode:
+
+```css
+/* WCAG 2.x "passing" colors that are actually hard to read */
+background: #2a2a2a;
+color: #757575; /* Passes WCAG 2.x but hard to read */
+
+/* APCA-optimized colors from UmbraJS */
+background: var(--base-background); /* #1a1a1a */
+color: var(--base-foreground);      /* Truly readable */
+```
+
+**The science is clear**: Human perception follows curves, not linear math. APCA's perceptual uniformity means that Lc 60 represents the same perceived contrast whether you're using light or dark colors—something impossible with WCAG 2.x ratios.
+
+**Learn more:** [APCA Documentation](https://git.apcacontrast.com/documentation/APCAeasyIntro) | [The Realities And Myths Of Contrast And Color](https://www.smashingmagazine.com/2022/09/realities-myths-contrast-color/)
+
+## 🌈 Advanced Usage
 
 ### Dark/Light Mode
 
@@ -884,9 +879,42 @@ import { format } from '@umbrajs/core'
 const formatted = format({
   output: colorRanges,
   input: originalInput,
-  formater: (color) => color.toHex() // Custom formatter function
+  formatter: (color) => color.toHex() // Custom formatter function
 })
+
+// Available format options
+const theme = umbra({ background: '#fff', foreground: '#000' })
+
+theme.format('hex')    // #ffffff, #000000
+theme.format('rgb')    // rgb(255,255,255), rgb(0,0,0)
+theme.format('hsl')    // hsl(0,0%,100%), hsl(0,0%,0%)
+
+// Custom formatter functions
+theme.format((color) => color.toOklch()) // Modern OKLCH format
+theme.format((color) => `hsl(${color.hue} ${color.saturation}% ${color.lightness}%)`) // Custom string
 ```
+
+### 🥚 Easter Egg: Generation Counter
+
+Here's a fun secret! UmbraJS includes a hidden counter in the generated CSS that tracks how many times themes have been applied to your page. Look for it in your browser's DevTools:
+
+```css
+/* Each time you apply a theme, UmbraJS creates a selector like this: */
+theme-2-15, :root { 
+  --base-background: #ffffff;
+  /* ... your variables ... */
+}
+```
+
+The numbers mean:
+- **First number**: How many times this specific selector has been updated  
+- **Second number**: Total theme applications across your entire page
+
+It's completely harmless and doesn't affect performance—just a little gift for curious developers who inspect their CSS! 🎉
+
+### Framework Integration Examples
+
+#### React Hook Example
 
 ```typescript
 import { umbra } from '@umbrajs/core'
@@ -914,13 +942,37 @@ function useTheme(initialTheme) {
     isDark: theme.isDark()
   }
 }
+
+// Usage in component
+function App() {
+  const { theme, updateTheme, toggleDarkMode, isDark } = useTheme({
+    background: '#ffffff',
+    foreground: '#000000',
+    accents: ['#3b82f6']
+  })
+  
+  return (
+    <div>
+      <button onClick={toggleDarkMode}>
+        Switch to {isDark ? 'light' : 'dark'} mode
+      </button>
+      <button onClick={() => updateTheme({ 
+        background: '#1a1a1a', 
+        foreground: '#ffffff',
+        accents: ['#ef4444'] 
+      })}>
+        Apply red accent theme
+      </button>
+    </div>
+  )
+}
 ```
 
-### Vue Composable Example
+#### Vue Composable Example
 
 ```typescript
 import { umbra } from '@umbrajs/core'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 export function useUmbra(initialTheme) {
   const currentTheme = ref(umbra(initialTheme))
@@ -942,6 +994,24 @@ export function useUmbra(initialTheme) {
     setTheme,
     toggleDarkMode,
     isDark: computed(() => currentTheme.value.isDark())
+  }
+}
+
+// Usage in component
+export default {
+  setup() {
+    const { theme, setTheme, toggleDarkMode, isDark } = useUmbra({
+      background: '#ffffff',
+      foreground: '#000000',
+      accents: ['#3b82f6']
+    })
+    
+    return {
+      theme,
+      setTheme,
+      toggleDarkMode,
+      isDark
+    }
   }
 }
 ```
