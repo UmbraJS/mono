@@ -86,6 +86,14 @@ export const useUmbra = defineStore('umbra', () => {
     return theme
   }
 
+  const theme = umbra()
+  console.log('Umbra:', {
+    generated: theme,
+    formated: theme.format(),
+    attached: theme.format().attach({}),
+  })
+
+
   function apply({ scheme, element }: { scheme?: UmbraInput; element?: HTMLElement } = {}) {
     const schemeInput = {
       ...input.value, // previous input

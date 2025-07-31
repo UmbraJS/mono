@@ -116,6 +116,17 @@ const applied = formatted.attach()             // Step 3: Attach to DOM
 theme.apply() // Combines format() + attach() automatically
 ```
 
+The best way to get a quick sense of how these steps work together and what they provide you is to just log put each step and inspect the output:
+
+```typescript
+  const theme = umbra()
+  console.log('Umbra:', {
+    generated: theme,
+    formated: theme.format(),
+    attached: theme.format().attach({}),
+  })
+```
+
 
 #### `theme.apply(options?)`
 Applies the theme to the DOM by setting CSS variables.
@@ -161,7 +172,7 @@ const themeInput: UmbraInput = {
 ```
 
 #### `theme.format(formatter?)`
-Returns formatted color data without applying to DOM.
+The format function decides what the final format of the colors should be, rgb, hex, hsl, etc. 
 
 ```typescript
 const formatted = theme.format('hex')
@@ -170,6 +181,184 @@ console.log(formatted.colors) // Array of formatted color ranges
 // Custom formatter function
 const customFormatted = theme.format((color) => color.toRgb())
 console.log(customFormatted.colors) // RGB formatted ranges
+```
+
+The format function also returns a few usefull arrays and objects though. Lets have a quick look.
+
+
+
+```typescript
+const formatted = theme.format()
+
+console.log(formatted.colors) // Array of FormatedRange objects
+
+// logs
+{
+  input: {} // Original input theme
+  output: [] // This is what the generator itself passed to the formatter - which is a list of all the ranges and their colors but every color is a Colord object - not a string
+  formated: [], // This is the same exact list as the output except the colors are formatted as strings according to the formatter picked
+  flattened: [] // This is a flattened list of all colors across all ranges, umbra uses this list in the attach step to easily iterate over all the colors and apply them. But you can also easily use this list to iterate over all the colors regardless of the range they belong to.
+  attach: [Function: attach], // the final step, to attach the colors to the DOM as CSS variables
+}
+
+// Example of the formated output
+[
+    {
+        "name": "base",
+        "background": "#090233",
+        "shades": [
+            "#140f39",
+            "#20163f",
+            "#2b1c44",
+            "#352249",
+            "#513558",
+            "#614061",
+            "#704a69",
+            "#92627b",
+            "#b2798b",
+            "#c58794",
+            "#d3919b",
+            "#de99a0"
+        ],
+        "foreground": "#ffb1b1"
+    },
+    {
+        "name": "accent",
+        "background": "#ffffff",
+        "shades": [
+            "#12123c",
+            "#1e1b45",
+            "#28244d",
+            "#322d55",
+            "#4e486d",
+            "#5e587b",
+            "#6d6787",
+            "#908ba4",
+            "#b0acbf",
+            "#ffffff",
+            "#ffeceb",
+            "#ffdddc"
+        ],
+        "foreground": "#ffb1b1"
+    },
+]
+
+// Example of the flattened output: 
+
+[
+    {
+        "name": "--base",
+        "color": "#090233"
+    },
+    {
+        "name": "--base-10",
+        "color": "#140f39"
+    },
+    {
+        "name": "--base-20",
+        "color": "#20163f"
+    },
+    {
+        "name": "--base-30",
+        "color": "#2b1c44"
+    },
+    {
+        "name": "--base-40",
+        "color": "#352249"
+    },
+    {
+        "name": "--base-50",
+        "color": "#513558"
+    },
+    {
+        "name": "--base-60",
+        "color": "#614061"
+    },
+    {
+        "name": "--base-70",
+        "color": "#704a69"
+    },
+    {
+        "name": "--base-80",
+        "color": "#92627b"
+    },
+    {
+        "name": "--base-90",
+        "color": "#b2798b"
+    },
+    {
+        "name": "--base-100",
+        "color": "#c58794"
+    },
+    {
+        "name": "--base-110",
+        "color": "#d3919b"
+    },
+    {
+        "name": "--base-120",
+        "color": "#de99a0"
+    },
+    {
+        "name": "--base-contrast",
+        "color": "#ffb1b1"
+    },
+    {
+        "name": "--accent",
+        "color": "#ffffff"
+    },
+    {
+        "name": "--accent-10",
+        "color": "#12123c"
+    },
+    {
+        "name": "--accent-20",
+        "color": "#1e1b45"
+    },
+    {
+        "name": "--accent-30",
+        "color": "#28244d"
+    },
+    {
+        "name": "--accent-40",
+        "color": "#322d55"
+    },
+    {
+        "name": "--accent-50",
+        "color": "#4e486d"
+    },
+    {
+        "name": "--accent-60",
+        "color": "#5e587b"
+    },
+    {
+        "name": "--accent-70",
+        "color": "#6d6787"
+    },
+    {
+        "name": "--accent-80",
+        "color": "#908ba4"
+    },
+    {
+        "name": "--accent-90",
+        "color": "#b0acbf"
+    },
+    {
+        "name": "--accent-100",
+        "color": "#ffffff"
+    },
+    {
+        "name": "--accent-110",
+        "color": "#ffeceb"
+    },
+    {
+        "name": "--accent-120",
+        "color": "#ffdddc"
+    },
+    {
+        "name": "--accent-contrast",
+        "color": "#ffb1b1"
+    },
+]
 ```
 
 #### `theme.isDark()`
@@ -232,6 +421,42 @@ const themeInput: UmbraInput = {
   // unnamed accent colors will simply show up as --accent-* variables
   accents: ['#9999ff', warningAccent, successAccent, infoAccent, yellowAccent],
 }
+```
+
+
+**Example of providing multiple theme options to the user:**
+These themes could be used in a theme switcher component, allowing users to choose their preferred style.
+```typescript
+const warningAccent: Accent = {
+  name: 'warning',
+  color: '#ff0000',
+}
+
+const successAccent: Accent = {
+  name: 'success',
+  color: '#00ff00',
+}
+
+
+const linearTheme: UmbraInput = {
+  foreground: '#f3f6ea',
+  background: '#16121f',
+  accents: ['#9999ff', warningAccent, successAccent],
+}
+
+const retro60sTheme: UmbraInput = {
+  foreground: '#16121f',
+  background: '#eaeef6ff',
+  accents: ['#a77a1aff', warningAccent, successAccent],
+}
+
+const vintageTheme: UmbraInput = {
+  foreground: '#16121f',
+  background: '#f3f6ea',
+  accents: ['#99ffb3ff', warningAccent, successAccent],
+}
+
+<button onClick={() => umbra(linearTheme).apply()}>Linear Theme</button>
 ```
 
 **Advanced accent configuration:**
@@ -433,7 +658,7 @@ const theme = umbra({
   background: '#1a1a1a', // Dark theme base
   foreground: '#ffffff',
   accents: [
-    // it's recommended to name your accents if you have multiple
+    // It's recommended to name your accents if you have multiple
     { name: 'primary', color: '#3b82f6' },
     { name: 'success', color: '#10b981' },
     { name: 'danger', color: '#ef4444' }
