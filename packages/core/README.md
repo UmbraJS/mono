@@ -91,6 +91,10 @@ Use in your CSS:
 ```
 > **💡 Tailwind CSS v4 Users:** CSS variables work directly in Tailwind v4! [See Tailwind setup guide →](#tailwind-css-integration)
 
+
+## 🌟 Why UmbraJS?
+Let me take you through the same journey i went through - that lead me to make UmbraJS. 
+
 ## 📖 API Reference
 
 ### Core Function
