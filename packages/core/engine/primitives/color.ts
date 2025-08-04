@@ -1,6 +1,7 @@
-import { colord, extend } from '../../swatch'
+import { swatch, extend } from '../../swatch'
 import type { UmbraSwatch } from '../../swatch'
 import mixPlugin from '../../swatch/plugins/mix'
+
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import type { UmbraAdjusted } from '../types'
 import { defaultSettings } from '../defaults'
@@ -31,21 +32,21 @@ const stored = {
 }
 
 function apcaContrast(fg: string | UmbraSwatch, bg: string | UmbraSwatch) {
-  const fgc = colord(fg).toRgb()
-  const bgc = colord(bg).toRgb()
+  const fgc = swatch(fg).toRgb()
+  const bgc = swatch(bg).toRgb()
   return APCAcontrast(sRGBtoY([fgc.r, fgc.g, fgc.b]), sRGBtoY([bgc.r, bgc.g, bgc.b]))
 }
 
 export const getReadability = (fg: string | UmbraSwatch, bg: string | UmbraSwatch) => {
-  const foreground = colord(fg);
-  const background = colord(bg);
+  const foreground = swatch(fg);
+  const background = swatch(bg);
   const contrast = apcaContrast(foreground, background);
   return Math.abs(Number(contrast));
 }
 
 export const getReadable = (props: ColorRawRange) => {
-  const foreground = colord(props.foreground)
-  const background = colord(props.background)
+  const foreground = swatch(props.foreground)
+  const background = swatch(props.background)
 
   return increaseContrastUntil({
     color: foreground,
@@ -101,13 +102,13 @@ export function mostReadable(color: UmbraSwatch, colors: UmbraSwatch[]) {
 
 export const pickContrast = (color: UmbraSwatch, scheme: UmbraAdjusted) => {
   return mostReadable(color, [
-    scheme.background || colord('white'),
-    scheme.foreground || colord('black')
+    scheme.background || swatch('white'),
+    scheme.foreground || swatch('black')
   ])
 }
 
 export function colorMix(from: string | UmbraSwatch, to: string | UmbraSwatch, percent = 50) {
-  const tinyFrom = colord(from)
-  const tinyTo = colord(to)
-  return colord(tinyFrom).mix(tinyTo, percent / 100)
+  const tinyFrom = swatch(from)
+  const tinyTo = swatch(to)
+  return swatch(tinyFrom).mix(tinyTo, percent / 100)
 }

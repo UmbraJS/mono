@@ -47,10 +47,10 @@
   "dependencies": {
     "@iconify/vue": "catalog:",
     "@nobel/core": "workspace:*",
+    "@radix-ui/colors": "^3.0.0",
     "@umbrajs/core": "workspace:*",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
-    "colord": "catalog:",
     "gsap": "catalog:",
     "gsap-trial": "catalog:",
     "vue-router": "catalog:"

@@ -40,7 +40,6 @@
     "@umbrajs/core": "catalog:",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
-    "colord": "catalog:",
     "nearest-color": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:"

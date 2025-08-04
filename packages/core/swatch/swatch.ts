@@ -109,42 +109,42 @@ export class UmbraSwatch {
    * Creates a new instance containing an inverted (opposite) version of the color.
    */
   public invert(): UmbraSwatch {
-    return colord(invert(this.rgba));
+    return swatch(invert(this.rgba));
   }
 
   /**
    * Increases the HSL saturation of a color by the given amount.
    */
   public saturate(amount = 0.1): UmbraSwatch {
-    return colord(saturate(this.rgba, amount));
+    return swatch(saturate(this.rgba, amount));
   }
 
   /**
    * Decreases the HSL saturation of a color by the given amount.
    */
   public desaturate(amount = 0.1): UmbraSwatch {
-    return colord(saturate(this.rgba, -amount));
+    return swatch(saturate(this.rgba, -amount));
   }
 
   /**
    * Makes a gray color with the same lightness as a source color.
    */
   public grayscale(): UmbraSwatch {
-    return colord(saturate(this.rgba, -1));
+    return swatch(saturate(this.rgba, -1));
   }
 
   /**
    * Increases the HSL lightness of a color by the given amount.
    */
   public lighten(amount = 0.1): UmbraSwatch {
-    return colord(lighten(this.rgba, amount));
+    return swatch(lighten(this.rgba, amount));
   }
 
   /**
    * Increases the HSL lightness of a color by the given amount.
    */
   public darken(amount = 0.1): UmbraSwatch {
-    return colord(lighten(this.rgba, -amount));
+    return swatch(lighten(this.rgba, -amount));
   }
 
   /**
@@ -160,7 +160,7 @@ export class UmbraSwatch {
   public alpha(): number;
   public alpha(value: number): UmbraSwatch;
   public alpha(value?: number): UmbraSwatch | number {
-    if (typeof value === "number") return colord(changeAlpha(this.rgba, value));
+    if (typeof value === "number") return swatch(changeAlpha(this.rgba, value));
     return round(this.rgba.a, ALPHA_PRECISION);
   }
 
@@ -171,7 +171,7 @@ export class UmbraSwatch {
   public hue(value: number): UmbraSwatch;
   public hue(value?: number): UmbraSwatch | number {
     const hsla = rgbaToHsla(this.rgba);
-    if (typeof value === "number") return colord({ h: value, s: hsla.s, l: hsla.l, a: hsla.a });
+    if (typeof value === "number") return swatch({ h: value, s: hsla.s, l: hsla.l, a: hsla.a });
     return round(hsla.h);
   }
 
@@ -179,15 +179,15 @@ export class UmbraSwatch {
    * Determines whether two values are the same color.
    */
   public isEqual(color: AnyColor | UmbraSwatch): boolean {
-    return this.toHex() === colord(color).toHex();
+    return this.toHex() === swatch(color).toHex();
   }
 }
 
 /**
  * Parses the given input color and creates a new `UmbraSwatch` instance.
- * See accepted input formats: https://github.com/omgovich/colord#color-parsing
+ * See accepted input formats: https://github.com/omgovich/swatch#color-parsing
  */
-export const colord = (input: AnyColor | UmbraSwatch): UmbraSwatch => {
+export const swatch = (input: AnyColor | UmbraSwatch): UmbraSwatch => {
   if (input instanceof UmbraSwatch) return input;
   return new UmbraSwatch(input);
 };

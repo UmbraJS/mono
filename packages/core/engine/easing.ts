@@ -48,19 +48,22 @@ export type TintsInput =
   | EasingOptions        // Full easing options object
 
 // Convert any TintsInput to number array
-export function resolveTints(input?: TintsInput): number[] {
-  if (!input) return []
+export function resolveTints(input?: TintsInput, defaultValue?: TintsInput): number[] {
+  // If no input provided, use default value
+  const actualInput = input ?? defaultValue
 
-  if (Array.isArray(input)) {
+  if (!actualInput) return []
+
+  if (Array.isArray(actualInput)) {
     // Original array format - convert strings to numbers
-    return input.map(v => typeof v === 'string' ? parseInt(v, 10) : v)
+    return actualInput.map(v => typeof v === 'string' ? parseInt(v, 10) : v)
   }
 
-  if (typeof input === 'string') {
+  if (typeof actualInput === 'string') {
     // Simple easing string
-    return generateTints({ easing: input })
+    return generateTints({ easing: actualInput })
   }
 
   // EasingOptions object
-  return generateTints(input)
+  return generateTints(actualInput)
 }

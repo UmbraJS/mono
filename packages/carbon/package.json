@@ -37,11 +37,6 @@
     "build": "tsc && vite build && copy package.json dist && copy README.md dist",
     "publish": "cd dist && npm publish"
   },
-  "dependencies": {
-    "apca-w3": "catalog:",
-    "colord": "catalog:",
-    "colorparsley": "catalog:"
-  },
   "devDependencies": {
     "@types/node": "catalog:",
     "typescript": "catalog:",

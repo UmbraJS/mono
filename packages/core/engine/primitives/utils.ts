@@ -1,5 +1,6 @@
-import { colord } from '../../swatch'
+import { swatch } from '../../swatch'
 import type { UmbraSwatch } from '../../swatch'
+
 import type { UmbraScheme, UmbraSettings } from '../types'
 import { getReadability } from './color'
 import { defaultSettings } from '../defaults'
@@ -44,7 +45,7 @@ export function insertColorIntoRange({ range, shades, color }: NewRange) {
 }
 
 export function nextAccent(accents: string[], foreground: UmbraSwatch) {
-  return accents.length > 0 ? colord(accents[0] as string) : foreground
+  return accents.length > 0 ? swatch(accents[0] as string) : foreground
 }
 
 export function getStrings(range: (number | string)[]) {

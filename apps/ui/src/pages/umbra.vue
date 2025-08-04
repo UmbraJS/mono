@@ -2,6 +2,17 @@
 import { umbra } from '@umbrajs/core'
 import type { Accent } from '@umbrajs/core'
 
+import {
+  gray,
+  blue,
+  red,
+  green,
+  grayDark,
+  blueDark,
+  redDark,
+  greenDark,
+} from "@radix-ui/colors";
+
 const warningAccent: Accent = {
   name: 'warning',
   color: '#ff0000',
@@ -12,13 +23,15 @@ const successAccent: Accent = {
   color: '#00ff00',
 }
 
+console.log('successAccent', successAccent)
+
 const theme = umbra({
   foreground: '#16121f',
   background: '#f3f6ea',
   accents: [
     '#9999ff',
-    "#ff0000",
-    "#00ff00",
+    warningAccent,
+    successAccent,
     "#ff00ff",
   ],
   // Or use an easing options object:
@@ -37,10 +50,6 @@ const theme = umbra({
   // ],
 })
 
-function getTokenName(tokenIndex: number) {
-  return tokenIndex * 10 + 10
-}
-
 theme.apply()
 </script>
 
@@ -52,7 +61,7 @@ theme.apply()
         <div class="tokens border">
           <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
           <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.toHex()}`">
-            <p v-if="false" class="caption">{{ getTokenName(index) }}</p>
+            <!-- <p v-if="false" class="caption">{{ getTokenName(index) }}</p> -->
           </div>
           <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.toHex()}`"></div>
         </div>

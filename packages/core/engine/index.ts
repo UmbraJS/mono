@@ -1,4 +1,4 @@
-import { colord } from '../swatch'
+import { swatch } from '../swatch'
 import { defaultSettings, defaultScheme } from './defaults'
 import type { UmbraInput, UmbraScheme, UmbraRange } from './types'
 
@@ -68,10 +68,10 @@ function insertFallbacks(scheme: UmbraInput = defaultScheme): UmbraScheme {
 }
 
 function umbraAdjust(scheme = defaultScheme) {
-  const background = colord(scheme.background)
+  const background = swatch(scheme.background)
   const foreground = getReadable({
     readability: fallback({ number: scheme.settings?.readability, fallback: 4 }),
-    foreground: colord(scheme.foreground),
+    foreground: swatch(scheme.foreground),
     background,
   })
 

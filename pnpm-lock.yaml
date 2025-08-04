@@ -144,18 +144,9 @@ catalogs:
     '@vueuse/nuxt':
       specifier: 13.4.0
       version: 13.4.0
-    apca-w3:
-      specifier: ^0.1.9
-      version: 0.1.9
     better-auth:
       specifier: ^1.2.10
       version: 1.2.10
-    colord:
-      specifier: ^2.9.3
-      version: 2.9.3
-    colorparsley:
-      specifier: ^0.1.8
-      version: 0.1.8
     destr:
       specifier: ^2.0.5
       version: 2.0.5
@@ -597,22 +588,22 @@ importers:
     dependencies:
       '@iconify/vue':
         specifier: 'catalog:'
-        version: 4.3.0(vue@3.5.13(typescript@5.8.3))
+        version: 4.3.0(vue@3.5.17(typescript@5.8.3))
       '@nobel/core':
         specifier: workspace:*
         version: link:../../packages/nobel
+      '@radix-ui/colors':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@umbrajs/core':
         specifier: workspace:*
         version: link:../../packages/core
       '@vueuse/components':
         specifier: 'catalog:'
-        version: 13.4.0(vue@3.5.13(typescript@5.8.3))
+        version: 13.4.0(vue@3.5.17(typescript@5.8.3))
       '@vueuse/core':
         specifier: 'catalog:'
-        version: 13.4.0(vue@3.5.13(typescript@5.8.3))
-      colord:
-        specifier: 'catalog:'
-        version: 2.9.3
+        version: 13.4.0(vue@3.5.17(typescript@5.8.3))
       gsap:
         specifier: 'catalog:'
         version: 3.13.0
@@ -621,10 +612,10 @@ importers:
         version: 3.12.7
       vue:
         specifier: ^3.5.3
-        version: 3.5.13(typescript@5.8.3)
+        version: 3.5.17(typescript@5.8.3)
       vue-router:
         specifier: 'catalog:'
-        version: 4.5.1(vue@3.5.13(typescript@5.8.3))
+        version: 4.5.1(vue@3.5.17(typescript@5.8.3))
     devDependencies:
       '@rushstack/eslint-patch':
         specifier: 'catalog:'
@@ -637,7 +628,7 @@ importers:
         version: 22.14.1
       '@vitejs/plugin-vue':
         specifier: 'catalog:'
-        version: 5.2.3(vite@6.3.1(@types/node@22.14.1)(jiti@2.4.2)(sass@1.89.2)(terser@5.43.1)(yaml@2.8.0))(vue@3.5.13(typescript@5.8.3))
+        version: 5.2.3(vite@6.3.1(@types/node@22.14.1)(jiti@2.4.2)(sass@1.89.2)(terser@5.43.1)(yaml@2.8.0))(vue@3.5.17(typescript@5.8.3))
       '@vue/eslint-config-prettier':
         specifier: 'catalog:'
         version: 10.2.0(@types/eslint@9.6.1)(eslint@9.29.0(jiti@2.4.2))(prettier@3.5.3)
@@ -646,7 +637,7 @@ importers:
         version: 14.5.0(eslint-plugin-vue@10.0.0(eslint@9.29.0(jiti@2.4.2))(vue-eslint-parser@10.2.0(eslint@9.29.0(jiti@2.4.2))))(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       '@vue/tsconfig':
         specifier: 'catalog:'
-        version: 0.7.0(typescript@5.8.3)(vue@3.5.13(typescript@5.8.3))
+        version: 0.7.0(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3))
       eslint:
         specifier: 'catalog:'
         version: 9.29.0(jiti@2.4.2)
@@ -673,22 +664,12 @@ importers:
         version: 4.5.3(@types/node@22.14.1)(rollup@4.44.1)(typescript@5.8.3)(vite@6.3.1(@types/node@22.14.1)(jiti@2.4.2)(sass@1.89.2)(terser@5.43.1)(yaml@2.8.0))
       vite-plugin-vue-devtools:
         specifier: 'catalog:'
-        version: 7.7.5(rollup@4.44.1)(vite@6.3.1(@types/node@22.14.1)(jiti@2.4.2)(sass@1.89.2)(terser@5.43.1)(yaml@2.8.0))(vue@3.5.13(typescript@5.8.3))
+        version: 7.7.5(rollup@4.44.1)(vite@6.3.1(@types/node@22.14.1)(jiti@2.4.2)(sass@1.89.2)(terser@5.43.1)(yaml@2.8.0))(vue@3.5.17(typescript@5.8.3))
       vue-tsc:
         specifier: 'catalog:'
         version: 2.2.10(typescript@5.8.3)
 
   packages/carbon:
-    dependencies:
-      apca-w3:
-        specifier: 'catalog:'
-        version: 0.1.9
-      colord:
-        specifier: 'catalog:'
-        version: 2.9.3
-      colorparsley:
-        specifier: 'catalog:'
-        version: 0.1.8
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -706,10 +687,10 @@ importers:
   packages/core:
     dependencies:
       apca-w3:
-        specifier: 'catalog:'
+        specifier: ^0.1.9
         version: 0.1.9
       colorparsley:
-        specifier: 'catalog:'
+        specifier: ^0.1.8
         version: 0.1.8
     devDependencies:
       '@types/node':
@@ -736,9 +717,6 @@ importers:
       '@vueuse/core':
         specifier: 'catalog:'
         version: 13.4.0(vue@3.5.17(typescript@5.8.3))
-      colord:
-        specifier: 'catalog:'
-        version: 2.9.3
       nearest-color:
         specifier: 'catalog:'
         version: 0.4.4
@@ -791,9 +769,6 @@ importers:
       '@vueuse/core':
         specifier: 'catalog:'
         version: 13.4.0(vue@3.5.17(typescript@5.8.3))
-      colord:
-        specifier: 'catalog:'
-        version: 2.9.3
       gsap:
         specifier: 'catalog:'
         version: 3.13.0
@@ -2652,6 +2627,9 @@ packages:
   '@poppinss/exception@1.2.1':
     resolution: {integrity: sha512-aQypoot0HPSJa6gDPEPTntc1GT6QINrSbgRlRhadGW2WaYqUK3tK4Bw9SBMZXhmxd3GeAlZjVcODHgiu+THY7A==}
     engines: {node: '>=18'}
+
+  '@radix-ui/colors@3.0.0':
+    resolution: {integrity: sha512-FUOsGBkHrYJwCSEtWRCIfQbZG7q1e6DgxCIOe1SUQzDe/7rXXeA47s8yCn6fuTNQAj1Zq4oTFi9Yjp3wzElcxg==}
 
   '@remirror/core-constants@3.0.0':
     resolution: {integrity: sha512-42aWfPrimMfDKDi4YegyS7x+/0tlzaqwPQCULLanv3DMIlu96KTJR0fM5isWX2UViOqlGnX6YFgqWepcX+XMNg==}
@@ -10482,11 +10460,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@iconify/vue@4.3.0(vue@3.5.13(typescript@5.8.3))':
-    dependencies:
-      '@iconify/types': 2.0.0
-      vue: 3.5.13(typescript@5.8.3)
-
   '@iconify/vue@4.3.0(vue@3.5.17(typescript@5.8.3))':
     dependencies:
       '@iconify/types': 2.0.0
@@ -11571,6 +11544,8 @@ snapshots:
       supports-color: 10.0.0
 
   '@poppinss/exception@1.2.1': {}
+
+  '@radix-ui/colors@3.0.0': {}
 
   '@remirror/core-constants@3.0.0': {}
 
@@ -13191,12 +13166,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.8.3
       vue: 3.5.17(typescript@5.8.3)
-
-  '@vueuse/components@13.4.0(vue@3.5.13(typescript@5.8.3))':
-    dependencies:
-      '@vueuse/core': 13.4.0(vue@3.5.13(typescript@5.8.3))
-      '@vueuse/shared': 13.4.0(vue@3.5.13(typescript@5.8.3))
-      vue: 3.5.13(typescript@5.8.3)
 
   '@vueuse/components@13.4.0(vue@3.5.17(typescript@5.8.3))':
     dependencies:
@@ -19710,11 +19679,6 @@ snapshots:
       semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
-
-  vue-router@4.5.1(vue@3.5.13(typescript@5.8.3)):
-    dependencies:
-      '@vue/devtools-api': 6.6.4
-      vue: 3.5.13(typescript@5.8.3)
 
   vue-router@4.5.1(vue@3.5.17(typescript@5.8.3)):
     dependencies:
