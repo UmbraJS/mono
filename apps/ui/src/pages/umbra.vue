@@ -16,21 +16,25 @@ const theme = umbra({
   foreground: '#16121f',
   background: '#f3f6ea',
   accents: [
-    {
-      color: '#9999ff',
-      tints: [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
-    }
+    '#9999ff',
+    "#ff0000",
+    "#00ff00",
+    "#ff00ff",
   ],
-  // inversed: {
-  //   foreground: '#f3f6ea',
-  //   background: '#16121f',
-  //   accents: [
-  //     {
-  //       color: '#9999ff',
-  //       shades: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-  //     }
-  //   ],
-  // },
+  // Or use an easing options object:
+  // accents: [
+  //   {
+  //     color: '#9999ff',
+  //     tints: { easing: 'easeInCubic', min: 5, max: 80, count: 12 }
+  //   }
+  // ],
+  // Or still use the traditional array:
+  // accents: [
+  //   {
+  //     color: '#9999ff',
+  //     tints: [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 95]
+  //   }
+  // ],
 })
 
 function getTokenName(tokenIndex: number) {
@@ -69,6 +73,17 @@ theme.apply()
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 }
+
+.color-list:not(:last-of-type, :first-of-type) .tokens {
+  border-top: none;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+
+  border-bottom: none;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
 
 .tokens {
   display: flex;

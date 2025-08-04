@@ -1,6 +1,7 @@
 import type { UmbraSwatch } from '../../swatch'
 import type { Alias } from '../primitives/attach'
 import type { Formater, UmbraOutputs } from '../primitives/format'
+import type { TintsInput } from '../easing'
 
 export interface UmbraRange {
   name: string
@@ -25,8 +26,8 @@ export interface UmbraOutput {
 export interface Accent {
   name?: string
   color: string
-  shades?: (number | string)[]
-  tints?: (number | string)[]
+  shades?: TintsInput
+  tints?: TintsInput
   readability?: number
 }
 
@@ -55,8 +56,8 @@ export interface UmbraSettings {
   readability?: number
   insertion?: number
   aliases?: Alias | true
-  shades?: (number | string)[]
-  tints?: (number | string)[]
+  shades?: TintsInput
+  tints?: TintsInput
   callback?: (props: UmbraOutputs) => void
   formater?: Formater
 }

@@ -3,6 +3,7 @@ import type { UmbraSwatch } from '../swatch'
 import type { UmbraAdjusted, UmbraScheme, Accent } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils'
+import { resolveTints, type TintsInput } from './easing'
 
 interface GetRange {
   from: UmbraSwatch
@@ -42,14 +43,9 @@ function autoPlacedRange({ input, adjusted, range, color }: RangeProps) {
   const baseRange = getRange({
     from: adjusted.background,
     to: adjusted.foreground,
-    range: rangeValues(adjusted, input.settings) || []
+    range: rangeValues(adjusted, input.settings)
   })
   return insertColorIntoRange({ range, shades: baseRange, color: colord(color) })
-}
-
-function accentColor(fallback: UmbraSwatch, accent?: string, range?: (number | string)[]) {
-  const plainColor2 = accent ? accent : range ? getStrings(range)[0] : undefined
-  return plainColor2 ? colord(plainColor2) : fallback
 }
 
 function replaceAtIndex(array: (number | string)[], index: number, value: string) {
@@ -63,7 +59,7 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   const color = isString ? accent : accent.color
   const insertion = input.settings?.insertion
 
-  const fallback = rangeValues(adjusted, input.settings) || []
+  const fallback = rangeValues(adjusted, input.settings)
   const range = isString ? fallback : rangeValues(adjusted, accent) || fallback
 
   if (insertion && color) return replaceAtIndex(range, insertion, color)
@@ -78,7 +74,6 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
     const isString = typeof accent === 'string'
 
     const name = isString ? undefined : accent.name
-    const color = isString ? accent : accent.color
     const range = putAccentInRange(adjusted, accent, input)
 
     return {
@@ -93,17 +88,18 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
 }
 
 interface RangeValues {
-  shades?: (number | string)[]
-  tints?: (number | string)[]
+  shades?: TintsInput
+  tints?: TintsInput
 }
 
-function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues) {
-  return adjusted.background.isDark() ? scheme?.shades : scheme?.tints
+function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): (number | string)[] {
+  const tintsInput = adjusted.background.isDark() ? scheme?.shades : scheme?.tints
+  return resolveTints(tintsInput)
 }
 
 function base(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
-  const range = rangeValues(adjusted, input.settings) || []
+  const range = rangeValues(adjusted, input.settings)
   return {
     name: 'base',
     background,

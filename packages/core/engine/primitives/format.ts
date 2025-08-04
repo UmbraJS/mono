@@ -74,7 +74,7 @@ export const format = ({
       callback && callback(outputs)
       return attach({
         outputs,
-        alias,
+        alias: typeof alias === 'boolean' ? undefined : alias,
         target: target || {
           selector: ':root'
         }
@@ -123,14 +123,22 @@ function flattenColors({ formated, prefix }: FlattenColors) {
     })
   })
 
-  function flattenShades(shades: any[], name: string) {
-    return shades.map((shade, i) => {
-      const token = (+i + 1) * 10
-      return {
-        name: name + '-' + token,
-        color: shade
-      }
-    })
+  function flattenShades(shades: any[], name: string): FlattenColor[] {
+    if (!Array.isArray(shades) || shades.length === 0) {
+      return []
+    }
+    return shades
+      .map((shade, i) => {
+        if (shade === undefined || shade === null) {
+          return null
+        }
+        const token = (+i + 1) * 10
+        return {
+          name: name + '-' + token,
+          color: shade
+        }
+      })
+      .filter((item): item is FlattenColor => item !== null) // Type-safe filter
   }
 
   return sortFlattened(flattened)
@@ -140,9 +148,12 @@ function sortFlattened(flattened: FlattenColor[]) {
   const foregroundPrefix = '--foreground'
   const backgroundPrefix = '--background'
 
-  const background = flattened.filter((item) => item.name.startsWith(backgroundPrefix))
-  const foreground = flattened.filter((item) => item.name.startsWith(foregroundPrefix))
-  const rest = flattened.filter(
+  // Filter out any undefined or null items
+  const validFlattened = flattened.filter((item) => item && item.name)
+
+  const background = validFlattened.filter((item) => item.name.startsWith(backgroundPrefix))
+  const foreground = validFlattened.filter((item) => item.name.startsWith(foregroundPrefix))
+  const rest = validFlattened.filter(
     (item) => !item.name.startsWith(backgroundPrefix) && !item.name.startsWith(foregroundPrefix)
   )
 
