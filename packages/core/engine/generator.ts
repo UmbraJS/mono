@@ -1,12 +1,12 @@
 import { colord } from '../swatch'
-import type { Colord } from '../swatch'
+import type { UmbraSwatch } from '../swatch'
 import type { UmbraAdjusted, UmbraScheme, Accent } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils'
 
 interface GetRange {
-  from: Colord
-  to: Colord
+  from: UmbraSwatch
+  to: UmbraSwatch
   range: (number | string)[]
 }
 
@@ -47,7 +47,7 @@ function autoPlacedRange({ input, adjusted, range, color }: RangeProps) {
   return insertColorIntoRange({ range, shades: baseRange, color: colord(color) })
 }
 
-function accentColor(fallback: Colord, accent?: string, range?: (number | string)[]) {
+function accentColor(fallback: UmbraSwatch, accent?: string, range?: (number | string)[]) {
   const plainColor2 = accent ? accent : range ? getStrings(range)[0] : undefined
   return plainColor2 ? colord(plainColor2) : fallback
 }

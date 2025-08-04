@@ -4,8 +4,8 @@ import { parseLaba, roundLaba, rgbaToLaba } from "../colorModels/lab";
 import { getDeltaE00 } from "../get/getPerceivedDifference";
 import { clamp, round } from "../helpers";
 
-declare module "../colord" {
-  interface Colord {
+declare module "../swatch" {
+  interface UmbraSwatch {
     /**
      * Converts a color to CIELAB color space and returns an object.
      * The object always includes `alpha` value [0, 1].
@@ -17,7 +17,7 @@ declare module "../colord" {
      * [Delta E2000](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000).
      * Returns a value in [0, 1] range.
      */
-    delta(color?: AnyColor | Colord): number;
+    delta(color?: AnyColor | UmbraSwatch): number;
   }
 }
 

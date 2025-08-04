@@ -1,4 +1,4 @@
-export { colord, Colord } from "./colord";
+export { colord, UmbraSwatch } from "./swatch";
 export { extend, type Plugin } from "./extend";
 export { getFormat } from "./parse";
 export { random } from "./random";

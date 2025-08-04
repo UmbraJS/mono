@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { colord } from 'colord'
-import type { Colord } from 'colord'
+import type { UmbraSwatch } from 'colord'
 import { vOnClickOutside } from '@vueuse/components'
 import { ref } from 'vue'
 import type { OutputColor } from '../composables/canvas'
@@ -14,7 +14,7 @@ import DyeWrapper from './DyeWrapper.vue'
 // Props
 interface Dye {
   name: string
-  color: Colord
+  color: UmbraSwatch
 }
 
 const emit = defineEmits<{

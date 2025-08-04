@@ -1,5 +1,5 @@
 import { colord, extend } from '../../swatch'
-import type { Colord } from '../../swatch'
+import type { UmbraSwatch } from '../../swatch'
 import mixPlugin from '../../swatch/plugins/mix'
 import { APCAcontrast, sRGBtoY } from 'apca-w3'
 import type { UmbraAdjusted } from '../types'
@@ -9,20 +9,20 @@ import { fallback } from './utils'
 extend([mixPlugin])
 
 type ColorRawRange = {
-  foreground: string | Colord
-  background: string | Colord
+  foreground: string | UmbraSwatch
+  background: string | UmbraSwatch
   readability?: number
 }
 
 interface IncreaseContrastUntil {
-  color: Colord
-  contrast: Colord
-  condition: (newColor: Colord, iterations?: number) => boolean
+  color: UmbraSwatch
+  contrast: UmbraSwatch
+  condition: (newColor: UmbraSwatch, iterations?: number) => boolean
 }
 
 interface IncreaseContrast {
-  color: Colord
-  contrast: Colord
+  color: UmbraSwatch
+  contrast: UmbraSwatch
   power: number
 }
 
@@ -30,13 +30,13 @@ const stored = {
   readability: defaultSettings.readability || 11
 }
 
-function apcaContrast(fg: string | Colord, bg: string | Colord) {
+function apcaContrast(fg: string | UmbraSwatch, bg: string | UmbraSwatch) {
   const fgc = colord(fg).toRgb()
   const bgc = colord(bg).toRgb()
   return APCAcontrast(sRGBtoY([fgc.r, fgc.g, fgc.b]), sRGBtoY([bgc.r, bgc.g, bgc.b]))
 }
 
-export const getReadability = (fg: string | Colord, bg: string | Colord) => {
+export const getReadability = (fg: string | UmbraSwatch, bg: string | UmbraSwatch) => {
   const foreground = colord(fg);
   const background = colord(bg);
   const contrast = apcaContrast(foreground, background);
@@ -93,20 +93,20 @@ const increaseContrast = ({ color, contrast, power }: IncreaseContrast) => {
   return sameLightness ? onSameLightness() : onDiffLightness()
 }
 
-export function mostReadable(color: Colord, colors: Colord[]) {
+export function mostReadable(color: UmbraSwatch, colors: UmbraSwatch[]) {
   const readable = colors.map((c) => Math.abs(getReadability(color, c)))
   const index = readable.indexOf(Math.max(...readable))
   return colors[index]
 }
 
-export const pickContrast = (color: Colord, scheme: UmbraAdjusted) => {
+export const pickContrast = (color: UmbraSwatch, scheme: UmbraAdjusted) => {
   return mostReadable(color, [
     scheme.background || colord('white'),
     scheme.foreground || colord('black')
   ])
 }
 
-export function colorMix(from: string | Colord, to: string | Colord, percent = 50) {
+export function colorMix(from: string | UmbraSwatch, to: string | UmbraSwatch, percent = 50) {
   const tinyFrom = colord(from)
   const tinyTo = colord(to)
   return colord(tinyFrom).mix(tinyTo, percent / 100)

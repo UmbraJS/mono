@@ -1,29 +1,29 @@
 import { AnyColor } from "../types";
 import { Plugin } from "../extend";
 import { mix } from "../manipulate/mix";
-import { Colord } from "../colord";
+import { UmbraSwatch } from "../swatch";
 
-declare module "../colord" {
-  interface Colord {
+declare module "../swatch" {
+  interface UmbraSwatch {
     /**
-     * Produces a mixture of two colors through CIE LAB color space and returns a new Colord instance.
+     * Produces a mixture of two colors through CIE LAB color space and returns a new UmbraSwatch instance.
      */
-    mix(color2: AnyColor | Colord, ratio?: number): Colord;
+    mix(color2: AnyColor | UmbraSwatch, ratio?: number): UmbraSwatch;
 
     /**
      * Generates a tints palette based on original color.
      */
-    tints(count?: number): Colord[];
+    tints(count?: number): UmbraSwatch[];
 
     /**
      * Generates a shades palette based on original color.
      */
-    shades(count?: number): Colord[];
+    shades(count?: number): UmbraSwatch[];
 
     /**
      * Generates a tones palette based on original color.
      */
-    tones(count?: number): Colord[];
+    tones(count?: number): UmbraSwatch[];
   }
 }
 
@@ -41,7 +41,7 @@ const mixPlugin: Plugin = (ColordClass): void => {
   /**
    * Generate a palette from mixing a source color with another.
    */
-  function mixPalette(source: Colord, hex: string, count = 5): Colord[] {
+  function mixPalette(source: UmbraSwatch, hex: string, count = 5): UmbraSwatch[] {
     const palette = [];
     const step = 1 / (count - 1);
     for (let i = 0; i <= count - 1; i++) {

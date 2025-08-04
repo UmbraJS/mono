@@ -1,10 +1,10 @@
-import type { Colord } from '../../swatch'
+import type { UmbraSwatch } from '../../swatch'
 import { umbra } from '../..'
 import type { UmbraRange, FormatedRange, UmbraScheme } from '../types'
 import { attach } from './attach'
 import type { Alias } from './attach'
 
-export type Formater = (color: Colord) => string
+export type Formater = (color: UmbraSwatch) => string
 
 interface FormatProps {
   input: Partial<UmbraScheme>
@@ -88,14 +88,14 @@ export const defaultFormater = hex
 /**
  * Formats a color as a hexadecimal string: `#ff0000`
  */
-export function hex(color: Colord) {
+export function hex(color: UmbraSwatch) {
   return color.toHex()
 }
 
 /**
  * Formats a color as an RGB string: `rgb(255, 0, 0)`
  */
-export function rgb(color: Colord) {
+export function rgb(color: UmbraSwatch) {
   const rgba = color.toRgb()
   return `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})`
 }

@@ -3,8 +3,8 @@ import { Plugin } from "../extend";
 import { parseLcha, roundLcha, rgbaToLcha } from "../colorModels/lch";
 import { parseLchaString, rgbaToLchaString } from "../colorModels/lchString";
 
-declare module "../colord" {
-  interface Colord {
+declare module "../swatch" {
+  interface UmbraSwatch {
     /**
      * Converts a color to CIELCH (Lightness-Chroma-Hue) color space and returns an object.
      * https://lea.verou.me/2020/04/lch-colors-in-css-what-why-and-how/

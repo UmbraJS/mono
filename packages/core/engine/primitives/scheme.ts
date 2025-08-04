@@ -1,5 +1,5 @@
 import { colord } from '../../swatch'
-import type { Colord } from '../../swatch'
+import type { UmbraSwatch } from '../../swatch'
 import type { UmbraInput, UmbraScheme, UmbraAdjusted } from '../types'
 import { increaseContrastUntil, getReadability, getReadable, mostReadable } from './color'
 
@@ -66,6 +66,6 @@ export const isDark = (background: string) => {
   return colord(background).isDark()
 }
 
-export function findContrast(color: Colord, adjusted: UmbraAdjusted) {
+export function findContrast(color: UmbraSwatch, adjusted: UmbraAdjusted) {
   return mostReadable(color, [adjusted.background || color, adjusted.foreground || color])
 }

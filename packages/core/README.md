@@ -199,7 +199,7 @@ console.log(formatted.colors) // Array of FormatedRange objects
 // logs
 {
   input: {} // Original input theme
-  output: [] // This is what the generator itself passed to the formatter - which is a list of all the ranges and their colors but every color is a Colord object - not a string
+  output: [] // This is what the generator itself passed to the formatter - which is a list of all the ranges and their colors but every color is a UmbraSwatch object - not a string
   formated: [], // This is the same exact list as the output except the colors are formatted as strings according to the formatter picked
   flattened: [] // This is a flattened list of all colors across all ranges, umbra uses this list in the attach step to easily iterate over all the colors and apply them. But you can also easily use this list to iterate over all the colors regardless of the range they belong to.
   attach: [Function: attach], // the final step, to attach the colors to the DOM as CSS variables

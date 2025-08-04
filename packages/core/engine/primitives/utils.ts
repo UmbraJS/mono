@@ -1,5 +1,5 @@
 import { colord } from '../../swatch'
-import type { Colord } from '../../swatch'
+import type { UmbraSwatch } from '../../swatch'
 import type { UmbraScheme, UmbraSettings } from '../types'
 import { getReadability } from './color'
 import { defaultSettings } from '../defaults'
@@ -10,8 +10,8 @@ interface RandomSettings extends UmbraSettings {
 
 interface NewRange {
   range: (number | string)[]
-  shades: Colord[]
-  color: Colord
+  shades: UmbraSwatch[]
+  color: UmbraSwatch
 }
 
 function randomHex() {
@@ -27,7 +27,7 @@ export function randomScheme(randomSettings: RandomSettings = { amount: 1 }): Um
   }
 }
 
-function getReadable(shade: Colord, color: Colord, index: number) {
+function getReadable(shade: UmbraSwatch, color: UmbraSwatch, index: number) {
   const readability = getReadability(shade, color)
   return { readability, index }
 }
@@ -43,7 +43,7 @@ export function insertColorIntoRange({ range, shades, color }: NewRange) {
   return rangeInstance
 }
 
-export function nextAccent(accents: string[], foreground: Colord) {
+export function nextAccent(accents: string[], foreground: UmbraSwatch) {
   return accents.length > 0 ? colord(accents[0] as string) : foreground
 }
 

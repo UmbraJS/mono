@@ -10,8 +10,8 @@ interface ReadabilityOptions {
   size?: "normal" | "large";
 }
 
-declare module "../colord" {
-  interface Colord {
+declare module "../swatch" {
+  interface UmbraSwatch {
     /**
      * Returns the relative luminance of a color,
      * normalized to 0 for darkest black and 1 for lightest white.
@@ -27,12 +27,12 @@ declare module "../colord" {
      * https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html
      * https://webaim.org/articles/contrast/
      */
-    contrast(color2?: AnyColor | Colord): number;
+    contrast(color2?: AnyColor | UmbraSwatch): number;
     /**
      * Checks that a background and text color pair conforms to WCAG 2.0 requirements.
      * https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html
      */
-    isReadable(color2?: AnyColor | Colord, options?: ReadabilityOptions): boolean;
+    isReadable(color2?: AnyColor | UmbraSwatch, options?: ReadabilityOptions): boolean;
   }
 }
 

@@ -1,12 +1,12 @@
-import type { Colord } from '../../swatch'
+import type { UmbraSwatch } from '../../swatch'
 import type { Alias } from '../primitives/attach'
 import type { Formater, UmbraOutputs } from '../primitives/format'
 
 export interface UmbraRange {
   name: string
-  background: Colord
-  range: Colord[]
-  foreground: Colord
+  background: UmbraSwatch
+  range: UmbraSwatch[]
+  foreground: UmbraSwatch
 }
 
 export interface FormatedRange {
@@ -44,8 +44,8 @@ export interface UmbraColors {
 }
 
 export interface UmbraAdjusted {
-  background: Colord
-  foreground: Colord
+  background: UmbraSwatch
+  foreground: UmbraSwatch
   accents: (string | Accent)[]
 }
 
