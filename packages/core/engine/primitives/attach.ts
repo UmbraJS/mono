@@ -2,29 +2,10 @@ import type { FlattenColor, UmbraOutputs } from './format'
 
 //Why aliases? 2 reasons:
 //1 - People seem to be better at understanding direct instructions rather than logic.
-//2 - This lets us define a second dimention of attribution style to a color themes on top of the underlying foreground-background color readability dimention.
+//2 - This lets us define a second dimension of attribution style to a color themes on top of the underlying foreground-background color readability dimension.
 
 export type Alias = {
   [key: string]: string
-}
-
-const defaultAliases = {
-  background: 'base',
-  'background-10': 'base-10',
-  'background-20': 'base-20',
-  'background-30': 'base-30',
-  'background-40': 'base-40',
-
-  'midground-50': 'base-40',
-  'midground-60': 'base-50',
-  'midground-70': 'base-60',
-  'midground-80': 'base-70',
-
-  'foreground-90': 'base-70',
-  'foreground-100': 'base-80',
-  'foreground-110': 'base-90',
-  'foreground-120': 'base-100',
-  foreground: 'base-contrast'
 }
 
 // const ActionAliases = {
@@ -71,7 +52,7 @@ interface Targets {
 interface Attach {
   outputs: UmbraOutputs
   target: Targets
-  alias?: Alias | boolean
+  alias?: Alias
 }
 
 let iterations = 0
@@ -101,9 +82,9 @@ export function attach({ outputs, target, alias }: Attach) {
   if (target.selector) setColorSheet(target.selector, colors, meta)
 
   if (alias) {
-    const aliases = Object.entries(alias === true ? defaultAliases : alias)
+    const aliases = Object.entries(alias)
     const array = aliases.map(([key, value]) => ({ name: '--' + key, color: `var(--${value})` }))
-    if (target.element) setElementAliases(target.element, array)
+    array.forEach((p) => target.element && setProperty(target.element, p))
     if (target.selector) setAliasSheet(target.selector, array, meta)
   }
 
@@ -111,12 +92,11 @@ export function attach({ outputs, target, alias }: Attach) {
 }
 
 function invalidColor(name: string) {
-  const regex = /(?:background|foreground).*contrast/i
+  const regex = /(?:background|foreground).*text/i
   return regex.test(name)
 }
 
 //sheet functions
-
 interface MTS {
   meta?: string
   marker?: string
@@ -160,7 +140,6 @@ function setSheet(sheet: CSSStyleSheet, selector: string, marker = 'theme') {
 }
 
 //element functions
-
 interface SetProperty {
   name: 'foreground' | 'background' | 'accents' | string
   color: string
@@ -178,8 +157,4 @@ function setElementColors(element: HTMLElement | null, colors: FlattenColor[]) {
     name: 'color',
     color: 'var(--base-contrast)'
   })
-}
-
-function setElementAliases(element: HTMLElement | null, aliases: FlattenColor[]) {
-  element && aliases.forEach((p) => setProperty(element, p))
 }
