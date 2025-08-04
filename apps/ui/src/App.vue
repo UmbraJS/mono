@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Button, ButtonGroup } from '@nobel/core'
 import TextScreen from './components/TextScreen.vue'
@@ -7,6 +7,7 @@ import { umbra } from '@umbrajs/core'
 import { Icon } from '@iconify/vue'
 import type { Accent } from '@umbrajs/core'
 import '@nobel/core/styles/main.scss'
+import Umbra from "../src/pages/umbra.vue"
 
 const route = useRoute()
 
@@ -28,11 +29,22 @@ const theme = umbra({
   accents: ['#8888ff', warningAccent, successAccent],
 })
 
-inversed.value ? theme.inverse().apply() : theme.apply()
+// Apply theme after component is mounted
+onMounted(() => {
+  try {
+    inversed.value ? theme.inverse().apply() : theme.apply()
+  } catch (error) {
+    console.error('Theme application error:', error)
+  }
+})
 
 function toggleTheme() {
-  inversed.value ? theme.apply() : theme.inverse().apply()
-  inversed.value = !inversed.value
+  try {
+    inversed.value ? theme.apply() : theme.inverse().apply()
+    inversed.value = !inversed.value
+  } catch (error) {
+    console.error('Theme toggle error:', error)
+  }
 }
 </script>
 
@@ -69,6 +81,7 @@ function toggleTheme() {
   </header>
   <main data-vaul-drawer-wrapper>
     <router-view :key="route.path"></router-view>
+    <Umbra />
   </main>
 </template>
 
