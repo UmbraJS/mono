@@ -1,4 +1,4 @@
-import type { Colord } from 'colord'
+import type { Colord } from '../../swatch'
 import type { Alias } from '../primitives/attach'
 import type { Formater, UmbraOutputs } from '../primitives/format'
 

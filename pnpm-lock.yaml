@@ -708,9 +708,6 @@ importers:
       apca-w3:
         specifier: 'catalog:'
         version: 0.1.9
-      colord:
-        specifier: 'catalog:'
-        version: 2.9.3
       colorparsley:
         specifier: 'catalog:'
         version: 0.1.8

@@ -15,13 +15,17 @@ const successAccent: Accent = {
 const theme = umbra({
   foreground: '#16121f',
   background: '#f3f6ea',
-  accents: ['#9999ff', warningAccent, successAccent],
+  accents: ['#9999ff'],
   inversed: {
     foreground: '#f3f6ea',
     background: '#16121f',
-    accents: ['#9999ff', warningAccent, successAccent],
+    accents: ['#9999ff'],
   },
 })
+
+function getTokenName(tokenIndex: number) {
+  return tokenIndex * 10 + 10
+}
 
 theme.apply()
 </script>
@@ -31,26 +35,54 @@ theme.apply()
     <div class="range-list">
       <div v-for="range in theme.output" :key="range.name" class="color-list">
         <div class="color-name">{{ range.name }}</div>
-        <div v-for="color in range.range" class="color" :style="`--color: ${color.toHex()}`"></div>
+        <div class="tokens border">
+          <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
+          <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.toHex()}`">
+            <p class="caption">{{ getTokenName(index) }}</p>
+          </div>
+          <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.toHex()}`"></div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
+.color-list:first-of-type .tokens {
+  border-bottom: none;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.color-list:last-of-type .tokens {
+  border-top: none;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.tokens {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.tokens:first-of-type {
+  border-bottom: none;
+}
+
 .range-list {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: var(--space-2);
 }
 
 .color-list {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0px;
 }
 
 .color-name {

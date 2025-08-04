@@ -1,4 +1,4 @@
-import { colord } from 'colord'
+import { colord } from '../swatch'
 import { defaultSettings, defaultScheme } from './defaults'
 import type { UmbraInput, UmbraScheme, UmbraRange } from './types'
 

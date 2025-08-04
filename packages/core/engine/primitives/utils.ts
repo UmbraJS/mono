@@ -1,5 +1,5 @@
-import { colord } from 'colord'
-import type { Colord } from 'colord'
+import { colord } from '../../swatch'
+import type { Colord } from '../../swatch'
 import type { UmbraScheme, UmbraSettings } from '../types'
 import { getReadability } from './color'
 import { defaultSettings } from '../defaults'

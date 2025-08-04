@@ -1,5 +1,5 @@
-import { colord } from 'colord'
-import type { Colord } from 'colord'
+import { colord } from '../swatch'
+import type { Colord } from '../swatch'
 import type { UmbraAdjusted, UmbraScheme, Accent } from './types'
 import { pickContrast, colorMix } from './primitives/color'
 import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils'
@@ -83,7 +83,7 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
 
     return {
       name: name || `accent`,
-      background: accentColor(adjusted.foreground, color, range),
+      background: pickContrast(foreground, adjusted), //accentColor(foreground, color, range),
       foreground: pickContrast(background, adjusted),
       range: getRange({ from: background, to: foreground, range })
     }

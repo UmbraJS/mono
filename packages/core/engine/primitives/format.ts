@@ -1,4 +1,4 @@
-import type { Colord } from 'colord'
+import type { Colord } from '../../swatch'
 import { umbra } from '../..'
 import type { UmbraRange, FormatedRange, UmbraScheme } from '../types'
 import { attach } from './attach'
@@ -118,7 +118,7 @@ function flattenColors({ formated, prefix }: FlattenColors) {
     flattened.push({ name, color: c.background })
     flattened.push(...flattenShades(c.shades, name))
     flattened.push({
-      name: name + '-contrast',
+      name: name + '-text',
       color: c.foreground
     })
   })

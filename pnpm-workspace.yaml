@@ -49,10 +49,7 @@ catalog:
   '@vueuse/components': 13.4.0
   '@vueuse/core': 13.4.0
   '@vueuse/nuxt': 13.4.0
-  apca-w3: ^0.1.9
   better-auth: ^1.2.10
-  colord: ^2.9.3
-  colorparsley: ^0.1.8
   destr: ^2.0.5
   drizzle-kit: ^0.31.2
   drizzle-orm: ^0.44.2
