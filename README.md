@@ -59,7 +59,7 @@ Generated CSS variables:
   --base-100: #d4d6cd; 
   --base-110: #e1e3da; 
   --base-120: #eef0e7; 
-  --base-contrast: #d5c9c1; // Base foreground color stop
+  --base-text: #d5c9c1; // Base foreground color stop
 
   // The accent range logic based on the base range
   --accent: #9999ff; // Original accent color - maintained to be exactly what the user provided
@@ -77,7 +77,7 @@ Generated CSS variables:
   --accent-100: #9999ff; // Original accent color fit best into this part of the range so we put the accent here as a color stop
   --accent-110: #b2affb; 
   --accent-120: #c3c0f7; 
-  --accent-contrast: #d5c9c1; // the same as the base foreground color stop
+  --accent-text: #d5c9c1; // the same as the base foreground color stop
 }
 ```
 
@@ -85,7 +85,7 @@ Use in your CSS:
 ```css
 .card {
   background: var(--base-10);
-  color: var(--base-contrast);
+  color: var(--base-text);
   border: 1px solid var(--accent-20);
 }
 ```
@@ -303,7 +303,7 @@ console.log(formatted.colors) // Array of FormatedRange objects
         "color": "#de99a0"
     },
     {
-        "name": "--base-contrast",
+        "name": "--base-text",
         "color": "#ffb1b1"
     },
     {
@@ -359,7 +359,7 @@ console.log(formatted.colors) // Array of FormatedRange objects
         "color": "#ffdddc"
     },
     {
-        "name": "--accent-contrast",
+        "name": "--accent-text",
         "color": "#ffb1b1"
     },
 ]
@@ -645,7 +645,7 @@ Each accent creates its own complete range:
 - `--success-background` (the accent color)
 - `--success-10`, `--success-20` (darker variations)
 - `--success-90`, `--success-80` (lighter variations)
-- `--success-contrast` (optimal contrast color)
+- `--success-text` (optimal contrast color)
 
 #### Smart Range Relationships
 
@@ -737,8 +737,8 @@ The 12-shade system isn't arbitrary—it's based on extensive research and testi
 | 8 | Hovered UI element border | `--base-80` |
 | 9 | Solid backgrounds | `--base-90` |
 | 10 | Hovered solid backgrounds | `--base-100` |
-| 11 | Low-contrast text | `--base-110` |
-| 12 | High-contrast text | `--base-120` |
+| 11 | Low-text text | `--base-110` |
+| 12 | High-text text | `--base-120` |
 
 > **Note:** The background and foreground colors become `--base-background` and `--base-foreground` respectively, with the 12 shades bridging between them.
 
@@ -830,7 +830,7 @@ UmbraJS uses APCA's Lc (lightness contrast) values, which range from 0 to ±106:
 
 | Lc Value | Use Case | UmbraJS Application |
 |----------|----------|-------------------|
-| **Lc 90** | Body text, reading content | High-contrast text variables |
+| **Lc 90** | Body text, reading content | High-text text variables |
 | **Lc 75** | Important text, minimum readability | Primary text elements |
 | **Lc 60** | Content text, headlines | Secondary text, larger elements |
 | **Lc 45** | Large headings, pictograms | UI accents, interactive elements |
@@ -875,7 +875,7 @@ color: var(--base-foreground);      /* Truly readable */
 
 **The science is clear**: Human perception follows curves, not linear math. APCA's perceptual uniformity means that Lc 60 represents the same perceived contrast whether you're using light or dark colors—something impossible with WCAG 2.x ratios.
 
-**Learn more:** [APCA Documentation](https://git.apcacontrast.com/documentation/APCAeasyIntro) | [The Realities And Myths Of Contrast And Color](https://www.smashingmagazine.com/2022/09/realities-myths-contrast-color/)
+**Learn more:** [APCA Documentation](https://git.apcacontrast.com/documentation/APCAeasyIntro) | [The Realities And Myths Of Contrast And Color](https://www.smashingmagazine.com/2022/09/realities-myths-text-color/)
 
 ## 🌈 Advanced Usage
 
@@ -966,7 +966,7 @@ export default {
         100: 'var(--base-100)',
         110: 'var(--base-110)',
         120: 'var(--base-120)',
-        contrast: 'var(--base-contrast)',
+        contrast: 'var(--base-text)',
       },
       accent: {
         background: 'var(--accent)',
@@ -982,7 +982,7 @@ export default {
         100: 'var(--accent-100)',
         110: 'var(--accent-110)',
         120: 'var(--accent-120)',
-        contrast: 'var(--accent-contrast)',
+        contrast: 'var(--accent-text)',
       }
     }
   }

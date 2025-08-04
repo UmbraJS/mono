@@ -39,7 +39,7 @@ export type Alias = {
 //   buttonBorderActive: 'accent',
 
 //   //button text
-//   buttonText: 'accent-contrast',
+//   buttonText: 'accent-text',
 //   buttonSubtleText: 'foreground',
 //   buttonDisabledText: 'foreground'
 // }
@@ -155,6 +155,6 @@ function setElementColors(element: HTMLElement | null, colors: FlattenColor[]) {
   //Ensure that the foreground color is always set to the attached element
   setProperty(element, {
     name: 'color',
-    color: 'var(--base-contrast)'
+    color: 'var(--base-text)'
   })
 }

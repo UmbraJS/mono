@@ -55,7 +55,7 @@ Outputted CSS attached to the HTML element
 --foreground-20: #71696b;
 
 --accent: #e6bebf;
---accent-contrast: #0c0915;
+--accent-text: #0c0915;
 --accent-10: #ba9a9d;
 --accent-20: #79646a;
 ```

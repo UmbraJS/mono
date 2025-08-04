@@ -25,7 +25,7 @@ defineProps<{
 <style lang="scss">
 .toast {
   background-color: var(--color-80);
-  color: var(--color-contrast);
+  color: var(--color-text);
   border-radius: var(--radius);
   padding: var(--space-1);
   border: solid var(--border-size) var(--color-80);
@@ -45,7 +45,7 @@ defineProps<{
   --color-100: var(--warning-100);
   --color-110: var(--warning-110);
   --color-120: var(--warning-120);
-  --color-contrast: var(--warning-contrast);
+  --color-text: var(--warning-text);
 }
 
 .toast-success {
@@ -62,6 +62,6 @@ defineProps<{
   --color-100: var(--success-100);
   --color-110: var(--success-110);
   --color-120: var(--success-120);
-  --color-contrast: var(--success-contrast);
+  --color-text: var(--success-text);
 }
 </style>

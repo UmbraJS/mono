@@ -15,23 +15,13 @@ const focused = ref(false)
 
 <template>
   <div class="input sibling-blur">
-    <label
-      for="html"
-      class="button buttonText buttonHover buttonActive buttonFocus focus"
-      :class="!focused ? 'bodycopy' : 'move'"
-    >
+    <label for="html" class="button buttonText buttonHover buttonActive buttonFocus focus"
+      :class="!focused ? 'bodycopy' : 'move'">
       {{ label }}
     </label>
-    <input
-      v-bind="$attrs"
-      :id="label"
-      ref="inputRef"
-      class="button buttonText buttonHover buttonActive buttonFocus focus"
-      :class="`${size}`"
-      :placeholder="label"
-      @focus="() => (focused = true)"
-      @blur="() => (focused = false)"
-    />
+    <input v-bind="$attrs" :id="label" ref="inputRef"
+      class="button buttonText buttonHover buttonActive buttonFocus focus" :class="`${size}`" :placeholder="label"
+      @focus="() => (focused = true)" @blur="() => (focused = false)" />
   </div>
 </template>
 
@@ -44,17 +34,17 @@ input.button {
 
 /* input:-internal-autofill-selected {
   background-color: var(--base-20) !important;
-  color: var(--base-contrast) !important;
+  color: var(--base-text) !important;
 }
 
 input:-webkit-autofill {
   background-color: var(--base-20) !important;
-  color: var(--base-contrast) !important;
+  color: var(--base-text) !important;
 }
 
 input:-webkit-autofill::placeholder {
   background-color: var(--base-20) !important;
-  color: var(--base-contrast) !important;
+  color: var(--base-text) !important;
 } */
 
 .input {
@@ -80,7 +70,7 @@ div.sibling-group-blur:has(+ * > :first-child input:focus) {
   height: 100%;
   width: 100%;
   background: var(--base);
-  color: var(--base-contrast);
+  color: var(--base-text);
   justify-content: left;
   padding: 0 var(--space-quark);
   pointer-events: none;

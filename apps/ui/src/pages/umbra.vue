@@ -15,12 +15,22 @@ const successAccent: Accent = {
 const theme = umbra({
   foreground: '#16121f',
   background: '#f3f6ea',
-  accents: ['#9999ff'],
-  inversed: {
-    foreground: '#f3f6ea',
-    background: '#16121f',
-    accents: ['#9999ff'],
-  },
+  accents: [
+    {
+      color: '#9999ff',
+      tints: [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+    }
+  ],
+  // inversed: {
+  //   foreground: '#f3f6ea',
+  //   background: '#16121f',
+  //   accents: [
+  //     {
+  //       color: '#9999ff',
+  //       shades: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  //     }
+  //   ],
+  // },
 })
 
 function getTokenName(tokenIndex: number) {
@@ -38,7 +48,7 @@ theme.apply()
         <div class="tokens border">
           <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
           <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.toHex()}`">
-            <p class="caption">{{ getTokenName(index) }}</p>
+            <p v-if="false" class="caption">{{ getTokenName(index) }}</p>
           </div>
           <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.toHex()}`"></div>
         </div>
