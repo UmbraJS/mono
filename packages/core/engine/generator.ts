@@ -6,7 +6,6 @@ import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils
 import { resolveTints, type TintsInput } from './easing'
 import { defaultSettings } from './defaults'
 
-
 interface GetRange {
   from: UmbraSwatch
   to: UmbraSwatch
@@ -61,8 +60,8 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   const color = isString ? accent : accent.color
   const insertion = input.settings?.insertion
 
-  const fallback = rangeValues(adjusted, input.settings)
-  const range = isString ? fallback : rangeValues(adjusted, accent) || fallback
+  const fallback = accentRangeValues(adjusted, input.settings, true) // Filter strings for settings fallback
+  const range = isString ? fallback : accentRangeValues(adjusted, accent, false) || fallback // Don't filter for accent's own properties
 
   if (insertion && color) return replaceAtIndex(range, insertion, color)
   if (!insertion && color) return autoPlacedRange({ input, adjusted, range, color })
@@ -70,23 +69,18 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
 }
 
 function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
-  const { background, foreground } = adjusted
-
-  function gen(accent: string | Accent) {
+  return adjusted.accents.map((accent) => {
+    console.log("Generating accent:", accent)
     const isString = typeof accent === 'string'
-
     const name = isString ? undefined : accent.name
     const range = putAccentInRange(adjusted, accent, input)
-
     return {
       name: name || `accent`,
-      background: pickContrast(foreground, adjusted), //accentColor(foreground, color, range),
-      foreground: pickContrast(background, adjusted),
-      range: getRange({ from: background, to: foreground, range })
+      background: pickContrast(adjusted.foreground, adjusted),
+      foreground: pickContrast(adjusted.background, adjusted),
+      range: getRange({ from: adjusted.background, to: adjusted.foreground, range })
     }
-  }
-
-  return adjusted.accents.map((accent) => gen(accent))
+  })
 }
 
 interface RangeValues {
@@ -100,6 +94,28 @@ function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): (number | s
   const tintsInput = isDark ? scheme?.shades : scheme?.tints
   const rangeInput = scheme?.range  // Fallback to range property
   const defaultInput = isDark ? defaultSettings.shades : defaultSettings.tints
+  return resolveTints(tintsInput, rangeInput, defaultInput)
+}
+
+function containsStrings(input?: TintsInput): boolean {
+  if (!input) return false
+  if (!Array.isArray(input)) return false
+  return input.some(v => typeof v === 'string')
+}
+
+function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filterStrings: boolean = false): (number | string)[] {
+  const isDark = adjusted.background.isDark()
+  const tintsInput = isDark ? scheme?.shades : scheme?.tints
+  const rangeInput = scheme?.range  // Fallback to range property
+  const defaultInput = isDark ? defaultSettings.shades : defaultSettings.tints
+
+  if (filterStrings) {
+    // Only use tintsInput and rangeInput as fallbacks if they don't contain strings
+    const safeTintsInput = containsStrings(tintsInput) ? undefined : tintsInput
+    const safeRangeInput = containsStrings(rangeInput) ? undefined : rangeInput
+    return resolveTints(safeTintsInput, safeRangeInput, defaultInput)
+  }
+
   return resolveTints(tintsInput, rangeInput, defaultInput)
 }
 
