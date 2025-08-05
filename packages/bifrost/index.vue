@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import Carbon from './components/Carbon/Carbon.vue'
 import Connections from './components/Connections.vue'
-import AddButton from '../../components/ui/Button/presets/AddButton.vue'
+import { AddButton } from '@nobel/core'
 import type { CarbonObject, Connection } from './types'
 import { hooks } from './data/index'
 
@@ -44,15 +44,8 @@ function functionRef(el: any, index: number) {
 <template>
   <div ref="board" id="board">
     <AddButton @click="addCarbon" />
-    <Carbon
-      v-for="(carbon, index) in carbons"
-      :key="carbon.id"
-      :ref="(e) => functionRef(e, index)"
-      :carbon="carbon"
-      :carbons="carbons"
-      :bounds="board"
-      :connections="connections"
-    />
+    <Carbon v-for="(carbon, index) in carbons" :key="carbon.id" :ref="(e) => functionRef(e, index)" :carbon="carbon"
+      :carbons="carbons" :bounds="board" :connections="connections" />
     <Connections :connections="connections" :bounds="board" />
   </div>
 </template>

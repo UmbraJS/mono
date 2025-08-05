@@ -1,8 +1,7 @@
 <script setup lang="ts">
-// import CarbonFiber from '../packages/CarbonFiber/index.vue'
+import { CarbonFiber } from 'bifrost'
 </script>
 
 <template>
-  <!-- <CarbonFiber /> -->
-  <div>carbon fiber</div>
+  <CarbonFiber />
 </template>

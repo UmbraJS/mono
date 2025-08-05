@@ -4,7 +4,7 @@ import type { CarbonObject } from '../../types'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
-import { InertiaPlugin } from 'gsap-trial/InertiaPlugin'
+import { InertiaPlugin } from 'gsap/InertiaPlugin'
 gsap.registerPlugin(InertiaPlugin)
 gsap.registerPlugin(Draggable)
 
@@ -29,13 +29,8 @@ function storeRef(el: any, index: number) {
 
 <template>
   <div class="edges">
-    <div
-      v-for="hook in carbonHooks"
-      :key="hook.index"
-      :ref="(e) => storeRef(e, hook.index)"
-      class="hook"
-      @click="emit('hookClick', hook.index)"
-    ></div>
+    <div v-for="hook in carbonHooks" :key="hook.index" :ref="(e) => storeRef(e, hook.index)" class="hook"
+      @click="emit('hookClick', hook.index)"></div>
   </div>
 </template>
 

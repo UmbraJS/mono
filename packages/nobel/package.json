@@ -42,7 +42,7 @@
     "format": "prettier --write src/"
   },
   "peerDependencies": {
-    "vue": "^3.5.3"
+    "vue": "^3.5.18"
   },
   "dependencies": {
     "@umbrajs/core": "workspace:*",
@@ -51,7 +51,6 @@
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
     "gsap": "catalog:",
-    "gsap-trial": "catalog:",
     "reka-ui": "catalog:",
     "vaul-vue": "^0.4.1",
     "vue-router": "catalog:",

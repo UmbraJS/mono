@@ -2,12 +2,12 @@ import { ref } from 'vue'
 import type { Ref } from 'vue'
 import type { FiberPath } from '../utils/fiberPlace'
 import { fiberPlace } from '../utils/fiberPlace'
-import { useRef } from '../../../composables/useRef'
+import { useRef } from './useRef'
 import { getPathData } from '../utils/fiberPath'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
-import { InertiaPlugin } from 'gsap-trial/InertiaPlugin'
+import { InertiaPlugin } from 'gsap/InertiaPlugin'
 gsap.registerPlugin(InertiaPlugin)
 gsap.registerPlugin(Draggable)
 

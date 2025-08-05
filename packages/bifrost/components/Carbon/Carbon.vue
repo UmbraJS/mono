@@ -7,7 +7,7 @@ import { hooks } from '../../data/index'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
-import { InertiaPlugin } from 'gsap-trial/InertiaPlugin'
+import { InertiaPlugin } from 'gsap/InertiaPlugin'
 gsap.registerPlugin(InertiaPlugin)
 gsap.registerPlugin(Draggable)
 

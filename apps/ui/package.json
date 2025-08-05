@@ -52,7 +52,6 @@
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
     "gsap": "catalog:",
-    "gsap-trial": "catalog:",
     "vue-router": "catalog:"
   },
   "devDependencies": {

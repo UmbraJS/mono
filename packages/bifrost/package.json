@@ -1,0 +1,49 @@
+{
+  "name": "bifrost",
+  "type": "module",
+  "version": "0.0.01",
+  "description": "Umbra is a theme management library that allows you to create semantic color themes that are easy to dynamically customize, change retroactively and scale progressively",
+  "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UmbraJS/core"
+  },
+  "bugs": {
+    "url": "https://github.com/UmbraJS/core/issues"
+  },
+  "keywords": [],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.cjs"
+    },
+    "./*": "./*"
+  },
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && cp package.json dist && cp README.md dist",
+    "publish": "cd dist && npm publish"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.18"
+  },
+  "dependencies": {
+    "@nobel/core": "workspace:*",
+    "@vueuse/components": "catalog:",
+    "@vueuse/core": "catalog:",
+    "gsap": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vue": "catalog:"
+  }
+}
