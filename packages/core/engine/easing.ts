@@ -45,18 +45,26 @@ export function generateTints(options: EasingOptions = {}): number[] {
 export type TintsInput =
   | (number | string)[]  // Original array format
   | EasingType           // Simple easing string
-  | EasingOptions        // Full easing options object
-
-// Convert any TintsInput to number array
-export function resolveTints(input?: TintsInput, defaultValue?: TintsInput): number[] {
-  // If no input provided, use default value
-  const actualInput = input ?? defaultValue
+  | EasingOptions        // Full easing options object// Convert any TintsInput to (number | string) array with fallback support
+export function resolveTints(input?: TintsInput, fallback?: TintsInput, defaultValue?: TintsInput): (number | string)[] {
+  // Priority: input -> fallback -> defaultValue
+  const actualInput = input ?? fallback ?? defaultValue
 
   if (!actualInput) return []
 
   if (Array.isArray(actualInput)) {
-    // Original array format - convert strings to numbers
-    return actualInput.map(v => typeof v === 'string' ? parseInt(v, 10) : v)
+    // Original array format - keep strings as-is, convert numeric strings to numbers
+    return actualInput.map(v => {
+      if (typeof v === 'string') {
+        // If it looks like a color (starts with # or named color), keep as string
+        if (v.startsWith('#') || isNaN(parseInt(v, 10))) {
+          return v
+        }
+        // Otherwise convert to number
+        return parseInt(v, 10)
+      }
+      return v
+    })
   }
 
   if (typeof actualInput === 'string') {

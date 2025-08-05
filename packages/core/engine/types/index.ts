@@ -25,9 +25,10 @@ export interface UmbraOutput {
 
 export interface Accent {
   name?: string
-  color: string
-  shades?: TintsInput
-  tints?: TintsInput
+  color?: string
+  range?: TintsInput     // Used for both light-to-dark and dark-to-light
+  shades?: TintsInput    // Dark-to-light range (falls back to range)
+  tints?: TintsInput     // Light-to-dark range (falls back to range)
   readability?: number
 }
 

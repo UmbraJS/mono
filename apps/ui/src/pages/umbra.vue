@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { umbra } from '@umbrajs/core'
-import type { Accent } from '@umbrajs/core'
-
+import type { Accent, Umbra, UmbraInput } from '@umbrajs/core'
+import { ref } from 'vue'
 import {
   gray,
   blue,
@@ -15,53 +15,80 @@ import {
 
 const warningAccent: Accent = {
   name: 'warning',
-  color: '#ff0000',
+  range: Object.values(red),
+  shades: Object.values(redDark),
+  tints: Object.values(red),
 }
 
 const successAccent: Accent = {
   name: 'success',
-  color: '#00ff00',
+  shades: Object.values(greenDark),
+  tints: Object.values(green),
 }
 
-console.log('successAccent', successAccent)
+const infoAccent: Accent = {
+  name: 'info',
+  range: Object.values(blue),
+  shades: Object.values(blueDark),
+  tints: Object.values(blue),
+}
 
-const theme = umbra({
-  foreground: '#16121f',
-  background: '#f3f6ea',
+const theme = useUmbra({
+  foreground: '#000000',
+  background: '#ffffff',
   accents: [
+    "#ff00ff",
     '#9999ff',
     warningAccent,
     successAccent,
-    "#ff00ff",
+    infoAccent,
   ],
-  // Or use an easing options object:
-  // accents: [
-  //   {
-  //     color: '#9999ff',
-  //     tints: { easing: 'easeInCubic', min: 5, max: 80, count: 12 }
-  //   }
-  // ],
-  // Or still use the traditional array:
-  // accents: [
-  //   {
-  //     color: '#9999ff',
-  //     tints: [5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 95]
-  //   }
-  // ],
+  settings: {
+    shades: Object.values(grayDark),
+    tints: Object.values(gray),
+  }
 })
 
-theme.apply()
+function useUmbra(schema: UmbraInput) {
+  const initTheme = umbra(schema)
+  const generatedTheme = ref<Umbra>(initTheme)
+
+  function applyTheme() {
+    generatedTheme.value.apply()
+  }
+
+  function inverseTheme(apply = true) {
+    generatedTheme.value = generatedTheme.value.inverse()
+    if (apply) applyTheme()
+  }
+
+  applyTheme()
+
+  return {
+    applyTheme,
+    inverseTheme,
+    generatedTheme,
+  }
+}
+
+
+function getTokenName(index: number) {
+  return index * 10 + 10
+}
 </script>
 
 <template>
+  <div id="ThemeControls">
+    <button @click="() => theme.inverseTheme(false)">Inverse Theme</button>
+  </div>
   <div class="umbra-wrapper">
     <div class="range-list">
-      <div v-for="range in theme.output" :key="range.name" class="color-list">
+      <div v-for="range in theme.generatedTheme.value.output" :key="range.name" class="color-list">
         <div class="color-name">{{ range.name }}</div>
         <div class="tokens border">
           <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
           <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.toHex()}`">
-            <!-- <p v-if="false" class="caption">{{ getTokenName(index) }}</p> -->
+            <p v-if="true" id="TokenName" class="caption">{{ getTokenName(index) }}</p>
           </div>
           <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.toHex()}`"></div>
         </div>
@@ -71,6 +98,11 @@ theme.apply()
 </template>
 
 <style>
+#TokenName {
+  opacity: 0.2;
+  font-weight: 900;
+}
+
 .color-list:first-of-type .tokens {
   border-bottom: none;
   border-bottom-left-radius: 0px;
@@ -92,7 +124,6 @@ theme.apply()
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
-
 
 .tokens {
   display: flex;
@@ -118,6 +149,14 @@ theme.apply()
   align-items: center;
   gap: 0px;
 }
+
+.color-list:hover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0px;
+}
+
 
 .color-name {
   display: flex;

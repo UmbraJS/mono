@@ -90,16 +90,17 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
 }
 
 interface RangeValues {
+  range?: TintsInput     // Fallback for both shades and tints
   shades?: TintsInput
   tints?: TintsInput
 }
 
-
 function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): (number | string)[] {
   const isDark = adjusted.background.isDark()
   const tintsInput = isDark ? scheme?.shades : scheme?.tints
+  const rangeInput = scheme?.range  // Fallback to range property
   const defaultInput = isDark ? defaultSettings.shades : defaultSettings.tints
-  return resolveTints(tintsInput, defaultInput)
+  return resolveTints(tintsInput, rangeInput, defaultInput)
 }
 
 function base(input: UmbraScheme, adjusted: UmbraAdjusted) {

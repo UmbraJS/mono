@@ -7,7 +7,6 @@ import { umbra } from '@umbrajs/core'
 import { Icon } from '@iconify/vue'
 import type { Accent } from '@umbrajs/core'
 import '@nobel/core/styles/main.scss'
-import Umbra from "../src/pages/umbra.vue"
 
 const route = useRoute()
 
@@ -81,7 +80,6 @@ function toggleTheme() {
   </header>
   <main data-vaul-drawer-wrapper>
     <router-view :key="route.path"></router-view>
-    <Umbra />
   </main>
 </template>
 
