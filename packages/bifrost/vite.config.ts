@@ -1,29 +1,27 @@
-// vite.config.js
-import { resolve } from 'node:path'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import dts from 'vite-plugin-dts'
+import { fileURLToPath, URL } from 'node:url'
 
+import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
+import dts from 'vite-plugin-dts'
+import vueDevTools from 'vite-plugin-vue-devtools'
+
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    dts({
-      outDir: 'dist/types',
-    })
-  ],
+  plugins: [vue(), dts(), vueDevTools()],
   build: {
     lib: {
-      entry: resolve(__dirname, 'index.ts'),
-      name: 'bifrost',
-      fileName: 'index',
+      entry: fileURLToPath(new URL('./index.ts', import.meta.url)),
+      formats: ['es'],
+      name: 'Bifrost',
     },
+    minify: false,
     rollupOptions: {
       external: ['vue'],
       output: {
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
+          vue: 'vue',
+        },
+      },
+    },
   },
 })
