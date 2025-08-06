@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { CarbonObject } from '../../types'
+import type { CarbonObject } from '../types'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
@@ -28,24 +28,24 @@ function storeRef(el: HTMLDivElement, index: number) {
 </script>
 
 <template>
-  <div class="edges">
+  <div id="BifrostCarbonEdges">
     <div v-for="hook in carbonHooks" :key="hook.index" :ref="(e: HTMLDivElement) => storeRef(e, hook.index)"
-      class="hook" @click="emit('hookClick', hook.index)"></div>
+      id="BifrostCarbonhook" @click="emit('hookClick', hook.index)"></div>
   </div>
 </template>
 
 <style>
-#carbon .hook {
+#BifrostCarbonhook {
   height: var(--space-atom);
   aspect-ratio: 1 / 1;
-  background: var(--accent);
+  background: var(--accent-90);
 }
 
-#carbon .hook:hover {
+#BifrostCarbonhook:hover {
   background: var(--accent-40);
 }
 
-#carbon .edges {
+#BifrostCarbonEdges {
   display: flex;
   align-items: center;
   justify-content: center;

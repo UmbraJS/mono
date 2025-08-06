@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import type { CarbonObject, Connection, HookType } from '../../types'
+import type { CarbonObject, Connection, HookType } from '../types'
 import CarbonHooks from './CarbonHooks.vue'
-import { hooks } from '../../data/index'
+import { hooks } from '../data/index'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
@@ -107,25 +107,25 @@ function isRelatedConnection(connection: Connection) {
 </script>
 
 <template>
-  <div ref="carbonref" id="carbon">
+  <div ref="carbonref" id="BifrostCarbon">
     <CarbonHooks ref="inputs" :carbon="carbon" type="input"
-      @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)" />
+      @hookClick="(index: number) => addHookedCarbon(carbon.id, 'input', index)" />
     <div class="core">
-      <CarbonHooks :carbon="carbon" type="input" @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)" />
+      <CarbonHooks :carbon="carbon" type="input"
+        @hookClick="(index: number) => addHookedCarbon(carbon.id, 'input', index)" />
       <div class="content">
-        <p>
-          <strong>{{ title }}</strong>
-        </p>
+        <p><strong>{{ title }}</strong></p>
       </div>
-      <CarbonHooks :carbon="carbon" type="output" @hookClick="(index) => addHookedCarbon(carbon.id, 'output', index)" />
+      <CarbonHooks :carbon="carbon" type="output"
+        @hookClick="(index: number) => addHookedCarbon(carbon.id, 'output', index)" />
     </div>
     <CarbonHooks ref="outputs" :carbon="carbon" type="output"
-      @hookClick="(index) => addHookedCarbon(carbon.id, 'output', index)" />
+      @hookClick="(index: number) => addHookedCarbon(carbon.id, 'output', index)" />
   </div>
 </template>
 
 <style>
-#carbon {
+#BifrostCarbon {
   position: absolute;
   top: v-bind(top);
   left: v-bind(left);
@@ -141,20 +141,20 @@ function isRelatedConnection(connection: Connection) {
   border-radius: var(--radius);
 }
 
-#carbon .core {
+#BifrostCarbon .core {
   display: grid;
   min-height: var(--space-6);
 }
 
-#carbon .core p {
+#BifrostCarbon .core p {
   line-height: 1;
 }
 
-#carbon .core .edges {
+#BifrostCarbon .core .edges {
   flex-direction: row;
 }
 
-#carbon .core .content {
+#BifrostCarbon .core .content {
   display: flex;
   justify-content: center;
   align-items: center;

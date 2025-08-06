@@ -42,7 +42,7 @@ const data = computed(() => (orients.value ? vertical() : horizontal()))
 </script>
 
 <template>
-  <div id="rome" class="ancor">
+  <div id="rome">
     <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg">
       <path :d="data" :stroke-width="props.stroke" />
     </svg>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineProps, onMounted, defineExpose } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
-import { useFiber } from '../composables/useFiber'
+import { useBifrostFiber } from '../composables/useBifrostFiber'
 
 interface FiberProps {
   bounds?: HTMLDivElement
@@ -11,7 +11,7 @@ interface FiberProps {
 
 const { output, input, bounds } = defineProps<FiberProps>()
 
-const fiber = useFiber({
+const fiber = useBifrostFiber({
   board: bounds,
   output: output,
   input: input
@@ -51,7 +51,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :ref="(e) => fiber.set(e as HTMLDivElement)" id="rome" class="ancor">
+  <div :ref="(e: HTMLDivElement) => fiber.set(e)" id="BifrostFiber">
     <svg :width="fiber.path.value.width" :height="fiber.path.value.height" xmlns="http://www.w3.org/2000/svg">
       <path :d="data" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />
     </svg>
@@ -59,12 +59,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
-#rome {
+#BifrostFiber {
   position: absolute;
   z-index: 0;
 }
 
-#rome svg path {
+#BifrostFiber svg path {
   fill: transparent;
   stroke: var(--accent);
 }

@@ -1,5 +1,5 @@
-import Carbon from '../components/Carbon/Carbon.vue'
-import Fiber from '../components/Fiber.vue'
+import Carbon from '../components/BifrostCarbon.vue'
+import Fiber from '../components/BifrostFiber.vue'
 
 export interface Connection {
   id: string

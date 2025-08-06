@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import Carbon from './components/Carbon/Carbon.vue'
+import Carbon from './components/BifrostCarbon.vue'
 import Connections from './components/Connections.vue'
 import { AddButton } from '@nobel/core'
 import type { CarbonObject, Connection } from './types'

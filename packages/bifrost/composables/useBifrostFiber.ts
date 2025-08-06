@@ -1,6 +1,46 @@
-import { gsap } from 'gsap'
-import { Draggable } from 'gsap/Draggable'
-gsap.registerPlugin(Draggable)
+import { ref } from 'vue'
+import { useRef } from './useRef'
+
+interface UseFiber {
+  output?: HTMLDivElement
+  input?: HTMLDivElement
+  board?: HTMLDivElement
+}
+
+export function useBifrostFiber({ output, input, board }: UseFiber) {
+  const [SVGPath, setSVGPath] = useRef<HTMLDivElement>()
+
+  const path = ref<FiberPath>({
+    curve: 0.0,
+    stroke: 5,
+    padding: 10,
+    width: 200,
+    height: 200,
+    flipped: false,
+    reversed: false
+  })
+
+  function update() {
+    path.value = getPathData(path.value, {
+      output: output,
+      input: input
+    })
+    if (!SVGPath.value) return
+    fiberPlace(path.value, {
+      board: board,
+      output: output,
+      input: input,
+      fiber: SVGPath.value
+    })
+  }
+
+  return {
+    path,
+    update,
+    set: setSVGPath
+  }
+}
+
 
 export interface FiberPath {
   curve: number
@@ -112,4 +152,49 @@ function spaceBetweenX({ startCarbon, endCarbon, board }: SpaceProps) {
   const startCarbonEnd = startCarbon.left + startCarbon.width - board.left
   const endCarbonStart = endCarbon.left - board.left
   return Math.abs(startCarbonEnd - endCarbonStart)
+}
+
+
+interface GetPathData {
+  output?: HTMLDivElement
+  input?: HTMLDivElement
+}
+
+export function getPathData(path: FiberPath, { output, input }: GetPathData) {
+  if (!output || !input) return path
+  const boxOutput: DOMRect | undefined = output.getBoundingClientRect()
+  const boxInput: DOMRect | undefined = input.getBoundingClientRect()
+
+  const flipped = checkFlip({ boxOutput, boxInput })
+  const reversed = checkReversed({ boxOutput, boxInput })
+  const curved = reversed ? 0.1 : adjustCurve({ boxOutput, boxInput })
+  return {
+    ...path,
+    curve: curved,
+    flipped: flipped,
+    reversed: reversed
+  }
+}
+
+function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+  // The closer the carbons are to each other the more the curve (between 0.1 and 1.0)
+  const distanceHeight = Math.abs(boxOutput.top - boxInput.top)
+  const distanceWidth = Math.abs(boxOutput.left - boxInput.left)
+  const distance = Math.min(distanceHeight, distanceWidth) / 500
+  if (distance > 0.6) return 0.6
+  return distance
+}
+
+function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+  // If center of carbon2 is higher than the center of carbon1 turn flipped to false
+  const center1 = boxOutput.top + boxOutput.height / 2
+  const center2 = boxInput.top + boxInput.height / 2
+  if (center2 < center1) return false
+  return true
+}
+
+function checkReversed({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+  // If carbon2 left is less than carbon1 right turn reversed to true
+  if (boxInput.left < boxOutput.left + boxOutput.width) return true
+  return false
 }
