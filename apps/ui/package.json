@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
+    "@nobel/bifrost": "workspace:*",
     "@nobel/core": "workspace:*",
     "@radix-ui/colors": "^3.0.0",
     "@umbrajs/core": "workspace:*",

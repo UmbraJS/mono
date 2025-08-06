@@ -1,7 +1,7 @@
 {
-  "name": "bifrost",
+  "name": "@nobel/bifrost",
   "type": "module",
-  "version": "0.0.01",
+  "version": "0.0.1",
   "description": "Umbra is a theme management library that allows you to create semantic color themes that are easy to dynamically customize, change retroactively and scale progressively",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
   "license": "MIT",
@@ -15,14 +15,14 @@
   "keywords": [],
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/bifrost.js",
+      "require": "./dist/bifrost.js"
     },
     "./*": "./*"
   },
-  "main": "index.ts",
-  "module": "dist/index.mjs",
+  "main": "dist/bifrost.js",
+  "module": "dist/bifrost.js",
   "types": "dist/index.d.ts",
   "typings": "types/index.d.ts",
   "scripts": {

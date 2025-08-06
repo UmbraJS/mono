@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CarbonFiber } from 'bifrost'
+import { CarbonFiber } from '@nobel/bifrost'
 </script>
 
 <template>
