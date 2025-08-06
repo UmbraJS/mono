@@ -1,12 +1,34 @@
 import { ref } from 'vue'
 import { useRef } from './useRef'
 
+/**
+ * Configuration interface for the Bifrost fiber composable
+ */
 interface UseFiber {
   output?: HTMLDivElement
   input?: HTMLDivElement
   board?: HTMLDivElement
 }
 
+/**
+ * Vue composable for managing Bifrost fiber connections between UI elements.
+ * Creates and manages SVG paths that connect output and input elements on a board.
+ *
+ * @param config - Configuration object containing DOM elements
+ * @param config.output - The output element (starting point of the connection)
+ * @param config.input - The input element (ending point of the connection)
+ * @param config.board - The board element (container for positioning)
+ * @returns Object with path state, update function, and setter for SVG element
+ *
+ * @example
+ * ```typescript
+ * const { path, update, set } = useBifrostFiber({
+ *   output: outputElement,
+ *   input: inputElement,
+ *   board: boardElement
+ * })
+ * ```
+ */
 export function useBifrostFiber({ output, input, board }: UseFiber) {
   const [SVGPath, setSVGPath] = useRef<HTMLDivElement>()
 
@@ -20,6 +42,12 @@ export function useBifrostFiber({ output, input, board }: UseFiber) {
     reversed: false
   })
 
+  /**
+   * Updates the fiber connection by recalculating path data and repositioning the fiber element.
+   * This function should be called whenever the position of connected elements changes.
+   *
+   * @throws Will log errors if DOM operations fail but won't crash the application
+   */
   function update() {
     try {
       path.value = getPathData(path.value, {
@@ -50,23 +78,59 @@ export function useBifrostFiber({ output, input, board }: UseFiber) {
   }
 }
 
+/**
+ * Configuration interface for fiber path properties
+ */
 export interface FiberPath {
+  /** Curvature of the path (0.0 to 1.0) */
   curve: number
+  /** Stroke width of the path in pixels */
   stroke: number
+  /** Padding around the path in pixels */
   padding: number
+  /** Total width of the fiber container */
   width: number
+  /** Total height of the fiber container */
   height: number
+  /** Whether the path is vertically flipped */
   flipped: boolean
+  /** Whether the path direction is reversed */
   reversed: boolean
 }
 
+/**
+ * Interface for DOM elements involved in fiber positioning
+ */
 export interface CarbonFrost {
+  /** The container board element */
   board?: HTMLDivElement
+  /** The output (start) element */
   output?: HTMLDivElement
+  /** The input (end) element */
   input?: HTMLDivElement
+  /** The fiber SVG element */
   fiber?: HTMLDivElement
 }
 
+/**
+ * Calculates and applies the position and size of a fiber element to connect two carbon elements.
+ * Aligns the fiber SVG with the start carbon and adjusts the size so it reaches the end carbon.
+ *
+ * @param path - The fiber path configuration object
+ * @param el - Object containing the DOM elements (board, output, input, fiber)
+ *
+ * @throws Will log errors and return early if required DOM elements are missing
+ *
+ * @example
+ * ```typescript
+ * calculateFiberPosition(pathConfig, {
+ *   board: boardElement,
+ *   output: startElement,
+ *   input: endElement,
+ *   fiber: fiberSvgElement
+ * })
+ * ```
+ */
 export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
   // Aligns the fiber SVG with the start carbon and adjusts the size of the fiber so it reaches the end carbon
   if (!el.board || !el.output || !el.input || !el.fiber) {
@@ -124,11 +188,24 @@ export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
   }
 }
 
+/**
+ * Interface for carbon and board positioning calculations
+ */
 interface CarbonBifrostOutput {
+  /** Bounding rectangle of the board element */
   board: DOMRect
+  /** Bounding rectangle of the carbon element */
   carbon: DOMRect
 }
 
+/**
+ * Calculates the horizontal (X-axis) positioning for a fiber element.
+ * Handles both normal and reversed fiber directions.
+ *
+ * @param path - The fiber path configuration
+ * @param config - Object containing board and carbon bounding rectangles
+ * @returns CSS positioning object with left/right values
+ */
 function placeX(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
   try {
     if (path.reversed) {
@@ -147,6 +224,14 @@ function placeX(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
   }
 }
 
+/**
+ * Calculates the vertical (Y-axis) positioning for a fiber element.
+ * Handles both normal and flipped fiber orientations.
+ *
+ * @param path - The fiber path configuration
+ * @param config - Object containing board and carbon bounding rectangles
+ * @returns CSS positioning object with top/bottom values
+ */
 function placeY(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
   try {
     const carbonCenter = carbon.height / 2
@@ -167,12 +252,26 @@ function placeY(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
   }
 }
 
+/**
+ * Interface for spacing calculations between carbon elements
+ */
 interface SpaceProps {
+  /** Bounding rectangle of the starting carbon element */
   startCarbon: DOMRect
+  /** Bounding rectangle of the ending carbon element */
   endCarbon: DOMRect
+  /** Bounding rectangle of the board container */
   board: DOMRect
 }
 
+/**
+ * Calculates the vertical distance between two carbon elements.
+ * Takes into account the fiber path configuration and stroke offset.
+ *
+ * @param path - The fiber path configuration
+ * @param config - Object containing bounding rectangles of both carbons and board
+ * @returns Absolute vertical distance in pixels
+ */
 function spaceBetweenY(path: FiberPath, { startCarbon, endCarbon, board }: SpaceProps) {
   const startCarbonCenter = startCarbon.top + startCarbon.height / 2 - board.top
   const endCarbonCenter = endCarbon.top + endCarbon.height / 2 - board.top
@@ -180,6 +279,13 @@ function spaceBetweenY(path: FiberPath, { startCarbon, endCarbon, board }: Space
   return Math.abs(startCarbonCenter - endCarbonCenter + offset)
 }
 
+/**
+ * Calculates the horizontal distance between two carbon elements.
+ * Measures from the end of the start carbon to the beginning of the end carbon.
+ *
+ * @param config - Object containing bounding rectangles of both carbons and board
+ * @returns Absolute horizontal distance in pixels
+ */
 function spaceBetweenX({ startCarbon, endCarbon, board }: SpaceProps) {
   const startCarbonEnd = startCarbon.left + startCarbon.width - board.left
   const endCarbonStart = endCarbon.left - board.left
@@ -187,11 +293,32 @@ function spaceBetweenX({ startCarbon, endCarbon, board }: SpaceProps) {
 }
 
 
+/**
+ * Interface for path data calculation input
+ */
 interface GetPathData {
+  /** The output (starting) DOM element */
   output?: HTMLDivElement
+  /** The input (ending) DOM element */
   input?: HTMLDivElement
 }
 
+/**
+ * Calculates path data for a fiber connection based on the positions of output and input elements.
+ * Determines if the path should be flipped, reversed, and calculates the appropriate curve value.
+ *
+ * @param path - The current fiber path configuration
+ * @param config - Object containing the output and input DOM elements
+ * @returns Updated path configuration with calculated properties
+ *
+ * @example
+ * ```typescript
+ * const updatedPath = getPathData(currentPath, {
+ *   output: startElement,
+ *   input: endElement
+ * })
+ * ```
+ */
 export function getPathData(path: FiberPath, { output, input }: GetPathData) {
   if (!output || !input) {
     console.warn('getPathData: Missing output or input elements', { output: !!output, input: !!input })
@@ -227,6 +354,13 @@ export function getPathData(path: FiberPath, { output, input }: GetPathData) {
   }
 }
 
+/**
+ * Calculates the curve intensity for a fiber path based on the distance between elements.
+ * The closer the elements are, the more curved the path becomes (between 0.1 and 0.6).
+ *
+ * @param config - Object containing bounding rectangles of output and input elements
+ * @returns Curve value between 0.1 and 0.6
+ */
 function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
   try {
     // The closer the carbons are to each other the more the curve (between 0.1 and 1.0)
@@ -248,6 +382,13 @@ function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DO
   }
 }
 
+/**
+ * Determines if the fiber path should be vertically flipped.
+ * Flips the path if the input element's center is below the output element's center.
+ *
+ * @param config - Object containing bounding rectangles of output and input elements
+ * @returns True if the path should be flipped, false otherwise
+ */
 function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
   // If center of carbon2 is higher than the center of carbon1 turn flipped to false
   const center1 = boxOutput.top + boxOutput.height / 2
@@ -257,6 +398,13 @@ function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMR
   return true
 }
 
+/**
+ * Determines if the fiber path direction should be reversed.
+ * Reverses the path if the input element overlaps horizontally with the output element.
+ *
+ * @param config - Object containing bounding rectangles of output and input elements
+ * @returns True if the path should be reversed, false otherwise
+ */
 function checkReversed({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
   // If carbon2 left is less than carbon1 right turn reversed to true
   if (boxInput.left < boxOutput.left + boxOutput.width) return true
