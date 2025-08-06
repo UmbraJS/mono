@@ -24,18 +24,18 @@ function storeRef(el: HTMLDivElement, index: number) {
 <template>
   <div id="BifrostCarbonEdges">
     <div v-for="hook in carbonHooks" :key="hook.index" :ref="(e: HTMLDivElement) => storeRef(e, hook.index)"
-      id="BifrostCarbonhook" @click="emit('hookClick', hook.index)"></div>
+      id="BifrostCarbonHook" @click="emit('hookClick', hook.index)"></div>
   </div>
 </template>
 
 <style>
-#BifrostCarbonhook {
+#BifrostCarbonHook {
   height: var(--space-atom);
   aspect-ratio: 1 / 1;
   background: var(--accent-90);
 }
 
-#BifrostCarbonhook:hover {
+#BifrostCarbonHook:hover {
   background: var(--accent-40);
 }
 

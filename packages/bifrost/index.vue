@@ -8,7 +8,7 @@ import { hooks } from './data/index'
 
 type BifrostCarbonType = InstanceType<typeof BifrostCarbon>
 
-const board = ref<HTMLDivElement>()
+const BifrostBoard = ref<HTMLDivElement>()
 const connections = ref<BifrostFiberConnections[]>([])
 const carbons = ref<CarbonObject[]>([])
 
@@ -44,22 +44,17 @@ function functionRef(el: BifrostCarbonType, index: number) {
 </script>
 
 <template>
-  <div ref="board" id="board">
+  <div id="BifrostBoard" :ref="BifrostBoard">
     <AddButton @click="addCarbon" />
     <BifrostCarbon v-for="(carbon, index) in carbons" :key="carbon.id"
-      :ref="(e: BifrostCarbonType) => functionRef(e, index)" :carbon="carbon" :carbons="carbons" :bounds="board"
+      :ref="(e: BifrostCarbonType) => functionRef(e, index)" :carbon="carbon" :carbons="carbons" :bounds="BifrostBoard"
       :connections="connections" />
-    <BifrostFiber :connections="connections" :bounds="board" />
+    <BifrostFiber :connections="connections" :bounds="BifrostBoard" />
   </div>
 </template>
 
 <style>
-.bounds {
-  height: 100%;
-  width: 100%;
-}
-
-#board {
+#BifrostBoard {
   display: flex;
   position: relative;
   justify-content: center;

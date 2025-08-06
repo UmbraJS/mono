@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
-import CarbonHooks from './CarbonHooks.vue'
+import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
 
 import { gsap } from 'gsap'
@@ -19,8 +19,8 @@ const props = defineProps<{
 
 const carbonref = ref<HTMLDivElement>()
 const dragHandle = ref<HTMLDivElement>()
-const inputs = ref<InstanceType<typeof CarbonHooks>>()
-const outputs = ref<InstanceType<typeof CarbonHooks>>()
+const inputs = ref<InstanceType<typeof BifrostCarbonHooks>>()
+const outputs = ref<InstanceType<typeof BifrostCarbonHooks>>()
 
 const top = computed(() => `${props.carbon.position[1]}px`)
 const left = computed(() => `${props.carbon.position[0]}px`)
@@ -109,18 +109,18 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
 
 <template>
   <div ref="carbonref" id="BifrostCarbon">
-    <CarbonHooks ref="inputs" :carbon="carbon" type="input"
+    <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
       @hookClick="(index: number) => addHookedCarbon(carbon.id, 'input', index)" />
-    <div class="core">
-      <CarbonHooks :carbon="carbon" type="input"
+    <div id="BifrostCore">
+      <BifrostCarbonHooks :carbon="carbon" type="input"
         @hookClick="(index: number) => addHookedCarbon(carbon.id, 'input', index)" />
-      <div class="content">
+      <div id="BifrostCarbonContent">
         <p><strong>{{ title }}</strong></p>
       </div>
-      <CarbonHooks :carbon="carbon" type="output"
+      <BifrostCarbonHooks :carbon="carbon" type="output"
         @hookClick="(index: number) => addHookedCarbon(carbon.id, 'output', index)" />
     </div>
-    <CarbonHooks ref="outputs" :carbon="carbon" type="output"
+    <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
       @hookClick="(index: number) => addHookedCarbon(carbon.id, 'output', index)" />
   </div>
 </template>
@@ -142,20 +142,20 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   border-radius: var(--radius);
 }
 
-#BifrostCarbon .core {
+#BifrostCarbon #BifrostCore {
   display: grid;
   min-height: var(--space-6);
 }
 
-#BifrostCarbon .core p {
+#BifrostCarbon #BifrostCore p {
   line-height: 1;
 }
 
-#BifrostCarbon .core .edges {
+#BifrostCarbon #BifrostCore #BifrostCarbonEdges {
   flex-direction: row;
 }
 
-#BifrostCarbon .core .content {
+#BifrostCarbon #BifrostCore #BifrostCarbonContent {
   display: flex;
   justify-content: center;
   align-items: center;

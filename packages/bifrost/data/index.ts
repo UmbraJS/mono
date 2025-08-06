@@ -131,6 +131,5 @@ const n: CarbonObject[] = [
 export function useCarbonQuery() {
   const connections = ref<BifrostFiberConnections[]>(c)
   const carbons = ref<CarbonObject[]>(n)
-
   return { carbons, connections }
 }
