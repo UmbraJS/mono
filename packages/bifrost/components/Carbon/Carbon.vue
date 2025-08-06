@@ -20,7 +20,7 @@ const props = defineProps<{
 }>()
 
 const carbonref = ref<HTMLDivElement>()
-const draggHandle = ref<HTMLDivElement>()
+const dragHandle = ref<HTMLDivElement>()
 const inputs = ref<InstanceType<typeof CarbonHooks>>()
 const outputs = ref<InstanceType<typeof CarbonHooks>>()
 
@@ -48,7 +48,7 @@ onMounted(() => {
 
   Draggable.create(carbonEl, {
     bounds: props.bounds,
-    trigger: draggHandle.value,
+    trigger: dragHandle.value,
     inertia: false,
     edgeResistance: 0.9,
     onDrag: updateFibers
@@ -112,7 +112,7 @@ function isRelatedConnection(connection: Connection) {
       @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)" />
     <div class="core">
       <CarbonHooks :carbon="carbon" type="input" @hookClick="(index) => addHookedCarbon(carbon.id, 'input', index)" />
-      <div ref="draggHandle" class="content">
+      <div class="content">
         <p>
           <strong>{{ title }}</strong>
         </p>
