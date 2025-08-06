@@ -22,11 +22,11 @@ export function useBifrostFiber({ output, input, board }: UseFiber) {
 
   function update() {
     path.value = getPathData(path.value, {
-      output: output,
-      input: input
+      output,
+      input
     })
     if (!SVGPath.value) return
-    fiberPlace(path.value, {
+    calculateFiberPosition(path.value, {
       board: board,
       output: output,
       input: input,
@@ -58,7 +58,7 @@ export interface CarbonFrost {
   fiber?: HTMLDivElement
 }
 
-export function fiberPlace(path: FiberPath, el: CarbonFrost) {
+export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
   // Aligns the fiber SVG with the start carbon and adjusts the size of the fiber so it reaches the end carbon
   if (!el.board || !el.output || !el.input || !el.fiber) return
   const boxBoard = el.board.getBoundingClientRect()
@@ -78,10 +78,12 @@ export function fiberPlace(path: FiberPath, el: CarbonFrost) {
   })
 
   // Position is used to sync the start of the bifrost with the output of the start carbon
-  bifrost.style.left = x.left
-  bifrost.style.right = x.right
-  bifrost.style.bottom = y.bottom
-  bifrost.style.top = y.top
+  Object.assign(bifrost.style, {
+    left: x.left,
+    right: x.right,
+    bottom: y.bottom,
+    top: y.top
+  })
 
   // Sizes are used to sync the end of the bifrost to the input of the next carbons
   const width = spaceBetweenX({
