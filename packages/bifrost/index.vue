@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import BifrostCarbon from './components/BifrostCarbon.vue'
-import Connections from './components/Connections.vue'
+import BifrostFiber from './components/BifrostFibers.vue'
 import { AddButton } from '@nobel/core'
 import type { CarbonObject, BifrostFiberConnections } from './types'
 import { hooks } from './data/index'
@@ -46,9 +46,10 @@ function functionRef(el: BifrostCarbonType, index: number) {
 <template>
   <div ref="board" id="board">
     <AddButton @click="addCarbon" />
-    <Carbon v-for="(carbon, index) in carbons" :key="carbon.id" :ref="(e: BifrostCarbonType) => functionRef(e, index)"
-      :carbon="carbon" :carbons="carbons" :bounds="board" :connections="connections" />
-    <Connections :connections="connections" :bounds="board" />
+    <BifrostCarbon v-for="(carbon, index) in carbons" :key="carbon.id"
+      :ref="(e: BifrostCarbonType) => functionRef(e, index)" :carbon="carbon" :carbons="carbons" :bounds="board"
+      :connections="connections" />
+    <BifrostFiber :connections="connections" :bounds="board" />
   </div>
 </template>
 
