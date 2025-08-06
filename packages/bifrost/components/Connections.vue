@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Connection } from '../types'
+import type { BifrostFiberConnections } from '../types'
 import FiberPath from './BifrostFiber.vue'
 
 type FiberType = InstanceType<typeof FiberPath>
 
 defineProps<{
   bounds?: HTMLDivElement
-  connections: Connection[]
+  connections: BifrostFiberConnections[]
 }>()
 </script>
 

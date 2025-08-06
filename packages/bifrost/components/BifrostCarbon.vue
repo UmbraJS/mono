@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
-import type { CarbonObject, Connection, HookType } from '../types'
+import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import CarbonHooks from './CarbonHooks.vue'
 import { hooks } from '../data/index'
 
@@ -14,7 +14,7 @@ const props = defineProps<{
   carbon: CarbonObject
   carbons: CarbonObject[]
   bounds?: HTMLDivElement
-  connections: Connection[]
+  connections: BifrostFiberConnections[]
 }>()
 
 const carbonref = ref<HTMLDivElement>()
@@ -100,7 +100,7 @@ function addConnection(carbonId: string, childId: string, type: HookType, hookIn
   })
 }
 
-function isRelatedConnection(connection: Connection) {
+function isRelatedConnection(connection: BifrostFiberConnections) {
   const isFrom = connection.output.carbon === props.carbon.id
   const isTo = connection.input.carbon === props.carbon.id
   return isFrom || isTo

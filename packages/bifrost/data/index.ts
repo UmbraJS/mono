@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import type { CarbonObject, Connection, Hook } from '../types'
+import type { CarbonObject, BifrostFiberConnections, Hook } from '../types'
 
 const input1: Hook = {
   index: 0,
@@ -27,7 +27,7 @@ const output2: Hook = {
 
 export const hooks = [input1, input2, output1, output2]
 
-const c: Connection[] = [
+const c: BifrostFiberConnections[] = [
   {
     id: 'con-1',
     component: undefined,
@@ -129,7 +129,7 @@ const n: CarbonObject[] = [
 ]
 
 export function useCarbonQuery() {
-  const connections = ref<Connection[]>(c)
+  const connections = ref<BifrostFiberConnections[]>(c)
   const carbons = ref<CarbonObject[]>(n)
 
   return { carbons, connections }
