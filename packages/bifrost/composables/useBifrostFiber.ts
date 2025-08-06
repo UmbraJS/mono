@@ -113,12 +113,12 @@ function placeX(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
     const rigthWithOffset = board.right - carbon.right
     const paddingOffset = rigthWithOffset - path.padding
     return { right: `${paddingOffset}px`, left: 'auto' }
-  } else {
-    const leftWithOffset = carbon.left - board.left
-    const carbonRightSide = leftWithOffset + carbon.width
-    const paddingOffset = carbonRightSide - path.padding
-    return { right: 'auto', left: `${paddingOffset}px` }
   }
+
+  const leftWithOffset = carbon.left - board.left
+  const carbonRightSide = leftWithOffset + carbon.width
+  const paddingOffset = carbonRightSide - path.padding
+  return { right: 'auto', left: `${paddingOffset}px` }
 }
 
 function placeY(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
@@ -130,10 +130,10 @@ function placeY(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
   if (path.flipped) {
     const topWithOffset = carbon.top - board.top
     return { top: `${topWithOffset + paddingOffset}px`, bottom: 'auto' }
-  } else {
-    const topWithOffset = board.bottom - carbon.bottom
-    return { top: 'auto', bottom: `${topWithOffset + paddingOffset}px` }
   }
+
+  const topWithOffset = board.bottom - carbon.bottom
+  return { top: 'auto', bottom: `${topWithOffset + paddingOffset}px` }
 }
 
 interface SpaceProps {
@@ -182,6 +182,7 @@ function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DO
   const distanceHeight = Math.abs(boxOutput.top - boxInput.top)
   const distanceWidth = Math.abs(boxOutput.left - boxInput.left)
   const distance = Math.min(distanceHeight, distanceWidth) / 500
+
   if (distance > 0.6) return 0.6
   return distance
 }
@@ -190,6 +191,7 @@ function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMR
   // If center of carbon2 is higher than the center of carbon1 turn flipped to false
   const center1 = boxOutput.top + boxOutput.height / 2
   const center2 = boxInput.top + boxInput.height / 2
+
   if (center2 < center1) return false
   return true
 }
