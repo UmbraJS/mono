@@ -41,7 +41,6 @@ export function useBifrostFiber({ output, input, board }: UseFiber) {
   }
 }
 
-
 export interface FiberPath {
   curve: number
   stroke: number

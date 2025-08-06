@@ -8,8 +8,6 @@ import { hooks } from '../data/index'
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 import { InertiaPlugin } from 'gsap/InertiaPlugin'
-gsap.registerPlugin(InertiaPlugin)
-gsap.registerPlugin(Draggable)
 
 const title = 'Carbon'
 const props = defineProps<{
@@ -42,6 +40,9 @@ defineExpose({ inputs, outputs, updateReferences })
 const connections = computed(() => props.connections.filter(isRelatedConnection))
 
 onMounted(() => {
+  gsap.registerPlugin(InertiaPlugin)
+  gsap.registerPlugin(Draggable)
+
   const carbonEl = carbonref.value
   if (!carbonEl) return
   updateReferences()
