@@ -4,12 +4,10 @@ import { useRef } from './useRef'
 /**
  * Configuration interface for the Bifrost fiber composable
  */
-interface UseFiber {
+interface UseBifrostFiberOptions {
   /** Board container element */
   board?: HTMLDivElement
-  /** Preferred new name for starting element */
   fiberStart?: HTMLDivElement
-  /** Preferred new name for ending element */
   fiberEnd?: HTMLDivElement
 }
 
@@ -32,7 +30,7 @@ interface UseFiber {
  * })
  * ```
  */
-export function useBifrostFiber({ board, fiberStart, fiberEnd }: UseFiber) {
+export function useBifrostFiber({ board, fiberStart, fiberEnd }: UseBifrostFiberOptions) {
   // Support new prop names with fallback to legacy ones
   if (!fiberStart) {
     console.warn('[useBifrostFiber] "output" is deprecated. Use "fiberStart" instead.')
@@ -155,17 +153,17 @@ export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
   try {
     const boxBoard = el.board.getBoundingClientRect()
     const bifrost = el.fiber
-    const boxStartCarbon = el.fiberStart.getBoundingClientRect()
-    const boxEndCarbon = el.fiberEnd.getBoundingClientRect()
+    const fiberStartBox = el.fiberStart.getBoundingClientRect()
+    const fiberEndBox = el.fiberEnd.getBoundingClientRect()
 
     const x = placeX(path, {
       board: boxBoard,
-      carbon: boxStartCarbon
+      fiberBox: fiberStartBox
     })
 
     const y = placeY(path, {
       board: boxBoard,
-      carbon: boxStartCarbon
+      fiberBox: fiberStartBox
     })
 
     // Position is used to sync the start of the bifrost with the output of the start carbon
@@ -178,16 +176,16 @@ export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
 
     // Sizes are used to sync the end of the bifrost to the input of the next carbons
     const width = spaceBetweenX({
-      startCarbon: boxStartCarbon,
-      endCarbon: boxEndCarbon,
+      fiberStartBox,
+      fiberEndBox,
       board: boxBoard
     })
 
     path.width = width + path.padding * 2
 
     const height = spaceBetweenY(path, {
-      startCarbon: boxStartCarbon,
-      endCarbon: boxEndCarbon,
+      fiberStartBox,
+      fiberEndBox,
       board: boxBoard
     })
 
@@ -203,8 +201,8 @@ export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
 interface CarbonBifrostOutput {
   /** Bounding rectangle of the board element */
   board: DOMRect
-  /** Bounding rectangle of the carbon element */
-  carbon: DOMRect
+  /** Bounding rectangle of the fiber element */
+  fiberBox: DOMRect
 }
 
 /**
@@ -212,20 +210,20 @@ interface CarbonBifrostOutput {
  * Handles both normal and reversed fiber directions.
  *
  * @param path - The fiber path configuration
- * @param config - Object containing board and carbon bounding rectangles
+ * @param config - Object containing board and fiber bounding rectangles
  * @returns CSS positioning object with left/right values
  */
-function placeX(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
+function placeX(path: FiberPath, { board, fiberBox }: CarbonBifrostOutput) {
   try {
     if (path.reversed) {
-      const rightWithOffset = board.right - carbon.right
+      const rightWithOffset = board.right - fiberBox.right
       const paddingOffset = rightWithOffset - path.padding
       return { right: `${paddingOffset}px`, left: 'auto' }
     }
 
-    const leftWithOffset = carbon.left - board.left
-    const carbonRightSide = leftWithOffset + carbon.width
-    const paddingOffset = carbonRightSide - path.padding
+    const leftWithOffset = fiberBox.left - board.left
+    const fiberRightSide = leftWithOffset + fiberBox.width
+    const paddingOffset = fiberRightSide - path.padding
     return { right: 'auto', left: `${paddingOffset}px` }
   } catch (error) {
     console.error('placeX: Error calculating X position', error)
@@ -238,22 +236,22 @@ function placeX(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
  * Handles both normal and flipped fiber orientations.
  *
  * @param path - The fiber path configuration
- * @param config - Object containing board and carbon bounding rectangles
+ * @param config - Object containing board and fiber bounding rectangles
  * @returns CSS positioning object with top/bottom values
  */
-function placeY(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
+function placeY(path: FiberPath, { board, fiberBox }: CarbonBifrostOutput) {
   try {
-    const carbonCenter = carbon.height / 2
+    const fiberCenter = fiberBox.height / 2
     const strokeOffset = path.stroke / 2
-    const offset = carbonCenter - strokeOffset
+    const offset = fiberCenter - strokeOffset
     const paddingOffset = offset - path.padding
 
     if (path.flipped) {
-      const topWithOffset = carbon.top - board.top
+      const topWithOffset = fiberBox.top - board.top
       return { top: `${topWithOffset + paddingOffset}px`, bottom: 'auto' }
     }
 
-    const topWithOffset = board.bottom - carbon.bottom
+    const topWithOffset = board.bottom - fiberBox.bottom
     return { top: 'auto', bottom: `${topWithOffset + paddingOffset}px` }
   } catch (error) {
     console.error('placeY: Error calculating Y position', error)
@@ -266,9 +264,9 @@ function placeY(path: FiberPath, { board, carbon }: CarbonBifrostOutput) {
  */
 interface SpaceProps {
   /** Bounding rectangle of the starting carbon element */
-  startCarbon: DOMRect
+  fiberStartBox: DOMRect
   /** Bounding rectangle of the ending carbon element */
-  endCarbon: DOMRect
+  fiberEndBox: DOMRect
   /** Bounding rectangle of the board container */
   board: DOMRect
 }
@@ -281,9 +279,9 @@ interface SpaceProps {
  * @param config - Object containing bounding rectangles of both carbons and board
  * @returns Absolute vertical distance in pixels
  */
-function spaceBetweenY(path: FiberPath, { startCarbon, endCarbon, board }: SpaceProps) {
-  const startCarbonCenter = startCarbon.top + startCarbon.height / 2 - board.top
-  const endCarbonCenter = endCarbon.top + endCarbon.height / 2 - board.top
+function spaceBetweenY(path: FiberPath, { fiberStartBox, fiberEndBox, board }: SpaceProps) {
+  const startCarbonCenter = fiberStartBox.top + fiberStartBox.height / 2 - board.top
+  const endCarbonCenter = fiberEndBox.top + fiberEndBox.height / 2 - board.top
   const offset = path.flipped ? -path.stroke : path.stroke
   return Math.abs(startCarbonCenter - endCarbonCenter + offset)
 }
@@ -295,9 +293,9 @@ function spaceBetweenY(path: FiberPath, { startCarbon, endCarbon, board }: Space
  * @param config - Object containing bounding rectangles of both carbons and board
  * @returns Absolute horizontal distance in pixels
  */
-function spaceBetweenX({ startCarbon, endCarbon, board }: SpaceProps) {
-  const startCarbonEnd = startCarbon.left + startCarbon.width - board.left
-  const endCarbonStart = endCarbon.left - board.left
+function spaceBetweenX({ fiberStartBox, fiberEndBox, board }: SpaceProps) {
+  const startCarbonEnd = fiberStartBox.left + fiberStartBox.width - board.left
+  const endCarbonStart = fiberEndBox.left - board.left
   return Math.abs(startCarbonEnd - endCarbonStart)
 }
 
