@@ -132,14 +132,29 @@ export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
   const bifrost = el.fiber
   const fiberStartBox = el.fiberStart.getBoundingClientRect()
   const fiberEndBox = el.fiberEnd.getBoundingClientRect()
-
-  const x = placeX(path, { board: boxBoard, fiberBox: fiberStartBox })
-  const y = placeY(path, { board: boxBoard, fiberBox: fiberStartBox })
-
-  Object.assign(bifrost.style, { left: x.left, right: x.right, bottom: y.bottom, top: y.top })
-
-  path.width = spaceBetweenX({ fiberStartBox, fiberEndBox, board: boxBoard }) + path.padding * 2
-  path.height = spaceBetweenY(path, { fiberStartBox, fiberEndBox, board: boxBoard }) + path.padding * 2
+  if (path.orientation === 'vertical') {
+    // Position and size container to span between centers of start and end carbon vertically and horizontally
+    const startCenterY = fiberStartBox.top + fiberStartBox.height / 2 - boxBoard.top
+    const endCenterY = fiberEndBox.top + fiberEndBox.height / 2 - boxBoard.top
+    const startCenterX = fiberStartBox.left + fiberStartBox.width / 2 - boxBoard.left
+    const endCenterX = fiberEndBox.left + fiberEndBox.width / 2 - boxBoard.left
+    const minY = Math.min(startCenterY, endCenterY)
+    const minX = Math.min(startCenterX, endCenterX)
+    const deltaY = Math.abs(endCenterY - startCenterY)
+    const deltaX = Math.abs(endCenterX - startCenterX)
+    const strokeOffset = path.stroke / 2
+    const top = minY - strokeOffset - path.padding
+    const left = minX - strokeOffset - path.padding
+    path.height = deltaY + path.stroke + path.padding * 2
+    path.width = deltaX + path.stroke + path.padding * 2
+    Object.assign(bifrost.style, { top: `${top}px`, left: `${left}px`, right: 'auto', bottom: 'auto' })
+  } else {
+    const x = placeX(path, { board: boxBoard, fiberBox: fiberStartBox })
+    const y = placeY(path, { board: boxBoard, fiberBox: fiberStartBox })
+    Object.assign(bifrost.style, { left: x.left, right: x.right, bottom: y.bottom, top: y.top })
+    path.width = spaceBetweenX({ fiberStartBox, fiberEndBox, board: boxBoard }) + path.padding * 2
+    path.height = spaceBetweenY(path, { fiberStartBox, fiberEndBox, board: boxBoard }) + path.padding * 2
+  }
 }
 
 /**

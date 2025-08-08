@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import type { CarbonObject } from '../types'
+import type { CarbonObject, HookType } from '../types'
 
 const props = defineProps<{
   carbon: CarbonObject
-  type: string
+  type: HookType
 }>()
 
 const emit = defineEmits({

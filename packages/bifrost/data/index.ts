@@ -25,7 +25,19 @@ const output2: Hook = {
   type: 'output'
 }
 
-export const hooks = [input1, input2, output1, output2]
+const source1: Hook = {
+  index: 0,
+  active: false,
+  type: 'source'
+}
+
+const sink1: Hook = {
+  index: 0,
+  active: false,
+  type: 'sink'
+}
+// Base hook template list (shared refs currently; consider cloning per carbon for independent state)
+export const hooks = [input1, input2, output1, output2, source1, sink1]
 
 const c: BifrostFiberConnections[] = [
   {
@@ -96,35 +108,35 @@ const n: CarbonObject[] = [
     component: undefined,
     position: [100, 100],
     connections: ['con-1'],
-    hooks: [input1, input2, output1, output2]
+    hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
     id: '2',
     component: undefined,
     position: [275, 275],
     connections: ['con-2', 'con-3'],
-    hooks: [input1, input2, output1, output2]
+    hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
     id: '3',
     component: undefined,
     position: [450, 450],
     connections: ['con-4'],
-    hooks: [input1, input2, output1, output2]
+    hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
     id: '4',
     component: undefined,
     position: [600, 600],
     connections: ['con-4'],
-    hooks: [input1, input2, output1, output2]
+    hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
     id: '5',
     component: undefined,
     position: [500, 200],
     connections: ['con-3'],
-    hooks: [input1, input2, output1, output2]
+    hooks: [input1, input2, output1, output2, source1, sink1]
   }
 ]
 

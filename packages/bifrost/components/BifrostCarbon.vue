@@ -20,6 +20,8 @@ const carbonref = ref<HTMLDivElement>()
 const dragHandle = ref<HTMLDivElement>()
 const inputs = ref<InstanceType<typeof BifrostCarbonHooks>>()
 const outputs = ref<InstanceType<typeof BifrostCarbonHooks>>()
+const sources = ref<InstanceType<typeof BifrostCarbonHooks>>()
+const sinks = ref<InstanceType<typeof BifrostCarbonHooks>>()
 
 const top = computed(() => `${props.carbon.position[1]}px`)
 const left = computed(() => `${props.carbon.position[0]}px`)
@@ -34,7 +36,7 @@ function updateReferences() {
   })
 }
 
-defineExpose({ inputs, outputs, updateReferences })
+defineExpose({ inputs, outputs, sources, sinks, updateReferences })
 
 const connections = computed(() => props.connections.filter(isRelatedConnection))
 
@@ -102,7 +104,7 @@ function addVerticallyHookedCarbon(carbonId: string, type: HookType, hookIndex: 
 }
 
 function addConnection(carbonId: string, childId: string, type: HookType, hookIndex: number) {
-  const fromOutput = type === 'output' || type === 'sink' // Is this connection being dragged out from a carbon output?
+  const fromOutput = type === 'output' || type === 'source' // Is this connection being started from an emitting side?
   const isOutputInout = type === 'output' || type === 'input' // Is this connection an output to input connection?
 
   props.connections.push({
@@ -129,19 +131,23 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
 
 <template>
   <div ref="carbonref" id="BifrostCarbon">
-    <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
-      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'input', index)" />
+    <!-- Horizontal Left Side (outputs) -->
+    <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
+      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'output', index)" />
     <div id="BifrostCore">
-      <BifrostCarbonHooks :carbon="carbon" type="input"
-        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'input', index)" />
+      <!-- Vertical Top (sources) -->
+      <BifrostCarbonHooks ref="sources" :carbon="carbon" type="source"
+        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'source', index)" />
       <div id="BifrostCarbonContent">
         <p><strong>{{ title }}</strong></p>
       </div>
-      <BifrostCarbonHooks :carbon="carbon" type="output"
-        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'output', index)" />
+      <!-- Vertical Bottom (sinks) -->
+      <BifrostCarbonHooks ref="sinks" :carbon="carbon" type="sink"
+        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'sink', index)" />
     </div>
-    <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
-      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'output', index)" />
+    <!-- Horizontal Right Side (inputs) -->
+    <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
+      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'input', index)" />
   </div>
 </template>
 
