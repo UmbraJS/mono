@@ -8,6 +8,8 @@ interface FiberProps {
   fiberStart?: HTMLDivElement
   /** Ending element of the fiber */
   fiberEnd?: HTMLDivElement
+  /** Orientation of the fiber path (horizontal | vertical) */
+  orientation?: 'horizontal' | 'vertical'
 }
 
 const props = defineProps<FiberProps>()
@@ -18,7 +20,8 @@ const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 const fiber = useBifrostFiber({
   board: boardRef?.value,
   fiberStart: props.fiberStart,
-  fiberEnd: props.fiberEnd
+  fiberEnd: props.fiberEnd,
+  orientation: props.orientation
 })
 
 // When the board ref becomes available later, trigger an update

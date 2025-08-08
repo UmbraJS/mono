@@ -12,6 +12,8 @@ interface UseBifrostFiberOptions {
   padding?: number
   /** Optional initial curve override */
   curve?: number
+  /** Orientation of the fiber connection (default: 'horizontal') */
+  orientation?: 'horizontal' | 'vertical'
 }
 
 /** Public return contract of useBifrostFiber */
@@ -27,10 +29,10 @@ export interface UseBifrostFiberReturn {
  * Manage geometry + SVG path string for a visual connection ("fiber") between two anchors on a board.
  * Call updateLayout() whenever anchor positions can change (resize, drag, mount, etc.).
  */
-export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, curve }: UseBifrostFiberOptions): UseBifrostFiberReturn {
+export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, curve, orientation }: UseBifrostFiberOptions): UseBifrostFiberReturn {
   const [fiberElement, setFiberElement] = useRef<HTMLDivElement>()
 
-  const path = ref<FiberPath>(createDefaultFiberPath({ stroke, padding, curve }))
+  const path = ref<FiberPath>(createDefaultFiberPath({ stroke, padding, curve, orientation }))
 
   /**
    * Updates the fiber connection by recalculating path data and repositioning the fiber element.
@@ -86,6 +88,8 @@ export interface FiberPath {
   flipped: boolean
   /** Whether the path direction is reversed */
   reversed: boolean
+  /** Orientation of the path */
+  orientation: 'horizontal' | 'vertical'
 }
 
 /**
@@ -259,8 +263,12 @@ export function getPathData(path: FiberPath, { fiberStart, fiberEnd }: GetPathDa
   const boxOutput: DOMRect = fiberStart.getBoundingClientRect()
   const boxInput: DOMRect = fiberEnd.getBoundingClientRect()
   if (!boxOutput.width || !boxOutput.height || !boxInput.width || !boxInput.height) return path
-  const flipped = checkFlip({ boxOutput, boxInput })
-  const reversed = checkReversed({ boxOutput, boxInput })
+  const flipped = path.orientation === 'horizontal'
+    ? checkFlipHorizontal({ boxOutput, boxInput })
+    : checkFlipVertical({ boxOutput, boxInput })
+  const reversed = path.orientation === 'horizontal'
+    ? checkReversedHorizontal({ boxOutput, boxInput })
+    : checkReversedVertical({ boxOutput, boxInput })
   const curved = reversed ? 0.1 : adjustCurve({ boxOutput, boxInput })
   return { ...path, curve: curved, flipped, reversed }
 }
@@ -287,7 +295,7 @@ function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DO
  * @param config - Object containing bounding rectangles of output and input elements
  * @returns True if the path should be flipped, false otherwise
  */
-function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+function checkFlipHorizontal({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
   const center1 = boxOutput.top + boxOutput.height / 2
   const center2 = boxInput.top + boxInput.height / 2
   return center2 >= center1
@@ -300,14 +308,41 @@ function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMR
  * @param config - Object containing bounding rectangles of output and input elements
  * @returns True if the path should be reversed, false otherwise
  */
-function checkReversed({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+function checkReversedHorizontal({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
   return boxInput.left < boxOutput.left + boxOutput.width
+}
+
+// For vertical orientation, flipped indicates input is to the right of output center.
+function checkFlipVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+  const center1 = boxOutput.left + boxOutput.width / 2
+  const center2 = boxInput.left + boxInput.width / 2
+  return center2 >= center1
+}
+
+// For vertical orientation, reversed indicates input is above output (overlaps upward)
+function checkReversedVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+  return boxInput.top < boxOutput.top + boxOutput.height
 }
 
 function clamp(value: number, min: number, max: number) { return Math.min(max, Math.max(min, value)) }
 
 /** Build an SVG path string for current fiber path geometry */
 export function buildPathD(p: FiberPath, flipped: boolean) {
+  if (p.orientation === 'vertical') {
+    const height = p.height - p.padding
+    const width = p.width
+    const curve = height * p.curve
+    const strokeOffset = p.stroke / 2
+    const left = strokeOffset + p.padding
+    const right = width - strokeOffset - p.padding
+    const startX = flipped ? right : left
+    const endX = flipped ? left : right
+    const startY = p.padding
+    const endY = height - p.padding
+    const c1 = `${startX}, ${startY + curve}`
+    const c2 = `${endX}, ${endY - curve}`
+    return `M${startX}, ${startY} C${c1}, ${c2}, ${endX}, ${endY}`
+  }
   const width = p.width - p.padding
   const height = p.height
   const curve = width * p.curve
@@ -322,7 +357,7 @@ export function buildPathD(p: FiberPath, flipped: boolean) {
 }
 
 /** Create a default FiberPath with optional overrides */
-export function createDefaultFiberPath(overrides: Partial<Pick<FiberPath, 'stroke' | 'padding' | 'curve'>> = {}): FiberPath {
+export function createDefaultFiberPath(overrides: Partial<Pick<FiberPath, 'stroke' | 'padding' | 'curve' | 'orientation'>> = {}): FiberPath {
   return {
     curve: overrides.curve ?? 0.0,
     stroke: overrides.stroke ?? 5,
@@ -330,6 +365,7 @@ export function createDefaultFiberPath(overrides: Partial<Pick<FiberPath, 'strok
     width: 200,
     height: 200,
     flipped: false,
-    reversed: false
+    reversed: false,
+    orientation: overrides.orientation ?? 'horizontal'
   }
 }
