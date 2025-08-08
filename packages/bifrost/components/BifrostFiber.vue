@@ -67,6 +67,6 @@ onMounted(() => {
 
 #BifrostFiber svg path {
   fill: transparent;
-  stroke: var(--accent);
+  stroke: var(--accent-100);
 }
 </style>
