@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CarbonFiber } from '@nobel/bifrost'
-import '@nobel/bifrost/dist/bifrost.css'
+import '@nobel/bifrost/bifrost.css'
 
 </script>
 

@@ -42,12 +42,19 @@ onMounted(() => {
   gsap.registerPlugin(InertiaPlugin)
   gsap.registerPlugin(Draggable)
 
-  const carbonEl = carbonref.value
-  if (!carbonEl) return
+  console.log("carbonEl", carbonref.value)
+  if (!carbonref.value) return
   updateReferences()
 
-  Draggable.create(carbonEl, {
-    bounds: inject('BifrostBoard'),
+  const bounds: HTMLDivElement | undefined = inject('BifrostBoard')
+  console.log("bounds", bounds)
+  if (!bounds) {
+    console.error('BifrostBoard bounds not found')
+    return
+  }
+
+  Draggable.create(carbonref.value, {
+    // bounds: bounds,
     trigger: dragHandle.value,
     inertia: false,
     edgeResistance: 0.9,
