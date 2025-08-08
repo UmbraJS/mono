@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, provide } from 'vue'
+// Provide the board as a ref so consumers must access .value for the element
 const BifrostBoard = ref<HTMLDivElement>()
 
 provide('BifrostBoard', BifrostBoard)

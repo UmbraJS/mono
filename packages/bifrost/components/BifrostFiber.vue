@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, onMounted, defineExpose, inject } from 'vue'
+import { computed, defineProps, onMounted, defineExpose, inject, type Ref, watch } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { useBifrostFiber } from '../composables/useBifrostFiber'
 
@@ -10,13 +10,25 @@ interface FiberProps {
 
 const { output, input } = defineProps<FiberProps>()
 
-const bounds = inject('BifrostBoard') as HTMLDivElement
+// Provided in BifrostBoard.vue as a ref<HTMLDivElement>()
+const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
+// Initialize with current value (may be undefined until mounted)
 const fiber = useBifrostFiber({
-  board: bounds,
-  output: output,
-  input: input
+  board: boardRef?.value,
+  output,
+  input
 })
+
+// When the board ref becomes available later, trigger an update
+if (boardRef) {
+  watch(boardRef, (el) => {
+    if (el) {
+      // Re-run update once the actual element exists
+      setTimeout(() => fiber.update(), 0)
+    }
+  })
+}
 
 defineExpose({ update: fiber.update })
 
@@ -45,9 +57,12 @@ function createPathData(flipped: boolean) {
 
 onMounted(() => {
   setTimeout(() => fiber.update(), 0)
-  useResizeObserver(bounds, () => {
-    fiber.update()
-  })
+  // useResizeObserver accepts a MaybeRef, so pass the ref directly
+  if (boardRef) {
+    useResizeObserver(boardRef, () => {
+      fiber.update()
+    })
+  }
 })
 </script>
 

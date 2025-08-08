@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
-import { onMounted, ref, computed, inject } from 'vue'
+import { onMounted, ref, computed, inject, type Ref } from 'vue'
 import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
@@ -46,15 +46,16 @@ onMounted(() => {
   if (!carbonref.value) return
   updateReferences()
 
-  const bounds: HTMLDivElement | undefined = inject('BifrostBoard')
-  console.log("bounds", bounds)
+  const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
+  const bounds = boardRef?.value
+  console.log('BifrostBoard element', bounds)
   if (!bounds) {
-    console.error('BifrostBoard bounds not found')
-    return
+    console.warn('BifrostBoard not yet mounted; drag bounds disabled until available')
   }
 
   Draggable.create(carbonref.value, {
-    // bounds: bounds,
+    // bounds is optional; if undefined Draggable handles freely
+    bounds: bounds,
     trigger: dragHandle.value,
     inertia: false,
     edgeResistance: 0.9,
