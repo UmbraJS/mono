@@ -4,37 +4,21 @@ import { useResizeObserver } from '@vueuse/core'
 import { useBifrostFiber } from '../composables/useBifrostFiber'
 
 interface FiberProps {
-  /** Starting element of the fiber (replaces deprecated 'output') */
+  /** Starting element of the fiber */
   fiberStart?: HTMLDivElement
-  /** Ending element of the fiber (replaces deprecated 'input') */
+  /** Ending element of the fiber */
   fiberEnd?: HTMLDivElement
-  /** @deprecated Use fiberStart instead */
-  output?: HTMLDivElement
-  /** @deprecated Use fiberEnd instead */
-  input?: HTMLDivElement
 }
 
 const props = defineProps<FiberProps>()
-
-// Backward compatibility: allow old prop names while encouraging new ones
-const fiberStart = props.fiberStart ?? props.output
-const fiberEnd = props.fiberEnd ?? props.input
-
-if (!props.fiberStart && props.output) {
-  console.warn('[BifrostFiber] Prop "output" is deprecated. Use "fiberStart" instead.')
-}
-if (!props.fiberEnd && props.input) {
-  console.warn('[BifrostFiber] Prop "input" is deprecated. Use "fiberEnd" instead.')
-}
-
 // Provided in BifrostBoard.vue as a ref<HTMLDivElement>()
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
 // Initialize with current value (may be undefined until mounted)
 const fiber = useBifrostFiber({
   board: boardRef?.value,
-  fiberStart,
-  fiberEnd
+  fiberStart: props.fiberStart,
+  fiberEnd: props.fiberEnd
 })
 
 // When the board ref becomes available later, trigger an update
