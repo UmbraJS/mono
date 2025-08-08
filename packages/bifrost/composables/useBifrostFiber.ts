@@ -52,8 +52,7 @@ export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, 
   }
 
   const renderFlipped = computed(() => {
-    const p = path.value
-    return p.reversed ? !p.flipped : p.flipped
+    return path.value.reversed ? !path.value.flipped : path.value.flipped
   })
 
   const pathD = computed(() => buildPathD(path.value, renderFlipped.value))
