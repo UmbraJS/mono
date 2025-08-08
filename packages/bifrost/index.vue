@@ -39,9 +39,8 @@ watch(
 )
 
 function functionRef(el: BifrostCarbonType, index: number) {
-  if (el) {
-    carbons.value[index].component = el
-  }
+  if (!el) return
+  carbons.value[index].component = el
 }
 </script>
 
