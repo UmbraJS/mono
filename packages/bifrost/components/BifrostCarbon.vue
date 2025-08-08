@@ -75,7 +75,20 @@ function setFibers(carbonId: string) {
   setTimeout(() => updateFibers(), 0)
 }
 
-function addHookedCarbon(carbonId: string, type: HookType, hookIndex: number) {
+function addHorizontallyHookedCarbon(carbonId: string, type: HookType, hookIndex: number) {
+  const childId = 'carbon-' + props.carbons.length
+  props.carbons.push({
+    id: childId,
+    position: [200, 200],
+    component: undefined,
+    connections: [carbonId],
+    hooks: hooks
+  })
+  addConnection(carbonId, childId, type, hookIndex)
+  setFibers(carbonId)
+}
+
+function addVerticallyHookedCarbon(carbonId: string, type: HookType, hookIndex: number) {
   const childId = 'carbon-' + props.carbons.length
   props.carbons.push({
     id: childId,
@@ -116,18 +129,18 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
 <template>
   <div ref="carbonref" id="BifrostCarbon">
     <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
-      @hookClick="(index: number) => addHookedCarbon(carbon.id, 'input', index)" />
+      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'input', index)" />
     <div id="BifrostCore">
       <BifrostCarbonHooks :carbon="carbon" type="input"
-        @hookClick="(index: number) => addHookedCarbon(carbon.id, 'input', index)" />
+        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'input', index)" />
       <div id="BifrostCarbonContent">
         <p><strong>{{ title }}</strong></p>
       </div>
       <BifrostCarbonHooks :carbon="carbon" type="output"
-        @hookClick="(index: number) => addHookedCarbon(carbon.id, 'output', index)" />
+        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'output', index)" />
     </div>
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
-      @hookClick="(index: number) => addHookedCarbon(carbon.id, 'output', index)" />
+      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'output', index)" />
   </div>
 </template>
 
