@@ -21,6 +21,7 @@ export interface UseBifrostFiberReturn {
   path: { value: FiberPath }
   pathD: { value: string }
   renderFlipped: { value: boolean }
+  renderReversed: { value: boolean }
   updateLayout: () => void
   setElement: (el: HTMLDivElement | null | undefined) => void
 }
@@ -54,6 +55,11 @@ export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, 
   }
 
   const renderFlipped = computed(() => {
+    if (path.value.orientation === 'vertical') {
+      // In vertical mode flipped means "start on right side"; reversing (upwards) shouldn't invert.
+      return path.value.flipped
+    }
+    // Horizontal: reversed indicates path moves leftwards, so invert flip to keep arc direction intuitive.
     return path.value.reversed ? !path.value.flipped : path.value.flipped
   })
 
@@ -66,6 +72,7 @@ export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, 
     updateLayout,
     setElement: acceptNullable,
     renderFlipped,
+    renderReversed: { value: path.value.reversed },
     pathD
   }
 }
@@ -329,14 +336,15 @@ function checkReversedHorizontal({ boxOutput, boxInput }: { boxOutput: DOMRect; 
 
 // For vertical orientation, flipped indicates input is to the right of output center.
 function checkFlipVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  const center1 = boxOutput.left + boxOutput.width / 2
-  const center2 = boxInput.left + boxInput.width / 2
+  // For vertical orientation, we treat flipped as whether input is below output (same semantic as horizontal vertical ordering)
+  const center1 = boxOutput.top + boxOutput.height / 2
+  const center2 = boxInput.top + boxInput.height / 2
   return center2 >= center1
 }
 
-// For vertical orientation, reversed indicates input is above output (overlaps upward)
 function checkReversedVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  return boxInput.top < boxOutput.top + boxOutput.height
+  // Reversed for vertical means the connection travels upward (input above output)
+  return boxInput.top + boxInput.height / 2 < boxOutput.top + boxOutput.height / 2
 }
 
 function clamp(value: number, min: number, max: number) { return Math.min(max, Math.max(min, value)) }

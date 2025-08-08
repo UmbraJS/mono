@@ -40,6 +40,11 @@ onMounted(() => {
 
 <template>
   <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.setElement(e)" id="BifrostFiber">
+    <div id="debug">
+      <p>orientation: {{ orientation }}</p>
+      <p>flipped: {{ fiber.renderFlipped.value }}</p>
+      <p>reversed: {{ fiber.renderReversed.value }}</p>
+    </div>
     <svg :width="fiber.path.value.width" :height="fiber.path.value.height" xmlns="http://www.w3.org/2000/svg">
       <path :d="fiber.pathD.value" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />
     </svg>
@@ -50,6 +55,19 @@ onMounted(() => {
 #BifrostFiber {
   position: absolute;
   z-index: 0;
+  background: #2A7B9B;
+  background: linear-gradient(90deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
+}
+
+#debug {
+  position: absolute;
+  z-index: 9999999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--accent-10);
+  padding: 10px;
+  min-width: max-content
 }
 
 #BifrostFiber svg path {
