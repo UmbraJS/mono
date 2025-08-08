@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineProps, onMounted, defineExpose, inject, type Ref, watch } from 'vue'
+import { defineProps, onMounted, defineExpose, inject, type Ref, watch, nextTick } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { useBifrostFiber } from '../composables/useBifrostFiber'
 
@@ -23,52 +23,22 @@ const fiber = useBifrostFiber({
 
 // When the board ref becomes available later, trigger an update
 if (boardRef) {
-  watch(boardRef, (el) => {
-    if (el) {
-      // Re-run update once the actual element exists
-      setTimeout(() => fiber.update(), 0)
-    }
-  })
+  watch(boardRef, (el) => el && nextTick(() => fiber.updateLayout()))
 }
 
-defineExpose({ update: fiber.update })
-
-const data = computed(() => {
-  const path = fiber.path.value
-  const flipped = path.reversed ? !path.flipped : path.flipped
-  return createPathData(flipped)
-})
-
-function createPathData(flipped: boolean) {
-  const path = fiber.path.value
-  const width = path.width - path.padding
-  const height = path.height
-  const curve = width * path.curve
-  const strokeOffset = path.stroke / 2
-  const top = strokeOffset + path.padding
-  const bottom = height - strokeOffset - path.padding
-
-  const start = flipped ? top : bottom
-  const end = `${width}, ${flipped ? bottom : top}`
-  const startCurve = `${curve}, ${flipped ? top : bottom}`
-  const endCurve = `${width - curve}, ${flipped ? bottom : top}`
-
-  return `M${path.padding}, ${start} C${startCurve}, ${endCurve}, ${end}`
-}
+defineExpose({ update: fiber.updateLayout })
 
 onMounted(() => {
-  setTimeout(() => fiber.update(), 0)
+  nextTick(() => fiber.updateLayout())
   if (!boardRef) return
-  useResizeObserver(boardRef, () => {
-    fiber.update()
-  })
+  useResizeObserver(boardRef, () => fiber.updateLayout())
 })
 </script>
 
 <template>
-  <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.set(e)" id="BifrostFiber">
+  <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.setElement(e)" id="BifrostFiber">
     <svg :width="fiber.path.value.width" :height="fiber.path.value.height" xmlns="http://www.w3.org/2000/svg">
-      <path :d="data" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />
+      <path :d="fiber.pathD.value" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />
     </svg>
   </div>
 </template>

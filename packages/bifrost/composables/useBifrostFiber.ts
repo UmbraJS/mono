@@ -1,54 +1,36 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRef } from './useRef'
 
-/**
- * Configuration interface for the Bifrost fiber composable
- */
+/** Options accepted by useBifrostFiber */
 interface UseBifrostFiberOptions {
-  /** Board container element */
   board?: HTMLDivElement
   fiberStart?: HTMLDivElement
   fiberEnd?: HTMLDivElement
+  /** Optional initial stroke width */
+  stroke?: number
+  /** Optional initial padding */
+  padding?: number
+  /** Optional initial curve override */
+  curve?: number
+}
+
+/** Public return contract of useBifrostFiber */
+export interface UseBifrostFiberReturn {
+  path: { value: FiberPath }
+  pathD: { value: string }
+  renderFlipped: { value: boolean }
+  updateLayout: () => void
+  setElement: (el: HTMLDivElement | null | undefined) => void
 }
 
 /**
- * Vue composable for managing Bifrost fiber connections between UI elements.
- * Creates and manages SVG paths that connect output and input elements on a board.
- *
- * @param config - Configuration object containing DOM elements
- * @param config.output - The output element (starting point of the connection)
- * @param config.input - The input element (ending point of the connection)
- * @param config.board - The board element (container for positioning)
- * @returns Object with path state, update function, and setter for SVG element
- *
- * @example
- * ```typescript
- * const { path, update, set } = useBifrostFiber({
- *   output: outputElement,
- *   input: inputElement,
- *   board: boardElement
- * })
- * ```
+ * Manage geometry + SVG path string for a visual connection ("fiber") between two anchors on a board.
+ * Call updateLayout() whenever anchor positions can change (resize, drag, mount, etc.).
  */
-export function useBifrostFiber({ board, fiberStart, fiberEnd }: UseBifrostFiberOptions) {
-  // Support new prop names with fallback to legacy ones
-  if (!fiberStart) {
-    console.warn('[useBifrostFiber] "output" is deprecated. Use "fiberStart" instead.')
-  }
-  if (!fiberEnd) {
-    console.warn('[useBifrostFiber] "input" is deprecated. Use "fiberEnd" instead.')
-  }
-  const [SVGPath, setSVGPath] = useRef<HTMLDivElement>()
+export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, curve }: UseBifrostFiberOptions): UseBifrostFiberReturn {
+  const [fiberElement, setFiberElement] = useRef<HTMLDivElement>()
 
-  const path = ref<FiberPath>({
-    curve: 0.0,
-    stroke: 5,
-    padding: 10,
-    width: 200,
-    height: 200,
-    flipped: false,
-    reversed: false
-  })
+  const path = ref<FiberPath>(createDefaultFiberPath({ stroke, padding, curve }))
 
   /**
    * Updates the fiber connection by recalculating path data and repositioning the fiber element.
@@ -56,33 +38,34 @@ export function useBifrostFiber({ board, fiberStart, fiberEnd }: UseBifrostFiber
    *
    * @throws Will log errors if DOM operations fail but won't crash the application
    */
-  function update() {
-    try {
-      path.value = getPathData(path.value, {
-        fiberStart,
-        fiberEnd
-      })
-
-      if (!SVGPath.value) {
-        console.warn('update: SVGPath not available')
-        return
-      }
-
-      calculateFiberPosition(path.value, {
-        board: board,
-        fiberStart: fiberStart,
-        fiberEnd: fiberEnd,
-        fiber: SVGPath.value
-      })
-    } catch (error) {
-      console.error('update: Error updating fiber position', error)
-    }
+  function updateLayout() {
+    // Re-compute path directionality & curvature
+    path.value = getPathData(path.value, { fiberStart, fiberEnd })
+    // If required DOM not ready yet, bail silently
+    if (!fiberElement.value || !board || !fiberStart || !fiberEnd) return
+    calculateFiberPosition(path.value, {
+      board,
+      fiberStart,
+      fiberEnd,
+      fiber: fiberElement.value
+    })
   }
+
+  const renderFlipped = computed(() => {
+    const p = path.value
+    return p.reversed ? !p.flipped : p.flipped
+  })
+
+  const pathD = computed(() => buildPathD(path.value, renderFlipped.value))
+
+  const acceptNullable = (el: HTMLDivElement | null | undefined) => setFiberElement(el ?? undefined)
 
   return {
     path,
-    update,
-    set: setSVGPath
+    updateLayout,
+    setElement: acceptNullable,
+    renderFlipped,
+    pathD
   }
 }
 
@@ -140,68 +123,27 @@ export interface CarbonFrost {
  * ```
  */
 export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
-  // Aligns the fiber SVG with the start carbon and adjusts the size of the fiber so it reaches the end carbon
-  if (!el.board || !el.fiberStart || !el.fiberEnd || !el.fiber) {
-    console.warn('calculateFiberPosition: Missing required DOM elements', {
-      board: !!el.board,
-      fiberStart: !!el.fiberStart,
-      fiberEnd: !!el.fiberEnd
-    })
-    return
-  }
+  if (!el.board || !el.fiberStart || !el.fiberEnd || !el.fiber) return
 
-  try {
-    const boxBoard = el.board.getBoundingClientRect()
-    const bifrost = el.fiber
-    const fiberStartBox = el.fiberStart.getBoundingClientRect()
-    const fiberEndBox = el.fiberEnd.getBoundingClientRect()
+  const boxBoard = el.board.getBoundingClientRect()
+  const bifrost = el.fiber
+  const fiberStartBox = el.fiberStart.getBoundingClientRect()
+  const fiberEndBox = el.fiberEnd.getBoundingClientRect()
 
-    const x = placeX(path, {
-      board: boxBoard,
-      fiberBox: fiberStartBox
-    })
+  const x = placeX(path, { board: boxBoard, fiberBox: fiberStartBox })
+  const y = placeY(path, { board: boxBoard, fiberBox: fiberStartBox })
 
-    const y = placeY(path, {
-      board: boxBoard,
-      fiberBox: fiberStartBox
-    })
+  Object.assign(bifrost.style, { left: x.left, right: x.right, bottom: y.bottom, top: y.top })
 
-    // Position is used to sync the start of the bifrost with the output of the start carbon
-    Object.assign(bifrost.style, {
-      left: x.left,
-      right: x.right,
-      bottom: y.bottom,
-      top: y.top
-    })
-
-    // Sizes are used to sync the end of the bifrost to the input of the next carbons
-    const width = spaceBetweenX({
-      fiberStartBox,
-      fiberEndBox,
-      board: boxBoard
-    })
-
-    path.width = width + path.padding * 2
-
-    const height = spaceBetweenY(path, {
-      fiberStartBox,
-      fiberEndBox,
-      board: boxBoard
-    })
-
-    path.height = height + path.padding * 2
-  } catch (error) {
-    console.error('calculateFiberPosition: Error calculating fiber position', error)
-  }
+  path.width = spaceBetweenX({ fiberStartBox, fiberEndBox, board: boxBoard }) + path.padding * 2
+  path.height = spaceBetweenY(path, { fiberStartBox, fiberEndBox, board: boxBoard }) + path.padding * 2
 }
 
 /**
  * Interface for carbon and board positioning calculations
  */
 interface CarbonBifrostOutput {
-  /** Bounding rectangle of the board element */
   board: DOMRect
-  /** Bounding rectangle of the fiber element */
   fiberBox: DOMRect
 }
 
@@ -214,21 +156,15 @@ interface CarbonBifrostOutput {
  * @returns CSS positioning object with left/right values
  */
 function placeX(path: FiberPath, { board, fiberBox }: CarbonBifrostOutput) {
-  try {
-    if (path.reversed) {
-      const rightWithOffset = board.right - fiberBox.right
-      const paddingOffset = rightWithOffset - path.padding
-      return { right: `${paddingOffset}px`, left: 'auto' }
-    }
-
-    const leftWithOffset = fiberBox.left - board.left
-    const fiberRightSide = leftWithOffset + fiberBox.width
-    const paddingOffset = fiberRightSide - path.padding
-    return { right: 'auto', left: `${paddingOffset}px` }
-  } catch (error) {
-    console.error('placeX: Error calculating X position', error)
-    return { right: 'auto', left: '0px' }
+  if (path.reversed) {
+    const rightWithOffset = board.right - fiberBox.right
+    const paddingOffset = rightWithOffset - path.padding
+    return { right: `${paddingOffset}px`, left: 'auto' }
   }
+  const leftWithOffset = fiberBox.left - board.left
+  const fiberRightSide = leftWithOffset + fiberBox.width
+  const paddingOffset = fiberRightSide - path.padding
+  return { right: 'auto', left: `${paddingOffset}px` }
 }
 
 /**
@@ -240,23 +176,16 @@ function placeX(path: FiberPath, { board, fiberBox }: CarbonBifrostOutput) {
  * @returns CSS positioning object with top/bottom values
  */
 function placeY(path: FiberPath, { board, fiberBox }: CarbonBifrostOutput) {
-  try {
-    const fiberCenter = fiberBox.height / 2
-    const strokeOffset = path.stroke / 2
-    const offset = fiberCenter - strokeOffset
-    const paddingOffset = offset - path.padding
-
-    if (path.flipped) {
-      const topWithOffset = fiberBox.top - board.top
-      return { top: `${topWithOffset + paddingOffset}px`, bottom: 'auto' }
-    }
-
-    const topWithOffset = board.bottom - fiberBox.bottom
-    return { top: 'auto', bottom: `${topWithOffset + paddingOffset}px` }
-  } catch (error) {
-    console.error('placeY: Error calculating Y position', error)
-    return { top: 'auto', bottom: '0px' }
+  const fiberCenter = fiberBox.height / 2
+  const strokeOffset = path.stroke / 2
+  const offset = fiberCenter - strokeOffset
+  const paddingOffset = offset - path.padding
+  if (path.flipped) {
+    const topWithOffset = fiberBox.top - board.top
+    return { top: `${topWithOffset + paddingOffset}px`, bottom: 'auto' }
   }
+  const topWithOffset = board.bottom - fiberBox.bottom
+  return { top: 'auto', bottom: `${topWithOffset + paddingOffset}px` }
 }
 
 /**
@@ -327,38 +256,14 @@ interface GetPathData {
  * ```
  */
 export function getPathData(path: FiberPath, { fiberStart, fiberEnd }: GetPathData) {
-  if (!fiberStart || !fiberEnd) {
-    console.warn('getPathData: Missing fiberStart or fiberEnd elements', { fiberStart: !!fiberStart, fiberEnd: !!fiberEnd })
-    return path
-  }
-
-  try {
-    const boxOutput: DOMRect = fiberStart.getBoundingClientRect()
-    const boxInput: DOMRect = fiberEnd.getBoundingClientRect()
-
-    // Validate bounding rectangles
-    if (boxOutput.width === 0 || boxOutput.height === 0 || boxInput.width === 0 || boxInput.height === 0) {
-      console.warn('getPathData: Elements have zero dimensions', {
-        outputSize: { width: boxOutput.width, height: boxOutput.height },
-        inputSize: { width: boxInput.width, height: boxInput.height }
-      })
-      return path
-    }
-
-    const flipped = checkFlip({ boxOutput, boxInput })
-    const reversed = checkReversed({ boxOutput, boxInput })
-    const curved = reversed ? 0.1 : adjustCurve({ boxOutput, boxInput })
-
-    return {
-      ...path,
-      curve: curved,
-      flipped: flipped,
-      reversed: reversed
-    }
-  } catch (error) {
-    console.error('getPathData: Error calculating path data', error)
-    return path
-  }
+  if (!fiberStart || !fiberEnd) return path
+  const boxOutput: DOMRect = fiberStart.getBoundingClientRect()
+  const boxInput: DOMRect = fiberEnd.getBoundingClientRect()
+  if (!boxOutput.width || !boxOutput.height || !boxInput.width || !boxInput.height) return path
+  const flipped = checkFlip({ boxOutput, boxInput })
+  const reversed = checkReversed({ boxOutput, boxInput })
+  const curved = reversed ? 0.1 : adjustCurve({ boxOutput, boxInput })
+  return { ...path, curve: curved, flipped, reversed }
 }
 
 /**
@@ -369,24 +274,11 @@ export function getPathData(path: FiberPath, { fiberStart, fiberEnd }: GetPathDa
  * @returns Curve value between 0.1 and 0.6
  */
 function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  try {
-    // The closer the carbons are to each other the more the curve (between 0.1 and 1.0)
-    const distanceHeight = Math.abs(boxOutput.top - boxInput.top)
-    const distanceWidth = Math.abs(boxOutput.left - boxInput.left)
-    const distance = Math.min(distanceHeight, distanceWidth) / 500
-
-    // Ensure we return a valid number
-    if (!isFinite(distance)) {
-      console.warn('adjustCurve: Invalid distance calculated', { distanceHeight, distanceWidth })
-      return 0.1
-    }
-
-    if (distance > 0.6) return 0.6
-    return Math.max(distance, 0.1) // Ensure minimum curve value
-  } catch (error) {
-    console.error('adjustCurve: Error calculating curve', error)
-    return 0.1
-  }
+  const distanceHeight = Math.abs(boxOutput.top - boxInput.top)
+  const distanceWidth = Math.abs(boxOutput.left - boxInput.left)
+  const raw = Math.min(distanceHeight, distanceWidth) / 500
+  if (!isFinite(raw)) return 0.1
+  return clamp(raw, 0.1, 0.6)
 }
 
 /**
@@ -397,12 +289,9 @@ function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DO
  * @returns True if the path should be flipped, false otherwise
  */
 function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  // If center of carbon2 is higher than the center of carbon1 turn flipped to false
   const center1 = boxOutput.top + boxOutput.height / 2
   const center2 = boxInput.top + boxInput.height / 2
-
-  if (center2 < center1) return false
-  return true
+  return center2 >= center1
 }
 
 /**
@@ -413,7 +302,35 @@ function checkFlip({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMR
  * @returns True if the path should be reversed, false otherwise
  */
 function checkReversed({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  // If carbon2 left is less than carbon1 right turn reversed to true
-  if (boxInput.left < boxOutput.left + boxOutput.width) return true
-  return false
+  return boxInput.left < boxOutput.left + boxOutput.width
+}
+
+function clamp(value: number, min: number, max: number) { return Math.min(max, Math.max(min, value)) }
+
+/** Build an SVG path string for current fiber path geometry */
+export function buildPathD(p: FiberPath, flipped: boolean) {
+  const width = p.width - p.padding
+  const height = p.height
+  const curve = width * p.curve
+  const strokeOffset = p.stroke / 2
+  const top = strokeOffset + p.padding
+  const bottom = height - strokeOffset - p.padding
+  const start = flipped ? top : bottom
+  const end = `${width}, ${flipped ? bottom : top}`
+  const startCurve = `${curve}, ${flipped ? top : bottom}`
+  const endCurve = `${width - curve}, ${flipped ? bottom : top}`
+  return `M${p.padding}, ${start} C${startCurve}, ${endCurve}, ${end}`
+}
+
+/** Create a default FiberPath with optional overrides */
+export function createDefaultFiberPath(overrides: Partial<Pick<FiberPath, 'stroke' | 'padding' | 'curve'>> = {}): FiberPath {
+  return {
+    curve: overrides.curve ?? 0.0,
+    stroke: overrides.stroke ?? 5,
+    padding: overrides.padding ?? 10,
+    width: 200,
+    height: 200,
+    flipped: false,
+    reversed: false
+  }
 }
