@@ -5,9 +5,12 @@ import { useRef } from './useRef'
  * Configuration interface for the Bifrost fiber composable
  */
 interface UseFiber {
-  output?: HTMLDivElement
-  input?: HTMLDivElement
+  /** Board container element */
   board?: HTMLDivElement
+  /** Preferred new name for starting element */
+  fiberStart?: HTMLDivElement
+  /** Preferred new name for ending element */
+  fiberEnd?: HTMLDivElement
 }
 
 /**
@@ -29,7 +32,14 @@ interface UseFiber {
  * })
  * ```
  */
-export function useBifrostFiber({ output, input, board }: UseFiber) {
+export function useBifrostFiber({ board, fiberStart, fiberEnd }: UseFiber) {
+  // Support new prop names with fallback to legacy ones
+  if (!fiberStart) {
+    console.warn('[useBifrostFiber] "output" is deprecated. Use "fiberStart" instead.')
+  }
+  if (!fiberEnd) {
+    console.warn('[useBifrostFiber] "input" is deprecated. Use "fiberEnd" instead.')
+  }
   const [SVGPath, setSVGPath] = useRef<HTMLDivElement>()
 
   const path = ref<FiberPath>({
@@ -51,8 +61,8 @@ export function useBifrostFiber({ output, input, board }: UseFiber) {
   function update() {
     try {
       path.value = getPathData(path.value, {
-        output,
-        input
+        fiberStart,
+        fiberEnd
       })
 
       if (!SVGPath.value) {
@@ -62,8 +72,8 @@ export function useBifrostFiber({ output, input, board }: UseFiber) {
 
       calculateFiberPosition(path.value, {
         board: board,
-        output: output,
-        input: input,
+        fiberStart: fiberStart,
+        fiberEnd: fiberEnd,
         fiber: SVGPath.value
       })
     } catch (error) {
@@ -105,9 +115,9 @@ export interface CarbonFrost {
   /** The container board element */
   board?: HTMLDivElement
   /** The output (start) element */
-  output?: HTMLDivElement
+  fiberStart?: HTMLDivElement
   /** The input (end) element */
-  input?: HTMLDivElement
+  fiberEnd?: HTMLDivElement
   /** The fiber SVG element */
   fiber?: HTMLDivElement
 }
@@ -133,12 +143,11 @@ export interface CarbonFrost {
  */
 export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
   // Aligns the fiber SVG with the start carbon and adjusts the size of the fiber so it reaches the end carbon
-  if (!el.board || !el.output || !el.input || !el.fiber) {
+  if (!el.board || !el.fiberStart || !el.fiberEnd || !el.fiber) {
     console.warn('calculateFiberPosition: Missing required DOM elements', {
       board: !!el.board,
-      output: !!el.output,
-      input: !!el.input,
-      fiber: !!el.fiber
+      fiberStart: !!el.fiberStart,
+      fiberEnd: !!el.fiberEnd
     })
     return
   }
@@ -146,8 +155,8 @@ export function calculateFiberPosition(path: FiberPath, el: CarbonFrost) {
   try {
     const boxBoard = el.board.getBoundingClientRect()
     const bifrost = el.fiber
-    const boxStartCarbon = el.output.getBoundingClientRect()
-    const boxEndCarbon = el.input.getBoundingClientRect()
+    const boxStartCarbon = el.fiberStart.getBoundingClientRect()
+    const boxEndCarbon = el.fiberEnd.getBoundingClientRect()
 
     const x = placeX(path, {
       board: boxBoard,
@@ -298,9 +307,9 @@ function spaceBetweenX({ startCarbon, endCarbon, board }: SpaceProps) {
  */
 interface GetPathData {
   /** The output (starting) DOM element */
-  output?: HTMLDivElement
+  fiberStart?: HTMLDivElement
   /** The input (ending) DOM element */
-  input?: HTMLDivElement
+  fiberEnd?: HTMLDivElement
 }
 
 /**
@@ -319,15 +328,15 @@ interface GetPathData {
  * })
  * ```
  */
-export function getPathData(path: FiberPath, { output, input }: GetPathData) {
-  if (!output || !input) {
-    console.warn('getPathData: Missing output or input elements', { output: !!output, input: !!input })
+export function getPathData(path: FiberPath, { fiberStart, fiberEnd }: GetPathData) {
+  if (!fiberStart || !fiberEnd) {
+    console.warn('getPathData: Missing fiberStart or fiberEnd elements', { fiberStart: !!fiberStart, fiberEnd: !!fiberEnd })
     return path
   }
 
   try {
-    const boxOutput: DOMRect = output.getBoundingClientRect()
-    const boxInput: DOMRect = input.getBoundingClientRect()
+    const boxOutput: DOMRect = fiberStart.getBoundingClientRect()
+    const boxInput: DOMRect = fiberEnd.getBoundingClientRect()
 
     // Validate bounding rectangles
     if (boxOutput.width === 0 || boxOutput.height === 0 || boxInput.width === 0 || boxInput.height === 0) {
