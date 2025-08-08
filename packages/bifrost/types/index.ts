@@ -16,6 +16,8 @@ export interface BifrostFiberConnections {
    * - 'source-sink': Vertical connection (top-bottom sides of carbons)
    */
   type: 'output-input' | 'source-sink'
+  /** Orientation derived from type (horizontal for output-input, vertical for source-sink) */
+  orientation?: 'horizontal' | 'vertical'
   /** Origin point of the connection */
   output: {
     /** ID of the carbon component this connection originates from */

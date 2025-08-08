@@ -108,6 +108,7 @@ function addConnection(carbonId: string, childId: string, type: HookType, hookIn
   props.connections.push({
     id: 'connection-' + props.connections.length,
     type: isOutputInout ? 'output-input' : 'source-sink',
+    orientation: isOutputInout ? 'horizontal' : 'vertical',
     output: {
       carbon: fromOutput ? carbonId : childId,
       hook: fromOutput ? hookIndex : 0
