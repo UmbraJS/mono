@@ -54,7 +54,6 @@ onMounted(() => {
   }
 
   Draggable.create(carbonref.value, {
-    // bounds is optional; if undefined Draggable handles freely
     bounds: bounds,
     trigger: dragHandle.value,
     inertia: false,

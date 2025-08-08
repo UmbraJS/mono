@@ -57,12 +57,10 @@ function createPathData(flipped: boolean) {
 
 onMounted(() => {
   setTimeout(() => fiber.update(), 0)
-  // useResizeObserver accepts a MaybeRef, so pass the ref directly
-  if (boardRef) {
-    useResizeObserver(boardRef, () => {
-      fiber.update()
-    })
-  }
+  if (!boardRef) return
+  useResizeObserver(boardRef, () => {
+    fiber.update()
+  })
 })
 </script>
 
