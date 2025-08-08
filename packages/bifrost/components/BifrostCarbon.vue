@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, inject } from 'vue'
 import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
@@ -9,11 +9,10 @@ import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 import { InertiaPlugin } from 'gsap/InertiaPlugin'
 
-const title = 'Carbon'
+const title = 'Carbonated'
 const props = defineProps<{
   carbon: CarbonObject
   carbons: CarbonObject[]
-  bounds?: HTMLDivElement
   connections: BifrostFiberConnections[]
 }>()
 
@@ -48,7 +47,7 @@ onMounted(() => {
   updateReferences()
 
   Draggable.create(carbonEl, {
-    bounds: props.bounds,
+    bounds: inject('BifrostBoard'),
     trigger: dragHandle.value,
     inertia: false,
     edgeResistance: 0.9,

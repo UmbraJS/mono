@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import BifrostBoard from './components/BifrostBoard.vue'
 import BifrostCarbon from './components/BifrostCarbon.vue'
 import BifrostFiber from './components/BifrostFibers.vue'
 import { AddButton } from '@nobel/core'
@@ -8,7 +9,6 @@ import { hooks } from './data/index'
 
 type BifrostCarbonType = InstanceType<typeof BifrostCarbon>
 
-const BifrostBoard = ref<HTMLDivElement>()
 const connections = ref<BifrostFiberConnections[]>([])
 const carbons = ref<CarbonObject[]>([])
 
@@ -39,18 +39,20 @@ watch(
 )
 
 function functionRef(el: BifrostCarbonType, index: number) {
-  carbons.value[index].component = el
+  if (el) {
+    carbons.value[index].component = el
+  }
 }
 </script>
 
 <template>
-  <div id="BifrostBoard" :ref="BifrostBoard">
+  <BifrostBoard>
     <AddButton @click="addCarbon" />
     <BifrostCarbon v-for="(carbon, index) in carbons" :key="carbon.id"
-      :ref="(e: BifrostCarbonType) => functionRef(e, index)" :carbon="carbon" :carbons="carbons" :bounds="BifrostBoard"
+      :ref="(e) => functionRef(e as BifrostCarbonType, index)" :carbon="carbon" :carbons="carbons"
       :connections="connections" />
-    <BifrostFiber :connections="connections" :bounds="BifrostBoard" />
-  </div>
+    <BifrostFiber :connections="connections" />
+  </BifrostBoard>
 </template>
 
 <style>

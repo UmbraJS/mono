@@ -1,15 +1,16 @@
 <script setup lang="ts">
-import { computed, defineProps, onMounted, defineExpose } from 'vue'
+import { computed, defineProps, onMounted, defineExpose, inject } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { useBifrostFiber } from '../composables/useBifrostFiber'
 
 interface FiberProps {
-  bounds?: HTMLDivElement
   output?: HTMLDivElement
   input?: HTMLDivElement
 }
 
-const { output, input, bounds } = defineProps<FiberProps>()
+const { output, input } = defineProps<FiberProps>()
+
+const bounds = inject('BifrostBoard') as HTMLDivElement
 
 const fiber = useBifrostFiber({
   board: bounds,
@@ -51,7 +52,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :ref="(e: HTMLDivElement) => fiber.set(e)" id="BifrostFiber">
+  <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.set(e)" id="BifrostFiber">
     <svg :width="fiber.path.value.width" :height="fiber.path.value.height" xmlns="http://www.w3.org/2000/svg">
       <path :d="data" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />
     </svg>

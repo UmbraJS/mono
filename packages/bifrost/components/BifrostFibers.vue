@@ -5,7 +5,6 @@ import BifrostFiber from './BifrostFiber.vue'
 type FiberType = InstanceType<typeof BifrostFiber>
 
 defineProps<{
-  bounds?: HTMLDivElement
   connections: BifrostFiberConnections[]
 }>()
 </script>
@@ -13,7 +12,7 @@ defineProps<{
 <template>
   <div v-for="connection in connections" :key="connection.id">
     <BifrostFiber v-if="connection.output.component && connection.input.component"
-      :ref="(e: FiberType) => (connection.component = e)" :bounds="bounds"
+      :ref="(e) => connection.component = e as FiberType"
       :output="connection.output.component?.outputs?.hooks[connection.output.hook]"
       :input="connection.input.component?.inputs?.hooks[connection.input.hook]" />
   </div>

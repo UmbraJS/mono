@@ -16,15 +16,17 @@ const carbonHooks = computed(() => props.carbon.hooks.filter((hook) => hook.type
 
 defineExpose({ hooks })
 
-function storeRef(el: HTMLDivElement, index: number) {
-  hooks.value[index] = el
+function storeRef(el: any, index: number) {
+  if (el && el.tagName === 'DIV') {
+    hooks.value[index] = el
+  }
 }
 </script>
 
 <template>
   <div id="BifrostCarbonEdges">
-    <div v-for="hook in carbonHooks" :key="hook.index" :ref="(e: HTMLDivElement) => storeRef(e, hook.index)"
-      id="BifrostCarbonHook" @click="emit('hookClick', hook.index)"></div>
+    <div v-for="hook in carbonHooks" :key="hook.index" :ref="(e: any) => storeRef(e, hook.index)" id="BifrostCarbonHook"
+      @click="emit('hookClick', hook.index)"></div>
   </div>
 </template>
 

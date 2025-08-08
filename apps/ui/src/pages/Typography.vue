@@ -95,7 +95,7 @@
   padding-bottom: var(--space-7);
 }
 
-.typography > *:not(p) {
+.typography>*:not(p) {
   margin-top: var(--space-2);
 }
 </style>
