@@ -43,7 +43,7 @@ onMounted(() => {
     <div id="debug">
       <p>orientation: {{ orientation }}</p>
       <p>flipped: {{ fiber.renderFlipped.value }}</p>
-      <p>reversed: {{ fiber.renderReversed.value }}</p>
+      <p>reversed: {{ fiber.path.value.reversed }}</p>
     </div>
     <svg :width="fiber.path.value.width" :height="fiber.path.value.height" xmlns="http://www.w3.org/2000/svg">
       <path :d="fiber.pathD.value" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />

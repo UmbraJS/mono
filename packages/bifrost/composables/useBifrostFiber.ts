@@ -21,7 +21,6 @@ export interface UseBifrostFiberReturn {
   path: { value: FiberPath }
   pathD: { value: string }
   renderFlipped: { value: boolean }
-  renderReversed: { value: boolean }
   updateLayout: () => void
   setElement: (el: HTMLDivElement | null | undefined) => void
 }
@@ -56,7 +55,7 @@ export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, 
 
   const renderFlipped = computed(() => {
     if (path.value.orientation === 'vertical') {
-      // In vertical mode flipped means "start on right side"; reversing (upwards) shouldn't invert.
+      // In vertical mode flipped means "start on right side"
       return path.value.reversed ? path.value.flipped : !path.value.flipped
     }
     // Horizontal: reversed indicates path moves leftwards, so invert flip to keep arc direction intuitive.
@@ -72,7 +71,6 @@ export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, 
     updateLayout,
     setElement: acceptNullable,
     renderFlipped,
-    renderReversed: { value: path.value.reversed },
     pathD
   }
 }
@@ -282,16 +280,16 @@ interface GetPathData {
  */
 export function getPathData(path: FiberPath, { fiberStart, fiberEnd }: GetPathData) {
   if (!fiberStart || !fiberEnd) return path
-  const boxOutput: DOMRect = fiberStart.getBoundingClientRect()
-  const boxInput: DOMRect = fiberEnd.getBoundingClientRect()
-  if (!boxOutput.width || !boxOutput.height || !boxInput.width || !boxInput.height) return path
+  const boxStart: DOMRect = fiberStart.getBoundingClientRect()
+  const boxEnd: DOMRect = fiberEnd.getBoundingClientRect()
+  if (!boxStart.width || !boxStart.height || !boxEnd.width || !boxEnd.height) return path
   const flipped = path.orientation === 'horizontal'
-    ? checkFlipHorizontal({ boxOutput, boxInput })
-    : checkFlipVertical({ boxOutput, boxInput })
+    ? checkFlipHorizontal({ boxStart, boxEnd })
+    : checkFlipVertical({ boxStart, boxEnd })
   const reversed = path.orientation === 'horizontal'
-    ? checkReversedHorizontal({ boxOutput, boxInput })
-    : checkReversedVertical({ boxOutput, boxInput })
-  const curved = reversed ? 0.1 : adjustCurve({ boxOutput, boxInput })
+    ? checkReversedHorizontal({ boxStart, boxEnd })
+    : checkReversedVertical({ boxStart, boxEnd })
+  const curved = reversed ? 0.1 : adjustCurve({ boxStart, boxEnd })
   return { ...path, curve: curved, flipped, reversed }
 }
 
@@ -302,9 +300,9 @@ export function getPathData(path: FiberPath, { fiberStart, fiberEnd }: GetPathDa
  * @param config - Object containing bounding rectangles of output and input elements
  * @returns Curve value between 0.1 and 0.6
  */
-function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  const distanceHeight = Math.abs(boxOutput.top - boxInput.top)
-  const distanceWidth = Math.abs(boxOutput.left - boxInput.left)
+function adjustCurve({ boxStart, boxEnd }: { boxStart: DOMRect; boxEnd: DOMRect }) {
+  const distanceHeight = Math.abs(boxStart.top - boxEnd.top)
+  const distanceWidth = Math.abs(boxStart.left - boxEnd.left)
   const raw = Math.min(distanceHeight, distanceWidth) / 500
   if (!isFinite(raw)) return 0.1
   return clamp(raw, 0.1, 0.6)
@@ -317,9 +315,9 @@ function adjustCurve({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DO
  * @param config - Object containing bounding rectangles of output and input elements
  * @returns True if the path should be flipped, false otherwise
  */
-function checkFlipHorizontal({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  const center1 = boxOutput.top + boxOutput.height / 2
-  const center2 = boxInput.top + boxInput.height / 2
+function checkFlipHorizontal({ boxStart, boxEnd }: { boxStart: DOMRect; boxEnd: DOMRect }) {
+  const center1 = boxStart.top + boxStart.height / 2
+  const center2 = boxEnd.top + boxEnd.height / 2
   return center2 >= center1
 }
 
@@ -330,23 +328,23 @@ function checkFlipHorizontal({ boxOutput, boxInput }: { boxOutput: DOMRect; boxI
  * @param config - Object containing bounding rectangles of output and input elements
  * @returns True if the path should be reversed, false otherwise
  */
-function checkReversedHorizontal({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  return boxInput.left < boxOutput.left + boxOutput.width
+function checkReversedHorizontal({ boxStart, boxEnd }: { boxStart: DOMRect; boxEnd: DOMRect }) {
+  return boxEnd.left < boxStart.left + boxStart.width
 }
 
 // For vertical orientation, flipped indicates input is to the right of output center.
-function checkFlipVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+function checkFlipVertical({ boxStart, boxEnd }: { boxStart: DOMRect; boxEnd: DOMRect }) {
   // const center1 = boxOutput.top + boxOutput.height / 2
   // const center2 = boxInput.top + boxInput.height / 2
-  const center1 = boxOutput.left + boxOutput.width / 2
-  const center2 = boxInput.left + boxInput.width / 2
+  const center1 = boxStart.left + boxStart.width / 2
+  const center2 = boxEnd.left + boxEnd.width / 2
   return center2 >= center1
 }
 
-function checkReversedVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
+function checkReversedVertical({ boxStart, boxEnd }: { boxStart: DOMRect; boxEnd: DOMRect }) {
   //  // Reversed for vertical means the connection travels upward (input above output)
   // return boxInput.top + boxInput.height / 2 < boxOutput.top + boxOutput.height / 2
-  return boxInput.top < boxOutput.top + boxOutput.height
+  return boxEnd.top < boxStart.top + boxStart.height
 }
 
 function clamp(value: number, min: number, max: number) { return Math.min(max, Math.max(min, value)) }
@@ -378,6 +376,9 @@ export function buildPathD(p: FiberPath, flipped: boolean) {
   const end = `${width}, ${flipped ? bottom : top}`
   const startCurve = `${curve}, ${flipped ? top : bottom}`
   const endCurve = `${width - curve}, ${flipped ? bottom : top}`
+
+  console.log("rex curve: ", { curve, width, pCurve: p.curve })
+
   return `M${p.padding}, ${start} C${startCurve}, ${endCurve}, ${end}`
 }
 
