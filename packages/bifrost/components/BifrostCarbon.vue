@@ -57,7 +57,8 @@ onMounted(() => {
     trigger: dragHandle.value,
     inertia: false,
     edgeResistance: 0.9,
-    onDrag: updateFibers
+    onDrag: updateFibers,
+    onRelease: updateFibers
   })
 })
 
