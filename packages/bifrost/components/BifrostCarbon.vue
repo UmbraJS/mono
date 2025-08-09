@@ -163,8 +163,8 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   justify-items: center;
   align-items: center;
 
-  background-color: var(--accent-120);
-  color: var(--base-20);
+  background: var(--accent-20);
+  color: var(--accent-120);
   border-radius: var(--radius);
 }
 
@@ -185,11 +185,7 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--space-2);
-  min-height: var(--space-5);
-  border: 2px solid var(--accent-60);
+  padding: var(--space-1);
   border-radius: var(--radius);
-  height: 100%;
-  width: 100%;
 }
 </style>
