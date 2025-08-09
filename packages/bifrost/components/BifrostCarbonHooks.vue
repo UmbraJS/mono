@@ -34,7 +34,8 @@ function storeRef(el: any, index: number) {
 #BifrostCarbonHook {
   height: var(--space-atom);
   aspect-ratio: 1 / 1;
-  background: var(--accent-90);
+  background: var(--accent-100);
+  cursor: pointer;
 }
 
 #BifrostCarbonHook:hover {

@@ -9,7 +9,7 @@ import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 import { InertiaPlugin } from 'gsap/InertiaPlugin'
 
-const title = 'Carbonated'
+const title = 'Carbon Node'
 const props = defineProps<{
   carbon: CarbonObject
   carbons: CarbonObject[]
@@ -50,10 +50,7 @@ onMounted(() => {
 
   const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
   const bounds = boardRef?.value
-  console.log('BifrostBoard element', bounds)
-  if (!bounds) {
-    console.warn('BifrostBoard not yet mounted; drag bounds disabled until available')
-  }
+  if (!bounds) console.warn('BifrostBoard not yet mounted; drag bounds disabled until available')
 
   Draggable.create(carbonref.value, {
     bounds: bounds,
@@ -138,7 +135,7 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
       <!-- Vertical Top (sources) -->
       <BifrostCarbonHooks ref="sources" :carbon="carbon" type="source"
         @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'source', index)" />
-      <div id="BifrostCarbonContent">
+      <div id="BifrostCarbonContent" ref="dragHandle">
         <p><strong>{{ title }}</strong></p>
       </div>
       <!-- Vertical Bottom (sinks) -->
@@ -163,9 +160,10 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   justify-items: center;
   align-items: center;
 
-  background: var(--accent-20);
+  background: var(--accent);
   color: var(--accent-120);
   border-radius: var(--radius);
+  border-color: var(--accent-100);
 }
 
 #BifrostCarbon #BifrostCore {
@@ -187,5 +185,6 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   align-items: center;
   padding: var(--space-1);
   border-radius: var(--radius);
+  min-width: var(--space-6);
 }
 </style>
