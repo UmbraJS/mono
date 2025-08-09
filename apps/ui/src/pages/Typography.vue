@@ -79,6 +79,10 @@
   margin-top: var(--space-2);
 }
 
+.usercard strong {
+  color: var(--base-10);
+}
+
 .usercard .avatar {
   width: 100px;
   height: 100px;

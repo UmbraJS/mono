@@ -57,7 +57,7 @@ export function useBifrostFiber({ board, fiberStart, fiberEnd, stroke, padding, 
   const renderFlipped = computed(() => {
     if (path.value.orientation === 'vertical') {
       // In vertical mode flipped means "start on right side"; reversing (upwards) shouldn't invert.
-      return path.value.flipped
+      return path.value.reversed ? path.value.flipped : !path.value.flipped
     }
     // Horizontal: reversed indicates path moves leftwards, so invert flip to keep arc direction intuitive.
     return path.value.reversed ? !path.value.flipped : path.value.flipped
