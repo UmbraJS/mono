@@ -130,7 +130,7 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
 </script>
 
 <template>
-  <div ref="carbonref" id="BifrostCarbon">
+  <div ref="carbonref" id="BifrostCarbon" class="border">
     <!-- Horizontal Left Side (outputs) -->
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
       @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'output', index)" />
@@ -170,7 +170,7 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
 
 #BifrostCarbon #BifrostCore {
   display: grid;
-  min-height: var(--space-6);
+  grid-template-rows: auto 1fr auto;
 }
 
 #BifrostCarbon #BifrostCore p {
