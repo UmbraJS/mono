@@ -104,13 +104,13 @@ function addVerticallyHookedCarbon(carbonId: string, type: HookType, hookIndex: 
 }
 
 function addConnection(carbonId: string, childId: string, type: HookType, hookIndex: number) {
-  const fromOutput = type === 'output' || type === 'source' // Is this connection being started from an emitting side?
-  const isOutputInout = type === 'output' || type === 'input' // Is this connection an output to input connection?
+  const fromOutput = type === 'input' || type === 'source' // Is this connection being started from an emitting side?
+  const connectionType = type === 'output' || type === 'input' ? 'output-input' : 'source-sink'
 
   props.connections.push({
     id: 'connection-' + props.connections.length,
-    type: isOutputInout ? 'output-input' : 'source-sink',
-    orientation: isOutputInout ? 'horizontal' : 'vertical',
+    type: connectionType,
+    orientation: connectionType === 'output-input' ? 'horizontal' : 'vertical',
     output: {
       carbon: fromOutput ? carbonId : childId,
       hook: fromOutput ? hookIndex : 0

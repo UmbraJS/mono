@@ -40,7 +40,7 @@ onMounted(() => {
 
 <template>
   <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.setElement(e)" id="BifrostFiber">
-    <div id="debug">
+    <div v-if="false" id="debug">
       <p>orientation: {{ orientation }}</p>
       <p>flipped: {{ fiber.renderFlipped.value }}</p>
       <p>reversed: {{ fiber.path.value.reversed }}</p>
@@ -55,8 +55,6 @@ onMounted(() => {
 #BifrostFiber {
   position: absolute;
   z-index: 0;
-  background: #2A7B9B;
-  background: linear-gradient(90deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
 }
 
 #debug {
