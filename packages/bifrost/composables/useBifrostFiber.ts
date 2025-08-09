@@ -336,15 +336,17 @@ function checkReversedHorizontal({ boxOutput, boxInput }: { boxOutput: DOMRect; 
 
 // For vertical orientation, flipped indicates input is to the right of output center.
 function checkFlipVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  // For vertical orientation, we treat flipped as whether input is below output (same semantic as horizontal vertical ordering)
-  const center1 = boxOutput.top + boxOutput.height / 2
-  const center2 = boxInput.top + boxInput.height / 2
+  // const center1 = boxOutput.top + boxOutput.height / 2
+  // const center2 = boxInput.top + boxInput.height / 2
+  const center1 = boxOutput.left + boxOutput.width / 2
+  const center2 = boxInput.left + boxInput.width / 2
   return center2 >= center1
 }
 
 function checkReversedVertical({ boxOutput, boxInput }: { boxOutput: DOMRect; boxInput: DOMRect }) {
-  // Reversed for vertical means the connection travels upward (input above output)
-  return boxInput.top + boxInput.height / 2 < boxOutput.top + boxOutput.height / 2
+  //  // Reversed for vertical means the connection travels upward (input above output)
+  // return boxInput.top + boxInput.height / 2 < boxOutput.top + boxOutput.height / 2
+  return boxInput.top < boxOutput.top + boxOutput.height
 }
 
 function clamp(value: number, min: number, max: number) { return Math.min(max, Math.max(min, value)) }
