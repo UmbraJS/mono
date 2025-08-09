@@ -289,7 +289,7 @@ export function getPathData(path: FiberPath, { fiberStart, fiberEnd }: GetPathDa
   const reversed = path.orientation === 'horizontal'
     ? checkReversedHorizontal({ boxStart, boxEnd })
     : checkReversedVertical({ boxStart, boxEnd })
-  const curved = reversed ? 0.1 : adjustCurve({ boxStart, boxEnd })
+  const curved = path.orientation === 'horizontal' ? reversed ? 0.1 : adjustCurve({ boxStart, boxEnd }) : reversed ? adjustCurve({ boxStart, boxEnd }) : 0.1
   return { ...path, curve: curved, flipped, reversed }
 }
 
@@ -364,6 +364,7 @@ export function buildPathD(p: FiberPath, flipped: boolean) {
     const endY = height - p.padding
     const c1 = `${startX}, ${startY + curve}`
     const c2 = `${endX}, ${endY - curve}`
+
     return `M${startX}, ${startY} C${c1}, ${c2}, ${endX}, ${endY}`
   }
   const width = p.width - p.padding
@@ -376,8 +377,6 @@ export function buildPathD(p: FiberPath, flipped: boolean) {
   const end = `${width}, ${flipped ? bottom : top}`
   const startCurve = `${curve}, ${flipped ? top : bottom}`
   const endCurve = `${width - curve}, ${flipped ? bottom : top}`
-
-  console.log("rex curve: ", { curve, width, pCurve: p.curve })
 
   return `M${p.padding}, ${start} C${startCurve}, ${endCurve}, ${end}`
 }
