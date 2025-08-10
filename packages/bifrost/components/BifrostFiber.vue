@@ -40,7 +40,7 @@ onMounted(() => {
 
 <template>
   <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.setElement(e)" id="BifrostFiber">
-    <div v-if="false" id="debug">
+    <div v-if="false" id="BifrostFiberDebug">
       <p>orientation: {{ orientation }}</p>
       <p>flipped: {{ fiber.renderFlipped.value }}</p>
       <p>reversed: {{ fiber.path.value.reversed }}</p>
@@ -57,7 +57,7 @@ onMounted(() => {
   z-index: 0;
 }
 
-#debug {
+#BifrostFiberDebug {
   position: absolute;
   z-index: 9999999;
   top: 50%;
