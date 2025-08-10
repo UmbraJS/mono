@@ -167,13 +167,21 @@ function addCarbonNode(node: NewNode) {
 function clickCarbonHandle(node: NewNode) {
   addCarbonNode(node);
 
+  const htmlElement = document.querySelector(`html`);
+  htmlElement?.classList.add('bifrost-dragging');
+
+  const newCarbonId = 'carbon-' + (props.carbons.length - 1);
+  moveElement(newCarbonId)
   setTimeout(() => {
-    const newCarbonId = 'carbon-' + (props.carbons.length - 1);
     const element = document.querySelector(`.${newCarbonId}`);
     if (!element) return;
     const ctrl = new AbortController();
 
-    const stop = () => { moveElement(newCarbonId); ctrl.abort(); };
+    moveElement(newCarbonId)
+    const stop = () => {
+      moveElement(newCarbonId); ctrl.abort();
+      htmlElement?.classList.remove('bifrost-dragging');
+    };
     document.addEventListener('pointermove', () => moveElement(newCarbonId), { signal: ctrl.signal });
 
     document.addEventListener('pointerup', stop, { once: true, signal: ctrl.signal });
@@ -207,6 +215,10 @@ function clickCarbonHandle(node: NewNode) {
 </template>
 
 <style>
+html.bifrost-dragging {
+  pointer-events: none;
+}
+
 #BifrostCarbon {
   position: absolute;
   top: 0px;

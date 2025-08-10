@@ -31,13 +31,26 @@ const source1: Hook = {
   type: 'source'
 }
 
+const source2: Hook = {
+  index: 1,
+  active: false,
+  type: 'source'
+}
+
 const sink1: Hook = {
   index: 0,
   active: false,
   type: 'sink'
 }
+
+const sink2: Hook = {
+  index: 1,
+  active: false,
+  type: 'sink'
+}
+
 // Base hook template list (shared refs currently; consider cloning per carbon for independent state)
-export const hooks = [input1, input2, output1, output2, source1, sink1]
+export const hooks = [input1, input2, output1, output2, source1, sink1, source2, sink2]
 
 const c: BifrostFiberConnections[] = [
   {
