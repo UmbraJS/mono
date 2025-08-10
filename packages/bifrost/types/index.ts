@@ -51,6 +51,7 @@ export interface CarbonObject {
   position: [number, number]
   /** Array of connection IDs that this carbon is part of */
   connections: string[]
+  state: ("born" | "moving" | "idle")[]
   /** Array of hook points available on this carbon */
   hooks: Hook[]
   class?: string

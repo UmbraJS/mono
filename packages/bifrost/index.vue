@@ -17,6 +17,7 @@ function addCarbon() {
     id: 'carbon-' + carbons.value.length,
     position: [100, 100],
     component: undefined,
+    state: ["idle"],
     connections: [],
     hooks: hooks
   })

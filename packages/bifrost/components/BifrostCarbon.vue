@@ -93,6 +93,7 @@ function addHorizontallyHookedCarbon(newNode: NewNode) {
     position: [xFromBoardBounds.value, yFromBoardBounds.value],
     component: undefined,
     connections: [newNode.id],
+    state: ["born"],
     class: "recently-born",
     hooks: hooks
   })
@@ -107,6 +108,7 @@ function addVerticallyHookedCarbon(newNode: NewNode) {
     position: [xFromBoardBounds.value, yFromBoardBounds.value],
     component: undefined,
     connections: [newNode.id],
+    state: ["born"],
     class: "recently-born",
     hooks: hooks
   })
