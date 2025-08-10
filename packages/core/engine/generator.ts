@@ -70,7 +70,6 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
 
 function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
   return adjusted.accents.map((accent) => {
-    console.log("Generating accent:", accent)
     const isString = typeof accent === 'string'
     const name = isString ? undefined : accent.name
     const range = putAccentInRange(adjusted, accent, input)

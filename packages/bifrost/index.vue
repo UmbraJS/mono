@@ -22,22 +22,6 @@ function addCarbon() {
   })
 }
 
-watch(
-  connections,
-  (newConnections) => {
-    console.log('connections', newConnections)
-  },
-  { deep: true }
-)
-
-watch(
-  carbons,
-  (newConnections) => {
-    console.log('carbons', newConnections)
-  },
-  { deep: true }
-)
-
 function functionRef(el: BifrostCarbonType, index: number) {
   if (!el) return
   carbons.value[index].component = el

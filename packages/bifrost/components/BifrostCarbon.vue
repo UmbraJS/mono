@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
-import { onMounted, ref, computed, inject, watch, type Ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed, inject, watch, type Ref } from 'vue'
 import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
@@ -77,7 +77,6 @@ function setFibers(carbonId: string) {
 }
 
 const { x, y } = useMouse()
-const { pressed } = useMousePressed()
 
 const xFromBoardBounds = computed(() => {
   const bounds = boardRef?.value?.getBoundingClientRect()
@@ -146,49 +145,65 @@ interface NewNode {
   type: HookType
 }
 
-const newNode = ref<NewNode | null>(null)
-watch(newNode, (node) => {
-  if (!node) return
-  if (node.type === 'input' || node.type === 'output') {
-    addHorizontallyHookedCarbon(node)
-  } else {
-    addVerticallyHookedCarbon(node)
-  }
-  newNode.value = null
-})
+function moveElement(id: string) {
+  const element = document.querySelector(`.${CSS.escape(id)}`);
+  if (!element) return;
+  gsap.to(element, {
+    x: xFromBoardBounds.value,
+    y: yFromBoardBounds.value,
+    duration: 0.2,
+    ease: 'power1.out'
+  });
+};
 
-const skeletonNode = ref<NewNode | null>(null)
-function addSkeletonNode(node: NewNode) {
-  skeletonNode.value = node
+function addCarbonNode(node: NewNode) {
+  if (node.type === 'input' || node.type === 'output') {
+    addHorizontallyHookedCarbon(node);
+  } else {
+    addVerticallyHookedCarbon(node);
+  }
 }
 
-watch(pressed, (isPressed) => {
-  if (isPressed) return
-  newNode.value = skeletonNode.value
-  skeletonNode.value = null
-})
+function clickCarbonHandle(node: NewNode) {
+  addCarbonNode(node);
+
+  setTimeout(() => {
+    const newCarbonId = 'carbon-' + (props.carbons.length - 1);
+    const element = document.querySelector(`.${newCarbonId}`);
+    if (!element) return;
+    const ctrl = new AbortController();
+
+    const stop = () => { moveElement(newCarbonId); ctrl.abort(); };
+    document.addEventListener('pointermove', () => moveElement(newCarbonId), { signal: ctrl.signal });
+
+    document.addEventListener('pointerup', stop, { once: true, signal: ctrl.signal });
+    document.addEventListener('pointercancel', stop, { signal: ctrl.signal });
+
+    onBeforeUnmount(() => ctrl.abort());
+  })
+}
 
 </script>
 
 <template>
-  <div ref="carbonref" id="BifrostCarbon" class="border">
+  <div ref="carbonref" id="BifrostCarbon" :class="carbon.id" class="border">
     <!-- Horizontal Left Side (outputs) -->
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
-      @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'output', index })" />
+      @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'output', index })" />
     <div id="BifrostCore">
       <!-- Vertical Top (sources) -->
       <BifrostCarbonHooks ref="sources" :carbon="carbon" type="source"
-        @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'source', index })" />
+        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'source', index })" />
       <div id="BifrostCarbonContent" ref="dragHandle">
         <p><strong>{{ title }}</strong></p>
       </div>
       <!-- Vertical Bottom (sinks) -->
       <BifrostCarbonHooks ref="sinks" :carbon="carbon" type="sink"
-        @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'sink', index })" />
+        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'sink', index })" />
     </div>
     <!-- Horizontal Right Side (inputs) -->
     <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
-      @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'input', index })" />
+      @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'input', index })" />
   </div>
 </template>
 
