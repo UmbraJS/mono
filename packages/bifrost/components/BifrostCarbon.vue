@@ -4,7 +4,7 @@ import { onMounted, onBeforeUnmount, ref, computed, inject, watch, type Ref } fr
 import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
-import { useMouse, useMousePressed } from '@vueuse/core'
+import { useMouse } from '@vueuse/core'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
