@@ -29,10 +29,10 @@ const sinks = ref<InstanceType<typeof BifrostCarbonHooks>>()
 function updateReferences() {
   connections.value.forEach((connection) => {
     // Stores carbon reference in connection object
-    const isFrom = connection.output.carbon === props.carbon.id
+    const isFrom = connection.start.carbon === props.carbon.id
     isFrom
-      ? (connection.output.component = props.carbon.component)
-      : (connection.input.component = props.carbon.component)
+      ? (connection.start.component = props.carbon.component)
+      : (connection.end.component = props.carbon.component)
   })
 }
 
@@ -93,6 +93,7 @@ function addHorizontallyHookedCarbon(newNode: NewNode) {
     position: [xFromBoardBounds.value, yFromBoardBounds.value],
     component: undefined,
     connections: [newNode.id],
+    class: "recently-born",
     hooks: hooks
   })
   addConnection(newNode.id, childId, newNode.type, newNode.index)
@@ -106,6 +107,7 @@ function addVerticallyHookedCarbon(newNode: NewNode) {
     position: [xFromBoardBounds.value, yFromBoardBounds.value],
     component: undefined,
     connections: [newNode.id],
+    class: "recently-born",
     hooks: hooks
   })
   addConnection(newNode.id, childId, newNode.type, newNode.index)
@@ -120,11 +122,11 @@ function addConnection(carbonId: string, childId: string, type: HookType, hookIn
     id: 'connection-' + props.connections.length,
     type: connectionType,
     orientation: connectionType === 'output-input' ? 'horizontal' : 'vertical',
-    output: {
+    start: {
       carbon: fromOutput ? carbonId : childId,
       hook: fromOutput ? hookIndex : 0
     },
-    input: {
+    end: {
       carbon: fromOutput ? childId : carbonId,
       hook: fromOutput ? 0 : hookIndex
     }
@@ -132,8 +134,8 @@ function addConnection(carbonId: string, childId: string, type: HookType, hookIn
 }
 
 function isRelatedConnection(connection: BifrostFiberConnections) {
-  const isFrom = connection.output.carbon === props.carbon.id
-  const isTo = connection.input.carbon === props.carbon.id
+  const isFrom = connection.start.carbon === props.carbon.id
+  const isTo = connection.end.carbon === props.carbon.id
   return isFrom || isTo
 }
 
@@ -145,12 +147,13 @@ interface NewNode {
 
 function moveElement(id: string) {
   const element = document.querySelector(`.${CSS.escape(id)}`);
+  element?.classList.remove('recently-born');
   // get elements top and left css values
   if (!element) return;
   gsap.to(element, {
     x: xFromBoardBounds.value,
     y: yFromBoardBounds.value,
-    duration: 0.2,
+    duration: 0,
     ease: 'power1.out'
   });
   updateFibers();
@@ -166,18 +169,16 @@ function addCarbonNode(node: NewNode) {
 
 function clickCarbonHandle(node: NewNode) {
   addCarbonNode(node);
+  const newCarbonId = 'carbon-' + (props.carbons.length - 1);
 
   const htmlElement = document.querySelector(`html`);
   htmlElement?.classList.add('bifrost-dragging');
 
-  const newCarbonId = 'carbon-' + (props.carbons.length - 1);
-  moveElement(newCarbonId)
   setTimeout(() => {
     const element = document.querySelector(`.${newCarbonId}`);
     if (!element) return;
     const ctrl = new AbortController();
 
-    moveElement(newCarbonId)
     const stop = () => {
       moveElement(newCarbonId); ctrl.abort();
       htmlElement?.classList.remove('bifrost-dragging');
@@ -193,7 +194,7 @@ function clickCarbonHandle(node: NewNode) {
 </script>
 
 <template>
-  <div ref="carbonref" id="BifrostCarbon" :class="carbon.id" class="border">
+  <div ref="carbonref" id="BifrostCarbon" :class="carbon.id + ' ' + carbon.class" class="border">
     <!-- Horizontal Left Side (outputs) -->
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
       @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'output', index })" />
@@ -237,6 +238,11 @@ html.bifrost-dragging {
   color: var(--accent-120);
   border-radius: var(--radius);
   border-color: var(--accent-100);
+  opacity: 1;
+}
+
+#BifrostCarbon.recently-born {
+  opacity: 0;
 }
 
 #BifrostCarbon #BifrostCore {

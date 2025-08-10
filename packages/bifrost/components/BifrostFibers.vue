@@ -11,12 +11,12 @@ defineProps<{
 
 <template>
   <div v-for="connection in connections" :key="connection.id">
-    <BifrostFiber v-if="connection.output.component && connection.input.component"
+    <BifrostFiber v-if="connection.start.component && connection.end.component"
       :ref="(e) => connection.component = e as FiberType" :fiber-start="connection.type === 'source-sink'
-        ? connection.output.component?.sources?.hooks[connection.output.hook]
-        : connection.output.component?.inputs?.hooks[connection.output.hook]" :fiber-end="connection.type === 'source-sink'
-          ? connection.input.component?.sinks?.hooks[connection.input.hook]
-          : connection.input.component?.outputs?.hooks[connection.input.hook]"
+        ? connection.start.component?.sources?.hooks[connection.start.hook]
+        : connection.start.component?.inputs?.hooks[connection.start.hook]" :fiber-end="connection.type === 'source-sink'
+          ? connection.end.component?.sinks?.hooks[connection.end.hook]
+          : connection.end.component?.outputs?.hooks[connection.end.hook]"
       :orientation="connection.type === 'source-sink' ? 'vertical' : 'horizontal'" />
   </div>
 </template>

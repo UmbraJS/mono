@@ -19,7 +19,7 @@ export interface BifrostFiberConnections {
   /** Orientation derived from type (horizontal for output-input, vertical for source-sink) */
   orientation?: 'horizontal' | 'vertical'
   /** Origin point of the connection */
-  output: {
+  start: {
     /** ID of the carbon component this connection originates from */
     carbon: string
     /** Index of the hook on the origin carbon */
@@ -28,7 +28,7 @@ export interface BifrostFiberConnections {
     component?: InstanceType<typeof BifrostCarbon>
   }
   /** Destination point of the connection */
-  input: {
+  end: {
     /** ID of the carbon component this connection terminates at */
     carbon: string
     /** Index of the hook on the destination carbon */
@@ -53,6 +53,7 @@ export interface CarbonObject {
   connections: string[]
   /** Array of hook points available on this carbon */
   hooks: Hook[]
+  class?: string
 }
 
 /**
