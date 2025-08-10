@@ -26,9 +26,6 @@ const outputs = ref<InstanceType<typeof BifrostCarbonHooks>>()
 const sources = ref<InstanceType<typeof BifrostCarbonHooks>>()
 const sinks = ref<InstanceType<typeof BifrostCarbonHooks>>()
 
-const top = computed(() => `${props.carbon.position[1]}px`)
-const left = computed(() => `${props.carbon.position[0]}px`)
-
 function updateReferences() {
   connections.value.forEach((connection) => {
     // Stores carbon reference in connection object
@@ -80,12 +77,13 @@ const { x, y } = useMouse()
 
 const xFromBoardBounds = computed(() => {
   const bounds = boardRef?.value?.getBoundingClientRect()
-  return bounds ? x.value - bounds.left : 0
+  console.log('xFromBoardBounds', { x: x.value, newX: x.value - (bounds?.left || 0), bounds, boardRef: boardRef?.value })
+  return bounds ? x.value - (bounds.left || 0) : 0
 })
 
 const yFromBoardBounds = computed(() => {
   const bounds = boardRef?.value?.getBoundingClientRect()
-  return bounds ? y.value - bounds.top : 0
+  return bounds ? y.value - (bounds.top || 0) : 0
 })
 
 function addHorizontallyHookedCarbon(newNode: NewNode) {
@@ -147,6 +145,7 @@ interface NewNode {
 
 function moveElement(id: string) {
   const element = document.querySelector(`.${CSS.escape(id)}`);
+  // get elements top and left css values
   if (!element) return;
   gsap.to(element, {
     x: xFromBoardBounds.value,
@@ -154,6 +153,7 @@ function moveElement(id: string) {
     duration: 0.2,
     ease: 'power1.out'
   });
+  updateFibers();
 };
 
 function addCarbonNode(node: NewNode) {
@@ -182,7 +182,6 @@ function clickCarbonHandle(node: NewNode) {
     onBeforeUnmount(() => ctrl.abort());
   })
 }
-
 </script>
 
 <template>
@@ -210,8 +209,11 @@ function clickCarbonHandle(node: NewNode) {
 <style>
 #BifrostCarbon {
   position: absolute;
-  top: v-bind(top);
-  left: v-bind(left);
+  top: 0px;
+  left: 0px;
+
+  transform: translate3d(v-bind(xFromBoardBounds),
+      v-bind(yFromBoardBounds));
   z-index: 1;
 
   display: grid;
