@@ -1,13 +1,16 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
-import { onMounted, ref, computed, inject, type Ref } from 'vue'
+import { onMounted, ref, computed, inject, watch, type Ref } from 'vue'
 import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
+import { useMouse, useMousePressed } from '@vueuse/core'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
 import { InertiaPlugin } from 'gsap/InertiaPlugin'
+
+const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
 const title = 'Carbon Node'
 const props = defineProps<{
@@ -44,11 +47,9 @@ onMounted(() => {
   gsap.registerPlugin(InertiaPlugin)
   gsap.registerPlugin(Draggable)
 
-  console.log("carbonEl", carbonref.value)
   if (!carbonref.value) return
   updateReferences()
 
-  const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
   const bounds = boardRef?.value
   if (!bounds) console.warn('BifrostBoard not yet mounted; drag bounds disabled until available')
 
@@ -75,30 +76,43 @@ function setFibers(carbonId: string) {
   setTimeout(() => updateFibers(), 0)
 }
 
-function addHorizontallyHookedCarbon(carbonId: string, type: HookType, hookIndex: number) {
+const { x, y } = useMouse()
+const { pressed } = useMousePressed()
+
+const xFromBoardBounds = computed(() => {
+  const bounds = boardRef?.value?.getBoundingClientRect()
+  return bounds ? x.value - bounds.left : 0
+})
+
+const yFromBoardBounds = computed(() => {
+  const bounds = boardRef?.value?.getBoundingClientRect()
+  return bounds ? y.value - bounds.top : 0
+})
+
+function addHorizontallyHookedCarbon(newNode: NewNode) {
   const childId = 'carbon-' + props.carbons.length
   props.carbons.push({
     id: childId,
-    position: [200, 200],
+    position: [xFromBoardBounds.value, yFromBoardBounds.value],
     component: undefined,
-    connections: [carbonId],
+    connections: [newNode.id],
     hooks: hooks
   })
-  addConnection(carbonId, childId, type, hookIndex)
-  setFibers(carbonId)
+  addConnection(newNode.id, childId, newNode.type, newNode.index)
+  setFibers(newNode.id)
 }
 
-function addVerticallyHookedCarbon(carbonId: string, type: HookType, hookIndex: number) {
+function addVerticallyHookedCarbon(newNode: NewNode) {
   const childId = 'carbon-' + props.carbons.length
   props.carbons.push({
     id: childId,
-    position: [200, 200],
+    position: [xFromBoardBounds.value, yFromBoardBounds.value],
     component: undefined,
-    connections: [carbonId],
+    connections: [newNode.id],
     hooks: hooks
   })
-  addConnection(carbonId, childId, type, hookIndex)
-  setFibers(carbonId)
+  addConnection(newNode.id, childId, newNode.type, newNode.index)
+  setFibers(newNode.id)
 }
 
 function addConnection(carbonId: string, childId: string, type: HookType, hookIndex: number) {
@@ -125,27 +139,56 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   const isTo = connection.input.carbon === props.carbon.id
   return isFrom || isTo
 }
+
+interface NewNode {
+  id: string
+  index: number
+  type: HookType
+}
+
+const newNode = ref<NewNode | null>(null)
+watch(newNode, (node) => {
+  if (!node) return
+  if (node.type === 'input' || node.type === 'output') {
+    addHorizontallyHookedCarbon(node)
+  } else {
+    addVerticallyHookedCarbon(node)
+  }
+  newNode.value = null
+})
+
+const skeletonNode = ref<NewNode | null>(null)
+function addSkeletonNode(node: NewNode) {
+  skeletonNode.value = node
+}
+
+watch(pressed, (isPressed) => {
+  if (isPressed) return
+  newNode.value = skeletonNode.value
+  skeletonNode.value = null
+})
+
 </script>
 
 <template>
   <div ref="carbonref" id="BifrostCarbon" class="border">
     <!-- Horizontal Left Side (outputs) -->
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
-      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'output', index)" />
+      @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'output', index })" />
     <div id="BifrostCore">
       <!-- Vertical Top (sources) -->
       <BifrostCarbonHooks ref="sources" :carbon="carbon" type="source"
-        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'source', index)" />
+        @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'source', index })" />
       <div id="BifrostCarbonContent" ref="dragHandle">
         <p><strong>{{ title }}</strong></p>
       </div>
       <!-- Vertical Bottom (sinks) -->
       <BifrostCarbonHooks ref="sinks" :carbon="carbon" type="sink"
-        @hookClick="(index: number) => addVerticallyHookedCarbon(carbon.id, 'sink', index)" />
+        @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'sink', index })" />
     </div>
     <!-- Horizontal Right Side (inputs) -->
     <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
-      @hookClick="(index: number) => addHorizontallyHookedCarbon(carbon.id, 'input', index)" />
+      @hookMouseDown="(index: number) => addSkeletonNode({ id: carbon.id, type: 'input', index })" />
   </div>
 </template>
 

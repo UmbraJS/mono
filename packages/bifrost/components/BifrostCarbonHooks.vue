@@ -8,7 +8,9 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits({
-  hookClick: (index: number) => true
+  hookClick: (index: number) => true,
+  hookMouseDown: (index: number) => true,
+  hookMouseUp: (index: number) => true
 })
 
 const hooks = ref<HTMLDivElement[]>([])
@@ -26,7 +28,8 @@ function storeRef(el: any, index: number) {
 <template>
   <div id="BifrostCarbonEdges">
     <div v-for="hook in carbonHooks" :key="hook.index" :ref="(e: any) => storeRef(e, hook.index)" id="BifrostCarbonHook"
-      @click="emit('hookClick', hook.index)"></div>
+      @click="emit('hookClick', hook.index)" @mousedown="emit('hookMouseDown', hook.index)"
+      @mouseup="emit('hookMouseUp', hook.index)"></div>
   </div>
 </template>
 
