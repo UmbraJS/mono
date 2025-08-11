@@ -4,6 +4,7 @@ import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
 import { useMouse } from '@vueuse/core'
+import { generateId } from '../utils/id'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
@@ -16,7 +17,6 @@ const DRAGGING_CLASS = 'bifrost-dragging'
 
 
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
-const nextCarbonId = inject<() => string>('BifrostNextCarbonId')
 
 const title = 'Carbon Node'
 const props = defineProps<{
@@ -110,7 +110,7 @@ const yFromBoardBounds = computed(() => {
 })
 
 function createCarbonFromNode(newNode: NewNode) {
-  const childId = nextCarbonId ? nextCarbonId() : `carbon-${Date.now()}`
+  const childId = generateId('carbon')
   emit('add-carbon', {
     id: childId,
     position: [xFromBoardBounds.value, yFromBoardBounds.value],
@@ -129,7 +129,7 @@ function addConnection(carbonId: string, childId: string, type: HookType, hookIn
   const fromOutputSide = type === 'input' || type === 'source'
   const connectionType = (type === 'output' || type === 'input') ? 'output-input' : 'source-sink'
   emit('add-connection', {
-    id: `connection-${props.connections.length}`,
+    id: generateId('connection'),
     type: connectionType,
     orientation: connectionType === 'output-input' ? 'horizontal' : 'vertical',
     start: {
