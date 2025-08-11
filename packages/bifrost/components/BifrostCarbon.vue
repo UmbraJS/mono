@@ -1,6 +1,5 @@
-<!-- eslint-disable vue/no-mutating-props -->
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref, computed, inject, watch, type Ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, shallowRef, computed, inject, watch, nextTick, type Ref } from 'vue'
 import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
 import { hooks } from '../data/index'
@@ -8,76 +7,100 @@ import { useMouse } from '@vueuse/core'
 
 import { gsap } from 'gsap'
 import { Draggable } from 'gsap/Draggable'
-import { InertiaPlugin } from 'gsap/InertiaPlugin'
+
+// ---------------------------
+// Constants & Utilities
+// ---------------------------
+const RECENT_CLASS = 'recently-born'
+const DRAGGING_CLASS = 'bifrost-dragging'
+
 
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
+const nextCarbonId = inject<() => string>('BifrostNextCarbonId')
 
 const title = 'Carbon Node'
 const props = defineProps<{
   carbon: CarbonObject
-  carbons: CarbonObject[]
-  connections: BifrostFiberConnections[]
+  carbons: CarbonObject[] // Provided by parent (read-only from this component perspective)
+  connections: BifrostFiberConnections[] // Provided by parent (read-only here)
+}>()
+
+const emit = defineEmits<{
+  (e: 'add-carbon', carbon: CarbonObject): void
+  (e: 'add-connection', connection: BifrostFiberConnections): void
 }>()
 
 const carbonref = ref<HTMLDivElement>()
 const dragHandle = ref<HTMLDivElement>()
-const inputs = ref<InstanceType<typeof BifrostCarbonHooks>>()
-const outputs = ref<InstanceType<typeof BifrostCarbonHooks>>()
-const sources = ref<InstanceType<typeof BifrostCarbonHooks>>()
-const sinks = ref<InstanceType<typeof BifrostCarbonHooks>>()
+const inputs = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
+const outputs = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
+const sources = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
+const sinks = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
+
+// Will hold the Draggable instance for cleanup
+// Draggable.create returns an array of Draggable instances (untyped here to avoid gsap type coupling)
+let draggableInstance: any | undefined
 
 function updateReferences() {
-  connections.value.forEach((connection) => {
-    // Stores carbon reference in connection object
+  relatedConnections.value.forEach((connection) => {
     const isFrom = connection.start.carbon === props.carbon.id
-    isFrom
-      ? (connection.start.component = props.carbon.component)
-      : (connection.end.component = props.carbon.component)
+    if (isFrom) connection.start.component = props.carbon.component
+    else connection.end.component = props.carbon.component
   })
 }
 
 defineExpose({ inputs, outputs, sources, sinks, updateReferences })
 
-const connections = computed(() => props.connections.filter(isRelatedConnection))
+// We only work with connections related to this carbon
+const relatedConnections = computed(() => props.connections.filter(isRelatedConnection))
 
 onMounted(() => {
-  gsap.registerPlugin(InertiaPlugin)
   gsap.registerPlugin(Draggable)
-
   if (!carbonref.value) return
   updateReferences()
-
   const bounds = boardRef?.value
-  if (!bounds) console.warn('BifrostBoard not yet mounted; drag bounds disabled until available')
-
-  Draggable.create(carbonref.value, {
-    bounds: bounds,
+  draggableInstance = Draggable.create(carbonref.value, {
+    bounds: bounds || undefined,
     trigger: dragHandle.value,
     inertia: false,
     edgeResistance: 0.9,
-    onDrag: updateFibers,
-    onRelease: updateFibers
-  })
+    onDrag: scheduleUpdateFibers,
+    onRelease: scheduleUpdateFibers
+  })[0]
 })
 
-function updateFibers() {
-  // Updates the path out of and into the carbon
-  connections.value.forEach((connection) => {
+onBeforeUnmount(() => {
+  draggableInstance?.kill()
+})
+
+// ---------------------------
+// Fiber Update (throttled)
+// ---------------------------
+let fiberUpdateScheduled = false
+function doUpdateFibers() {
+  relatedConnections.value.forEach((connection) => {
     connection.component?.update()
+  })
+}
+function scheduleUpdateFibers() {
+  if (fiberUpdateScheduled) return
+  fiberUpdateScheduled = true
+  requestAnimationFrame(() => {
+    fiberUpdateScheduled = false
+    doUpdateFibers()
   })
 }
 
 function setFibers(carbonId: string) {
   const parentCarbon = props.carbons.find((carbon) => carbon.id === carbonId)
-  parentCarbon?.component?.updateReferences()
-  setTimeout(() => updateFibers(), 0)
+  parentCarbon?.component?.updateReferences?.()
+  queueMicrotask(() => scheduleUpdateFibers())
 }
 
 const { x, y } = useMouse()
 
 const xFromBoardBounds = computed(() => {
   const bounds = boardRef?.value?.getBoundingClientRect()
-  console.log('xFromBoardBounds', { x: x.value, newX: x.value - (bounds?.left || 0), bounds, boardRef: boardRef?.value })
   return bounds ? x.value - (bounds.left || 0) : 0
 })
 
@@ -86,53 +109,40 @@ const yFromBoardBounds = computed(() => {
   return bounds ? y.value - (bounds.top || 0) : 0
 })
 
-function addHorizontallyHookedCarbon(newNode: NewNode) {
-  const childId = 'carbon-' + props.carbons.length
-  props.carbons.push({
+function createCarbonFromNode(newNode: NewNode) {
+  const childId = nextCarbonId ? nextCarbonId() : `carbon-${Date.now()}`
+  emit('add-carbon', {
     id: childId,
     position: [xFromBoardBounds.value, yFromBoardBounds.value],
     component: undefined,
     connections: [newNode.id],
-    state: ["born"],
-    class: "recently-born",
-    hooks: hooks
+    state: ['born'],
+    class: RECENT_CLASS,
+    hooks
   })
   addConnection(newNode.id, childId, newNode.type, newNode.index)
   setFibers(newNode.id)
-}
-
-function addVerticallyHookedCarbon(newNode: NewNode) {
-  const childId = 'carbon-' + props.carbons.length
-  props.carbons.push({
-    id: childId,
-    position: [xFromBoardBounds.value, yFromBoardBounds.value],
-    component: undefined,
-    connections: [newNode.id],
-    state: ["born"],
-    class: "recently-born",
-    hooks: hooks
-  })
-  addConnection(newNode.id, childId, newNode.type, newNode.index)
-  setFibers(newNode.id)
+  return childId
 }
 
 function addConnection(carbonId: string, childId: string, type: HookType, hookIndex: number) {
-  const fromOutput = type === 'input' || type === 'source' // Is this connection being started from an emitting side?
-  const connectionType = type === 'output' || type === 'input' ? 'output-input' : 'source-sink'
-
-  props.connections.push({
-    id: 'connection-' + props.connections.length,
+  const fromOutputSide = type === 'input' || type === 'source'
+  const connectionType = (type === 'output' || type === 'input') ? 'output-input' : 'source-sink'
+  emit('add-connection', {
+    id: `connection-${props.connections.length}`,
     type: connectionType,
     orientation: connectionType === 'output-input' ? 'horizontal' : 'vertical',
     start: {
-      carbon: fromOutput ? carbonId : childId,
-      hook: fromOutput ? hookIndex : 0
+      carbon: fromOutputSide ? carbonId : childId,
+      hook: fromOutputSide ? hookIndex : 0
     },
     end: {
-      carbon: fromOutput ? childId : carbonId,
-      hook: fromOutput ? 0 : hookIndex
+      carbon: fromOutputSide ? childId : carbonId,
+      hook: fromOutputSide ? 0 : hookIndex
     }
   })
+  // Schedule fiber update after parent applies emitted change
+  nextTick(() => scheduleUpdateFibers())
 }
 
 function isRelatedConnection(connection: BifrostFiberConnections) {
@@ -141,62 +151,49 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   return isFrom || isTo
 }
 
-interface NewNode {
-  id: string
-  index: number
-  type: HookType
-}
+interface NewNode { id: string; index: number; type: HookType }
 
 function moveElement(id: string) {
-  const element = document.querySelector(`.${CSS.escape(id)}`);
-  element?.classList.remove('recently-born');
-  // get elements top and left css values
-  if (!element) return;
+  const element = document.querySelector(`.${CSS.escape(id)}`)
+  element?.classList.remove(RECENT_CLASS)
+  if (!element) return
   gsap.to(element, {
     x: xFromBoardBounds.value,
     y: yFromBoardBounds.value,
     duration: 0,
     ease: 'power1.out'
-  });
-  updateFibers();
-};
-
-function addCarbonNode(node: NewNode) {
-  if (node.type === 'input' || node.type === 'output') {
-    addHorizontallyHookedCarbon(node);
-  } else {
-    addVerticallyHookedCarbon(node);
-  }
+  })
+  scheduleUpdateFibers()
 }
 
 function clickCarbonHandle(node: NewNode) {
-  addCarbonNode(node);
-  const newCarbonId = 'carbon-' + (props.carbons.length - 1);
+  const newCarbonId = createCarbonFromNode(node)
+  const htmlElement = document.documentElement
+  htmlElement.classList.add(DRAGGING_CLASS)
 
-  const htmlElement = document.querySelector(`html`);
-  htmlElement?.classList.add('bifrost-dragging');
-
-  setTimeout(() => {
-    const element = document.querySelector(`.${newCarbonId}`);
-    if (!element) return;
-    const ctrl = new AbortController();
-
+  // Defer so the element exists in DOM
+  requestAnimationFrame(() => {
+    const ctrl = new AbortController()
+    const move = () => moveElement(newCarbonId)
     const stop = () => {
-      moveElement(newCarbonId); ctrl.abort();
-      htmlElement?.classList.remove('bifrost-dragging');
-    };
-    document.addEventListener('pointermove', () => moveElement(newCarbonId), { signal: ctrl.signal });
-
-    document.addEventListener('pointerup', stop, { once: true, signal: ctrl.signal });
-    document.addEventListener('pointercancel', stop, { signal: ctrl.signal });
-
-    onBeforeUnmount(() => ctrl.abort());
+      moveElement(newCarbonId)
+      ctrl.abort()
+      htmlElement.classList.remove(DRAGGING_CLASS)
+    }
+    document.addEventListener('pointermove', move, { signal: ctrl.signal })
+    document.addEventListener('pointerup', stop, { once: true, signal: ctrl.signal })
+    document.addEventListener('pointercancel', stop, { signal: ctrl.signal })
+    onBeforeUnmount(() => ctrl.abort())
   })
 }
+
+// React when external connection list changes (e.g., parent applied emitted additions)
+watch(() => props.connections, () => updateReferences(), { deep: true })
 </script>
 
 <template>
-  <div ref="carbonref" id="BifrostCarbon" :class="carbon.id + ' ' + carbon.class" class="border">
+  <div ref="carbonref" class="bifrost-carbon border" :class="[carbon.id, carbon.class]" role="group"
+    :data-carbon-id="carbon.id" :aria-label="carbon.id">
     <!-- Horizontal Left Side (outputs) -->
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
       @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'output', index })" />
@@ -219,48 +216,50 @@ function clickCarbonHandle(node: NewNode) {
 
 <style>
 html.bifrost-dragging {
-  pointer-events: none;
+  /* Keep pointer events but disable selection so user can still interact with other UI if needed */
+  user-select: none;
+  cursor: grabbing;
 }
 
-#BifrostCarbon {
+.bifrost-carbon {
   position: absolute;
-  top: 0px;
-  left: 0px;
-
-  transform: translate3d(v-bind(xFromBoardBounds),
-      v-bind(yFromBoardBounds));
+  top: 0;
+  left: 0;
   z-index: 1;
-
   display: grid;
   grid-template-columns: auto 1fr auto;
   justify-items: center;
   align-items: center;
-
   background: var(--accent);
   color: var(--accent-120);
   border-radius: var(--radius);
   border-color: var(--accent-100);
   opacity: 1;
+
+  /* transform: translate3d(v-bind(xFromBoardBounds),
+      v-bind(yFromBoardBounds)); */
+  transition: opacity .15s ease;
 }
 
-#BifrostCarbon.recently-born {
+.bifrost-carbon.recently-born {
   opacity: 0;
 }
 
-#BifrostCarbon #BifrostCore {
+.bifrost-carbon #BifrostCore {
   display: grid;
   grid-template-rows: auto 1fr auto;
 }
 
-#BifrostCarbon #BifrostCore p {
+.bifrost-carbon #BifrostCore p {
   line-height: 1;
+  margin: 0;
 }
 
-#BifrostCarbon #BifrostCore #BifrostCarbonEdges {
+.bifrost-carbon #BifrostCore #BifrostCarbonEdges {
   flex-direction: row;
 }
 
-#BifrostCarbon #BifrostCore #BifrostCarbonContent {
+.bifrost-carbon #BifrostCore #BifrostCarbonContent {
   display: flex;
   justify-content: center;
   align-items: center;
