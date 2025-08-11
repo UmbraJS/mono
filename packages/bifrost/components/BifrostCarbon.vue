@@ -196,11 +196,17 @@ watch(() => props.connections, () => updateReferences(), { deep: true })
     <!-- Horizontal Left Side (outputs) -->
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
       @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'output', index })" />
-    <BifrostCarbonVerticalHooks ref="sources" :carbon="carbon" @clickCarbonHandle="clickCarbonHandle">
+    <div id="BifrostCore">
+      <!-- Vertical Top (sources) -->
+      <BifrostCarbonHooks ref="sources" :carbon="carbon" type="source"
+        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'source', index })" />
       <div id="BifrostCarbonContent" ref="dragHandle">
         <p><strong>{{ title }}</strong></p>
       </div>
-    </BifrostCarbonVerticalHooks>
+      <!-- Vertical Bottom (sinks) -->
+      <BifrostCarbonHooks ref="sinks" :carbon="carbon" type="sink"
+        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'sink', index })" />
+    </div>
     <!-- Horizontal Right Side (inputs) -->
     <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
       @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'input', index })" />
@@ -208,6 +214,11 @@ watch(() => props.connections, () => updateReferences(), { deep: true })
 </template>
 
 <style>
+#BifrostCore {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
 html.bifrost-dragging {
   /* Keep pointer events but disable selection so user can still interact with other UI if needed */
   user-select: none;
