@@ -84,3 +84,5 @@ export interface Hook {
    */
   type: HookType
 }
+
+export interface NewNode { id: string; index: number; type: HookType }

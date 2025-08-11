@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, shallowRef, computed, inject, watch, nextTick, type Ref } from 'vue'
-import type { CarbonObject, BifrostFiberConnections, HookType } from '../types'
-import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
+import type { CarbonObject, BifrostFiberConnections, HookType, NewNode } from '../types'
+import BifrostCarbonHooks from './BifrostCarbonHooks/BifrostCarbonHooks.vue'
+import BifrostCarbonVerticalHooks from './BifrostCarbonHooks/BifrostCarbonVerticalHooks.vue'
 import { hooks } from '../data/index'
 import { useMouse } from '@vueuse/core'
 import { generateId } from '../utils/id'
@@ -151,8 +152,6 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
   return isFrom || isTo
 }
 
-interface NewNode { id: string; index: number; type: HookType }
-
 function moveElement(id: string) {
   const element = document.querySelector(`.${CSS.escape(id)}`)
   element?.classList.remove(RECENT_CLASS)
@@ -197,17 +196,11 @@ watch(() => props.connections, () => updateReferences(), { deep: true })
     <!-- Horizontal Left Side (outputs) -->
     <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
       @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'output', index })" />
-    <div id="BifrostCore">
-      <!-- Vertical Top (sources) -->
-      <BifrostCarbonHooks ref="sources" :carbon="carbon" type="source"
-        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'source', index })" />
+    <BifrostCarbonVerticalHooks ref="sources" :carbon="carbon" @clickCarbonHandle="clickCarbonHandle">
       <div id="BifrostCarbonContent" ref="dragHandle">
         <p><strong>{{ title }}</strong></p>
       </div>
-      <!-- Vertical Bottom (sinks) -->
-      <BifrostCarbonHooks ref="sinks" :carbon="carbon" type="sink"
-        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'sink', index })" />
-    </div>
+    </BifrostCarbonVerticalHooks>
     <!-- Horizontal Right Side (inputs) -->
     <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
       @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'input', index })" />
@@ -243,11 +236,6 @@ html.bifrost-dragging {
 
 .bifrost-carbon.recently-born {
   opacity: 0;
-}
-
-.bifrost-carbon #BifrostCore {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
 }
 
 .bifrost-carbon #BifrostCore p {

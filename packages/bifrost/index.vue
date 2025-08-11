@@ -33,6 +33,7 @@ function onAddCarbon(carbon: CarbonObject) {
 
 function onAddConnection(connection: BifrostFiberConnections) {
   connections.value.push(connection)
+  console.log('Adding connection:', connection, connections.value)
 }
 
 function functionRef(el: BifrostCarbonType, index: number) {
