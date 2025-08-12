@@ -52,5 +52,6 @@ function storeRef(el: any, index: number) {
   flex-direction: column;
   gap: var(--space-1);
   height: 100%;
+  flex-direction: row;
 }
 </style>

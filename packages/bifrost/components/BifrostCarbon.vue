@@ -68,9 +68,7 @@ onMounted(() => {
   })[0]
 })
 
-onBeforeUnmount(() => {
-  draggableInstance?.kill()
-})
+onBeforeUnmount(() => draggableInstance?.kill())
 
 // ---------------------------
 // Fiber Update (throttled)
@@ -81,6 +79,7 @@ function doUpdateFibers() {
     connection.component?.update()
   })
 }
+
 function scheduleUpdateFibers() {
   if (fiberUpdateScheduled) return
   fiberUpdateScheduled = true
@@ -202,11 +201,6 @@ watch(() => props.connections, () => updateReferences(), { deep: true })
 </template>
 
 <style>
-#BifrostCore {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
-
 html.bifrost-dragging {
   user-select: none;
   cursor: grabbing;
@@ -233,21 +227,17 @@ html.bifrost-dragging {
   opacity: 0;
 }
 
-.bifrost-carbon #BifrostCore p {
-  line-height: 1;
-  margin: 0;
-}
-
-.bifrost-carbon #BifrostCore #BifrostCarbonEdges {
-  flex-direction: row;
-}
-
-.bifrost-carbon #BifrostCore #BifrostCarbonContent {
+#BifrostCarbonContent {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: var(--space-1);
   border-radius: var(--radius);
   min-width: var(--space-6);
+}
+
+#BifrostCarbonContent p {
+  line-height: 1;
+  margin: 0;
 }
 </style>
