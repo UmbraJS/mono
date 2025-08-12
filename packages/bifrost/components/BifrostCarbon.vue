@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, shallowRef, computed, inject, watch, nextTick, type Ref } from 'vue'
 import type { CarbonObject, BifrostFiberConnections, HookType, NewNode } from '../types'
-import BifrostCarbonHooks from './BifrostCarbonHooks/BifrostCarbonHooks.vue'
 import BifrostCarbonVerticalHooks from './BifrostCarbonHooks/BifrostCarbonVerticalHooks.vue'
+import BifrostCarbonHorizontalHooks from './BifrostCarbonHooks/BifrostCarbonHorizontalHooks.vue'
 import { hooks } from '../data/index'
 import { useMouse } from '@vueuse/core'
 import { generateId } from '../utils/id'
@@ -15,7 +15,6 @@ import { Draggable } from 'gsap/Draggable'
 // ---------------------------
 const RECENT_CLASS = 'recently-born'
 const DRAGGING_CLASS = 'bifrost-dragging'
-
 
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
@@ -33,10 +32,9 @@ const emit = defineEmits<{
 
 const carbonref = ref<HTMLDivElement>()
 const dragHandle = ref<HTMLDivElement>()
-const inputs = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
-const outputs = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
-const sources = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
-const sinks = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
+
+const horizontalHooks = shallowRef<InstanceType<typeof BifrostCarbonHorizontalHooks>>()
+const verticalHooks = shallowRef<InstanceType<typeof BifrostCarbonVerticalHooks>>()
 
 // Will hold the Draggable instance for cleanup
 // Draggable.create returns an array of Draggable instances (untyped here to avoid gsap type coupling)
@@ -50,7 +48,7 @@ function updateReferences() {
   })
 }
 
-defineExpose({ inputs, outputs, sources, sinks, updateReferences })
+defineExpose({ horizontalHooks, verticalHooks, updateReferences })
 
 // We only work with connections related to this carbon
 const relatedConnections = computed(() => props.connections.filter(isRelatedConnection))
@@ -193,23 +191,13 @@ watch(() => props.connections, () => updateReferences(), { deep: true })
 <template>
   <div ref="carbonref" class="bifrost-carbon border" :class="[carbon.id, carbon.class]" role="group"
     :data-carbon-id="carbon.id" :aria-label="carbon.id">
-    <!-- Horizontal Left Side (outputs) -->
-    <BifrostCarbonHooks ref="outputs" :carbon="carbon" type="output"
-      @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'output', index })" />
-    <div id="BifrostCore">
-      <!-- Vertical Top (sources) -->
-      <BifrostCarbonHooks ref="sources" :carbon="carbon" type="source"
-        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'source', index })" />
-      <div id="BifrostCarbonContent" ref="dragHandle">
-        <p><strong>{{ title }}</strong></p>
-      </div>
-      <!-- Vertical Bottom (sinks) -->
-      <BifrostCarbonHooks ref="sinks" :carbon="carbon" type="sink"
-        @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'sink', index })" />
-    </div>
-    <!-- Horizontal Right Side (inputs) -->
-    <BifrostCarbonHooks ref="inputs" :carbon="carbon" type="input"
-      @hookMouseDown="(index: number) => clickCarbonHandle({ id: carbon.id, type: 'input', index })" />
+    <BifrostCarbonHorizontalHooks ref="horizontalHooks" :carbon="carbon" @clickCarbonHandle="clickCarbonHandle">
+      <BifrostCarbonVerticalHooks ref="verticalHooks" :carbon="carbon" @clickCarbonHandle="clickCarbonHandle">
+        <div id="BifrostCarbonContent" ref="dragHandle">
+          <p><strong>{{ title }}</strong></p>
+        </div>
+      </BifrostCarbonVerticalHooks>
+    </BifrostCarbonHorizontalHooks>
   </div>
 </template>
 
@@ -220,7 +208,6 @@ watch(() => props.connections, () => updateReferences(), { deep: true })
 }
 
 html.bifrost-dragging {
-  /* Keep pointer events but disable selection so user can still interact with other UI if needed */
   user-select: none;
   cursor: grabbing;
 }
@@ -239,9 +226,6 @@ html.bifrost-dragging {
   border-radius: var(--radius);
   border-color: var(--accent-100);
   opacity: 1;
-
-  /* transform: translate3d(v-bind(xFromBoardBounds),
-      v-bind(yFromBoardBounds)); */
   transition: opacity .15s ease;
 }
 

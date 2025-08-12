@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CarbonObject, NewNode } from '../../types'
 import BifrostCarbonHooks from './BifrostCarbonHooks.vue'
+import { shallowRef } from 'vue'
 
 defineProps<{
   carbon: CarbonObject
@@ -9,6 +10,11 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'clickCarbonHandle', carbon: NewNode): void
 }>()
+
+const sources = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
+const sinks = shallowRef<InstanceType<typeof BifrostCarbonHooks>>()
+
+defineExpose({ sources, sinks })
 </script>
 
 <template>
