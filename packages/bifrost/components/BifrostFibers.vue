@@ -1,12 +1,22 @@
 <script setup lang="ts">
-import type { BifrostFiberConnections } from '../types'
+import type { BifrostFiberConnections, CarbonObject } from '../types'
 import BifrostFiber from './BifrostFiber.vue'
+import { computed } from 'vue'
 
 type FiberType = InstanceType<typeof BifrostFiber>
 
-defineProps<{
+const { connections, carbons } = defineProps<{
   connections: BifrostFiberConnections[]
+  carbons: CarbonObject[]
 }>()
+
+function getRelatedCarbons(connection: BifrostFiberConnections) {
+  return {
+    start: carbons.find(c => c.id === connection.start.carbon),
+    end: carbons.find(c => c.id === connection.end.carbon)
+  }
+
+}
 </script>
 
 <template>
@@ -17,6 +27,7 @@ defineProps<{
         : connection.start.component?.horizontalHooks?.inputs?.hooks[connection.start.hook]" :fiber-end="connection.type === 'source-sink'
           ? connection.end.component?.verticalHooks?.sinks?.hooks[connection.end.hook]
           : connection.end.component?.horizontalHooks?.outputs?.hooks[connection.end.hook]"
-      :orientation="connection.type === 'source-sink' ? 'vertical' : 'horizontal'" />
+      :orientation="connection.type === 'source-sink' ? 'vertical' : 'horizontal'"
+      :start-state="getRelatedCarbons(connection).start?.state" :end-state="getRelatedCarbons(connection).end?.state" />
   </div>
 </template>

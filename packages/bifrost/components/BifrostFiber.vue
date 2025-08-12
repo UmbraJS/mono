@@ -2,26 +2,35 @@
 import { defineProps, onMounted, defineExpose, inject, type Ref, watch, nextTick } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { useBifrostFiber } from '../composables/useBifrostFiber'
+import type { CarbonState } from '../types'
 
-interface FiberProps {
+
+const {
+  fiberStart,
+  fiberEnd,
+  orientation,
+  startState = [],
+  endState = []
+} = defineProps<{
   /** Starting element of the fiber */
   fiberStart?: HTMLDivElement
   /** Ending element of the fiber */
   fiberEnd?: HTMLDivElement
   /** Orientation of the fiber path (horizontal | vertical) */
   orientation?: 'horizontal' | 'vertical'
-}
+  startState?: CarbonState[]
+  endState?: CarbonState[]
+}>()
 
-const props = defineProps<FiberProps>()
 // Provided in BifrostBoard.vue as a ref<HTMLDivElement>()
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
 // Initialize with current value (may be undefined until mounted)
 const fiber = useBifrostFiber({
   board: boardRef?.value,
-  fiberStart: props.fiberStart,
-  fiberEnd: props.fiberEnd,
-  orientation: props.orientation
+  fiberStart,
+  fiberEnd,
+  orientation,
 })
 
 // When the board ref becomes available later, trigger an update
@@ -39,7 +48,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.setElement(e)" id="BifrostFiber">
+  <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.setElement(e)" id="BifrostFiber"
+    :class="[...startState, ...endState]">
     <div v-if="false" id="BifrostFiberDebug">
       <p>orientation: {{ orientation }}</p>
       <p>flipped: {{ fiber.renderFlipped.value }}</p>
@@ -55,6 +65,12 @@ onMounted(() => {
 #BifrostFiber {
   position: absolute;
   z-index: 0;
+  opacity: 1;
+  transition: opacity .15s ease;
+}
+
+#BifrostFiber.born {
+  opacity: 0;
 }
 
 #BifrostFiberDebug {

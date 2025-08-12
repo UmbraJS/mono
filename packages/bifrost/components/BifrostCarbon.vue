@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, shallowRef, computed, inject, watch, nextTick, type Ref } from 'vue'
-import type { CarbonObject, BifrostFiberConnections, HookType, NewNode } from '../types'
+import type { CarbonObject, BifrostFiberConnections, HookType, NewNode, CarbonState } from '../types'
 import BifrostCarbonVerticalHooks from './BifrostCarbonHooks/BifrostCarbonVerticalHooks.vue'
 import BifrostCarbonHorizontalHooks from './BifrostCarbonHooks/BifrostCarbonHorizontalHooks.vue'
 import { hooks } from '../data/index'
@@ -13,7 +13,6 @@ import { Draggable } from 'gsap/Draggable'
 // ---------------------------
 // Constants & Utilities
 // ---------------------------
-const RECENT_CLASS = 'recently-born'
 const DRAGGING_CLASS = 'bifrost-dragging'
 
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
@@ -28,6 +27,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'add-carbon', carbon: CarbonObject): void
   (e: 'add-connection', connection: BifrostFiberConnections): void
+  (e: "change-carbon", props: {
+    id: string
+    state: CarbonState[]
+  }): void
 }>()
 
 const carbonref = ref<HTMLDivElement>()
@@ -115,7 +118,6 @@ function createCarbonFromNode(newNode: NewNode) {
     component: undefined,
     connections: [newNode.id],
     state: ['born'],
-    class: RECENT_CLASS,
     hooks
   })
   addConnection(newNode.id, childId, newNode.type, newNode.index)
@@ -151,7 +153,7 @@ function isRelatedConnection(connection: BifrostFiberConnections) {
 
 function moveElement(id: string) {
   const element = document.querySelector(`.${CSS.escape(id)}`)
-  element?.classList.remove(RECENT_CLASS)
+  emit("change-carbon", { id, state: ['idle'] })
   if (!element) return
   gsap.to(element, {
     x: xFromBoardBounds.value,
@@ -188,7 +190,7 @@ watch(() => props.connections, () => updateReferences(), { deep: true })
 </script>
 
 <template>
-  <div ref="carbonref" class="bifrost-carbon border" :class="[carbon.id, carbon.class]" role="group"
+  <div ref="carbonref" class="bifrost-carbon border" :class="[carbon.id, carbon.state]" role="group"
     :data-carbon-id="carbon.id" :aria-label="carbon.id">
     <BifrostCarbonHorizontalHooks ref="horizontalHooks" :carbon="carbon" @clickCarbonHandle="clickCarbonHandle">
       <BifrostCarbonVerticalHooks ref="verticalHooks" :carbon="carbon" @clickCarbonHandle="clickCarbonHandle">
@@ -223,7 +225,7 @@ html.bifrost-dragging {
   transition: opacity .15s ease;
 }
 
-.bifrost-carbon.recently-born {
+.bifrost-carbon.born {
   opacity: 0;
 }
 

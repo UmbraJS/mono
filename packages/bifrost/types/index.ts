@@ -38,6 +38,8 @@ export interface BifrostFiberConnections {
   }
 }
 
+export type CarbonState = "born" | "moving" | "idle"
+
 /**
  * Represents a carbon component in the Bifrost system.
  * Carbon components are nodes that can be connected via fiber connections.
@@ -51,7 +53,7 @@ export interface CarbonObject {
   position: [number, number]
   /** Array of connection IDs that this carbon is part of */
   connections: string[]
-  state: ("born" | "moving" | "idle")[]
+  state: CarbonState[]
   /** Array of hook points available on this carbon */
   hooks: Hook[]
   class?: string

@@ -4,7 +4,7 @@ import BifrostBoard from './components/BifrostBoard.vue'
 import BifrostCarbon from './components/BifrostCarbon.vue'
 import BifrostFibers from './components/BifrostFibers.vue'
 import { AddButton } from '@nobel/core'
-import type { CarbonObject, BifrostFiberConnections } from './types'
+import type { CarbonObject, BifrostFiberConnections, CarbonState } from './types'
 import { generateId } from './utils/id'
 import { hooks } from './data/index'
 
@@ -36,6 +36,16 @@ function onAddConnection(connection: BifrostFiberConnections) {
   console.log('Adding connection:', connection, connections.value)
 }
 
+function changeCarbon(props: {
+  id: string
+  state: CarbonState[]
+}) {
+  const index = carbons.value.findIndex(c => c.id === props.id)
+  if (index === -1) return
+  carbons.value[index] = { ...carbons.value[index], state: props.state }
+  console.log('Changing carbon:', index, props.id, carbons.value)
+}
+
 function functionRef(el: BifrostCarbonType, index: number) {
   if (!el) return
   carbons.value[index].component = el
@@ -47,8 +57,9 @@ function functionRef(el: BifrostCarbonType, index: number) {
     <AddButton @click="addCarbon" />
     <BifrostCarbon v-for="(carbon, index) in carbons" :key="carbon.id"
       :ref="(e) => functionRef(e as BifrostCarbonType, index)" :carbon="carbon" :carbons="carbons"
-      :connections="connections" @add-carbon="onAddCarbon" @add-connection="onAddConnection" />
-    <BifrostFibers :connections="connections" />
+      :connections="connections" @add-carbon="onAddCarbon" @add-connection="onAddConnection"
+      @change-carbon="changeCarbon" />
+    <BifrostFibers :connections="connections" :carbons="carbons" />
   </BifrostBoard>
 </template>
 
