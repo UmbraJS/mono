@@ -17,7 +17,7 @@ const DRAGGING_CLASS = 'bifrost-dragging'
 
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
-const title = 'Carbon Node'
+const title = 'Carbon Joint'
 const props = defineProps<{
   carbon: CarbonObject
   carbons: CarbonObject[] // Provided by parent (read-only from this component perspective)
