@@ -45,9 +45,7 @@ const validateProp = (attribute: string, value: string) => {
 }
 
 export const validateProps = (type: string, props?: Record<string, any>) => {
-  if (!props) {
-    return {}
-  }
+  if (!props) return {}
   props = Object.fromEntries(
     Object.entries(props).filter(([name, value]) => {
       const isValid = validateProp(name, value)

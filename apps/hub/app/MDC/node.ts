@@ -53,7 +53,7 @@ export function nodeChildren(node: VNode | MDCElement) {
 
 /**
  * Calculate text content of a virtual node
- * @param node Virtuel node from Vue virtual DOM
+ * @param node Virtual node from Vue virtual DOM
  * @returns text content of given node
  */
 export function nodeTextContent(node: VNode | MDCNode): string {
