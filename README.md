@@ -9,10 +9,11 @@ A flexible, type-safe theme management library that creates semantic color syste
 - **🎯 Simple** - Single function call to generate complete theme systems
 - **💪 Flexible** - Extensible primitives for building custom theming logic
 - **🔒 Type-safe** - Full TypeScript support with intelligent autocompletion
-- **♿ Accessible** - Built-in APCA color contrast compliance and readability scoring
-- **🎨 Semantic** - Color relationships that work across light/dark themes automatically
-- **⚡ Performant** - Optimized color generation and CSS variable management
+- **♿ Accessible** - Built-in APCA colour contrast compliance and readability scoring
+- **🎨 Semantic** - Colour relationships that work across light/dark themes automatically
+- **⚡ Performant** - Optimized colour generation and CSS variable management
 - **🌊 Tailwind Ready** - CSS variables work directly with Tailwind CSS v4
+- **🌊 Radix Colors Compatible** - Maps perfectly onto the radix colors system
 - **🔬 Future-ready** - Uses APCA contrast algorithm (the future WCAG 3.0 standard)
 
 UmbraJS creates semantic color themes by defining relationships between background, foreground, and accent colors. This approach ensures consistent readability and enables easy theme switching, automatic dark/light mode generation, and scalable color systems that grow with your application.

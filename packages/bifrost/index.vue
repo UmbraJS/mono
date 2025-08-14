@@ -33,7 +33,16 @@ function onAddCarbon(carbon: CarbonObject) {
 
 function onAddConnection(connection: BifrostFiberConnections) {
   connections.value.push(connection)
-  console.log('Adding connection:', connection, connections.value)
+  // set the connected carbons connected hooks to active
+  const startCarbon = carbons.value.find(c => c.id === connection.start.carbon)
+  const endCarbon = carbons.value.find(c => c.id === connection.end.carbon)
+  if (startCarbon) {
+    startCarbon.hooks[connection.start.hook].active = true
+  }
+  if (endCarbon) {
+    console.log("hooks: ", { endCarbonHooks: endCarbon.hooks, connectionEndHook: connection.end.hook })
+    endCarbon.hooks[connection.end.hook].active = true
+  }
 }
 
 function changeCarbon(props: {
@@ -43,7 +52,6 @@ function changeCarbon(props: {
   const index = carbons.value.findIndex(c => c.id === props.id)
   if (index === -1) return
   carbons.value[index] = { ...carbons.value[index], state: props.state }
-  console.log('Changing carbon:', index, props.id, carbons.value)
 }
 
 function functionRef(el: BifrostCarbonType, index: number) {

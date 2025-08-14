@@ -26,10 +26,10 @@ function storeRef(el: any, index: number) {
 </script>
 
 <template>
-  <div id="BifrostCarbonEdges">
+  <div id="BifrostCarbonEdges" :class="type === 'source' || type === 'sink' ? 'vertical' : 'horizontal'">
     <div v-for="hook in carbonHooks" :key="hook.index" :ref="(e: any) => storeRef(e, hook.index)" id="BifrostCarbonHook"
-      @click="emit('hookClick', hook.index)" @mousedown="emit('hookMouseDown', hook.index)"
-      @mouseup="emit('hookMouseUp', hook.index)"></div>
+      :class="{ active: hook.active }" @click="emit('hookClick', hook.index)"
+      @mousedown="emit('hookMouseDown', hook.index)" @mouseup="emit('hookMouseUp', hook.index)"></div>
   </div>
 </template>
 
@@ -52,6 +52,13 @@ function storeRef(el: any, index: number) {
   flex-direction: column;
   gap: var(--space-1);
   height: 100%;
+}
+
+#BifrostCarbonEdges.vertical {
   flex-direction: row;
+}
+
+#BifrostCarbonEdges.horizontal {
+  flex-direction: column;
 }
 </style>

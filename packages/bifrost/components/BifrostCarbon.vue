@@ -159,7 +159,7 @@ function moveElement(id: string) {
     x: xFromBoardBounds.value,
     y: yFromBoardBounds.value,
     duration: 0,
-    ease: 'power1.out'
+    ease: 'power1.out',
   })
   scheduleUpdateFibers()
 }
