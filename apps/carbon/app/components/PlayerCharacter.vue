@@ -19,9 +19,10 @@ const maxHealth = computed(() => {
 <template>
   <section class="character" :class="{ reverse }">
     <header id="Party">
-      <CharacterModal v-for="character in characters" :key="character.id" :character="character">
+      <CharacterModal v-for="(character, index) in characters" :key="character.id" :character="character">
         <div id="CharacterAvatarWrapper"
-          class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus">
+          class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
+          :class="{ TankCharacter: index === 0 }">
           <NuxtImg v-if="character.image" id="CharacterImage" :src="character.image.default" alt="Character Image"
             placeholder />
         </div>
@@ -44,10 +45,6 @@ const maxHealth = computed(() => {
 </template>
 
 <style>
-#Characters {
-  background-color: red;
-}
-
 #CharacterAvatarWrapper {
   position: relative;
   width: 100%;

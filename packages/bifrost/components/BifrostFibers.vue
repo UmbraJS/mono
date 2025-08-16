@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { BifrostFiberConnections, CarbonObject } from '../types'
 import BifrostFiber from './BifrostFiber.vue'
-import { computed } from 'vue'
 
 type FiberType = InstanceType<typeof BifrostFiber>
 
@@ -15,7 +14,6 @@ function getRelatedCarbons(connection: BifrostFiberConnections) {
     start: carbons.find(c => c.id === connection.start.carbon),
     end: carbons.find(c => c.id === connection.end.carbon)
   }
-
 }
 </script>
 

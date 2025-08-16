@@ -317,6 +317,9 @@ importers:
       '@iconify/vue':
         specifier: 'catalog:'
         version: 4.3.0(vue@3.5.18(typescript@5.9.2))
+      '@nobel/bifrost':
+        specifier: workspace:*
+        version: link:../../packages/bifrost
       '@nobel/core':
         specifier: workspace:*
         version: link:../../packages/nobel

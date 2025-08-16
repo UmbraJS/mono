@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
 import type { SimCard } from '../../../types/card'
+import { useTemplateRef } from 'vue';
+import { BifrostFiber } from '@nobel/bifrost'
 
 const {
   card,
@@ -47,14 +49,27 @@ const punchValue = computed(() => {
   }
   // return cooldown.value < 5 ? 20 : 0
 })
+
+const cooldownRef = useTemplateRef('cooldownRef')
+
+const fiberTarget = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  const tankCharacters = document.querySelectorAll('.TankCharacter')
+  console.log('rex lol', tankCharacters)
+  fiberTarget.value = tankCharacters[0] as HTMLElement
+})
 </script>
 
 <template>
   <div :class="{ slow, haste, frozen }">
+    <BifrostFiber v-if="cooldownRef && fiberTarget" :fiber-start="cooldownRef" :fiber-end="fiberTarget"
+      orientation="vertical" />
+
     <div id="BoxingGlove" :class="card.owner.board">
       <h3>{{ punchValue.percentage }}</h3>
     </div>
-    <div v-if="cooldown > 0" class="cooldown" :class="{
+    <div v-if="cooldown > 0" ref="cooldownRef" class="cooldown" :class="{
       'base-warning': slow, 'base-success': haste, 'base-info': frozen
     }" :style="{ height: `${cooldown}%` }" />
     <div v-if="debug" class="debugPanel">

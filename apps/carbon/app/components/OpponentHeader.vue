@@ -22,5 +22,3 @@ defineProps<{
       :modal-button="true" /> -->
   </PartyBoard>
 </template>
-
-<style></style>

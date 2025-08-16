@@ -17,6 +17,7 @@
   "dependencies": {
     "@iconify/vue": "catalog:",
     "@nobel/core": "workspace:*",
+    "@nobel/bifrost": "workspace:*",
     "@nuxt/eslint": "catalog:",
     "@nuxthub/core": "catalog:",
     "@pinia/nuxt": "catalog:",
