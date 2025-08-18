@@ -3,7 +3,7 @@ import { useRef } from './useRef'
 
 /** Options accepted by useBifrostFiber */
 interface UseBifrostFiberOptions {
-  board?: HTMLDivElement
+  board?: HTMLElement
   fiberStart?: HTMLDivElement
   fiberEnd?: HTMLDivElement
   /** Optional initial stroke width */
@@ -102,7 +102,7 @@ export interface FiberPath {
  */
 export interface CarbonFrost {
   /** The container board element */
-  board?: HTMLDivElement
+  board?: HTMLElement
   /** The output (start) element */
   fiberStart?: HTMLDivElement
   /** The input (end) element */

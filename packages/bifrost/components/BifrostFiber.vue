@@ -27,7 +27,7 @@ const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
 // Initialize with current value (may be undefined until mounted)
 const fiber = useBifrostFiber({
-  board: boardRef?.value,
+  board: boardRef?.value || document.body,
   fiberStart,
   fiberEnd,
   orientation,

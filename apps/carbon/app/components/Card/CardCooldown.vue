@@ -56,16 +56,17 @@ const fiberTarget = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   const tankCharacters = document.querySelectorAll('.TankCharacter')
-  console.log('rex lol', tankCharacters)
+  console.log('rex lol', cooldownRef.value, tankCharacters[0])
   fiberTarget.value = tankCharacters[0] as HTMLElement
 })
 </script>
 
 <template>
-  <div :class="{ slow, haste, frozen }">
-    <BifrostFiber v-if="cooldownRef && fiberTarget" :fiber-start="cooldownRef" :fiber-end="fiberTarget"
-      orientation="vertical" />
-
+  <div id="CardCooldown" :class="{ slow, haste, frozen }">
+    <Teleport to="body">
+      <BifrostFiber v-if="cooldownRef && fiberTarget" :fiber-start="cooldownRef" :fiber-end="fiberTarget"
+        orientation="vertical" />
+    </Teleport>
     <div id="BoxingGlove" :class="card.owner.board">
       <h3>{{ punchValue.percentage }}</h3>
     </div>
@@ -94,6 +95,10 @@ onMounted(() => {
 </template>
 
 <style>
+html body #BifrostFiber {
+  z-index: 99 !important;
+}
+
 #BoxingGlove {
   position: absolute;
   background-color: var(--base-80);
