@@ -62,7 +62,8 @@ function functionRef(el: BifrostCarbonType, index: number) {
 useSpline({
   start: carbons.value[0]?.component?.$el,
   end: carbons.value[1]?.component?.$el,
-  stroke: 2
+  angle: 90,
+  stroke: 2,
 })
 </script>
 
