@@ -9,15 +9,21 @@ interface HMRImportMeta extends ImportMeta {
 }
 import { generateSpline, cubic } from "../utils/spline";
 
-/** Options accepted by useBifrostFiber */
-interface UseBifrostFiberOptions {
+/** Options accepted by useSpline */
+interface UseSplineOptions {
+  /** Starting element */
   start?: HTMLDivElement
+  /** Ending element */
   end?: HTMLDivElement
+  /** Control angle for spline handle */
   angle?: number
+  /** Stroke width */
   stroke?: number
+  /** Automatically re-render when start/end refs change (default true) */
+  auto?: boolean
 }
 
-export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFiberOptions) {
+export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseSplineOptions) {
   // Keep track of the SVG we create so we can clean it up (avoids HMR duplicates)
   const svgId = ref<string | null>(null)
 
@@ -28,6 +34,7 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
     svg.style.left = "0";
     svg.style.width = "100%";
     svg.style.height = "100%";
+    svg.style.pointerEvents = "none"; // Prevents interfering with other elements
     svg.setAttribute("id", id);
     document.body.appendChild(svg);
 
@@ -57,7 +64,7 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
       curve: cubic.with({ startTension: 6, endTension: 6 }),
       pins: [
         { x: startCenter.x, y: startCenter.y, angle, length: 10 },
-        { x: endCenter.x, y: endCenter.y, angle, length: 10 }
+        { x: endCenter.x, y: endCenter.y, angle: -angle, length: 10 }
       ],
     })
 
@@ -75,6 +82,14 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
     createSVG(generatedID)
     adjustSVGPath(generatedID)
   })
+
+  // // Recalculate when inputs move (consumer can still call update manually)
+  // if (auto) {
+  //   const interval = setInterval(() => {
+  //     if (svgId.value) adjustSVGPath(svgId.value)
+  //   }, 100) // lightweight polling; can be replaced with observers later
+  //   onBeforeUnmount(() => clearInterval(interval))
+  // }
 
   function getCenter(element: HTMLDivElement): { x: number; y: number } {
     const box = element.getBoundingClientRect()
@@ -100,7 +115,9 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
     })
   }
 
-  return {
-    update: adjustSVGPath
+  function update() {
+    if (svgId.value) adjustSVGPath(svgId.value)
   }
+
+  return { update }
 }

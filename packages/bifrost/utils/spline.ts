@@ -55,7 +55,7 @@ export interface GenerateSplineResult {
 
 export function generateSpline({ pins, curve, includePins = true }: GenerateSplineArgs): GenerateSplineResult {
   const [start, end] = pins; // tuple ensures two pins
-  const sDir = vecFromAngle(start.angle);
+  const sDir = vecFromAngle(-start.angle);
   const eDir = vecFromAngle(end.angle);
 
   const p0 = { x: start.x, y: start.y };

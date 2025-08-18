@@ -54,17 +54,11 @@ function changeCarbon(props: {
   if (index === -1) return
   carbons.value[index] = { ...carbons.value[index], state: props.state }
 }
+
 function functionRef(el: BifrostCarbonType, index: number) {
   if (!el) return
   carbons.value[index].component = el
 }
-
-useSpline({
-  start: carbons.value[0]?.component?.$el,
-  end: carbons.value[1]?.component?.$el,
-  angle: 90,
-  stroke: 2,
-})
 </script>
 
 <template>

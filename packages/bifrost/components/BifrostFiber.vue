@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps, onMounted, defineExpose, inject, type Ref, watch, nextTick } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
-import { useBifrostFiber } from '../composables/useBifrostFiber'
+import { useSpline } from '../composables/useSpline'
 import type { CarbonState } from '../types'
 
 
@@ -26,39 +26,30 @@ const {
 const boardRef = inject<Ref<HTMLDivElement | undefined>>('BifrostBoard')
 
 // Initialize with current value (may be undefined until mounted)
-const fiber = useBifrostFiber({
-  board: boardRef?.value || document.body,
-  fiberStart,
-  fiberEnd,
-  orientation,
+// New lightweight spline composable replaces legacy geometry system.
+const spline = useSpline({
+  start: fiberStart,
+  end: fiberEnd,
+  angle: orientation === 'horizontal' ? 0 : 90,
+  stroke: 4,
 })
 
 // When the board ref becomes available later, trigger an update
 if (boardRef) {
-  watch(boardRef, (el) => el && nextTick(() => fiber.updateLayout()))
+  watch(boardRef, (el) => el && nextTick(() => spline.update()))
 }
 
-defineExpose({ update: fiber.updateLayout })
+defineExpose({ update: spline.update })
 
 onMounted(() => {
-  nextTick(() => fiber.updateLayout())
+  nextTick(() => spline.update())
   if (!boardRef) return
-  useResizeObserver(boardRef, () => fiber.updateLayout())
+  useResizeObserver(boardRef, () => spline.update())
 })
 </script>
 
 <template>
-  <div :ref="(e: any) => e && e.tagName === 'DIV' && fiber.setElement(e)" id="BifrostFiber"
-    :class="[...startState, ...endState]">
-    <div v-if="false" id="BifrostFiberDebug">
-      <p>orientation: {{ orientation }}</p>
-      <p>flipped: {{ fiber.renderFlipped.value }}</p>
-      <p>reversed: {{ fiber.path.value.reversed }}</p>
-    </div>
-    <svg :width="fiber.path.value.width" :height="fiber.path.value.height" xmlns="http://www.w3.org/2000/svg">
-      <path :d="fiber.pathD.value" :stroke-width="fiber.path.value.stroke" stroke-linecap="round" />
-    </svg>
-  </div>
+  <div id="BifrostFiber" :class="[...startState, ...endState]" />
 </template>
 
 <style scoped>

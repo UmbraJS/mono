@@ -221,7 +221,7 @@ html.bifrost-dragging {
   color: var(--accent-120);
   border-radius: var(--radius);
   border-color: var(--accent-100);
-  opacity: 1;
+  opacity: 0.5;
   transition: opacity .15s ease;
 }
 
