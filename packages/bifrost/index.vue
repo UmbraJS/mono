@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useSpline } from './composables/useSpline'
 import BifrostBoard from './components/BifrostBoard.vue'
 import BifrostCarbon from './components/BifrostCarbon.vue'
 import BifrostFibers from './components/BifrostFibers.vue'
@@ -53,11 +54,16 @@ function changeCarbon(props: {
   if (index === -1) return
   carbons.value[index] = { ...carbons.value[index], state: props.state }
 }
-
 function functionRef(el: BifrostCarbonType, index: number) {
   if (!el) return
   carbons.value[index].component = el
 }
+
+useSpline({
+  start: carbons.value[0]?.component?.$el,
+  end: carbons.value[1]?.component?.$el,
+  stroke: 2
+})
 </script>
 
 <template>
