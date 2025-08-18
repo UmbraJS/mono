@@ -21,18 +21,13 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
   // Keep track of the SVG we create so we can clean it up (avoids HMR duplicates)
   const svgId = ref<string | null>(null)
 
-  function placeSVG(svgID: string) {
-    const svg = document.getElementById(svgID);
-    if (!svg) return
-    svg.setAttribute("width", "100%");
-    svg.setAttribute("height", "100%");
-  }
-
   function createSVG(id: string) {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.style.position = "absolute";
     svg.style.top = "0";
     svg.style.left = "0";
+    svg.style.width = "100%";
+    svg.style.height = "100%";
     svg.setAttribute("id", id);
     document.body.appendChild(svg);
 
@@ -51,18 +46,8 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
     svg.appendChild(spline);
   }
 
-  onMounted(() => {
-    // If an SVG from a previous hot-reload still exists, remove it first
-    if (svgId.value) {
-      document.getElementById(svgId.value)?.remove()
-    }
-
-    const generatedID = `bifrost-spline-${crypto.randomUUID()}`
-    svgId.value = generatedID
-    createSVG(generatedID)
-    placeSVG(generatedID)
-
-    const svgElement = document.getElementById(generatedID)
+  function adjustSVGPath(id: string) {
+    const svgElement = document.getElementById(id)
     const splinePath = svgElement?.querySelector('#spline')
 
     const startCenter = start ? getCenter(start) : { x: 0, y: 0 }
@@ -77,6 +62,18 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
     })
 
     splinePath?.setAttribute('d', spline.d)
+  }
+
+  onMounted(() => {
+    // If an SVG from a previous hot-reload still exists, remove it first
+    if (svgId.value) {
+      document.getElementById(svgId.value)?.remove()
+    }
+
+    const generatedID = `bifrost-spline-${crypto.randomUUID()}`
+    svgId.value = generatedID
+    createSVG(generatedID)
+    adjustSVGPath(generatedID)
   })
 
   function getCenter(element: HTMLDivElement): { x: number; y: number } {
@@ -101,5 +98,9 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseBifrostFi
       document.getElementById(svgId.value)?.remove()
       svgId.value = null
     })
+  }
+
+  return {
+    update: adjustSVGPath
   }
 }
