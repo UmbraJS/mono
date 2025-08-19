@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSpline } from '../composables/useSpline'
 import type { CarbonState } from '../types'
-
+import { computed } from 'vue'
 
 const {
   fiberStart,
@@ -20,13 +20,17 @@ const {
   endState?: CarbonState[]
 }>()
 
+const state = computed(() => {
+  return [...startState, ...endState].join(' ')
+})
+
 // Initialize with current value (may be undefined until mounted)
 // New lightweight spline composable replaces legacy geometry system.
 const spline = useSpline({
   start: fiberStart,
   end: fiberEnd,
   angle: orientation === 'horizontal' ? 0 : 90,
-  svgClass: [...startState, ...endState].join(' '),
+  svgClass: state,
   stroke: 4,
 })
 
@@ -34,17 +38,20 @@ defineExpose({ update: spline.update })
 </script>
 
 <template>
-  <div id="BifrostFiber" :class="[...startState, ...endState]" />
+  <div id="BifrostFiber" :class="state" />
 </template>
 
-<style scoped>
+<style>
 #BifrostFiber {
   display: none;
+}
+
+.BifrostSpline {
   opacity: 1;
   transition: opacity .15s ease;
 }
 
-#BifrostFiber.born {
+.BifrostSpline.born {
   opacity: 0;
 }
 </style>

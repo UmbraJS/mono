@@ -1,4 +1,4 @@
-import { onMounted, onBeforeUnmount, ref, watchEffect } from 'vue'
+import { onMounted, onBeforeUnmount, ref, watchEffect, type Ref, watch } from 'vue'
 
 // Minimal HMR type (avoids needing a global env definition here)
 interface ImportMetaHot { dispose(cb: () => void): void }
@@ -11,7 +11,7 @@ interface UseSplineOptions {
   end?: HTMLDivElement
   angle?: number
   stroke?: number
-  svgClass?: string
+  svgClass?: Ref<string>
 }
 
 export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: UseSplineOptions) {
@@ -79,7 +79,8 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: Us
     if (!svgId.value) return
     const svgElement = document.getElementById(svgId.value)
     if (!svgElement) return
-    if (svgClass !== undefined) svgElement.setAttribute('class', svgClass)
+    console.log("SVG 2 class updated:", svgClass?.value)
+    if (svgClass?.value !== undefined) svgElement.setAttribute('class', "BifrostSpline " + svgClass.value)
   }
 
   function getCenter(element: HTMLDivElement): { x: number; y: number } {
@@ -114,6 +115,14 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: Us
   })
 
   watchEffect(() => { if (created.value) applyClasses() })
+  if (svgClass) {
+    watch(svgClass, (value) => {
+      if (created.value) {
+        applyClasses()
+        console.log("SVG class updated:", value)
+      }
+    })
+  }
 
   onBeforeUnmount(() => {
     window.removeEventListener('scroll', scheduleRecalc)
