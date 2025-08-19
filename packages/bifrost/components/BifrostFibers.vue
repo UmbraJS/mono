@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { BifrostFiberConnections, CarbonObject } from '../types'
 import BifrostFiber from './BifrostFiber.vue'
+import { watch } from 'vue'
 
 type FiberType = InstanceType<typeof BifrostFiber>
 
@@ -10,6 +11,7 @@ const { connections, carbons } = defineProps<{
 }>()
 
 function getRelatedCarbons(connection: BifrostFiberConnections) {
+  console.log("carbons", carbons.find(c => c.id === connection.start.carbon)?.state)
   return {
     start: carbons.find(c => c.id === connection.start.carbon),
     end: carbons.find(c => c.id === connection.end.carbon)

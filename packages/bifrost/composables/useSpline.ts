@@ -1,40 +1,42 @@
-import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref, watchEffect } from 'vue'
 
 // Minimal HMR type (avoids needing a global env definition here)
-interface ImportMetaHot {
-  dispose(cb: () => void): void
-}
-interface HMRImportMeta extends ImportMeta {
-  hot?: ImportMetaHot
-}
+interface ImportMetaHot { dispose(cb: () => void): void }
+interface HMRImportMeta extends ImportMeta { hot?: ImportMetaHot }
 import { generateSpline, cubic } from "../utils/spline";
 
 /** Options accepted by useSpline */
 interface UseSplineOptions {
-  /** Starting element */
   start?: HTMLDivElement
-  /** Ending element */
   end?: HTMLDivElement
-  /** Control angle for spline handle */
   angle?: number
-  /** Stroke width */
   stroke?: number
-  /** Automatically re-render when start/end refs change (default true) */
-  auto?: boolean
+  svgClass?: string
 }
 
-export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseSplineOptions) {
-  // Keep track of the SVG we create so we can clean it up (avoids HMR duplicates)
+export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: UseSplineOptions) {
   const svgId = ref<string | null>(null)
+  const created = ref(false)
+
+  /** Ensure SVG covers entire scrollable document */
+  function resizeSVG(svg: SVGSVGElement) {
+    const docEl = document.documentElement
+    const width = Math.max(docEl.scrollWidth, docEl.clientWidth)
+    const height = Math.max(docEl.scrollHeight, docEl.clientHeight)
+    svg.style.width = width + 'px'
+    svg.style.height = height + 'px'
+    svg.setAttribute('width', width.toString())
+    svg.setAttribute('height', height.toString())
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
+  }
 
   function createSVG(id: string) {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.style.position = "absolute";
+    svg.style.position = "absolute"; // anchored at document origin
     svg.style.top = "0";
     svg.style.left = "0";
-    svg.style.width = "100%";
-    svg.style.height = "100%";
-    svg.style.pointerEvents = "none"; // Prevents interfering with other elements
+    resizeSVG(svg) // initial sizing to full document
+    svg.style.pointerEvents = "none";
     svg.setAttribute("id", id);
     document.body.appendChild(svg);
 
@@ -51,6 +53,8 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseSplineOpt
     spline.setAttribute("stroke-width", stroke.toString());
     spline.setAttribute("fill", "none");
     svg.appendChild(spline);
+    created.value = true
+    applyClasses()
   }
 
   function adjustSVGPath(id: string) {
@@ -71,45 +75,61 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseSplineOpt
     splinePath?.setAttribute('d', spline.d)
   }
 
-  onMounted(() => {
-    // If an SVG from a previous hot-reload still exists, remove it first
-    if (svgId.value) {
-      document.getElementById(svgId.value)?.remove()
-    }
+  function applyClasses() {
+    if (!svgId.value) return
+    const svgElement = document.getElementById(svgId.value)
+    if (!svgElement) return
+    if (svgClass !== undefined) svgElement.setAttribute('class', svgClass)
+  }
 
+  function getCenter(element: HTMLDivElement): { x: number; y: number } {
+    const box = element.getBoundingClientRect()
+    const x = box.left + window.scrollX + box.width / 2
+    const y = box.top + window.scrollY + box.height / 2
+    return { x, y }
+  }
+
+  // rAF throttled scroll/resize handler
+  let pending = false
+  function scheduleRecalc() {
+    if (pending) return
+    pending = true
+    requestAnimationFrame(() => {
+      pending = false
+      if (!svgId.value) return
+      const svg = document.getElementById(svgId.value) as SVGSVGElement | null
+      if (svg) resizeSVG(svg)
+      update()
+    })
+  }
+
+  onMounted(() => {
+    if (svgId.value) document.getElementById(svgId.value)?.remove()
     const generatedID = `bifrost-spline-${crypto.randomUUID()}`
     svgId.value = generatedID
     createSVG(generatedID)
     adjustSVGPath(generatedID)
+    window.addEventListener('scroll', scheduleRecalc, { passive: true })
+    window.addEventListener('resize', scheduleRecalc)
   })
 
-  // // Recalculate when inputs move (consumer can still call update manually)
-  // if (auto) {
-  //   const interval = setInterval(() => {
-  //     if (svgId.value) adjustSVGPath(svgId.value)
-  //   }, 100) // lightweight polling; can be replaced with observers later
-  //   onBeforeUnmount(() => clearInterval(interval))
-  // }
-
-  function getCenter(element: HTMLDivElement): { x: number; y: number } {
-    const box = element.getBoundingClientRect()
-    const x = box.left + box.width / 2
-    const y = box.top + box.height / 2
-    return { x, y }
-  }
+  watchEffect(() => { if (created.value) applyClasses() })
 
   onBeforeUnmount(() => {
+    window.removeEventListener('scroll', scheduleRecalc)
+    window.removeEventListener('resize', scheduleRecalc)
     if (svgId.value) {
       document.getElementById(svgId.value)?.remove()
       svgId.value = null
     }
   })
 
-  // Handle Vite / HMR dispose (component may be replaced without unmount lifecycle firing for detached nodes)
   const _importMeta = import.meta as HMRImportMeta
   if (_importMeta.hot) {
     _importMeta.hot.dispose(() => {
       if (!svgId.value) return
+      window.removeEventListener('scroll', scheduleRecalc)
+      window.removeEventListener('resize', scheduleRecalc)
       document.getElementById(svgId.value)?.remove()
       svgId.value = null
     })
@@ -117,7 +137,8 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5 }: UseSplineOpt
 
   function update() {
     if (svgId.value) adjustSVGPath(svgId.value)
+    applyClasses()
   }
 
-  return { update }
+  return { update, applyClasses, id: svgId }
 }
