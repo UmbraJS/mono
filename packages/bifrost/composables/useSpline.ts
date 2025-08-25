@@ -5,6 +5,8 @@ interface ImportMetaHot { dispose(cb: () => void): void }
 interface HMRImportMeta extends ImportMeta { hot?: ImportMetaHot }
 import { generateSpline, cubic } from "../utils/spline";
 
+const BOARD_ID = 'BifrostBoard'
+
 /** Options accepted by useSpline */
 export interface UseSplineOptions {
   start?: HTMLElement | null
@@ -21,11 +23,17 @@ export interface UseSplineReturn {
   update: () => void
   applyClasses: () => void
   id: Ref<string | null>
+  board: Ref<HTMLElement | null>
+  start: Ref<{ x: number; y: number } | null>
+  end: Ref<{ x: number; y: number } | null>
 }
 
 export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, startTension, endTension, color }: UseSplineOptions): UseSplineReturn {
   const svgId = ref<string | null>(null)
   const created = ref(false)
+  const board = ref<HTMLElement | null>(null)
+  const startCoords = ref<{ x: number; y: number } | null>(null)
+  const endCoords = ref<{ x: number; y: number } | null>(null)
 
   /** Ensure SVG covers entire scrollable document */
   function resizeSVG(svg: SVGSVGElement) {
@@ -39,6 +47,23 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`)
   }
 
+  /** Ensure a shared BifrostBoard container exists and return it */
+  function ensureBoard(): HTMLDivElement {
+    let el = document.getElementById(BOARD_ID) as HTMLDivElement | null
+    if (!el) {
+      el = document.createElement('div')
+      el.id = BOARD_ID
+      // Same styles as the original SVG container intent
+      el.style.position = 'absolute'
+      el.style.top = '0'
+      el.style.left = '0'
+      el.style.zIndex = '2'
+      el.style.pointerEvents = 'none'
+      document.body.appendChild(el)
+    }
+    return el
+  }
+
   function createSVG(id: string) {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.style.position = "absolute"; // anchored at document origin
@@ -48,7 +73,9 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
     resizeSVG(svg) // initial sizing to full document
     svg.style.pointerEvents = "none";
     svg.setAttribute("id", id);
-    document.body.appendChild(svg);
+    const container = ensureBoard()
+    board.value = container
+    container.appendChild(svg);
 
     const pins = document.createElementNS("http://www.w3.org/2000/svg", "path");
     pins.setAttribute("id", "pins");
@@ -73,6 +100,9 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
 
     const startCenter = start ? getCenter(start) : { x: 0, y: 0 }
     const endCenter = end ? getCenter(end) : { x: 150, y: 150 }
+
+    startCoords.value = startCenter
+    endCoords.value = endCenter
 
     const spline = generateSpline({
       curve: cubic.with({ startTension, endTension }),
@@ -116,6 +146,8 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
   if (svgId.value) document.getElementById(svgId.value)?.remove()
   const generatedID = `bifrost-spline-${crypto.randomUUID()}`
   svgId.value = generatedID
+  // Ensure board exists before creating the SVG
+  board.value = ensureBoard()
   createSVG(generatedID)
   adjustSVGPath(generatedID)
   window.addEventListener('scroll', scheduleRecalc, { passive: true })
@@ -133,9 +165,14 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
     window.removeEventListener('scroll', scheduleRecalc)
     window.removeEventListener('resize', scheduleRecalc)
     if (svgId.value) {
-      document.getElementById(svgId.value)?.remove()
+      const el = document.getElementById(svgId.value)
+      el?.remove()
       svgId.value = null
     }
+    // Keep the board for other elements; optionally clean up if empty
+    const container = document.getElementById(BOARD_ID)
+    if (container && container.childElementCount === 0) container.remove()
+    board.value = null
   })
 
   const _importMeta = import.meta as HMRImportMeta
@@ -145,7 +182,10 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
       window.removeEventListener('scroll', scheduleRecalc)
       window.removeEventListener('resize', scheduleRecalc)
       document.getElementById(svgId.value)?.remove()
+      const container = document.getElementById(BOARD_ID)
+      if (container && container.childElementCount === 0) container.remove()
       svgId.value = null
+      board.value = null
     })
   }
 
@@ -154,5 +194,5 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
     applyClasses()
   }
 
-  return { update, applyClasses, id: svgId }
+  return { update, applyClasses, id: svgId, board, start: startCoords, end: endCoords }
 }
