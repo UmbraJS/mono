@@ -3,6 +3,7 @@ export { default as BifrostCarbon } from './components/BifrostCarbon.vue'
 export { default as BifrostFiber } from './components/BifrostFiber.vue'
 export { default as BifrostFibers } from './components/BifrostFibers.vue'
 export { default as BifrostCarbonHooks } from './components/BifrostCarbonHooks/BifrostCarbonHooks.vue'
-
+export { useSpline } from './composables/useSpline.ts'
+export type { UseSplineOptions, UseSplineReturn } from './composables/useSpline.ts'
 // Export types
 export * from './types'

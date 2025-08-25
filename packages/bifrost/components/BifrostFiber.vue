@@ -11,9 +11,9 @@ const {
   endState = []
 } = defineProps<{
   /** Starting element of the fiber */
-  fiberStart?: HTMLDivElement
+  fiberStart?: HTMLDivElement | null
   /** Ending element of the fiber */
-  fiberEnd?: HTMLDivElement
+  fiberEnd?: HTMLDivElement | null
   /** Orientation of the fiber path (horizontal | vertical) */
   orientation?: 'horizontal' | 'vertical'
   startState?: CarbonState[]
@@ -32,6 +32,8 @@ const spline = useSpline({
   angle: orientation === 'horizontal' ? 0 : 90,
   svgClass: state,
   stroke: 4,
+  startTension: 15,
+  endTension: 15
 })
 
 defineExpose({ update: spline.update })

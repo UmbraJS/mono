@@ -1,4 +1,4 @@
-import { onMounted, onBeforeUnmount, ref, watchEffect, type Ref, watch } from 'vue'
+import { onBeforeUnmount, ref, watchEffect, type Ref, watch } from 'vue'
 
 // Minimal HMR type (avoids needing a global env definition here)
 interface ImportMetaHot { dispose(cb: () => void): void }
@@ -6,15 +6,24 @@ interface HMRImportMeta extends ImportMeta { hot?: ImportMetaHot }
 import { generateSpline, cubic } from "../utils/spline";
 
 /** Options accepted by useSpline */
-interface UseSplineOptions {
-  start?: HTMLDivElement
-  end?: HTMLDivElement
+export interface UseSplineOptions {
+  start?: HTMLElement | null
+  end?: HTMLElement | null
   angle?: number
   stroke?: number
   svgClass?: Ref<string>
+  startTension?: number
+  endTension?: number
+  color?: string
 }
 
-export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: UseSplineOptions) {
+export interface UseSplineReturn {
+  update: () => void
+  applyClasses: () => void
+  id: Ref<string | null>
+}
+
+export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, startTension, endTension, color }: UseSplineOptions): UseSplineReturn {
   const svgId = ref<string | null>(null)
   const created = ref(false)
 
@@ -35,6 +44,7 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: Us
     svg.style.position = "absolute"; // anchored at document origin
     svg.style.top = "0";
     svg.style.left = "0";
+    svg.style.zIndex = "2"
     resizeSVG(svg) // initial sizing to full document
     svg.style.pointerEvents = "none";
     svg.setAttribute("id", id);
@@ -42,14 +52,14 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: Us
 
     const pins = document.createElementNS("http://www.w3.org/2000/svg", "path");
     pins.setAttribute("id", "pins");
-    pins.setAttribute("stroke", "#ff0000");
+    pins.setAttribute("stroke", color || "#ffffff");
     pins.setAttribute("stroke-width", stroke.toString());
     pins.setAttribute("fill", "none");
     svg.appendChild(pins);
 
     const spline = document.createElementNS("http://www.w3.org/2000/svg", "path");
     spline.setAttribute("id", "spline");
-    spline.setAttribute("stroke", "#00ff00");
+    spline.setAttribute("stroke", color || "#ffffff");
     spline.setAttribute("stroke-width", stroke.toString());
     spline.setAttribute("fill", "none");
     svg.appendChild(spline);
@@ -65,7 +75,7 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: Us
     const endCenter = end ? getCenter(end) : { x: 150, y: 150 }
 
     const spline = generateSpline({
-      curve: cubic.with({ startTension: 6, endTension: 6 }),
+      curve: cubic.with({ startTension, endTension }),
       pins: [
         { x: startCenter.x, y: startCenter.y, angle, length: 10 },
         { x: endCenter.x, y: endCenter.y, angle: -angle, length: 10 }
@@ -79,11 +89,10 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: Us
     if (!svgId.value) return
     const svgElement = document.getElementById(svgId.value)
     if (!svgElement) return
-    console.log("SVG 2 class updated:", svgClass?.value)
     if (svgClass?.value !== undefined) svgElement.setAttribute('class', "BifrostSpline " + svgClass.value)
   }
 
-  function getCenter(element: HTMLDivElement): { x: number; y: number } {
+  function getCenter(element: HTMLElement): { x: number; y: number } {
     const box = element.getBoundingClientRect()
     const x = box.left + window.scrollX + box.width / 2
     const y = box.top + window.scrollY + box.height / 2
@@ -104,23 +113,19 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass }: Us
     })
   }
 
-  onMounted(() => {
-    if (svgId.value) document.getElementById(svgId.value)?.remove()
-    const generatedID = `bifrost-spline-${crypto.randomUUID()}`
-    svgId.value = generatedID
-    createSVG(generatedID)
-    adjustSVGPath(generatedID)
-    window.addEventListener('scroll', scheduleRecalc, { passive: true })
-    window.addEventListener('resize', scheduleRecalc)
-  })
+  if (svgId.value) document.getElementById(svgId.value)?.remove()
+  const generatedID = `bifrost-spline-${crypto.randomUUID()}`
+  svgId.value = generatedID
+  createSVG(generatedID)
+  adjustSVGPath(generatedID)
+  window.addEventListener('scroll', scheduleRecalc, { passive: true })
+  window.addEventListener('resize', scheduleRecalc)
 
   watchEffect(() => { if (created.value) applyClasses() })
   if (svgClass) {
-    watch(svgClass, (value) => {
-      if (created.value) {
-        applyClasses()
-        console.log("SVG class updated:", value)
-      }
+    watch(svgClass, () => {
+      if (!created.value) return
+      applyClasses()
     })
   }
 

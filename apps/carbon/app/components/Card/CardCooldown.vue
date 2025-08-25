@@ -2,7 +2,12 @@
 import { useCooldown } from '../../composables/useCooldown'
 import type { SimCard } from '../../../types/card'
 import { useTemplateRef } from 'vue';
-import { BifrostFiber } from '@nobel/bifrost'
+import { useSpline } from '@nobel/bifrost'
+import { gsap } from 'gsap'
+import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
+
+gsap.registerPlugin(DrawSVGPlugin);
+
 
 const {
   card,
@@ -47,7 +52,6 @@ const punchValue = computed(() => {
     tracked: trackPercentage(20, percentage),
     percentage: percentage
   }
-  // return cooldown.value < 5 ? 20 : 0
 })
 
 const cooldownRef = useTemplateRef('cooldownRef')
@@ -56,17 +60,43 @@ const fiberTarget = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   const tankCharacters = document.querySelectorAll('.TankCharacter')
-  console.log('rex lol', cooldownRef.value, tankCharacters[0])
   fiberTarget.value = tankCharacters[0] as HTMLElement
+
+  const spline = useSpline({
+    start: cooldownRef.value,
+    end: fiberTarget.value,
+    startTension: 22,
+    endTension: 22,
+    angle: 90,
+    stroke: 4,
+  })
+
+  console.log('spline', spline)
+  if (!spline.id.value) return
+
+  const splineSVG = document.getElementById(spline.id.value)
+  const splinePath = splineSVG?.querySelector('#spline')
+
+  console.log('splineSVG', splinePath)
+
+  if (!splinePath) return
+
+  // gsap.fromTo(
+  //   splinePath,
+  //   { drawSVG: '0% 10%' },
+  //   {
+  //     duration: 0.4,
+  //     drawSVG: '90% 100%',
+  //     ease: 'power1.inOut',
+  //     repeat: -1,
+  //     yoyo: true,
+  //   }
+  // );
 })
 </script>
 
-<template>
+<template>s
   <div id="CardCooldown" :class="{ slow, haste, frozen }">
-    <Teleport to="body">
-      <BifrostFiber v-if="cooldownRef && fiberTarget" :fiber-start="cooldownRef" :fiber-end="fiberTarget"
-        orientation="vertical" />
-    </Teleport>
     <div id="BoxingGlove" :class="card.owner.board">
       <h3>{{ punchValue.percentage }}</h3>
     </div>

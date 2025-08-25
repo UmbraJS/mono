@@ -57,12 +57,12 @@ const c: BifrostFiberConnections[] = [
     id: 'con-1',
     component: undefined,
     type: 'output-input',
-    output: {
+    start: {
       carbon: '1',
       hook: 0,
       component: undefined
     },
-    input: {
+    end: {
       carbon: '2',
       hook: 0,
       component: undefined
@@ -72,12 +72,12 @@ const c: BifrostFiberConnections[] = [
     id: 'con-2',
     component: undefined,
     type: 'output-input',
-    output: {
+    start: {
       carbon: '2',
       hook: 1,
       component: undefined
     },
-    input: {
+    end: {
       carbon: '3',
       hook: 0,
       component: undefined
@@ -87,12 +87,12 @@ const c: BifrostFiberConnections[] = [
     id: 'con-3',
     component: undefined,
     type: 'output-input',
-    output: {
+    start: {
       carbon: '2',
       hook: 0,
       component: undefined
     },
-    input: {
+    end: {
       carbon: '5',
       hook: 0,
       component: undefined
@@ -102,12 +102,12 @@ const c: BifrostFiberConnections[] = [
     id: 'con-4',
     component: undefined,
     type: 'output-input',
-    output: {
+    start: {
       carbon: '3',
       hook: 0,
       component: undefined
     },
-    input: {
+    end: {
       carbon: '4',
       hook: 0,
       component: undefined
@@ -121,6 +121,7 @@ const n: CarbonObject[] = [
     component: undefined,
     position: [100, 100],
     connections: ['con-1'],
+    state: ['idle'],
     hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
@@ -128,6 +129,7 @@ const n: CarbonObject[] = [
     component: undefined,
     position: [275, 275],
     connections: ['con-2', 'con-3'],
+    state: ['idle'],
     hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
@@ -135,6 +137,7 @@ const n: CarbonObject[] = [
     component: undefined,
     position: [450, 450],
     connections: ['con-4'],
+    state: ['idle'],
     hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
@@ -142,6 +145,7 @@ const n: CarbonObject[] = [
     component: undefined,
     position: [600, 600],
     connections: ['con-4'],
+    state: ['idle'],
     hooks: [input1, input2, output1, output2, source1, sink1]
   },
   {
@@ -149,6 +153,7 @@ const n: CarbonObject[] = [
     component: undefined,
     position: [500, 200],
     connections: ['con-3'],
+    state: ['idle'],
     hooks: [input1, input2, output1, output2, source1, sink1]
   }
 ]
