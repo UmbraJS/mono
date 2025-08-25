@@ -65,9 +65,6 @@ onMounted(() => {
   const spline = useSpline({
     start: cooldownRef.value,
     end: fiberTarget.value,
-    startTension: 22,
-    endTension: 22,
-    angle: 90,
     stroke: 4,
   })
 

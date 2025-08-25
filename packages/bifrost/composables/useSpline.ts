@@ -5,7 +5,7 @@ interface ImportMetaHot { dispose(cb: () => void): void }
 interface HMRImportMeta extends ImportMeta { hot?: ImportMetaHot }
 import { generateSpline, cubic } from "../utils/spline";
 
-const BOARD_ID = 'BifrostBoard'
+const BOARD_ID = 'BifrostSplineBoard'
 
 /** Options accepted by useSpline */
 export interface UseSplineOptions {
@@ -28,7 +28,7 @@ export interface UseSplineReturn {
   end: Ref<{ x: number; y: number } | null>
 }
 
-export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, startTension, endTension, color }: UseSplineOptions): UseSplineReturn {
+export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, startTension = 22, endTension = 22, color = "#ffffff" }: UseSplineOptions): UseSplineReturn {
   const svgId = ref<string | null>(null)
   const created = ref(false)
   const board = ref<HTMLElement | null>(null)
@@ -58,6 +58,8 @@ export function useSpline({ start, end, angle = 90, stroke = 1.5, svgClass, star
       el.style.top = '0'
       el.style.left = '0'
       el.style.zIndex = '2'
+      el.style.width = '100%'
+      el.style.height = '100%'
       el.style.pointerEvents = 'none'
       document.body.appendChild(el)
     }
