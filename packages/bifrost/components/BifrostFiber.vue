@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSpline } from '../composables/useSpline'
+import { useSplinePath } from '../composables/useSpline'
 import type { CarbonState } from '../types'
 import { computed } from 'vue'
 
@@ -26,17 +26,17 @@ const state = computed(() => {
 
 // Initialize with current value (may be undefined until mounted)
 // New lightweight spline composable replaces legacy geometry system.
-const spline = useSpline({
+const spline = useSplinePath({
   start: fiberStart,
   end: fiberEnd,
   angle: orientation === 'horizontal' ? 0 : 90,
-  svgClass: state,
+  // svgClass: state,
   stroke: 4,
   startTension: 15,
   endTension: 15
 })
 
-defineExpose({ update: spline.update })
+defineExpose({ update: spline.recalc })
 </script>
 
 <template>

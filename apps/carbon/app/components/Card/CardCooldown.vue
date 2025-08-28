@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
+import { useSplinesStore } from '@/stores/useSplinesStore'
 import type { SimCard } from '../../../types/card'
-import { useTemplateRef } from 'vue';
-import { useSpline } from '@nobel/bifrost'
 import { gsap } from 'gsap'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 
@@ -54,29 +53,23 @@ const punchValue = computed(() => {
   }
 })
 
-const cooldownRef = useTemplateRef('cooldownRef')
+const splinesStore = useSplinesStore()
 
-const fiberTarget = ref<HTMLElement | null>(null)
+function functionRef(el: HTMLElement | null) {
+  if (!el) return
+  splinesStore.addAttackSource(el);
+}
 
 onMounted(() => {
-  const tankCharacters = document.querySelectorAll('.TankCharacter')
-  fiberTarget.value = tankCharacters[0] as HTMLElement
+  // console.log('spline', spline)
+  // if (!spline.id.value) return
 
-  const spline = useSpline({
-    start: cooldownRef.value,
-    end: fiberTarget.value,
-    stroke: 4,
-  })
+  // const splineSVG = document.getElementById(spline.id.value)
+  // const splinePath = splineSVG?.querySelector('#spline')
 
-  console.log('spline', spline)
-  if (!spline.id.value) return
+  // console.log('splineSVG', splinePath)
 
-  const splineSVG = document.getElementById(spline.id.value)
-  const splinePath = splineSVG?.querySelector('#spline')
-
-  console.log('splineSVG', splinePath)
-
-  if (!splinePath) return
+  // if (!splinePath) return
 
   // gsap.fromTo(
   //   splinePath,
@@ -97,7 +90,7 @@ onMounted(() => {
     <div id="BoxingGlove" :class="card.owner.board">
       <h3>{{ punchValue.percentage }}</h3>
     </div>
-    <div v-if="cooldown > 0" ref="cooldownRef" class="cooldown" :class="{
+    <div v-if="cooldown > 0" :ref="(el) => functionRef(el as HTMLElement)" class="cooldown" :class="{
       'base-warning': slow, 'base-success': haste, 'base-info': frozen
     }" :style="{ height: `${cooldown}%` }" />
     <div v-if="debug" class="debugPanel">

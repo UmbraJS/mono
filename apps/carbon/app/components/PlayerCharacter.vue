@@ -14,13 +14,21 @@ const props = defineProps<{
 const maxHealth = computed(() => {
   return props.characters.reduce((total, character) => total + character.maxHealth, 0)
 })
+
+const splinesStore = useSplinesStore()
+
+function functionRef(el: HTMLElement | null) {
+  if (!el) return
+  if (splinesStore.tankCharacter) return
+  splinesStore.addTank(el);
+}
 </script>
 
 <template>
   <section class="character" :class="{ reverse }">
     <header id="Party">
       <CharacterModal v-for="(character, index) in characters" :key="character.id" :character="character">
-        <div id="CharacterAvatarWrapper"
+        <div id="CharacterAvatarWrapper" :ref="(el) => functionRef(el as HTMLElement)"
           class="border base-accent button buttonText buttonHover buttonActive buttonFocus focus"
           :class="{ TankCharacter: index === 0 }">
           <NuxtImg v-if="character.image" id="CharacterImage" :src="character.image.default" alt="Character Image"

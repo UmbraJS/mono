@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useSpline } from './composables/useSpline'
 import BifrostBoard from './components/BifrostBoard.vue'
 import BifrostCarbon from './components/BifrostCarbon.vue'
 import BifrostFibers from './components/BifrostFibers.vue'
