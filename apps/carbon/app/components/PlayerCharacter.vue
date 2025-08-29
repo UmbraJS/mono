@@ -11,16 +11,21 @@ const props = defineProps<{
   shield: number
 }>()
 
+const emit = defineEmits<{
+  (e: 'characterLoaded', value: HTMLElement): void
+}>()
+
 const maxHealth = computed(() => {
   return props.characters.reduce((total, character) => total + character.maxHealth, 0)
 })
 
-const splinesStore = useSplinesStore()
+// const splinesStore = useSplinesStore()
 
 function functionRef(el: HTMLElement | null) {
   if (!el) return
-  if (splinesStore.tankCharacter) return
-  splinesStore.addTank(el);
+  emit('characterLoaded', el);
+  // if (splinesStore.player.tankCharacter) return
+  // splinesStore.player.addTank(el);
 }
 </script>
 

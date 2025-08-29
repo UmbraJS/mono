@@ -3,7 +3,7 @@ import type { OutputChunk } from '../../utils/time/types';
 import { useAudio } from '../stores/useAudio'
 import { useSimulationInject } from '~/composables/useSimulationProvider'
 
-export function useCooldown(cardSimulation: OutputChunk[]) {
+export function useCooldown(cardSimulation: OutputChunk[], callback: () => void) {
   const audio = useAudio()
 
   const cooldown = ref(100)
@@ -41,6 +41,7 @@ export function useCooldown(cardSimulation: OutputChunk[]) {
       },
       onComplete: () => {
         audio.playPunchSound()
+        callback()
       },
     })
 

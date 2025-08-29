@@ -14,6 +14,18 @@ const playerTimeline = simulation.cardTimeline.player
 
 const maxUserSlots = computed(() => store.user.maxSlots)
 const maxBotSlots = computed(() => props.maxSlots)
+
+const splinesStore = useSplinesStore()
+
+function addOpponentAttackSource(el: HTMLElement | null) {
+  if (!el) return
+  splinesStore.addOpponentAttackSource(el);
+}
+
+function addPlayerAttackSource(el: HTMLElement | null) {
+  if (!el) return
+  splinesStore.addPlayerAttackSource(el);
+}
 </script>
 
 <template>
@@ -21,7 +33,9 @@ const maxBotSlots = computed(() => props.maxSlots)
     <CardBoard board="deck" :max-slots="maxBotSlots">
       <CardModal v-for="card in opponentTimeline" :key="card.id" :card="card">
         <CardHeader :card="card">
-          <CardCooldown :card="card" />
+          <CardCooldown :card="card" @function-ref="addOpponentAttackSource" @card-attack="() => {
+            splinesStore.attackCounter.opponent.push(1)
+          }" />
         </CardHeader>
       </CardModal>
     </CardBoard>
@@ -41,7 +55,9 @@ const maxBotSlots = computed(() => props.maxSlots)
     <CardBoard board="deck" :max-slots="maxUserSlots">
       <CardModal v-for="card in playerTimeline" :key="card.id" :card="card" :chunks="card.simulation.chunks">
         <CardHeader :card="card">
-          <CardCooldown :card="card" />
+          <CardCooldown :card="card" @function-ref="addPlayerAttackSource" @card-attack="() => {
+            splinesStore.attackCounter.player.push(1)
+          }" />
         </CardHeader>
       </CardModal>
     </CardBoard>

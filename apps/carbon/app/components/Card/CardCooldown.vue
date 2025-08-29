@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { useCooldown } from '../../composables/useCooldown'
-import { useSplinesStore } from '@/stores/useSplinesStore'
 import type { SimCard } from '../../../types/card'
 import { gsap } from 'gsap'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 
 gsap.registerPlugin(DrawSVGPlugin);
+
+const emit = defineEmits<{
+  (e: 'functionRef', el: HTMLElement): void
+  (e: 'cardAttack'): void
+}>()
 
 
 const {
@@ -22,7 +26,9 @@ const opacity = computed(() => {
   return simulation.time.value > 0 ? 1 : 0
 })
 
-const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(card.simulation.chunks)
+const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(card.simulation.chunks, () => {
+  emit('cardAttack')
+})
 
 /**
  * Returns a percentage value based on the provided min, max, and value.
@@ -53,43 +59,17 @@ const punchValue = computed(() => {
   }
 })
 
-const splinesStore = useSplinesStore()
-
 function functionRef(el: HTMLElement | null) {
   if (!el) return
-  splinesStore.addAttackSource(el);
+  emit('functionRef', el)
 }
-
-onMounted(() => {
-  // console.log('spline', spline)
-  // if (!spline.id.value) return
-
-  // const splineSVG = document.getElementById(spline.id.value)
-  // const splinePath = splineSVG?.querySelector('#spline')
-
-  // console.log('splineSVG', splinePath)
-
-  // if (!splinePath) return
-
-  // gsap.fromTo(
-  //   splinePath,
-  //   { drawSVG: '0% 10%' },
-  //   {
-  //     duration: 0.4,
-  //     drawSVG: '90% 100%',
-  //     ease: 'power1.inOut',
-  //     repeat: -1,
-  //     yoyo: true,
-  //   }
-  // );
-})
 </script>
 
 <template>s
   <div id="CardCooldown" :class="{ slow, haste, frozen }">
-    <div id="BoxingGlove" :class="card.owner.board">
+    <!-- <div id="BoxingGlove" :class="card.owner.board">
       <h3>{{ punchValue.percentage }}</h3>
-    </div>
+    </div> -->
     <div v-if="cooldown > 0" :ref="(el) => functionRef(el as HTMLElement)" class="cooldown" :class="{
       'base-warning': slow, 'base-success': haste, 'base-info': frozen
     }" :style="{ height: `${cooldown}%` }" />
@@ -125,7 +105,6 @@ html body #BifrostFiber {
   width: 100%;
   height: 150px;
   border-radius: var(--radius);
-  /* transition: .2s ease-in-out; */
 }
 
 #BoxingGlove.player {

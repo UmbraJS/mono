@@ -12,15 +12,21 @@ const splinesStore = useSplinesStore()
 </script>
 
 <template>
+  <h1>{{ splinesStore.attackCounter.opponent }}</h1>
   <NuxtRouteAnnouncer />
   <NuxtLoadingIndicator />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
 
-  <div v-if="splinesStore.tankCharacter" id="BifrostSplineBoard">
-    <MatchSpline v-for="splinePath in splinesStore.attackSource" :key="splinePath.id" :start="splinePath"
-      :end="splinesStore.tankCharacter" />
+  <div v-if="splinesStore.tankCharacter.opponent" id="BifrostSplineBoard">
+    <MatchSpline v-for="splinePath in splinesStore.attackSources.player" :key="splinePath.id" :start="splinePath"
+      :end="splinesStore.tankCharacter.opponent" :angle="90" owner="player" />
+  </div>
+
+  <div v-if="splinesStore.tankCharacter.player" id="BifrostSplineBoard">
+    <MatchSpline v-for="splinePath in splinesStore.attackSources.opponent" :key="splinePath.id" :start="splinePath"
+      :end="splinesStore.tankCharacter.player" :angle="-90" owner="opponent" />
   </div>
   <Toaster />
 </template>

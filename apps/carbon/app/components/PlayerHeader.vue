@@ -20,6 +20,13 @@ const theme = useUmbra()
 function inverseTheme() {
   theme.inverse()
 }
+
+const splinesStore = useSplinesStore()
+
+function functionRef(el: HTMLElement) {
+  if (splinesStore.tankCharacter.player) return
+  splinesStore.addTank('player', el);
+}
 </script>
 
 <template>
@@ -56,7 +63,8 @@ function inverseTheme() {
       </DrawerButton>
     </div>
 
-    <PlayerCharacter :characters="store.user.characters" :health="health" :shield="shield" :reverse="false" />
+    <PlayerCharacter :characters="store.user.characters" :health="health" :shield="shield" :reverse="false"
+      @character-loaded="functionRef" />
 
     <div class="location border">
       <ChipChipPassiveFinance />

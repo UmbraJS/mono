@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { useSplinePath } from '@nobel/bifrost'
+import type { OwnerBoard } from '~/../types/index'
 import { gsap } from 'gsap'
+import { storeToRefs } from 'pinia'
+
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 
 gsap.registerPlugin(DrawSVGPlugin);
 
-const { start, end } = defineProps<{
+const { start, end, angle } = defineProps<{
   start: HTMLElement
   end: HTMLElement
+  angle: number
+  owner: OwnerBoard
 }>()
 
-const spline = useSplinePath({
-  start: start,
-  end: end,
-  stroke: 4,
-})
+const splinesStore = useSplinesStore()
+const { attackCounter } = storeToRefs(splinesStore)
+
+const spline = useSplinePath({ start, end, stroke: 4, angle })
 
 const startCenter = spline.getCenter(start) || { x: 0, y: 0 }
 const endCenter = spline.getCenter(end) || { x: 0, y: 0 }
@@ -23,7 +27,7 @@ const StartPulse = ref<HTMLElement | null>(null)
 const EndPulse = ref<HTMLElement | null>(null)
 const SplinePath = ref<HTMLElement | null>(null)
 
-onMounted(() => {
+function sendDash() {
   if (!SplinePath.value) return
 
   const totalDuration = 0.4; // Total duration of the animation cycle in seconds
@@ -89,7 +93,13 @@ onMounted(() => {
     { scale: pulseSize, autoAlpha: 0, duration: shrinkDuration * 4 },
     'shrink'
   );
+}
+
+watch(() => attackCounter, () => {
+  sendDash()
 })
+
+onMounted(() => sendDash())
 </script>
 
 <template>
