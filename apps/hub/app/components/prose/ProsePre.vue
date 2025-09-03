@@ -1,5 +1,5 @@
 <template>
-  <pre :class="$props.class"><slot /></pre>
+  <pre id="ProsePre" :class="$props.class"><slot /></pre>
 </template>
 
 <script setup lang="ts">
@@ -32,6 +32,13 @@ defineProps({
 </script>
 
 <style>
+#ProsePre {
+  background-color: var(--base-10);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  overflow-x: auto;
+}
+
 pre code .line {
   display: block;
 }

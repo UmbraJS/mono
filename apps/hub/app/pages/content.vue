@@ -18,7 +18,7 @@ const defaultText = source.value
 </script>
 
 <template>
-  <div class="artickle">
+  <div class="article">
     <RichText :value="defaultText" @update:model-value="source = $event" />
 
     <div contenteditable="true" class="buttonHover buttonFocus focus rounded border">
@@ -31,7 +31,7 @@ const defaultText = source.value
 </template>
 
 <style lang="scss">
-.artickle {
+.article {
   margin-top: 200px;
 
   display: grid;

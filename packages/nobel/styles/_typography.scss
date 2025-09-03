@@ -26,6 +26,12 @@ html {
   font-size: clamp(13.5px, 0.8vw, 24px);
 }
 
+code span {
+  font-size: var(--paragraph);
+  font-weight: 500;
+  font-size: 15px !important;
+}
+
 body {
   line-height: 1.5;
 }
@@ -99,7 +105,8 @@ p,
 button,
 input::placeholder,
 .bodycopy,
-blockquote {
+blockquote,
+pre {
   font-size: var(--paragraph);
   font-weight: 700;
   line-height: 1.5;
