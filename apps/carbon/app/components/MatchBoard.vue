@@ -17,14 +17,14 @@ const maxBotSlots = computed(() => props.maxSlots)
 
 const splinesStore = useSplinesStore()
 
-function addOpponentAttackSource(el: HTMLElement | null) {
-  if (!el) return
-  splinesStore.addOpponentAttackSource(el);
+function addOpponentAttackSource({ id, element }: { id: string; element: HTMLElement | null }) {
+  if (!element) return
+  splinesStore.addOpponentAttackSource({ id, element });
 }
 
-function addPlayerAttackSource(el: HTMLElement | null) {
-  if (!el) return
-  splinesStore.addPlayerAttackSource(el);
+function addPlayerAttackSource({ id, element }: { id: string; element: HTMLElement | null }) {
+  if (!element) return
+  splinesStore.addPlayerAttackSource({ id, element });
 }
 </script>
 
@@ -33,9 +33,10 @@ function addPlayerAttackSource(el: HTMLElement | null) {
     <CardBoard board="deck" :max-slots="maxBotSlots">
       <CardModal v-for="card in opponentTimeline" :key="card.id" :card="card">
         <CardHeader :card="card">
-          <CardCooldown :card="card" @function-ref="addOpponentAttackSource" @card-attack="() => {
-            splinesStore.attackCounter.opponent.push(1)
-          }" />
+          <CardCooldown :card="card" @function-ref="(el) => addOpponentAttackSource({ id: card.id, element: el })"
+            @card-attack="() => {
+              splinesStore.attackCounter.opponent.push(card.id)
+            }" />
         </CardHeader>
       </CardModal>
     </CardBoard>
@@ -55,9 +56,10 @@ function addPlayerAttackSource(el: HTMLElement | null) {
     <CardBoard board="deck" :max-slots="maxUserSlots">
       <CardModal v-for="card in playerTimeline" :key="card.id" :card="card" :chunks="card.simulation.chunks">
         <CardHeader :card="card">
-          <CardCooldown :card="card" @function-ref="addPlayerAttackSource" @card-attack="() => {
-            splinesStore.attackCounter.player.push(1)
-          }" />
+          <CardCooldown :card="card" @function-ref="(el) => addPlayerAttackSource({ id: card.id, element: el })"
+            @card-attack="() => {
+              splinesStore.attackCounter.player.push(card.id)
+            }" />
         </CardHeader>
       </CardModal>
     </CardBoard>

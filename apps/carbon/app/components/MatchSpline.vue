@@ -8,8 +8,11 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 
 gsap.registerPlugin(DrawSVGPlugin);
 
-const { start, end, angle } = defineProps<{
-  start: HTMLElement
+const { start, end, angle, owner } = defineProps<{
+  start: {
+    element: HTMLElement
+    id: string
+  }
   end: HTMLElement
   angle: number
   owner: OwnerBoard
@@ -18,9 +21,9 @@ const { start, end, angle } = defineProps<{
 const splinesStore = useSplinesStore()
 const { attackCounter } = storeToRefs(splinesStore)
 
-const spline = useSplinePath({ start, end, stroke: 4, angle })
+const spline = useSplinePath({ start: start.element, end, stroke: 4, angle })
 
-const startCenter = spline.getCenter(start) || { x: 0, y: 0 }
+const startCenter = spline.getCenter(start.element) || { x: 0, y: 0 }
 const endCenter = spline.getCenter(end) || { x: 0, y: 0 }
 
 const StartPulse = ref<HTMLElement | null>(null)
@@ -95,8 +98,12 @@ function sendDash() {
   );
 }
 
-watch(() => attackCounter, () => {
-  sendDash()
+watch(attackCounter, (newVal) => {
+  const correctArray = newVal[owner]
+  const latestEntry = correctArray[correctArray.length - 1];
+  if (latestEntry === start.id) sendDash()
+}, {
+  deep: true
 })
 
 onMounted(() => sendDash())

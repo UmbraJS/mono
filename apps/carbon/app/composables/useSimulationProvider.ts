@@ -17,9 +17,7 @@ export function useSimulationProvider(props: {
   botCharacters: Character[],
 }) {
   const simulation = useSimulation(props)
-
   provide(simulationKey, simulation)
-
   return simulation
 }
 

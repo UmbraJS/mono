@@ -123,10 +123,13 @@ export default defineNuxtConfig({
     },
   },
 
-  // components: {
-  //   global: true,
-  //   dirs: ['./components/prose'],
-  // },
+  // Ensure Prose components are auto-registered with exact names (e.g. `ProseH1`)
+  components: {
+    global: true,
+    dirs: [
+      { path: './components/prose', pathPrefix: false },
+    ],
+  },
 
   content: {
     preview: {

@@ -12,22 +12,26 @@ export const useSplinesStore = defineStore('splines', () => {
 
 
   const attackSources = ref<{
-    player: HTMLElement[]
-    opponent: HTMLElement[]
+    player: {
+      id: string
+      element: HTMLElement
+    }[]
+    opponent: {
+      id: string
+      element: HTMLElement
+    }[]
   }>({
     player: [],
     opponent: []
   })
 
   const attackCounter = ref<{
-    player: number[]
-    opponent: number[]
+    player: string[]
+    opponent: string[]
   }>({
     player: [],
     opponent: []
   })
-
-
 
   function addTank(source: OwnerBoard, ref: HTMLElement) {
     tankCharacter.value = {
@@ -36,14 +40,26 @@ export const useSplinesStore = defineStore('splines', () => {
     }
   }
 
-  function addPlayerAttackSource(ref: HTMLElement) {
-    if (attackSources.value.player.includes(ref)) return
-    attackSources.value.player.push(ref)
+  function addPlayerAttackSource({
+    id,
+    element
+  }: {
+    id: string
+    element: HTMLElement
+  }) {
+    if (attackSources.value.player.find(source => source.id === id)) return
+    attackSources.value.player.push({ id, element })
   }
 
-  function addOpponentAttackSource(ref: HTMLElement) {
-    if (attackSources.value.opponent.includes(ref)) return
-    attackSources.value.opponent.push(ref)
+  function addOpponentAttackSource({
+    id,
+    element
+  }: {
+    id: string
+    element: HTMLElement
+  }) {
+    if (attackSources.value.opponent.find(source => source.id === id)) return
+    attackSources.value.opponent.push({ id, element })
   }
 
   return {

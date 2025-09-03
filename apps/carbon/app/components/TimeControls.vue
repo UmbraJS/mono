@@ -28,19 +28,28 @@ function setSpeed() {
   simulation.timeline.timeScale(timesSpeed.value)
 }
 
+function lowerSpeed() {
+  timesSpeed.value = timesSpeed.value - 0.1
+  if (timesSpeed.value < 0) timesSpeed.value = 1
+  simulation.timeline.timeScale(timesSpeed.value)
+}
+
 const timeInMinutesAndSeconds = computed(() => {
   const minutes = Math.floor(simulation.time.value / 60)
   const seconds = Math.floor(simulation.time.value % 60)
   if (minutes === 0) return `${seconds < 10 ? '0' : ''}${seconds}s`
   return `${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`
 })
+
+function floorTo1Decimal(value: number) {
+  return Math.floor(value * 10) / 10
+}
 </script>
 
 <template>
   <div id="ControlPanels">
     <div class="ControlPanel">
       <h3>
-        <Icon name="carbon:time" size="1.5rem" />
         {{ timeInMinutesAndSeconds }}
       </h3>
     </div>
@@ -59,7 +68,11 @@ const timeInMinutesAndSeconds = computed(() => {
       </Button>
 
       <Button @click="setSpeed">
-        <p>x {{ timesSpeed }}</p>
+        <p>x {{ floorTo1Decimal(timesSpeed) }}</p>
+      </Button>
+
+      <Button @click="lowerSpeed">
+        <p>x {{ floorTo1Decimal(Math.abs(timesSpeed)) }}</p>
       </Button>
     </div>
   </div>

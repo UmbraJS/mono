@@ -12,7 +12,6 @@ const splinesStore = useSplinesStore()
 </script>
 
 <template>
-  <h1>{{ splinesStore.attackCounter.opponent }}</h1>
   <NuxtRouteAnnouncer />
   <NuxtLoadingIndicator />
   <NuxtLayout>
