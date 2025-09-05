@@ -2,6 +2,8 @@
 import { onKeyStroke } from '@vueuse/core'
 import FrostLayer from '~/components/FrostLayer.vue'
 
+const { data: posts } = await useAsyncData('blog', () => queryCollection('blog').all())
+
 const theme = useUmbra()
 
 onMounted(() => {
@@ -38,13 +40,40 @@ onKeyStroke('Escape', () => {
       </header>
       <div class="content" />
       <div class="sidebar">
-        <p>Some default layout content shared across all pages</p>
+        <div id="BlogPostList">
+          <div id="BlogPostListHeader">
+            <p class="caption">Posts ({{ posts?.length }})</p>
+          </div>
+          <NuxtLink v-for="post in posts" id="BlogPostCard" :key="post.id" :to="post.path" class="" tabindex="0"
+            role="link" aria-label="Blog post card">
+            <h2>{{ post.title }}</h2>
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
+#BlogPostList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+#BlogPostListHeader {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-1);
+  background: var(--base-30);
+  border-radius: var(--radius);
+  color: var(--base-80);
+}
+
+#BlogPostCard {
+  font-size: 50px;
+}
+
 .inverted-theme {
   color: var(--base-120);
 }
@@ -54,7 +83,6 @@ onKeyStroke('Escape', () => {
   --sidebar-width: calc(100dvw / 3);
   position: relative;
   width: 100dvw;
-  background: red;
 }
 
 @media (max-width: 800px) {
@@ -64,17 +92,16 @@ onKeyStroke('Escape', () => {
 }
 
 .layout .content-layer {
-  position: relative;
-  z-index: 1;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
-  place-items: center;
+  align-items: center;
 
-  padding-bottom: var(--space-5);
-  background-color: var(--base-20);
-  border-radius: var(--radius);
+  position: relative;
+  z-index: 1;
+
+  background-color: var(--base);
+  border-top-right-radius: var(--radius);
 
   transform: translateY(0px) translateX(0px);
   transition: var(--slow);
@@ -82,10 +109,7 @@ onKeyStroke('Escape', () => {
 
 .layout .content-layer main.page {
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  place-items: center;
-  gap: var(--space-4);
 
   width: 80dvw;
   max-width: 1900px;

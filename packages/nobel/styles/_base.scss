@@ -96,13 +96,13 @@ a:hover {
 
 ::-moz-selection {
   /* Code for Firefox */
-  color: var(--accent-constrast);
+  color: var(--accent-text);
   background: var(--accent);
 }
 
 ::selection {
-  color: var(--accent-constrast);
-  background: var(--accent);
+  color: var(--accent-10);
+  background: var(--accent-120);
 }
 
 img {
