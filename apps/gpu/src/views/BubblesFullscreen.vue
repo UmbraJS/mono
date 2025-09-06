@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 // @ts-ignore
 import shader from '../shaders/bubblesFullscreen.wgsl'
-import { useMoonbow, useGPU } from '../moonbow'
+import { useMoonbow, useGPU } from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()

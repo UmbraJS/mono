@@ -1,7 +1,8 @@
-import { gpuPipeline } from './'
-import { toGPUColor, BackgroundColors } from './background'
-import type { GetMemory, MoonbowBuffers, MoonbowPipelineOptions } from './'
-import type { BackgroundColor } from './background'
+import { gpuPipeline } from './pipeline/index.js'
+import { toGPUColor, BackgroundColors } from './background.js'
+import type { GetMemory } from './memory.js'
+import type { MoonbowBuffers, MoonbowPipelineOptions } from './types.js'
+import type { BackgroundColor } from './background.js'
 
 export interface ShaderObject {
   shader: string

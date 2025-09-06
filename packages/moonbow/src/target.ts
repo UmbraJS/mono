@@ -1,6 +1,7 @@
 export async function useGPU() {
-  if (!navigator.gpu) throw new Error('WebGPU not supported on this browser.')
-  const adapter = await navigator.gpu.requestAdapter()
+  const gpu = (navigator as any).gpu as GPU
+  if (!gpu) throw new Error('WebGPU not supported on this browser.')
+  const adapter = await gpu.requestAdapter()
   if (!adapter) throw new Error('No appropriate GPUAdapter found.')
   const device = await adapter.requestDevice()
 
@@ -12,8 +13,8 @@ export async function useGPU() {
 
 export function gpuCanvas(device: GPUDevice, canvasQuery?: HTMLCanvasElement | null) {
   if (!canvasQuery) throw new Error('No webgpu canvas found.')
-  const context = canvasQuery.getContext('webgpu')
-  const canvasFormat = navigator.gpu.getPreferredCanvasFormat()
+  const context = canvasQuery.getContext('webgpu') as unknown as GPUCanvasContext
+  const canvasFormat = (navigator as any).gpu.getPreferredCanvasFormat()
   if (!context) throw new Error('WebGPU context not available')
 
   context.configure({

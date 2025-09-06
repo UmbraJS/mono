@@ -15,7 +15,7 @@ import {
   getMemory,
   createMultiShaderPipelines,
   createPostProcessPipeline
-} from '../moonbow'
+} from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()

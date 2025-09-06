@@ -12,7 +12,7 @@ import {
   createTextureFromUrl,
   textureBinding,
   samplerBinding
-} from '@/moonbow'
+} from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()

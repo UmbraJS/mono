@@ -2,7 +2,7 @@
 // @ts-ignore
 import shaderSource from '../shaders/impact.wgsl'
 import { useTemplateRef, onMounted } from 'vue'
-import { useMoonbow, fTime } from '../moonbow'
+import { useMoonbow, fTime } from '@umbrajs/moonbow'
 
 const canvasRef = useTemplateRef<HTMLCanvasElement>('canvasRef')
 onMounted(async () => {

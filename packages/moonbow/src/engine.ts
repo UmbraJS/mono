@@ -1,5 +1,6 @@
-import { gpuPipeline, getMemory } from './'
-import type { MoonbowBuffers, MoonbowOptions } from './'
+import { gpuPipeline } from './pipeline/index.js'
+import { getMemory } from './memory.js'
+import type { MoonbowBuffers, MoonbowOptions } from './types.js'
 
 export async function useMoonbow<
   U extends MoonbowBuffers,

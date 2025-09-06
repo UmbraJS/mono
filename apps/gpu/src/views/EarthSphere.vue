@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 // @ts-ignore
 import shader from '../shaders/shader.wgsl'
 import { spinningPlanks } from '../scenes/spinningPlanks'
-import { uTime, float, gpuCamera, useMoonbow, useGPU } from '../moonbow'
+import { uTime, float, gpuCamera, useMoonbow, useGPU } from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()

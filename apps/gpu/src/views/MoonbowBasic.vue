@@ -5,7 +5,7 @@ import shader from '../shaders/shader.wgsl'
 import basic from '../shaders/basic.wgsl'
 import { onMounted } from 'vue'
 import { spinningCube } from '../scenes/spinningCube'
-import { uTime, float, gpuCamera, useGPU, getMemory, createMultiShaderPipelines } from '../moonbow'
+import { uTime, float, gpuCamera, useGPU, getMemory, createMultiShaderPipelines } from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()

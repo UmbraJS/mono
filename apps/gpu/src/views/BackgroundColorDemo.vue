@@ -14,7 +14,7 @@ import {
   createMultiShaderPipelines,
   BackgroundColors,
   type BackgroundColor
-} from '../moonbow'
+} from '@umbrajs/moonbow'
 
 // Reactive background color selection
 const selectedColor = ref<string>('default')

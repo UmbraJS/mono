@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { useGPU, gpuCanvas } from '../moonbow'
+import { useGPU, gpuCanvas } from '@umbrajs/moonbow'
 
 // @ts-ignore
 import FluidDisplayShader from '../shaders/fluidDisplay.wgsl'

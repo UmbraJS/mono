@@ -1,4 +1,4 @@
-import { cube } from '../moonbow'
+import { cube } from '@umbrajs/moonbow'
 
 export function spinningCube(device: GPUDevice) {
   const resolution = 15

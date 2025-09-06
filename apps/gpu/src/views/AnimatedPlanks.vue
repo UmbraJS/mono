@@ -5,7 +5,7 @@ import shader from '../shaders/shader.wgsl'
 // @ts-ignore
 import basic from '../shaders/basic.wgsl'
 import { spinningPlanks } from '../scenes/spinningPlanks'
-import { uTime, float, gpuCamera, useMoonbow, useGPU } from '../moonbow'
+import { uTime, float, gpuCamera, useMoonbow, useGPU } from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()

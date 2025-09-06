@@ -1,1 +1,1 @@
-export * from './moonbow'
+export * from './moonbow.js'

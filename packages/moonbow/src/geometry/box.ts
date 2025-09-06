@@ -2,7 +2,7 @@
 import { mat4 } from 'gl-matrix'
 import { bufferVertexLayout, modelMatrix, ensure3Values } from './utils.js'
 import type { GeoBuffers, Geometry, ModelOptions } from './utils.js'
-import { getModel } from './'
+import { getModel } from './index.js'
 
 export function cube(device: GPUDevice, options: ModelOptions) {
   const buffer = cubeBuffer(device, options)
@@ -45,20 +45,20 @@ function cubeBuffer(device: GPUDevice, options: ModelOptions): GeoBuffers {
   })
 
   // Write initial data
-  device.queue.writeBuffer(vBuffer, 0, geometry.vertices)
-  device.queue.writeBuffer(nBuffer, 0, geometry.normals)
-  device.queue.writeBuffer(uvBuffer, 0, geometry.uvs)
-  device.queue.writeBuffer(indices, 0, geometry.indices)
+  device.queue.writeBuffer(vBuffer, 0, geometry.vertices.buffer, 0, geometry.vertices.byteLength)
+  device.queue.writeBuffer(nBuffer, 0, geometry.normals.buffer, 0, geometry.normals.byteLength)
+  device.queue.writeBuffer(uvBuffer, 0, geometry.uvs.buffer, 0, geometry.uvs.byteLength)
+  device.queue.writeBuffer(indices, 0, geometry.indices.buffer, 0, geometry.indices.byteLength)
 
   let currentIndicesCount = geometry.indicesCount
 
   function update(o: ModelOptions) {
     const geo = cubeGeometry({ ...options, ...o })
 
-    device.queue.writeBuffer(vBuffer, 0, geo.vertices)
-    device.queue.writeBuffer(nBuffer, 0, geo.normals)
-    device.queue.writeBuffer(uvBuffer, 0, geo.uvs)
-    device.queue.writeBuffer(indices, 0, geo.indices)
+  device.queue.writeBuffer(vBuffer, 0, geo.vertices.buffer, 0, geo.vertices.byteLength)
+  device.queue.writeBuffer(nBuffer, 0, geo.normals.buffer, 0, geo.normals.byteLength)
+  device.queue.writeBuffer(uvBuffer, 0, geo.uvs.buffer, 0, geo.uvs.byteLength)
+  device.queue.writeBuffer(indices, 0, geo.indices.buffer, 0, geo.indices.byteLength)
 
     currentIndicesCount = geo.indicesCount
   }

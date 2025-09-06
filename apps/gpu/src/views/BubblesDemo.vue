@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 // @ts-ignore
 import shader from '../shaders/bubbles.wgsl'
-import { uTime, float, gpuCamera, useMoonbow, useGPU, cube, uniformBuffer } from '../moonbow'
+import { uTime, float, gpuCamera, useMoonbow, useGPU, cube, uniformBuffer } from '@umbrajs/moonbow'
 
 function surface(device: GPUDevice) {
   const resolution = 1

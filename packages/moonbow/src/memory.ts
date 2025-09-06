@@ -1,6 +1,7 @@
-import { useGPU, gpuCanvas } from './'
-import type { MoonbowBuffers, MoonbowOptions, BindGroup } from './'
-import type { ResourceBinding } from './buffers/textures'
+import { useGPU, gpuCanvas } from './target.js'
+import type { MoonbowBuffers, MoonbowOptions } from './types.js'
+import type { BindGroup } from './pipeline/core.js'
+import type { ResourceBinding } from './buffers/textures.js'
 
 /**
  * Gets a device and lets the user allocate uniform/storage buffers to the memory on it. Also assembles the options and assigns the defaults.

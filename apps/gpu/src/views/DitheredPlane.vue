@@ -12,7 +12,7 @@ import {
   createTextureFromUrl,
   textureBinding,
   samplerBinding
-} from '@/moonbow'
+} from '@umbrajs/moonbow'
 
 const levelsVal = ref(3)
 const monoOn = ref(true)

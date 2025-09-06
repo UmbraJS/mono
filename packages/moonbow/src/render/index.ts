@@ -1,5 +1,7 @@
-import type { MoonbowPipelineOptions, PipelineCore } from '../'
-import { getDepthStencilAttachment } from './utils'
+/// <reference types="@webgpu/types" />
+import type { MoonbowPipelineOptions } from '../types.js'
+import type { PipelineCore } from '../pipeline/core.js'
+import { getDepthStencilAttachment } from './utils.js'
 
 export type MoonbowRender = ReturnType<typeof getRenderer>
 

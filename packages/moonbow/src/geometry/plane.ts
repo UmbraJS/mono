@@ -2,7 +2,7 @@
 import { mat4 } from 'gl-matrix'
 import { bufferVertexLayout, modelMatrix, ensure3Values } from './utils.js'
 import type { GeoBuffers, Geometry, ModelOptions } from './utils.js'
-import { getModel } from './'
+import { getModel } from './index.js'
 
 export function plane(device: GPUDevice, options: ModelOptions = {}) {
   const buffer = planeBuffer(device, options)

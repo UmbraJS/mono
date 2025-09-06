@@ -1,4 +1,4 @@
-import { plane } from '../moonbow'
+import { plane } from '@umbrajs/moonbow'
 
 export function spinningPlane(device: GPUDevice) {
   const resolution = 15

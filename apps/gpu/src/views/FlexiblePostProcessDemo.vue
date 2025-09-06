@@ -13,7 +13,7 @@ import {
   getMemory,
   createMultiShaderPipelines,
   createAutoPostProcessPipeline
-} from '../moonbow'
+} from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()
@@ -53,33 +53,33 @@ onMounted(async () => {
     let timeF = f32(time) * 0.001;
     let scaleFactor = scale;
     let customIntensity = customParam;
-    
+
     // 1. Animated vignette
     let center = vec2f(0.5, 0.5);
     let dist = distance(uv, center);
     let vignetteStrength = 0.3 + sin(timeF) * 0.1;
     let vignette = 1.0 - smoothstep(vignetteStrength, 0.8, dist);
-    
+
     // 2. Color shifting based on custom params
     let colorShift = vec3f(
         1.0 + sin(timeF * customIntensity) * 0.2,
         1.0 + sin(timeF * customIntensity * 1.3) * 0.2,
         1.0 + sin(timeF * customIntensity * 1.7) * 0.2
     );
-    
+
     // 3. Dynamic contrast
     let contrast = scaleFactor;
     color = vec4f((color.rgb - 0.5) * contrast + 0.5, color.a);
-    
+
     // 4. Apply all effects
     color = vec4f(color.rgb * colorShift * vignette, color.a);
-    
+
     // 5. Chromatic aberration with animated intensity
     let aberration = intensity * (0.01 + sin(timeF * 2.0) * 0.005);
     let r = textureSample(sceneTexture, sceneSampler, uv + vec2f(aberration, 0.0)).r;
     let g = textureSample(sceneTexture, sceneSampler, uv).g;
     let b = textureSample(sceneTexture, sceneSampler, uv - vec2f(aberration, 0.0)).b;
-    
+
     color = vec4f(vec3f(r, g, b) * colorShift * vignette, color.a);
   `
 

@@ -4,7 +4,7 @@ import { onMounted } from 'vue'
 import shader from '../shaders/bomber.wgsl'
 // @ts-ignore
 import basic from '../shaders/basic.wgsl'
-import { uTime, float, gpuCamera, useMoonbow, useGPU, cube } from '../moonbow'
+import { uTime, float, gpuCamera, useMoonbow, useGPU, cube } from '@umbrajs/moonbow'
 
 function plane(device: GPUDevice) {
   const resolution = 1

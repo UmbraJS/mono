@@ -1,6 +1,6 @@
-import { storageBuffer } from './'
-import { float } from './uniforms'
-import type { UniformBuffer } from './'
+import { storageBuffer } from './index.js'
+import { float } from './uniforms.js'
+import type { UniformBuffer } from './index.js'
 
 // Create an array representing the active state of each cell.
 // Storage buffers are more flexible and much bigger than uniform buffers

@@ -4,8 +4,7 @@ import ConwayShader from '../shaders/conway.wgsl'
 // @ts-ignore
 import ConwayCompute from '../shaders/conwayCompute.wgsl'
 import { onMounted } from 'vue'
-import { useGPU, getCellPlane, gpuPipeline, getMemory } from '../moonbow'
-import { getCellPong } from '../moonbow/buffers/cellPong'
+import { useGPU, getCellPlane, gpuPipeline, getMemory, getCellPong } from '@umbrajs/moonbow'
 
 onMounted(async () => {
   const { device } = await useGPU()

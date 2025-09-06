@@ -6,7 +6,7 @@ import passA from '../shaders/bubblesPassA.wgsl'
 import passBlur from '../shaders/bubblesPassBlur.wgsl'
 // @ts-ignore
 import passB from '../shaders/bubblesPassB.wgsl'
-import { useGPU } from '../moonbow'
+import { useGPU } from '@umbrajs/moonbow'
 
 const playing = ref(true)
 

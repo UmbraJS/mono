@@ -1,8 +1,9 @@
-import { bufferVertexLayout } from '../geometry/utils'
-import { getStencil } from '../render/utils'
-import { getBindGroupLayout, getUniformEntries, getResourceLayout } from './entries'
-import type { ResourceBinding } from '../buffers/textures'
-import type { GetMemory, MoonbowBuffers } from '../'
+import { bufferVertexLayout } from '../geometry/utils.js'
+import { getStencil } from '../render/utils.js'
+import { getBindGroupLayout, getUniformEntries, getResourceLayout } from './entries.js'
+import type { ResourceBinding } from '../buffers/textures.js'
+import type { GetMemory } from '../memory.js'
+import type { MoonbowBuffers } from '../types.js'
 
 function memoryLayout<
   U extends MoonbowBuffers,

@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
-import { useGPU, plane, gpuCamera, getMemory, gpuPipeline, uTime, float } from '@/moonbow'
+import { useGPU, plane, gpuCamera, getMemory, gpuPipeline, uTime, float } from '@umbrajs/moonbow'
 
 const resolution = ref(1)
 const rotationX = ref(0)
@@ -80,7 +80,7 @@ async function initWebGPU() {
       fn vertexMain(@location(0) position: vec3<f32>) -> @builtin(position) vec4<f32> {
         return vec4<f32>(position * 0.5, 1.0);
       }
-      
+
       @fragment
       fn fragmentMain() -> @location(0) vec4<f32> {
         return vec4<f32>(0.3, 0.6, 0.9, 1.0);

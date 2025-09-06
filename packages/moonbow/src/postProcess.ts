@@ -1,8 +1,9 @@
-import { getUniformEntries } from './'
-import { toGPUColor, BackgroundColors } from './background'
-import type { GetMemory, MoonbowBuffers, MoonbowPipelineOptions } from './'
+import { getUniformEntries } from './pipeline/entries.js'
+import { toGPUColor, BackgroundColors } from './background.js'
+import type { GetMemory } from './memory.js'
+import type { MoonbowBuffers, MoonbowPipelineOptions } from './types.js'
 import type { MultiShaderRenderCall } from './multiShader'
-import type { BackgroundColor } from './background'
+import type { BackgroundColor } from './background.js'
 
 export interface PostProcessOptions {
   postProcessShader: string

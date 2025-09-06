@@ -1,12 +1,11 @@
-import { getRenderer, computePass, pipelineCore } from '../'
-import type {
-  GetMemory,
-  MoonbowBuffers,
-  MoonbowPipelineOptions,
-  ComputePass,
-  PipelineCore
-} from '../'
-import { isFunc } from '../utils/index'
+import { getRenderer } from '../render/index.js'
+import { computePass } from '../render/index.js'
+import { pipelineCore } from './core.js'
+import type { GetMemory } from '../memory.js'
+import type { MoonbowBuffers, MoonbowPipelineOptions } from '../types.js'
+import type { ComputePass } from '../render/index.js'
+import type { PipelineCore } from './core.js'
+import { isFunc } from '../utils/index.js'
 
 export interface MoonbowCallback<
   U extends MoonbowBuffers,
