@@ -1,3 +1,5 @@
+# 😵‍💫 I'm Exhausted of Exhaustive-Deps
+
 In the world of React, we have the infamous `useEffect` hook.
 
 Infamous because it's often the butt of the joke. It's the footgun by your bedside table. The cyanide in your dogshit sandwich.

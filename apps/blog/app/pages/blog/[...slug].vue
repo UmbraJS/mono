@@ -26,6 +26,7 @@ useSeoMeta({
 #MarkdownArticle {
   position: relative;
   padding: var(--space-4);
+  padding-bottom: var(--space-10);
   z-index: 10;
 
   &::before {

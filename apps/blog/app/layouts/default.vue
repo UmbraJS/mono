@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onKeyStroke } from '@vueuse/core'
 import FrostLayer from '../components/FrostLayer.vue'
+import AuthorCard from '../components/AuthorCard.vue'
 
 const { data: posts } = await useAsyncData('blog', () => queryCollection('blog').all())
 
@@ -17,6 +18,15 @@ function toggleReveal() {
 }
 
 onKeyStroke('Escape', () => toggleReveal())
+
+
+const projects = [
+  { name: "Moonbow", href: undefined, description: "A WebGPU framework for creative coding.", status: "v0.1.0" },
+  { name: "Umbra", href: undefined, description: "A design system for building beautiful web apps.", status: "v0.3.0" },
+  { name: "Carbon Bizarre", href: undefined, description: "A design system for building beautiful web apps.", status: "private" },
+  { name: "Bifrost", href: undefined, description: "A design system for building beautiful web apps.", status: "private" },
+  { name: "Formula", href: undefined, description: "A design system for building beautiful web apps.", status: "planning" },
+]
 </script>
 
 <template>
@@ -40,13 +50,26 @@ onKeyStroke('Escape', () => toggleReveal())
       </header>
       <div class="content" />
       <div class="sidebar">
-        <div id="BlogPostList">
+        <AuthorCard />
+        <div id="BlogPostList" class="border">
           <div id="BlogPostListHeader">
-            <p class="caption">Posts ({{ posts?.length }})</p>
+            <h3 class="caption">Posts ({{ posts?.length }})</h3>
           </div>
-          <NuxtLink v-for="post in posts" id="BlogPostCard" :key="post.id" filter: blur(3px); :to="post.path" class=""
-            tabindex="0" role="link" aria-label="Blog post card">
-            <h2>{{ post.title }}</h2>
+          <NuxtLink v-for="post in posts" id="BlogPostCard" :key="post.id" class="border" filter: blur(3px);
+            :to="post.path" tabindex="0" role="link" aria-label="Blog post card">
+            <p>{{ post.title }}</p>
+          </NuxtLink>
+        </div>
+
+        <div id="BlogPostList" class="border">
+          <div id="BlogPostListHeader">
+            <h3 class="caption">Projects ({{ projects.length }})</h3>
+          </div>
+          <NuxtLink v-for="project in projects" id="BlogPostCard" :key="project.name" class="border" filter: blur(3px);
+            :to="project.href ?? ''" tabindex="0" role="link" aria-label="Blog post card">
+            <p>{{ project.name }}</p>
+            <p class="description">{{ project.description }}</p>
+            <p class="status">{{ project.status }}</p>
           </NuxtLink>
         </div>
       </div>
@@ -55,23 +78,31 @@ onKeyStroke('Escape', () => toggleReveal())
 </template>
 
 <style lang="scss">
+/* author card styles moved to AuthorCard.vue */
+
 #BlogPostList {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  padding: var(--space-1);
+  padding-bottom: var(--space-2);
+  border-color: var(--base-30);
+  height: min-content;
+  background-color: var(--base);
 }
 
 #BlogPostListHeader {
   display: flex;
-  justify-content: flex-end;
   padding: var(--space-1);
-  background: var(--base-30);
   border-radius: var(--radius);
-  color: var(--base-80);
 }
 
 #BlogPostCard {
   font-size: 50px;
+  background-color: var(--base);
+  border-radius: var(--radius);
+  border-color: var(--base-20);
+  padding: var(--space-1);
 }
 
 .inverted-theme {
@@ -194,9 +225,12 @@ onKeyStroke('Escape', () => toggleReveal())
 }
 
 .underbar .sidebar {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
   padding: var(--space-2);
-  grid-area: sidebar;
+  padding-top: 0px;
 }
 
 .underbar .content {
