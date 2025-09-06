@@ -32,7 +32,7 @@ onKeyStroke('Escape', () => toggleReveal())
         <slot />
       </main>
     </div>
-    <div class="underbar inverted-theme">
+    <div class="underbar">
       <header>
         <NuxtLink to="/" class="logo">
           <h1>CarelessCourage</h1>

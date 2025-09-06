@@ -35,8 +35,8 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
 </script>
 
 <template>
-  <nav id="island-menu" ref="islandMenu" class="inverted-theme border" :class="{ expanded: expandedTab }"
-    @mouseover="hover = true" @mouseleave="hover = false">
+  <nav id="island-menu" ref="islandMenu" class="border" :class="{ expanded: expandedTab }" @mouseover="hover = true"
+    @mouseleave="hover = false">
     <div class="island-panel">
       <UserPanelWrapper v-if="activeTab === 'user'" />
       <SettingsPanel v-if="activeTab === 'settings'" />

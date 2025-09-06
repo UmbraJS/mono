@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import { RichText } from '@nobel/richtext'
-import PostFeed from '~/components/PostFeed.vue'
-import ReasonList from '~/components/Reason/List.vue'
+import PostFeed from '../components/PostFeed.vue'
+import ReasonList from '../components/Reason/List.vue'
 </script>
 
 <template>
-  <div class="article voice">
-    <h1 class="title">Voice of Reason</h1>
-    <p class="subtitle">A place to share your thoughts and ideas.</p>
+  <div class="NoblePage">
+    <div class="article voice">
+      <h1 class="title">Voice of Reason</h1>
+      <p class="subtitle">A place to share your thoughts and ideas.</p>
+    </div>
+    <div class="article">
+      <ReasonList />
+    </div>
+    <div class="article">
+      <RichText />
+    </div>
+    <PostFeed />
   </div>
-  <div class="article">
-    <ReasonList />
-  </div>
-  <div class="article">
-    <RichText />
-  </div>
-  <PostFeed />
 </template>
 
 <style scoped lang="scss">
