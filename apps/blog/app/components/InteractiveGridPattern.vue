@@ -17,6 +17,8 @@ interface Props {
   squares?: [number, number]
   /** When true, compute rows/cols from the element's rendered size */
   useElementSize?: boolean
+  /** When using element size, where should the partial (cut-off) square appear? */
+  align?: 'left' | 'right'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -24,6 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   height: 60,
   squares: () => [24, 24],
   useElementSize: true,
+  align: 'left',
 })
 
 const width = computed(() => props.width)
@@ -53,14 +56,15 @@ onBeforeUnmount(() => {
   ro?.disconnect(); ro = null
 })
 
+// Use ceil() so we always include a final square that may be partially visible (cut off by the edge)
 const horizontal = computed(() =>
   props.useElementSize
-    ? Math.max(1, Math.floor((elWidth.value || 0) / (width.value || 1)))
+    ? Math.max(1, Math.ceil((elWidth.value || 0) / (width.value || 1)))
     : props.squares[0],
 )
 const vertical = computed(() =>
   props.useElementSize
-    ? Math.max(1, Math.floor((elHeight.value || 0) / (height.value || 1)))
+    ? Math.max(1, Math.ceil((elHeight.value || 0) / (height.value || 1)))
     : props.squares[1],
 )
 const totalSquares = computed(() => horizontal.value * vertical.value)
@@ -68,8 +72,16 @@ const hoveredSquare = ref<number | null>(null)
 const gridWidth = computed(() => (props.useElementSize ? elWidth.value : width.value * horizontal.value))
 const gridHeight = computed(() => (props.useElementSize ? elHeight.value : height.value * vertical.value))
 
+// Compute horizontal offset so that, when overflowing, the partial square can be on the left or right
+const offsetX = computed(() => {
+  if (!props.useElementSize) return 0
+  const virtualWidth = horizontal.value * width.value
+  // If aligning right, align the right edge of the virtual grid with the visible width
+  return props.align === 'right' ? (elWidth.value - virtualWidth) : 0
+})
+
 function getX(index: number) {
-  return (index % horizontal.value) * width.value
+  return offsetX.value + (index % horizontal.value) * width.value
 }
 function getY(index: number) {
   return Math.floor(index / horizontal.value) * height.value
