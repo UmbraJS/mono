@@ -1,5 +1,4 @@
 import type { UniformBuffer } from '../buffers'
-import type { ResourceBinding } from '../buffers/textures'
 
 export function getUniformEntries(props: { device: GPUDevice; uniforms: UniformBuffer[] }) {
   const defaultVisibility = GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE
