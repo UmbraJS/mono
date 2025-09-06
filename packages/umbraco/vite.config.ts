@@ -17,11 +17,12 @@ export default defineConfig({
     },
     minify: false,
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'gsap'],
       output: {
         entryFileNames: 'index.js',
         globals: {
           vue: 'vue',
+          gsap: 'gsap',
         },
       },
     },
