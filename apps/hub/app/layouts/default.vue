@@ -16,9 +16,7 @@ function toggleReveal() {
   reveal.value = !reveal.value
 }
 
-onKeyStroke('Escape', () => {
-  toggleReveal()
-})
+onKeyStroke('Escape', () => toggleReveal())
 </script>
 
 <template>
@@ -36,7 +34,9 @@ onKeyStroke('Escape', () => {
     </div>
     <div class="underbar inverted-theme">
       <header>
-        <h1>CarelessCourage</h1>
+        <NuxtLink to="/" class="logo">
+          <h1>CarelessCourage</h1>
+        </NuxtLink>
       </header>
       <div class="content" />
       <div class="sidebar">
@@ -44,8 +44,8 @@ onKeyStroke('Escape', () => {
           <div id="BlogPostListHeader">
             <p class="caption">Posts ({{ posts?.length }})</p>
           </div>
-          <NuxtLink v-for="post in posts" id="BlogPostCard" :key="post.id" :to="post.path" class="" tabindex="0"
-            role="link" aria-label="Blog post card">
+          <NuxtLink v-for="post in posts" id="BlogPostCard" :key="post.id" filter: blur(3px); :to="post.path" class=""
+            tabindex="0" role="link" aria-label="Blog post card">
             <h2>{{ post.title }}</h2>
           </NuxtLink>
         </div>
