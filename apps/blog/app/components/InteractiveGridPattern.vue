@@ -1,5 +1,5 @@
 <template>
-  <svg :width="gridWidth" :height="gridHeight" :class="['grid-svg', className]">
+  <svg ref="svgRef" :width="gridWidth" :height="gridHeight" :class="['grid-svg', className]">
     <rect v-for="(_, index) in totalSquares" :key="index" :x="getX(index)" :y="getY(index)" :width="width"
       :height="height" :class="['grid-rect', hoveredSquare === index ? 'grid-rect--active' : '', squaresClassName]"
       @mouseenter="handleMouseEnter(index)" @mouseleave="handleMouseLeave" />
@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 interface Props {
   className?: string | Record<string, boolean> | Array<string | Record<string, boolean>>
@@ -15,22 +15,58 @@ interface Props {
   width?: number
   height?: number
   squares?: [number, number]
+  /** When true, compute rows/cols from the element's rendered size */
+  useElementSize?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  width: 40,
-  height: 40,
+  width: 60,
+  height: 60,
   squares: () => [24, 24],
+  useElementSize: true,
 })
 
 const width = computed(() => props.width)
 const height = computed(() => props.height)
-const horizontal = computed(() => props.squares[0])
-const vertical = computed(() => props.squares[1])
+// Track rendered size of the SVG (100% of container)
+const svgRef = ref<SVGSVGElement | null>(null)
+const elWidth = ref(0)
+const elHeight = ref(0)
+let ro: ResizeObserver | null = null
+
+onMounted(() => {
+  const el = svgRef.value
+  if (!el) return
+  const rect = el.getBoundingClientRect()
+  elWidth.value = rect.width
+  elHeight.value = rect.height
+  ro = new ResizeObserver((entries) => {
+    const cr = entries[0]?.contentRect
+    if (!cr) return
+    elWidth.value = cr.width
+    elHeight.value = cr.height
+  })
+  ro.observe(el)
+})
+
+onBeforeUnmount(() => {
+  ro?.disconnect(); ro = null
+})
+
+const horizontal = computed(() =>
+  props.useElementSize
+    ? Math.max(1, Math.floor((elWidth.value || 0) / (width.value || 1)))
+    : props.squares[0],
+)
+const vertical = computed(() =>
+  props.useElementSize
+    ? Math.max(1, Math.floor((elHeight.value || 0) / (height.value || 1)))
+    : props.squares[1],
+)
 const totalSquares = computed(() => horizontal.value * vertical.value)
 const hoveredSquare = ref<number | null>(null)
-const gridWidth = computed(() => width.value * horizontal.value)
-const gridHeight = computed(() => height.value * vertical.value)
+const gridWidth = computed(() => (props.useElementSize ? elWidth.value : width.value * horizontal.value))
+const gridHeight = computed(() => (props.useElementSize ? elHeight.value : height.value * vertical.value))
 
 function getX(index: number) {
   return (index % horizontal.value) * width.value
