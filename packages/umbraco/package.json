@@ -45,7 +45,8 @@
     "format": "prettier --write src/"
   },
   "peerDependencies": {
-    "vue": "^3.5.18"
+    "vue": "^3.5.18",
+    "@vueuse/core": "13.4.0"
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
@@ -54,6 +55,7 @@
     "vue-sonner": "catalog:"
   },
   "devDependencies": {
+    "@vueuse/core": "catalog:",
     "@rushstack/eslint-patch": "catalog:",
     "@tsconfig/node20": "catalog:",
     "@types/node": "catalog:",
