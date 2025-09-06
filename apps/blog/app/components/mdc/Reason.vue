@@ -1,6 +1,11 @@
 <script setup lang="ts">
-const { data: reasons } = useFetch('/api/reasons')
-const reason = ref(reasons.value?.[0])
+import Reference from '../Reference.vue'
+import ReasonArgument from '../Reason/Argument.vue'
+import PremisesDeductive from '../Premises/Deductive.vue'
+import PremisesInductive from '../Premises/Inductive.vue'
+import type { Reason } from '../../../types/reasoning'
+const { data: reasons } = useFetch<Reason[]>('/api/reasons')
+const reason = computed(() => reasons?.value?.[0])
 </script>
 
 <template>

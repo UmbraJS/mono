@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import type { Reason } from '../../../types/reasoning'
+import Premises from './Premises.vue'
+import PremisesPremise from './Premise.vue'
+import PremisesPremiseId from './PremiseId.vue'
+import PremisesPremiseContent from './PremiseContent.vue'
+import ReasonCredibility from '../Reason/Credibility.vue'
 const props = defineProps<{
   reason: Reason
 }>()
@@ -15,11 +20,8 @@ function getNameOfWebsiteFromURL(url?: string) {
   <Premises>
     <div class="gutter"></div>
     <div id="DeductivePremises">
-      <PremisesPremise
-        v-for="(premise, index) in props.reason.premises"
-        :key="premise.id"
-        :class="premise.type === 'infavor' ? 'base-success' : 'base-warning'"
-      >
+      <PremisesPremise v-for="(premise, index) in props.reason.premises" :key="premise.id"
+        :class="premise.type === 'infavor' ? 'base-success' : 'base-warning'">
         <PremisesPremiseId :id="index + 1" />
         <PremisesPremiseContent :editable="true">
           {{ premise.text }}

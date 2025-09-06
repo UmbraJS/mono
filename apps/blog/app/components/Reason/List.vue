@@ -1,10 +1,16 @@
 <script setup lang="ts">
-const { data: reasons } = useFetch('/api/reasons')
+import Reference from '../Reference.vue'
+import ReasonArgument from './Argument.vue'
+import PremisesDeductive from '../Premises/Deductive.vue'
+import PremisesInductive from '../Premises/Inductive.vue'
+import type { Reason } from '../../../types/reasoning'
+
+const { data: reasons } = useFetch<Reason[]>('/api/reasons')
 </script>
 
 <template>
   <div class="arguments">
-    <ReasonArgument v-for="reason in reasons" :key="reason.reasoning" :reason="reason">
+    <ReasonArgument v-for="reason in reasons" :key="reason.id" :reason="reason">
       <p>
         1 Nuxt layers are a <Reference id="0">powerful</Reference> feature that you can use to share
         and reuse partial Nuxt applications within a monorepo, or from a git repository or npm

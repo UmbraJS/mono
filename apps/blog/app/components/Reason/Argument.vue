@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Reason } from '../../../types/reasoning'
 import { Button, ButtonGroup } from 'umbraco'
+import ReasonConclution from './Conclution.vue'
 
 const props = defineProps<{
   reason: Reason

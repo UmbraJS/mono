@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Reason } from '../../../types/reasoning'
 import PremiseContent from './PremiseContent.vue'
+import Premises from './Premises.vue'
+import PremisesPremise from './Premise.vue'
 const props = defineProps<{
   reason: Reason
 }>()
@@ -8,11 +10,7 @@ const props = defineProps<{
 
 <template>
   <Premises class="inductive">
-    <PremisesPremise
-      v-for="premise in props.reason.premises"
-      :key="premise.id"
-      :type="premise.type"
-    >
+    <PremisesPremise v-for="premise in props.reason.premises" :key="premise.id" :type="premise.type">
       <PremiseContent :editable="false">{{ premise.text }}</PremiseContent>
     </PremisesPremise>
   </Premises>
