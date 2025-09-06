@@ -99,6 +99,8 @@ const squaresClassName = computed(() => props.squaresClassName)
 
 <style scoped>
 .grid-svg {
+  --gridColor: var(--base-40, #909090);
+
   position: absolute;
   inset: 0;
   width: 100%;
@@ -107,19 +109,19 @@ const squaresClassName = computed(() => props.squaresClassName)
   z-index: 5;
   /* don't block UI interactions by default; toggle if you want hover interactivity */
   pointer-events: none;
-  border: 1px solid color-mix(in srgb, var(--base-120, #909090) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gridColor) 30%, transparent);
 }
 
 .grid-rect {
   fill: transparent;
-  stroke: color-mix(in srgb, var(--base-120, #909090) 30%, transparent);
+  stroke: color-mix(in srgb, var(--gridColor) 30%, transparent);
   transition-property: fill, stroke;
   transition-duration: 1000ms;
   transition-timing-function: ease-in-out;
 }
 
 .grid-rect--active {
-  fill: color-mix(in srgb, var(--base-120, #909090) 30%, transparent);
+  fill: color-mix(in srgb, var(--gridColor) 30%, transparent);
   transition-duration: 100ms;
 }
 
@@ -127,6 +129,6 @@ const squaresClassName = computed(() => props.squaresClassName)
 :root.dark .grid-svg,
 .dark .grid-svg,
 [data-theme='dark'] .grid-svg {
-  border-color: color-mix(in srgb, var(--base-120, #909090) 30%, transparent);
+  border-color: color-mix(in srgb, var(--gridColor) 30%, transparent);
 }
 </style>

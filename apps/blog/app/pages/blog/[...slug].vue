@@ -16,16 +16,29 @@ useSeoMeta({
   <article id="MarkdownArticle">
     <ContentRenderer v-if="exhaustiveDeps" :value="exhaustiveDeps" />
     <div v-else>Markdown content not found</div>
-
-    <InteractiveGridPattern />
   </article>
+  <InteractiveGridPattern />
 </template>
 
 
 <style lang="scss">
 // Typographic styles specific to markdown pages
 #MarkdownArticle {
+  position: relative;
   padding: var(--space-4);
+  z-index: 10;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: var(--base);
+    filter: blur(140px);
+  }
 
   &>div {
     display: flex;
