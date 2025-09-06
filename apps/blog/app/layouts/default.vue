@@ -102,6 +102,7 @@ onKeyStroke('Escape', () => toggleReveal())
 
   background-color: var(--base);
   border-top-right-radius: var(--radius);
+  overflow: hidden;
 
   transform: translateY(0px) translateX(0px);
   transition: var(--slow);

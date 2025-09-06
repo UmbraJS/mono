@@ -1,5 +1,6 @@
 <template>
-  <div data-slot="black-hole-background" class="black-hole" v-bind="props">
+  <motion.div data-slot="black-hole-background" class="black-hole" v-bind="props" :initial="{ opacity: 0 }"
+    :animate="{ opacity: 1 }" :transition="{ duration: 0.8, ease: 'easeOut' }">
     <slot />
     <canvas ref="canvasRef" class="blackhole-canvas" />
     <!-- animated gradient plume -->
@@ -7,7 +8,7 @@
       :transition="{ duration: 5, ease: 'linear', repeat: Infinity }" />
     <!-- scanline overlay (dark mode) -->
     <div class="blackhole-overlay" />
-  </div>
+  </motion.div>
 
 </template>
 
