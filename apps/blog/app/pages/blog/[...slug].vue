@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import InteractiveGridPattern from '../../components/InteractiveGridPattern.vue'
+
 const route = useRoute()
 const { data: exhaustiveDeps } = await useAsyncData(route.path, () => {
   return queryCollection('blog').path(route.path).first()
@@ -14,6 +16,8 @@ useSeoMeta({
   <article id="MarkdownArticle">
     <ContentRenderer v-if="exhaustiveDeps" :value="exhaustiveDeps" />
     <div v-else>Markdown content not found</div>
+
+    <InteractiveGridPattern />
   </article>
 </template>
 
