@@ -16,10 +16,11 @@ export default defineConfig({
     },
     minify: false,
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'umbraco'],
       output: {
         globals: {
           vue: 'vue',
+          umbraco: 'umbraco',
         },
       },
     },
