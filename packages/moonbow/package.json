@@ -1,0 +1,43 @@
+{
+  "name": "@umbrajs/moonbow",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Moonbow: a lean, framework-agnostic WebGPU helper library",
+  "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./index.js",
+      "require": "./index.umd.cjs"
+    },
+    "./*": "./*"
+  },
+  "main": "./index.umd.cjs",
+  "module": "./index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "buildall": "tsc && vite build && cp package.json dist && cp README.md dist",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "publish": "cd dist && npm publish"
+  },
+  "peerDependencies": {
+    "@webgpu/types": "^0.1.48"
+  },
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:"
+  }
+}
