@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Reason } from '../../../types/reasoning'
-import { Button, ButtonGroup } from '@nobel/core'
+import { Button, ButtonGroup } from 'umbraco'
 
 const props = defineProps<{
   reason: Reason

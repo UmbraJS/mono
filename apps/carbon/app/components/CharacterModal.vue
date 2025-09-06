@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Drawer } from '@nobel/core'
+import { Drawer } from 'umbraco'
 
 import type { Character } from '../../types'
 

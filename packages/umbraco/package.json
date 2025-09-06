@@ -1,5 +1,5 @@
 {
-  "name": "@nobel/core",
+  "name": "umbraco",
   "type": "module",
   "version": "1.0.0",
   "author": "Samuel M. Bednarz<https://github.com/CarelessCourage>",
@@ -17,18 +17,19 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./index.js",
-      "require": "./index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
     },
     "./*": "./*"
   },
-  "main": "index.ts",
-  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "typings": "types/index.d.ts",
   "files": [
     "README.md",
     "dist",
+    "styles",
     "src",
     "types"
   ],
@@ -45,19 +46,12 @@
     "vue": "^3.5.18"
   },
   "dependencies": {
-    "@umbrajs/core": "workspace:*",
-    "@unovis/ts": "catalog:",
-    "@unovis/vue": "catalog:",
-    "@vueuse/components": "catalog:",
-    "@vueuse/core": "catalog:",
-    "gsap": "catalog:",
+    "@iconify/vue": "catalog:",
     "reka-ui": "catalog:",
-    "vaul-vue": "^0.4.1",
-    "vue-router": "catalog:",
+    "vaul-vue": "catalog:",
     "vue-sonner": "catalog:"
   },
   "devDependencies": {
-    "@iconify/vue": "catalog:",
     "@rushstack/eslint-patch": "catalog:",
     "@tsconfig/node20": "catalog:",
     "@types/node": "catalog:",

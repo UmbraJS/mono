@@ -14,7 +14,7 @@ export default antfu({
     'packages/carbon/**/*',
   'packages/umbra/**/*',
     'packages/dye/**/*',
-    'packages/nobel/**/*',
+  'packages/umbraco/**/*',
     'packages/richtext/**/*',
     // Ignore config and documentation files that don't need TypeScript parsing
     '**/*.md',

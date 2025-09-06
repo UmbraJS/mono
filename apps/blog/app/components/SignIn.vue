@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, toast, Input } from '@nobel/core'
+import { Button, toast, Input } from 'umbraco'
 
 const auth = useAuth()
 
@@ -47,8 +47,9 @@ const onSuccessfulSignIn = async () => {
     <Icon name="svg-spinners:pulse-multiple" size="8em" />
   </div>
   <form @submit.prevent="signIn">
-    <Input type="email" label="Email" @input="(e) => (email = e.target.value)" />
-    <Input type="password" label="Password" @input="(e) => (password = e.target.value)" />
+    <Input type="email" label="Email" @input="(e: InputEvent) => (email = (e.target as HTMLInputElement).value)" />
+    <Input type="password" label="Password"
+      @input="(e: InputEvent) => (password = (e.target as HTMLInputElement).value)" />
     <Button type="submit" :disabled="!email.length || !password.length">
       <span v-if="!loading"> Sign In </span>
       <Icon v-else name="svg-spinners:3-dots-move" />
@@ -81,6 +82,7 @@ const onSuccessfulSignIn = async () => {
   0% {
     clip-path: circle(0% at 50% 50%);
   }
+
   100% {
     clip-path: circle(100% at 50% 50%);
   }

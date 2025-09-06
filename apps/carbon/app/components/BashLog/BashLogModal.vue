@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogRoot, DialogTrigger, DialogModal, DialogTitle, DialogDescription } from '@nobel/core'
+import { DialogRoot, DialogTrigger, DialogModal, DialogTitle, DialogDescription } from 'umbraco'
 import type { CardInfo } from '../../../types/card'
 import BashLogs from '~/components/BashLog/BashLogs.vue'
 import type { SpaceOutput } from '../../../utils/matchSimulator'

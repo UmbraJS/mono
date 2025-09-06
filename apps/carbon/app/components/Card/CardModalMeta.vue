@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogTitle, Tabs } from '@nobel/core'
+import { DialogTitle, Tabs } from 'umbraco'
 import type { Card } from '../../../types'
 
 defineProps<{

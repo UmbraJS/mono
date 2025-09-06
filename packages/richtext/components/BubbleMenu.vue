@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { BubbleMenu, Editor } from '@tiptap/vue-3'
-import { Button, ButtonGroup } from '@nobel/core'
+import { Button, ButtonGroup } from 'umbraco'
 
 defineProps<{
   editor: Editor
@@ -10,20 +10,12 @@ defineProps<{
 <template>
   <BubbleMenu :editor="editor" :tippy-options="{ duration: 100 }" class="inverted-theme">
     <ButtonGroup>
-      <Button
-        variant="base"
-        size="small"
-        @click="editor.chain().focus().toggleBold().run()"
-        :class="{ 'is-active': editor.isActive('bold') }"
-      >
+      <Button variant="base" size="small" @click="editor.chain().focus().toggleBold().run()"
+        :class="{ 'is-active': editor.isActive('bold') }">
         Bold
       </Button>
-      <Button
-        variant="base"
-        size="small"
-        @click="editor.chain().focus().toggleItalic().run()"
-        :class="{ 'is-active': editor.isActive('italic') }"
-      >
+      <Button variant="base" size="small" @click="editor.chain().focus().toggleItalic().run()"
+        :class="{ 'is-active': editor.isActive('italic') }">
         Italic
       </Button>
       <Button variant="base" size="small" @click="editor.chain().focus().toggleReference().run()">

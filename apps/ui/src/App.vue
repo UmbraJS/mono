@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Button, ButtonGroup } from '@nobel/core'
+import { Button, ButtonGroup } from 'umbraco'
 import TextScreen from './components/TextScreen.vue'
 import { umbra } from '@umbrajs/core'
 import { Icon } from '@iconify/vue'
 import type { Accent } from '@umbrajs/core'
-import '@nobel/core/styles/main.scss'
+import 'umbraco/styles/main.scss'
 
 const route = useRoute()
 

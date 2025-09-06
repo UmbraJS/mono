@@ -8,6 +8,12 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), dts(), vueDevTools()],
+  resolve: {
+    alias: {
+      umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+    },
+    dedupe: ['vue'],
+  },
   build: {
     lib: {
       entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),

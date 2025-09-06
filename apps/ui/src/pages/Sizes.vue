@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from '@nobel/core'
+import { Button } from 'umbraco'
 </script>
 
 <template>
@@ -24,7 +24,9 @@ import { Button } from '@nobel/core'
     <div class="test">
       <div class="fig">
         <div class="cap"></div>
-        <div class="m"><p>text height + space-s * 2</p></div>
+        <div class="m">
+          <p>text height + space-s * 2</p>
+        </div>
         <div class="cap"></div>
       </div>
       <Button>Block</Button>

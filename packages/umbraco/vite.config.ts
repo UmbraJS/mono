@@ -13,11 +13,13 @@ export default defineConfig({
       entry: fileURLToPath(new URL('./index.ts', import.meta.url)),
       formats: ['es'],
       name: 'Nobel',
+      fileName: () => 'index',
     },
     minify: false,
     rollupOptions: {
       external: ['vue'],
       output: {
+        entryFileNames: 'index.js',
         globals: {
           vue: 'vue',
         },

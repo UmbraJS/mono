@@ -1,10 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { fileURLToPath, URL } from 'node:url'
+
 export default defineNuxtConfig({
   // https://nuxt.com/modules
   modules: ['@nuxthub/core', '@nuxt/eslint', '@nuxt/image', '@pinia/nuxt', '@nuxt/icon'],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
+  alias: {
+    umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+  },
 
   // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
   runtimeConfig: {
@@ -40,5 +45,18 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: true
     }
-  }
+  },
+
+  build: {
+    transpile: ['umbraco'],
+  },
+
+  vite: {
+    resolve: {
+      dedupe: ['vue'],
+    },
+    server: {
+      fs: { allow: ['..'] },
+    },
+  },
 })

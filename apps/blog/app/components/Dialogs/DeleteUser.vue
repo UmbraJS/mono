@@ -8,7 +8,7 @@ import {
   DialogClose,
   DialogTitle,
   DialogDescription,
-} from '@nobel/core'
+} from 'umbraco'
 
 const { client } = useAuth()
 

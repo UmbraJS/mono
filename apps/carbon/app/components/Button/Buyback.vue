@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DrawerButton } from '@nobel/core'
+import { DrawerButton } from 'umbraco'
 const store = useStore()
 </script>
 

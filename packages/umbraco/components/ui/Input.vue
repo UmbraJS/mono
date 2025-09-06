@@ -30,6 +30,7 @@ input.button {
   all: unset;
   width: 100%;
   box-sizing: border-box;
+  border-radius: var(--radius);
 }
 
 /* input:-internal-autofill-selected {

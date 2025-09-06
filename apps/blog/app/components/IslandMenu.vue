@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, ButtonGroup } from '@nobel/core'
+import { Button, ButtonGroup } from 'umbraco'
 import { onClickOutside } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import UserPanelWrapper from './UserPanelWrapper.vue'

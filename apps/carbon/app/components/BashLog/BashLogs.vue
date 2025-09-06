@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import BashLog from '~/components/BashLog/BashLog.vue'
-import { Tabs, Button } from '@nobel/core'
+import { Tabs, Button } from 'umbraco'
 import type { CardInfo } from '../../../types/card'
 import BashLogModal from './BashLogModal.vue'
 import type { SpaceOutput } from '../../../utils/matchSimulator'

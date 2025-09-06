@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from '@nobel/core'
+import { Button } from 'umbraco'
 const quest = useQuest()
 
 function exitShop() {

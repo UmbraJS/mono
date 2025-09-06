@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@floating-ui/vue": "catalog:",
-    "@nobel/core": "workspace:*",
+    "umbraco": "workspace:*",
     "@tiptap/core": "catalog:",
     "@tiptap/extension-bold": "catalog:",
     "@tiptap/extension-character-count": "catalog:",

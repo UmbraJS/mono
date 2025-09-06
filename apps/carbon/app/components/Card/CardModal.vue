@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Drawer } from '@nobel/core'
+import { Drawer } from 'umbraco'
 import type { Card } from '../../../types'
 import CardModalAvatar from './CardModalAvatar.vue'
 import CardModalMeta from './CardModalMeta.vue'

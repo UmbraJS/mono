@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@monaco-editor/loader": "catalog:",
-    "@nobel/core": "workspace:*",
+    "umbraco": "workspace:*",
     "@nobel/richtext": "workspace:*",
     "@nuxt/content": "catalog:",
     "@nuxt/eslint": "catalog:",

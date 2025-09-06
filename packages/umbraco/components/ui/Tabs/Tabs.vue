@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { TabButton } from '@nobel/core'
+import TabButton from './TabButton.vue'
 import { TabsList, TabsRoot, TabsContent } from 'reka-ui'
 import type { ButtonSize } from "../../../types/button"
 import { ref } from 'vue';

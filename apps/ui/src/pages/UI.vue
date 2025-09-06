@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
-import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs, Graph, Drawer } from '@nobel/core'
+import { Button, ButtonGroup, Toggle, Chip, Radio, Slider, ButtonToggle, Tabs, Graph, Drawer } from 'umbraco'
 
 const open = ref(false)
 </script>

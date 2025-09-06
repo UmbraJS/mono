@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, toast, Input } from '@nobel/core'
+import { Button, toast, Input } from 'umbraco'
 
 const auth = useAuth()
 
@@ -29,9 +29,10 @@ async function signUp() {
 
 <template>
   <form @submit.prevent="signUp">
-    <Input type="email" label="Email" @input="(e) => (email = e.target.value)" />
-    <Input label="Password" type="password" @input="(e) => (password = e.target.value)" />
-    <Input label="Name" type="name" @input="(e) => (name = e.target.value)" />
+    <Input type="email" label="Email" @input="(e: InputEvent) => (email = (e.target as HTMLInputElement).value)" />
+    <Input label="Password" type="password"
+      @input="(e: InputEvent) => (password = (e.target as HTMLInputElement).value)" />
+    <Input label="Name" type="name" @input="(e: InputEvent) => (name = (e.target as HTMLInputElement).value)" />
     <Button type="submit">Sign Up</Button>
   </form>
 </template>

@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
-    "@nobel/core": "workspace:*",
+    "umbraco": "workspace:*",
     "@nobel/bifrost": "workspace:*",
     "@nuxt/eslint": "catalog:",
     "@nuxthub/core": "catalog:",

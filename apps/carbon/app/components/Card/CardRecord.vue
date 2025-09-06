@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Graph, ScrollArea } from '@nobel/core'
+import { Graph, ScrollArea } from 'umbraco'
 import type { Card } from '../../../types'
 // import type { BashRecords } from '~/composables/LEGACYuseBashRecords'
 

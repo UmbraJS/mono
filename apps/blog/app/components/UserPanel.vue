@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, toast } from '@nobel/core'
+import { Button, toast } from 'umbraco'
 import DeleteUser from './Dialogs/DeleteUser.vue'
 
 const { user, session, client } = useAuth()
@@ -27,22 +27,12 @@ const expiresIn = computed(() => {
 <template>
   <div class="user-panel">
     <div class="identity">
-      <NuxtImg
-        class="banner"
-        :src="
-          user?.image || 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-        "
-        alt="User Banner"
-      />
+      <NuxtImg class="banner" :src="user?.image || 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+        " alt="User Banner" />
       <div class="identity-content panel-wrapper">
-        <NuxtImg
-          class="avatar"
-          :src="
-            user?.image ||
-            'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-          "
-          alt="User avatar"
-        />
+        <NuxtImg class="avatar" :src="user?.image ||
+          'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+          " alt="User avatar" />
         <h3>{{ user?.name }}</h3>
         <div v-if="!user?.emailVerified" class="verified border base-accent">
           <Icon name="pixelarticons:check" />
@@ -54,14 +44,8 @@ const expiresIn = computed(() => {
       <p>{{ user?.email }}</p>
       <p>
         Created at:
-        <NuxtTime
-          v-if="user?.createdAt"
-          :datetime="new Date(user?.createdAt)"
-          second="numeric"
-          month="long"
-          day="numeric"
-          year="numeric"
-        />
+        <NuxtTime v-if="user?.createdAt" :datetime="new Date(user?.createdAt)" second="numeric" month="long"
+          day="numeric" year="numeric" />
       </p>
       <p>Session Expires: {{ expiresIn }}</p>
     </div>
@@ -109,6 +93,7 @@ const expiresIn = computed(() => {
   background-color: var(--base-110);
   width: var(--block);
   aspect-ratio: 1 / 1;
+
   .iconify {
     background-color: var(--base-10);
   }

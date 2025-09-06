@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ScrollArea } from '@nobel/core'
+import { ScrollArea } from 'umbraco'
 import type { CardInfo } from '../../../types/card'
 import BashLogEntry from './BashLogEntry.vue'
 import type { SpaceOutput } from '../../../utils/matchSimulator'

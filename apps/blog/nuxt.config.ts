@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import { fileURLToPath, URL } from 'node:url'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -17,7 +18,12 @@ export default defineNuxtConfig({
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
-  // css: ['@nobel/core/styles/main.scss'],
+  // css: ['@umbrajs/umbraco/styles/main.scss'],
+
+  // Use Umbraco source during dev for instant HMR across the monorepo
+  alias: {
+    umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+  },
 
   // Image configuration
   image: {
@@ -51,6 +57,11 @@ export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2024-07-30',
 
+  // Ensure source is transpiled when aliased
+  build: {
+    transpile: ['umbraco', 'motion-v'],
+  },
+
   // https://hub.nuxt.com/docs/getting-started/installation#options
   hub: {
     database: true,
@@ -60,8 +71,12 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    define: {
-      global: 'globalThis',
+    define: { global: 'globalThis' },
+    resolve: {
+      dedupe: ['vue'],
+    },
+    server: {
+      fs: { allow: ['..'] },
     },
   },
 

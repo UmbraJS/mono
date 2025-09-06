@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Toggle, toast } from '@nobel/core'
+import { Toggle, toast } from 'umbraco'
 
 const theme = useUmbra()
 </script>

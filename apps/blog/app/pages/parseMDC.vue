@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from '@nobel/core'
+import { Button } from 'umbraco'
 import { unified, type Processor } from 'unified'
 import type { MDCRoot } from '@nuxtjs/mdc'
 import remarkParse from 'remark-parse'

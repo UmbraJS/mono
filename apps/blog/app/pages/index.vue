@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BlackHole from "../components/BlackHole.vue"
 useSeoMeta({
   title: "Sam is Blogging at 2am",
   description: "A place to share your thoughts and ideas.",
@@ -33,19 +34,37 @@ useSeoMeta({
         </p>
       </div>
     </div>
+    <div id="BackgroundElement">
+      <BlackHole />
+    </div>
   </div>
 </template>
 
 <style lang="scss">
+#BackgroundElement {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
 #BlogFrontPage {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
   gap: var(--space-4);
-  height: 80vh;
+  height: 100vh;
   width: 100%;
+}
+
+#BlogHero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
 }
 
 #BlogHero .avatar {

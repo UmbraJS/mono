@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import '@nobel/core/styles/main.scss'
-import { Toaster } from '@nobel/core'
+import 'umbraco/styles/main.scss'
+import { Toaster } from 'umbraco'
 import { useSplinesStore } from '@/stores/useSplinesStore'
 
 useSeoMeta({

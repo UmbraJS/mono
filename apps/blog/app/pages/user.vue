@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, toast } from '@nobel/core'
+import { Button, toast } from 'umbraco'
 
 // https://better-auth.vercel.app/docs/integrations/nuxt#ssr-usage
 const { user, session, client } = useAuth()
@@ -23,18 +23,10 @@ onMounted(() => {
     <pre>{{ session }}</pre>
     <h3>Accounts</h3>
     <p class="mt-2">
-      <Button
-        v-if="hasProvider('github')"
-        icon="i-simple-icons-github"
-        trailing-icon="i-heroicons-check"
-      >
+      <Button v-if="hasProvider('github')" icon="i-simple-icons-github" trailing-icon="i-heroicons-check">
         Linked with GitHub
       </Button>
-      <Button
-        v-else
-        icon="i-simple-icons-github"
-        @click="client.linkSocial({ provider: 'github' })"
-      >
+      <Button v-else icon="i-simple-icons-github" @click="client.linkSocial({ provider: 'github' })">
         Link account with GitHub
       </Button>
     </p>
