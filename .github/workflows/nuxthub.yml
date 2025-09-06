@@ -13,7 +13,7 @@ jobs:
       id-token: write
     defaults:
       run:
-        working-directory: ./apps/hub
+        working-directory: ./apps/blog
 
     steps:
       - uses: actions/checkout@v4
@@ -40,4 +40,4 @@ jobs:
         id: deploy
         with:
           project-key: mono-itci
-          directory: ./apps/hub/dist
+          directory: ./apps/blog/dist

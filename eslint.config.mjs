@@ -9,10 +9,10 @@ export default antfu({
   // Ignore apps and packages that have their own ESLint configs or are not meant to be linted
   ignores: [
     'apps/carbon/**/*',
-    'apps/hub/**/*',
+  'apps/blog/**/*',
     'apps/ui/**/*',
     'packages/carbon/**/*',
-    'packages/core/**/*',
+  'packages/umbra/**/*',
     'packages/dye/**/*',
     'packages/nobel/**/*',
     'packages/richtext/**/*',

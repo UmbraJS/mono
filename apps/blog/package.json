@@ -47,7 +47,7 @@
     "@vueuse/core": "catalog:",
     "@vueuse/nuxt": "catalog:",
     "better-auth": "catalog:",
-    "better-sqlite3": "catalog:",
+    "better-sqlite3": "^12.2.0",
     "destr": "catalog:",
     "drizzle-orm": "catalog:",
     "github-slugger": "catalog:",

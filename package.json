@@ -7,14 +7,14 @@
     "ui": "cd apps/ui && pnpm run dev",
     "carbon": "cd apps/carbon && pnpm run dev",
     "dye": "cd packages/dye && pnpm run dev",
-    "hub": "cd apps/hub && pnpm run dev",
+    "blog": "cd apps/blog && pnpm run dev",
     "gpu": "cd apps/gpu && pnpm run dev",
-    "build": "cd packages/core && tsc && vite build && copy package.json dist && copy README.md dist",
-    "publish": "cd packages/core/dist && npm publish",
+    "build": "cd packages/umbra && tsc && vite build && copy package.json dist && copy README.md dist",
+    "publish": "cd packages/umbra/dist && npm publish",
     "tree": "tree -I 'node_modules|dist'",
-    "db:generate": "cd apps/hub && pnpm run drizzle-kit generate",
-    "lint": "eslint . --ext .js,.ts,.vue && cd apps/carbon && pnpm lint && cd ../hub && pnpm lint",
-    "lint:fix": "eslint . --ext .js,.ts,.vue --fix && cd apps/carbon && pnpm lint --fix && cd ../hub && pnpm lint --fix"
+    "db:generate": "cd apps/blog && pnpm run drizzle-kit generate",
+    "lint": "eslint . --ext .js,.ts,.vue && cd apps/carbon && pnpm lint && cd ../blog && pnpm lint",
+    "lint:fix": "eslint . --ext .js,.ts,.vue --fix && cd apps/carbon && pnpm lint --fix && cd ../blog && pnpm lint --fix"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

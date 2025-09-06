@@ -1,4 +1,4 @@
-import type { UniformBuffer } from '../buffers'
+import type { UniformBuffer } from '../buffers/index.js'
 
 export function getUniformEntries(props: { device: GPUDevice; uniforms: UniformBuffer[] }) {
   const defaultVisibility = GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT | GPUShaderStage.COMPUTE

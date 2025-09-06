@@ -25,7 +25,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     defaults:
       run:
-        working-directory: apps/hub
+        working-directory: apps/blog
 
     strategy:
       matrix:
@@ -39,7 +39,7 @@ jobs:
       - name: Identify package manager
         id: pkgman
         run: |
-          cache=`[ -f "apps/hub/pnpm-lock.yaml" ] && echo "pnpm" || ([ -f "apps/hub/package-lock.json" ] && echo "npm" || ([ -f "apps/hub/yarn.lock" ] && echo "yarn" || echo ""))`
+          cache=`[ -f "apps/blog/pnpm-lock.yaml" ] && echo "pnpm" || ([ -f "apps/blog/package-lock.json" ] && echo "npm" || ([ -f "apps/blog/yarn.lock" ] && echo "yarn" || echo ""))`
           package_manager=`[ ! -z "$cache" ] && echo "$cache" || echo "pnpm"`
           echo "cache=$cache" >> $GITHUB_OUTPUT
           echo "package_manager=$package_manager" >> $GITHUB_OUTPUT
@@ -92,5 +92,5 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: your-project-name # Replace with your actual Cloudflare project name
-          directory: apps/hub/.output/public
+          directory: apps/blog/.output/public
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

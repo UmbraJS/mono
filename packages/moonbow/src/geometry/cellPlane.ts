@@ -1,4 +1,4 @@
-import { plane } from './plane'
+import { plane } from './plane.js'
 
 export function getCellPlane(device: GPUDevice, GRID_SIZE: number) {
   const surface = plane(device, {})
