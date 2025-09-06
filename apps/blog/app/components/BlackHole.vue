@@ -309,13 +309,13 @@ onBeforeUnmount(() => { window.removeEventListener('resize', handleResize); canc
   z-index: 7;
   width: 100%;
   height: 100%;
-  opacity: 0.5;
+  opacity: 0.3;
   mix-blend-mode: overlay;
 }
 
 :root.dark .blackhole-overlay,
 .dark .blackhole-overlay,
 [data-theme='dark'] .blackhole-overlay {
-  background: repeating-linear-gradient(transparent, transparent 1px, var(--base-120) 1px, var(--base-120) 2px);
+  background: repeating-linear-gradient(transparent, transparent 1px, var(--accent-120) 1px, var(--accent-120) 2px);
 }
 </style>

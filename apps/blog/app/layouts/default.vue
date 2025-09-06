@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onKeyStroke } from '@vueuse/core'
-import FrostLayer from '~/components/FrostLayer.vue'
+import FrostLayer from '../components/FrostLayer.vue'
 
 const { data: posts } = await useAsyncData('blog', () => queryCollection('blog').all())
 
