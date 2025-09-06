@@ -1,6 +1,4 @@
 import { toast } from 'vue-sonner'
-
-export { default as Graph } from './components/graph/Graph.vue'
 export { default as Button } from './components/ui/Button/Button.vue'
 export { default as ButtonGroup } from './components/ui/Button/ButtonGroup.vue'
 export { default as AddButton } from './components/ui/Button/presets/AddButton.vue'
