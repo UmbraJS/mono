@@ -38,6 +38,7 @@
     "@types/hast": "catalog:",
     "@types/mdast": "catalog:",
     "@umbrajs/core": "workspace:*",
+    "@vercel/speed-insights": "^1.2.0",
     "@vueuse/core": "catalog:",
     "@vueuse/nuxt": "catalog:",
     "convex-nuxt": "0.1.5",
