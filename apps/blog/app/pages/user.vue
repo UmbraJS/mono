@@ -8,9 +8,9 @@ type AuthClient = {
   linkSocial?: (opts: { provider: string }) => Promise<unknown>
 }
 
-// https://better-auth.vercel.app/docs/integrations/nuxt#ssr-usage
+// Auth is currently stubbed; replace with real implementation when needed
 const { user, session, client } = useAuth()
-const authClient = client as unknown as AuthClient
+const authClient = client as AuthClient
 const { data: accounts } = await useAsyncData(
   'accounts',
   async () => {
