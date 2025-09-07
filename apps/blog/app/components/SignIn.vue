@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button, toast, Input } from 'umbraco'
 
-const auth = useAuth()
+// const auth = useAuth()
 
 const email = ref('')
 const password = ref('')
@@ -11,30 +11,30 @@ async function signIn() {
   if (loading.value) return
   loading.value = true
 
-  const { error } = await auth.signIn.email({
-    email: email.value,
-    password: password.value,
-  })
+  // const { error } = await auth.signIn.email({
+  //   email: email.value,
+  //   password: password.value,
+  // })
 
-  if (error) {
-    toast.error(error.message || 'Error signing in')
-    loading.value = false
-  } else onSuccessfulSignIn()
+  // if (error) {
+  //   toast.error(error.message || 'Error signing in')
+  //   loading.value = false
+  // } else onSuccessfulSignIn()
 }
 
 const signinWithGithub = async () => {
   if (loading.value) return
   loading.value = true
 
-  const { error } = await auth.signIn.social({
-    provider: 'github',
-    callbackURL: '/user',
-  })
+  // const { error } = await auth.signIn.social({
+  //   provider: 'github',
+  //   callbackURL: '/user',
+  // })
 
-  if (error) {
-    toast.error('Error signing in')
-    loading.value = false
-  } else onSuccessfulSignIn()
+  // if (error) {
+  //   toast.error('Error signing in')
+  //   loading.value = false
+  // } else onSuccessfulSignIn()
 }
 
 const onSuccessfulSignIn = async () => {

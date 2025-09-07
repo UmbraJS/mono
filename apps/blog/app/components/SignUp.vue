@@ -12,17 +12,17 @@ async function signUp() {
   if (loading.value) return
   loading.value = true
 
-  const { error } = await auth.signUp.email({
-    email: email.value,
-    password: password.value,
-    name: name.value,
-  })
+  // const { error } = await auth.signUp.email({
+  //   email: email.value,
+  //   password: password.value,
+  //   name: name.value,
+  // })
 
-  if (error) {
-    toast.error(error.message || 'Error signing up')
-  } else {
-    toast.success('You have been signed up!')
-  }
+  // if (error) {
+  //   toast.error(error.message || 'Error signing up')
+  // } else {
+  //   toast.success('You have been signed up!')
+  // }
   loading.value = false
 }
 </script>
