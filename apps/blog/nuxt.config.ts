@@ -25,7 +25,8 @@ export default defineNuxtConfig({
   ],
 
   convex: {
-    url: process.env.NUXT_PUBLIC_CONVEX_URL,
+    // Use Convex URL from .env.local per Convex Nuxt quickstart
+    url: process.env.CONVEX_URL,
   },
 
   // https://devtools.nuxt.com
@@ -63,7 +64,7 @@ export default defineNuxtConfig({
       // Can be overridden by NUXT_PUBLIC_HELLO_TEXT environment variable
       helloText: 'Hello from the Edge 👋',
       // Expose Convex URL to the client as well, if needed
-      convexUrl: process.env.NUXT_PUBLIC_CONVEX_URL,
+      convexUrl: process.env.CONVEX_URL,
     },
   },
   // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4

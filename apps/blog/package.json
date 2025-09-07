@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.12.3",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --dotenv .env.local",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -41,6 +41,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "@vueuse/core": "catalog:",
     "@vueuse/nuxt": "catalog:",
+    "convex": "^1.26.2",
     "convex-nuxt": "0.1.5",
     "convex-vue": "^0.1.5",
     "destr": "catalog:",
