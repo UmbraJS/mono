@@ -106,14 +106,6 @@ catalog:
   vue-tsc: ^2.2.10
   wrangler: 4.22.0
 
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - better-sqlite3
-  - esbuild
-  - maplibre-gl
-  - sharp
-  - unrs-resolver
-  - workerd
 catalogs:
   conflicts_vue_h3_5_11:
     vue: ^3.5.11
@@ -149,3 +141,15 @@ catalogs:
     vite-plugin-vue-devtools: ^7.4.6
   conflicts_vue-tsc_h2_1_6:
     vue-tsc: ^2.1.6
+
+ignoredBuiltDependencies:
+  - '@vercel/speed-insights'
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - better-sqlite3
+  - esbuild
+  - maplibre-gl
+  - sharp
+  - unrs-resolver
+  - workerd

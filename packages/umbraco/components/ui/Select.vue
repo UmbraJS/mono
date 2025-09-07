@@ -32,9 +32,9 @@ function handleClick() {
 //   open.value = !open.value
 // }, 1000)
 
-const transitionMax = 0.4
-const transitionMin = transitionMax / 2
-const transition = ref(transitionMax)
+// const transitionMax = 0.4
+// const transitionMin = transitionMax / 2
+// const transition = ref(transitionMax)
 
 function handleItemClick(v: string, index: number, event: MouseEvent) {
   value.value = v
@@ -64,23 +64,13 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
 </script>
 
 <template>
-  <button
-    ref="button"
-    class="SelectRoot button buttonFocus buttonHover"
-    :class="{ open: open, aboveHalf: activeItemAboveCenter }"
-    @click="handleClick"
-    anchor="select"
-  >
+  <button ref="button" class="SelectRoot button buttonFocus buttonHover"
+    :class="{ open: open, aboveHalf: activeItemAboveCenter }" @click="handleClick" anchor="select">
     <p class="space-value">{{ longestValue }}</p>
     <div class="SelectList">
       <div ref="ListContent" class="SelectList-content">
-        <div
-          v-for="(v, index) in values"
-          :key="v"
-          class="SelectOption buttonFocus buttonHover"
-          :class="{ active: value === v }"
-          @click="(e) => handleItemClick(v, index, e)"
-        >
+        <div v-for="(v, index) in values" :key="v" class="SelectOption buttonFocus buttonHover"
+          :class="{ active: value === v }" @click="(e) => handleItemClick(v, index, e)">
           <Icon :icon="value === v ? `` : ``" />
           <p>{{ v }}</p>
         </div>
@@ -147,7 +137,8 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
   width: 100%;
   transition: 1s linear;
 }
-/* 
+
+/*
 .SelectRoot.aboveHalf .SelectList-content {
   top: calc(v-bind(itemOffsetTop) * -1px);
 }
