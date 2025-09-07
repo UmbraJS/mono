@@ -1,0 +1,16 @@
+# Trim repository upload (for Git/Vercel integration) and reduce artifact size
+# IMPORTANT: Do NOT ignore .vercel/output
+
+# Ignore common build caches and outputs
+**/.nuxt/
+**/.nitro/
+**/.output/
+**/.cache/
+**/dist/
+**/coverage/
+
+# Node modules are handled by Vercel build/install phases
+**/node_modules/
+
+# Vite/Nuxt logs and temp
+**/vite.cache/

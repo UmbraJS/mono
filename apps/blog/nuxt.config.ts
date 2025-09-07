@@ -106,6 +106,7 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: true,
     },
+  sourceMap: process.env.NODE_ENV === 'production' ? false : undefined,
     prerender: {
       // Dev-friendly toggles: disable crawling or add extra routes via env
       routes: [
