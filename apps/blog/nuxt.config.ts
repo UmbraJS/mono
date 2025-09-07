@@ -88,8 +88,8 @@ export default defineNuxtConfig({
   // },
 
   nitro: {
-  // Force Vercel preset for deployment
-  preset: 'vercel',
+    // Force Vercel preset for deployment
+    preset: 'vercel',
     experimental: {
       openAPI: true,
     },

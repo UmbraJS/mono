@@ -43,11 +43,8 @@ onMounted(() => {
       <Button v-if="hasProvider('github')" icon="i-simple-icons-github" trailing-icon="i-heroicons-check">
         Linked with GitHub
       </Button>
-      <Button
-        v-else
-        icon="i-simple-icons-github"
-        @click="(authClient.linkSocial && authClient.linkSocial({ provider: 'github' }))"
-      >
+      <Button v-else icon="i-simple-icons-github"
+        @click="(authClient.linkSocial && authClient.linkSocial({ provider: 'github' }))">
         Link account with GitHub
       </Button>
     </p>

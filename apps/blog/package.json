@@ -7,7 +7,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-  "preview": "nuxt preview",
+    "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -79,6 +79,6 @@
     "@nuxt/eslint-config": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:",
-  "vue-tsc": "catalog:"
+    "vue-tsc": "catalog:"
   }
 }
