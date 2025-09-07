@@ -51,7 +51,9 @@
     "@iconify/vue": "catalog:",
     "reka-ui": "catalog:",
     "vaul-vue": "catalog:",
-    "vue-sonner": "catalog:"
+    "vue-sonner": "catalog:",
+    "gsap": "catalog:",
+    "@vueuse/core": "catalog:"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "catalog:",

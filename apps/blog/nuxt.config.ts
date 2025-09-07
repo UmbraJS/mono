@@ -38,8 +38,8 @@ export default defineNuxtConfig({
   // Use Umbraco source during dev for instant HMR across the monorepo
   alias: isDev
     ? {
-        umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
-      }
+      umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+    }
     : {},
 
   // Image configuration
@@ -106,7 +106,7 @@ export default defineNuxtConfig({
     experimental: {
       openAPI: true,
     },
-  sourceMap: process.env.NODE_ENV === 'production' ? false : undefined,
+    sourceMap: process.env.NODE_ENV === 'production' ? false : undefined,
     prerender: {
       // Dev-friendly toggles: disable crawling or add extra routes via env
       routes: [
@@ -132,16 +132,7 @@ export default defineNuxtConfig({
   // https://eslint.nuxt.com
   eslint: {
     config: {
-      // parserOptions: {
-      //   parser: '@typescript-eslint/parser',
-      //   sourType: 'module',
-      // },
       stylistic: false,
-      // {
-      //   quotes: 'single',
-      //   arrowParens: false,
-      //   semi: false,
-      // }
     },
   },
 
@@ -187,12 +178,5 @@ export default defineNuxtConfig({
         },
       },
     },
-  },
-
-  // Auto-import configuration for Studio compatibility
-  imports: {
-    dirs: [
-      'composables/**',
-    ],
   },
 })
