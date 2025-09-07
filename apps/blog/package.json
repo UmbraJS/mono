@@ -11,7 +11,7 @@
     "deploy": "npx nuxthub deploy",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-  "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@monaco-editor/loader": "catalog:",
@@ -42,7 +42,6 @@
     "@umbrajs/core": "workspace:*",
     "@vueuse/core": "catalog:",
     "@vueuse/nuxt": "catalog:",
-    
     "convex-nuxt": "0.1.5",
     "convex-vue": "^0.1.5",
     "destr": "catalog:",
