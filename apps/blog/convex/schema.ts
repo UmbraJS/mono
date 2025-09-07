@@ -6,4 +6,8 @@ export default defineSchema({
     text: v.string(),
     isCompleted: v.boolean(),
   }),
+  messages: defineTable({
+    user: v.string(),
+    body: v.string(),
+  }),
 });
