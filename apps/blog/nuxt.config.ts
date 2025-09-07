@@ -25,7 +25,8 @@ export default defineNuxtConfig({
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
-  // css: ['@umbrajs/umbraco/styles/main.scss'],
+  // Ensure Umbraco styles are applied when consuming the built package
+  css: ['umbraco/dist/umbraco.css'],
 
   // Use Umbraco source during dev for instant HMR across the monorepo
   alias: {

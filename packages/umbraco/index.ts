@@ -1,3 +1,5 @@
+import './styles/_index.scss'
+
 import { toast } from 'vue-sonner'
 export { default as Button } from './components/ui/Button/Button.vue'
 export { default as ButtonGroup } from './components/ui/Button/ButtonGroup.vue'
