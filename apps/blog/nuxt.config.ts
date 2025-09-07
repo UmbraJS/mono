@@ -14,7 +14,14 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
     'nuxt-time',
     '@vueuse/nuxt',
+    'convex-nuxt',
   ],
+
+  // Convex configuration (set URL via env var)
+  convex: {
+    // Set NUXT_PUBLIC_CONVEX_URL in your .env file (see .env.example)
+    url: process.env.NUXT_PUBLIC_CONVEX_URL,
+  },
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
@@ -44,13 +51,11 @@ export default defineNuxtConfig({
 
   // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
   runtimeConfig: {
-    public: {
+  public: {
       // Can be overridden by NUXT_PUBLIC_HELLO_TEXT environment variable
       helloText: 'Hello from the Edge 👋',
-    },
-    auth: {
-      redirectUserTo: '/user',
-      redirectGuestTo: '/',
+      // Expose Convex URL to the client as well, if needed
+      convexUrl: process.env.NUXT_PUBLIC_CONVEX_URL,
     },
   },
   // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
@@ -95,8 +100,6 @@ export default defineNuxtConfig({
       routes: ['/'], // Add specific routes you want to pre-render
       crawlLinks: true, // This will crawl and pre-render linked pages
       ignore: [
-        '/user', // Skip auth-protected routes
-        '/api/auth/**', // Skip auth API routes
         '/api/**', // Skip all API routes that might need server context
       ],
       failOnError: false, // Don't fail the build if prerendering fails

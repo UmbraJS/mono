@@ -411,6 +411,12 @@ importers:
       better-sqlite3:
         specifier: ^12.2.0
         version: 12.2.0
+      convex-nuxt:
+        specifier: 0.1.5
+        version: 0.1.5(convex-vue@0.1.5(convex@1.26.2)(vue@3.5.18(typescript@5.9.2)))(magicast@0.3.5)
+      convex-vue:
+        specifier: ^0.1.5
+        version: 0.1.5(convex@1.26.2)(vue@3.5.18(typescript@5.9.2))
       destr:
         specifier: 'catalog:'
         version: 2.0.5
@@ -4716,6 +4722,34 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  convex-nuxt@0.1.5:
+    resolution: {integrity: sha512-Sz1nzXPPFomSs7M8qzAldE8SOpqQI/8AUV2UUHqoTUbqynRAoM1J0uHrLlLm0LDfJD5RlDhM4Kv0q6JWx7zwag==}
+    peerDependencies:
+      convex-vue: ^0.1.4
+
+  convex-vue@0.1.5:
+    resolution: {integrity: sha512-0kyM4rkGzDDW9mrK4O3q9cCByzezBm6cnjfeB+i5Wc/BNKfXeAWKFyOKvAuCqjC8WGCbUG/OtbMFbUlWT3dD3g==}
+    engines: {node: '>=22.14.0'}
+    peerDependencies:
+      convex: '>=1.24.0'
+      vue: '>=3.5.0'
+
+  convex@1.26.2:
+    resolution: {integrity: sha512-QG3zvZ9GTTeeBS+N5PJj73TULHYu99eVSOI3KU2hMnB9q40fHxkMFJ+AYox+K81roTakciBvNTvGlhfz+M10fQ==}
+    engines: {node: '>=18.0.0', npm: '>=7.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@auth0/auth0-react': ^2.0.1
+      '@clerk/clerk-react': ^4.12.8 || ^5.0.0
+      react: ^18.0.0 || ^19.0.0-0 || ^19.0.0
+    peerDependenciesMeta:
+      '@auth0/auth0-react':
+        optional: true
+      '@clerk/clerk-react':
+        optional: true
+      react:
+        optional: true
 
   cookie-es@1.2.2:
     resolution: {integrity: sha512-+W7VmiVINB+ywl1HGXJXmrqkOhpKrIiVZV6tQuV54ZyQC7MMuBt81Vc336GMLoHBq5hV/F9eXgt5Mnx0Rha5Fg==}
@@ -13117,6 +13151,26 @@ snapshots:
   consola@3.4.2: {}
 
   convert-source-map@2.0.0: {}
+
+  convex-nuxt@0.1.5(convex-vue@0.1.5(convex@1.26.2)(vue@3.5.18(typescript@5.9.2)))(magicast@0.3.5):
+    dependencies:
+      '@nuxt/kit': 3.18.1(magicast@0.3.5)
+      convex-vue: 0.1.5(convex@1.26.2)(vue@3.5.18(typescript@5.9.2))
+    transitivePeerDependencies:
+      - magicast
+
+  convex-vue@0.1.5(convex@1.26.2)(vue@3.5.18(typescript@5.9.2)):
+    dependencies:
+      consola: 3.4.2
+      convex: 1.26.2
+      std-env: 3.9.0
+      vue: 3.5.18(typescript@5.9.2)
+
+  convex@1.26.2:
+    dependencies:
+      esbuild: 0.25.4
+      jwt-decode: 4.0.0
+      prettier: 3.6.2
 
   cookie-es@1.2.2: {}
 
