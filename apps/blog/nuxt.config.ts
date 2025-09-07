@@ -21,14 +21,18 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
     'nuxt-time',
     '@vueuse/nuxt',
-    'convex-nuxt',
+  // Only enable Convex when a deployment URL is provided
+  ...(process.env.NUXT_PUBLIC_CONVEX_URL ? ['convex-nuxt'] as const : []),
   ],
 
   // Convex configuration (set URL via env var)
-  convex: {
-    // Set NUXT_PUBLIC_CONVEX_URL in your .env file (see .env.example)
-    url: process.env.NUXT_PUBLIC_CONVEX_URL,
-  },
+  // Only configured/used if the module above is enabled
+  convex: process.env.NUXT_PUBLIC_CONVEX_URL
+    ? {
+      // Set NUXT_PUBLIC_CONVEX_URL in your .env file (see .env.example)
+      url: process.env.NUXT_PUBLIC_CONVEX_URL,
+    }
+    : undefined,
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
@@ -117,7 +121,8 @@ export default defineNuxtConfig({
       ignore: [
         '/api/**', // Skip all API routes that might need server context
       ],
-      failOnError: false, // Don't fail the build if prerendering fails
+  // TEMP: enable to capture stack trace for '/' prerender failure
+  failOnError: true,
     },
     alias: {
       'pkg-types': 'unenv/runtime/mock/proxy',

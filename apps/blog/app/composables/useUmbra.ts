@@ -149,10 +149,12 @@ export const useUmbra = defineStore('umbra', () => {
     return readability.value
   }
 
-  watch(dark, (value) => {
-    // document.documentElement.classList.toggle('dark', value)
-    document.querySelector('html')?.classList.toggle('dark', value)
-  })
+  // Toggle HTML class only on client to avoid SSR errors during prerender
+  if (import.meta.client) {
+    watch(dark, (value) => {
+      document.querySelector('html')?.classList.toggle('dark', value)
+    })
+  }
 
   return {
     input,

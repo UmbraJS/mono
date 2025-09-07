@@ -18,6 +18,8 @@ useSeoMeta({
     <NuxtPage />
   </NuxtLayout>
   <IslandMenu />
-  <Toaster />
-  <SpeedInsights />
+  <ClientOnly>
+    <Toaster />
+    <SpeedInsights />
+  </ClientOnly>
 </template>

@@ -6,7 +6,16 @@ import SidebarList from '../components/SidebarList.vue'
 import PostList from '../components/PostList.vue'
 import ProjectList from '../components/ProjectList.vue'
 
-const { data: posts } = await useAsyncData('blog', () => queryCollection('blog').all())
+// SSR-safe: guard content query to avoid crashing prerender
+const { data: posts, error: postsError } = await useAsyncData('blog', async () => {
+  try {
+    // queryCollection provided by @nuxt/content
+    return await queryCollection('blog').all()
+  } catch (e) {
+    console.error('[home] Failed to load blog posts during SSR:', e)
+    return []
+  }
+})
 
 const theme = useUmbra()
 
