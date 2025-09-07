@@ -94,6 +94,7 @@ export default defineNuxtConfig({
   // },
 
   nitro: {
+    preset: 'vercel', // good hygiene on Vercel
     experimental: {
       openAPI: true,
     },
