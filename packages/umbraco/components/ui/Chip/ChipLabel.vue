@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import IconClose from '../../Icons/IconClose.vue'
-import Button from '../Button/Button.vue'
-</script>
-
 <template>
   <div class="content border">
     <p>Name Avor</p>

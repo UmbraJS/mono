@@ -2,6 +2,7 @@
 import "umbraco/styles/main.scss";
 import { Toaster } from "umbraco";
 import IslandMenu from "./components/IslandMenu.vue";
+// Use direct component import to avoid Nuxt module resolution issues
 import { SpeedInsights } from "@vercel/speed-insights/nuxt";
 
 useSeoMeta({

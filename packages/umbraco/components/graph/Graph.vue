@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VisXYContainer, VisLine, VisAxis, VisCrosshair, VisTooltip } from '@unovis/vue'
+import { VisXYContainer, VisLine, VisAxis, VisCrosshair } from '@unovis/vue'
 
 type DataRecord = {
   x: number

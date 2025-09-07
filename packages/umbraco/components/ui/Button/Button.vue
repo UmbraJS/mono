@@ -90,16 +90,16 @@ const getColorScheme = computed(() => {
   @include button-base-structure;
 }
 
-.button.medium {
-  @include button-medium;
+.button.mini {
+  @include button-mini;
 }
 
 .button.small {
   @include button-small;
 }
 
-.button.mini {
-  @include button-mini;
+.button.medium {
+  @include button-medium;
 }
 
 .buttonHover:hover {
