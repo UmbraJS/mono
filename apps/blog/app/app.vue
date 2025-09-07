@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import 'umbraco/styles/main.scss'
-import { Toaster } from 'umbraco'
-import IslandMenu from './components/IslandMenu.vue'
+import "umbraco/styles/main.scss";
+import { Toaster } from "umbraco";
+import IslandMenu from "./components/IslandMenu.vue";
+import { SpeedInsights } from "@vercel/speed-insights/nuxt";
 
 useSeoMeta({
-  title: 'NuxtHub Starter',
-  description: 'A Nuxt template to build your full-stack application on the edge.',
-})
+  title: "NuxtHub Starter",
+  description:
+    "A Nuxt template to build your full-stack application on the edge.",
+});
 </script>
 
 <template>
@@ -17,4 +19,5 @@ useSeoMeta({
   </NuxtLayout>
   <IslandMenu />
   <Toaster />
+  <SpeedInsights />
 </template>
