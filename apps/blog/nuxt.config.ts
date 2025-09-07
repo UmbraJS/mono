@@ -1,6 +1,14 @@
 import { defineNuxtConfig } from 'nuxt/config'
 import { fileURLToPath, URL } from 'node:url'
 
+// Build-time flags
+const isDev = process.env.NODE_ENV !== 'production'
+const shouldCrawl = process.env.NUXT_PRERENDER_CRAWL !== 'false'
+const prerenderExtraRoutes = (process.env.NUXT_PRERENDER_ROUTES || '')
+  .split(',')
+  .map(r => r.trim())
+  .filter(Boolean)
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // https://nuxt.com/modules
@@ -28,9 +36,11 @@ export default defineNuxtConfig({
   css: ['umbraco/dist/umbraco.css'],
 
   // Use Umbraco source during dev for instant HMR across the monorepo
-  alias: {
-    umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
-  },
+  alias: isDev
+    ? {
+        umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+      }
+    : {},
 
   // Image configuration
   image: {
@@ -62,9 +72,12 @@ export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2024-07-30',
 
-  // Ensure source is transpiled when aliased
+  // Ensure source is transpiled when aliased (dev only); always transpile motion-v
   build: {
-    transpile: ['umbraco', 'motion-v'],
+    transpile: [
+      ...(isDev ? ['umbraco'] : []),
+      'motion-v',
+    ],
   },
 
   // https://hub.nuxt.com/docs/getting-started/installation#options
@@ -94,8 +107,12 @@ export default defineNuxtConfig({
       openAPI: true,
     },
     prerender: {
-      routes: ['/'], // Add specific routes you want to pre-render
-      crawlLinks: true, // This will crawl and pre-render linked pages
+      // Dev-friendly toggles: disable crawling or add extra routes via env
+      routes: [
+        '/',
+        ...prerenderExtraRoutes,
+      ],
+      crawlLinks: shouldCrawl, // Disable with NUXT_PRERENDER_CRAWL=false
       ignore: [
         '/api/**', // Skip all API routes that might need server context
       ],
