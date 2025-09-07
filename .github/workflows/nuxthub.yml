@@ -1,3 +1,6 @@
+name: disabled
+on: {}
+jobs: {}
 name: Noble
 on: push
 

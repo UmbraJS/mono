@@ -2,7 +2,7 @@
 
 ## Features
 
-- Server-Side rendering on Cloudflare Workers
+- Server-Side rendering on Vercel (Nitro preset `vercel`)
 - ESLint setup
 - Ready to add a database, blob and KV storage
 - One click deploy on 275+ locations for free

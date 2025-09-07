@@ -1,12 +1,29 @@
 <script setup lang="ts">
 import { Button, toast } from 'umbraco'
 
+type Account = { provider: string }
+type AccountsResponse = { data: Account[] }
+type AuthClient = {
+  listAccounts?: () => Promise<AccountsResponse>
+  linkSocial?: (opts: { provider: string }) => Promise<unknown>
+}
+
 // https://better-auth.vercel.app/docs/integrations/nuxt#ssr-usage
 const { user, session, client } = useAuth()
-const { data: accounts } = await useAsyncData('accounts', () => client.listAccounts())
+const authClient = client as unknown as AuthClient
+const { data: accounts } = await useAsyncData(
+  'accounts',
+  async () => {
+    if (typeof authClient?.listAccounts !== 'function') {
+      return { data: [] as Account[] }
+    }
+    return await authClient.listAccounts()
+  },
+  { server: false }
+)
 
 function hasProvider(provider: string) {
-  return accounts.value?.data?.some((account) => account.provider === provider)
+  return accounts.value?.data?.some((account: Account) => account.provider === provider)
 }
 const error = useRoute().query?.error
 onMounted(() => {
@@ -26,7 +43,11 @@ onMounted(() => {
       <Button v-if="hasProvider('github')" icon="i-simple-icons-github" trailing-icon="i-heroicons-check">
         Linked with GitHub
       </Button>
-      <Button v-else icon="i-simple-icons-github" @click="client.linkSocial({ provider: 'github' })">
+      <Button
+        v-else
+        icon="i-simple-icons-github"
+        @click="(authClient.linkSocial && authClient.linkSocial({ provider: 'github' }))"
+      >
         Link account with GitHub
       </Button>
     </p>

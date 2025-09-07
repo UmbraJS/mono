@@ -32,7 +32,6 @@
     "eslint": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
-    "vue-tsc": "catalog:",
-    "wrangler": "catalog:"
+  "vue-tsc": "catalog:"
   }
 }

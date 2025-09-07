@@ -79,7 +79,6 @@
     "@nuxt/eslint-config": "catalog:",
     "eslint": "catalog:",
     "typescript": "catalog:",
-    "vue-tsc": "catalog:",
-    "wrangler": "catalog:"
+  "vue-tsc": "catalog:"
   }
 }
