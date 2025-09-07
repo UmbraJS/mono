@@ -7,8 +7,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "npx nuxthub preview",
-    "deploy": "npx nuxthub deploy",
+  "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -20,7 +19,6 @@
     "@nuxt/eslint": "catalog:",
     "@nuxt/icon": "catalog:",
     "@nuxt/image": "catalog:",
-    "@nuxthub/core": "catalog:",
     "@nuxtjs/mdc": "catalog:",
     "@nuxtlabs/monarch-mdc": "catalog:",
     "@pinia/nuxt": "catalog:",

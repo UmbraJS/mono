@@ -3,7 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineNuxtConfig({
   // https://nuxt.com/modules
-  modules: ['@nuxthub/core', '@nuxt/eslint', '@nuxt/image', '@pinia/nuxt', '@nuxt/icon'],
+  modules: ['@nuxt/eslint', '@nuxt/image', '@pinia/nuxt', '@nuxt/icon'],
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
@@ -22,8 +22,7 @@ export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2025-03-01',
 
-  // https://hub.nuxt.com/docs/getting-started/installation#options
-  hub: {},
+  // NuxtHub removed
 
   image: {
     quality: 80,
@@ -42,6 +41,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    preset: 'vercel',
     experimental: {
       openAPI: true
     }

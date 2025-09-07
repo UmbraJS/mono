@@ -1,12 +1,4 @@
-# Hello Edge
-
-A minimal [Nuxt](https://nuxt.com) starter deployed on the Edge using [NuxtHub](https://hub.nuxt.com).
-
-https://hello.nuxt.dev
-
-<a href="https://hello.nuxt.dev">
-<img src="https://github.com/nuxt-hub/hello-edge/assets/904724/99d1bd54-ef7e-4ac9-83ad-0a290f85edcf" alt="Hello World template for NuxtHub" />
-</a>
+# Blog (Nuxt 3 on Vercel)
 
 ## Features
 
@@ -47,12 +39,10 @@ pnpm build
 
 ## Deploy
 
-Deploy the application on the Edge with [NuxtHub](https://hub.nuxt.com) on your Cloudflare account:
+Deploy to Vercel:
 
 ```bash
-npx nuxthub deploy
+pnpm build
 ```
 
-Then checkout your server logs, analaytics and more in the [NuxtHub Admin](https://admin.hub.nuxt.com).
-
-You can also deploy using [Cloudflare Pages CI](https://hub.nuxt.com/docs/getting-started/deploy#cloudflare-pages-ci).
+Then connect the repo to Vercel and set the Framework Preset to Nuxt. Nitro preset is forced to `vercel` in `nuxt.config.ts`.

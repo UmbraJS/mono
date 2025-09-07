@@ -4,8 +4,8 @@ import { Toaster } from 'umbraco'
 import { useSplinesStore } from '@/stores/useSplinesStore'
 
 useSeoMeta({
-  title: 'NuxtHub Starter',
-  description: 'A Nuxt template to build your full-stack application on the edge.',
+  title: 'Carbon',
+  description: 'A Nuxt app deployed on Vercel.',
 })
 
 const splinesStore = useSplinesStore()

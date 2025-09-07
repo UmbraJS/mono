@@ -5,7 +5,6 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineNuxtConfig({
   // https://nuxt.com/modules
   modules: [
-    '@nuxthub/core',
     '@nuxt/eslint',
     '@nuxt/image',
     '@pinia/nuxt',
@@ -69,12 +68,7 @@ export default defineNuxtConfig({
   },
 
   // https://hub.nuxt.com/docs/getting-started/installation#options
-  hub: {
-    database: true,
-    kv: true,
-    blob: true,
-    cache: true,
-  },
+  // NuxtHub removed
 
   vite: {
     define: { global: 'globalThis' },
@@ -94,7 +88,8 @@ export default defineNuxtConfig({
   // },
 
   nitro: {
-    preset: 'vercel', // good hygiene on Vercel
+  // Force Vercel preset for deployment
+  preset: 'vercel',
     experimental: {
       openAPI: true,
     },
