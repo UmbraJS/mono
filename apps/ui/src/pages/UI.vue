@@ -20,8 +20,10 @@ const open = ref(false);
 
 <template>
   <div class="ui-wrapper">
-    <Slider />
-
+    <section id="radio" class="column">
+      <h2>Slider</h2>
+      <Slider />
+    </section>
     <section id="chips">
       <h2>Chip</h2>
       <Chip />
@@ -48,69 +50,73 @@ const open = ref(false);
       />
     </section>
 
-    <section id="radio">
+    <section id="radio" class="column">
+      <h2>Radio</h2>
       <Radio> condition </Radio>
       <Radio> condition </Radio>
       <Radio> condition </Radio>
     </section>
-    <Button variant="primary">
-      <Icon icon="pixelarticons:home" />
-      <p>Primary</p>
-    </Button>
-    <Button variant="secondary">
-      <Icon icon="pixelarticons:home" />
-      <p>Secondary</p>
-    </Button>
-    <Button>
-      <Icon icon="pixelarticons:home" />
 
-      <p>Base</p>
-    </Button>
-    <Button disabled>
-      <Icon icon="pixelarticons:home" />
-
-      <p>Disabled</p>
-    </Button>
-
-    <!-- <Select /> -->
-
-    <section class="buttons">
-      <Button variant="primary" size="mini">
+    <section class="column">
+      <h2>Buttons</h2>
+      <Button variant="primary">
         <Icon icon="pixelarticons:home" />
+        <p>Primary</p>
       </Button>
-      <Button variant="secondary" size="small">
+      <Button variant="secondary">
         <Icon icon="pixelarticons:home" />
+        <p>Secondary</p>
       </Button>
       <Button>
         <Icon icon="pixelarticons:home" />
+
+        <p>Base</p>
       </Button>
+      <Button disabled>
+        <Icon icon="pixelarticons:home" />
+
+        <p>Disabled</p>
+      </Button>
+
+      <section class="buttons">
+        <Button variant="primary" size="mini">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+        <Button variant="secondary" size="small">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+        <Button>
+          <Icon icon="pixelarticons:home" />
+        </Button>
+      </section>
+
+      <ButtonGroup>
+        <Button size="small">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+        <Button size="small">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+        <Button size="small">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+      </ButtonGroup>
+
+      <ButtonGroup>
+        <Button size="mini">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+        <Button size="mini">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+        <Button size="mini">
+          <Icon icon="pixelarticons:home" />
+        </Button>
+      </ButtonGroup>
     </section>
 
-    <ButtonGroup>
-      <Button size="small">
-        <Icon icon="pixelarticons:home" />
-      </Button>
-      <Button size="small">
-        <Icon icon="pixelarticons:home" />
-      </Button>
-      <Button size="small">
-        <Icon icon="pixelarticons:home" />
-      </Button>
-    </ButtonGroup>
-
-    <ButtonGroup>
-      <Button size="mini">
-        <Icon icon="pixelarticons:home" />
-      </Button>
-      <Button size="mini">
-        <Icon icon="pixelarticons:home" />
-      </Button>
-      <Button size="mini">
-        <Icon icon="pixelarticons:home" />
-      </Button>
-    </ButtonGroup>
-
     <section>
+      <h2>Button Toggle</h2>
       <ButtonToggle>
         <template #active>
           <Icon icon="pixelarticons:home" />
@@ -122,7 +128,8 @@ const open = ref(false);
       <Toggle :value="false" />
     </section>
 
-    <section>
+    <section class="column">
+      <h2>Tabs</h2>
       <Tabs
         ariaLabel="Tabs example"
         :tabs="[
@@ -148,7 +155,8 @@ const open = ref(false);
       </Tabs>
     </section>
 
-    <section>
+    <section class="column">
+      <h2>Drawer</h2>
       <Drawer>
         <template #trigger>
           <div variant="primary">
@@ -164,7 +172,7 @@ const open = ref(false);
       </Drawer>
     </section>
 
-    <section class="graph">
+    <section class="graph column">
       <h2>Graph</h2>
       <Graph
         :data="[
@@ -188,9 +196,13 @@ const open = ref(false);
 <style scoped>
 .ui-wrapper {
   display: flex;
-  gap: var(--space-1);
+  gap: var(--space-2);
   flex-direction: column;
   max-width: 40em;
+}
+
+section.column {
+  flex-direction: column;
 }
 
 section {
@@ -199,5 +211,9 @@ section {
   padding: var(--space-1);
   border-radius: var(--radius);
   background-color: var(--base-10);
+}
+
+section h2 {
+  margin-right: var(--space-1);
 }
 </style>
