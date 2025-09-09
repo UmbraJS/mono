@@ -23,10 +23,8 @@ const open = ref(false);
     <header class="ui-hero">
       <h1>Umbraco Storybook</h1>
       <p>
-        Umbraco is a collection of component built using the umbra theme
-        managment. Umbraco means allen wrentch which is a tool that can be used
-        for many purposes. Umbraco can also be a combination of the words umbra
-        and components.
+        Umbraco is a collection of component built using the umbra theme management. Umbraco means allen wrench which is
+        a tool that can be used for many purposes. Umbraco can also be a combination of the words umbra and components.
       </p>
     </header>
 
@@ -43,22 +41,18 @@ const open = ref(false);
 
     <section id="chips">
       <h2>Select</h2>
-      <Select
-        size="medium"
-        placeholder="Choose an option"
-        :options="[
-          { label: 'Option 1', value: 'option1' },
-          { label: 'Option 2', value: 'option2' },
-          { label: 'Option 3', value: 'option3' },
-          { label: 'Option 4', value: 'option4' },
-          { label: 'Option 5', value: 'option5' },
-          { label: 'Option 6', value: 'option6' },
-          { label: 'Option 7', value: 'option7' },
-          { label: 'Option 8', value: 'option8' },
-          { label: 'Option 9', value: 'option9' },
-          { label: 'Option 10', value: 'option10' },
-        ]"
-      />
+      <Select size="medium" placeholder="Choose an option" :options="[
+        { label: 'Option 1', value: 'option1' },
+        { label: 'Option 2', value: 'option2' },
+        { label: 'Option 3', value: 'option3' },
+        { label: 'Option 4', value: 'option4' },
+        { label: 'Option 5', value: 'option5' },
+        { label: 'Option 6', value: 'option6' },
+        { label: 'Option 7', value: 'option7' },
+        { label: 'Option 8', value: 'option8' },
+        { label: 'Option 9', value: 'option9' },
+        { label: 'Option 10', value: 'option10' },
+      ]" />
     </section>
 
     <section id="radio" class="column">
@@ -144,19 +138,16 @@ const open = ref(false);
 
     <section class="column">
       <h2>Tabs</h2>
-      <Tabs
-        ariaLabel="Tabs example"
-        :tabs="[
-          {
-            label: 'Some tab',
-            icon: 'pixelarticons:home',
-          },
-          {
-            label: 'Some other tab',
-            icon: 'pixelarticons:home',
-          },
-        ]"
-      >
+      <Tabs ariaLabel="Tabs example" :tabs="[
+        {
+          label: 'Some tab',
+          icon: 'pixelarticons:home',
+        },
+        {
+          label: 'Some other tab',
+          icon: 'pixelarticons:home',
+        },
+      ]">
         <template #tab1="props">
           <h2>{{ props.label }}</h2>
           <p>Content for Tab 1</p>
@@ -188,21 +179,19 @@ const open = ref(false);
 
     <section class="graph column">
       <h2>Graph</h2>
-      <Graph
-        :data="[
-          { x: 1, y: 2, y1: 3, y2: 4 },
-          { x: 20, y: 5, y1: 6, y2: 6 },
-          { x: 30, y: 4, y1: 5, y2: 8 },
-          { x: 40, y: 6, y1: 6, y2: 7 },
-          { x: 50, y: 6, y1: 7, y2: 8 },
-          { x: 60, y: 7, y1: 8, y2: 6 },
-          { x: 70, y: 5, y1: 4, y2: 10 },
-          { x: 80, y: 9, y1: 10, y2: 11 },
-          { x: 90, y: 8, y1: 11, y2: 10 },
-          { x: 100, y: 11, y1: 12, y2: 13 },
-          { x: 110, y: 12, y1: 14, y2: 12 },
-        ]"
-      />
+      <Graph :data="[
+        { x: 1, y: 2, y1: 3, y2: 4 },
+        { x: 20, y: 5, y1: 6, y2: 6 },
+        { x: 30, y: 4, y1: 5, y2: 8 },
+        { x: 40, y: 6, y1: 6, y2: 7 },
+        { x: 50, y: 6, y1: 7, y2: 8 },
+        { x: 60, y: 7, y1: 8, y2: 6 },
+        { x: 70, y: 5, y1: 4, y2: 10 },
+        { x: 80, y: 9, y1: 10, y2: 11 },
+        { x: 90, y: 8, y1: 11, y2: 10 },
+        { x: 100, y: 11, y1: 12, y2: 13 },
+        { x: 110, y: 12, y1: 14, y2: 12 },
+      ]" />
     </section>
   </div>
 </template>
