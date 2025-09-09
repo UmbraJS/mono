@@ -53,7 +53,8 @@
     "vaul-vue": "catalog:",
     "vue-sonner": "catalog:",
     "gsap": "catalog:",
-    "@vueuse/core": "catalog:"
+    "@vueuse/core": "catalog:",
+    "@unovis/vue": "catalog:"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "catalog:",

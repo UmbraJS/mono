@@ -37,5 +37,6 @@ export {
   DrawerDescription,
   DrawerTitle
 } from './components/ui/Drawer/index'
+export { default as Graph } from './components/graph/Graph.vue'
 
 export { toast }

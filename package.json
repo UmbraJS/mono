@@ -8,6 +8,7 @@
     "carbon": "cd apps/carbon && pnpm run dev",
     "dye": "cd packages/dye && pnpm run dev",
     "blog": "cd apps/blog && pnpm run dev",
+    "pulse": "cd apps/pulse && pnpm run dev",
     "gpu": "cd apps/gpu && pnpm run dev",
     "build": "cd packages/umbra && tsc && vite build && cp package.json dist/ && cp README.md dist/",
     "publish": "cd packages/umbra/dist && npm publish",

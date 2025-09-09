@@ -1,0 +1,42 @@
+{
+  "name": "pulse",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.12.3",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --dotenv .env.local",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "catalog:",
+    "@nuxt/icon": "catalog:",
+    "@nuxt/image": "catalog:",
+    "@pinia/nuxt": "catalog:",
+    "@umbrajs/core": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "@vueuse/nuxt": "catalog:",
+    "convex": "^1.26.2",
+    "convex-nuxt": "0.1.5",
+    "convex-vue": "^0.1.5",
+    "nuxt": "catalog:",
+    "nuxt-time": "catalog:",
+    "pinia": "catalog:",
+    "sass": "catalog:",
+    "ufo": "catalog:",
+    "umbraco": "workspace:*",
+    "vue": "catalog:",
+    "vue-router": "catalog:"
+  },
+  "devDependencies": {
+    "@iconify-json/pixelarticons": "catalog:",
+    "@nuxt/eslint-config": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}
