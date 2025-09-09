@@ -1,49 +1,49 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { Button, ButtonGroup } from 'umbraco'
-import TextScreen from './components/TextScreen.vue'
-import { umbra } from '@umbrajs/core'
-import { Icon } from '@iconify/vue'
-import type { Accent } from '@umbrajs/core'
-import 'umbraco/styles/_index.scss'
-import 'umbraco/dist/umbraco.css'
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { Button, ButtonGroup } from "umbraco";
+import TextScreen from "./components/TextScreen.vue";
+import { umbra } from "@umbrajs/core";
+import { Icon } from "@iconify/vue";
+import type { Accent } from "@umbrajs/core";
+import "umbraco/styles/_index.scss";
+import "umbraco/dist/umbraco.css";
 
-const route = useRoute()
+const route = useRoute();
 
-const inversed = ref(true)
+const inversed = ref(true);
 
 const warningAccent: Accent = {
-  name: 'warning',
-  color: '#ff0000',
-}
+  name: "warning",
+  color: "#ff0000",
+};
 
 const successAccent: Accent = {
-  name: 'success',
-  color: '#00ff00',
-}
+  name: "success",
+  color: "#00ff00",
+};
 
 const theme = umbra({
-  background: '#ffffff',
-  foreground: '#000000',
-  accents: ['#8888ff', warningAccent, successAccent],
-})
+  background: "#ffffff",
+  foreground: "#000000",
+  accents: ["#8888ff", warningAccent, successAccent],
+});
 
 // Apply theme after component is mounted
 onMounted(() => {
   try {
-    inversed.value ? theme.inverse().apply() : theme.apply()
+    inversed.value ? theme.inverse().apply() : theme.apply();
   } catch (error) {
-    console.error('Theme application error:', error)
+    console.error("Theme application error:", error);
   }
-})
+});
 
 function toggleTheme() {
   try {
-    inversed.value ? theme.apply() : theme.inverse().apply()
-    inversed.value = !inversed.value
+    inversed.value ? theme.apply() : theme.inverse().apply();
+    inversed.value = !inversed.value;
   } catch (error) {
-    console.error('Theme toggle error:', error)
+    console.error("Theme toggle error:", error);
   }
 }
 </script>
@@ -53,23 +53,43 @@ function toggleTheme() {
     <TextScreen>{{ route.fullPath }}</TextScreen>
     <nav>
       <ButtonGroup>
-        <RouterLink to="/" class="button buttonFocus small" activeClass="primary">
+        <RouterLink
+          to="/"
+          class="button buttonFocus small"
+          activeClass="primary"
+        >
           <Icon icon="pixelarticons:home" />
         </RouterLink>
 
-        <RouterLink to="/type" class="button buttonFocus small" activeClass="primary">
+        <RouterLink
+          to="/type"
+          class="button buttonFocus small"
+          activeClass="primary"
+        >
           <Icon icon="pixelarticons:card-text" />
         </RouterLink>
 
-        <RouterLink to="/sizes" class="button buttonFocus small" activeClass="primary">
+        <RouterLink
+          to="/sizes"
+          class="button buttonFocus small"
+          activeClass="primary"
+        >
           <Icon icon="pixelarticons:viewport-wide" />
         </RouterLink>
 
-        <RouterLink to="/ui" class="button buttonFocus small" activeClass="primary">
+        <RouterLink
+          to="/ui"
+          class="button buttonFocus small"
+          activeClass="primary"
+        >
           <Icon icon="pixelarticons:building" />
         </RouterLink>
 
-        <RouterLink to="/color" class="button buttonFocus small" activeClass="primary">
+        <RouterLink
+          to="/color"
+          class="button buttonFocus small"
+          activeClass="primary"
+        >
           <Icon icon="pixelarticons:paint-bucket" />
         </RouterLink>
 
@@ -84,7 +104,7 @@ function toggleTheme() {
   </main>
 </template>
 
-<style>
+<style scoped>
 header {
   display: flex;
   flex-direction: column;

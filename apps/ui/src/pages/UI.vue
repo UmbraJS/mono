@@ -20,10 +20,21 @@ const open = ref(false);
 
 <template>
   <div class="ui-wrapper">
+    <header class="ui-hero">
+      <h1>Umbraco Storybook</h1>
+      <p>
+        Umbraco is a collection of component built using the umbra theme
+        managment. Umbraco means allen wrentch which is a tool that can be used
+        for many purposes. Umbraco can also be a combination of the words umbra
+        and components.
+      </p>
+    </header>
+
     <section id="radio" class="column">
       <h2>Slider</h2>
       <Slider />
     </section>
+
     <section id="chips">
       <h2>Chip</h2>
       <Chip />
@@ -69,16 +80,15 @@ const open = ref(false);
       </Button>
       <Button>
         <Icon icon="pixelarticons:home" />
-
         <p>Base</p>
       </Button>
       <Button disabled>
         <Icon icon="pixelarticons:home" />
-
         <p>Disabled</p>
       </Button>
 
       <section class="buttons">
+        <h3>Button Sizes</h3>
         <Button variant="primary" size="mini">
           <Icon icon="pixelarticons:home" />
         </Button>
@@ -90,29 +100,33 @@ const open = ref(false);
         </Button>
       </section>
 
-      <ButtonGroup>
-        <Button size="small">
-          <Icon icon="pixelarticons:home" />
-        </Button>
-        <Button size="small">
-          <Icon icon="pixelarticons:home" />
-        </Button>
-        <Button size="small">
-          <Icon icon="pixelarticons:home" />
-        </Button>
-      </ButtonGroup>
+      <section class="column">
+        <h3>Button groups</h3>
 
-      <ButtonGroup>
-        <Button size="mini">
-          <Icon icon="pixelarticons:home" />
-        </Button>
-        <Button size="mini">
-          <Icon icon="pixelarticons:home" />
-        </Button>
-        <Button size="mini">
-          <Icon icon="pixelarticons:home" />
-        </Button>
-      </ButtonGroup>
+        <ButtonGroup>
+          <Button size="small">
+            <Icon icon="pixelarticons:home" />
+          </Button>
+          <Button size="small">
+            <Icon icon="pixelarticons:home" />
+          </Button>
+          <Button size="small">
+            <Icon icon="pixelarticons:home" />
+          </Button>
+        </ButtonGroup>
+
+        <ButtonGroup>
+          <Button size="mini">
+            <Icon icon="pixelarticons:home" />
+          </Button>
+          <Button size="mini">
+            <Icon icon="pixelarticons:home" />
+          </Button>
+          <Button size="mini">
+            <Icon icon="pixelarticons:home" />
+          </Button>
+        </ButtonGroup>
+      </section>
     </section>
 
     <section>
@@ -194,6 +208,20 @@ const open = ref(false);
 </template>
 
 <style scoped>
+.ui-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius);
+  background-color: var(--base-10);
+}
+
+.ui-hero h1 {
+  text-align: left;
+}
+
 .ui-wrapper {
   display: flex;
   gap: var(--space-2);
