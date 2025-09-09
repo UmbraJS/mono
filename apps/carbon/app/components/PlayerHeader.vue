@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
-import { DrawerButton, DrawerTitle, DrawerDescription, Slider } from '@umbrajs/umbraco'
+import { DrawerButton, DrawerTitle, DrawerDescription, Slider } from 'umbraco'
 
 const store = useStore()
 const view = useView()

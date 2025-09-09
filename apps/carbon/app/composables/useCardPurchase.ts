@@ -1,5 +1,5 @@
 import type { Card } from '../../types'
-import { toast } from '@umbrajs/umbraco'
+import { toast } from 'umbraco'
 
 /**
  * Result interface for purchase validation

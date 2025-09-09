@@ -27,7 +27,9 @@ const splinesStore = useSplinesStore()
     <MatchSpline v-for="splinePath in splinesStore.attackSources.opponent" :key="splinePath.id" :start="splinePath"
       :end="splinesStore.tankCharacter.player" :angle="-90" owner="opponent" />
   </div>
-  <Toaster />
+  <ClientOnly>
+    <Toaster />
+  </ClientOnly>
 </template>
 
 <style>

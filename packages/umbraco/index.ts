@@ -1,6 +1,7 @@
 import './styles/_index.scss'
 
 import { toast } from 'vue-sonner'
+import { defineAsyncComponent, defineComponent } from 'vue'
 export { default as Button } from './components/ui/Button/Button.vue'
 export { default as ButtonGroup } from './components/ui/Button/ButtonGroup.vue'
 export { default as AddButton } from './components/ui/Button/presets/AddButton.vue'
@@ -37,6 +38,9 @@ export {
   DrawerDescription,
   DrawerTitle
 } from './components/ui/Drawer/index'
-export { default as Graph } from './components/graph/Graph.vue'
+// SSR-safe Graph export: only load @unovis/vue on the client to avoid Emotion SSR issues
+export const Graph = (import.meta as any).client
+  ? defineAsyncComponent(() => import('./components/graph/Graph.vue'))
+  : defineComponent({ name: 'GraphSSRStub', setup: () => () => null })
 
 export { toast }
