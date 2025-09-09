@@ -82,7 +82,7 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
   </button>
 </template>
 
-<style>
+<style scoped>
 .SelectRoot {
   position: relative;
   z-index: 1;

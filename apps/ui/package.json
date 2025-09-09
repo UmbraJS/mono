@@ -47,12 +47,13 @@
   "dependencies": {
     "@iconify/vue": "catalog:",
     "@nobel/bifrost": "workspace:*",
-    "umbraco": "workspace:*",
-    "@umbrajs/core": "workspace:*",
     "@radix-ui/colors": "^3.0.0",
+    "@umbrajs/core": "workspace:*",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
     "gsap": "catalog:",
+    "reka-ui": "catalog:",
+    "umbraco": "workspace:*",
     "vue-router": "catalog:"
   },
   "devDependencies": {

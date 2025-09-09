@@ -48,7 +48,7 @@ function handleItemClick(props: { value: string; index: number; event: MouseEven
 </template>
 
 <style>
-button.SelectRoot {
+/* button.SelectRoot {
   position: relative;
   height: var(--block-big);
   min-width: var(--block-big);
@@ -66,5 +66,5 @@ button.SelectRoot {
 
 button.SelectRoot p {
   font-variation-settings: var(--font-regular);
-}
+} */
 </style>

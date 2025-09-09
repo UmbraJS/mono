@@ -27,21 +27,11 @@ function handleItemClick(v: string, event: MouseEvent) {
 </script>
 
 <template>
-  <button
-    ref="button"
-    class="SelectRoot button buttonFocus buttonHover"
-    :class="{ open: open }"
-    @click="handleClick"
-  >
+  <button ref="button" class="SelectRoot button buttonFocus buttonHover" :class="{ open: open }" @click="handleClick">
     <p class="space-value">{{ longestValue }}</p>
     <div ref="listWrapper" class="SelectList">
-      <div
-        v-for="v in values"
-        :key="v"
-        class="SelectOption buttonFocus buttonHover"
-        :class="{ active: value === v }"
-        @click="(e) => handleItemClick(v, e)"
-      >
+      <div v-for="v in values" :key="v" class="SelectOption buttonFocus buttonHover" :class="{ active: value === v }"
+        @click="(e) => handleItemClick(v, e)">
         <Icon :icon="value === v ? `` : ``" />
         <p>{{ v }}</p>
       </div>
@@ -53,7 +43,7 @@ function handleItemClick(v: string, event: MouseEvent) {
 </template>
 
 <style>
-.SelectRoot {
+/* .SelectRoot {
   position: relative;
   z-index: 1;
   height: var(--block-big);
@@ -132,5 +122,5 @@ function handleItemClick(v: string, event: MouseEvent) {
 .frame svg {
   transform: rotate(0deg);
   transition: 0.2s;
-}
+} */
 </style>

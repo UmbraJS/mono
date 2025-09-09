@@ -22,13 +22,8 @@ const emits = defineEmits<{
 
 <template>
   <div class="SelectList" :class="{ open: open }">
-    <div
-      v-for="(v, index) in values"
-      :key="v"
-      class="SelectOption buttonFocus buttonHover"
-      :class="{ active: value === v }"
-      @click="(e) => emits('optionClick', { value: v, index, event: e })"
-    >
+    <div v-for="(v, index) in values" :key="v" class="SelectOption buttonFocus buttonHover"
+      :class="{ active: value === v }" @click="(e) => emits('optionClick', { value: v, index, event: e })">
       <Icon :icon="value === v ? '' : ''" />
       <p>{{ v }}</p>
     </div>
@@ -39,7 +34,7 @@ const emits = defineEmits<{
 </template>
 
 <style>
-.SelectList {
+/* .SelectList {
   position: absolute;
   top: calc(v-bind(itemOffsetTop) * -1px - var(--border-size) * 2);
   right: calc(0px - var(--border-size));
@@ -102,5 +97,5 @@ const emits = defineEmits<{
 .frame svg {
   transform: rotate(0deg);
   transition: 0.2s;
-}
+} */
 </style>

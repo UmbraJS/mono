@@ -6,7 +6,8 @@ import TextScreen from './components/TextScreen.vue'
 import { umbra } from '@umbrajs/core'
 import { Icon } from '@iconify/vue'
 import type { Accent } from '@umbrajs/core'
-import 'umbraco/styles/main.scss'
+import 'umbraco/styles/_index.scss'
+import 'umbraco/dist/umbraco.css'
 
 const route = useRoute()
 
