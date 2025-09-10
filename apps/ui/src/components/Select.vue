@@ -72,16 +72,14 @@ const open = ref(false);
             <ComboboxSeparator v-if="index !== 0" class="ComboboxSeparator" />
 
             <ComboboxLabel class="ComboboxLabel">
-              {{ group.name }}
+              <p class="caption">{{ group.name }}</p>
             </ComboboxLabel>
 
             <ComboboxItem v-for="option in group.children" :key="option.name" :value="option.name" class="ComboboxItem">
-              <ComboboxItemIndicator class="ComboboxItemIndicator">
+              <!-- <ComboboxItemIndicator class="ComboboxItemIndicator">
                 <Icon icon="radix-icons:check" />
-              </ComboboxItemIndicator>
-              <span>
-                {{ option.name }}
-              </span>
+              </ComboboxItemIndicator> -->
+              <p>{{ option.name }}</p>
             </ComboboxItem>
           </ComboboxGroup>
         </template>
@@ -106,13 +104,18 @@ input {
 }
 
 .ComboboxContent {
-  z-index: 10;
+  z-index: 10000;
   width: 100%;
   position: absolute;
   overflow: hidden;
   background-color: var(--base-10);
   border-radius: var(--radius);
   margin-top: var(--space-1);
+  cursor: pointer;
+}
+
+.ComboboxContent p {
+  pointer-events: none;
 }
 
 .ComboboxViewport {
@@ -143,13 +146,13 @@ input {
 }
 
 .ComboboxItem[data-highlighted] {
-  outline: none;
-  background-color: var(--space-3);
+  background-color: var(--base-20);
   color: var(--base-120);
 }
 
 .ComboboxLabel {
   padding: 0 var(--space-1);
+  padding-bottom: var(--space-quark);
   color: var(--base-70);
 }
 
