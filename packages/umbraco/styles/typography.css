@@ -136,6 +136,10 @@ p.caption {
   font-variation-settings: var(--font-light);
 }
 
+p.mini {
+  line-height: var(--paragraph);
+}
+
 span,
 strong {
   font-variation-settings: var(--font-semibold);

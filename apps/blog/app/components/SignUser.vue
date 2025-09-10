@@ -10,12 +10,10 @@ const signMode = ref<'signin' | 'signup'>('signin')
   <div class="signin panel-wrapper">
     <div class="multi-toggle-wrapper sibling-group-blur">
       <ButtonGroup>
-        <Button :variant="signMode === 'signin' ? 'primary' : 'base'" size="small" color="base"
-          @click="signMode = 'signin'">
+        <Button :variant="signMode === 'signin' ? 'primary' : 'base'" size="small" @click="signMode = 'signin'">
           Sign in
         </Button>
-        <Button :variant="signMode === 'signup' ? 'primary' : 'base'" size="small" color="base"
-          @click="signMode = 'signup'">
+        <Button :variant="signMode === 'signup' ? 'primary' : 'base'" size="small" @click="signMode = 'signup'">
           Sign up
         </Button>
       </ButtonGroup>

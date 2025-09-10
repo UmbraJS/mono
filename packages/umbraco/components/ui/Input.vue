@@ -14,7 +14,7 @@ const focused = ref(false)
 </script>
 
 <template>
-  <div class="input sibling-blur">
+  <div class="UInput sibling-blur">
     <label for="html" class="button buttonText buttonHover buttonActive buttonFocus focus"
       :class="!focused ? 'bodycopy' : 'move'">
       {{ label }}
@@ -26,7 +26,7 @@ const focused = ref(false)
 </template>
 
 <style lang="scss">
-input.button {
+input.UInput.button {
   all: unset;
   width: 100%;
   box-sizing: border-box;
@@ -48,11 +48,11 @@ input:-webkit-autofill::placeholder {
   color: var(--base-text) !important;
 } */
 
-.input {
+.UInput {
   position: relative;
 }
 
-div.input:has(input:not(:placeholder-shown)):not(:focus-within) label {
+div.UInput:has(input:not(:placeholder-shown)):not(:focus-within) label {
   transform: translateY(0%);
   opacity: 0;
 }
@@ -65,7 +65,7 @@ div.sibling-group-blur:has(+ * > :first-child input:focus) {
   filter: blur(4px);
 }
 
-.input label {
+.UInput label {
   position: absolute;
   z-index: 10;
   height: 100%;
@@ -78,16 +78,16 @@ div.sibling-group-blur:has(+ * > :first-child input:focus) {
   transition: all 0.3s;
 }
 
-.input input.focus:focus {
+.UInput input.focus:focus {
   color: var(--accent-120);
   background: var(--accent-10);
 }
 
-.input input::placeholder {
+.UInput input::placeholder {
   color: var(--accent-120);
 }
 
-.input label.move {
+.UInput label.move {
   transform: translateY(-100%);
   height: var(--block);
 }

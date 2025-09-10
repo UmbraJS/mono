@@ -35,8 +35,15 @@ const open = ref(false);
 
     <section id="chips">
       <h2>Chip</h2>
-      <Chip />
-      <Chip />
+      <Chip size="mini">
+        <p class="mini caption">Name Cvor</p>
+      </Chip>
+      <Chip>
+        <p>Name Avor</p>
+      </Chip>
+      <Chip size="medium">
+        <p>Name Bvor</p>
+      </Chip>
     </section>
 
     <section id="chips">

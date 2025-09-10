@@ -1,5 +1,3 @@
-import './styles/_index.scss'
-
 import { toast } from 'vue-sonner'
 import { defineAsyncComponent, defineComponent } from 'vue'
 export { default as Button } from './components/ui/Button/Button.vue'

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import { Button } from "umbraco";
+import { ref } from "vue";
 import {
   ComboboxAnchor,
   ComboboxContent,
@@ -43,18 +45,25 @@ const options = [
     ],
   },
 ];
+
+const open = ref(false);
 </script>
 
 <template>
-  <ComboboxRoot class="ComboboxRoot">
-    <ComboboxAnchor class="ComboboxAnchor border">
-      <ComboboxInput class="ComboboxInput" placeholder="Placeholder..." />
-      <ComboboxTrigger>
-        <Icon icon="radix-icons:chevron-down" class="ComboboxIcon" />
+  <ComboboxRoot class="ComboboxRoot" v-model:open="open">
+    <ComboboxAnchor class="ComboboxAnchor button-group">
+      <ComboboxInput
+        class="ComboboxInput button base-accent small buttonText buttonHover buttonActive buttonFocus focus"
+        placeholder="Placeholder..." />
+      <ComboboxTrigger :asChild="true">
+        <Button class="DropDownIcon" size="small">
+          <Icon v-if="open" icon="radix-icons:chevron-down" class="ComboboxIcon" />
+          <Icon v-else icon="radix-icons:chevron-right" class="ComboboxIcon" />
+        </Button>
       </ComboboxTrigger>
     </ComboboxAnchor>
 
-    <ComboboxContent class="ComboboxContent">
+    <ComboboxContent class="ComboboxContent border">
       <ComboboxViewport class="ComboboxViewport">
         <ComboboxEmpty class="ComboboxEmpty" />
 
@@ -66,12 +75,7 @@ const options = [
               {{ group.name }}
             </ComboboxLabel>
 
-            <ComboboxItem
-              v-for="option in group.children"
-              :key="option.name"
-              :value="option.name"
-              class="ComboboxItem"
-            >
+            <ComboboxItem v-for="option in group.children" :key="option.name" :value="option.name" class="ComboboxItem">
               <ComboboxItemIndicator class="ComboboxItemIndicator">
                 <Icon icon="radix-icons:check" />
               </ComboboxItemIndicator>
@@ -96,36 +100,9 @@ input {
   position: relative;
 }
 
-.ComboboxAnchor {
-  display: inline-flex;
-  align-items: center;
-  justify-content: between;
-  height: var(--block);
-  padding: 0 var(--space-1);
-  gap: var(--space-1);
-  background-color: var(--base-10);
-  color: var(--base-120);
-  border-radius: var(--radius);
-}
-
-.ComboboxAnchor:hover {
-  background-color: var(--base-30);
-}
-
-.ComboboxInput {
-  height: 100%;
-  background-color: transparent;
-  color: var(--base-120);
-}
-
-.ComboboxInput[data-placeholder] {
-  color: var(--base-70);
-}
-
-.ComboboxIcon {
-  width: 16px;
-  height: 16px;
-  color: var(--base-120);
+.ComboboxInput[value=""] {
+  color: var(--base-text);
+  color: red;
 }
 
 .ComboboxContent {
@@ -133,7 +110,7 @@ input {
   width: 100%;
   position: absolute;
   overflow: hidden;
-  background-color: var(--base);
+  background-color: var(--base-10);
   border-radius: var(--radius);
   margin-top: var(--space-1);
 }
@@ -145,8 +122,8 @@ input {
 .ComboboxEmpty {
   padding-top: var(--space-1);
   padding-bottom: var(--space-1);
+  color: var(--base-120);
   text-align: center;
-  color: var(--base-70);
 }
 
 .ComboboxItem {
@@ -158,7 +135,6 @@ input {
   height: var(--block);
   padding: 0 var(--space-1);
   position: relative;
-  user-combobox: none;
 }
 
 .ComboboxItem[data-disabled] {

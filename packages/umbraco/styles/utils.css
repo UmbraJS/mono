@@ -1,0 +1,9 @@
+.rounded {
+  padding: var(--space-quark);
+  border-radius: var(--radius);
+}
+
+.border {
+  border-radius: var(--radius);
+  border: var(--border-size) solid var(--base-60);
+}
