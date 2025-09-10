@@ -52,8 +52,7 @@ const open = ref(false);
 <template>
   <ComboboxRoot class="ComboboxRoot" v-model:open="open">
     <ComboboxAnchor class="ComboboxAnchor button-group">
-      <ComboboxInput
-        class="ComboboxInput button base-accent small buttonText buttonHover buttonActive buttonFocus focus"
+      <ComboboxInput class="ComboboxInput button small buttonText buttonHover buttonActive buttonFocus focus"
         placeholder="Placeholder..." />
       <ComboboxTrigger :asChild="true">
         <Button class="DropDownIcon" size="small">
@@ -76,10 +75,10 @@ const open = ref(false);
             </ComboboxLabel>
 
             <ComboboxItem v-for="option in group.children" :key="option.name" :value="option.name" class="ComboboxItem">
-              <!-- <ComboboxItemIndicator class="ComboboxItemIndicator">
-                <Icon icon="radix-icons:check" />
-              </ComboboxItemIndicator> -->
               <p>{{ option.name }}</p>
+              <ComboboxItemIndicator class="ComboboxItemIndicator">
+                <Icon icon="radix-icons:check" />
+              </ComboboxItemIndicator>
             </ComboboxItem>
           </ComboboxGroup>
         </template>
@@ -135,6 +134,7 @@ input {
   border-radius: var(--radius);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: var(--block);
   padding: 0 var(--space-1);
   position: relative;
@@ -150,6 +150,11 @@ input {
   color: var(--base-120);
 }
 
+.ComboboxItem[data-state="checked"] {
+  background-color: var(--accent-30);
+  color: var(--accent-120);
+}
+
 .ComboboxLabel {
   padding: 0 var(--space-1);
   padding-bottom: var(--space-quark);
@@ -163,11 +168,6 @@ input {
 }
 
 .ComboboxItemIndicator {
-  position: absolute;
-  left: 0;
   width: 25px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>
