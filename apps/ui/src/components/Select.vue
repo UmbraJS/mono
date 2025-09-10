@@ -17,34 +17,24 @@ import {
   ComboboxViewport,
 } from "reka-ui";
 
-const options = [
-  {
-    name: "Fruit",
-    children: [
-      { name: "Apple" },
-      { name: "Banana" },
-      { name: "Orange" },
-      { name: "Honeydew" },
-      { name: "Grapes" },
-      { name: "Watermelon" },
-      { name: "Cantaloupe" },
-      { name: "Pear" },
-    ],
-  },
-  {
-    name: "Vegetable",
-    children: [
-      { name: "Cabbage" },
-      { name: "Broccoli" },
-      { name: "Carrots" },
-      { name: "Lettuce" },
-      { name: "Spinach" },
-      { name: "Bok Choy" },
-      { name: "Cauliflower" },
-      { name: "Potatoes" },
-    ],
-  },
-];
+interface Option {
+  name: string;
+}
+
+interface LabeledOption {
+  name: string;
+  children: Option[];
+}
+
+const {
+  size = "medium",
+  placeholder = "Placeholder...",
+  options,
+} = defineProps<{
+  size?: "mini" | "small" | "medium" | "large";
+  placeholder?: string;
+  options: LabeledOption[];
+}>();
 
 const open = ref(false);
 </script>
@@ -53,7 +43,7 @@ const open = ref(false);
   <ComboboxRoot class="ComboboxRoot" v-model:open="open">
     <ComboboxAnchor class="ComboboxAnchor button-group">
       <ComboboxInput class="ComboboxInput button small buttonText buttonHover buttonActive buttonFocus focus"
-        placeholder="Placeholder..." />
+        :placeholder="placeholder" />
       <ComboboxTrigger :asChild="true">
         <Button class="DropDownIcon" size="small">
           <Icon v-if="open" icon="radix-icons:chevron-down" class="ComboboxIcon" />

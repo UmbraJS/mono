@@ -15,7 +15,34 @@ import {
 } from "umbraco";
 import Select from "../components/Select.vue";
 
-const open = ref(false);
+const options = [
+  {
+    name: "Fruit",
+    children: [
+      { name: "Apple" },
+      { name: "Banana" },
+      { name: "Orange" },
+      { name: "Honeydew" },
+      { name: "Grapes" },
+      { name: "Watermelon" },
+      { name: "Cantaloupe" },
+      { name: "Pear" },
+    ],
+  },
+  {
+    name: "Vegetable",
+    children: [
+      { name: "Cabbage" },
+      { name: "Broccoli" },
+      { name: "Carrots" },
+      { name: "Lettuce" },
+      { name: "Spinach" },
+      { name: "Bok Choy" },
+      { name: "Cauliflower" },
+      { name: "Potatoes" },
+    ],
+  },
+];
 </script>
 
 <template>
@@ -48,18 +75,7 @@ const open = ref(false);
 
     <section id="chips">
       <h2>Select</h2>
-      <Select size="medium" placeholder="Choose an option" :options="[
-        { label: 'Option 1', value: 'option1' },
-        { label: 'Option 2', value: 'option2' },
-        { label: 'Option 3', value: 'option3' },
-        { label: 'Option 4', value: 'option4' },
-        { label: 'Option 5', value: 'option5' },
-        { label: 'Option 6', value: 'option6' },
-        { label: 'Option 7', value: 'option7' },
-        { label: 'Option 8', value: 'option8' },
-        { label: 'Option 9', value: 'option9' },
-        { label: 'Option 10', value: 'option10' },
-      ]" />
+      <Select size="medium" placeholder="Choose an option" :options="options" />
     </section>
 
     <section id="radio" class="column">
