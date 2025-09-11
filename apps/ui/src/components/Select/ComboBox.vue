@@ -16,15 +16,7 @@ import {
   ComboboxTrigger,
   ComboboxViewport,
 } from "reka-ui";
-
-interface Option {
-  name: string;
-}
-
-interface LabeledOption {
-  name: string;
-  children: Option[];
-}
+import type { LabeledOption } from "./types";
 
 const {
   size = "medium",

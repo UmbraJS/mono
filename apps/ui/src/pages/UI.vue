@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { Icon } from "@iconify/vue";
 import {
   Button,
@@ -13,8 +12,8 @@ import {
   Graph,
   Drawer,
 } from "umbraco";
-import Select from "../components/Select.vue";
-import ComboBox from "../components/ComboBox.vue";
+import Select from "../components/Select/ListSelect.vue";
+import ComboBox from "../components/Select/ComboBox.vue";
 
 const options = [
   {

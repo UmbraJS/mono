@@ -18,10 +18,19 @@ import {
 } from 'reka-ui'
 import { ref } from 'vue'
 
-const fruit = ref()
+import type { LabeledOption } from "./types";
 
-const options = ['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple']
-const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek']
+const {
+  size = "medium",
+  placeholder = "Placeholder...",
+  options,
+} = defineProps<{
+  size?: "mini" | "small" | "medium" | "large";
+  placeholder?: string;
+  options: LabeledOption[];
+}>();
+
+const fruit = ref(options)
 </script>
 
 <template>
@@ -43,7 +52,7 @@ const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek']
             Fruits
           </SelectLabel>
           <SelectGroup>
-            <SelectItem v-for="(option, index) in options" :key="index" class="SelectItem" :value="option">
+            <SelectItem v-for="(option, index) in fruit" :key="index" class="SelectItem" :value="option">
               <SelectItemIndicator class="SelectItemIndicator">
                 <Icon icon="radix-icons:check" />
               </SelectItemIndicator>
