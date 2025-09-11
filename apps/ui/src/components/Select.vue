@@ -78,22 +78,19 @@ const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek']
 </template>
 
 <style>
-@import '@radix-ui/colors/black-alpha.css';
-@import '@radix-ui/colors/mauve.css';
-@import '@radix-ui/colors/grass.css';
-
-.SelectTrigger[data-placeholder] {
-  color: var(--grass-9);
-}
-
-.SelectIcon {
-  color: var(--grass-11);
-}
+/* Harmonize Select styles with ComboBox component design tokens */
 
 .SelectContent {
+  z-index: 10000;
+  width: 100%;
+  position: relative;
+  /* stays within portal positioning */
   overflow: hidden;
   background-color: var(--base-10);
   border-radius: var(--radius);
+  margin-top: var(--space-1);
+  cursor: pointer;
+  border: 1px solid var(--base-40);
 }
 
 .SelectViewport {
@@ -101,55 +98,74 @@ const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek']
 }
 
 .SelectItem {
+  line-height: 1;
+  color: var(--base-120);
   border-radius: var(--radius);
   display: flex;
   align-items: center;
-  height: 25px;
+  justify-content: space-between;
+  height: var(--block);
   padding: 0 var(--space-1);
   position: relative;
   user-select: none;
+  font-size: var(--font-size-0, 14px);
 }
 
 .SelectItem[data-disabled] {
-  color: var(--mauve-8);
+  color: var(--base-50);
   pointer-events: none;
 }
 
 .SelectItem[data-highlighted] {
+  background-color: var(--base-20);
+  color: var(--base-120);
   outline: none;
-  background-color: var(--grass-9);
-  color: var(--grass-1);
+}
+
+.SelectItem[data-state="checked"] {
+  background-color: var(--accent-30);
+  color: var(--accent-120);
 }
 
 .SelectLabel {
-  padding: 0 25px;
-  font-size: 12px;
-  line-height: 25px;
-  color: var(--mauve-11);
+  padding: 0 var(--space-1);
+  padding-bottom: var(--space-quark);
+  color: var(--base-70);
+  font-size: var(--font-size--1, 12px);
+  line-height: 1.2;
+  text-transform: none;
 }
 
 .SelectSeparator {
   height: 1px;
-  background-color: var(--grass-6);
-  margin: 5px;
+  background-color: var(--base-50);
+  margin: var(--space-1);
 }
 
 .SelectItemIndicator {
-  position: absolute;
-  left: 0;
   width: 25px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  color: currentColor;
 }
 
 .SelectScrollButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 25px;
-  background-color: white;
-  color: var(--grass-11);
+  height: var(--block);
+  background-color: var(--base-10);
+  color: var(--base-120);
   cursor: default;
+}
+
+/* Placeholder coloring similar to ComboBoxInput */
+.SelectTrigger[data-placeholder] {
+  color: var(--base-text, var(--base-120));
 }
 </style>
