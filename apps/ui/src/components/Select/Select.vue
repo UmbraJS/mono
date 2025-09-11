@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import ComboBox from './ComboBox.vue';
 import ListSelect from './ListSelect.vue';
+import { normalizeToLabeled, isLabeledOptions } from './types';
 
-import type { LabeledOption } from "./types";
+import type { SelectOptions } from "./types";
 
 const {
   size = "medium",
@@ -12,14 +14,18 @@ const {
 } = defineProps<{
   size?: "mini" | "small" | "medium" | "large";
   placeholder?: string;
-  options: LabeledOption[];
+  options: SelectOptions;
   type?: "list" | "combobox";
 }>();
+
+const normalizedOptions = computed(() => {
+  return isLabeledOptions(options) ? options : normalizeToLabeled(options);
+});
 </script>
 
 <template>
-  <ListSelect v-if="type === 'list'" :size="size" :placeholder="placeholder" :options="options" />
-  <ComboBox v-if="type === 'combobox'" :size="size" :placeholder="placeholder" :options="options" />
+  <ListSelect v-if="type === 'list'" :size="size" :placeholder="placeholder" :options="normalizedOptions" />
+  <ComboBox v-if="type === 'combobox'" :size="size" :placeholder="placeholder" :options="normalizedOptions" />
 </template>
 
 <style>
