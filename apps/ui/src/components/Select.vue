@@ -1,163 +1,155 @@
 <script setup lang="ts">
-import { Icon } from "@iconify/vue";
-import { Button } from "umbraco";
-import { ref } from "vue";
+import { Icon } from '@iconify/vue'
 import {
-  ComboboxAnchor,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxGroup,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxItemIndicator,
-  ComboboxLabel,
-  ComboboxRoot,
-  ComboboxSeparator,
-  ComboboxTrigger,
-  ComboboxViewport,
-} from "reka-ui";
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectItemIndicator,
+  SelectItemText,
+  SelectLabel,
+  SelectPortal,
+  SelectRoot,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+  SelectViewport,
+} from 'reka-ui'
+import { ref } from 'vue'
 
-interface Option {
-  name: string;
-}
+const fruit = ref()
 
-interface LabeledOption {
-  name: string;
-  children: Option[];
-}
-
-const {
-  size = "medium",
-  placeholder = "Placeholder...",
-  options,
-} = defineProps<{
-  size?: "mini" | "small" | "medium" | "large";
-  placeholder?: string;
-  options: LabeledOption[];
-}>();
-
-const open = ref(false);
+const options = ['Apple', 'Banana', 'Blueberry', 'Grapes', 'Pineapple']
+const vegetables = ['Aubergine', 'Broccoli', 'Carrot', 'Courgette', 'Leek']
 </script>
 
 <template>
-  <ComboboxRoot class="ComboboxRoot" v-model:open="open">
-    <ComboboxAnchor class="ComboboxAnchor button-group">
-      <ComboboxInput class="ComboboxInput button small buttonText buttonHover buttonActive buttonFocus focus"
-        :placeholder="placeholder" />
-      <ComboboxTrigger :asChild="true">
-        <Button class="DropDownIcon" size="small">
-          <Icon v-if="open" icon="radix-icons:chevron-down" class="ComboboxIcon" />
-          <Icon v-else icon="radix-icons:chevron-right" class="ComboboxIcon" />
-        </Button>
-      </ComboboxTrigger>
-    </ComboboxAnchor>
+  <SelectRoot v-model="fruit">
+    <SelectTrigger class="SelectTrigger button small buttonText buttonHover buttonActive buttonFocus focus"
+      aria-label="Customise options">
+      <SelectValue placeholder="Select a fruit..." />
+      <Icon icon="radix-icons:chevron-down" />
+    </SelectTrigger>
 
-    <ComboboxContent class="ComboboxContent border">
-      <ComboboxViewport class="ComboboxViewport">
-        <ComboboxEmpty class="ComboboxEmpty" />
+    <SelectPortal>
+      <SelectContent class="SelectContent" :side-offset="5">
+        <SelectScrollUpButton class="SelectScrollButton">
+          <Icon icon="radix-icons:chevron-up" />
+        </SelectScrollUpButton>
 
-        <template v-for="(group, index) in options" :key="group.name">
-          <ComboboxGroup v-if="group.children.length">
-            <ComboboxSeparator v-if="index !== 0" class="ComboboxSeparator" />
-
-            <ComboboxLabel class="ComboboxLabel">
-              <p class="caption">{{ group.name }}</p>
-            </ComboboxLabel>
-
-            <ComboboxItem v-for="option in group.children" :key="option.name" :value="option.name" class="ComboboxItem">
-              <p>{{ option.name }}</p>
-              <ComboboxItemIndicator class="ComboboxItemIndicator">
+        <SelectViewport class="SelectViewport">
+          <SelectLabel class="SelectLabel">
+            Fruits
+          </SelectLabel>
+          <SelectGroup>
+            <SelectItem v-for="(option, index) in options" :key="index" class="SelectItem" :value="option">
+              <SelectItemIndicator class="SelectItemIndicator">
                 <Icon icon="radix-icons:check" />
-              </ComboboxItemIndicator>
-            </ComboboxItem>
-          </ComboboxGroup>
-        </template>
-      </ComboboxViewport>
-    </ComboboxContent>
-  </ComboboxRoot>
+              </SelectItemIndicator>
+              <SelectItemText>
+                {{ option }}
+              </SelectItemText>
+            </SelectItem>
+          </SelectGroup>
+          <SelectSeparator class="SelectSeparator" />
+          <SelectLabel class="SelectLabel">
+            Vegetables
+          </SelectLabel>
+          <SelectGroup>
+            <SelectItem v-for="(option, index) in vegetables" :key="index" class="SelectItem" :value="option"
+              :disabled="option === 'Courgette'">
+              <SelectItemIndicator class="SelectItemIndicator">
+                <Icon icon="radix-icons:check" />
+              </SelectItemIndicator>
+              <SelectItemText>
+                {{ option }}
+              </SelectItemText>
+            </SelectItem>
+          </SelectGroup>
+        </SelectViewport>
+
+        <SelectScrollDownButton class="SelectScrollButton">
+          <Icon icon="radix-icons:chevron-down" />
+        </SelectScrollDownButton>
+      </SelectContent>
+    </SelectPortal>
+  </SelectRoot>
 </template>
 
 <style>
-button,
-input {
-  all: unset;
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/grass.css';
+
+.SelectTrigger[data-placeholder] {
+  color: var(--grass-9);
 }
 
-.ComboboxRoot {
-  position: relative;
+.SelectIcon {
+  color: var(--grass-11);
 }
 
-.ComboboxInput[value=""] {
-  color: var(--base-text);
-  color: red;
-}
-
-.ComboboxContent {
-  z-index: 10000;
-  width: 100%;
-  position: absolute;
+.SelectContent {
   overflow: hidden;
   background-color: var(--base-10);
   border-radius: var(--radius);
-  margin-top: var(--space-1);
-  cursor: pointer;
 }
 
-.ComboboxContent p {
-  pointer-events: none;
-}
-
-.ComboboxViewport {
+.SelectViewport {
   padding: var(--space-1);
 }
 
-.ComboboxEmpty {
-  padding-top: var(--space-1);
-  padding-bottom: var(--space-1);
-  color: var(--base-120);
-  text-align: center;
-}
-
-.ComboboxItem {
-  line-height: 1;
-  color: var(--space-1);
+.SelectItem {
   border-radius: var(--radius);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: var(--block);
+  height: 25px;
   padding: 0 var(--space-1);
   position: relative;
+  user-select: none;
 }
 
-.ComboboxItem[data-disabled] {
-  color: var(--base-50);
+.SelectItem[data-disabled] {
+  color: var(--mauve-8);
   pointer-events: none;
 }
 
-.ComboboxItem[data-highlighted] {
-  background-color: var(--base-20);
-  color: var(--base-120);
+.SelectItem[data-highlighted] {
+  outline: none;
+  background-color: var(--grass-9);
+  color: var(--grass-1);
 }
 
-.ComboboxItem[data-state="checked"] {
-  background-color: var(--accent-30);
-  color: var(--accent-120);
+.SelectLabel {
+  padding: 0 25px;
+  font-size: 12px;
+  line-height: 25px;
+  color: var(--mauve-11);
 }
 
-.ComboboxLabel {
-  padding: 0 var(--space-1);
-  padding-bottom: var(--space-quark);
-  color: var(--base-70);
-}
-
-.ComboboxSeparator {
+.SelectSeparator {
   height: 1px;
-  background-color: var(--base-50);
-  margin: var(--space-1);
+  background-color: var(--grass-6);
+  margin: 5px;
 }
 
-.ComboboxItemIndicator {
+.SelectItemIndicator {
+  position: absolute;
+  left: 0;
   width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SelectScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: var(--grass-11);
+  cursor: default;
 }
 </style>

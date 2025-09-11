@@ -14,6 +14,7 @@ import {
   Drawer,
 } from "umbraco";
 import Select from "../components/Select.vue";
+import ComboBox from "../components/ComboBox.vue";
 
 const options = [
   {
@@ -73,9 +74,10 @@ const options = [
       </Chip>
     </section>
 
-    <section id="chips">
+    <section id="chips" class="column">
       <h2>Select</h2>
       <Select size="medium" placeholder="Choose an option" :options="options" />
+      <ComboBox size="medium" placeholder="Choose an option" :options="options" />
     </section>
 
     <section id="radio" class="column">
