@@ -12,8 +12,7 @@ import {
   Graph,
   Drawer,
 } from "umbraco";
-import Select from "../components/Select/ListSelect.vue";
-import ComboBox from "../components/Select/ComboBox.vue";
+import Select from "../components/Select/Select.vue";
 
 const options = [
   {
@@ -75,8 +74,8 @@ const options = [
 
     <section id="chips" class="column">
       <h2>Select</h2>
-      <Select size="medium" placeholder="Choose an option" :options="options" />
-      <ComboBox size="medium" placeholder="Choose an option" :options="options" />
+      <Select type="list" size="medium" placeholder="Choose an option" :options="options" />
+      <Select type="combobox" size="medium" placeholder="Choose an option" :options="options" />
     </section>
 
     <section id="radio" class="column">
@@ -220,7 +219,11 @@ const options = [
   </div>
 </template>
 
-<style scoped>
+<style>
+body {
+  padding-right: 0px !important;
+}
+
 .ui-hero {
   display: flex;
   flex-direction: column;

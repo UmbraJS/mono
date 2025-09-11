@@ -34,7 +34,7 @@ const open = ref(false);
 <template>
   <ComboboxRoot class="ComboboxRoot" v-model:open="open">
     <ComboboxAnchor class="ComboboxAnchor button-group">
-      <ComboboxInput class="ComboboxInput button small buttonText buttonHover buttonActive buttonFocus focus"
+      <ComboboxInput class="ComboboxInput button small buttonHover buttonActive buttonFocus focus"
         :placeholder="placeholder" />
       <ComboboxTrigger :asChild="true">
         <Button class="DropDownIcon" size="small">
@@ -44,37 +44,36 @@ const open = ref(false);
       </ComboboxTrigger>
     </ComboboxAnchor>
 
-    <ComboboxContent class="ComboboxContent border">
-      <ComboboxViewport class="ComboboxViewport">
-        <ComboboxEmpty class="ComboboxEmpty" />
+    <ComboboxContent class="SelectContent border">
+      <ComboboxViewport class="SelectViewport">
+        <ComboboxEmpty class="ComboboxEmpty">
+          <Icon icon="carbon:warning" />
+          <p class="">404 not found</p>
+        </ComboboxEmpty>
 
         <template v-for="(group, index) in options" :key="group.name">
           <ComboboxGroup v-if="group.children.length">
-            <ComboboxSeparator v-if="index !== 0" class="ComboboxSeparator" />
+            <ComboboxSeparator v-if="index !== 0" class="SelectItemsSeparator" />
 
-            <ComboboxLabel class="ComboboxLabel">
+            <ComboboxLabel class="SelectLabel">
               <p class="caption">{{ group.name }}</p>
             </ComboboxLabel>
 
-            <ComboboxItem v-for="option in group.children" :key="option.name" :value="option.name" class="ComboboxItem">
+            <ComboboxItem v-for="option in group.children" :key="option.name" :value="option.name" class="SelectItem">
               <p>{{ option.name }}</p>
-              <ComboboxItemIndicator class="ComboboxItemIndicator">
+              <ComboboxItemIndicator class="SelectItemIndicator">
                 <Icon icon="radix-icons:check" />
               </ComboboxItemIndicator>
             </ComboboxItem>
           </ComboboxGroup>
         </template>
+
       </ComboboxViewport>
     </ComboboxContent>
   </ComboboxRoot>
 </template>
 
 <style>
-button,
-input {
-  all: unset;
-}
-
 .ComboboxRoot {
   position: relative;
 }
@@ -84,72 +83,15 @@ input {
   color: red;
 }
 
-.ComboboxContent {
-  z-index: 10000;
-  width: 100%;
-  position: absolute;
-  overflow: hidden;
-  background-color: var(--base-10);
-  border-radius: var(--radius);
-  margin-top: var(--space-1);
-  cursor: pointer;
-}
-
-.ComboboxContent p {
-  pointer-events: none;
-}
-
-.ComboboxViewport {
-  padding: var(--space-1);
-}
-
 .ComboboxEmpty {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+  justify-content: center;
+
   padding-top: var(--space-1);
   padding-bottom: var(--space-1);
-  color: var(--base-120);
+  color: var(--warning-120);
   text-align: center;
-}
-
-.ComboboxItem {
-  line-height: 1;
-  color: var(--space-1);
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: var(--block);
-  padding: 0 var(--space-1);
-  position: relative;
-}
-
-.ComboboxItem[data-disabled] {
-  color: var(--base-50);
-  pointer-events: none;
-}
-
-.ComboboxItem[data-highlighted] {
-  background-color: var(--base-20);
-  color: var(--base-120);
-}
-
-.ComboboxItem[data-state="checked"] {
-  background-color: var(--accent-30);
-  color: var(--accent-120);
-}
-
-.ComboboxLabel {
-  padding: 0 var(--space-1);
-  padding-bottom: var(--space-quark);
-  color: var(--base-70);
-}
-
-.ComboboxSeparator {
-  height: 1px;
-  background-color: var(--base-50);
-  margin: var(--space-1);
-}
-
-.ComboboxItemIndicator {
-  width: 25px;
 }
 </style>

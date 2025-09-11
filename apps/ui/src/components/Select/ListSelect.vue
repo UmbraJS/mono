@@ -30,52 +30,41 @@ const {
   options: LabeledOption[];
 }>();
 
-const fruit = ref(options)
+// current selected value (string) – start empty to allow placeholder usage
+const selected = ref<string | null>(null)
 </script>
 
 <template>
-  <SelectRoot v-model="fruit">
-    <SelectTrigger class="SelectTrigger button small buttonText buttonHover buttonActive buttonFocus focus"
-      aria-label="Customise options">
-      <SelectValue placeholder="Select a fruit..." />
+  <SelectRoot v-model="selected">
+    <SelectTrigger class="SelectTrigger button small buttonHover buttonActive buttonFocus focus"
+      :aria-label="placeholder">
+      <SelectValue as="p" :placeholder="placeholder" />
       <Icon icon="radix-icons:chevron-down" />
     </SelectTrigger>
 
     <SelectPortal>
-      <SelectContent class="SelectContent" :side-offset="5">
+      <SelectContent class="SelectContent border" :side-offset="5">
         <SelectScrollUpButton class="SelectScrollButton">
           <Icon icon="radix-icons:chevron-up" />
         </SelectScrollUpButton>
 
         <SelectViewport class="SelectViewport">
-          <SelectLabel class="SelectLabel">
-            Fruits
-          </SelectLabel>
-          <SelectGroup>
-            <SelectItem v-for="(option, index) in fruit" :key="index" class="SelectItem" :value="option">
-              <SelectItemIndicator class="SelectItemIndicator">
-                <Icon icon="radix-icons:check" />
-              </SelectItemIndicator>
-              <SelectItemText>
-                {{ option }}
-              </SelectItemText>
-            </SelectItem>
-          </SelectGroup>
-          <SelectSeparator class="SelectSeparator" />
-          <SelectLabel class="SelectLabel">
-            Vegetables
-          </SelectLabel>
-          <SelectGroup>
-            <SelectItem v-for="(option, index) in vegetables" :key="index" class="SelectItem" :value="option"
-              :disabled="option === 'Courgette'">
-              <SelectItemIndicator class="SelectItemIndicator">
-                <Icon icon="radix-icons:check" />
-              </SelectItemIndicator>
-              <SelectItemText>
-                {{ option }}
-              </SelectItemText>
-            </SelectItem>
-          </SelectGroup>
+          <template v-for="(group, gIndex) in options" :key="group.name">
+            <SelectGroup v-if="group.children.length">
+              <SelectSeparator v-if="gIndex !== 0" class="SelectItemsSeparator" />
+              <SelectLabel class="SelectLabel">
+                <p class="caption">{{ group.name }}</p>
+              </SelectLabel>
+              <SelectItem v-for="option in group.children" :key="option.name" class="SelectItem" :value="option.name">
+                <SelectItemText>
+                  <p>{{ option.name }}</p>
+                </SelectItemText>
+                <SelectItemIndicator class="SelectItemIndicator">
+                  <Icon icon="radix-icons:check" />
+                </SelectItemIndicator>
+              </SelectItem>
+            </SelectGroup>
+          </template>
         </SelectViewport>
 
         <SelectScrollDownButton class="SelectScrollButton">
@@ -87,80 +76,9 @@ const fruit = ref(options)
 </template>
 
 <style>
-/* Harmonize Select styles with ComboBox component design tokens */
-
 .SelectContent {
-  z-index: 10000;
-  width: 100%;
-  position: relative;
-  /* stays within portal positioning */
-  overflow: hidden;
-  background-color: var(--base-10);
-  border-radius: var(--radius);
-  margin-top: var(--space-1);
-  cursor: pointer;
-  border: 1px solid var(--base-40);
-}
-
-.SelectViewport {
-  padding: var(--space-1);
-}
-
-.SelectItem {
-  line-height: 1;
-  color: var(--base-120);
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: var(--block);
-  padding: 0 var(--space-1);
-  position: relative;
-  user-select: none;
-  font-size: var(--font-size-0, 14px);
-}
-
-.SelectItem[data-disabled] {
-  color: var(--base-50);
-  pointer-events: none;
-}
-
-.SelectItem[data-highlighted] {
-  background-color: var(--base-20);
-  color: var(--base-120);
-  outline: none;
-}
-
-.SelectItem[data-state="checked"] {
-  background-color: var(--accent-30);
-  color: var(--accent-120);
-}
-
-.SelectLabel {
-  padding: 0 var(--space-1);
-  padding-bottom: var(--space-quark);
-  color: var(--base-70);
-  font-size: var(--font-size--1, 12px);
-  line-height: 1.2;
-  text-transform: none;
-}
-
-.SelectSeparator {
-  height: 1px;
-  background-color: var(--base-50);
-  margin: var(--space-1);
-}
-
-.SelectItemIndicator {
-  width: 25px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  color: currentColor;
+  /* Content gets slightly unaligned with its trigger. Might want to do a deeper dive into why but this fix works for now. */
+  transform: translateY(-9px);
 }
 
 .SelectScrollButton {
@@ -171,6 +89,13 @@ const fruit = ref(options)
   background-color: var(--base-10);
   color: var(--base-120);
   cursor: default;
+}
+
+.SelectTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
 }
 
 /* Placeholder coloring similar to ComboBoxInput */

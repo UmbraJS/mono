@@ -111,7 +111,8 @@ const getColorScheme = computed(() => {
   background: var(--base-10);
 }
 
-.buttonText {
+.buttonText,
+.buttonText p {
   font-variation-settings: var(--font-medium);
   line-height: 1;
 }
