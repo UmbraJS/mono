@@ -78,11 +78,6 @@ const open = ref(false);
   position: relative;
 }
 
-.ComboboxInput[value=""] {
-  color: var(--base-text);
-  color: red;
-}
-
 .ComboboxEmpty {
   display: flex;
   gap: var(--space-1);
@@ -92,6 +87,5 @@ const open = ref(false);
   padding-top: var(--space-1);
   padding-bottom: var(--space-1);
   color: var(--warning-120);
-  text-align: center;
 }
 </style>

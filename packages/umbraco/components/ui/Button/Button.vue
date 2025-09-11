@@ -80,8 +80,8 @@ const getColorScheme = computed(() => {
 }
 
 .button.buttonFocus:focus {
-  color: var(--base-100);
-  background: var(--base-70);
+  color: var(--base-text);
+  background: var(--base-40);
   border-color: var(--base-10);
 }
 

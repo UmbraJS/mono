@@ -41,10 +41,9 @@ const {
 .SelectLabel {
   padding: 0 var(--space-1);
   padding-bottom: var(--space-quark);
-  color: var(--base-70);
+  color: var(--base-80);
 }
 
-/* lol */
 .SelectItem {
   display: flex;
   align-items: center;
@@ -52,7 +51,6 @@ const {
 
   color: var(--space-1);
   border-radius: var(--radius);
-
   padding: 0 var(--space-1);
 }
 
@@ -82,5 +80,10 @@ const {
 
 .SelectItemIndicator {
   width: 25px;
+}
+
+.ComboboxInput[value=""]::placeholder,
+.SelectTrigger p[data-placeholder] {
+  color: var(--base-80);
 }
 </style>
