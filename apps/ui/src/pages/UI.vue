@@ -75,7 +75,8 @@ const options = [
     <section id="chips" class="column">
       <h2>Select</h2>
       <Select type="list" size="medium" placeholder="Choose an option" :options="options" />
-      <Select type="combobox" size="medium" placeholder="Choose an option" :options="options" />
+      <Select type="search" size="medium" placeholder="Choose an option" :options="options" />
+      <Select type="tags" size="medium" placeholder="Choose an option" :options="options" />
     </section>
 
     <section id="radio" class="column">

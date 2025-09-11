@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import ComboBox from './ComboBox.vue';
 import ListSelect from './ListSelect.vue';
+import TagSelect from './TagSelect.vue';
 import { normalizeToLabeled, isLabeledOptions } from './types';
 
 import type { SelectOptions } from "./types";
@@ -15,7 +16,7 @@ const {
   size?: "mini" | "small" | "medium" | "large";
   placeholder?: string;
   options: SelectOptions;
-  type?: "list" | "combobox";
+  type?: "list" | "search" | "tags";
 }>();
 
 const normalizedOptions = computed(() => {
@@ -25,7 +26,8 @@ const normalizedOptions = computed(() => {
 
 <template>
   <ListSelect v-if="type === 'list'" :size="size" :placeholder="placeholder" :options="normalizedOptions" />
-  <ComboBox v-if="type === 'combobox'" :size="size" :placeholder="placeholder" :options="normalizedOptions" />
+  <ComboBox v-if="type === 'search'" :size="size" :placeholder="placeholder" :options="normalizedOptions" />
+  <TagSelect v-if="type === 'tags'" :size="size" :placeholder="placeholder" :options="normalizedOptions" />
 </template>
 
 <style>

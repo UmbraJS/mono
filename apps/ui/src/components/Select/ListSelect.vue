@@ -17,7 +17,6 @@ import {
   SelectViewport,
 } from 'reka-ui'
 import { ref } from 'vue'
-
 import type { LabeledOption } from "./types";
 
 const {
