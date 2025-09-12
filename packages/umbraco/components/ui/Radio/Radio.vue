@@ -5,22 +5,24 @@ const checked = ref(false)
 </script>
 
 <template>
-  <div class="checkbox button medium" :class="{ checked }">
+  <div class="RadioCheckbox button buttonMedium" :class="{ checked }">
     <input v-model="checked" type="checkbox" class="buttonFocus" tabindex="0" />
     <CheckMark />
-    <p><slot></slot></p>
+    <p>
+      <slot></slot>
+    </p>
   </div>
 </template>
 
-<style scoped lang="scss">
-.checkbox input[type='checkbox'] {
+<style>
+.RadioCheckbox input[type='checkbox'] {
   -webkit-appearance: none;
   appearance: none;
   margin: 0;
 }
 
 /* Customize the label (the container) */
-.checkbox {
+.RadioCheckbox {
   cursor: pointer;
   position: relative;
   display: grid;
@@ -30,7 +32,7 @@ const checked = ref(false)
 }
 
 /* Hide the browser's default radio button */
-.checkbox input {
+.RadioCheckbox input {
   cursor: pointer;
   height: 100%;
   position: absolute;

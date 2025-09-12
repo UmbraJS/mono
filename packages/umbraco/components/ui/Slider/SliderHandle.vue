@@ -9,18 +9,18 @@ defineProps<{
 </script>
 
 <template>
-  <Button size="mini" :variant="variant" class="handle" :class="side">
-    <Icon icon="pixelarticons:home" />
+  <Button size="mini" :variant="variant" class="SliderHandle" :class="side">
+    <Icon icon="pixelarticons:home" width="0.6em" height="0.6em" />
   </Button>
 </template>
 
 <style scoped lang="scss">
-.slider-wrapper .track .range .handle.right {
+.SliderWrapper .SliderTrack .SliderRange .SliderHandle.right {
   position: absolute;
   right: calc(0px - var(--handle-size) / 2);
 }
 
-.slider-wrapper .track .range .handle.left {
+.SliderWrapper .SliderTrack .SliderRange .SliderHandle.left {
   position: absolute;
   left: calc(0px - var(--handle-size) / 2);
 }

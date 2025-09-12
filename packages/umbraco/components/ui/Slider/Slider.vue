@@ -23,23 +23,12 @@ watch(pressed, (isPressed) => {
 </script>
 
 <template>
-  <div class="slider-container">
-    <SliderRuler
-      :value="leftHandleClicked ? left : size + left"
-      :min="0"
-      :max="100"
-      :snapPoints="snapPoints"
-      :pressed="pressed"
-      :zoom="zoom"
-    />
-    <div
-      ref="slider"
-      tabindex="1"
-      class="slider-wrapper border focus"
-      @mousedown="() => updateSlider()"
-    >
-      <div ref="track" class="track">
-        <div class="range">
+  <div class="SliderContainer">
+    <SliderRuler v-if="zoom > 1" :value="leftHandleClicked ? left : size + left" :min="0" :max="100"
+      :snapPoints="snapPoints" :pressed="pressed" :zoom="zoom" />
+    <div ref="slider" tabindex="1" class="SliderWrapper border focus" @mousedown="() => updateSlider()">
+      <div ref="track" class="SliderTrack">
+        <div class="SliderRange">
           <SliderHandle variant="secondary" side="left" @mousedown="leftHandleClicked = true" />
           <SliderHandle variant="primary" side="right" />
         </div>
@@ -51,7 +40,7 @@ watch(pressed, (isPressed) => {
 </template>
 
 <style scoped lang="scss">
-.slider-container {
+.SliderContainer {
   position: relative;
   --handle-size: var(--block-small);
   --track-height: calc(var(--block-small) / 2);
@@ -59,7 +48,7 @@ watch(pressed, (isPressed) => {
   --padding: var(--space-2) var(--padding-sides);
 }
 
-.slider-container .slider-ruler {
+.SliderContainer .SliderRuler {
   position: absolute;
   top: 0px;
   width: 100%;
@@ -67,7 +56,7 @@ watch(pressed, (isPressed) => {
   z-index: 5;
 }
 
-.slider-wrapper {
+.SliderWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +69,7 @@ watch(pressed, (isPressed) => {
   background: var(--base-10);
 }
 
-.slider-wrapper .track {
+.SliderWrapper .SliderTrack {
   display: flex;
   align-items: center;
   z-index: 1;
@@ -91,7 +80,7 @@ watch(pressed, (isPressed) => {
   border-radius: var(--radius);
 }
 
-.slider-wrapper .track .range {
+.SliderWrapper .SliderTrack .SliderRange {
   display: flex;
   align-items: center;
   justify-self: flex-end;

@@ -98,6 +98,23 @@ function getTokenName(index: number) {
 </template>
 
 <style>
+:root {
+  --color: var(--accent);
+  --color-10: var(--accent-10);
+  --color-20: var(--accent-20);
+  --color-30: var(--accent-30);
+  --color-40: var(--accent-40);
+  --color-50: var(--accent-50);
+  --color-60: var(--accent-60);
+  --color-70: var(--accent-70);
+  --color-80: var(--accent-80);
+  --color-90: var(--accent-90);
+  --color-100: var(--accent-100);
+  --color-110: var(--accent-110);
+  --color-120: var(--accent-120);
+  --color-text: var(--accent-text);
+}
+
 #TokenName {
   opacity: 0.2;
   font-weight: 900;

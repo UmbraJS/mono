@@ -7,19 +7,14 @@ defineProps<{
 </script>
 
 <template>
-  <div class="snap-points">
-    <div
-      v-for="snapPoint in snapPoints"
-      :key="snapPoint"
-      class="snapPoint"
-      :class="{ active: nearestSnapPoint(value, snapPoints) === snapPoint }"
-      :style="{ left: snapPoint + '%' }"
-    ></div>
+  <div class="SnapPoints">
+    <div v-for="snapPoint in snapPoints" :key="snapPoint" class="SnapPoint"
+      :class="{ active: nearestSnapPoint(value, snapPoints) === snapPoint }" :style="{ left: snapPoint + '%' }"></div>
   </div>
 </template>
 
-<style scoped lang="scss">
-.slider-wrapper .snap-points {
+<style>
+.SnapPoints {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +25,7 @@ defineProps<{
   height: 100%;
 }
 
-.slider-wrapper .snapPoint {
+.SnapPoint {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,7 +38,7 @@ defineProps<{
   transition: var(--slow);
 }
 
-.slider-wrapper .snapPoint.active {
+.SnapPoint.active {
   height: var(--block);
   background-color: var(--accent-100);
 }

@@ -19,7 +19,7 @@ const modelValue = ref(['Apple', 'Banana'])
 </script>
 
 <template>
-  <TagsInputRoot v-model="modelValue" class="SelectTrigger button small buttonHover buttonActive buttonFocus focus">
+  <TagsInputRoot v-model="modelValue" class="SelectTrigger button buttonSmall buttonHover buttonActive buttonFocus">
     <TagsInputItem v-for="item in modelValue" :key="item" :value="item"
       class="TagsInputItem button mini buttonHover buttonActive buttonFocus focus">
       <TagsInputItemText as="p" class="TagsInputItemText caption" />

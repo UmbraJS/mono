@@ -1,4 +1,6 @@
-@import "./base.css";
-@import "./main.css";
+@layer reset, utils, mods;
+
+@import "./reset.css";
+@import "./tokens.css";
 @import "./typography.css";
 @import "./utils.css";

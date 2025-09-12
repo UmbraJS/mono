@@ -108,7 +108,7 @@ const options = [
       <section class="buttons">
         <h3>Button Sizes</h3>
         <Button variant="primary" size="mini">
-          <Icon icon="pixelarticons:home" />
+          <Icon icon="pixelarticons:home" width="0.6em" height="0.6em" />
         </Button>
         <Button variant="secondary" size="small">
           <Icon icon="pixelarticons:home" />
@@ -135,13 +135,13 @@ const options = [
 
         <ButtonGroup>
           <Button size="mini">
-            <Icon icon="pixelarticons:home" />
+            <Icon icon="pixelarticons:home" height="0.6em" width="0.6em" />
           </Button>
           <Button size="mini">
-            <Icon icon="pixelarticons:home" />
+            <Icon icon="pixelarticons:home" height="0.6em" width="0.6em" />
           </Button>
           <Button size="mini">
-            <Icon icon="pixelarticons:home" />
+            <Icon icon="pixelarticons:home" height="0.6em" width="0.6em" />
           </Button>
         </ButtonGroup>
       </section>

@@ -35,7 +35,7 @@ const selected = ref<string | null>(null)
 
 <template>
   <SelectRoot v-model="selected">
-    <SelectTrigger class="SelectTrigger button small buttonHover buttonActive buttonFocus focus"
+    <SelectTrigger class="SelectTrigger button buttonSmall buttonHover buttonActive buttonFocus"
       :aria-label="placeholder">
       <SelectValue as="p" :placeholder="placeholder" />
       <Icon icon="radix-icons:chevron-down" />

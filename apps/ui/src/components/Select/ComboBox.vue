@@ -34,7 +34,7 @@ const open = ref(false);
 <template>
   <ComboboxRoot class="ComboboxRoot" v-model:open="open">
     <ComboboxAnchor class="ComboboxAnchor button-group">
-      <ComboboxInput class="ComboboxInput button small buttonHover buttonActive buttonFocus focus"
+      <ComboboxInput class="ComboboxInput button buttonSmall buttonHover buttonActive buttonFocus"
         :placeholder="placeholder" />
       <ComboboxTrigger :asChild="true">
         <Button class="DropDownIcon" size="small">

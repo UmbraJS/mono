@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import "umbraco/styles/main.scss";
+import "umbraco/styles/_index.css";
+import "umbraco/dist/umbraco.css";
 import { Toaster } from "umbraco";
 import IslandMenu from "./components/IslandMenu.vue";
 import { SpeedInsights } from "@vercel/speed-insights/nuxt";

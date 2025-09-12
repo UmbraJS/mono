@@ -53,23 +53,23 @@ function toggleTheme() {
     <TextScreen>{{ route.fullPath }}</TextScreen>
     <nav>
       <ButtonGroup>
-        <RouterLink to="/" class="button buttonFocus small" activeClass="primary">
+        <RouterLink to="/" class="button buttonFocus buttonSmall" activeClass="primary">
           <Icon icon="pixelarticons:home" />
         </RouterLink>
 
-        <RouterLink to="/type" class="button buttonFocus small" activeClass="primary">
+        <RouterLink to="/type" class="button buttonFocus buttonSmall" activeClass="primary">
           <Icon icon="pixelarticons:card-text" />
         </RouterLink>
 
-        <RouterLink to="/sizes" class="button buttonFocus small" activeClass="primary">
+        <RouterLink to="/sizes" class="button buttonFocus buttonSmall" activeClass="primary">
           <Icon icon="pixelarticons:viewport-wide" />
         </RouterLink>
 
-        <RouterLink to="/ui" class="button buttonFocus small" activeClass="primary">
+        <RouterLink to="/ui" class="button buttonFocus buttonSmall" activeClass="primary">
           <Icon icon="pixelarticons:building" />
         </RouterLink>
 
-        <RouterLink to="/color" class="button buttonFocus small" activeClass="primary">
+        <RouterLink to="/color" class="button buttonFocus buttonSmall" activeClass="primary">
           <Icon icon="pixelarticons:paint-bucket" />
         </RouterLink>
 

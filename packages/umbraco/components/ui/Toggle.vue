@@ -8,7 +8,7 @@ defineProps<{
 </script>
 
 <template>
-  <Button class="toggle-wrapper" :class="{ right: value }" size="small">
+  <Button class="ToggleWrapper" :class="{ right: value }" size="small">
     <div class="handle">
       <Icon icon="carbon:face-satisfied" />
     </div>
@@ -16,7 +16,7 @@ defineProps<{
 </template>
 
 <style lang="scss">
-button.toggle-wrapper.small {
+button.ToggleWrapper.small {
   display: inline-block;
 
   width: calc(var(--block) * 2);
@@ -41,7 +41,7 @@ button.toggle-wrapper.small {
   }
 }
 
-button.toggle-wrapper.small:focus {
+button.ToggleWrapper.small:focus {
   background-color: var(--base-50);
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
-  <div class="checkmark">
-    <div class="mark"></div>
+  <div class="RadioCheckmark">
+    <div class="RadioMark"></div>
   </div>
 </template>
 
-<style scoped lang="scss">
-.checkmark {
+<style>
+.RadioCheckmark {
   display: flex;
   position: relative;
   border-radius: 30px;
@@ -19,7 +19,7 @@
   transition: var(--time);
 }
 
-.checkmark .mark {
+.RadioCheckmark .RadioMark {
   position: absolute;
   height: 0px;
   aspect-ratio: 1 / 1;
@@ -28,11 +28,11 @@
   transition: var(--time);
 }
 
-.checkbox.checked .checkmark {
+.RadioCheckbox.checked .RadioCheckmark {
   height: var(--block);
 }
 
-.checkbox.checked .checkmark .mark {
+.RadioCheckbox.checked .RadioCheckmark .RadioMark {
   height: var(--space-atom);
 }
 </style>

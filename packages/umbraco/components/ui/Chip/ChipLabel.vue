@@ -1,19 +1,28 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { ButtonSize } from '../../../types/button'
-defineProps<{
+const {
+  size = 'small',
+} = defineProps<{
   size?: ButtonSize;
 }>()
+
+
+const sizeClass = computed(() => ({
+  mini: 'buttonMini',
+  small: 'buttonSmall',
+  medium: 'buttonMedium',
+}[size] ?? 'buttonMedium'))
 </script>
 
 <template>
-  <div class="UChipContent button" :class="size ? size : 'small'">
+  <div class="UChipContent button" :class="sizeClass">
     <slot />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .UChipContent {
-  box-sizing: content-box;
   padding: 0px var(--space-quark);
 }
 </style>

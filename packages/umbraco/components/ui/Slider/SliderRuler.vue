@@ -24,26 +24,21 @@ function inverseScale(scale: number) {
 </script>
 
 <template>
-  <div class="slider-ruler border">
+  <div class="SliderRuler border">
     <div class="zoomable">
-      <div class="handle-range">
+      <div class="HandleRange">
         <div class="handle"></div>
       </div>
-      <div
-        v-for="tick in max + 1"
-        :key="tick"
-        class="tick"
-        :class="{
-          mark: snapPoints.includes(tick - 1),
-          active: nearestSnapPoint(value, snapPoints) === tick - 1
-        }"
-      ></div>
+      <div v-for="tick in max + 1" :key="tick" class="tick" :class="{
+        mark: snapPoints.includes(tick - 1),
+        active: nearestSnapPoint(value, snapPoints) === tick - 1
+      }"></div>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.slider-ruler {
+<style>
+.SliderRuler {
   overflow: hidden;
   height: var(--block-big);
   padding: 0 var(--padding-sides);
@@ -54,7 +49,7 @@ function inverseScale(scale: number) {
   --handle-pos: calc(var(--pos) - var(--offset));
 }
 
-.slider-ruler .zoomable {
+.SliderRuler .zoomable {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -66,24 +61,24 @@ function inverseScale(scale: number) {
   transform-origin: var(--handle-pos) 50%;
 }
 
-.slider-ruler .tick {
+.SliderRuler .tick {
   height: 25%;
   width: 0.2px;
   background: var(--base-80);
   transition: var(--slow);
 }
 
-.slider-ruler .tick.mark {
+.SliderRuler .tick.mark {
   background: var(--base-120);
   height: 50%;
 }
 
-.slider-ruler .tick.mark.active {
+.SliderRuler .tick.mark.active {
   background: var(--accent-100);
   height: 75%;
 }
 
-.slider-ruler .handle-range {
+.SliderRuler .HandleRange {
   display: flex;
   align-items: center;
   width: 100%;
@@ -92,7 +87,7 @@ function inverseScale(scale: number) {
   z-index: 10;
 }
 
-.slider-ruler .handle {
+.SliderRuler .handle {
   position: absolute;
   left: var(--handle-pos);
   width: var(--space-quark);

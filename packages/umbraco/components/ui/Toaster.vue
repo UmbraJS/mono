@@ -24,11 +24,11 @@ defineProps<{
 
 <style lang="scss">
 .toast {
-  background-color: var(--color-80);
-  color: var(--color-text);
+  background-color: var(--base-80);
+  color: var(--base-text);
   border-radius: var(--radius);
   padding: var(--space-1);
-  border: solid var(--border-size) var(--color-80);
+  border: solid var(--border-size) var(--base-80);
 }
 
 .toast-error {

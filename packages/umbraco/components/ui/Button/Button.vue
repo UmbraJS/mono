@@ -13,15 +13,21 @@ const {
 
 const ButtonVariant = computed(() => (disabled ? buttonVariants.base : buttonVariants[variant]))
 
-const getColorScheme = computed(() => {
+const colorScheme = computed(() => {
   if (color === 'default') return `base-accent`
   return `base-${color}`
 })
+
+const sizeClass = computed(() => ({
+  mini: 'buttonMini',
+  small: 'buttonSmall',
+  medium: 'buttonMedium',
+}[size] ?? 'buttonMedium'))
 </script>
 
 <template>
-  <component :is="ButtonVariant" tabindex="1" class="button buttonText buttonHover buttonActive buttonFocus focus"
-    :class="`${size} ${getColorScheme}`" :disabled="disabled" :type="type">
+  <component :is="ButtonVariant" tabindex="0" class="button buttonText buttonHover buttonActive buttonFocus"
+    :class="[sizeClass, colorScheme]" :disabled="disabled" :aria-disabled="disabled" :type="type">
     <slot></slot>
   </component>
 </template>
@@ -47,19 +53,19 @@ const getColorScheme = computed(() => {
   grid-template-columns: auto 1fr;
 }
 
-.button.mini {
+.button.buttonMini {
   height: var(--block-small);
   min-width: var(--block-small);
   padding: 0px;
 }
 
-.button.small {
+.button.buttonSmall {
   height: var(--block);
   min-width: var(--block);
   padding: 0px var(--space-quark);
 }
 
-.button.medium {
+.button.buttonMedium {
   height: var(--block-big);
   min-width: var(--block-big);
   padding: 0px var(--space-1);
@@ -80,7 +86,7 @@ const getColorScheme = computed(() => {
 }
 
 .button.buttonFocus:focus {
-  color: var(--base-text);
+  color: var(--base-120);
   background: var(--base-40);
   border-color: var(--base-10);
 }
