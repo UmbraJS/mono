@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import SignIn from './SignIn.vue'
-import SignUp from './SignUp.vue'
-import { ButtonGroup, Button } from 'umbraco'
+import SignIn from "./SignIn.vue";
+import SignUp from "./SignUp.vue";
+import { ButtonGroup, Button } from "umbraco";
 
-const signMode = ref<'signin' | 'signup'>('signin')
+const signMode = ref<"signin" | "signup">("signin");
 </script>
 
 <template>
   <div class="signin panel-wrapper">
     <div class="multi-toggle-wrapper sibling-group-blur">
       <ButtonGroup>
-        <Button :variant="signMode === 'signin' ? 'primary' : 'base'" size="small" @click="signMode = 'signin'">
+        <Button
+          :variant="signMode === 'signin' ? 'primary' : 'base'"
+          size="small"
+          @click="signMode = 'signin'"
+        >
           Sign in
         </Button>
-        <Button :variant="signMode === 'signup' ? 'primary' : 'base'" size="small" @click="signMode = 'signup'">
+        <Button
+          :variant="signMode === 'signup' ? 'primary' : 'base'"
+          size="small"
+          @click="signMode = 'signup'"
+        >
           Sign up
         </Button>
       </ButtonGroup>
@@ -36,7 +44,7 @@ form {
 }
 
 .multi-toggle-wrapper {
-  .button-group {
+  .buttonGroup {
     width: 100%;
   }
 

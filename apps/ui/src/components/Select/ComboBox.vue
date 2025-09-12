@@ -33,12 +33,18 @@ const open = ref(false);
 
 <template>
   <ComboboxRoot class="ComboboxRoot" v-model:open="open">
-    <ComboboxAnchor class="ComboboxAnchor button-group">
-      <ComboboxInput class="ComboboxInput button buttonSmall buttonHover buttonActive buttonFocus"
-        :placeholder="placeholder" />
+    <ComboboxAnchor class="ComboboxAnchor buttonGroup">
+      <ComboboxInput
+        class="ComboboxInput button buttonSmall buttonHover buttonActive buttonFocus"
+        :placeholder="placeholder"
+      />
       <ComboboxTrigger :asChild="true">
         <Button class="DropDownIcon" size="small">
-          <Icon v-if="open" icon="radix-icons:chevron-down" class="ComboboxIcon" />
+          <Icon
+            v-if="open"
+            icon="radix-icons:chevron-down"
+            class="ComboboxIcon"
+          />
           <Icon v-else icon="radix-icons:chevron-right" class="ComboboxIcon" />
         </Button>
       </ComboboxTrigger>
@@ -53,13 +59,21 @@ const open = ref(false);
 
         <template v-for="(group, index) in options" :key="group.name">
           <ComboboxGroup v-if="group.children.length">
-            <ComboboxSeparator v-if="index !== 0" class="SelectItemsSeparator" />
+            <ComboboxSeparator
+              v-if="index !== 0"
+              class="SelectItemsSeparator"
+            />
 
             <ComboboxLabel class="SelectLabel">
               <p class="caption">{{ group.name }}</p>
             </ComboboxLabel>
 
-            <ComboboxItem v-for="option in group.children" :key="option.name" :value="option.name" class="SelectItem">
+            <ComboboxItem
+              v-for="option in group.children"
+              :key="option.name"
+              :value="option.name"
+              class="SelectItem"
+            >
               <p>{{ option.name }}</p>
               <ComboboxItemIndicator class="SelectItemIndicator">
                 <Icon icon="radix-icons:check" />
@@ -67,7 +81,6 @@ const open = ref(false);
             </ComboboxItem>
           </ComboboxGroup>
         </template>
-
       </ComboboxViewport>
     </ComboboxContent>
   </ComboboxRoot>

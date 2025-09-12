@@ -24,44 +24,44 @@ pnpm add umbraco
 
 ## 🧩 Quick start
 
-1) Import the design tokens and base styles once (recommended in your app entry):
+1. Import the design tokens and base styles once (recommended in your app entry):
 
 ```ts
 // main.ts
-import 'umbraco/styles/main.scss'
+import "umbraco/styles/main.scss";
 ```
 
 Note: Importing any Umbraco component will also include the library’s base styles via the build. Bringing in `styles/main.scss` yourself is optional and most useful when you want tokens/utilities available even before components load, or when consuming only tokens.
 
-2) Use components:
+2. Use components:
 
 ```vue
 <script setup lang="ts">
-import { Button } from 'umbraco'
+import { Button } from "umbraco";
 </script>
 
 <template>
-	<Button variant="primary">Click me</Button>
-	<Button variant="secondary" color="success" size="small">OK</Button>
+  <Button variant="primary">Click me</Button>
+  <Button variant="secondary" color="success" size="small">OK</Button>
 </template>
 ```
 
-3) Optional: add toasts and provider components:
+3. Optional: add toasts and provider components:
 
 ```vue
 <script setup lang="ts">
-import { Toaster, toast } from 'umbraco'
+import { Toaster, toast } from "umbraco";
 
 function notify() {
-	toast("Saved!")
+  toast("Saved!");
 }
 </script>
 
 <template>
-	<Toaster />
-	<button @click="notify">Show toast</button>
-	<!-- Your app -->
-	<router-view />
+  <Toaster />
+  <button @click="notify">Show toast</button>
+  <!-- Your app -->
+  <router-view />
 </template>
 ```
 
@@ -70,13 +70,13 @@ function notify() {
 Umbraco reads the CSS variables produced by UmbraJS. If you already use Umbra, components will immediately match your theme.
 
 ```ts
-import { umbra } from '@umbrajs/core'
+import { umbra } from "@umbrajs/core";
 
 umbra({
-	background: '#16121f',
-	foreground: '#f3f6ea',
-	accents: ['#9999ff']
-}).apply()
+  background: "#16121f",
+  foreground: "#f3f6ea",
+  accents: ["#9999ff"],
+}).apply();
 ```
 
 Scoped color swaps are available with helper classes defined in `styles/main.scss`:
@@ -87,7 +87,7 @@ Scoped color swaps are available with helper classes defined in `styles/main.scs
 
 ```html
 <div class="base-success">
-	<Button>Success base</Button>
+  <button>Success base</button>
 </div>
 ```
 
@@ -100,32 +100,41 @@ All components are Vue SFCs exported from the package root (`import { Button, Di
 Highlights include:
 
 - Buttons: `Button`, `ButtonGroup`, `ButtonToggle`, plus variants in `components/ui/Button/variants`
-	- Props: `variant` = `base | primary | secondary`, `size` = `medium | small | mini`, `color` = `default | success | warning`, `disabled`, `type`
+  - Props: `variant` = `base | primary | secondary`, `size` = `medium | small | mini`, `color` = `default | success | warning`, `disabled`, `type`
 
-	Example:
-	```vue
-	<Button variant="primary" size="medium">Primary</Button>
-	<Button variant="secondary" color="warning" size="small">Warn</Button>
-	```
+  Example:
+
+  ```vue
+  <Button variant="primary" size="medium">Primary</Button>
+  <Button variant="secondary" color="warning" size="small">Warn</Button>
+  ```
 
 - Dialogs (Reka UI): re-exports `DialogRoot`, `DialogTrigger`, `Dialog`, `DialogTitle`, `DialogDescription`, `DialogClose`
-	```vue
-	<script setup lang="ts">
-	import { DialogRoot, DialogTrigger, Dialog, DialogTitle, DialogDescription, DialogClose } from 'umbraco'
-	</script>
-	<template>
-		<DialogRoot>
-			<DialogTrigger as-child>
-				<Button>Open Dialog</Button>
-			</DialogTrigger>
-			<Dialog>
-				<DialogTitle>Title</DialogTitle>
-				<DialogDescription>Details</DialogDescription>
-				<DialogClose as-child><Button>Close</Button></DialogClose>
-			</Dialog>
-		</DialogRoot>
-	</template>
-	```
+
+  ```vue
+  <script setup lang="ts">
+  import {
+    DialogRoot,
+    DialogTrigger,
+    Dialog,
+    DialogTitle,
+    DialogDescription,
+    DialogClose,
+  } from "umbraco";
+  </script>
+  <template>
+    <DialogRoot>
+      <DialogTrigger as-child>
+        <Button>Open Dialog</Button>
+      </DialogTrigger>
+      <Dialog>
+        <DialogTitle>Title</DialogTitle>
+        <DialogDescription>Details</DialogDescription>
+        <DialogClose as-child><Button>Close</Button></DialogClose>
+      </Dialog>
+    </DialogRoot>
+  </template>
+  ```
 
 - Drawer (Vaul): re-exports `DrawerRoot`, `DrawerTrigger`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, `DrawerDescription`, `DrawerTitle`, plus wrappers `Drawer`, `DrawerButton`, `DrawerHandle`
 
@@ -143,13 +152,13 @@ Tokens live in `styles/`:
 
 - `_base.scss` – base resets, anchors, selection, images, forms
 - `_typography.scss` – Inter typography scale, display sizes, paragraph, headings
-- `_utils.scss` – utility classes (rounded, border, button-group helpers)
+- `_utils.scss` – utility classes (rounded, border, buttonGroup helpers)
 - `main.scss` – variables for radius, borders, spacing scale, timings, defaults for `--base`/`--accent` ranges and semantic ranges (`--warning`, `--success`, `--info`, `--yellow`), plus helper classes (`.base-accent`, `.base-success`, etc.)
 
 Import once (recommended):
 
 ```ts
-import 'umbraco/styles/main.scss'
+import "umbraco/styles/main.scss";
 ```
 
 Then reference tokens in your own CSS as needed (e.g., `var(--space-3)`, `var(--radius)`, `var(--base-40)`).
@@ -193,4 +202,3 @@ MIT © Samuel M. Bednarz
 ---
 
 Documentation • Examples • GitHub
-
