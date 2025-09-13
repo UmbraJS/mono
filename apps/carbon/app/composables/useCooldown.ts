@@ -3,7 +3,21 @@ import type { OutputChunk } from '../../utils/time/types';
 import { useAudio } from '../stores/useAudio'
 import { useSimulationInject } from '~/composables/useSimulationProvider'
 
-export function useCooldown(cardSimulation: OutputChunk[], callback: () => void) {
+interface UseCooldownOptions {
+  /** Called when an entire cooldown segment finishes */
+  onSegmentComplete?: () => void
+  /** Called when any cooldown segment finishes, should return a gsap timeline to append AFTER callback */
+  attackTimelineFactory?: () => gsap.core.Timeline | undefined
+  /** Legacy callback (attack trigger) maintained for backwards compat */
+  onAttack?: () => void
+}
+
+export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: (() => void) | UseCooldownOptions) {
+  // Normalize arguments (support old signature useCooldown(chunks, cb))
+  const normalized: UseCooldownOptions = typeof callbackOrOptions === 'function'
+    ? { onAttack: callbackOrOptions }
+    : callbackOrOptions || {}
+
   const audio = useAudio()
 
   const cooldown = ref(100)
@@ -41,7 +55,14 @@ export function useCooldown(cardSimulation: OutputChunk[], callback: () => void)
       },
       onComplete: () => {
         audio.playPunchSound()
-        callback()
+        normalized.onAttack?.()
+        normalized.onSegmentComplete?.()
+        // Append attack dash timeline if provided (after segment completes)
+        const atk = normalized.attackTimelineFactory?.()
+        if (atk) {
+          // Ensure attack timeline starts after cooldown segment fully done
+          cooldownTimeline.add(atk, '+=0')
+        }
       },
     })
 

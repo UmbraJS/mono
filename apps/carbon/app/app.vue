@@ -2,14 +2,12 @@
 import 'umbraco/styles/_index.css';
 import 'umbraco/dist/umbraco.css';
 import { Toaster } from 'umbraco'
-import { useSplinesStore } from '@/stores/useSplinesStore'
 
 useSeoMeta({
   title: 'Carbon',
   description: 'A Nuxt app deployed on Vercel.',
 })
 
-const splinesStore = useSplinesStore()
 </script>
 
 <template>
@@ -19,15 +17,6 @@ const splinesStore = useSplinesStore()
     <NuxtPage />
   </NuxtLayout>
 
-  <div v-if="splinesStore.tankCharacter.opponent" id="BifrostSplineBoard">
-    <MatchSpline v-for="splinePath in splinesStore.attackSources.player" :key="splinePath.id" :start="splinePath"
-      :end="splinesStore.tankCharacter.opponent" :angle="90" owner="player" />
-  </div>
-
-  <div v-if="splinesStore.tankCharacter.player" id="BifrostSplineBoard">
-    <MatchSpline v-for="splinePath in splinesStore.attackSources.opponent" :key="splinePath.id" :start="splinePath"
-      :end="splinesStore.tankCharacter.player" :angle="-90" owner="opponent" />
-  </div>
   <ClientOnly>
     <Toaster />
   </ClientOnly>

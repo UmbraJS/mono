@@ -1,5 +1,5 @@
 import { onBeforeUnmount, ref, onMounted } from 'vue'
-import { generateSpline, cubic } from "../utils/spline";
+import { generateSpline, cubic } from '@nobel/bifrost';
 
 export interface SplineOpts {
   start?: HTMLElement | null
@@ -40,6 +40,8 @@ export function useSplinePath(opts: SplineOpts) {
     const s = getCenter(opts.start) ?? { x: 0, y: 0 }
     const e = getCenter(opts.end) ?? { x: 150, y: 150 }
 
+    console.log('REX: recalculating')
+
     startCoords.value = s
     endCoords.value = e
     d.value = generateSpline({
@@ -65,6 +67,7 @@ export function useSplinePath(opts: SplineOpts) {
   }
 
   onMounted(() => {
+    console.log('REX: 111')
     recalc()
     window.addEventListener('scroll', scheduleRecalc, { passive: true })
     window.addEventListener('resize', scheduleRecalc)
