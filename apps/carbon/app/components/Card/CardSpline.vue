@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { OwnerBoard } from '../../../types/card'
-import { gsap } from 'gsap'
-import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { useSplinesStore } from '@/stores/useSplinesStore'
 
-gsap.registerPlugin(DrawSVGPlugin);
+const emit = defineEmits<{
+  (e: 'startRef' | 'endRef', el: HTMLElement): void
+  (e: 'splinePathRef', el: SVGPathElement): void
+}>()
 
 const { owner, startCenter, endCenter, strokeWidth, path } = defineProps<{
   owner: OwnerBoard;
@@ -19,19 +20,32 @@ const targetEl = computed(() => {
   return owner === 'player' ? splinesStore.tankCharacter.opponent : splinesStore.tankCharacter.player
 })
 
-const StartPulse = ref<HTMLElement | null>(null)
-const EndPulse = ref<HTMLElement | null>(null)
+function startRef(el: HTMLElement | null) {
+  if (!el) return
+  emit('startRef', el)
+}
+
+function endRef(el: HTMLElement | null) {
+  if (!el) return
+  emit('endRef', el)
+}
+
+function splinePathRef(el: SVGPathElement | null) {
+  if (!el) return
+  emit('splinePathRef', el)
+}
 </script>
 
 <template>
   <Teleport to="body">
     <div id="SplineWrapper">
       <svg class="IntegratedSpline">
-        <path :d="path" stroke="var(--accent-120)" :stroke-width="strokeWidth" fill="transparent" />
+        <path :ref="(e) => splinePathRef(e as SVGPathElement)" :d="path" stroke="var(--accent-120)"
+          :stroke-width="strokeWidth" fill="transparent" />
       </svg>
-      <div ref="StartPulse" class="SplinePulse"
+      <div :ref="(e) => startRef(e as HTMLElement)" class="SplinePulse"
         :style="{ top: `${(startCenter.y) || 0}px`, left: `${(startCenter.x) || 0}px` }" />
-      <div v-if="targetEl" ref="EndPulse" class="SplinePulse"
+      <div v-if="targetEl" :ref="(e) => endRef(e as HTMLElement)" class="SplinePulse"
         :style="{ top: `${(endCenter.y) || 0}px`, left: `${(endCenter.x) || 0}px` }" />
     </div>
   </Teleport>

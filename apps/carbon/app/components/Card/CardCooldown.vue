@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { useTemplateRef } from 'vue'
 import type { SimCard } from '../../../types/card'
 import { useCooldown } from '../../composables/useCooldown'
 import { gsap } from 'gsap'
@@ -30,6 +30,7 @@ const opacity = computed(() => {
 
 // Spline / dash setup (per-card) -----------------------------------------
 const splinesStore = useSplinesStore()
+
 // Determine opponent target element based on card ownership
 const targetEl = computed(() => {
   const owner = card.owner.board
@@ -41,16 +42,22 @@ const StartPulse = ref<HTMLElement | null>(null)
 const EndPulse = ref<HTMLElement | null>(null)
 
 // We can only build a spline path when both refs exist (card root provided via functionRef)
-const cardEl = ref<HTMLElement | null>(null)
+const cardEl = useTemplateRef<HTMLElement | null>('cardEl')
 
-const spline = computed(() => {
-  if (!cardEl.value || !targetEl.value) return null
-  return useSplinePath({ start: cardEl.value, end: targetEl.value, stroke: 4, angle: card.owner.board === 'player' ? 90 : -90 })
+const spline = useSplinePath({
+  start: cardEl,
+  end: targetEl,
+  stroke: 4,
+  angle: card.owner.board === 'player' ? 90 : -90
 })
 
 function buildDashTimeline() {
+  console.log('REX: lol', {
+    splinePath: SplinePath.value,
+    startPulse: StartPulse.value,
+    endPulse: EndPulse.value,
+  })
   if (!SplinePath.value || !StartPulse.value || !EndPulse.value) return undefined
-  if (!spline.value) return undefined
   const totalDuration = 0.4
   const pulseSize = 4
   const growthDuration = (10 / 100) * totalDuration
@@ -101,32 +108,20 @@ function buildDashTimeline() {
 // Integrate dash timeline at end of each cooldown segment
 const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(card.simulation.chunks, {
   onAttack: () => emit('cardAttack'),
-  // attackTimelineFactory: () => buildDashTimeline()
+  attackTimelineFactory: () => buildDashTimeline()
 })
-
-function functionRef(el: HTMLElement | null) {
-  if (!el) return
-  cardEl.value = el
-  emit('functionRef', el)
-}
-
-// onMounted(() => {
-//   if (spline.value && cardEl.value && targetEl.value) {
-//     console.log('REX: CardCooldown mounted for', {
-//       d: spline.value.d.value
-//     })
-//   }
-// })
 </script>
 
 <template>
-  <div id="CardCooldown" :class="{ slow, haste, frozen }">
-    <div v-if="cooldown > 0" :ref="(el) => functionRef(el as HTMLElement)" class="cooldown" :class="{
+  <div id="CardCooldown" ref="cardEl" :class="{ slow, haste, frozen }">
+    <div v-if="cooldown > 0" class="cooldown" :class="{
       'base-warning': slow, 'base-success': haste, 'base-info': frozen
     }" :style="{ height: `${cooldown}%` }" />
 
     <CardSpline v-if="spline && cardEl && targetEl" :owner="card.owner.board" :start-center="spline.getCenter(cardEl)"
-      :end-center="spline.getCenter(targetEl)" :stroke-width="spline.stroke" :path="spline.d.value" />
+      :end-center="spline.getCenter(targetEl)" :stroke-width="spline.stroke" :path="spline.d.value"
+      :spline-path-ref="(path: HTMLElement) => SplinePath = path" @end-ref="(end: HTMLElement) => EndPulse = end"
+      @start-ref="(start: HTMLElement) => StartPulse = start" />
 
     <div v-if="debug" class="debugPanel">
       <div class="debug grid">
@@ -150,10 +145,6 @@ function functionRef(el: HTMLElement | null) {
 </template>
 
 <style>
-html body #BifrostFiber {
-  z-index: 99 !important;
-}
-
 .debug {
   display: flex;
   justify-content: space-between;
@@ -219,27 +210,5 @@ html body #BifrostFiber {
   width: 100%;
   z-index: 1;
   opacity: 0.8;
-}
-
-/* Spline integration */
-.IntegratedSpline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.SplinePulse {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--accent-120);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 3;
 }
 </style>

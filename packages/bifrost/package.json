@@ -30,10 +30,11 @@
   "typings": "types/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "run-p type-check \"build-only {@}\" -- && pnpm run postbuild",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
+    "postbuild": "mkdir -p dist/utils && cp types/utils/spline.d.ts dist/utils/spline.d.ts",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "prepare": "vite build"

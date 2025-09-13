@@ -1,9 +1,9 @@
-import { onBeforeUnmount, ref, onMounted } from 'vue'
+import { onBeforeUnmount, ref, onMounted, type ShallowRef } from 'vue'
 import { generateSpline, cubic } from '@nobel/bifrost';
 
 export interface SplineOpts {
-  start?: HTMLElement | null
-  end?: HTMLElement | null
+  start: Readonly<ShallowRef<HTMLElement | null>>
+  end: Readonly<ShallowRef<HTMLElement | null>>
   angle?: number
   stroke?: number
   startTension?: number
@@ -37,10 +37,8 @@ export function useSplinePath(opts: SplineOpts) {
   const endCoords = ref<{ x: number; y: number } | null>(null)
 
   const recalc = () => {
-    const s = getCenter(opts.start) ?? { x: 0, y: 0 }
-    const e = getCenter(opts.end) ?? { x: 150, y: 150 }
-
-    console.log('REX: recalculating')
+    const s = getCenter(opts.start.value) ?? { x: 0, y: 0 }
+    const e = getCenter(opts.end.value) ?? { x: 150, y: 150 }
 
     startCoords.value = s
     endCoords.value = e
@@ -67,7 +65,6 @@ export function useSplinePath(opts: SplineOpts) {
   }
 
   onMounted(() => {
-    console.log('REX: 111')
     recalc()
     window.addEventListener('scroll', scheduleRecalc, { passive: true })
     window.addEventListener('resize', scheduleRecalc)

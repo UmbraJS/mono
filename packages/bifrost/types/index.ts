@@ -88,3 +88,6 @@ export interface Hook {
 }
 
 export interface NewNode { id: string; index: number; type: HookType }
+
+// Re-export spline utility types & functions for declaration bundling
+export * from '../utils/spline'
