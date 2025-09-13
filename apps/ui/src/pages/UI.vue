@@ -92,10 +92,6 @@ const options = [
         <Icon icon="pixelarticons:home" />
         <p>Primary</p>
       </Button>
-      <Button variant="secondary">
-        <Icon icon="pixelarticons:home" />
-        <p>Secondary</p>
-      </Button>
       <Button>
         <Icon icon="pixelarticons:home" />
         <p>Base</p>

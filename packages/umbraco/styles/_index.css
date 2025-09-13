@@ -1,4 +1,4 @@
-@layer reset, utils, mods;
+@layer mods, utils, reset;
 
 @import "./reset.css";
 @import "./tokens.css";

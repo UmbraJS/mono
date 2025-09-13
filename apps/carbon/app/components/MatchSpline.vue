@@ -40,7 +40,6 @@ function sendDash() {
   const travelDuration = (80 / 100) * totalDuration; // 4s
   const shrinkDuration = (10 / 100) * totalDuration; // 0.5s
 
-
   // 2) Build the timeline with linear easing
   const tl = gsap.timeline({ defaults: { ease: 'none' } });
 

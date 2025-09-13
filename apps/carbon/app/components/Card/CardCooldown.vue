@@ -11,7 +11,6 @@ const emit = defineEmits<{
   (e: 'cardAttack'): void
 }>()
 
-
 const {
   card,
   debug = false
@@ -30,35 +29,6 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   emit('cardAttack')
 })
 
-/**
- * Returns a percentage value based on the provided min, max, and value.
- * @param min The minimum value.
- * @param max The maximum value.
- * @param value The current value.
- */
-const getPercentage = (min: number, max: number, value: number) => {
-  if (value <= min) return 100
-  if (value >= max) return 0
-  return ((value - min) / (max - min)) * 100
-}
-
-/**
- * Tracks a percentage of a value.
- * @param value The value to track.
- * @param percentage The percentage to apply.
- */
-const trackPercentage = (value: number, percentage: number) => {
-  return (value * percentage) / 100
-}
-
-const punchValue = computed(() => {
-  const percentage = getPercentage(0, 10, cooldown.value)
-  return {
-    tracked: trackPercentage(20, percentage),
-    percentage: percentage
-  }
-})
-
 function functionRef(el: HTMLElement | null) {
   if (!el) return
   emit('functionRef', el)
@@ -67,9 +37,6 @@ function functionRef(el: HTMLElement | null) {
 
 <template>s
   <div id="CardCooldown" :class="{ slow, haste, frozen }">
-    <!-- <div id="BoxingGlove" :class="card.owner.board">
-      <h3>{{ punchValue.percentage }}</h3>
-    </div> -->
     <div v-if="cooldown > 0" :ref="(el) => functionRef(el as HTMLElement)" class="cooldown" :class="{
       'base-warning': slow, 'base-success': haste, 'base-info': frozen
     }" :style="{ height: `${cooldown}%` }" />
@@ -97,23 +64,6 @@ function functionRef(el: HTMLElement | null) {
 <style>
 html body #BifrostFiber {
   z-index: 99 !important;
-}
-
-#BoxingGlove {
-  position: absolute;
-  background-color: var(--base-80);
-  width: 100%;
-  height: 150px;
-  border-radius: var(--radius);
-}
-
-#BoxingGlove.player {
-  transform: translate(0%, calc(0% - v-bind("punchValue.tracked") * 1%));
-}
-
-#BoxingGlove.opponent {
-  bottom: 0;
-  transform: translate(0%, calc(0% + v-bind("punchValue.tracked") * 1%));
 }
 
 .debug {
