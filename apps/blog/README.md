@@ -21,6 +21,34 @@ You can update the main text displayed by creating a `.env`:
 NUXT_PUBLIC_HELLO_TEXT="Hello my world!"
 ```
 
+### Convex (Realtime Backend) Setup
+
+This app is configured to use [Convex](https://convex.dev/) via the `convex-nuxt` module.
+
+1. Install the Convex CLI if you haven't:
+   ```bash
+   npm install -g convex
+   ```
+2. In this `apps/blog` directory, run the Convex dev server (creates `convex/` config & prints a deployment URL):
+   ```bash
+   npx convex dev
+   ```
+3. Copy `.env.example` to `.env.local` and set `CONVEX_URL` to the value printed (or your deployed Convex prod URL):
+   ```bash
+   CONVEX_URL="https://<your-deployment>.convex.cloud"
+   ```
+4. (Optional) Commit the generated `convex/_generated` updates after defining new functions or schema changes.
+
+If `CONVEX_URL` is missing you'll see generic "Server Error" messages from queries. The plugin `app/plugins/convexWarn.client.ts` will warn in the console when the variable isn't set.
+
+Common issues:
+
+- Forgetting to run `npx convex dev` so tables/functions aren't deployed yet.
+- Using a stale `CONVEX_URL` after recreating the deployment.
+- Attempting to query during SSR (the module handles this; ensure you're not manually importing server-only code on the server).
+
+After setting the URL, restart `pnpm dev` so Vite picks up the new environment variable.
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:
