@@ -54,6 +54,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
         cooldown.value = 100
       },
       onComplete: () => {
+        console.log('REX : Cooldown segment complete')
         audio.playPunchSound()
         normalized.onAttack?.()
         normalized.onSegmentComplete?.()

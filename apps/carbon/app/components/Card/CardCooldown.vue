@@ -37,7 +37,7 @@ const targetEl = computed(() => {
   return owner === 'player' ? splinesStore.tankCharacter.opponent : splinesStore.tankCharacter.player
 })
 
-const SplinePath = ref<HTMLElement | null>(null)
+const SplinePath = ref<SVGPathElement | null>(null)
 const StartPulse = ref<HTMLElement | null>(null)
 const EndPulse = ref<HTMLElement | null>(null)
 
@@ -52,11 +52,6 @@ const spline = useSplinePath({
 })
 
 function buildDashTimeline() {
-  console.log('REX: lol', {
-    splinePath: SplinePath.value,
-    startPulse: StartPulse.value,
-    endPulse: EndPulse.value,
-  })
   if (!SplinePath.value || !StartPulse.value || !EndPulse.value) return undefined
   const totalDuration = 0.4
   const pulseSize = 4
@@ -110,6 +105,18 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
   onAttack: () => emit('cardAttack'),
   attackTimelineFactory: () => buildDashTimeline()
 })
+
+function onSplinePathRef(path: SVGPathElement) {
+  SplinePath.value = path
+}
+
+function onStartRef(el: HTMLElement) {
+  StartPulse.value = el
+}
+
+function onEndRef(el: HTMLElement) {
+  EndPulse.value = el
+}
 </script>
 
 <template>
@@ -120,8 +127,7 @@ const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource
 
     <CardSpline v-if="spline && cardEl && targetEl" :owner="card.owner.board" :start-center="spline.getCenter(cardEl)"
       :end-center="spline.getCenter(targetEl)" :stroke-width="spline.stroke" :path="spline.d.value"
-      :spline-path-ref="(path: HTMLElement) => SplinePath = path" @end-ref="(end: HTMLElement) => EndPulse = end"
-      @start-ref="(start: HTMLElement) => StartPulse = start" />
+      @spline-path-ref="onSplinePathRef" @end-ref="onEndRef" @start-ref="onStartRef" />
 
     <div v-if="debug" class="debugPanel">
       <div class="debug grid">
