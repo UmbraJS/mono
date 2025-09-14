@@ -15,19 +15,17 @@ const tasks = computed(() => result.data.value ?? []);
     <h1>Tasks</h1>
     <div v-if="result.isPending">Loading…</div>
     <div v-else-if="result.error">{{ String(result.error) }}</div>
-    <ul v-else>
+    <ul>
       <li v-for="task in tasks" :key="task._id">
         <span>{{ task.text }}</span>
-        <span v-if="task.isCompleted" style="margin-left: .5rem">✅</span>
+        <span v-if="task.isCompleted" style="margin-left: 0.5rem">✅</span>
       </li>
     </ul>
   </div>
-  <p style="margin-top:1rem">
-    Try visiting this page after running Convex locally and importing sample data.
+  <p style="margin-top: 1rem">
+    Try visiting this page after running Convex locally and importing sample
+    data.
   </p>
-  <p>
-    Convex URL: {{ $config.public.convexUrl }}
-  </p>
+  <p>Convex URL: {{ $config.public.convexUrl }}</p>
   <NuxtLink to="/">Back</NuxtLink>
-
 </template>
