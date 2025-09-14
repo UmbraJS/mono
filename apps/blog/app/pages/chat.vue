@@ -1,51 +1,84 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue'
-import { useConvexQuery, useConvexMutation } from 'convex-vue'
-import { api } from '../../convex/_generated/api'
+import { ref, computed, watch, nextTick } from "vue";
+import { useConvexQuery, useConvexMutation } from "convex-vue";
+import { api } from "../../convex/_generated/api";
 
-useSeoMeta({ title: 'Convex Chat' })
+useSeoMeta({ title: "Convex Chat" });
 
-const name = ref('Anonymous')
-const text = ref('')
-const isSending = ref(false)
-const messagesEl = ref<HTMLElement | null>(null)
+const name = ref("Anonymous");
+const text = ref("");
+const isSending = ref(false);
+const messagesEl = ref<HTMLElement | null>(null);
 
-const messagesResult = useConvexQuery(api.chat.getMessages)
-const messages = computed(() => messagesResult.data.value ?? [])
-const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage)
+const messagesResult = useConvexQuery(api.chat.getMessages);
+const messages = computed(() => messagesResult.data.value ?? []);
+const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage);
+
+// Workaround: Some users observe messagesResult.isPending staying true even after data arrives.
+// Derive our own initial loading state based on first meaningful value (data OR error).
+const hasFirstValue = computed(
+  () =>
+    messagesResult.data.value !== undefined ||
+    messagesResult.error.value !== undefined,
+);
+const initialLoading = computed(() => !hasFirstValue.value);
+
+// Temporary debug instrumentation (remove once stable): log state transitions.
+if (import.meta.dev) {
+  watch(
+    [
+      () => messagesResult.data.value,
+      () => messagesResult.error.value,
+      () => messagesResult.isPending,
+    ],
+    ([data, error, isPending]) => {
+      // eslint-disable-next-line no-console
+      console.debug("[chat debug] convex query state", {
+        hasData: data !== undefined,
+        dataSample: Array.isArray(data)
+          ? `array(len=${data.length})`
+          : typeof data,
+        error: error || null,
+        isPending,
+        derivedInitialLoading: initialLoading.value,
+      });
+    },
+    { immediate: true },
+  );
+}
 
 async function onSubmit() {
-  const body = text.value.trim()
-  if (!body || isSending.value) return
-  isSending.value = true
+  const body = text.value.trim();
+  if (!body || isSending.value) return;
+  isSending.value = true;
   try {
-    await sendMessage({ user: name.value || 'Anonymous', body })
-    text.value = ''
-    await nextTick()
-    scrollToBottom()
+    await sendMessage({ user: name.value || "Anonymous", body });
+    text.value = "";
+    await nextTick();
+    scrollToBottom();
   } finally {
-    isSending.value = false
+    isSending.value = false;
   }
 }
 
 function onTextareaKeydown(e: KeyboardEvent) {
   // Enter to send, Shift+Enter for newline
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault()
-    onSubmit()
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    onSubmit();
   }
 }
 
 function scrollToBottom() {
-  const el = messagesEl.value
-  if (!el) return
-  el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+  const el = messagesEl.value;
+  if (!el) return;
+  el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
 }
 
 watch(messages, async () => {
-  await nextTick()
-  scrollToBottom()
-})
+  await nextTick();
+  scrollToBottom();
+});
 </script>
 
 <template>
@@ -54,17 +87,31 @@ watch(messages, async () => {
       <h1>Convex Chat</h1>
       <div class="you">
         <label class="sr-only" for="your-name">Your name</label>
-        <input id="your-name" v-model="name" placeholder="Your name" class="input input--sm" />
+        <input
+          id="your-name"
+          v-model="name"
+          placeholder="Your name"
+          class="input input--sm"
+        />
       </div>
     </header>
 
     <section ref="messagesEl" class="chat__messages">
-      <div v-if="messagesResult.isPending" class="state">Loading…</div>
-      <div v-else-if="messagesResult.error" class="state state--error">{{ String(messagesResult.error) }}</div>
+      <div v-if="initialLoading" class="state">Loading…</div>
+      <div v-else-if="messagesResult.error.value" class="state state--error">
+        Error: {{ String(messagesResult.error.value) }}
+      </div>
       <ul v-else class="messages">
-        <li v-for="m in messages" :key="m._id" class="message" :class="{ 'message--self': m.user === name }">
+        <li
+          v-for="m in messages"
+          :key="m._id"
+          class="message"
+          :class="{ 'message--self': m.user === name }"
+        >
           <div class="message__meta">
-            <span class="message__author">{{ m.user === name ? 'You' : m.user }}</span>
+            <span class="message__author">{{
+              m.user === name ? "You" : m.user
+            }}</span>
           </div>
           <div class="message__bubble">{{ m.body }}</div>
         </li>
@@ -73,9 +120,19 @@ watch(messages, async () => {
 
     <form class="composer" @submit.prevent="onSubmit">
       <label class="sr-only" for="message-input">Type a message</label>
-      <textarea id="message-input" v-model="text" class="composer__input" placeholder="Type a message" rows="1"
-        @keydown="onTextareaKeydown"></textarea>
-      <button class="composer__send" type="submit" :disabled="!text.trim() || isSending">
+      <textarea
+        id="message-input"
+        v-model="text"
+        class="composer__input"
+        placeholder="Type a message"
+        rows="1"
+        @keydown="onTextareaKeydown"
+      ></textarea>
+      <button
+        class="composer__send"
+        type="submit"
+        :disabled="!text.trim() || isSending"
+      >
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" />
         </svg>
@@ -170,7 +227,7 @@ watch(messages, async () => {
 }
 
 .state--error {
-  color: var(--error)
+  color: var(--error);
 }
 
 .messages {
