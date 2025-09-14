@@ -10,7 +10,9 @@ How do we stop them? How do you fight a chaos demon? Well MLK did it through lov
 
 But that only worked because his enemies wanted to appear intelligent. Appealing to reason only works if they care about truth. Love doesn't hold in a heart that's stone. Sacrifice doesn't impress someone who hates empathy. Dignity doesn't move someone who doesn't view you as human.
 
+::scene
 Jesus of Nazareth preached forgiveness and mercy, and the empire nailed him to wood.
+::
 
 Sophie Scholl scattered leaflets, appealing to the conscience of her fellow Germans, and the Reich answered with the guillotine.
 
