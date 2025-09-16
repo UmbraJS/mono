@@ -4,33 +4,82 @@ Male loneliness and white Christian replacement. In the West as it currently sta
 
 In times of peace we like to believe that nobody is truly bad. That every murderer has a past, every bad leader some twisted logic by which he cast himself as good. But history taught us otherwise: given the right soil, ordinary people aren't driven by misplaced reason or logic to justify atrocities so horrifying they seem beyond imagination. They are driven by something else. Something not dependent on intelligence or any type of internally consistent worldview at all. There exists some deep - narcissistic apathy towards others which allows someone to mentally dance in un-reason and allow themselves to do anything towards anyone. A lack of concern for those that aren't like you. This dark apathy, this enemy of empathy is the definition of true evil. It is proof that evil really does exist. Our neighbors, our countrymen, even our parents are not immune and neither are you, and neither am I. To learn this has been the great curse on our shoulders in this current chapter in our story. And once again, the soil of dark apathy is being tilled. These demons are on the march and have been allowed to walk right into our loved once hearts under the thin vail of loneliness and replacement once more.
 
-## Prisoners Dilemma
+## Behold Evil
 
 How do we stop them? How do you fight a chaos demon? Well MLK did it through love. Through dreams of living together which shamed evil men back into the shadows. Gandhi did it with selfless sacrifices - acts to challenge the humanity inside his oppressors hearts which emotionally drained their evil until it could no longer tolerate its own acts. Malcom X, and Muhammed Ali did it through dignity, by setting clear boundaries and standing their ground and the evil men could not deny respect for their bravery. Václav Havel in Czechoslovakia did it by appealing to reason, exposing the absurdities in the Soviet Union, his appeals to reason weakened the system until it collapsed under its own contradictions.
 
 But that only worked because his enemies wanted to appear intelligent. Appealing to reason only works if they care about truth. Love doesn't hold in a heart that's stone. Sacrifice doesn't impress someone who hates empathy. Dignity doesn't move someone who doesn't view you as human.
 
 ::scene
-Jesus of Nazareth preached forgiveness and mercy, and the empire nailed him to wood.
+#action
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096" mood="positive"}
+#title
+Jesus of Nazareth preached forgiveness and mercy
+#description
+Male loneliness and white Christian replacement. In the West as it currently stands, these are the two demons hiding in our closet which represent the fundamental insecurities of men. And since men are the custodians of violence these impulses become the chaos demons shaping the conflicts between us all. The underlying patterns of these dark impulses, superficially different in flavor but largely the same phenomenon once lead Europe into the most horrendous, depraved, war in world history. A war whose horrors still stalk the nightmares of our generation.
+
+In times of peace we like to believe that nobody is truly bad. That every murderer has a past, every bad leader some twisted logic by which he cast himself as good. But history taught us otherwise: given the right soil, ordinary people aren't driven by misplaced reason or logic to justify atrocities so horrifying they seem beyond imagination. They are driven by something else. Something not dependent on intelligence or any type of internally consistent worldview at all. There exists some deep - narcissistic apathy towards others which allows someone to mentally dance in un-reason and allow themselves to do anything towards anyone. A lack of concern for those that aren't like you. This dark apathy, this enemy of empathy is the definition of true evil. It is proof that evil really does exist. Our neighbors, our countrymen, even our parents are not immune and neither are you, and neither am I. To learn this has been the great curse on our shoulders in this current chapter in our story. And once again, the soil of dark apathy is being tilled. These demons are on the march and have been allowed to walk right into our loved once hearts under the thin vail of loneliness and replacement once more.But that only worked because his [enemies](1) wanted to appear intelligent. Appealing to reason only works if they care about truth. Love doesn't hold in a heart that's stone. Sacrifice doesn't impress someone who hates empathy. Dignity doesn't move someone who doesn't view you as human.
+::
+#reaction
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096" mood="negative"}
+#title
+and the empire nailed him to wood.
+#description
+But that only worked because his enemies wanted to appear intelligent. Appealing to reason only works if they care about truth. Love doesn't hold in a heart that's stone. Sacrifice doesn't impress someone who hates empathy. Dignity doesn't move someone who doesn't view you as human.
+::
 ::
 
-Sophie Scholl scattered leaflets, appealing to the conscience of her fellow Germans, and the Reich answered with the guillotine.
+::scene
+#action
+::NarrativeFrame{image="https://www.nationalww2museum.org/sites/default/files/2020-02/gestapo_mug_shots_of_sophie_18_february_1943-no_source-probably_german_federal_archive-hans%20-%20Tanja%20B.%20Spitzer.jpg" mood="positive"}
+  Sophie Scholl scattered leaflets, appealing to the conscience of her fellow Germans,
+::
 
-Archbishop Oscar Romero lifted his voice in sermons of peace, and bullets cut him down at the altar.
+#reaction
+::NarrativeFrame{image="https://www.nationalww2museum.org/sites/default/files/2020-02/gestapo_mug_shots_of_sophie_18_february_1943-no_source-probably_german_federal_archive-hans%20-%20Tanja%20B.%20Spitzer.jpg" mood="negative"}
+  and the Reich answered with the guillotine.
+::
+::
 
-Dietrich Bonhoeffer begged his countrymen to remember their souls, and the Nazis hanged him.
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Archbishop Oscar Romero lifted his voice in sermons of peace,
+and bullets cut him down at the altar.
+::
 
-Janusz Korczak walked hand in hand with orphans toward the trains, believing his compassion might awaken something, but the guards had no humanity left to awaken.
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Dietrich Bonhoeffer begged his countrymen to remember their souls,
+and the Nazis hanged him.
+::
 
-Ken Saro-Wiwa raised his pen against greed and violence, and his own government put the rope around his neck.
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Janusz Korczak walked hand in hand with orphans toward the trains, believing his compassion might awaken something,
+but the guards had no humanity left to awaken.
+::
 
-Galileo Galilei turned his telescope to the heavens and showed what was undeniably there, and the Church silenced him.
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Ken Saro-Wiwa raised his pen against greed and violence,
+and his own government put the rope around his neck.
+::
 
-Sitting Bull spoke for dignity, for his people’s right to live unbroken, and they killed him.
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Galileo Galilei turned his telescope to the heavens and showed what was undeniably there, 
+and the Church silenced him.
+::
 
-Steve Biko declared that black skin was not shameful but proud, and they beat him until his body stopped breathing.
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Sitting Bull spoke for dignity, for his people’s right to live unbroken,
+and they killed him.
+::
 
-Hypatia of Alexandria taught knowledge and reason, and a mob tore her apart for the crime of dignity itself.
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Steve Biko declared that black skin was not shameful but proud, 
+and they beat him until his body stopped breathing.
+::
+
+::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+Hypatia of Alexandria taught knowledge and reason, 
+and a mob tore her apart for the crime of dignity itself.
+::
 
 Friends, do not misunderstand me. These are not failures of love, empathy, or courage. They are proofs that love alone cannot soften a heart made of stone, that empathy cannot reach ears sealed shut, that dignity itself can become an unforgivable offence.
 
@@ -45,6 +94,8 @@ The Warsaw Ghetto fighters in 1943 knew they could not win, but they chose to ri
 The French Maquis, the partisans in Italy, the resistance cells across occupied Europe – they remind us that sometimes morality is not in turning the other cheek, but in raising the other fist.
 
 Violence in these cases where not betrayal of higher values – it was the last way of defending them. When cooperation is no longer possible, when the other side has already chosen domination, then resistance is not only rational – it is righteous.
+
+## Prisoners Dilemma
 
 This is the prisoner’s dilemma written in blood. And to help clarify how these cases all fit together I think understanding the prisoners dilemma is important. I believe it's the balancing act between resistance in the form of the MLK of love, or of Max Manus with bullets.
 

@@ -1,16 +1,45 @@
+<script setup lang="ts">
+</script>
+
+
 <template>
   <div class="NarrativeScene">
-    <NuxtImg src="https://res.cloudinary.com/samuelbednarz/image/upload/v1696118403/blog/gandhi-with-gun_ozm4v0.jpg"
-      alt="Gandhi holding a gun" width="600" height="400" class="mb-4 rounded-lg" />
-    <slot />
+    <slot name="action"></slot>
+    <div class="FrameEdge base-success">
+      <div class="Validity"></div>
+    </div>
+    <slot name="reaction"></slot>
   </div>
 </template>
 
 <style>
+.FrameEdge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1px;
+  background-color: var(--base-120);
+}
+
+.Validity {
+  display: flex;
+  gap: var(--space-1);
+  position: absolute;
+  z-index: 1;
+}
+
 .NarrativeScene {
-  padding: var(--space-3);
-  border: 1px solid var(--base-40);
-  border-radius: var(--radius);
-  background: var(--base-10);
+  display: flex;
+  flex-direction: column;
+}
+
+.NarrativeScene>*:nth-child(1) {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.NarrativeScene>*:nth-last-child(1) {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 </style>
