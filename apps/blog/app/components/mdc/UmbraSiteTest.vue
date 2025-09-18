@@ -60,7 +60,6 @@ const palette = [
         <div class="cta"></div>
       </div>
     </div>
-    <!--
     <!-- HERO -->
     <div class="grid hero">
       <div class="panel hero-copy">
@@ -126,7 +125,7 @@ const palette = [
       <div class="status-box ok"></div>
       <div class="status-box warn"></div>
       <div class="status-box danger"></div>
-    </div> -->
+    </div>
 
     <!-- PALETTE STRIP -->
     <div v-if="showPalette" class="palette">
