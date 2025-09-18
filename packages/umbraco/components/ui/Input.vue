@@ -75,7 +75,7 @@ div.sibling-group-blur:has(+ * > :first-child input:focus) {
   justify-content: left;
   padding: 0 var(--space-quark);
   pointer-events: none;
-  transition: all 0.3s;
+  transition: color 0.3s, background-color 0.3s, transform 0.3s, opacity 0.3s;
 }
 
 .UInput input.focus:focus {

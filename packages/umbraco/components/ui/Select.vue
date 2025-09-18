@@ -117,7 +117,7 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
 
   background: var(--base-10);
   box-shadow: 10px 10px 50px 50px red;
-  transition: 1s;
+  transition: color 1s, background-color 1s, border-color 1s, box-shadow 1s, opacity 1s;
   interpolate-size: allow-keywords;
 }
 
@@ -135,7 +135,7 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
   bottom: anchor(center);
 
   width: 100%;
-  transition: 1s linear;
+  transition: color 1s linear, background-color 1s linear, border-color 1s linear, box-shadow 1s linear, opacity 1s linear;
 }
 
 /*
@@ -186,11 +186,11 @@ function handleItemClick(v: string, index: number, event: MouseEvent) {
   bottom: 0;
   border: solid var(--border-size) var(--base-60);
   border-radius: var(--radius);
-  transition: 0.2s;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s;
 }
 
 .frame svg {
   transform: rotate(0deg);
-  transition: 0.2s;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s;
 }
 </style>

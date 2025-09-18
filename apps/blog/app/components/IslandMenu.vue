@@ -93,7 +93,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   padding: 0;
   height: 0;
   width: 0;
-  transition: var(--slow);
+  transition: color var(--slow), background-color var(--slow), border-color var(--slow), opacity var(--slow), transform var(--slow);
   overflow: hidden;
 }
 
@@ -131,7 +131,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   border-radius: var(--outer-radius);
   z-index: 99;
   opacity: 1;
-  transition: var(--slow);
+  transition: color var(--slow), background-color var(--slow), border-color var(--slow), opacity var(--slow), transform var(--slow);
   pointer-events: none;
 }
 </style>

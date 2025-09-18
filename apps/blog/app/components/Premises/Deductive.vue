@@ -46,6 +46,6 @@ function getNameOfWebsiteFromURL(url?: string) {
   width: var(--space-4);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-60);
-  transition: var(--slower);
+  transition: background-color var(--slower), color var(--slower), border-color var(--slower);
 }
 </style>

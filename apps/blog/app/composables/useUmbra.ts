@@ -92,6 +92,11 @@ export const useUmbra = defineStore('umbra', () => {
       settings: schemeSettings,
     })
 
+    // During theme swaps, temporarily restrict transitions to color-only to avoid jank
+    if (import.meta.client) {
+      document.documentElement.classList.add('theme-changing')
+    }
+
     const output = theme.apply({
       target: element,
     })
@@ -100,6 +105,10 @@ export const useUmbra = defineStore('umbra', () => {
       theme.inverse().apply({
         target: '.inverted-theme',
       })
+      if (import.meta.client) {
+        // remove the guard after a frame
+        requestAnimationFrame(() => document.documentElement.classList.remove('theme-changing'))
+      }
     }, 0)
 
     return store(output)
@@ -115,6 +124,10 @@ export const useUmbra = defineStore('umbra', () => {
       ...input.value,
     })
     const inverse = theme.inverse()
+    if (import.meta.client) {
+      document.documentElement.classList.add('theme-changing')
+    }
+
     const output = inverse.apply({
       target: element,
     })
@@ -122,6 +135,9 @@ export const useUmbra = defineStore('umbra', () => {
       theme.apply({
         target: '.inverted-theme',
       })
+      if (import.meta.client) {
+        requestAnimationFrame(() => document.documentElement.classList.remove('theme-changing'))
+      }
     }, 0)
     return store(output)
   }

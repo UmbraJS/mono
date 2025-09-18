@@ -67,7 +67,8 @@
   h5,
   h6 {
     overflow-wrap: break-word;
-    transition: 0.004s !important;
+    /* Only animate text color, not layout-affecting properties */
+    transition: color 0.004s !important;
   }
   /*
       9. Create a root stacking context
@@ -88,7 +89,8 @@
   a {
     color: var(--base-text);
     text-decoration: none;
-    transition: var(--time);
+    /* Limit to paint-only color transitions */
+    transition: color var(--time), background-color var(--time), border-color var(--time);
   }
 
   a:hover {
@@ -109,4 +111,21 @@
   img {
     -webkit-user-drag: none;
   }
+}
+
+/* Accessibility: minimize motion when requested */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* During theme swaps, restrict transitions to color-related properties only.
+   This avoids jank from layout/transform animations when CSS variables update. */
+html.theme-changing *,
+html.theme-changing *::before,
+html.theme-changing *::after {
+  transition-property: color, background-color, border-color, outline-color, fill, stroke, text-decoration-color, box-shadow !important;
 }

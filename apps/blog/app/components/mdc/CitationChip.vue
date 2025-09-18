@@ -24,7 +24,8 @@ a.CitationChip {
   background-color: var(--base-20);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius);
-  transition: var(--time);
+  /* Limit transition to color paints only */
+  transition: background-color var(--time), color var(--time), border-color var(--time);
 
   position: relative;
   z-index: 1;

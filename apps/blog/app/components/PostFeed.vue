@@ -27,6 +27,6 @@
   background: var(--base-10);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-30);
-  transition: var(--slower);
+  transition: background-color var(--slower), color var(--slower), border-color var(--slower), box-shadow var(--slower), opacity var(--slower), transform var(--slower);
 }
 </style>

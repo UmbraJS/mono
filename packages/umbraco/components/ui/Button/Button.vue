@@ -46,7 +46,7 @@ const sizeClass = computed(
 
   --focus-color: var(--base-100);
   border-radius: var(--radius);
-  transition: all var(--time);
+  transition: color var(--time), background-color var(--time), border-color var(--time), outline-color var(--time), opacity var(--time), transform var(--time), box-shadow var(--time);
 
   color: var(--base-120);
   background-color: var(--base-10);

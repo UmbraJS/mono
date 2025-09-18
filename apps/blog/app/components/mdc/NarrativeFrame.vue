@@ -96,11 +96,12 @@ const allSources = computed(() => {
 <style>
 .Arrow {
   color: var(--base-text);
-  transition: var(--time);
+  transition: color var(--time), transform var(--time);
 }
 
 .open .Arrow {
   transform: rotate(180deg);
+  will-change: transform;
 }
 
 .Description {
@@ -116,7 +117,7 @@ const allSources = computed(() => {
   background-color: var(--base-80);
   z-index: 1;
   cursor: pointer;
-  transition: var(--time);
+  transition: background-color var(--time), color var(--time);
 }
 
 .Bookmark:hover {
@@ -164,7 +165,7 @@ const allSources = computed(() => {
   align-items: center;
   flex-direction: column;
   cursor: pointer;
-  transition: var(--time);
+  transition: color var(--time), background-color var(--time), border-color var(--time), transform var(--time);
   padding: var(--space-4) 0px;
   padding-bottom: var(--space-3);
 }
@@ -176,7 +177,8 @@ const allSources = computed(() => {
 .NarrativeFrame header p {
   transform: scale(1);
   z-index: 1;
-  transition: var(--slower);
+  transition: color var(--slower), transform var(--slower);
+  will-change: transform;
 }
 
 .NarrativeFrame>* {
@@ -203,12 +205,13 @@ const allSources = computed(() => {
   opacity: 1;
 
   overflow: hidden;
-  transition: var(--slower);
+  transition: background-color var(--slower), opacity var(--slower), color var(--slower), padding var(--slower), height var(--slower);
 }
 
 .NarrativeFrame header:hover img {
   filter: blur(4px);
   transform: scale(1.1) translateY(-5px);
+  will-change: transform, filter;
 }
 
 .NarrativeFrame img {
@@ -221,6 +224,6 @@ const allSources = computed(() => {
   top: 0px;
   left: 0px;
   z-index: 0;
-  transition: var(--slower);
+  transition: opacity var(--slower), filter var(--slower), transform var(--slower);
 }
 </style>

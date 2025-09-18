@@ -98,7 +98,7 @@ onKeyStroke('Escape', () => toggleReveal())
   overflow: hidden;
 
   transform: translateY(0px) translateX(0px);
-  transition: var(--slow);
+  transition: background-color var(--slow), color var(--slow), border-color var(--slow), transform var(--slow);
 }
 
 .layout .content-layer main.page {
@@ -144,7 +144,7 @@ onKeyStroke('Escape', () => toggleReveal())
 
   @media (max-width: 800px) {
     transform: translateY(0) translateX(calc(0px - var(--sidebar-width) + 1px));
-    transition: var(--slower);
+    transition: background-color var(--slower), color var(--slower), border-color var(--slower), transform var(--slower);
   }
 }
 
