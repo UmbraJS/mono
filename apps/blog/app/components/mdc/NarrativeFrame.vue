@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Citation } from '../../../types/res'
-import { getCitationCredibility, aggregatedCitationCredibility, bucketCredibility } from '../../../types/res'
+import { aggregatedCitationCredibility, bucketCredibility } from '../../../types/res'
 
 const {
   image = 'https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096',
@@ -11,27 +11,20 @@ const {
     validity: 0.9,
     sources: [
       {
-        id: 'wikipedia',
-        link: 'https://en.wikipedia.org/wiki/Mahatma_Gandhi#Early_life_and_education',
-        quote: "Gandhi was known to carry a pistol for self-defense during his time in South Africa.",
-        authors: ['Wikipedia contributors'],
-        publication: 'Wikipedia',
-        linkBroken: false,
-        credibility: 0.7,
-        reliance: 'deductive',
-        distance: 'primary',
-      }, {
-        id: 'history',
-        link: 'https://www.history.com/news/mahatma-gandhi-assassination-india',
-        quote: "Gandhi carried a pistol for self-defense during his time in South Africa, where he faced racial discrimination and threats to his safety.",
-        authors: ['History.com Editors'],
-        publication: 'History.com',
-        linkBroken: true,
-        credibility: 0.8,
-        reliance: 'inductive',
-        distance: 'secondary',
+        id: "cit_1",
+        title: "The Welfare of Animals in Factory Farms",
+        container: "Journal of Animal Ethics",
+        publisher: "Oxford University Press",
+        publicationDate: "2020-05-15",
+        type: "journal-article",
+        authors: [{ name: "Dr. Jane Smith", orcid: "0000-0002-1825-0097" }],
+        url: "https://doi.org/10.1093/jae/ejz012",
+        reliance: "deductive",
+        distance: "primary",
+        scope: "study",
+        quality: { sourceReliability: 0.9, evidenceStrength: 0.85 },
       }
-    ],
+    ]
   }],
 } = defineProps<{
   image?: string
@@ -58,7 +51,7 @@ function toggleOpen() {
   open.value = !open.value
 }
 
-const sources = computed(() => {
+const allSources = computed(() => {
   return claims.flatMap(c => c.sources)
 })
 </script>
@@ -78,29 +71,23 @@ const sources = computed(() => {
         <p class="FrameMetaChip caption">type: <span>{{ type }}</span></p>
         <p class="FrameMetaChip caption">quality:
           <span>
-            {{ bucketCredibility(aggregatedCitationCredibility(sources)) }}
+            {{ bucketCredibility(aggregatedCitationCredibility(allSources)) }}
           </span>
         </p>
         <p class="FrameMetaChip caption">credibility:
           <span>
-            {{ bucketCredibility(aggregatedCitationCredibility(sources)) }}
+            {{ bucketCredibility(aggregatedCitationCredibility(allSources)) }}
           </span>
         </p>
         <p class="FrameMetaChip caption">sources:
-          <span>{{ sources.length }}</span>
+          <span>{{ allSources.length }}</span>
         </p>
       </div>
-      <p>
-        <slot name="description" mdc-unwrap="p" />
-      </p>
+      <div class="Description">
+        <slot name="description" />
+      </div>
       <div class="Citations">
-        <a v-for="source in sources" :key="source.link" class="CitationChip" :href="source.link" target="_blank"
-          rel="noopener">
-          <p class="caption">
-            {{ source.publication }}:
-            <span>{{ getCitationCredibility(source.credibility) }}</span>
-          </p>
-        </a>
+        <CitationChip v-for="source in allSources" :key="source.id" :source="source" />
       </div>
     </div>
   </div>
@@ -114,6 +101,12 @@ const sources = computed(() => {
 
 .open .Arrow {
   transform: rotate(180deg);
+}
+
+.Description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .Bookmark {
@@ -156,19 +149,6 @@ const sources = computed(() => {
   flex-wrap: wrap;
 }
 
-a.CitationChip {
-  color: var(--base-120);
-  background-color: var(--base-20);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-  transition: var(--time);
-}
-
-a.CitationChip:hover {
-  background-color: var(--base-10);
-  color: var(--base-100);
-}
-
 .NarrativeFrame {
   border-radius: var(--radius);
   width: 60em;
@@ -191,11 +171,6 @@ a.CitationChip:hover {
 
 .NarrativeFrame header:hover {
   color: var(--base-120);
-}
-
-.NarrativeFrame header:hover p {
-  transform: scale(1.1);
-  transition: var(--time);
 }
 
 .NarrativeFrame header p {
@@ -222,7 +197,8 @@ a.CitationChip:hover {
   gap: var(--space-3);
 
   padding: var(--space-2);
-  padding-bottom: var(--space-3);
+  padding-bottom: calc(var(--space-2) + var(--paragraph) / 2);
+  padding-top: calc(var(--space-2) + var(--paragraph) / 2);
   background-color: var(--base-10);
   opacity: 1;
 
@@ -233,7 +209,6 @@ a.CitationChip:hover {
 .NarrativeFrame header:hover img {
   filter: blur(4px);
   transform: scale(1.1) translateY(-5px);
-  transition: var(--time);
 }
 
 .NarrativeFrame img {

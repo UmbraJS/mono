@@ -16,9 +16,14 @@ But that only worked because his enemies wanted to appear intelligent. Appealing
 #title
 Jesus of Nazareth preached forgiveness and mercy
 #description
-Male loneliness and white Christian replacement. In the West as it currently stands, these are the two demons hiding in our closet which represent the fundamental insecurities of men. And since men are the custodians of violence these impulses become the chaos demons shaping the conflicts between us all. The underlying patterns of these dark impulses, superficially different in flavor but largely the same phenomenon once lead Europe into the most horrendous, depraved, war in world history. A war whose horrors still stalk the nightmares of our generation.
-
-In times of peace we like to believe that nobody is truly bad. That every murderer has a past, every bad leader some twisted logic by which he cast himself as good. But history taught us otherwise: given the right soil, ordinary people aren't driven by misplaced reason or logic to justify atrocities so horrifying they seem beyond imagination. They are driven by something else. Something not dependent on intelligence or any type of internally consistent worldview at all. There exists some deep - narcissistic apathy towards others which allows someone to mentally dance in un-reason and allow themselves to do anything towards anyone. A lack of concern for those that aren't like you. This dark apathy, this enemy of empathy is the definition of true evil. It is proof that evil really does exist. Our neighbors, our countrymen, even our parents are not immune and neither are you, and neither am I. To learn this has been the great curse on our shoulders in this current chapter in our story. And once again, the soil of dark apathy is being tilled. These demons are on the march and have been allowed to walk right into our loved once hearts under the thin vail of loneliness and replacement once more.But that only worked because his [enemies](1) wanted to appear intelligent. Appealing to reason only works if they care about truth. Love doesn't hold in a heart that's stone. Sacrifice doesn't impress someone who hates empathy. Dignity doesn't move someone who doesn't view you as human.
+  ::citation
+  In the West as it currently stands, these are the two demons
+  ::
+  Male loneliness and white Christian replacement. In the West as it currently stands, these are the two demons hiding in our closet which represent the fundamental insecurities of men. And since men are the custodians of violence these impulses become the chaos demons shaping the conflicts between us all. The underlying patterns of these dark impulses, superficially different in flavor but largely the same phenomenon once lead Europe into the most horrendous, depraved, war in world history. A war whose horrors still stalk the nightmares of our generation.
+  ::citation
+    Male loneliness and white Christian replacement. In the West as it currently stands, these are the two demons hiding in our closet which represent the fundamental insecurities of men. And since men are the custodians of violence these impulses become the chaos demons shaping the conflicts between us all. The underlying patterns of these dark impulses, superficially different in flavor but largely the same phenomenon once lead Europe into the most horrendous, depraved, war in world history. A war whose horrors still stalk the nightmares of our generation.
+  ::
+  Male loneliness and white Christian replacement. In the West as it currently stands, these are the two demons hiding in our closet which represent the fundamental insecurities of men. And since men are the custodians of violence these impulses become the chaos demons shaping the conflicts between us all. The underlying patterns of these dark impulses, superficially different in flavor but largely the same phenomenon once lead Europe into the most horrendous, depraved, war in world history. A war whose horrors still stalk the nightmares of our generation.
 ::
 #reaction
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096" mood="negative"}
@@ -32,51 +37,63 @@ But that only worked because his enemies wanted to appear intelligent. Appealing
 ::scene
 #action
 ::NarrativeFrame{image="https://www.nationalww2museum.org/sites/default/files/2020-02/gestapo_mug_shots_of_sophie_18_february_1943-no_source-probably_german_federal_archive-hans%20-%20Tanja%20B.%20Spitzer.jpg" mood="positive"}
-  Sophie Scholl scattered leaflets, appealing to the conscience of her fellow Germans,
+#title
+Sophie Scholl scattered leaflets, appealing to the conscience of her fellow Germans,
+#description
+But that only worked because his enemies wanted to appear intelligent. Appealing to reason only works if they care about truth. Love doesn't hold in a heart that's stone. Sacrifice doesn't impress someone who hates empathy. Dignity doesn't move someone who doesn't view you as human.
 ::
 
 #reaction
 ::NarrativeFrame{image="https://www.nationalww2museum.org/sites/default/files/2020-02/gestapo_mug_shots_of_sophie_18_february_1943-no_source-probably_german_federal_archive-hans%20-%20Tanja%20B.%20Spitzer.jpg" mood="negative"}
-  and the Reich answered with the guillotine.
+#title
+and the Reich answered with the guillotine.
 ::
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#title
 Archbishop Oscar Romero lifted his voice in sermons of peace,
 and bullets cut him down at the altar.
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#title
 Dietrich Bonhoeffer begged his countrymen to remember their souls,
 and the Nazis hanged him.
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#title
 Janusz Korczak walked hand in hand with orphans toward the trains, believing his compassion might awaken something,
 but the guards had no humanity left to awaken.
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#title
 Ken Saro-Wiwa raised his pen against greed and violence,
 and his own government put the rope around his neck.
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#
 Galileo Galilei turned his telescope to the heavens and showed what was undeniably there, 
 and the Church silenced him.
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#title
 Sitting Bull spoke for dignity, for his people’s right to live unbroken,
 and they killed him.
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#title
 Steve Biko declared that black skin was not shameful but proud, 
 and they beat him until his body stopped breathing.
 ::
 
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096"}
+#title
 Hypatia of Alexandria taught knowledge and reason, 
 and a mob tore her apart for the crime of dignity itself.
 ::

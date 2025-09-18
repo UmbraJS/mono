@@ -1,5 +1,3 @@
-type ISODate = string; // YYYY-MM-DD or full ISO timestamp
-
 // ----------------------
 // Core Vocab (string unions for easy serialization)
 // ----------------------
@@ -47,7 +45,7 @@ interface RelationalStance {
   notes?: string;
 }
 
-// WHAT value is prioritized? (fixed list + custom)
+// WHAT value is prioritized?
 type ValueKind =
   | "happiness"
   | "health"
@@ -80,19 +78,100 @@ interface Axiom {
   relationship: RelationalStance;
 }
 
-// ----------------------
-// Citations (structured sources)
-// ----------------------
-interface Citation {
-  id: string
-  link: string
-  quote: string
-  authors: string[]
-  linkBroken: boolean
-  publication: string
-  credibility: number
-  reliance: "deductive" | "inductive"
-  distance: "primary" | "secondary" | "heresay"
+// Evidence modeling for Noble
+
+export type ISODate = string; // e.g., "2025-09-18T12:34:56Z"
+
+export type CitationReliance =
+  | "deductive"      // premises entail conclusion
+  | "inductive"      // generalization/probabilistic support
+  | "abductive";     // inference to best explanation
+
+export type CitationDistance =
+  | "primary"        // original data, firsthand reporting
+  | "secondary"      // analysis/review of primary
+  | "tertiary"       // summaries/encyclopedias/textbooks
+  | "hearsay";       // unverified claim of a claim
+
+export type CitationScope =
+  | "anecdotal"      // single/few instances
+  | "trend"          // descriptive stats, polls
+  | "study"          // single study/report
+  | "meta-analysis"  // syntheses, systematic reviews
+  | "scientific-theory" // well-corroborated explanatory framework
+  | "novel-theory";  // speculative / not yet corroborated
+
+export type SourceType =
+  | "news-article"
+  | "op-ed"
+  | "book"
+  | "chapter"
+  | "journal-article"
+  | "preprint"
+  | "dataset"
+  | "whitepaper"
+  | "report"
+  | "webpage"
+  | "legal-document"
+  | "video"
+  | "podcast"
+  | "speech";
+
+export interface Author {
+  name: string;              // "Jane Doe"
+  orcid?: string;            // "0000-0002-1825-0097"
+}
+
+export interface Identifier {
+  doi?: string;
+  isbn?: string;
+  issn?: string;
+  pmid?: string;
+}
+
+export interface CitationQuality {
+  // Keep these separate so you can weight them differently in scoring
+  sourceReliability: number; // 0..1 (outlet/author reputation, retractions, transparency)
+  evidenceStrength: number;  // 0..1 (method quality, sample size, replication)
+}
+
+export interface Locator {
+  pages?: string;        // "123–129"
+  section?: string;      // "§2.1" or "Results"
+  timestamp?: string;    // "00:13:40" for AV
+}
+
+export interface Citation {
+  id: string;
+  title: string;                 // Work title
+  url?: string;                  // canonical URL
+  archivedUrl?: string;          // Wayback/Perma.cc
+  lastCheckedAt?: ISODate;       // link-health freshness
+  isLinkBroken?: boolean;
+
+  container?: string;            // Journal/book/site name ("Nature", "The Selfish Gene", "Wikipedia")
+  publisher?: string;            // Publisher/organization
+  publicationDate?: ISODate;
+  accessedAt?: ISODate;
+
+  type: SourceType;
+  authors?: Author[];
+
+  identifiers?: Identifier;
+  language?: string;             // "en", "no", etc.
+  isPaywalled?: boolean;
+  isRetracted?: boolean;
+  hasCorrection?: boolean;
+
+  quote?: string;                // optional excerpt used
+  notes?: string;                // curator annotation
+
+  reliance: CitationReliance;
+  distance: CitationDistance;
+  scope: CitationScope;
+
+  quality: CitationQuality;      // split metrics
+  tags?: string[];               // free-form labels for faceting
 }
 
 // ----------------------
@@ -187,11 +266,13 @@ export function aggregateCredibility(votes: Vote[]): Credibility {
 
 export function aggregatedCitationCredibility(citations: Citation[]) {
   if (citations.length === 0) return 0.5;
-  const total = citations.reduce((sum, c) => sum + (c.credibility || 0.5), 0);
+  const total = citations.reduce((sum, cit) => sum + (cit.quality.sourceReliability + cit.quality.evidenceStrength) / 2, 0);
   return total / citations.length;
 }
 
-export function getCitationCredibility(credibility: number = 0.5) {
+export type CitationCredibility = "discredited" | "unreliable" | "questionable" | "reliable" | "expert" | "authoritative" | "gold-standard";
+
+export function getCitationCredibility(credibility: number = 0.5): CitationCredibility {
   // Discredited means that the source actively lies or distorts the truth
   // Unreliable means that the source has a history of being wrong or biased
   // Questionable means that the source is not well known or is often wrong
@@ -244,17 +325,22 @@ const premise1: Premise = {
   id: "prem_1",
   polarity: "pro",
   text: "Factory farming causes significant, preventable suffering in sentient animals.",
-  citations: [{
-    id: 'wikipedia',
-    link: 'https://en.wikipedia.org/wiki/Mahatma_Gandhi#Early_life_and_education',
-    quote: "Gandhi was known to carry a pistol for self-defense during his time in South Africa.",
-    authors: ['Wikipedia contributors'],
-    publication: 'Wikipedia',
-    linkBroken: false,
-    credibility: 0.7,
-    reliance: 'deductive',
-    distance: 'primary',
-  }],
+  citations: [
+    {
+      id: "cit_1",
+      title: "The Welfare of Animals in Factory Farms",
+      container: "Journal of Animal Ethics",
+      publisher: "Oxford University Press",
+      publicationDate: "2020-05-15",
+      type: "journal-article",
+      authors: [{ name: "Dr. Jane Smith", orcid: "0000-0002-1825-0097" }],
+      url: "https://doi.org/10.1093/jae/ejz012",
+      reliance: "deductive",
+      distance: "primary",
+      scope: "study",
+      quality: { sourceReliability: 0.9, evidenceStrength: 0.85 },
+    }
+  ],
   credibility: aggregateCredibility([voteA]),
   createdBy: "user_1",
   createdAt: new Date().toISOString(),
@@ -293,7 +379,6 @@ export type {
   MetaEthic,
   NormativeMethod,
   Axiom,
-  Citation,
   Credibility,
   Vote,
   Proposition,

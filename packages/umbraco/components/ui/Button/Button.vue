@@ -16,7 +16,8 @@ const ButtonVariant = computed(() =>
 );
 
 const colorScheme = computed(() => {
-  if (color === "default") return `base-accent`;
+  // If default, then just let the tokens inherit from their context
+  if (color === "default") return
   return `base-${color}`;
 });
 

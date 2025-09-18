@@ -146,3 +146,10 @@ strong {
   font-variation-settings: var(--font-semibold);
   color: inherit
 }
+
+blockquote {
+  border-left: 1px solid var(--base-40);
+  padding-left: var(--space-2);
+  color: var(--base-120);
+  font-style: italic;
+}
