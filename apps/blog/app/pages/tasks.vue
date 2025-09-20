@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { api } from "../../convex/_generated/api";
-import { useConvexQuery } from "convex-vue";
+import { useConvexQuery } from "convue";
 import { computed } from "vue";
 
 useSeoMeta({ title: "Tasks" });

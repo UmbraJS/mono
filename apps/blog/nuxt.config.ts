@@ -21,13 +21,7 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
     'nuxt-time',
     '@vueuse/nuxt',
-    'convex-nuxt',
   ],
-
-  convex: {
-    // Use Convex URL from .env.local per Convex Nuxt quickstart
-    url: process.env.CONVEX_URL,
-  },
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
@@ -57,16 +51,6 @@ export default defineNuxtConfig({
     domains: [],
     alias: {},
   },
-
-  // Env variables - https://nuxt.com/docs/getting-started/configuration#environment-variables-and-private-tokens
-  runtimeConfig: {
-    public: {
-      // Can be overridden by NUXT_PUBLIC_HELLO_TEXT environment variable
-      helloText: 'Hello from the Edge 👋',
-      // Expose Convex URL to the client as well, if needed
-      convexUrl: process.env.CONVEX_URL,
-    },
-  },
   // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2024-07-30',
@@ -91,13 +75,6 @@ export default defineNuxtConfig({
       fs: { allow: ['..'] },
     },
   },
-
-  // postcss: {
-  //   plugins: {
-  //     tailwindcss: {},
-  //     autoprefixer: {},
-  //   },
-  // },
 
   nitro: {
     // Force Vercel preset for deployment
