@@ -60,6 +60,7 @@ const options = [
     <section class="column">
       <h2>Color Picker</h2>
       <DyePicker default="#3498db" @change="(dye) => console.log('Color changed:', dye)" />
+      <DyePicker default="#3498db" @change="(dye) => console.log('Color changed:', dye)" />
     </section>
 
     <section id="radio" class="column">

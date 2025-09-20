@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDye } from '../composables/useDye'
+import { useDyeContext } from '../composables/useDyeContext'
 
 withDefaults(
   defineProps<{
@@ -10,7 +10,7 @@ withDefaults(
   }
 )
 
-const dye = useDye()
+const dye = useDyeContext()
 </script>
 
 <template>

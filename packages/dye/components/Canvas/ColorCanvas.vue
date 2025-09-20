@@ -4,7 +4,7 @@ import { swatch } from '../../../umbra/swatch'
 import { canvasPixelColor, outsideCanvas, responsiveCanvas } from '../../composables/canvas'
 
 import type { HexType, OutputColor } from '../../composables/canvas'
-import { useDye, useDyeStore, useColorCanvas } from '../../composables/useDye'
+import { useDyeContext, useDyeStoreContext, useColorCanvasContext } from '../../composables/useDyeContext'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import { useDebounce } from '../../composables/utils'
@@ -24,9 +24,9 @@ const props = withDefaults(defineProps<Props>(), {
   max: 100
 })
 
-const canvas = useColorCanvas()
-const store = useDyeStore()
-const dye = useDye()
+const canvas = useColorCanvasContext()
+const store = useDyeStoreContext()
+const dye = useDyeContext()
 
 const position = ref({ x: 0, y: 0 })
 const change = useDebounce((dye) => emit('change', dye), 0)
@@ -43,14 +43,14 @@ function colorChange(e: MouseEvent, click = false) {
   if (click) store.setHolding(true)
   if (store.offCanvas(e, click)) return
   if (store.isActiveCanvas(e.target)) return
-  const hex = canvasPixelColor(e, canvas.colorCanvas().value)
+  const hex = canvasPixelColor(e, canvas.colorCanvas.value)
   updateCanvas(hex)
   inside.value = true
 }
 
 //when outside canvas
 const { inside } = outsideCanvas({
-  canvas: canvas.colorCanvas(),
+  canvas: canvas.colorCanvas,
   updateCanvas
 })
 
@@ -62,13 +62,13 @@ function getHue(color = dye.color.hex) {
 function changeHue(options = props) {
   const hue = getHue()
   const color = { hue, saturation: 100, lightness: 100 }
-  fillColorCanvas({ color, options }, canvas.colorCanvas().value)
+  fillColorCanvas({ color, options }, canvas.colorCanvas.value)
 }
 
 watch([() => props.max, () => props.min], () => changeHue())
 
 const { width, height } = responsiveCanvas({
-  canvas: canvas.colorCanvas(),
+  canvas: canvas.colorCanvas,
   updateCanvas: () => changeHue()
 })
 

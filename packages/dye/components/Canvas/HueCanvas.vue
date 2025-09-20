@@ -4,7 +4,7 @@ import { ref, onMounted, watch } from 'vue'
 import { getDimentions } from '../../composables/canvas'
 import { outsideCanvas, canvasPixelColor, responsiveCanvas } from '../../composables/canvas'
 import type { HexType, OutputColor } from '../../composables/canvas'
-import { useDye, useDyeStore, useColorCanvas } from '../../composables/useDye'
+import { useDyeContext, useDyeStoreContext, useColorCanvasContext } from '../../composables/useDyeContext'
 import { colorName } from '../../composables/colorName'
 import { fillColorCanvas } from '../../composables/gradient'
 import { useDebounce } from '../../composables/utils'
@@ -35,9 +35,9 @@ const props = withDefaults(defineProps<Props>(), {
 const hueCanvas = ref<HTMLCanvasElement | null>(null)
 const position = ref({ x: 30, y: 70 })
 
-const dye = useDye()
-const store = useDyeStore()
-const canvas = useColorCanvas()
+const dye = useDyeContext()
+const store = useDyeStoreContext()
+const canvas = useColorCanvasContext()
 
 const { inside } = outsideCanvas({
   canvas: hueCanvas,
@@ -89,7 +89,7 @@ function hueChange(e: MouseEvent, click = false) {
 
 const change = useDebounce((dye: OutputColor) => {
   const color = { hue: dye.hex }
-  fillColorCanvas({ color, options: props }, canvas.colorCanvas().value)
+  fillColorCanvas({ color, options: props }, canvas.colorCanvas.value)
   emit('change', dye)
 })
 

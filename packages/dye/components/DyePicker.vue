@@ -4,7 +4,7 @@ import { swatch, UmbraSwatch } from '../../umbra/swatch'
 import { vOnClickOutside } from '@vueuse/components'
 import { ref } from 'vue'
 import type { OutputColor } from '../composables/canvas'
-import { useDye } from '../composables/useDye'
+import { provideDyeContext } from '../composables/useDyeContext'
 import Pallet from './Pallet.vue'
 import ColorCanvas from './Canvas/ColorCanvas.vue'
 import HueCanvas from './Canvas/HueCanvas.vue'
@@ -30,9 +30,12 @@ const props = withDefaults(defineProps<DyeProps>(), {
   compact: true
 })
 
+// Provide isolated context for this DyePicker instance
+const context = provideDyeContext(props.default)
+
 // Logic
 const compact = ref(props.compact)
-const dye = useDye()
+const dye = context.dye
 
 onMounted(() => dye.setColor(props.default, true))
 

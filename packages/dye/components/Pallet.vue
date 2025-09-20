@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useDye } from '../composables/useDye'
+import { useDyeContext } from '../composables/useDyeContext'
 
 const emit = defineEmits(['click'])
 
@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
   fade: 25
 })
 
-const dye = useDye()
+const dye = useDyeContext()
 const copied = ref(false)
 
 function copyToClipboard() {
