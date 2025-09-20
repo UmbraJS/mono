@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from "vue";
+import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
 import { Input, Button, TextArea } from "umbraco";
 import OtherMessageBubble from "../components/OtherMessageBubble.vue";
 import MyMessageBubble from "../components/MyMessageBubble.vue";
 import { useStorage } from "@vueuse/core";
+
+definePageMeta({
+  ssr: false // Disable SSR for this page to avoid hydration issues
+});
 
 useSeoMeta({ title: "Convex Chat" });
 
@@ -14,13 +18,28 @@ const text = ref("");
 const isSending = ref(false);
 const messagesEl = ref<HTMLElement | null>(null);
 
-const messagesResult = useConvexQuery(api.chat.getMessages);
-const messages = computed(() => messagesResult.data.value ?? []);
+// Create reactive values that will be populated after mounting
+const isPending = ref(true);
+const isClientReady = ref(false);
+
+// Function to handle real query results
+const realQuery = useConvexQuery(api.chat.getMessages);
 const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage);
+
+onMounted(async () => {
+  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    isClientReady.value = true;
+    watch(() => realQuery?.isPending?.value, (newPending) => {
+      isPending.value = newPending;
+    }, { immediate: true });
+  }
+});
+
+const messages = computed(() => realQuery.data.value);
 
 async function onSubmit() {
   const body = text.value.trim();
-  if (!body || isSending.value) return;
+  if (!body || isSending.value || !isClientReady.value) return;
   isSending.value = true;
   try {
     await sendMessage({ user: name.value || "Anonymous", body });
@@ -57,21 +76,25 @@ watch(messages, async () => {
     <header>
       <h2>Convex Chat</h2>
       <p>Welcome to the chat! Feel free to share your thoughts.</p>
+      <p v-if="!isClientReady" style="color: orange;">⏳ Initializing client-side connection...</p>
     </header>
 
     <section class="ChatMessages">
-      <div v-if="messagesResult.isPending" class="state">
+      <div v-if="isPending" class="state">
         <Icon name="eos-icons:loading" class="icon icon--spin" />
       </div>
-      <div v-else-if="messagesResult.error.value" class="state state--error">
-        Error: {{ String(messagesResult.error.value) }}
+      <div v-else-if="realQuery.error.value" class="state state--error">
+        Error: {{ String(realQuery.error.value) }}
       </div>
-      <ul class="messages">
-        <template v-for="m in messages" :key="m._id">
+      <div v-else ref="messagesEl" class="messages">
+        <!-- @ts-ignore -->
+        <template v-for="(m, index) in messages" :key="m._id || index">
+          <!-- @ts-ignore -->
           <MyMessageBubble v-if="m.user === name" :message="m" />
+          <!-- @ts-ignore -->
           <OtherMessageBubble v-else :message="m" />
         </template>
-      </ul>
+      </div>
     </section>
 
     <footer>
@@ -82,7 +105,7 @@ watch(messages, async () => {
       <form class="composer" @submit.prevent="onSubmit">
         <Input v-model="name" label="Your name" size="small" />
         <TextArea v-model="text" placeholder="Type a message" @keydown="onTextareaKeydown" />
-        <Button type="submit" color="base" :disabled="!text.trim() || isSending">
+        <Button type="submit" color="base" :disabled="!text.trim() || isSending || !isClientReady">
           <Icon name="carbon:send" class="icon" />
           <p>Send</p>
         </Button>
@@ -145,11 +168,24 @@ header {
   padding: 0px;
   display: grid;
   gap: var(--space-1);
+  overflow-y: auto;
 }
 
 .composer {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+</style>
+
+<style scoped>
+.chat {
+  padding: var(--space-2);
+}
+
+header {
+  background-color: var(--base-10);
+  padding: var(--space-2);
+  border-radius: var(--radius);
 }
 </style>

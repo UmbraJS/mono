@@ -9,6 +9,12 @@
       ],
       "umbraco/*": [
         "../../packages/umbraco/*"
+      ],
+      "convue": [
+        "../../packages/convue/src/index.ts"
+      ],
+      "convue/*": [
+        "../../packages/convue/src/*"
       ]
     }
   }

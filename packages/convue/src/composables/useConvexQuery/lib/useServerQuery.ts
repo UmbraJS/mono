@@ -18,9 +18,11 @@ export function useServerQuery<Query extends FunctionReference<'query'>>(query: 
     throw new Error('useServerQuery should only be called on the server side')
   }
 
-  const isServerDisabled = options?.server ?? convexContext.options.server ?? true
+  // Fix: We need to check if server queries are enabled, not disabled
+  const isServerEnabled = options?.server ?? convexContext.options.server ?? true
 
-  if (isServerDisabled) {
+  if (!isServerEnabled) {
+    console.warn('[useServerQuery] Server queries disabled, returning static response')
     return {
       data: ref(undefined),
       error: ref(null),

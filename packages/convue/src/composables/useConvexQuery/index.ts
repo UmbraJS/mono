@@ -21,16 +21,29 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
 
   const isServer = typeof window === 'undefined'
 
+  console.warn('[useConvexQuery] Starting query:', {
+    isServer,
+    queryName: getFunctionName(query),
+    args: args.value,
+  })
+
   // use http client on server-side
   if (isServer) {
+    console.warn('[useConvexQuery] Using server path')
     return useServerQuery(query, args, options)
   }
 
+  console.warn('[useConvexQuery] Using client path')
   const convex = useConvexClient()
 
   // Initial data
   const data: Ref<FunctionReturnType<Query> | undefined> = ref<FunctionReturnType<Query> | undefined>(convex.client.localQueryResult(getFunctionName(query), args.value))
   const error = ref<Error | null>(null)
+
+  console.warn('[useConvexQuery] Initial client state:', {
+    data: data.value,
+    error: error.value,
+  })
 
   const suspense = () => {
     if (data.value) {
@@ -59,11 +72,13 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
   }
 
   const handleError = (err: Error) => {
-    data.value = null
+    console.warn('[useConvexQuery] handleError called:', err)
+    data.value = undefined
     error.value = err
   }
 
   const handleResult = (result: FunctionReturnType<Query>) => {
+    console.warn('[useConvexQuery] handleResult called:', result)
     data.value = result
     error.value = null
   }
@@ -82,6 +97,7 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
   }
 
   const createSubscription = (args: FunctionArgs<Query>) => {
+    console.warn('[useConvexQuery] Creating subscription with args:', args)
     return convex.onUpdate(
       query,
       args,
@@ -93,20 +109,31 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
   // recreate subscription when args change
   let cancelSubscription: () => void | undefined
   watch(args, (newArgs) => {
+    console.warn('[useConvexQuery] Args changed, recreating subscription:', newArgs)
     cancelSubscription?.()
-
     cancelSubscription = createSubscription(newArgs)
   }, {
     immediate: true,
   })
 
   // cleanup subscription when component is unmounted
-  onScopeDispose(() => cancelSubscription?.())
+  onScopeDispose(() => {
+    console.warn('[useConvexQuery] Component unmounting, cleaning up subscription')
+    cancelSubscription?.()
+  })
 
   return {
     data,
     error,
-    isPending: computed(() => data.value === undefined),
+    isPending: computed(() => {
+      const result = data.value === undefined && error.value === null
+      console.warn('[useConvexQuery] isPending computed:', {
+        dataValue: data.value,
+        errorValue: error.value,
+        isPending: result,
+      })
+      return result
+    }),
     suspense,
     refetch,
   }
