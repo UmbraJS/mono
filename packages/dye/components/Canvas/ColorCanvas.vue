@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { colord } from 'colord'
+import { swatch } from '../../../umbra/swatch'
 import { canvasPixelColor, outsideCanvas, responsiveCanvas } from '../../composables/canvas'
 
 import type { HexType, OutputColor } from '../../composables/canvas'
@@ -55,8 +55,8 @@ const { inside } = outsideCanvas({
 })
 
 function getHue(color = dye.color.hex) {
-  const hsv = colord(color).toHsv()
-  return colord({ h: hsv.h, s: 100, v: 100 }).toHex()
+  const hsv = swatch(color).toHsv()
+  return swatch({ h: hsv.h, s: 100, v: 100 }).toHex()
 }
 
 function changeHue(options = props) {
@@ -78,7 +78,7 @@ function getPercent(percent: number, height?: number) {
 }
 
 function updateHandle() {
-  const color = colord(dye.color.hex)
+  const color = swatch(dye.color.hex)
   const hsl = color.toHsl()
   position.value = {
     x: getPercent(hsl.s, width.value),
@@ -100,15 +100,9 @@ watch(
 <template>
   <div class="color-canvas-wrapper">
     <Handle :position="position" :color="dye.color" />
-    <canvas
-      :ref="(el) => canvas.setColorCanvas(el as HTMLCanvasElement)"
-      class="color-canvas"
-      :width="width"
-      :height="height"
-      @mousedown="(e) => colorChange(e, true)"
-      @mousemove="(e) => colorChange(e)"
-      @mouseleave="() => (inside = false)"
-    />
+    <canvas :ref="(el) => canvas.setColorCanvas(el as HTMLCanvasElement)" class="color-canvas" :width="width"
+      :height="height" @mousedown="(e) => colorChange(e, true)" @mousemove="(e) => colorChange(e)"
+      @mouseleave="() => (inside = false)" />
   </div>
 </template>
 

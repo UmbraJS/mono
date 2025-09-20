@@ -1,5 +1,4 @@
 import { ref, watch } from 'vue'
-import type { Ref } from 'vue'
 import { useMousePressed } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { umbra } from '@umbrajs/core'

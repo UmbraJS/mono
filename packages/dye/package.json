@@ -21,7 +21,7 @@
       "import": "./dist/dye.js",
       "require": "./dist/dye.umd.cjs"
     },
-    "./dist/style.css": "./dist/style.css"
+    "./dist/dye.css": "./dist/dye.css"
   },
   "main": "./dist/dye.umd.cjs",
   "module": "./dist/dye.js",
@@ -29,15 +29,13 @@
   "files": [
     "dist"
   ],
-  "style": "./dist/style.css",
+  "style": "./dist/dye.css",
   "scripts": {
-    "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
-    "types": "vue-tsc ",
-    "preview": "vite preview"
+    "types": "vue-tsc"
   },
   "dependencies": {
-    "@umbrajs/core": "catalog:",
+    "@umbrajs/core": "workspace:*",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
     "nearest-color": "catalog:",

@@ -13,6 +13,8 @@ import {
   Drawer,
   Input
 } from "umbraco";
+import { DyePicker } from "@umbrajs/dye";
+import "@umbrajs/dye/dist/dye.css";
 import Select from "../components/Select/Select.vue";
 
 const options = [
@@ -54,6 +56,11 @@ const options = [
         a tool that can be used for many purposes. Umbraco can also be a combination of the words umbra and components.
       </p>
     </header>
+
+    <section class="column">
+      <h2>Color Picker</h2>
+      <DyePicker default="#3498db" @change="(dye) => console.log('Color changed:', dye)" />
+    </section>
 
     <section id="radio" class="column">
       <h2>Slider</h2>

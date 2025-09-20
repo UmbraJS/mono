@@ -108,9 +108,6 @@ catalogs:
     '@typescript-eslint/parser':
       specifier: ^8.30.1
       version: 8.39.0
-    '@umbrajs/core':
-      specifier: ^0.0.456
-      version: 0.0.456
     '@unovis/vue':
       specifier: ^1.5.1
       version: 1.6.0
@@ -709,6 +706,9 @@ importers:
       '@umbrajs/core':
         specifier: workspace:*
         version: link:../../packages/umbra
+      '@umbrajs/dye':
+        specifier: workspace:*
+        version: link:../../packages/dye
       '@vueuse/components':
         specifier: 'catalog:'
         version: 13.4.0(vue@3.5.18(typescript@5.9.2))
@@ -718,6 +718,9 @@ importers:
       gsap:
         specifier: 'catalog:'
         version: 3.13.0
+      pinia:
+        specifier: 'catalog:'
+        version: 3.0.3(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2))
       reka-ui:
         specifier: 'catalog:'
         version: 2.2.0(typescript@5.9.2)(vue@3.5.18(typescript@5.9.2))
@@ -881,8 +884,8 @@ importers:
   packages/dye:
     dependencies:
       '@umbrajs/core':
-        specifier: 'catalog:'
-        version: 0.0.456
+        specifier: workspace:*
+        version: link:../umbra
       '@vueuse/components':
         specifier: 'catalog:'
         version: 13.4.0(vue@3.5.18(typescript@5.9.2))
@@ -3895,9 +3898,6 @@ packages:
   '@typescript-eslint/visitor-keys@8.39.0':
     resolution: {integrity: sha512-ldgiJ+VAhQCfIjeOgu8Kj5nSxds0ktPOSO9p4+0VDH2R2pLvQraaM5Oen2d7NxzMCm+Sn/vJT+mv2H5u6b/3fA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@umbrajs/core@0.0.456':
-    resolution: {integrity: sha512-iewODnnbHI05IlNvb7hg9GEd64cEiCYx2UEleenAz/KL8wOp9beYdWUcszcwOvJT9yvCOfGCKjXFkeWM0aHSAQ==}
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
@@ -12730,12 +12730,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.39.0
       eslint-visitor-keys: 4.2.1
-
-  '@umbrajs/core@0.0.456':
-    dependencies:
-      apca-w3: 0.1.9
-      colord: 2.9.3
-      colorparsley: 0.1.8
 
   '@ungap/structured-clone@1.3.0': {}
 

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { colord } from 'colord'
-import type { UmbraSwatch } from 'colord'
+import { swatch, UmbraSwatch } from '../../umbra/swatch'
 import { vOnClickOutside } from '@vueuse/components'
 import { ref } from 'vue'
 import type { OutputColor } from '../composables/canvas'
@@ -41,7 +40,7 @@ function change(color: OutputColor) {
   dye.setColor(color)
   emit('change', {
     name: color.name,
-    color: colord(color.hex)
+    color: swatch(color.hex)
   })
 }
 </script>
@@ -50,6 +49,6 @@ function change(color: OutputColor) {
   <DyeWrapper :compact="compact" v-on-click-outside="() => (compact = true)">
     <Pallet :compact="compact" @click="() => (compact = false)" />
     <ColorCanvas @change="change" :min="0" :max="100" />
-    <HueCanvas @change="change" />
+    <HueCanvas @change="change" :min="0" :max="100" />
   </DyeWrapper>
 </template>

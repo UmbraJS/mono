@@ -1,4 +1,4 @@
-import { colord } from 'colord'
+import { swatch } from '../../umbra/swatch'
 import { getDimentions } from './canvas'
 
 type dimentionsType = {
@@ -47,7 +47,7 @@ interface Draw {
 
 function draw({ hue, ctx, sizes, options }: Draw) {
   const { width, height, dimentions } = sizes
-  var color = colord(hue)
+  var color = swatch(hue)
   const hsl = color.toHsl()
   for (var row = 0; row < 100; row++) {
     var grad = ctx.createLinearGradient(0, 0, width, 0)

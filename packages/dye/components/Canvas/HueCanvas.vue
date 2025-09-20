@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { colord } from 'colord'
+import { swatch } from '../../../umbra/swatch'
 import { ref, onMounted, watch } from 'vue'
 import { getDimentions } from '../../composables/canvas'
 import { outsideCanvas, canvasPixelColor, responsiveCanvas } from '../../composables/canvas'
@@ -63,7 +63,7 @@ function fillHueCanvas(color: string = dye.color.hex) {
   if (ctx === null) return
   const { height, width } = getDimentions(hueCanvas.value)
 
-  const hsl = colord(color).toHsl()
+  const hsl = swatch(color).toHsl()
   ctx.fillStyle = hueGradient(ctx, height, hsl)
   ctx.fillRect(0, 0, width, height)
 }
@@ -131,7 +131,7 @@ function huePercent(hue: number, height: number) {
 }
 
 function getHandlePosition() {
-  const hue = colord(dye.color.hex).toHsl().h
+  const hue = swatch(dye.color.hex).toHsl().h
   return {
     y: huePercent(hue, canvasHeight.value),
     x: 0
@@ -162,15 +162,8 @@ watch(
 <template>
   <div class="hue-canvas-wrapper">
     <Handle :position="position" :color="dye.color" />
-    <canvas
-      ref="hueCanvas"
-      class="hue-canvas"
-      :width="canvasWidth"
-      :height="canvasHeight"
-      @mousedown="(e) => hueChange(e, true)"
-      @mousemove="(e) => hueChange(e)"
-      @mouseleave="() => (inside = false)"
-    />
+    <canvas ref="hueCanvas" class="hue-canvas" :width="canvasWidth" :height="canvasHeight"
+      @mousedown="(e) => hueChange(e, true)" @mousemove="(e) => hueChange(e)" @mouseleave="() => (inside = false)" />
   </div>
 </template>
 

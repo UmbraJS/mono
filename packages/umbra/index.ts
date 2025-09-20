@@ -20,6 +20,27 @@ import type {
 } from './engine/types'
 import { inverse, isDark, findContrast } from './engine/primitives/scheme'
 
+// Import swatch functionality
+import { swatch, UmbraSwatch, extend, getFormat, random } from './swatch'
+import type {
+  Plugin,
+  HslColor,
+  HslaColor,
+  HsvColor,
+  HsvaColor,
+  HwbColor,
+  HwbaColor,
+  LabColor,
+  LabaColor,
+  LchColor,
+  LchaColor,
+  RgbColor,
+  RgbaColor,
+  XyzColor,
+  XyzaColor,
+  AnyColor,
+} from './swatch'
+
 export {
   umbra,
   umbraGenerate,
@@ -37,7 +58,13 @@ export {
   resolveTints,
   easingFunctions,
   hex,
-  rgb
+  rgb,
+  // Export swatch functionality
+  swatch,
+  UmbraSwatch,
+  extend,
+  getFormat,
+  random
 }
 
 export type {
@@ -54,5 +81,22 @@ export type {
   FormatedRange,
   EasingType,
   EasingOptions,
-  TintsInput
+  TintsInput,
+  // Export swatch types
+  Plugin,
+  HslColor,
+  HslaColor,
+  HsvColor,
+  HsvaColor,
+  HwbColor,
+  HwbaColor,
+  LabColor,
+  LabaColor,
+  LchColor,
+  LchaColor,
+  RgbColor,
+  RgbaColor,
+  XyzColor,
+  XyzaColor,
+  AnyColor,
 }

@@ -49,9 +49,11 @@
     "@nobel/bifrost": "workspace:*",
     "@radix-ui/colors": "^3.0.0",
     "@umbrajs/core": "workspace:*",
+    "@umbrajs/dye": "workspace:*",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
     "gsap": "catalog:",
+    "pinia": "catalog:",
     "reka-ui": "catalog:",
     "umbraco": "workspace:*",
     "vue-router": "catalog:"
