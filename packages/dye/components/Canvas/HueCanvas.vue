@@ -102,6 +102,9 @@ function updateHandle(color?: HexType) {
 }
 
 function updateCanvas(color?: HexType) {
+  if (color) {
+    updateHandle(color)
+  }
   change({
     name: colorName(color?.hex).name,
     ...color
