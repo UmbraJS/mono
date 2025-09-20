@@ -25,6 +25,7 @@ export default defineNuxtConfig({
 
   // https://devtools.nuxt.com
   devtools: { enabled: true },
+
   // Ensure Umbraco styles are applied when consuming the built package
   css: ['umbraco/dist/umbraco.css'],
 

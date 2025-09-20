@@ -26,6 +26,5 @@ const tasks = computed(() => result.data.value ?? []);
     Try visiting this page after running Convex locally and importing sample
     data.
   </p>
-  <p>Convex URL: {{ $config.public.convexUrl }}</p>
   <NuxtLink to="/">Back</NuxtLink>
 </template>

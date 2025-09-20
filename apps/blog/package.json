@@ -13,6 +13,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@nuxt/kit": "npm:@nuxt/kit-nightly@latest",
     "@monaco-editor/loader": "catalog:",
     "@nobel/richtext": "workspace:*",
     "@nuxt/content": "catalog:",
