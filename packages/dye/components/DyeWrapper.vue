@@ -33,7 +33,8 @@ const dye = useDyeContext()
   border-radius: var(--radius);
   overflow: hidden;
 
-  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, width 0.2s ease-in-out, height 0.2s ease-in-out;
+  /* transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, width 0.2s ease-in-out, height 0.2s ease-in-out; */
+  transition: var(--slower);
 
   .DyePallet {
     grid-column: span 2;
