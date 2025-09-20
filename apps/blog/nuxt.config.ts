@@ -26,6 +26,13 @@ export default defineNuxtConfig({
   // https://devtools.nuxt.com
   devtools: { enabled: true },
 
+  // Runtime config for environment variables
+  runtimeConfig: {
+    public: {
+      convexUrl: process.env.CONVEX_URL || '',
+    },
+  },
+
   // Ensure Umbraco styles are applied when consuming the built package
   css: ['umbraco/dist/umbraco.css'],
 
@@ -33,6 +40,7 @@ export default defineNuxtConfig({
   alias: isDev
     ? {
       umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+      convue: fileURLToPath(new URL('../../packages/convue/src', import.meta.url)),
     }
     : {},
 
@@ -59,7 +67,7 @@ export default defineNuxtConfig({
   // Ensure source is transpiled when aliased (dev only); always transpile motion-v
   build: {
     transpile: [
-      ...(isDev ? ['umbraco'] : []),
+      ...(isDev ? ['umbraco', 'convue'] : []),
       'motion-v',
     ],
   },
