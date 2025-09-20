@@ -1,5 +1,10 @@
 import { toast } from 'vue-sonner'
 import { defineAsyncComponent, defineComponent } from 'vue'
+
+// Composables
+export { useButtonSize, type ComponentSize } from './composables/useButtonSize'
+
+// Components
 export { default as Button } from './components/ui/Button/Button.vue'
 export { default as ButtonGroup } from './components/ui/Button/ButtonGroup.vue'
 export { default as AddButton } from './components/ui/Button/presets/AddButton.vue'
@@ -15,6 +20,7 @@ export {
   DialogTrigger,
 } from './components/ui/Dialog/index'
 export { default as Input } from './components/ui/Input.vue'
+export { default as TextArea } from "./components/ui/TextArea.vue"
 export { default as PixelTransition } from './components/ui/PixelTransition.vue'
 export { default as Radio } from './components/ui/Radio/Radio.vue'
 export { default as ScrollArea } from './components/ui/ScrollArea.vue'

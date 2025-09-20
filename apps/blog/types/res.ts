@@ -143,11 +143,11 @@ export interface Locator {
 
 export interface Citation {
   id: string;
-  title: string;                 // Work title
   url?: string;                  // canonical URL
   archivedUrl?: string;          // Wayback/Perma.cc
   lastCheckedAt?: ISODate;       // link-health freshness
   isLinkBroken?: boolean;
+  quote?: string;                // optional excerpt used
 
   container?: string;            // Journal/book/site name ("Nature", "The Selfish Gene", "Wikipedia")
   publisher?: string;            // Publisher/organization
@@ -161,10 +161,7 @@ export interface Citation {
   language?: string;             // "en", "no", etc.
   isPaywalled?: boolean;
   isRetracted?: boolean;
-  hasCorrection?: boolean;
 
-  quote?: string;                // optional excerpt used
-  notes?: string;                // curator annotation
 
   reliance: CitationReliance;
   distance: CitationDistance;
@@ -328,7 +325,6 @@ const premise1: Premise = {
   citations: [
     {
       id: "cit_1",
-      title: "The Welfare of Animals in Factory Farms",
       container: "Journal of Animal Ethics",
       publisher: "Oxford University Press",
       publicationDate: "2020-05-15",

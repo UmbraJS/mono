@@ -11,6 +11,7 @@ import {
   Tabs,
   Graph,
   Drawer,
+  Input
 } from "umbraco";
 import Select from "../components/Select/Select.vue";
 
@@ -53,6 +54,11 @@ const options = [
         a tool that can be used for many purposes. Umbraco can also be a combination of the words umbra and components.
       </p>
     </header>
+
+    <section id="radio" class="column">
+      <h2>Slider</h2>
+      <Input label="name" />
+    </section>
 
     <section id="radio" class="column">
       <h2>Slider</h2>

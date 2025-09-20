@@ -14,11 +14,7 @@ const dye = useDye()
 </script>
 
 <template>
-  <div
-    :ref="(el) => dye.setWrapper(el as HTMLDivElement)"
-    class="dyepicker-wrapper"
-    :class="{ compact }"
-  >
+  <div :ref="(el) => dye.setWrapper(el as HTMLDivElement)" class="dyepicker-wrapper" :class="{ compact }">
     <slot />
   </div>
 </template>
@@ -38,6 +34,7 @@ const dye = useDye()
   overflow: hidden;
 
   transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, width 0.2s ease-in-out, height 0.2s ease-in-out;
+
   .pallet {
     grid-column: span 2;
   }

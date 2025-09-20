@@ -5,7 +5,6 @@ import CitationIcon from '../CitationIcon.vue';
 
 const cit: Citation = {
   id: "cit_1",
-  title: "The Welfare of Animals in Factory Farms",
   container: "Journal of Animal Ethics",
   publisher: "Oxford University Press",
   publicationDate: "2020-05-15",
@@ -21,16 +20,19 @@ const cit: Citation = {
 const relianceLegend: {
   label: CitationReliance
   description: string
+  points: number,
   icon: string
 }[] = [
     {
       label: 'deductive',
       description: 'The source directly supports the claim.',
+      points: 100,
       icon: 'carbon:asterisk',
     },
     {
       label: 'inductive',
       description: 'The source provides indirect support for the claim.',
+      points: 10,
       icon: 'carbon:condition-wait-point',
     },
   ]
@@ -38,21 +40,25 @@ const relianceLegend: {
 const distanceLegend: {
   label: CitationDistance
   description: string
+  points: number,
   icon: string
 }[] = [
     {
       label: 'primary',
       description: 'The source is the original source of the information.',
+      points: 0,
       icon: 'carbon:sight',
     },
     {
       label: 'secondary',
       description: 'The source cites another source for the information.',
+      points: -20,
       icon: 'carbon:need',
     },
     {
       label: 'hearsay',
       description: 'The source is not directly related to the information.',
+      points: -90,
       icon: 'carbon:chat-bot',
     },
   ]
@@ -60,45 +66,58 @@ const distanceLegend: {
 const credibilityLegend: {
   label: CitationCredibility
   description: string
+  points: number,
   icon: string
 }[] = [
     {
       label: 'gold-standard',
       description: 'The source is the highest quality and most reliable available.',
+      points: 100,
       icon: 'carbon:trophy',
     },
     {
       label: 'authoritative',
       description: 'The source is widely accepted as a definitive reference.',
+      points: 80,
       icon: 'carbon:3d-software',
     },
     {
       label: 'expert',
       description: 'The source is written by a recognized expert in the field.',
+      points: 60,
       icon: 'carbon:star',
     },
     {
       label: 'reliable',
       description: 'The source is generally accurate and trustworthy.',
+      points: 40,
       icon: 'carbon:checkmark',
     },
     {
       label: 'questionable',
       description: 'The source is not well known or is often wrong.',
+      points: 20,
       icon: 'carbon:help',
     },
     {
       label: 'unreliable',
       description: 'The source has a history of being wrong or biased.',
+      points: 0,
       icon: 'carbon:error',
     },
     {
       label: 'discredited',
       description: 'The source actively lies or distorts the truth.',
+      points: -100,
       icon: 'carbon:warning-alt',
     },
   ]
 
+
+function getNumber(val: number) {
+  // if number is positive add + sign
+  return val > 0 ? `+${val}` : `${val}`
+}
 
 
 const activeDistance = distanceLegend.find(d => d.label === cit.distance)
@@ -123,12 +142,17 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
               is inductive.</p>
           </div>
           <ul class="legend">
-            <li v-for="item in relianceLegend" :key="item.label" class="legendItem border"
+            <li v-for="item in relianceLegend" :key="item.label" class="LegendItem"
               :class="{ 'base-success': item.label === cit.reliance }">
-              <Icon :name="item.icon" class="icon" size="20" />
-              <div>
-                <p><span>{{ item.label }}</span></p>
-                <p class="caption">{{ item.description }}</p>
+              <div class="LegendChip border">
+                <Icon :name="item.icon" class="icon" size="20" />
+                <div>
+                  <p><span>{{ item.label }}</span></p>
+                  <p class="caption">{{ item.description }}</p>
+                </div>
+              </div>
+              <div class="LegendPoints border">
+                <p><span>{{ getNumber(item.points) }}</span></p>
               </div>
             </li>
           </ul>
@@ -145,12 +169,17 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
               and a hearsay source is not directly related to the information.</p>
           </div>
           <ul class="legend">
-            <li v-for="item in distanceLegend" :key="item.label" class="legendItem border"
+            <li v-for="item in distanceLegend" :key="item.label" class="LegendItem"
               :class="{ 'base-success': item.label === cit.distance }">
-              <Icon :name="item.icon" class="icon" size="20" />
-              <div>
-                <p><span>{{ item.label }}</span></p>
-                <p class="caption">{{ item.description }}</p>
+              <div class="LegendChip border">
+                <Icon :name="item.icon" class="icon" size="20" />
+                <div>
+                  <p><span>{{ item.label }}</span></p>
+                  <p class="caption">{{ item.description }}</p>
+                </div>
+              </div>
+              <div class="LegendPoints border">
+                <p><span>{{ getNumber(item.points) }}</span></p>
               </div>
             </li>
           </ul>
@@ -168,12 +197,17 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
               evidence.</p>
           </div>
           <ul class="legend">
-            <li v-for="item in credibilityLegend" :key="item.label" class="legendItem border"
-              :class="{ 'base-success': item.label === getCitationCredibility(cit.quality?.sourceReliability || 0) }">
-              <Icon :name="item.icon" class="icon" size="20" />
-              <div>
-                <p><span>{{ item.label }}</span></p>
-                <p class="caption">{{ item.description }}</p>
+            <li v-for="item in credibilityLegend" :key="item.label" class="LegendItem"
+              :class="{ 'base-success': item.label === getCitationCredibility(((cit.quality?.sourceReliability || 0) + (cit.quality?.evidenceStrength || 0)) / 2) }">
+              <div class="LegendChip border">
+                <Icon :name="item.icon" class="icon" size="20" />
+                <div>
+                  <p><span>{{ item.label }}</span></p>
+                  <p class="caption">{{ item.description }}</p>
+                </div>
+              </div>
+              <div class="LegendPoints border">
+                <p><span>{{ getNumber(item.points) }}</span></p>
               </div>
             </li>
           </ul>
@@ -191,6 +225,12 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
   gap: var(--space-2);
 }
 
+@media (max-width: 1000px) {
+  .Wrapper {
+    flex-direction: column;
+  }
+}
+
 .InfoText {
   display: flex;
   flex-direction: column;
@@ -198,21 +238,51 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
 }
 
 ul.legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
   list-style: none;
   padding: 0;
   margin: 0;
+
 }
 
-li.legendItem {
+li.LegendItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+li.LegendItem>div:nth-child(1) {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right: none;
+}
+
+li.LegendItem>div:nth-child(2) {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.LegendChip {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  margin-bottom: var(--space-1);
 
   background-color: var(--base-10);
   color: var(--base-120);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius);
+}
+
+.LegendPoints {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--base-10);
+  color: var(--base-120);
+  width: 90px;
 }
 
 .CitedQuote {
@@ -225,7 +295,7 @@ li.legendItem {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-2);
+  gap: var(--space-3);
   color: var(--base-120);
   border-left: 1px solid var(--base-40);
 

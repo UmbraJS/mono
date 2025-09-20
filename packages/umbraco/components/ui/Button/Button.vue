@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, toRef } from "vue";
 import type { NobleButton } from "../../../types/button";
 import { buttonVariants } from "./variants";
+import { useButtonSize } from "../../../composables/useButtonSize";
 
 const {
+  size,
   color = "default",
   variant = "base",
   disabled = false,
-  size = "medium",
   type = "button",
 } = defineProps<NobleButton>();
 
@@ -21,14 +22,7 @@ const colorScheme = computed(() => {
   return `base-${color}`;
 });
 
-const sizeClass = computed(
-  () =>
-    ({
-      mini: "buttonMini",
-      small: "buttonSmall",
-      medium: "buttonMedium",
-    })[size] ?? "buttonMedium",
-);
+const sizeClass = useButtonSize(toRef(() => size));
 </script>
 
 <template>
@@ -68,18 +62,21 @@ const sizeClass = computed(
 }
 
 .button.buttonMini {
+  min-height: var(--block-small);
   height: var(--block-small);
   min-width: var(--block-small);
   padding: 0px;
 }
 
 .button.buttonSmall {
+  min-height: var(--block);
   height: var(--block);
   min-width: var(--block);
   padding: 0px var(--space-quark);
 }
 
 .button.buttonMedium {
+  min-height: var(--block-big);
   height: var(--block-big);
   min-width: var(--block-big);
   padding: 0px var(--space-1);

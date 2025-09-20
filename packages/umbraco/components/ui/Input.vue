@@ -1,36 +1,37 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, toRef } from 'vue'
+import { useButtonSize } from "../../composables/useButtonSize";
+import type { ButtonSize } from '../../types/button'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const { size = 'medium' } = defineProps<{
-  size?: 'medium' | 'small' | 'mini'
+const { size } = defineProps<{
+  size?: ButtonSize
   label: string
 }>()
+
+const sizeClass = useButtonSize(toRef(() => size));
 
 const focused = ref(false)
 </script>
 
 <template>
   <div class="UInput sibling-blur">
-    <label for="html" class="button buttonText buttonHover buttonActive buttonFocus focus"
-      :class="!focused ? 'bodycopy' : 'move'">
+    <label :for="label" class="button" :class="!focused ? 'bodycopy' : 'move'">
       {{ label }}
     </label>
-    <input v-bind="$attrs" :id="label" ref="inputRef"
-      class="button buttonText buttonHover buttonActive buttonFocus focus" :class="`${size}`" :placeholder="label"
-      @focus="() => (focused = true)" @blur="() => (focused = false)" />
+    <input v-bind="$attrs" :id="label" class="button buttonHover buttonActive buttonFocus focus" :class="sizeClass"
+      :placeholder="label" @focus="() => (focused = true)" @blur="() => (focused = false)" />
   </div>
 </template>
 
 <style lang="scss">
-input.UInput.button {
+input {
   all: unset;
   width: 100%;
   box-sizing: border-box;
-  border-radius: var(--radius);
 }
 
 /* input:-internal-autofill-selected {
