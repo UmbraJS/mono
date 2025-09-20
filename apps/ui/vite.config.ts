@@ -11,6 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+      '@umbrajs/dye': fileURLToPath(new URL('../../packages/dye', import.meta.url)),
     },
     dedupe: ['vue'],
   },

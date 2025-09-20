@@ -31,12 +31,12 @@ function handleClick() {
 </script>
 
 <template>
-  <div class="pallet" :class="{ copied }" @click="handleClick">
+  <div class="DyePallet" :class="{ copied }" @click="handleClick">
     <div class="edit" v-if="compact">
       <p>Edit</p>
     </div>
 
-    <div class="content">
+    <div class="DyePalletContent">
       <p>{{ dye.color.hex }}</p>
       <p class="h3 name">{{ dye.color.name }}</p>
     </div>
@@ -52,14 +52,12 @@ function handleClick() {
 </template>
 
 <style lang="scss" scoped>
-.pallet {
+.DyePallet {
   position: relative;
   display: grid;
   --fade: calc(v-bind(fade) * 1px);
   grid-template-columns:
-    1fr
-    var(--fade)
-    var(--fade);
+    1fr var(--fade) var(--fade);
   justify-content: center;
   align-items: center;
 
@@ -68,20 +66,22 @@ function handleClick() {
   height: 75px;
   user-select: none;
   cursor: pointer;
+
   * {
     margin: 0px;
     line-height: 1;
   }
 }
 
-.content {
+.DyePalletContent {
   position: absolute;
   overflow: hidden;
   max-width: 80%;
 
   display: flex;
   flex-direction: column;
-  padding: var(--space-s);
+  padding: var(--space-1);
+
   p {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -94,7 +94,7 @@ function handleClick() {
   height: 100%;
 }
 
-.pallet.copied .cap {
+.DyePallet.copied .cap {
   background-color: var(--base-20);
   animation: flash 0.6s ease-in-out;
 }
@@ -103,6 +103,7 @@ function handleClick() {
   0% {
     background-color: var(--base-100);
   }
+
   100% {
     background-color: var(--base-20);
   }
@@ -125,21 +126,22 @@ function handleClick() {
 .cap {
   border-radius: var(--radius);
   position: absolute;
-  right: var(--space-s);
+  right: var(--space-1);
   background-color: var(--base-20);
-  padding: var(--space-s);
+  padding: var(--space-1);
   min-width: 60px;
 
   clip-path: circle(0%);
   transition: 0.2s;
 }
 
-.pallet:hover .cap {
+.DyePallet:hover .cap {
   clip-path: circle(100%);
 }
 
-.compact .pallet {
-  .content p,
+.compact .DyePallet {
+
+  .DyePalletContent p,
   .shade,
   .cap {
     opacity: 0;

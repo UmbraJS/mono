@@ -98,25 +98,24 @@ watch(
 </script>
 
 <template>
-  <div class="color-canvas-wrapper">
+  <div class="ColorCanvasWrapper">
     <Handle :position="position" :color="dye.color" />
-    <canvas :ref="(el) => canvas.setColorCanvas(el as HTMLCanvasElement)" class="color-canvas" :width="width"
+    <canvas :ref="(el) => canvas.setColorCanvas(el as HTMLCanvasElement)" class="ColorCanvas" :width="width"
       :height="height" @mousedown="(e) => colorChange(e, true)" @mousemove="(e) => colorChange(e)"
       @mouseleave="() => (inside = false)" />
   </div>
 </template>
 
-<style lang="scss" scoped>
-.color-canvas-wrapper {
+<style>
+.ColorCanvasWrapper {
   position: relative;
   user-select: none;
   overflow: hidden;
   width: 100%;
   height: 100%;
-  height: 150px;
 }
 
-canvas.color-canvas {
+canvas.ColorCanvas {
   aspect-ratio: 1/1;
   width: 100%;
   height: 100%;

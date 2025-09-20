@@ -12,15 +12,15 @@ defineProps<{
 </script>
 
 <template>
-  <div class="handle-wrapper">
+  <div class="DyeHandleWrapper">
     <slot>
-      <div class="handle"></div>
+      <div class="DyeHandle"></div>
     </slot>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.handle-wrapper {
+<style>
+.DyeHandleWrapper {
   position: absolute;
   --size: 20px;
   width: var(--size);
@@ -30,7 +30,7 @@ defineProps<{
   left: calc(v-bind('position.x') * 1px - var(--size) / 2);
 }
 
-.handle {
+.DyeHandle {
   background-color: v-bind('color.hex');
   border-radius: 50%;
   border: solid 3px var(--base-120, #fff);
