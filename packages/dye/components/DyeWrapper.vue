@@ -14,13 +14,13 @@ const dye = useDye()
 </script>
 
 <template>
-  <div :ref="(el) => dye.setWrapper(el as HTMLDivElement)" class="dyepicker-wrapper" :class="{ compact }">
+  <div :ref="(el) => dye.setWrapper(el as HTMLDivElement)" class="DyepickerWrapper" :class="{ compact }">
     <slot />
   </div>
 </template>
 
-<style lang="scss">
-.dyepicker-wrapper {
+<style>
+.DyepickerWrapper {
   display: grid;
   grid-template-columns: 1fr 25px;
 
@@ -40,7 +40,7 @@ const dye = useDye()
   }
 }
 
-.dyepicker-wrapper.compact {
+.DyepickerWrapper.compact {
   --compactSize: 50px;
   max-height: var(--compactSize);
   max-width: var(--compactSize);
