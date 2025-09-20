@@ -72,7 +72,7 @@ watch(messages, async () => {
 </script>
 
 <template>
-  <main class="chat">
+  <main class="ConvexChat">
     <header>
       <h2>Convex Chat</h2>
       <p>Welcome to the chat! Feel free to share your thoughts.</p>
@@ -136,7 +136,7 @@ header {
   border-radius: var(--radius);
 }
 
-.chat {
+.ConvexChat {
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: var(--space-2);
