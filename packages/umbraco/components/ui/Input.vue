@@ -7,6 +7,8 @@ defineOptions({
   inheritAttrs: false,
 })
 
+const model = defineModel<string>()
+
 const { size } = defineProps<{
   size?: ButtonSize
   label: string
@@ -22,8 +24,8 @@ const focused = ref(false)
     <label :for="label" class="button" :class="!focused ? 'bodycopy' : 'move'">
       {{ label }}
     </label>
-    <input v-bind="$attrs" :id="label" class="button buttonHover buttonActive buttonFocus focus" :class="sizeClass"
-      :placeholder="label" @focus="() => (focused = true)" @blur="() => (focused = false)" />
+    <input v-bind="$attrs" v-model="model" :id="label" class="button buttonHover buttonActive buttonFocus focus"
+      :class="sizeClass" :placeholder="label" @focus="() => (focused = true)" @blur="() => (focused = false)" />
   </div>
 </template>
 

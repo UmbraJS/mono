@@ -3,6 +3,8 @@ import { ref, computed, watch, nextTick } from "vue";
 import { useConvexQuery, useConvexMutation } from "convex-vue";
 import { api } from "../../convex/_generated/api";
 import { Input, Button, TextArea } from "umbraco";
+import OtherMessageBubble from "../components/OtherMessageBubble.vue";
+import MyMessageBubble from "../components/MyMessageBubble.vue";
 
 useSeoMeta({ title: "Convex Chat" });
 
@@ -94,22 +96,16 @@ watch(messages, async () => {
         Error: {{ String(messagesResult.error.value) }}
       </div>
       <ul v-else class="messages">
-        <li v-for="m in messages" :key="m._id" class="message" :class="{ 'message--self': m.user === name }">
-          <div class="message__meta">
-            <p class="caption">
-              {{
-                m.user === name ? "You" : m.user
-              }}
-            </p>
-          </div>
-          <div class="message__bubble">{{ m.body }}</div>
-        </li>
+        <template v-for="m in messages" :key="m._id">
+          <MyMessageBubble v-if="m.user === name" :message="m" />
+          <OtherMessageBubble v-else :message="m" />
+        </template>
       </ul>
     </section>
 
     <form class="composer" @submit.prevent="onSubmit">
       <Input v-model="name" label="Your name" size="small" />
-      <TextArea v-model="text" label="Type a message" @keydown="onTextareaKeydown" />
+      <TextArea v-model="text" placeholder="Type a message" @keydown="onTextareaKeydown" />
       <Button type="submit" color="base" :disabled="!text.trim() || isSending">
         <Icon name="carbon:send" class="icon" />
         <p>Send</p>
@@ -148,31 +144,6 @@ watch(messages, async () => {
   padding: 0;
   display: grid;
   gap: var(--space-1);
-}
-
-.message {
-  display: grid;
-  gap: var(--space-1);
-  justify-items: start;
-}
-
-.message--self {
-  justify-items: end;
-}
-
-.message__bubble {
-  max-width: 80%;
-  padding: var(--space-1);
-  border-radius: var(--radius);
-  background: var(--base-10);
-  color: var(--base-text);
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-}
-
-.message--self .message__bubble {
-  background: color-mix(in oklab, var(--base-30) 92%, transparent);
-  color: var(--base-text);
 }
 
 .composer {

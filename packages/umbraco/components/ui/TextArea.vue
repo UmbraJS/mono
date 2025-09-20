@@ -9,8 +9,11 @@ defineOptions({
 
 const { size } = defineProps<{
   size?: ButtonSize
-  label: string
+  label?: string
+  placeholder?: string
 }>()
+
+const model = defineModel<string>()
 
 const sizeClass = useButtonSize(toRef(() => size));
 
@@ -24,11 +27,12 @@ function adjustHeight(area: EventTarget | null) {
 
 <template>
   <div class="TextArea">
-    <label :for="label" class="caption">
+    <label :for="label" class="caption" v-if="label">
       {{ label }}
     </label>
-    <textarea v-bind="$attrs" :id="label" class="button buttonHover buttonActive buttonFocus focus" :class="sizeClass"
-      :placeholder="label" @input="(e) => adjustHeight(e.target)" :style="{ height: scrollHeight + 'px' }" />
+    <textarea v-bind="$attrs" v-model="model" :id="label" class="button buttonHover buttonActive buttonFocus focus"
+      :class="sizeClass" :placeholder="placeholder || label" @input="(e) => adjustHeight(e.target)"
+      :style="{ height: scrollHeight + 'px' }" />
   </div>
 </template>
 
