@@ -5,7 +5,10 @@
         <Icon name="mdi:account" />
       </div>
       <div class="MessageContent">
-        <p class="MessageName caption">{{ message.user }}</p>
+        <div class="MessageContentTitle">
+          <p class="MessageName caption">{{ message.user }}</p>
+          <p v-if="shortId" class="UserID caption">#{{ shortId }}</p>
+        </div>
         <p>{{ message.body }}</p>
       </div>
     </div>
@@ -13,16 +16,21 @@
 </template>
 
 <script setup lang="ts">
-interface Props {
+import { computedAsync } from "@vueuse/core";
+import { getShortId } from "../utils";
+
+const props = defineProps<{
   color: string;
   message: {
     _id: string;
     user: string;
     body: string;
   };
-}
+}>();
 
-defineProps<Props>();
+const shortId = computedAsync(async () => {
+  return getShortId(props.message._id, 8);
+}, null);
 </script>
 
 <style>
@@ -34,6 +42,10 @@ defineProps<Props>();
   display: grid;
   gap: var(--space-1);
   justify-items: start;
+}
+
+.UserID {
+  color: var(--base-70);
 }
 
 .OtherMessageBubble {
@@ -66,5 +78,11 @@ defineProps<Props>();
   background: var(--base-10);
   border-radius: var(--radius);
 
+}
+
+.MessageContentTitle {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
 }
 </style>

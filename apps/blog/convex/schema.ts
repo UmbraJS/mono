@@ -6,8 +6,13 @@ export default defineSchema({
     text: v.string(),
     isCompleted: v.boolean(),
   }),
+  users: defineTable({
+    userId: v.string(),
+    displayName: v.string(),
+    lastSeen: v.number(),
+  }).index("by_userId", ["userId"]),
   messages: defineTable({
-    user: v.string(),
+    userId: v.string(),
     body: v.string(),
-  }),
+  }).index("by_userId", ["userId"]),
 });
