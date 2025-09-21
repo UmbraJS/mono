@@ -2,11 +2,13 @@
 import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
-import { Input, Button, TextArea } from "umbraco";
+import { Input, Button, TextArea, toast } from "umbraco";
+import { z } from "zod";
 import OtherMessageBubble from "../components/OtherMessageBubble.vue";
 import MyMessageBubble from "../components/MyMessageBubble.vue";
 import { useUser } from "../composables/useUser";
 import { usePresence } from "../composables/usePresence";
+import { useValidatedForm } from "../composables/useForm";
 import { getShortIdSync } from "../utils";
 
 definePageMeta({
@@ -18,7 +20,32 @@ useSeoMeta({ title: "Convex Chat" });
 // User management
 const { userId, displayName, currentUser, getUserColor } = useUser();
 
-const text = ref("");
+// Define chat form schema
+const chatSchema = z.object({
+  message: z.string()
+    .trim()
+    .min(1, "Message cannot be empty")
+    .max(1000, "Message must be less than 1000 characters"),
+  displayName: z.string()
+    .trim()
+    .min(1, "Display name is required")
+    .max(50, "Display name must be less than 50 characters")
+});
+
+// Initialize validated form
+const form = useValidatedForm({
+  message: "",
+  displayName: displayName.value || ""
+}, {
+  schema: chatSchema,
+  validationMode: "onSubmit" // Only validate when submitting
+});
+
+// Sync display name changes with form
+watch(displayName, (newDisplayName) => {
+  form.setForm({ displayName: newDisplayName || "" });
+});
+
 const isSending = ref(false);
 const messagesEl = ref<HTMLElement | null>(null);
 
@@ -58,17 +85,49 @@ const messages = computed(() => realQuery.data.value || []);
 const onlineUsers = computed(() => onlineUsersQuery.data.value || []);
 
 async function onSubmit() {
-  const body = text.value.trim();
-  if (!body || isSending.value || !isClientReady.value) return;
+  if (isSending.value || !isClientReady.value) return;
+
+  // Validate the form
+  const validation = form.validate();
+
+  if (!validation.success) {
+    // Show validation errors as toast notifications
+    const errors = Object.entries(validation.fieldErrors);
+    if (errors.length > 0) {
+      // Show the first error as a toast
+      const firstError = errors[0];
+      if (firstError) {
+        const [field, messages] = firstError;
+        toast.error(`${field}: ${messages[0]}`);
+      }
+    } else if (validation.formErrors.length > 0 && validation.formErrors[0]) {
+      toast.error(validation.formErrors[0]);
+    }
+    return;
+  }
+
+  if (!validation.data) return;
+
+  const { message } = validation.data;
   isSending.value = true;
+
   try {
     await sendMessage({
       userId: userId.value,
-      body
+      body: message
     });
-    text.value = "";
+
+    // Clear the message on successful send
+    form.setForm({ message: "" });
+
+    // Show success feedback
+    toast.success("Message sent!");
+
     await nextTick();
     scrollToBottom();
+  } catch (error) {
+    console.error("Failed to send message:", error);
+    toast.error("Failed to send message. Please try again.");
   } finally {
     isSending.value = false;
   }
@@ -140,9 +199,19 @@ watch(messages, async () => {
         <p class="caption">Each user gets a unique ID that's stored locally on their device.</p>
       </div>
       <form class="composer" @submit.prevent="onSubmit">
-        <Input :model-value="displayName" label="Your name" size="small" />
-        <TextArea v-model="text" placeholder="Type a message" @keydown="onTextareaKeydown" />
-        <Button type="submit" color="base" :disabled="!text.trim() || isSending || !isClientReady">
+        <Input v-model="form.data.value.displayName" label="Your name" size="small"
+          :class="{ error: form.errors.value.displayName }" />
+        <span v-if="form.errors.value.displayName" class="error-text">
+          {{ form.errors.value.displayName[0] }}
+        </span>
+
+        <TextArea v-model="form.data.value.message" placeholder="Type a message"
+          :class="{ error: form.errors.value.message }" @keydown="onTextareaKeydown" />
+        <span v-if="form.errors.value.message" class="error-text">
+          {{ form.errors.value.message[0] }}
+        </span>
+
+        <Button type="submit" color="base" :disabled="isSending || !isClientReady">
           <Icon name="carbon:send" class="icon" />
           <p>Send</p>
         </Button>
@@ -276,6 +345,17 @@ footer .Info {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+
+.error-text {
+  color: var(--warning-100);
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  margin-bottom: var(--space-half);
+}
+
+.error {
+  border-color: var(--warning-60) !important;
 }
 
 /* Responsive layout */
