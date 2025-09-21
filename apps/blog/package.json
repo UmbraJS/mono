@@ -13,13 +13,13 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@nuxt/kit": "npm:@nuxt/kit-nightly@latest",
     "@monaco-editor/loader": "catalog:",
     "@nobel/richtext": "workspace:*",
     "@nuxt/content": "catalog:",
     "@nuxt/eslint": "catalog:",
     "@nuxt/icon": "catalog:",
     "@nuxt/image": "catalog:",
+    "@nuxt/kit": "npm:@nuxt/kit-nightly@latest",
     "@nuxtjs/mdc": "catalog:",
     "@nuxtlabs/monarch-mdc": "catalog:",
     "@pinia/nuxt": "catalog:",
@@ -74,7 +74,8 @@
     "unist-util-visit": "catalog:",
     "vfile": "catalog:",
     "vue": "catalog:",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@iconify-json/pixelarticons": "catalog:",

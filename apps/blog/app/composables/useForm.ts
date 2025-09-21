@@ -1,6 +1,7 @@
 // useForm.ts
-import { ref, computed, toRaw } from "vue";
+import { ref, computed, toRaw, watch } from "vue";
 import type { Ref } from "vue";
+import type { ZodSchema, ZodError } from "zod";
 
 /**
  * Primitive types that don't need deep partial transformation
@@ -35,6 +36,70 @@ export interface UseFormOptions {
    * @default "replace"
    */
   arrayMerge?: "replace" | "concat";
+}
+
+/**
+ * Enhanced configuration options for the useValidatedForm hook with Zod validation
+ */
+export interface UseValidatedFormOptions extends UseFormOptions {
+  /**
+   * Zod schema for validating form data
+   */
+  schema: ZodSchema;
+
+  /**
+   * When to perform validation
+   * - "onChange": Validate on every form change (reactive)
+   * - "onSubmit": Only validate when explicitly called
+   * - "onBlur": Validate when fields lose focus (requires manual trigger)
+   * @default "onChange"
+   */
+  validationMode?: "onChange" | "onSubmit" | "onBlur";
+}
+
+/**
+ * Field-level error information from validation
+ */
+export type FieldErrors = Record<string, string[]>;
+
+/**
+ * Validation result containing success state, errors, and parsed data
+ */
+export interface ValidationResult<T> {
+  /** Whether validation passed */
+  success: boolean;
+  /** Parsed and validated data (only present if success is true) */
+  data?: T;
+  /** Field-level error messages */
+  fieldErrors: FieldErrors;
+  /** Global form error messages */
+  formErrors: string[];
+}
+
+/**
+ * Transforms a Zod error into a more usable format for form validation
+ * @param error - The ZodError to transform
+ * @returns ValidationResult with formatted field and form errors
+ */
+function formatZodError<T>(error: ZodError): Omit<ValidationResult<T>, 'success' | 'data'> {
+  const fieldErrors: FieldErrors = {};
+  const formErrors: string[] = [];
+
+  for (const issue of error.issues) {
+    if (issue.path.length > 0) {
+      // Field-specific error
+      const fieldPath = issue.path.join('.');
+      if (!fieldErrors[fieldPath]) {
+        fieldErrors[fieldPath] = [];
+      }
+      fieldErrors[fieldPath].push(issue.message);
+    } else {
+      // Form-level error
+      formErrors.push(issue.message);
+    }
+  }
+
+  return { fieldErrors, formErrors };
 }
 
 /**
@@ -278,5 +343,184 @@ export function useForm<T extends Record<string, unknown>>(
     reset,
     setBaseline,
     commit,
+  };
+}
+
+/**
+ * Enhanced form hook with Zod validation support.
+ *
+ * Extends the basic useForm hook with schema validation, error handling,
+ * and form validation state management using Zod schemas.
+ *
+ * @template T - The shape of your form data (inferred from Zod schema)
+ * @param initial - Initial form data that becomes the starting baseline
+ * @param options - Configuration including Zod schema and validation options
+ *
+ * @returns Extended form object with validation capabilities:
+ *   - All properties from useForm (data, baseline, isDirty, etc.)
+ *   - `errors` - Reactive validation errors for each field
+ *   - `isValid` - Computed boolean indicating if form passes validation
+ *   - `validate` - Function to manually trigger validation
+ *   - `validateField` - Function to validate a specific field
+ *   - `clearErrors` - Function to clear all validation errors
+ *
+ * @example
+ * ```typescript
+ * const schema = z.object({
+ *   name: z.string().min(2, "Name must be at least 2 characters"),
+ *   email: z.string().email("Invalid email format"),
+ *   age: z.number().min(18, "Must be at least 18 years old")
+ * });
+ *
+ * const form = useValidatedForm({
+ *   name: "",
+ *   email: "",
+ *   age: 0
+ * }, {
+ *   schema,
+ *   validationMode: "onChange" // Validate on every change
+ * });
+ *
+ * // Update with validation
+ * form.setForm({ name: "A" }); // Will show validation error
+ *
+ * // Check validation state
+ * console.log(form.isValid.value); // false
+ * console.log(form.errors.value.name); // ["Name must be at least 2 characters"]
+ *
+ * // Manual validation
+ * const result = form.validate();
+ * if (result.success) {
+ *   // Submit form with result.data
+ * }
+ * ```
+ */
+export function useValidatedForm<T extends Record<string, unknown>>(
+  initial: T,
+  options: UseValidatedFormOptions
+): {
+  /** Reactive form data - the current state of your form */
+  data: Ref<T>;
+  /** The baseline data used for change detection and reset operations */
+  baseline: Ref<T>;
+  /** Computed partial diff showing what has changed vs baseline */
+  dirtyValues: Ref<DeepPartial<T>>;
+  /** Computed boolean indicating whether any changes exist */
+  isDirty: Ref<boolean>;
+  /** Current validation errors for each field */
+  errors: Ref<FieldErrors>;
+  /** Computed boolean indicating if the form passes validation */
+  isValid: Ref<boolean>;
+  /** Merge partial changes into the form data */
+  setForm: (patch: DeepPartial<T>) => void;
+  /** Replace the entire form data with new values */
+  replace: (next: T) => void;
+  /** Reset form data back to the current baseline */
+  reset: () => void;
+  /** Update the baseline (comparison point) to new values */
+  setBaseline: (next: T) => void;
+  /** Promote current data to become the new baseline (call after save) */
+  commit: () => void;
+  /** Manually trigger form validation */
+  validate: () => ValidationResult<T>;
+  /** Validate a specific field by path (e.g., "user.email") */
+  validateField: (fieldPath: string) => string[] | null;
+  /** Clear all validation errors */
+  clearErrors: () => void;
+} {
+  const { schema, validationMode = "onChange", ...formOptions } = options;
+
+  // Initialize the base form
+  const form = useForm(initial, formOptions);
+
+  // Validation state
+  const errors = ref<FieldErrors>({});
+
+  // Computed validation state
+  const isValid = computed(() => {
+    return Object.keys(errors.value).length === 0;
+  });
+
+  /** Perform validation on the current form data */
+  function validate(): ValidationResult<T> {
+    const result = schema.safeParse(toRaw(form.data.value));
+
+    if (result.success) {
+      errors.value = {};
+      return {
+        success: true,
+        data: result.data as T,
+        fieldErrors: {},
+        formErrors: []
+      };
+    } else {
+      const formatted = formatZodError<T>(result.error);
+      errors.value = formatted.fieldErrors;
+      return {
+        success: false,
+        ...formatted
+      };
+    }
+  }
+
+  /** Validate a specific field by path */
+  function validateField(fieldPath: string): string[] | null {
+    // For simplicity, we'll validate the entire form and extract field-specific errors
+    const result = schema.safeParse(toRaw(form.data.value));
+
+    if (!result.success) {
+      const formatted = formatZodError<T>(result.error);
+
+      // Update errors for all fields from this validation
+      errors.value = formatted.fieldErrors;
+
+      // Return errors specific to the requested field
+      return formatted.fieldErrors[fieldPath] || null;
+    } else {
+      // Clear all errors if validation passes
+      errors.value = {};
+      return null;
+    }
+  }
+
+  /** Clear all validation errors */
+  function clearErrors() {
+    errors.value = {};
+  }
+
+  // Auto-validate on change if enabled
+  if (validationMode === "onChange") {
+    watch(() => form.data.value, () => {
+      validate();
+    }, { deep: true });
+  }
+
+  // Enhanced setForm with optional validation
+  const originalSetForm = form.setForm;
+  function setForm(patch: DeepPartial<T>) {
+    originalSetForm(patch);
+    if (validationMode === "onChange") {
+      validate();
+    }
+  }
+
+  // Enhanced replace with optional validation
+  const originalReplace = form.replace;
+  function replace(next: T) {
+    originalReplace(next);
+    if (validationMode === "onChange") {
+      validate();
+    }
+  }
+
+  return {
+    ...form,
+    errors,
+    isValid,
+    setForm,
+    replace,
+    validate,
+    validateField,
+    clearErrors,
   };
 }
