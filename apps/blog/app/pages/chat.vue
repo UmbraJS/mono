@@ -70,11 +70,11 @@ onMounted(async () => {
 
 // Load user's display name from backend when available
 watch(() => userQuery.data.value, (userData) => {
-  if (userData?.displayName) {
+  if (userData?.displayName && userData?.displayName !== "Anonymous") {
     // Only set initial value if form is empty
     setDisplayName(userData.displayName);
     form.setForm({ displayName: userData.displayName });
-  } else {
+  } else if (currentUser.value.displayName === "Anonymous") {
     // Set default if no backend data and form is empty
     setDisplayName("Anonymous");
     form.setForm({ displayName: "Anonymous" });
@@ -159,7 +159,7 @@ watch(messages, async () => {
   <main class="ConvexChat">
     <header class="ConvexChatHeader">
       <p v-if="!isClientReady" style="color: orange;">⏳ Initializing client-side connection...</p>
-      <p v-if="isClientReady"><strong>Online users:</strong> {{ onlineUsers.length }}</p>
+      <p v-if="isClientReady" class="caption">Online users: {{ onlineUsers.length }}</p>
       <div v-if="onlineUsers.length > 0" class="OnlineUsers">
         <UserChip v-for="user in onlineUsers" :key="user.userId"
           :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
@@ -168,7 +168,7 @@ watch(messages, async () => {
     </header>
 
     <section class="ChatMessagesWrapper">
-      <div v-if="isPending" class="state">
+      <div v-if="isPending" class="ChatMessagesLoading">
         <Icon name="eos-icons:loading" />
       </div>
       <div v-else-if="realQuery.error.value" class="MessagesState messagesStateError">
@@ -216,7 +216,14 @@ watch(messages, async () => {
   </main>
 </template>
 
-<style scoped>
+<style>
+.ChatMessagesLoading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .ConvexChat {
   display: grid;
   grid-template-columns: 1fr auto;
