@@ -4,11 +4,11 @@ import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
 import { Input, Button, TextArea, toast } from "umbraco";
 import { z } from "zod";
-import OtherMessageBubble from "../components/OtherMessageBubble.vue";
+import MessageChip from "../components/MessageChip.vue";
 import MyMessageBubble from "../components/MyMessageBubble.vue";
 import { useUser } from "../composables/useUser";
 import { usePresence } from "../composables/usePresence";
-import { useValidatedForm } from "../composables/useForm";
+import { useFormula } from "../composables/useForm";
 import { getShortIdSync } from "../utils";
 
 definePageMeta({
@@ -18,31 +18,28 @@ definePageMeta({
 useSeoMeta({ title: "Convex Chat" });
 
 // User management
-const { userId, displayName, currentUser, getUserColor } = useUser();
-
-// Define chat form schema
-const chatSchema = z.object({
-  message: z.string()
-    .trim()
-    .min(1, "Message cannot be empty")
-    .max(1000, "Message must be less than 1000 characters"),
-  displayName: z.string()
-    .trim()
-    .min(1, "Display name is required")
-    .max(50, "Display name must be less than 50 characters")
-});
+const { currentUser, getUserColor } = useUser();
 
 // Initialize validated form
-const form = useValidatedForm({
+const form = useFormula({
   message: "",
-  displayName: displayName.value || ""
+  displayName: currentUser.value.displayName
 }, {
-  schema: chatSchema,
-  validationMode: "onSubmit" // Only validate when submitting
+  validationMode: "onSubmit", // Only validate when submitting
+  schema: z.object({
+    message: z.string()
+      .trim()
+      .min(1, "Message cannot be empty")
+      .max(1000, "Message must be less than 1000 characters"),
+    displayName: z.string()
+      .trim()
+      .min(1, "Display name is required")
+      .max(50, "Display name must be less than 50 characters")
+  }),
 });
 
 // Sync display name changes with form
-watch(displayName, (newDisplayName) => {
+watch(() => currentUser.value.displayName, (newDisplayName) => {
   form.setForm({ displayName: newDisplayName || "" });
 });
 
@@ -59,26 +56,21 @@ const onlineUsersQuery = useConvexQuery(api.chat.getOnlineUsers);
 const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage);
 
 // Presence tracking - initialize after user data is available
-let presenceSystem: ReturnType<typeof usePresence> | null = null;
+const presenceSystem = usePresence(currentUser.value.userId, currentUser.value.displayName);
 
 onMounted(async () => {
-  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-    isClientReady.value = true;
+  if (typeof window === 'undefined' || typeof document === 'undefined') return
+  isClientReady.value = true;
+  // Initialize presence system once we have user data
+  watch(() => realQuery?.isPending?.value, (newPending) => {
+    isPending.value = newPending;
+  }, { immediate: true });
+});
 
-    // Initialize presence system once we have user data
-    presenceSystem = usePresence(userId.value, displayName.value);
-
-    watch(() => realQuery?.isPending?.value, (newPending) => {
-      isPending.value = newPending;
-    }, { immediate: true });
-
-    // Watch for display name changes to update presence
-    watch(displayName, (newName) => {
-      if (presenceSystem && newName) {
-        presenceSystem.updateUserPresence();
-      }
-    });
-  }
+// Watch for display name changes to update presence
+watch(() => currentUser.value.displayName, (newName) => {
+  if (!presenceSystem || !newName) return
+  presenceSystem.updateUserPresence();
 });
 
 const messages = computed(() => realQuery.data.value || []);
@@ -113,7 +105,7 @@ async function onSubmit() {
 
   try {
     await sendMessage({
-      userId: userId.value,
+      userId: currentUser.value.userId,
       body: message
     });
 
@@ -160,20 +152,18 @@ watch(messages, async () => {
       <p>Welcome to the chat! Feel free to share your thoughts.</p>
       <p v-if="!isClientReady" style="color: orange;">⏳ Initializing client-side connection...</p>
       <div v-if="isClientReady" class="user-info">
-        <p><strong>Your ID:</strong> <code>{{ getShortIdSync(userId, 8) }}</code></p>
+        <p><strong>Your ID:</strong> <code>{{ getShortIdSync(currentUser.userId, 8) }}</code></p>
         <p><strong>Online users:</strong> {{ onlineUsers.length }}</p>
       </div>
     </header>
 
     <aside v-if="onlineUsers.length > 0" class="online-users">
       <h3>Online Now ({{ onlineUsers.length }})</h3>
-      <ul class="user-list">
-        <li v-for="user in onlineUsers" :key="user.userId" class="user-item">
-          <div class="user-indicator" :style="{ backgroundColor: getUserColor(user.userId) }"></div>
-          <span>{{ user.displayName }}</span>
-          <span v-if="user.userId === userId" class="you-indicator">(you)</span>
-        </li>
-      </ul>
+      <div class="user-list">
+        <MessageChip v-for="user in onlineUsers" :key="user.userId"
+          :message="{ _id: user.userId, user: user.displayName, body: 'Hello!' }"
+          :color="getUserColor(user.userId) || '#808080'" />
+      </div>
     </aside>
 
     <section class="ChatMessages">
@@ -185,8 +175,9 @@ watch(messages, async () => {
       </div>
       <div v-else ref="messagesEl" class="messages">
         <template v-for="m in messages" :key="m._id">
-          <MyMessageBubble v-if="m.userId === userId" :message="{ _id: m._id, user: m.displayName, body: m.body }" />
-          <OtherMessageBubble v-else :message="{ _id: m._id, user: m.displayName, body: m.body }"
+          <MyMessageBubble v-if="m.userId === currentUser.userId"
+            :message="{ _id: m._id, user: m.displayName, body: m.body }" />
+          <MessageChip v-else :message="{ _id: m._id, user: m.displayName, body: m.body }"
             :color="getUserColor(m.userId) || '#808080'" />
         </template>
       </div>

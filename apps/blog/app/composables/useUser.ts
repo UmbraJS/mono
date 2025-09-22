@@ -14,14 +14,18 @@ function generateUUID(): string {
 export const useUser = () => {
   // Store user ID in localStorage, generate if doesn't exist
   const userId = useStorage("userID", () => generateUUID());
-
   // Store display name in localStorage
   const displayName = useStorage("chatName", "Anonymous");
+
+  const userColor = computed(() => {
+    return getUserColor(userId.value);
+  });
 
   // Computed property to ensure we always have a valid user ID
   const currentUser = computed(() => ({
     userId: userId.value,
-    displayName: displayName.value
+    displayName: displayName.value,
+    userColor: userColor.value
   }));
 
   /**

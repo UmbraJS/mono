@@ -395,7 +395,7 @@ export function useForm<T extends Record<string, unknown>>(
  * }
  * ```
  */
-export function useValidatedForm<T extends Record<string, unknown>>(
+export function useFormula<T extends Record<string, unknown>>(
   initial: T,
   options: UseValidatedFormOptions
 ): {
