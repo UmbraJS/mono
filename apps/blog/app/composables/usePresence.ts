@@ -1,8 +1,8 @@
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
 
-export const usePresence = (userId: string, displayName: string) => {
+export const usePresence = (userIdRef: () => string, displayNameRef: () => string) => {
   const isVisible = ref(true);
   const heartbeatInterval = ref<NodeJS.Timeout | null>(null);
 
@@ -10,11 +10,14 @@ export const usePresence = (userId: string, displayName: string) => {
   const { mutate: setOffline } = useConvexMutation(api.chat.setUserOffline);
   const { mutate: cleanup } = useConvexMutation(api.chat.cleanupStaleUsers);
 
+  const userId = computed(() => userIdRef());
+  const displayName = computed(() => displayNameRef());
+
   const updateUserPresence = async () => {
     try {
       await updatePresence({
-        userId,
-        displayName: displayName || "Anonymous"
+        userId: userId.value,
+        displayName: displayName.value || "Anonymous"
       });
     } catch (error) {
       console.error("Failed to update presence:", error);
@@ -23,7 +26,7 @@ export const usePresence = (userId: string, displayName: string) => {
 
   const setUserOffline = async () => {
     try {
-      await setOffline({ userId });
+      await setOffline({ userId: userId.value });
     } catch (error) {
       console.error("Failed to set user offline:", error);
     }

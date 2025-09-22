@@ -5,9 +5,35 @@ export const sendMessage = mutation({
   args: {
     userId: v.string(),
     body: v.string(),
+    displayName: v.string(),
   },
   handler: async (ctx, args) => {
     console.log("sendMessage called");
+
+    // Update or create user with the current display name
+    const existingUser = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .first();
+
+    const now = Date.now();
+
+    if (existingUser) {
+      // Update existing user's display name and last seen
+      await ctx.db.patch(existingUser._id, {
+        displayName: args.displayName,
+        lastSeen: now,
+      });
+    } else {
+      // Create new user record
+      await ctx.db.insert("users", {
+        userId: args.userId,
+        displayName: args.displayName,
+        lastSeen: now,
+      });
+    }
+
+    // Insert the message
     await ctx.db.insert("messages", {
       userId: args.userId,
       body: args.body,
@@ -86,11 +112,29 @@ export const setUserOffline = mutation({
   },
 });
 
+export const getUser = query({
+  args: {
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .first();
+
+    return user ? {
+      userId: user.userId,
+      displayName: user.displayName,
+      lastSeen: user.lastSeen
+    } : null;
+  },
+});
+
 export const getOnlineUsers = query({
   args: {},
   handler: async (ctx) => {
     const fiveMinutesAgo = Date.now() - 5 * 60 * 1000; // 5 minutes
-    
+
     // Get users who were seen within the last 5 minutes
     const users = await ctx.db
       .query("users")
@@ -112,7 +156,7 @@ export const cleanupStaleUsers = mutation({
     // This function is now less necessary since we compute online status dynamically
     // But we could use it to delete very old user records if needed
     const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000; // 1 week
-    
+
     const veryOldUsers = await ctx.db
       .query("users")
       .filter((q) => q.lt(q.field("lastSeen"), oneWeekAgo))
@@ -123,7 +167,7 @@ export const cleanupStaleUsers = mutation({
       await ctx.db.delete(user._id);
       deletedCount++;
     }
-    
+
     console.log(`Cleaned up ${deletedCount} very old user records`);
     return { deletedCount };
   },

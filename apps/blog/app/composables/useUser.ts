@@ -1,5 +1,5 @@
 import { useStorage } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 /**
  * Generates a UUID v4
@@ -12,10 +12,11 @@ function generateUUID(): string {
  * Composable for managing user identity and persistence
  */
 export const useUser = () => {
-  // Store user ID in localStorage, generate if doesn't exist
+  // Store only user ID in localStorage, generate if doesn't exist
   const userId = useStorage("userID", () => generateUUID());
-  // Store display name in localStorage
-  const displayName = useStorage("chatName", "Anonymous");
+
+  // Display name is now managed in memory only and synced with backend
+  const displayName = ref("Anonymous");
 
   const userColor = computed(() => {
     return getUserColor(userId.value);
@@ -50,10 +51,18 @@ export const useUser = () => {
     return colors[Math.abs(hash) % colors.length];
   };
 
+  /**
+   * Update the user's display name
+   */
+  const setDisplayName = (name: string) => {
+    displayName.value = name;
+  };
+
   return {
     userId: computed(() => userId.value),
     displayName,
     currentUser,
-    getUserColor
+    getUserColor,
+    setDisplayName
   };
 };

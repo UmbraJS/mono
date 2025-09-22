@@ -269,31 +269,12 @@ function deepDiff<T>(a: T, b: T, eq: (x: unknown, y: unknown) => boolean): DeepP
 export function useForm<T extends Record<string, unknown>>(
   initial: T,
   opts: UseFormOptions = {}
-): {
-  /** Reactive form data - the current state of your form */
-  data: Ref<T>;
-  /** The baseline data used for change detection and reset operations */
-  baseline: Ref<T>;
-  /** Computed partial diff showing what has changed vs baseline */
-  dirtyValues: Ref<DeepPartial<T>>;
-  /** Computed boolean indicating whether any changes exist */
-  isDirty: Ref<boolean>;
-  /** Merge partial changes into the form data */
-  setForm: (patch: DeepPartial<T>) => void;
-  /** Replace the entire form data with new values */
-  replace: (next: T) => void;
-  /** Reset form data back to the current baseline */
-  reset: () => void;
-  /** Update the baseline (comparison point) to new values */
-  setBaseline: (next: T) => void;
-  /** Promote current data to become the new baseline (call after save) */
-  commit: () => void;
-} {
+) {
   const eq = opts.equals ?? deepEqual;
   const arrayMerge = opts.arrayMerge ?? "replace";
 
-  const baseline = ref(clone(initial)) as Ref<T>;
-  const data = ref(clone(initial)) as Ref<T>;
+  const baseline = ref(clone(initial));
+  const data = ref(clone(initial));
 
   const _dirtyValues = computed<DeepPartial<T>>(() => {
     return deepDiff(toRaw(data.value), toRaw(baseline.value), eq);
@@ -398,36 +379,7 @@ export function useForm<T extends Record<string, unknown>>(
 export function useFormula<T extends Record<string, unknown>>(
   initial: T,
   options: UseValidatedFormOptions
-): {
-  /** Reactive form data - the current state of your form */
-  data: Ref<T>;
-  /** The baseline data used for change detection and reset operations */
-  baseline: Ref<T>;
-  /** Computed partial diff showing what has changed vs baseline */
-  dirtyValues: Ref<DeepPartial<T>>;
-  /** Computed boolean indicating whether any changes exist */
-  isDirty: Ref<boolean>;
-  /** Current validation errors for each field */
-  errors: Ref<FieldErrors>;
-  /** Computed boolean indicating if the form passes validation */
-  isValid: Ref<boolean>;
-  /** Merge partial changes into the form data */
-  setForm: (patch: DeepPartial<T>) => void;
-  /** Replace the entire form data with new values */
-  replace: (next: T) => void;
-  /** Reset form data back to the current baseline */
-  reset: () => void;
-  /** Update the baseline (comparison point) to new values */
-  setBaseline: (next: T) => void;
-  /** Promote current data to become the new baseline (call after save) */
-  commit: () => void;
-  /** Manually trigger form validation */
-  validate: () => ValidationResult<T>;
-  /** Validate a specific field by path (e.g., "user.email") */
-  validateField: (fieldPath: string) => string[] | null;
-  /** Clear all validation errors */
-  clearErrors: () => void;
-} {
+) {
   const { schema, validationMode = "onChange", ...formOptions } = options;
 
   // Initialize the base form

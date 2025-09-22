@@ -18,7 +18,7 @@ definePageMeta({
 useSeoMeta({ title: "Convex Chat" });
 
 // User management
-const { currentUser, getUserColor } = useUser();
+const { currentUser, getUserColor, setDisplayName } = useUser();
 
 // Initialize validated form
 const form = useFormula({
@@ -38,11 +38,6 @@ const form = useFormula({
   }),
 });
 
-// Sync display name changes with form
-watch(() => currentUser.value.displayName, (newDisplayName) => {
-  form.setForm({ displayName: newDisplayName || "" });
-});
-
 const isSending = ref(false);
 const messagesEl = ref<HTMLElement | null>(null);
 
@@ -53,10 +48,24 @@ const isClientReady = ref(false);
 // Function to handle real query results
 const realQuery = useConvexQuery(api.chat.getMessages);
 const onlineUsersQuery = useConvexQuery(api.chat.getOnlineUsers);
+const userQuery = useConvexQuery(api.chat.getUser, () => ({ userId: currentUser.value.userId }));
 const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage);
 
 // Presence tracking - initialize after user data is available
-const presenceSystem = usePresence(currentUser.value.userId, currentUser.value.displayName);
+const presenceSystem = usePresence(() => currentUser.value.userId, () => currentUser.value.displayName);
+
+// Watch for form display name changes to update the user composable
+watch(() => form.data.value.displayName, (newDisplayName) => {
+  setDisplayName(newDisplayName);
+});
+
+// Load user's display name from backend when available
+watch(() => userQuery.data.value, (userData) => {
+  if (userData && userData.displayName) {
+    setDisplayName(userData.displayName);
+    form.setForm({ displayName: userData.displayName });
+  }
+}, { immediate: true });
 
 onMounted(async () => {
   if (typeof window === 'undefined' || typeof document === 'undefined') return
@@ -65,12 +74,6 @@ onMounted(async () => {
   watch(() => realQuery?.isPending?.value, (newPending) => {
     isPending.value = newPending;
   }, { immediate: true });
-});
-
-// Watch for display name changes to update presence
-watch(() => currentUser.value.displayName, (newName) => {
-  if (!presenceSystem || !newName) return
-  presenceSystem.updateUserPresence();
 });
 
 const messages = computed(() => realQuery.data.value || []);
@@ -106,7 +109,8 @@ async function onSubmit() {
   try {
     await sendMessage({
       userId: currentUser.value.userId,
-      body: message
+      body: message,
+      displayName: validation.data.displayName
     });
 
     // Clear the message on successful send
