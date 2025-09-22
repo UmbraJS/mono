@@ -127,10 +127,10 @@ watch(messages, async () => {
         <p class="caption">Each user gets a unique ID that's stored locally on their device.</p>
       </div>
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
-        <MessageComposer :isDisabled="true" :onSubmit="onSubmit" />
+        <MessageComposer :isDisabled="true" :onSend="onSubmit" />
       </ChatMessagesLoading>
 
-      <MessageComposer v-else :isDisabled="isSending || !isClientReady" :onSubmit="onSubmit" />
+      <MessageComposer v-else :isDisabled="isSending || !isClientReady" :onSend="onSubmit" />
     </footer>
   </main>
 </template>
