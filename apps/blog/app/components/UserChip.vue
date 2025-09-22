@@ -6,10 +6,16 @@
       </div>
       <div class="MessageContent">
         <div class="MessageContentTitle">
-          <p class="MessageName caption">{{ message.user }}</p>
-          <p v-if="shortId" class="UserID caption">#{{ shortId }}</p>
+          <p class="MessageName">{{ message.user }}</p>
+          <p class="UserID caption">#{{ shortId }}</p>
         </div>
-        <p>{{ message.body }}</p>
+        <div class="UserChipMetadata">
+          <p v-if="timeSinceLastSeen < 60000" class="caption">Just now</p>
+          <p v-else-if="timeSinceLastSeen < 3600000" class="caption">{{ Math.floor(timeSinceLastSeen / 60000) }}
+            minutes
+            ago</p>
+          <p v-else class="caption">{{ Math.floor(timeSinceLastSeen / 3600000) }} hours ago</p>
+        </div>
       </div>
     </div>
   </li>
@@ -23,7 +29,6 @@ const props = defineProps<{
   color: string;
   message: {
     user: string;
-    body: string;
     lastSeen: number;
     userId: string;
   };
@@ -39,6 +44,12 @@ const shortId = computedAsync(async () => {
 </script>
 
 <style scoped>
+.UserChipMetadata {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
 .MessageName {
   color: var(--color);
 }
@@ -60,7 +71,6 @@ const shortId = computedAsync(async () => {
   justify-items: start;
   align-items: center;
 
-  max-width: 80%;
   padding: var(--space-1);
   border-radius: var(--radius);
   background: var(--base);

@@ -5,11 +5,11 @@ import { api } from "../../convex/_generated/api";
 import { Input, Button, TextArea, toast, ScrollArea } from "umbraco";
 import { z } from "zod";
 import MessageChip from "../components/MessageChip.vue";
+import UserChip from "../components/UserChip.vue";
 import MyMessageBubble from "../components/MyMessageBubble.vue";
 import { useUser } from "../composables/useUser";
 import { usePresence } from "../composables/usePresence";
 import { useFormula } from "../composables/useForm";
-import { getShortIdSync } from "../utils";
 
 definePageMeta({
   ssr: false // Disable SSR for this page to avoid hydration issues
@@ -138,10 +138,9 @@ async function onSubmit() {
 
 function onTextareaKeydown(e: KeyboardEvent) {
   // Enter to send, Shift+Enter for newline
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    onSubmit();
-  }
+  if (e.key !== "Enter" || e.shiftKey) return
+  e.preventDefault();
+  onSubmit();
 }
 
 function scrollToBottom() {
@@ -158,37 +157,30 @@ watch(messages, async () => {
 
 <template>
   <main class="ConvexChat">
-    <header>
-      <h2>Convex Chat</h2>
-      <p>Welcome to the chat! Feel free to share your thoughts.</p>
+    <header class="ConvexChatHeader">
       <p v-if="!isClientReady" style="color: orange;">⏳ Initializing client-side connection...</p>
-      <div v-if="isClientReady" class="user-info">
-        <p><strong>Your ID:</strong> <code>{{ getShortIdSync(currentUser.userId, 8) }}</code></p>
-        <p><strong>Online users:</strong> {{ onlineUsers.length }}</p>
-      </div>
-
-      <div v-if="onlineUsers.length > 0" class="online-users">
-        <MessageChip v-for="user in onlineUsers" :key="user.userId"
-          :message="{ _id: user.userId, user: user.displayName, body: 'Hello!', userId: user.userId, lastSeen: user.lastSeen }"
+      <p v-if="isClientReady"><strong>Online users:</strong> {{ onlineUsers.length }}</p>
+      <div v-if="onlineUsers.length > 0" class="OnlineUsers">
+        <UserChip v-for="user in onlineUsers" :key="user.userId"
+          :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
           :color="getUserColor(user.userId) || '#808080'" />
       </div>
     </header>
 
-    <section class="ChatMessages">
+    <section class="ChatMessagesWrapper">
       <div v-if="isPending" class="state">
-        <Icon name="eos-icons:loading" class="icon icon--spin" />
+        <Icon name="eos-icons:loading" />
       </div>
-      <div v-else-if="realQuery.error.value" class="state state--error">
+      <div v-else-if="realQuery.error.value" class="MessagesState messagesStateError">
         Error: {{ String(realQuery.error.value) }}
       </div>
       <div v-else ref="messagesEl">
         <ScrollArea>
           <div class="Messages">
             <template v-for="m in messages" :key="m._id">
-              <MyMessageBubble v-if="m.userId === currentUser.userId"
-                :message="{ _id: m._id, user: m.displayName, body: m.body }" />
+              <MyMessageBubble v-if="m.userId === currentUser.userId" :body="m.body" />
               <MessageChip v-else
-                :message="{ _id: m._id, user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
+                :message="{ user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
                 :color="getUserColor(m.userId) || '#808080'" />
             </template>
           </div>
@@ -196,22 +188,22 @@ watch(messages, async () => {
       </div>
     </section>
 
-    <footer>
+    <footer class="ConvexChatFooter">
       <div class="Info">
         <h4>Welcome to Convex Chat!</h4>
         <p class="caption">Messages are stored in Convex and visible to anyone using this app.</p>
         <p class="caption">Each user gets a unique ID that's stored locally on their device.</p>
       </div>
-      <form class="composer" @submit.prevent="onSubmit">
+      <form class="MessageComposer" @submit.prevent="onSubmit">
         <Input v-model="form.data.value.displayName" label="Your name" size="small"
           :class="{ error: form.errors.value.displayName }" />
-        <span v-if="form.errors.value.displayName" class="error-text">
+        <span v-if="form.errors.value.displayName" class="MessageErrorText">
           {{ form.errors.value.displayName[0] }}
         </span>
 
         <TextArea v-model="form.data.value.message" placeholder="Type a message"
           :class="{ error: form.errors.value.message }" @keydown="onTextareaKeydown" />
-        <span v-if="form.errors.value.message" class="error-text">
+        <span v-if="form.errors.value.message" class="MessageErrorText">
           {{ form.errors.value.message[0] }}
         </span>
 
@@ -229,81 +221,28 @@ watch(messages, async () => {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto 1fr auto;
-  height: 100vh;
   grid-template-areas:
-    "header sidebar"
-    "messages sidebar"
-    "footer sidebar";
+    "header"
+    "messages"
+    "footer";
+  height: 100vh;
   gap: var(--space-2);
   padding: var(--space-2);
   padding-bottom: 100px;
   width: 100%;
 }
 
-header {
+header.ConvexChatHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
   grid-area: header;
   background-color: var(--base-10);
   padding: var(--space-2);
   border-radius: var(--radius);
 }
 
-.user-info {
-  margin-top: var(--space-1);
-  font-size: 0.875rem;
-  opacity: 0.8;
-}
-
-.user-info code {
-  background: var(--base-20);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: monospace;
-}
-
-.online-users {
-  grid-area: sidebar;
-  background-color: var(--base-10);
-  padding: var(--space-2);
-  border-radius: var(--radius);
-  min-width: 200px;
-  max-width: 250px;
-}
-
-.online-users h3 {
-  margin: 0 0 var(--space-1) 0;
-  font-size: 1rem;
-  color: var(--base-100);
-}
-
-.user-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.user-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-half);
-  padding: var(--space-half);
-  border-radius: var(--radius-sm);
-  margin-bottom: 2px;
-}
-
-.user-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.you-indicator {
-  font-size: 0.75rem;
-  color: var(--base-60);
-  font-style: italic;
-}
-
-.ChatMessages {
+.ChatMessagesWrapper {
   grid-area: messages;
   overflow-y: auto;
   background: var(--base-10);
@@ -311,14 +250,14 @@ header {
   padding: var(--space-2);
 }
 
-footer {
+footer.ConvexChatFooter {
   grid-area: footer;
   display: grid;
   grid-template-columns: 1fr 30em;
   gap: var(--space-2);
 }
 
-footer .Info {
+footer.ConvexChatFooter .Info {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -327,13 +266,13 @@ footer .Info {
   border-radius: var(--radius);
 }
 
-.state {
+.MessagesState {
   text-align: center;
   color: var(--base-80);
   padding: var(--space-2) 0;
 }
 
-.state--error {
+.messagesStateError {
   color: var(--warning-100);
 }
 
@@ -346,40 +285,21 @@ footer .Info {
   overflow-y: auto;
 }
 
-.composer {
+.MessageComposer {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
 }
 
-.error-text {
+.MessageErrorText {
   color: var(--warning-100);
   font-size: 0.875rem;
   margin-top: -0.5rem;
   margin-bottom: var(--space-half);
 }
 
-.error {
-  border-color: var(--warning-60) !important;
-}
-
-/* Responsive layout */
-@media (max-width: 1024px) {
-  .ConvexChat {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "header"
-      "sidebar"
-      "messages"
-      "footer";
-  }
-
-  footer {
-    grid-template-columns: 1fr;
-  }
-
-  .online-users {
-    max-width: none;
-  }
+.OnlineUsers {
+  display: flex;
+  gap: var(--space-1);
 }
 </style>

@@ -1,16 +1,12 @@
 <template>
   <li class="my-message">
-    <div class="my-message__bubble">{{ message.body }}</div>
+    <div class="my-message__bubble">{{ body }}</div>
   </li>
 </template>
 
 <script setup lang="ts">
 interface Props {
-  message: {
-    _id: string;
-    user: string;
-    body: string;
-  };
+  body: string;
 }
 
 defineProps<Props>();
