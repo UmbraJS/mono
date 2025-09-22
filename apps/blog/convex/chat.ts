@@ -85,6 +85,7 @@ export const updateUserPresence = mutation({
         lastSeen: now,
       });
     } else {
+      console.log("REX: Creating new user record for", args.userId);
       await ctx.db.insert("users", {
         userId: args.userId,
         displayName: "Anonymous",
@@ -171,7 +172,7 @@ export const cleanupStaleUsers = mutation({
       deletedCount++;
     }
 
-    console.log(`Cleaned up ${deletedCount} very old user records`);
+    console.log(`REX Cleaned up ${deletedCount} very old user records`);
     return { deletedCount };
   },
 });

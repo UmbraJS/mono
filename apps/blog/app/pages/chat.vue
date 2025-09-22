@@ -2,7 +2,7 @@
 import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
-import { Input, Button, TextArea, toast } from "umbraco";
+import { Input, Button, TextArea, toast, ScrollArea } from "umbraco";
 import { z } from "zod";
 import MessageChip from "../components/MessageChip.vue";
 import MyMessageBubble from "../components/MyMessageBubble.vue";
@@ -70,11 +70,11 @@ onMounted(async () => {
 
 // Load user's display name from backend when available
 watch(() => userQuery.data.value, (userData) => {
-  if (userData && userData.displayName && form.data.value.displayName === "") {
+  if (userData?.displayName) {
     // Only set initial value if form is empty
     setDisplayName(userData.displayName);
     form.setForm({ displayName: userData.displayName });
-  } else if (!userData && form.data.value.displayName === "") {
+  } else {
     // Set default if no backend data and form is empty
     setDisplayName("Anonymous");
     form.setForm({ displayName: "Anonymous" });
@@ -166,16 +166,13 @@ watch(messages, async () => {
         <p><strong>Your ID:</strong> <code>{{ getShortIdSync(currentUser.userId, 8) }}</code></p>
         <p><strong>Online users:</strong> {{ onlineUsers.length }}</p>
       </div>
-    </header>
 
-    <aside v-if="onlineUsers.length > 0" class="online-users">
-      <h3>Online Now ({{ onlineUsers.length }})</h3>
-      <div class="user-list">
+      <div v-if="onlineUsers.length > 0" class="online-users">
         <MessageChip v-for="user in onlineUsers" :key="user.userId"
           :message="{ _id: user.userId, user: user.displayName, body: 'Hello!', userId: user.userId, lastSeen: user.lastSeen }"
           :color="getUserColor(user.userId) || '#808080'" />
       </div>
-    </aside>
+    </header>
 
     <section class="ChatMessages">
       <div v-if="isPending" class="state">
@@ -184,14 +181,18 @@ watch(messages, async () => {
       <div v-else-if="realQuery.error.value" class="state state--error">
         Error: {{ String(realQuery.error.value) }}
       </div>
-      <div v-else ref="messagesEl" class="messages">
-        <template v-for="m in messages" :key="m._id">
-          <MyMessageBubble v-if="m.userId === currentUser.userId"
-            :message="{ _id: m._id, user: m.displayName, body: m.body }" />
-          <MessageChip v-else
-            :message="{ _id: m._id, user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
-            :color="getUserColor(m.userId) || '#808080'" />
-        </template>
+      <div v-else ref="messagesEl">
+        <ScrollArea>
+          <div class="Messages">
+            <template v-for="m in messages" :key="m._id">
+              <MyMessageBubble v-if="m.userId === currentUser.userId"
+                :message="{ _id: m._id, user: m.displayName, body: m.body }" />
+              <MessageChip v-else
+                :message="{ _id: m._id, user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
+                :color="getUserColor(m.userId) || '#808080'" />
+            </template>
+          </div>
+        </ScrollArea>
       </div>
     </section>
 
@@ -228,6 +229,7 @@ watch(messages, async () => {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto 1fr auto;
+  height: 100vh;
   grid-template-areas:
     "header sidebar"
     "messages sidebar"
@@ -335,7 +337,7 @@ footer .Info {
   color: var(--warning-100);
 }
 
-.messages {
+.Messages {
   list-style: none;
   margin: 0;
   padding: 0px;

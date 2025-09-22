@@ -6,11 +6,15 @@ import {
   ScrollAreaViewport,
   // ScrollAreaCorner,
 } from 'reka-ui'
+
+defineOptions({
+  inheritAttrs: false,
+})
 </script>
 
 <template>
   <ScrollAreaRoot class="ScrollAreaRoot" type="auto">
-    <ScrollAreaViewport class="ScrollAreaViewport">
+    <ScrollAreaViewport class="ScrollAreaViewport" v-bind="$attrs">
       <slot />
     </ScrollAreaViewport>
     <!-- <ScrollAreaScrollbar class="ScrollAreaScrollbar" orientation="horizontal">
