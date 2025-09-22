@@ -8,7 +8,7 @@ export const sendMessage = mutation({
     displayName: v.string(),
   },
   handler: async (ctx, args) => {
-    console.log("sendMessage called");
+    console.log("REX: sendMessage called");
 
     // Update or create user with the current display name
     const existingUser = await ctx.db
@@ -56,6 +56,7 @@ export const getMessages = query({
 
         return {
           ...message,
+          lastSeen: user?.lastSeen || 0,
           displayName: user?.displayName || "Anonymous",
         };
       })
@@ -68,7 +69,6 @@ export const getMessages = query({
 export const updateUserPresence = mutation({
   args: {
     userId: v.string(),
-    displayName: v.string(),
   },
   handler: async (ctx, args) => {
     const existingUser = await ctx.db
@@ -76,17 +76,18 @@ export const updateUserPresence = mutation({
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .first();
 
+    console.log("REX: updateUserPresence called for", args.userId);
+
     const now = Date.now();
 
     if (existingUser) {
       await ctx.db.patch(existingUser._id, {
-        displayName: args.displayName,
         lastSeen: now,
       });
     } else {
       await ctx.db.insert("users", {
         userId: args.userId,
-        displayName: args.displayName,
+        displayName: "Anonymous",
         lastSeen: now,
       });
     }
@@ -98,6 +99,8 @@ export const setUserOffline = mutation({
     userId: v.string(),
   },
   handler: async (ctx, args) => {
+    console.log("REX: setUserOffline called for", args.userId);
+
     const user = await ctx.db
       .query("users")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))

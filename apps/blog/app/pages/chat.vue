@@ -20,10 +20,10 @@ useSeoMeta({ title: "Convex Chat" });
 // User management
 const { currentUser, getUserColor, setDisplayName } = useUser();
 
-// Initialize validated form
+// Initialize validated form with empty display name initially
 const form = useFormula({
   message: "",
-  displayName: currentUser.value.displayName
+  displayName: ""
 }, {
   validationMode: "onSubmit", // Only validate when submitting
   schema: z.object({
@@ -51,30 +51,37 @@ const onlineUsersQuery = useConvexQuery(api.chat.getOnlineUsers);
 const userQuery = useConvexQuery(api.chat.getUser, () => ({ userId: currentUser.value.userId }));
 const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage);
 
-// Presence tracking - initialize after user data is available
-const presenceSystem = usePresence(() => currentUser.value.userId, () => currentUser.value.displayName);
-
 // Watch for form display name changes to update the user composable
 watch(() => form.data.value.displayName, (newDisplayName) => {
+  if (!newDisplayName) return
   setDisplayName(newDisplayName);
 });
 
-// Load user's display name from backend when available
-watch(() => userQuery.data.value, (userData) => {
-  if (userData && userData.displayName) {
-    setDisplayName(userData.displayName);
-    form.setForm({ displayName: userData.displayName });
-  }
-}, { immediate: true });
-
+// Initialize display name from backend or default
 onMounted(async () => {
   if (typeof window === 'undefined' || typeof document === 'undefined') return
   isClientReady.value = true;
-  // Initialize presence system once we have user data
+
+  // Set up pending watcher
   watch(() => realQuery?.isPending?.value, (newPending) => {
     isPending.value = newPending;
   }, { immediate: true });
 });
+
+// Load user's display name from backend when available
+watch(() => userQuery.data.value, (userData) => {
+  if (userData && userData.displayName && form.data.value.displayName === "") {
+    // Only set initial value if form is empty
+    setDisplayName(userData.displayName);
+    form.setForm({ displayName: userData.displayName });
+  } else if (!userData && form.data.value.displayName === "") {
+    // Set default if no backend data and form is empty
+    setDisplayName("Anonymous");
+    form.setForm({ displayName: "Anonymous" });
+  }
+}, { immediate: true });
+
+usePresence(currentUser);
 
 const messages = computed(() => realQuery.data.value || []);
 const onlineUsers = computed(() => onlineUsersQuery.data.value || []);
@@ -165,7 +172,7 @@ watch(messages, async () => {
       <h3>Online Now ({{ onlineUsers.length }})</h3>
       <div class="user-list">
         <MessageChip v-for="user in onlineUsers" :key="user.userId"
-          :message="{ _id: user.userId, user: user.displayName, body: 'Hello!' }"
+          :message="{ _id: user.userId, user: user.displayName, body: 'Hello!', userId: user.userId, lastSeen: user.lastSeen }"
           :color="getUserColor(user.userId) || '#808080'" />
       </div>
     </aside>
@@ -181,7 +188,8 @@ watch(messages, async () => {
         <template v-for="m in messages" :key="m._id">
           <MyMessageBubble v-if="m.userId === currentUser.userId"
             :message="{ _id: m._id, user: m.displayName, body: m.body }" />
-          <MessageChip v-else :message="{ _id: m._id, user: m.displayName, body: m.body }"
+          <MessageChip v-else
+            :message="{ _id: m._id, user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
             :color="getUserColor(m.userId) || '#808080'" />
         </template>
       </div>

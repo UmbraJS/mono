@@ -7,6 +7,10 @@
       <div class="MessageContent">
         <div class="MessageContentTitle">
           <p class="MessageName caption">{{ message.user }}</p>
+          <p v-if="timeSinceLastSeen < 60000" class="caption">Just now</p>
+          <p v-else-if="timeSinceLastSeen < 3600000" class="caption">{{ Math.floor(timeSinceLastSeen / 60000) }} minutes
+            ago</p>
+          <p v-else class="caption">{{ Math.floor(timeSinceLastSeen / 3600000) }} hours ago</p>
           <p v-if="shortId" class="UserID caption">#{{ shortId }}</p>
         </div>
         <p>{{ message.body }}</p>
@@ -25,11 +29,17 @@ const props = defineProps<{
     _id: string;
     user: string;
     body: string;
+    lastSeen: number;
+    userId: string;
   };
 }>();
 
+const timeSinceLastSeen = computed(() => {
+  return Date.now() - props.message.lastSeen;
+});
+
 const shortId = computedAsync(async () => {
-  return getShortId(props.message._id, 8);
+  return getShortId(props.message.userId, 8);
 }, null);
 </script>
 

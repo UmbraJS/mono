@@ -1,8 +1,9 @@
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
+import type { UseUser } from "./useUser";
 
-export const usePresence = (userIdRef: () => string, displayNameRef: () => string) => {
+export const usePresence = (currentUser: UseUser["currentUser"]) => {
   const isVisible = ref(true);
   const heartbeatInterval = ref<NodeJS.Timeout | null>(null);
 
@@ -10,14 +11,11 @@ export const usePresence = (userIdRef: () => string, displayNameRef: () => strin
   const { mutate: setOffline } = useConvexMutation(api.chat.setUserOffline);
   const { mutate: cleanup } = useConvexMutation(api.chat.cleanupStaleUsers);
 
-  const userId = computed(() => userIdRef());
-  const displayName = computed(() => displayNameRef());
-
   const updateUserPresence = async () => {
     try {
+      console.log("Rex er: ", currentUser.value.displayName);
       await updatePresence({
-        userId: userId.value,
-        displayName: displayName.value || "Anonymous"
+        userId: currentUser.value.userId,
       });
     } catch (error) {
       console.error("Failed to update presence:", error);
@@ -26,7 +24,7 @@ export const usePresence = (userIdRef: () => string, displayNameRef: () => strin
 
   const setUserOffline = async () => {
     try {
-      await setOffline({ userId: userId.value });
+      await setOffline({ userId: currentUser.value.userId });
     } catch (error) {
       console.error("Failed to set user offline:", error);
     }
@@ -82,8 +80,10 @@ export const usePresence = (userIdRef: () => string, displayNameRef: () => strin
     // Set up beforeunload listener to mark user as offline
     window.addEventListener('beforeunload', setUserOffline);
 
-    // Start heartbeat system
-    startHeartbeat();
+    // Delay starting heartbeat to allow user data to load first (avoid overwriting with "Anonymous")
+    setTimeout(() => {
+      startHeartbeat();
+    }, 1000); // 1 second delay
 
     // Cleanup very old users on mount
     cleanupStaleUsers();

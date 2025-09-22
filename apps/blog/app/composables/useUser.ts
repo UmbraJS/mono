@@ -66,3 +66,5 @@ export const useUser = () => {
     setDisplayName
   };
 };
+
+export type UseUser = ReturnType<typeof useUser>;
