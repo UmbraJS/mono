@@ -20,7 +20,6 @@ useSeoMeta({ title: "Convex Chat" });
 // User management
 const { currentUser, getUserColor } = useUser();
 
-const isSending = ref(false);
 const messagesEl = ref<HTMLElement | null>(null);
 
 // Create reactive values that will be populated after mounting
@@ -30,7 +29,7 @@ const isClientReady = ref(false);
 // Function to handle real query results
 const realQuery = useConvexQuery(api.chat.getMessages);
 const onlineUsersQuery = useConvexQuery(api.chat.getOnlineUsers);
-const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage);
+const { mutate: sendMessage, isPending: isSending } = useConvexMutation(api.chat.sendMessage);
 
 // Initialize display name from backend or default
 onMounted(async () => {
@@ -47,8 +46,6 @@ const messages = computed(() => realQuery.data.value || []);
 const onlineUsers = computed(() => onlineUsersQuery.data.value || []);
 
 async function onSubmit({ message, displayName, form }: ChatMessage) {
-  isSending.value = true;
-
   try {
     await sendMessage({
       userId: currentUser.value.userId,
@@ -56,10 +53,7 @@ async function onSubmit({ message, displayName, form }: ChatMessage) {
       displayName: displayName
     });
 
-    // Clear the message on successful send
     form.setForm({ message: "" });
-
-    // Show success feedback
     toast.success("Message sent!");
 
     await nextTick();
@@ -67,8 +61,6 @@ async function onSubmit({ message, displayName, form }: ChatMessage) {
   } catch (error) {
     console.error("Failed to send message:", error);
     toast.error("Failed to send message. Please try again.");
-  } finally {
-    isSending.value = false;
   }
 }
 
@@ -129,7 +121,6 @@ watch(messages, async () => {
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
         <MessageComposer :isDisabled="true" :onSend="onSubmit" />
       </ChatMessagesLoading>
-
       <MessageComposer v-else :isDisabled="isSending || !isClientReady" :onSend="onSubmit" />
     </footer>
   </main>

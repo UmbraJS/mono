@@ -11,7 +11,8 @@ import {
   Tabs,
   Graph,
   Drawer,
-  Input
+  Input,
+  Tooltip
 } from "umbraco";
 import { DyePicker } from "@umbrajs/dye";
 import "@umbrajs/dye/dist/dye.css";
@@ -64,7 +65,12 @@ const options = [
     </section>
 
     <section id="radio" class="column">
-      <h2>Slider</h2>
+      <h2>Tooltip</h2>
+      <Tooltip />
+    </section>
+
+    <section id="radio" class="column">
+      <h2>Input</h2>
       <Input label="name" />
     </section>
 

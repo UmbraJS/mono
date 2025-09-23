@@ -26,7 +26,7 @@ const color = computed(() => {
   <DialogPortal>
     <DialogOverlay class="DialogOverlay" />
     <DialogContent class="DialogContent border" :class="color">
-      <DialogClose class="IconButton" aria-label="Close">
+      <DialogClose class="DialogIconButton" aria-label="Close">
         <Button size="medium">
           <Icon icon="pixelarticons:close" />
         </Button>
@@ -68,7 +68,7 @@ const color = computed(() => {
   z-index: 2001;
 }
 
-.DialogContent:has(> .IconButton:hover) {
+.DialogContent:has(> .DialogIconButton:hover) {
   background-color: var(--base-30);
   border-color: var(--base-120);
 }
@@ -77,18 +77,18 @@ const color = computed(() => {
   outline: none;
 }
 
-.IconButton {
+.DialogIconButton {
   position: absolute;
   top: var(--space-quark);
   right: var(--space-quark);
   border-radius: var(--inner-radius);
 }
 
-.IconButton:hover {
+.DialogIconButton:hover {
   background-color: var(--grass-4);
 }
 
-.IconButton:focus {
+.DialogIconButton:focus {
   box-shadow: 0 0 0 2px var(--grass-7);
 }
 
@@ -96,6 +96,7 @@ const color = computed(() => {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -105,6 +106,7 @@ const color = computed(() => {
   from {
     backdrop-filter: blur(0);
   }
+
   to {
     backdrop-filter: blur(40px);
   }
