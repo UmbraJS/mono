@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { toRef, ref } from 'vue'
-import { useButtonSize } from "../../composables/useButtonSize";
-import type { ButtonSize } from '../../types/button'
+import { useButtonSize } from "../../../composables/useButtonSize";
+import type { ButtonSize } from '../../../types/button'
 
 defineOptions({
   inheritAttrs: false,

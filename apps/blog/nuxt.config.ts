@@ -39,7 +39,9 @@ export default defineNuxtConfig({
   // Use Umbraco source during dev for instant HMR across the monorepo
   alias: isDev
     ? {
-      umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
+      umbraco: fileURLToPath(new URL('../../packages/umbraco/index.ts', import.meta.url)),
+      'umbraco/styles': fileURLToPath(new URL('../../packages/umbraco/styles', import.meta.url)),
+      'umbraco/dist': fileURLToPath(new URL('../../packages/umbraco/dist', import.meta.url)),
       convue: fileURLToPath(new URL('../../packages/convue/src', import.meta.url)),
     }
     : {},
@@ -79,6 +81,16 @@ export default defineNuxtConfig({
     define: { global: 'globalThis' },
     resolve: {
       dedupe: ['vue'],
+      alias: isDev ? [
+        {
+          find: /^umbraco\/(.*)$/,
+          replacement: fileURLToPath(new URL('../../packages/umbraco/$1', import.meta.url))
+        },
+        {
+          find: 'umbraco',
+          replacement: fileURLToPath(new URL('../../packages/umbraco/index.ts', import.meta.url))
+        }
+      ] : [],
     },
     server: {
       fs: { allow: ['..'] },

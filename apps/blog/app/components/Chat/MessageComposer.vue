@@ -96,17 +96,11 @@ async function onSubmit() {
 
 <template>
   <form class="MessageComposer" @submit.prevent="onSubmit">
-    <Input v-model="form.data.value.displayName" label="Your name" size="small"
-      :class="{ error: form.errors.value.displayName }" />
-    <span v-if="form.errors.value.displayName" class="MessageErrorText">
-      {{ form.errors.value.displayName[0] }}
-    </span>
+    <Input v-model="form.data.value.displayName" label="Your name" :class="{ error: form.errors.value.displayName }"
+      :error="form.errors.value.displayName ? form.errors.value.displayName[0] : ''" />
 
     <TextArea v-model="form.data.value.message" placeholder="Type a message"
       :class="{ error: form.errors.value.message }" @keydown="onTextareaKeydown" />
-    <span v-if="form.errors.value.message" class="MessageErrorText">
-      {{ form.errors.value.message[0] }}
-    </span>
 
     <Button type="submit" color="base" :isDisabled="props.isDisabled">
       <Icon name="carbon:send" class="icon" />
