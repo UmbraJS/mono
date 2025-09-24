@@ -1,13 +1,30 @@
 <script setup lang="ts">
-import { onUnmounted } from 'vue'
+import { onUnmounted, watch } from 'vue'
 import EmojiBubble from './EmojiBubble.vue'
 
-const emojis = ["😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊"]
+interface EmojiEvent {
+  _id: string;
+  userId: string;
+  emoji: string;
+  timestamp: number;
+}
+
+interface Props {
+  emojiEvents?: EmojiEvent[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  emojiEvents: () => []
+})
+
 const addedEmojis = ref<{
   id: string;
   emoji: string;
   left: string;
 }[]>([])
+
+// Track processed events to avoid duplicates
+const processedEvents = ref<Set<string>>(new Set())
 
 function removeEmojiById(id: string) {
   const index = addedEmojis.value.findIndex(e => e.id === id);
@@ -20,16 +37,43 @@ function randomLeft() {
   return Math.random() * 100 + "vw"
 }
 
-onMounted(() => {
-  const interval = setInterval(() => {
-    const emoji = emojis[Math.floor(Math.random() * emojis.length)] ?? "😀"
-    addedEmojis.value.push({ id: crypto.randomUUID(), emoji, left: randomLeft() })
-    if (addedEmojis.value.length > 20) {
-      addedEmojis.value.shift()
+function addEmojiFromEvent(emoji: string) {
+  addedEmojis.value.push({
+    id: crypto.randomUUID(),
+    emoji,
+    left: randomLeft()
+  })
+  if (addedEmojis.value.length > 20) {
+    addedEmojis.value.shift()
+  }
+}
+
+// Watch for new emoji events from Convex
+watch(() => props.emojiEvents, (newEvents) => {
+  if (!newEvents) return;
+
+  newEvents.forEach(event => {
+    if (!processedEvents.value.has(event._id)) {
+      processedEvents.value.add(event._id)
+      addEmojiFromEvent(event.emoji)
     }
-  }, 5000)
-  onUnmounted(() => clearInterval(interval))
-});
+  })
+
+  // Clean up old processed events to prevent memory leaks
+  if (processedEvents.value.size > 100) {
+    const eventsArray = Array.from(processedEvents.value)
+    const toKeep = eventsArray.slice(-50) // Keep last 50
+    processedEvents.value = new Set(toKeep)
+  }
+}, { deep: true })
+
+// onMounted(() => {
+//   const interval = setInterval(() => {
+//     const emoji = emojis[Math.floor(Math.random() * emojis.length)] ?? "😀"
+//     addEmojiFromEvent(emoji)
+//   }, 5000)
+//   onUnmounted(() => clearInterval(interval))
+// });
 </script>
 
 

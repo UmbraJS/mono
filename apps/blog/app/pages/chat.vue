@@ -30,7 +30,9 @@ const isClientReady = ref(false);
 // Function to handle real query results
 const realQuery = useConvexQuery(api.chat.getMessages);
 const onlineUsersQuery = useConvexQuery(api.chat.getOnlineUsers);
+const emojiEventsQuery = useConvexQuery(api.chat.getRecentEmojiEvents);
 const { mutate: sendMessage, isPending: isSending } = useConvexMutation(api.chat.sendMessage);
+const { mutate: sendEmoji } = useConvexMutation(api.chat.sendEmoji);
 
 // Initialize display name from backend or default
 onMounted(async () => {
@@ -45,6 +47,7 @@ onMounted(async () => {
 
 const messages = computed(() => realQuery.data.value || []);
 const onlineUsers = computed(() => onlineUsersQuery.data.value || []);
+const emojiEvents = computed(() => emojiEventsQuery.data.value || []);
 
 async function onSubmit({ message, displayName, form }: ChatMessage) {
   try {
@@ -71,6 +74,19 @@ function scrollToBottom() {
   el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
 }
 
+async function onEmojiClick(emoji: string) {
+  try {
+    await sendEmoji({
+      userId: currentUser.value.userId,
+      emoji: emoji,
+    });
+    toast.success(`${emoji} sent to everyone!`);
+  } catch (error) {
+    console.error("Failed to send emoji:", error);
+    toast.error("Failed to send emoji. Please try again.");
+  }
+}
+
 watch(messages, async () => {
   await nextTick();
   scrollToBottom();
@@ -94,7 +110,7 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
           :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
           :color="getUserColor(user.userId) || '#808080'" />
       </div>
-      <EmojiBubbles />
+      <EmojiBubbles :emojiEvents="emojiEvents" />
     </header>
 
     <section class="ChatMessagesWrapper">
@@ -120,7 +136,7 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
       <div class="LiveEmoji">
         <div class="Emojis">
           <button v-for="emoji in emojis" :key="emoji" class="button buttonHover buttonActive buttonFocus focus"
-            @click="toast.info(emoji)">
+            @click="onEmojiClick(emoji)">
             <span style="font-size: 2rem;">{{ emoji }}</span>
           </button>
         </div>

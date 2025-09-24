@@ -15,4 +15,9 @@ export default defineSchema({
     userId: v.string(),
     body: v.string(),
   }).index("by_userId", ["userId"]),
+  emojiEvents: defineTable({
+    userId: v.string(),
+    emoji: v.string(),
+    timestamp: v.number(),
+  }).index("by_timestamp", ["timestamp"]),
 });

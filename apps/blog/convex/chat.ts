@@ -176,3 +176,57 @@ export const cleanupStaleUsers = mutation({
     return { deletedCount };
   },
 });
+
+export const sendEmoji = mutation({
+  args: {
+    userId: v.string(),
+    emoji: v.string(),
+  },
+  handler: async (ctx, args) => {
+    console.log("REX: sendEmoji called", args.emoji);
+
+    // Insert the emoji event
+    await ctx.db.insert("emojiEvents", {
+      userId: args.userId,
+      emoji: args.emoji,
+      timestamp: Date.now(),
+    });
+  },
+});
+
+export const getRecentEmojiEvents = query({
+  args: {},
+  handler: async (ctx) => {
+    // Get emoji events from the last 10 seconds to catch real-time events
+    const tenSecondsAgo = Date.now() - 10 * 1000;
+
+    const emojiEvents = await ctx.db
+      .query("emojiEvents")
+      .withIndex("by_timestamp", (q) => q.gt("timestamp", tenSecondsAgo))
+      .collect();
+
+    return emojiEvents;
+  },
+});
+
+export const cleanupOldEmojiEvents = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // Clean up emoji events older than 1 minute to prevent database bloat
+    const oneMinuteAgo = Date.now() - 60 * 1000;
+
+    const oldEvents = await ctx.db
+      .query("emojiEvents")
+      .withIndex("by_timestamp", (q) => q.lt("timestamp", oneMinuteAgo))
+      .collect();
+
+    let deletedCount = 0;
+    for (const event of oldEvents) {
+      await ctx.db.delete(event._id);
+      deletedCount++;
+    }
+
+    console.log(`REX Cleaned up ${deletedCount} old emoji events`);
+    return { deletedCount };
+  },
+});
