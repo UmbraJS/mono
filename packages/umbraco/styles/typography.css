@@ -105,6 +105,8 @@ p,
 button,
 input,
 input::placeholder,
+textarea,
+textarea::placeholder,
 .bodycopy,
 blockquote,
 pre {

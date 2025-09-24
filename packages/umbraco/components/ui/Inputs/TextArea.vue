@@ -2,15 +2,18 @@
 import { toRef, ref } from 'vue'
 import { useButtonSize } from "../../../composables/useButtonSize";
 import type { ButtonSize } from '../../../types/button'
+import InputLabel from './InputLabel.vue'
+import InputErrorIcon from './InputErrorIcon.vue'
+import InputWrapper from './InputWrapper.vue';
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const { size } = defineProps<{
+const { size, error } = defineProps<{
   size?: ButtonSize
-  label?: string
-  placeholder?: string
+  error?: string
+  placeholder: string
 }>()
 
 const model = defineModel<string>()
@@ -18,6 +21,7 @@ const model = defineModel<string>()
 const sizeClass = useButtonSize(toRef(() => size));
 
 const scrollHeight = ref(0);
+const focused = ref(false)
 
 function adjustHeight(area: EventTarget | null) {
   if (!area) return;
@@ -26,23 +30,20 @@ function adjustHeight(area: EventTarget | null) {
 </script>
 
 <template>
-  <div class="TextArea">
-    <label :for="label" class="caption" v-if="label">
-      {{ label }}
-    </label>
-    <textarea v-bind="$attrs" v-model="model" :id="label" class="button buttonHover buttonActive buttonFocus focus"
-      :class="sizeClass" :placeholder="placeholder || label" @input="(e) => adjustHeight(e.target)"
+  <InputWrapper :error="error">
+    <InputLabel :for="placeholder" :label="placeholder" :error="error" class="button"
+      :class="!focused ? 'bodycopy' : 'move'" />
+    <textarea v-bind="$attrs" v-model="model" :id="placeholder"
+      :class="`InputElement button buttonHover buttonActive buttonFocus focus ${sizeClass}`" :placeholder="placeholder"
+      @input="(e) => adjustHeight(e.target)" @focus="() => (focused = true)" @blur="() => (focused = false)"
       :style="{ height: scrollHeight + 'px' }" />
-  </div>
+    <!-- <InputErrorIcon :error="error" /> -->
+  </InputWrapper>
 </template>
 
 <style>
-textarea {
-  all: unset;
-
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
+.InputWrapper textarea.InputElement {
+  padding-top: var(--space-quark);
 
   resize: none;
   white-space: pre-wrap;

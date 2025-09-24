@@ -13,16 +13,6 @@ defineProps<{
 </template>
 
 <style>
-.ErrorNote {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--base-20);
-  height: var(--block);
-  padding: 0 var(--space-1);
-  border-radius: var(--radius);
-}
-
 label.InputLabel {
   display: flex;
   align-items: center;
@@ -36,5 +26,25 @@ label.InputLabel {
   padding: 0 var(--space-quark);
   pointer-events: none;
   transition: color 0.3s, background-color 0.3s, transform 0.3s, opacity 0.3s;
+}
+
+div.InputWrapper:has(.InputElement:not(:placeholder-shown)):not(:focus-within) label {
+  transform: translateY(0%);
+  opacity: 0;
+}
+
+.InputWrapper label.move {
+  transform: translateY(-100%);
+  height: 100%;
+}
+
+.ErrorNote {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--base-20);
+  height: var(--block);
+  padding: 0 var(--space-1);
+  border-radius: var(--radius);
 }
 </style>

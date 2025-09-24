@@ -100,7 +100,8 @@ async function onSubmit() {
       :error="form.errors.value.displayName ? form.errors.value.displayName[0] : ''" />
 
     <TextArea v-model="form.data.value.message" placeholder="Type a message"
-      :class="{ error: form.errors.value.message }" @keydown="onTextareaKeydown" />
+      :class="{ error: form.errors.value.message }"
+      :error="form.errors.value.message ? form.errors.value.message[0] : ''" @keydown="onTextareaKeydown" />
 
     <Button type="submit" color="base" :isDisabled="props.isDisabled">
       <Icon name="carbon:send" class="icon" />
