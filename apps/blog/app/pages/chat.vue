@@ -10,6 +10,7 @@ import { useUser } from "../composables/useUser";
 import ChatMessagesLoading from "../components/Chat/ChatMessagesLoading.vue";
 import MessageComposer from "../components/Chat/MessageComposer.vue";
 import type { ChatMessage } from "../components/Chat/chat.types"
+import EmojiBubbles from "../components/EmojiBubbles/EmojiBubbles.vue";
 
 definePageMeta({
   ssr: false // Disable SSR for this page to avoid hydration issues
@@ -93,6 +94,7 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
           :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
           :color="getUserColor(user.userId) || '#808080'" />
       </div>
+      <EmojiBubbles />
     </header>
 
     <section class="ChatMessagesWrapper">
@@ -119,7 +121,7 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
         <div class="Emojis">
           <button v-for="emoji in emojis" :key="emoji" class="button buttonHover buttonActive buttonFocus focus"
             @click="toast.info(emoji)">
-            <span style="font-size: 1.5rem;">{{ emoji }}</span>
+            <span style="font-size: 2rem;">{{ emoji }}</span>
           </button>
         </div>
       </div>
