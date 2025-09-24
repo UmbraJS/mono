@@ -71,7 +71,12 @@ async function onSubmit({ message, displayName, form }: ChatMessage) {
 function scrollToBottom() {
   const el = messagesEl.value;
   if (!el) return;
-  el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+
+  // Find the ScrollArea component's scrollable element
+  const scrollArea = el.querySelector('[data-radix-scroll-area-viewport]') || el.querySelector('.scroll-area-viewport') || el;
+  if (scrollArea) {
+    scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: "smooth" });
+  }
 }
 
 async function onEmojiClick(emoji: string) {
@@ -195,6 +200,12 @@ footer.ConvexChatFooter {
   display: grid;
   grid-template-columns: 1fr 30em;
   gap: var(--space-1);
+}
+
+@media (max-width: 768px) {
+  footer.ConvexChatFooter {
+    grid-template-columns: 1fr;
+  }
 }
 
 .MessagesState {
