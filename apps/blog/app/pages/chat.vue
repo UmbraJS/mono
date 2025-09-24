@@ -97,14 +97,14 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
 
 <template>
   <main class="ConvexChat">
-    <header class="ConvexChatHeader">
+    <header class="ConvexChatHeader border">
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
-        <p class="caption">Online users: {{ onlineUsers.length }}</p>
+        <p class="caption">Recent Online users: {{ onlineUsers.length }}</p>
         <div class="OnlineUsers">
           <UserChip :message="{ user: 'spacer', userId: 'someid', lastSeen: 1234 }" :color="'#808080'" />
         </div>
       </ChatMessagesLoading>
-      <p v-else class="caption">Online users: {{ onlineUsers.length }}</p>
+      <p v-else class="caption">Recent Online users: {{ onlineUsers.length }}</p>
       <div v-if="onlineUsers.length > 0" class="OnlineUsers">
         <UserChip v-for="user in onlineUsers" :key="user.userId"
           :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
@@ -113,7 +113,7 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
       <EmojiBubbles :emojiEvents="emojiEvents" />
     </header>
 
-    <section class="ChatMessagesWrapper">
+    <section class="ChatMessagesWrapper border">
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady" />
       <div v-else-if="realQuery.error.value" class="MessagesState messagesStateError">
         Error: {{ String(realQuery.error.value) }}
@@ -134,19 +134,12 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
 
     <footer class="ConvexChatFooter">
       <div class="LiveEmoji">
-        <div class="Emojis">
-          <button v-for="emoji in emojis" :key="emoji" class="button buttonHover buttonActive buttonFocus focus"
-            @click="onEmojiClick(emoji)">
-            <span style="font-size: 2rem;">{{ emoji }}</span>
-          </button>
-        </div>
+        <button v-for="emoji in emojis" :key="emoji" class="button buttonHover buttonActive buttonFocus focus"
+          @click="onEmojiClick(emoji)">
+          <span style="font-size: 2rem;">{{ emoji }}</span>
+        </button>
       </div>
 
-      <!-- <div class="Info">
-        <h4>Welcome to Convex Chat!</h4>
-        <p class="caption">Messages are stored in Convex and visible to anyone using this app.</p>
-        <p class="caption">Each user gets a unique ID that's stored locally on their device.</p>
-      </div> -->
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
         <MessageComposer :isDisabled="true" :onSend="onSubmit" />
       </ChatMessagesLoading>
@@ -201,16 +194,7 @@ footer.ConvexChatFooter {
   grid-area: footer;
   display: grid;
   grid-template-columns: 1fr 30em;
-  gap: var(--space-2);
-}
-
-footer.ConvexChatFooter .LiveEmoji {
-  display: flex;
-  flex-direction: column;
   gap: var(--space-1);
-  background-color: var(--base-10);
-  padding: var(--space-2);
-  border-radius: var(--radius);
 }
 
 .MessagesState {
@@ -242,14 +226,14 @@ footer.ConvexChatFooter .LiveEmoji {
   gap: var(--space-1);
 }
 
-.LiveEmoji .Emojis {
+.LiveEmoji {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
   gap: var(--space-1);
   height: 100%;
 }
 
-.LiveEmoji .Emojis button.button {
+.LiveEmoji button.button {
   height: auto;
   width: auto;
 }
