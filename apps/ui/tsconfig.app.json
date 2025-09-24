@@ -7,6 +7,12 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "umbraco": [
+        "../../packages/umbraco/index.ts"
+      ],
+      "umbraco/*": [
+        "../../packages/umbraco/*"
       ]
     },
     "allowJs": true,

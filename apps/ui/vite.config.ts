@@ -9,11 +9,24 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 export default defineConfig({
   plugins: [vue(), dts(), vueDevTools()],
   resolve: {
-    alias: {
-      umbraco: fileURLToPath(new URL('../../packages/umbraco', import.meta.url)),
-      '@umbrajs/dye': fileURLToPath(new URL('../../packages/dye', import.meta.url)),
-    },
+    alias: [
+      {
+        find: /^umbraco\/(.*)$/,
+        replacement: fileURLToPath(new URL('../../packages/umbraco/$1', import.meta.url))
+      },
+      {
+        find: 'umbraco',
+        replacement: fileURLToPath(new URL('../../packages/umbraco/index.ts', import.meta.url))
+      },
+      {
+        find: '@umbrajs/dye',
+        replacement: fileURLToPath(new URL('../../packages/dye', import.meta.url))
+      }
+    ],
     dedupe: ['vue'],
+  },
+  optimizeDeps: {
+    exclude: ['umbraco'] // Prevent Vite from pre-bundling umbraco during development
   },
   build: {
     lib: {

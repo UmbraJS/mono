@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Icon } from '@iconify/vue'
 import { TooltipArrow, TooltipContent, TooltipPortal, TooltipProvider, TooltipRoot, TooltipTrigger } from 'reka-ui'
+
+defineProps<{
+  text: string
+}>()
 
 const open = ref(false)
 </script>
@@ -9,12 +12,12 @@ const open = ref(false)
 <template>
   <TooltipProvider>
     <TooltipRoot v-model:open="open">
-      <TooltipTrigger class="IconButton">
-        <Icon icon="radix-icons:plus" />
+      <TooltipTrigger asChild>
+        <slot></slot>
       </TooltipTrigger>
       <TooltipPortal>
         <TooltipContent class="TooltipContent" :side-offset="5">
-          Add to library
+          {{ text }}
           <TooltipArrow class="TooltipArrow" :width="8" />
         </TooltipContent>
       </TooltipPortal>
@@ -52,22 +55,6 @@ const open = ref(false)
 
 .TooltipArrow {
   fill: var(--base-120);
-}
-
-.IconButton {
-  font-family: inherit;
-  border-radius: 100%;
-  height: 35px;
-  width: 35px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--base-10);
-  background-color: var(--base-120);
-}
-
-.IconButton:hover {
-  background-color: var(--base-30);
 }
 
 @keyframes slideUpAndFade {
