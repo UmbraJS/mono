@@ -9,59 +9,40 @@ defineProps<{
 <template>
   <Toaster :position="position || 'top-center'" :expand="false" :visibleToasts="3" :toastOptions="{
     classes: {
-      toast: 'toast inverted-theme',
+      toast: 'toast',
       title: 'toast-title p',
       description: 'toast-description p',
       actionButton: 'toast-action-button',
       cancelButton: 'toast-cancel-button',
       closeButton: 'toast-close-button',
-      error: 'toast-error',
-      success: 'toast-success',
+      error: 'toast-error base-warning',
+      success: 'toast-success base-success',
       info: 'toast-info',
     },
   }" />
 </template>
 
-<style lang="scss">
+<style>
 .toast {
-  background-color: var(--base-80);
-  color: var(--base-text);
+  background-color: var(--base-10);
+  color: var(--base-120);
   border-radius: var(--radius);
-  padding: var(--space-1);
+  padding: var(--space-1) var(--space-2);
   border: solid var(--border-size) var(--base-80);
-}
 
-.toast-error {
-  --color: var(--warning);
-  --color-10: var(--warning-10);
-  --color-20: var(--warning-20);
-  --color-30: var(--warning-30);
-  --color-40: var(--warning-40);
-  --color-50: var(--warning-50);
-  --color-60: var(--warning-60);
-  --color-70: var(--warning-70);
-  --color-80: var(--warning-80);
-  --color-90: var(--warning-90);
-  --color-100: var(--warning-100);
-  --color-110: var(--warning-110);
-  --color-120: var(--warning-120);
-  --color-text: var(--warning-text);
-}
-
-.toast-success {
-  --color: var(--success);
-  --color-10: var(--success-10);
-  --color-20: var(--success-20);
-  --color-30: var(--success-30);
-  --color-40: var(--success-40);
-  --color-50: var(--success-50);
-  --color-60: var(--success-60);
-  --color-70: var(--success-70);
-  --color-80: var(--success-80);
-  --color-90: var(--success-90);
-  --color-100: var(--success-100);
-  --color-110: var(--success-110);
-  --color-120: var(--success-120);
-  --color-text: var(--success-text);
+  --color: var(--base);
+  --color-10: var(--base-10);
+  --color-20: var(--base-20);
+  --color-30: var(--base-30);
+  --color-40: var(--base-40);
+  --color-50: var(--base-50);
+  --color-60: var(--base-60);
+  --color-70: var(--base-70);
+  --color-80: var(--base-80);
+  --color-90: var(--base-90);
+  --color-100: var(--base-100);
+  --color-110: var(--base-110);
+  --color-120: var(--base-120);
+  --color-text: var(--base-text);
 }
 </style>

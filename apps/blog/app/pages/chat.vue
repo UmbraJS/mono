@@ -74,6 +74,8 @@ watch(messages, async () => {
   await nextTick();
   scrollToBottom();
 });
+
+const emojis = ["😂", "😍", "😎", "😭", "🔥"];
 </script>
 
 <template>
@@ -113,11 +115,20 @@ watch(messages, async () => {
     </section>
 
     <footer class="ConvexChatFooter">
-      <div class="Info">
+      <div class="LiveEmoji">
+        <div class="Emojis">
+          <button v-for="emoji in emojis" :key="emoji" class="button buttonHover buttonActive buttonFocus focus"
+            @click="toast.info(emoji)">
+            <span style="font-size: 1.5rem;">{{ emoji }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- <div class="Info">
         <h4>Welcome to Convex Chat!</h4>
         <p class="caption">Messages are stored in Convex and visible to anyone using this app.</p>
         <p class="caption">Each user gets a unique ID that's stored locally on their device.</p>
-      </div>
+      </div> -->
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
         <MessageComposer :isDisabled="true" :onSend="onSubmit" />
       </ChatMessagesLoading>
@@ -175,7 +186,7 @@ footer.ConvexChatFooter {
   gap: var(--space-2);
 }
 
-footer.ConvexChatFooter .Info {
+footer.ConvexChatFooter .LiveEmoji {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -207,8 +218,21 @@ footer.ConvexChatFooter .Info {
   overflow-y: auto;
 }
 
-.OnlineUsers {
+.OnlineUsers,
+.Emojis {
   display: flex;
   gap: var(--space-1);
+}
+
+.LiveEmoji .Emojis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  gap: var(--space-1);
+  height: 100%;
+}
+
+.LiveEmoji .Emojis button.button {
+  height: auto;
+  width: auto;
 }
 </style>

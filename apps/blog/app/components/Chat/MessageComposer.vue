@@ -77,7 +77,7 @@ async function onSubmit() {
       const firstError = errors[0];
       if (firstError) {
         const [field, messages] = firstError;
-        toast.error(`${field}: ${messages[0]}`);
+        toast.error(`${messages[0]}`);
       }
     } else if (validation.formErrors.length > 0 && validation.formErrors[0]) {
       toast.error(validation.formErrors[0]);
