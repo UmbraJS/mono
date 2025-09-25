@@ -21,8 +21,6 @@ useSeoMeta({ title: "Convex Chat" });
 // User management
 const { currentUser, getUserColor } = useUser();
 
-const messagesEl = ref<HTMLElement | null>(null);
-
 // Create reactive values that will be populated after mounting
 const isPending = ref(true);
 const isClientReady = ref(false);
@@ -68,17 +66,6 @@ async function onSubmit({ message, displayName, form }: ChatMessage) {
   }
 }
 
-function scrollToBottom() {
-  const el = messagesEl.value;
-  if (!el) return;
-
-  // Find the ScrollArea component's scrollable element
-  const scrollArea = el.querySelector('[data-radix-scroll-area-viewport]') || el.querySelector('.scroll-area-viewport') || el;
-  if (scrollArea) {
-    scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: "smooth" });
-  }
-}
-
 async function onEmojiClick(emoji: string) {
   try {
     await sendEmoji({
@@ -98,6 +85,11 @@ watch(messages, async () => {
 });
 
 const emojis = ["😂", "😍", "😎", "😭", "🔥"];
+
+const scrollArea = useTemplateRef('scrollArea')
+function scrollToBottom() {
+  scrollArea.value?.scrollToBottom()
+}
 </script>
 
 <template>
@@ -123,18 +115,15 @@ const emojis = ["😂", "😍", "😎", "😭", "🔥"];
       <div v-else-if="realQuery.error.value" class="MessagesState messagesStateError">
         Error: {{ String(realQuery.error.value) }}
       </div>
-      <div v-else ref="messagesEl">
-        <ScrollArea>
-          <div class="Messages">
-            <template v-for="m in messages" :key="m._id">
-              <MyMessageBubble v-if="m.userId === currentUser.userId" :body="m.body" />
-              <MessageChip v-else
-                :message="{ user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
-                :color="getUserColor(m.userId) || '#808080'" />
-            </template>
-          </div>
-        </ScrollArea>
-      </div>
+      <ScrollArea v-else ref="scrollArea">
+        <div class="Messages">
+          <template v-for="m in messages" :key="m._id">
+            <MyMessageBubble v-if="m.userId === currentUser.userId" :body="m.body" />
+            <MessageChip v-else :message="{ user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
+              :color="getUserColor(m.userId) || '#808080'" />
+          </template>
+        </div>
+      </ScrollArea>
     </section>
 
     <footer class="ConvexChatFooter">
@@ -192,7 +181,6 @@ header.ConvexChatHeader {
   overflow-y: auto;
   background: var(--base-10);
   border-radius: var(--radius);
-  padding: var(--space-2);
 }
 
 footer.ConvexChatFooter {
@@ -225,7 +213,8 @@ footer.ConvexChatFooter {
 .Messages {
   list-style: none;
   margin: 0;
-  padding: 0px;
+  padding: var(--space-2);
+  padding-left: var(--space-1);
   display: grid;
   gap: var(--space-1);
   overflow-y: auto;
@@ -247,5 +236,15 @@ footer.ConvexChatFooter {
 .LiveEmoji button.button {
   height: auto;
   width: auto;
+}
+
+
+.LiveEmoji button.button span {
+  transition: transform var(--slow);
+}
+
+.LiveEmoji button.button:active span {
+  transform: scale(0.3);
+  transition: transform var(--time);
 }
 </style>
