@@ -90,6 +90,10 @@ const scrollArea = useTemplateRef('scrollArea')
 function scrollToBottom() {
   scrollArea.value?.scrollToBottom()
 }
+
+function isThisYou(userId: string) {
+  return userId === currentUser.value.userId
+}
 </script>
 
 <template>
@@ -98,14 +102,14 @@ function scrollToBottom() {
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
         <p class="caption">Recent Online users: {{ onlineUsers.length }}</p>
         <div class="OnlineUsers">
-          <UserChip :message="{ user: 'spacer', userId: 'someid', lastSeen: 1234 }" :color="'#808080'" />
+          <UserChip :message="{ user: 'spacer', userId: 'someid', lastSeen: 1234 }" :color="'#808080'" :isYou="true" />
         </div>
       </ChatMessagesLoading>
       <p v-else class="caption">Recent Online users: {{ onlineUsers.length }}</p>
       <div v-if="onlineUsers.length > 0" class="OnlineUsers">
         <UserChip v-for="user in onlineUsers" :key="user.userId"
           :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
-          :color="getUserColor(user.userId) || '#808080'" />
+          :color="getUserColor(user.userId) || '#808080'" :isYou="isThisYou(user.userId)" />
       </div>
       <EmojiBubbles :emojiEvents="emojiEvents" />
     </header>
@@ -127,11 +131,19 @@ function scrollToBottom() {
     </section>
 
     <footer class="ConvexChatFooter">
-      <div class="LiveEmoji">
-        <button v-for="emoji in emojis" :key="emoji" class="button buttonHover buttonActive buttonFocus focus"
-          @click="onEmojiClick(emoji)">
-          <span style="font-size: 2rem;">{{ emoji }}</span>
-        </button>
+      <div class="LiveEmojiWrapper">
+        <div class="LiveEmojiMeta">
+          <div class="LiveEmojiCombo">
+            <div class="LiveEmojiCount">{{ emojiEvents.length }}</div>
+            <div class="LiveEmojiLabel">Sent</div>
+          </div>
+        </div>
+        <div class="LiveEmojis">
+          <button v-for="emoji in emojis" :key="emoji" class="button buttonHover buttonActive buttonFocus focus"
+            @click="onEmojiClick(emoji)">
+            <span style="font-size: 2rem;">{{ emoji }}</span>
+          </button>
+        </div>
       </div>
 
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
@@ -226,25 +238,46 @@ footer.ConvexChatFooter {
   gap: var(--space-1);
 }
 
-.LiveEmoji {
+.LiveEmojiWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.LiveEmojis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
   gap: var(--space-1);
   height: 100%;
 }
 
-.LiveEmoji button.button {
+.LiveEmojis button.button {
   height: auto;
   width: auto;
 }
 
-
-.LiveEmoji button.button span {
+.LiveEmojis button.button span {
   transition: transform var(--slow);
 }
 
-.LiveEmoji button.button:active span {
+.LiveEmojis button.button:active span {
   transform: scale(0.3);
   transition: transform var(--time);
+}
+
+.LiveEmojiMeta {
+  grid-column: 1 / -1;
+
+  background-color: var(--base-10);
+  border-radius: var(--radius);
+  padding: var(--space-1);
+}
+
+.LiveEmojiCombo {
+  display: flex;
+  gap: var(--space-1);
+  background: var(--base);
+  padding: var(--space-1);
+  border-radius: var(--radius);
 }
 </style>

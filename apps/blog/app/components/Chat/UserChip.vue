@@ -10,7 +10,8 @@
           <p class="UserID caption">#{{ shortId }}</p>
         </div>
         <div class="UserChipMetadata">
-          <p v-if="timeSinceLastSeen < 60000" class="caption">Just now</p>
+          <p v-if="isYou" class="caption">You</p>
+          <p v-else-if="timeSinceLastSeen < 60000" class="caption">Just now</p>
           <p v-else-if="timeSinceLastSeen < 3600000" class="caption">{{ Math.floor(timeSinceLastSeen / 60000) }}
             minutes
             ago</p>
@@ -27,6 +28,7 @@ import { getShortId } from "../../utils";
 
 const props = defineProps<{
   color: string;
+  isYou: boolean;
   message: {
     user: string;
     lastSeen: number;
