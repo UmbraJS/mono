@@ -16,7 +16,6 @@ lib-cov/
 .next/
 .nitro/
 .cache/
-dist/
 
 # misc
 .DS_Store

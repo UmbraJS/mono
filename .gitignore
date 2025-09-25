@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Allow convue package dist folder
+!packages/convue/dist
+
 # Editor directories and files
 .vscode
 .vscode/*

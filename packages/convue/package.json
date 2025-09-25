@@ -43,8 +43,9 @@
     "build": "obuild",
     "prerelease": "pnpm run check",
     "release": "pnpm dlx changelogen@latest --release --push --publish",
-    "prepare": "simple-git-hooks",
-    "prepublishOnly": "pnpm run build"
+    "prepare": "pnpm run build && simple-git-hooks",
+    "prepublishOnly": "pnpm run build",
+    "prepack": "pnpm run build"
   },
   "peerDependencies": {
     "convex": ">=1.24.0",
