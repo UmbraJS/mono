@@ -185,11 +185,27 @@ export const sendEmoji = mutation({
   handler: async (ctx, args) => {
     console.log("REX: sendEmoji called", args.emoji);
 
+    const now = Date.now();
+    const thirtySecondsAgo = now - 30 * 1000; // 30 seconds ago
+
+    // Check how many emojis this user has sent in the last 30 seconds
+    const recentEmojiEvents = await ctx.db
+      .query("emojiEvents")
+      .withIndex("by_userId_timestamp", (q) =>
+        q.eq("userId", args.userId).gt("timestamp", thirtySecondsAgo)
+      )
+      .collect();
+
+    // Rate limit: maximum 10 emojis per 30 seconds
+    if (recentEmojiEvents.length >= 10) {
+      throw new Error("Rate limit exceeded: too many emojis sent recently. Please wait before sending more.");
+    }
+
     // Insert the emoji event
     await ctx.db.insert("emojiEvents", {
       userId: args.userId,
       emoji: args.emoji,
-      timestamp: Date.now(),
+      timestamp: now,
     });
   },
 });

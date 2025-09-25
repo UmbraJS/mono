@@ -19,5 +19,7 @@ export default defineSchema({
     userId: v.string(),
     emoji: v.string(),
     timestamp: v.number(),
-  }).index("by_timestamp", ["timestamp"]),
+  })
+    .index("by_timestamp", ["timestamp"])
+    .index("by_userId_timestamp", ["userId", "timestamp"]),
 });
