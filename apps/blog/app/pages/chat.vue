@@ -32,7 +32,7 @@ const comboCount = ref<{
 
 const cooldownRemaining = ref(0);
 const isOnCooldown = ref(false);
-const COMBO_LIMIT = 10;
+const COMBO_LIMIT = 30;
 const COOLDOWN_DURATION = 30; // 30 seconds
 
 // Function to handle real query results
@@ -131,11 +131,6 @@ async function onEmojiClick(emoji: string) {
   }
 }
 
-watch(messages, async () => {
-  await nextTick();
-  scrollToBottom();
-});
-
 const emojis = ["😂", "😍", "😎", "😭", "🔥"];
 
 const scrollArea = useTemplateRef('scrollArea')
@@ -161,7 +156,6 @@ function startCooldown() {
 
   cooldownInterval = setInterval(() => {
     cooldownRemaining.value--;
-
     if (cooldownRemaining.value <= 0) {
       resetCombo();
     }

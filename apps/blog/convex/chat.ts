@@ -196,8 +196,7 @@ export const sendEmoji = mutation({
       )
       .collect();
 
-    // Rate limit: maximum 10 emojis per 30 seconds
-    if (recentEmojiEvents.length >= 10) {
+    if (recentEmojiEvents.length >= 30) {
       throw new Error("Rate limit exceeded: too many emojis sent recently. Please wait before sending more.");
     }
 

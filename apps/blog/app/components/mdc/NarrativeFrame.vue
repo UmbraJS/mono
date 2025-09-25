@@ -59,12 +59,12 @@ const allSources = computed(() => {
 <template>
   <div class="NarrativeFrame border" :class="[moodClass, openClass]">
     <header @click="toggleOpen">
-      <NuxtImg :src="image" alt="Gandhi holding a gun" width="600" height="400" />
-      <Icon class="Bookmark" name="carbon:bookmark" size="24" />
-      <p class="display">
+      <!-- <NuxtImg :src="image" alt="Gandhi holding a gun" width="600" height="400" /> -->
+      <p>
         <slot name="title" mdc-unwrap="p" />
+        <Icon name="carbon:chevron-down" size="16" class="Arrow" />
       </p>
-      <Icon name="carbon:chevron-down" size="24" class="Arrow" />
+      <!-- <Icon class="Bookmark" name="carbon:bookmark" size="24" /> -->
     </header>
     <div class="FrameSupport">
       <div class="FrameMeta">
@@ -164,10 +164,11 @@ const allSources = computed(() => {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: var(--base-10);
   cursor: pointer;
   transition: color var(--time), background-color var(--time), border-color var(--time), transform var(--time);
-  padding: var(--space-4) 0px;
-  padding-bottom: var(--space-3);
+  padding: var(--space-1) 0px;
+  padding-bottom: var(--space-2);
 }
 
 .NarrativeFrame header:hover {
@@ -175,7 +176,9 @@ const allSources = computed(() => {
 }
 
 .NarrativeFrame header p {
-  transform: scale(1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
   transition: color var(--slower), transform var(--slower);
   will-change: transform;
