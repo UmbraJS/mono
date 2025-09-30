@@ -39,6 +39,11 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
 
   onMounted(() => {
     const segments = getSegments(cardSimulation)
+
+    // const firstSegment = segments[0]
+    // if (!firstSegment) return
+    // animateCooldown(firstSegment)
+
     segments.forEach((segment) => {
       animateCooldown(segment)
     })
@@ -52,18 +57,6 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
     const cooldownTimeline = gsap.timeline({
       onStart: () => {
         cooldown.value = 100
-      },
-      onComplete: () => {
-        console.log('REX : Cooldown segment complete')
-        audio.playPunchSound()
-        normalized.onAttack?.()
-        normalized.onSegmentComplete?.()
-        // Append attack dash timeline if provided (after segment completes)
-        const atk = normalized.attackTimelineFactory?.()
-        if (atk) {
-          // Ensure attack timeline starts after cooldown segment fully done
-          cooldownTimeline.add(atk, '+=0')
-        }
       },
     })
 
@@ -79,6 +72,17 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
       ease: 'none',
       onComplete: () => {
         cooldown.value = 100
+
+        audio.playPunchSound()
+        normalized.onAttack?.()
+        normalized.onSegmentComplete?.()
+
+        // Append attack dash timeline if provided (after segment completes)
+        const atk = normalized.attackTimelineFactory?.()
+        if (atk) {
+          // Ensure attack timeline starts after cooldown segment fully done
+          cooldownTimeline.add(atk, '+=0')
+        }
       },
     }, 0)
 
