@@ -13,12 +13,20 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
 
   const updateUserPresence = async () => {
     try {
+      // Add safety checks for client environment
+      if (typeof window === 'undefined') return;
+      if (!currentUser.value?.userId) {
+        console.warn("No user ID available for presence update");
+        return;
+      }
+      
       console.log("Rex er: ", currentUser.value.displayName);
       await updatePresence({
         userId: currentUser.value.userId,
       });
     } catch (error) {
       console.error("Failed to update presence:", error);
+      // Don't throw the error to prevent breaking the app
     }
   };
 
@@ -35,8 +43,7 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
     isVisible.value = !document.hidden;
 
     if (isVisible.value) {
-      // Page became visible - update presence immediately and restart heartbeat
-      updateUserPresence();
+      // Page became visible - restart heartbeat (which will update presence)
       startHeartbeat();
     } else {
       // Page became hidden - stop heartbeat but don't set offline immediately
@@ -48,12 +55,14 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
   const startHeartbeat = () => {
     stopHeartbeat(); // Clear any existing interval
 
-    // Update presence immediately
-    updateUserPresence();
+    // Add a small delay before the first update to ensure everything is ready
+    setTimeout(() => {
+      updateUserPresence();
+    }, 100);
 
     // Then every 30 seconds
     heartbeatInterval.value = setInterval(() => {
-      if (!isVisible.value) return
+      if (!isVisible.value || typeof window === 'undefined') return
       updateUserPresence();
     }, 30000);
   };
@@ -80,10 +89,10 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
     // Set up beforeunload listener to mark user as offline
     window.addEventListener('beforeunload', setUserOffline);
 
-    // Delay starting heartbeat to allow user data to load first (avoid overwriting with "Anonymous")
+    // Delay starting heartbeat to allow user data to load first and Convex to initialize
     setTimeout(() => {
       startHeartbeat();
-    }, 1000); // 1 second delay
+    }, 2000); // 2 second delay to ensure Convex is ready
 
     // Cleanup very old users on mount
     cleanupStaleUsers();
