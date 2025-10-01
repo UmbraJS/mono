@@ -1,3 +1,31 @@
+<script setup lang="ts">
+import { gsap } from 'gsap';
+import { onMounted, ref } from 'vue';
+
+const exampleRefs = ref<HTMLElement[]>([]);
+
+onMounted(() => {
+  gsap.fromTo(
+    exampleRefs.value,
+    {
+      scale: 1,
+      x: 0,
+      y: 0,
+      opacity: 0
+    },
+    {
+      scale: 1,
+      x: (index) => index * 50,
+      y: (index) => index * 50,
+      opacity: 1,
+      duration: 0.6,
+      ease: "back.out(1.7)",
+      stagger: 0.1
+    }
+  );
+});
+</script>
+
 <template>
   <div class="SamSlide RoundedTokens">
     <p class="display">
@@ -7,9 +35,8 @@
     </p>
 
     <div class="RoundedExamples">
-      <div class="Example border"></div>
-      <div class="Example border"></div>
-      <div class="Example border"></div>
+      <div v-for="(item) in 3" :key="item" :ref="(el) => exampleRefs[item] = el as HTMLElement"
+        class="Example border" />
     </div>
   </div>
 </template>
@@ -39,18 +66,7 @@
   height: 100px;
   width: 100%;
   background: var(--base-20);
-}
-
-.Example:nth-child(1)::after,
-.Example:nth-child(2)::after {
-  content: '';
-  display: block;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: var(--base);
-  transform: translate(25px, 30px);
-  filter: blur(20px);
+  box-shadow: -20px -20px 50px 18px var(--base);
 }
 
 .Example:nth-child(1) {
@@ -59,11 +75,9 @@
 
 .Example:nth-child(2) {
   border-top-left-radius: var(--radius-2);
-  transform: translate(50px, 50px);
 }
 
 .Example:nth-child(3) {
   border-top-left-radius: var(--radius-3);
-  transform: translate(100px, 100px);
 }
 </style>

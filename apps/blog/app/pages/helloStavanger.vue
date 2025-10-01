@@ -2,39 +2,46 @@
 import { ref } from 'vue';
 import { onKeyStroke } from '@vueuse/core';
 import RoundedTokens from '../components/halloSlides/RoundedTokens.vue';
+import Trinity from '../components/halloSlides/Trinity.vue';
+import Eden from '../components/halloSlides/Eden.vue';
+import Intro from '../components/halloSlides/Intro.vue';
 
 const slide = ref(1);
+const totalSlides = 4;
 
 onKeyStroke('ArrowRight', () => {
-  console.log('right');
   slide.value++;
 });
 
 onKeyStroke('ArrowLeft', () => {
-  console.log('left');
   slide.value--;
 });
-
-
 </script>
 
 <template>
-  <div v-if="slide === 1" class="SamSlide">
-    <p class="display">
-      A design <span>system</span> isn’t UI components.
-      It isn’t dark mode <br /> or rounded corners.
-      It’s the <span>rules</span> that make <br /> those decisions possible.
-    </p>
-  </div>
-
+  <Intro v-if="slide === 1" />
   <RoundedTokens v-if="slide === 2" class="SamSlide" />
+  <Trinity v-if="slide === 3" class="SamSlide" />
+  <Eden v-if="slide === 4" class="SamSlide" :stage="slide - 3" />
+
+  <div class="SlidePage">
+    <h1 class="display">
+      {{ slide }} / {{ totalSlides }}
+    </h1>
+  </div>
 </template>
 
-<style scoped>
+<style>
 .SamSlide {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.SlidePage {
+  position: absolute;
+  bottom: var(--space-3);
+  right: var(--space-3);
 }
 </style>

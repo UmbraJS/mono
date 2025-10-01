@@ -146,7 +146,7 @@ p.mini {
 span,
 strong {
   font-variation-settings: var(--font-semibold);
-  color: inherit
+  color: inherit;
 }
 
 blockquote {

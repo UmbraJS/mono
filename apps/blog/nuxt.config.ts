@@ -21,6 +21,7 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
     'nuxt-time',
     '@vueuse/nuxt',
+    'motion-v/nuxt',
   ],
 
   // https://devtools.nuxt.com

@@ -52,6 +52,7 @@
     "hast-util-to-mdast": "catalog:",
     "hast-util-to-string": "catalog:",
     "mdast": "catalog:",
+    "motion-v": "^1.7.1",
     "nuxt": "catalog:",
     "nuxt-time": "catalog:",
     "pinia": "catalog:",
