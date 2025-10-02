@@ -7,7 +7,7 @@ import Eden from '../components/halloSlides/Eden.vue';
 import Intro from '../components/halloSlides/Intro.vue';
 
 const slide = ref(1);
-const totalSlides = 4;
+const totalSlides = 10;
 
 const slideHistory = useRefHistory(slide);
 
@@ -28,7 +28,7 @@ onKeyStroke('ArrowLeft', () => {
   <Intro v-if="slide === 1" />
   <RoundedTokens v-if="slide === 2" class="SamSlide" />
   <Trinity v-if="slide === 3" class="SamSlide" />
-  <Eden v-if="slide === 4" class="SamSlide" :stage="slide - 3" />
+  <Eden v-if="slide >= 4" class="SamSlide" :stage="slide - 3" />
 
   <div class="SlidePage">
     <h1 class="display">

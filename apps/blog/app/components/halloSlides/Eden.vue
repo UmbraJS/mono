@@ -5,6 +5,8 @@ import { onMounted, useTemplateRef } from 'vue';
 const { stage = 3 } = defineProps<{ stage: number; }>();
 
 const eden = useTemplateRef('eden');
+const shape1 = useTemplateRef('shape1');
+const shape2 = useTemplateRef('shape2');
 
 function state(stage: number) {
   switch (stage) {
@@ -30,7 +32,7 @@ const from = {
 
 const duration = 0.4;
 
-onMounted(() => {
+function enterFrame() {
   gsap.fromTo(
     eden.value,
     from,
@@ -40,14 +42,120 @@ onMounted(() => {
       duration,
     }
   );
+}
+
+function enterEden() {
+  gsap.to(shape1.value, {
+    width: "0%",
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    width: "0%",
+    duration,
+  });
+}
+
+function enterShade() {
+  gsap.to(shape1.value, {
+    width: "50%",
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    width: "0%",
+    duration,
+  });
+}
+
+function enterSpace() {
+  gsap.to(shape1.value, {
+    width: "30%",
+    height: "100%",
+    marginLeft: "0%",
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    width: "30%",
+    height: "100%",
+    marginRight: "0%",
+    duration,
+  });
+}
+
+function enterShapes() {
+  gsap.to(shape1.value, {
+    height: "50%",
+    width: "20%",
+    marginLeft: "20%",
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    height: "50%",
+    width: "20%",
+    marginRight: "20%",
+    duration,
+  });
+}
+
+function enterIntimate() {
+  gsap.to(shape1.value, {
+    marginLeft: "29%",
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    marginRight: "29%",
+    duration,
+  });
+}
+
+function enterDivorced() {
+  gsap.to(shape1.value, {
+    height: "50%",
+    width: "20%",
+    marginLeft: "5%",
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    height: "50%",
+    width: "20%",
+    marginRight: "5%",
+    duration,
+  });
+}
+
+watch(() => stage, (newStage, oldStage) => {
+  const stageState = state(newStage);
+
+  if (stageState === "eden") {
+    enterEden();
+  } else if (stageState === "shade") {
+    enterShade();
+  } else if (stageState === "space") {
+    enterSpace();
+  } else if (stageState === "shape") {
+    enterShapes();
+  } else if (stageState === "intimate") {
+    enterIntimate();
+  } else if (stageState === "divorced") {
+    enterDivorced();
+  }
+});
+
+onMounted(() => {
+  enterFrame();
 });
 </script>
 
 <template>
   <div ref="eden" class="SamSlide" :class="state(stage)">
     <div class="Eden border">
-      <div class="Shape"></div>
-      <div class="Shape"></div>
+      <div ref="shape1" class="Shape"></div>
+      <div ref="shape2" class="Shape"></div>
     </div>
   </div>
 </template>
@@ -55,31 +163,31 @@ onMounted(() => {
 <style>
 .Shape {
   background: black;
+  height: 100%;
+  transition: .4s ease-in-out;
 }
 
 .Eden {
   display: flex;
   justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  overflow: hidden;
 
   width: 70vw;
   height: 70vh;
   background-color: white;
   border-radius: var(--radius);
+  transition: .4s ease-in-out;
 }
 
-.shade .Shape:nth-child(1) {
+/* .shade .Shape:nth-child(1) {
   width: 50%;
   height: 100%;
-}
+} */
 
-.space .Eden {
-  justify-content: space-between;
-  overflow: hidden;
-}
-
-.space .Shape {
+/* .space .Shape {
   width: 35%;
   height: 100%;
-}
+} */
 </style>

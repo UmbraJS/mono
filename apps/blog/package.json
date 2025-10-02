@@ -43,6 +43,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "@vueuse/core": "catalog:",
     "@vueuse/nuxt": "catalog:",
+    "better-sqlite3": "catalog:",
     "convex": "^1.26.2",
     "convue": "workspace:*",
     "destr": "catalog:",
