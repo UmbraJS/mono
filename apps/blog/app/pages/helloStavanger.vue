@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { onKeyStroke } from '@vueuse/core';
+import { onKeyStroke, useRefHistory } from '@vueuse/core';
 import RoundedTokens from '../components/halloSlides/RoundedTokens.vue';
 import Trinity from '../components/halloSlides/Trinity.vue';
 import Eden from '../components/halloSlides/Eden.vue';
@@ -8,6 +8,12 @@ import Intro from '../components/halloSlides/Intro.vue';
 
 const slide = ref(1);
 const totalSlides = 4;
+
+const slideHistory = useRefHistory(slide);
+
+const lastSlide = computed(() => {
+  return slideHistory.history.value[slideHistory.history.value.length - 2] || 1;
+});
 
 onKeyStroke('ArrowRight', () => {
   slide.value++;
