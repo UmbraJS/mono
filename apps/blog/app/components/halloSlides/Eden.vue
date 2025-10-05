@@ -20,6 +20,10 @@ function state(stage: number) {
       return "intimate"
     case 6:
       return "divorced"
+    case 7:
+      return "empty"
+    case 8:
+      return "exit"
     default:
       return "eden"
   }
@@ -126,6 +130,50 @@ function enterDivorced() {
     marginRight: "5%",
     duration,
   });
+
+  gsap.to(eden.value, {
+    scale: 1,
+    opacity: 1,
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    height: "50%",
+    width: "20%",
+    marginRight: "5%",
+    duration,
+  });
+}
+
+function emptyFrame() {
+
+  gsap.to(shape1.value, {
+    height: "50%",
+    width: "0%",
+    marginLeft: "0%",
+    duration,
+  });
+
+  gsap.to(shape2.value, {
+    height: "50%",
+    width: "0%",
+    marginRight: "0%",
+    duration,
+  });
+
+  gsap.to(eden.value, {
+    scale: 1,
+    opacity: 1,
+    duration,
+  });
+}
+
+function exitFrame() {
+  gsap.to(eden.value, {
+    scale: 5,
+    opacity: 0,
+    duration: duration + 0.6,
+  });
 }
 
 watch(() => stage, (newStage, oldStage) => {
@@ -143,6 +191,10 @@ watch(() => stage, (newStage, oldStage) => {
     enterIntimate();
   } else if (stageState === "divorced") {
     enterDivorced();
+  } else if (stageState === "empty") {
+    emptyFrame();
+  } else if (stageState === "exit") {
+    exitFrame();
   }
 });
 
