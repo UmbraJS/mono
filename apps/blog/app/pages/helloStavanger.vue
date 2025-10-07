@@ -1,34 +1,51 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import type { Component } from 'vue';
 import { onKeyStroke, useRefHistory } from '@vueuse/core';
 import RoundedTokens from '../components/halloSlides/RoundedTokens.vue';
 import Trinity from '../components/halloSlides/Trinity.vue';
 import Eden from '../components/halloSlides/Eden.vue';
-import Intro from '../components/halloSlides/Intro.vue';
+import Intro from '../components/halloSlides/ActOneIntro.vue';
 import LiveEmojiPanel from '../components/Chat/LiveEmojiPanel.vue';
 import ThatsTheWebFolks from '../components/halloSlides/ThatsTheWebFolks.vue';
 import PersonalSpaceTokens from '../components/halloSlides/PersonalSpaceTokens.vue';
 import SpaceTokens from '../components/halloSlides/SpaceTokens.vue';
 import NotesBetweenNotes from '../components/halloSlides/NotesBetweenNotes.vue';
+import ColorIsAll from '../components/halloSlides/ColorIsAll.vue';
+import ActTwoIntro from '../components/halloSlides/ActTwoIntro.vue';
+
+interface SlideConfig {
+  component: Component; // Vue component
+  props: Record<string, any>; // Static props
+  range: [number, number]; // Slide range [start, end]
+  dynamicProps?: (slide: number) => Record<string, any>; // Function to generate dynamic props based on slide number
+}
 
 // Slide configuration - easy to maintain and extend
-const slideConfig = [
+const actOneSlideConfig: SlideConfig[] = [
   { component: Intro, props: {}, range: [1, 1] as [number, number] },
   { component: RoundedTokens, props: { class: 'SamSlide' }, range: [2, 2] as [number, number] },
   { component: Trinity, props: { class: 'SamSlide' }, range: [3, 3] as [number, number] },
   { component: Eden, props: { class: 'SamSlide' }, range: [4, 11] as [number, number], dynamicProps: (slide: number) => ({ stage: slide - 3 }) },
-  { component: ThatsTheWebFolks, props: { class: 'SamSlide' }, range: [12, 12] as [number, number] },
   { component: PersonalSpaceTokens, props: { class: 'SamSlide' }, range: [13, 13] as [number, number] },
   { component: SpaceTokens, props: { class: 'SamSlide' }, range: [14, 14] as [number, number] },
+  { component: ThatsTheWebFolks, props: { class: 'SamSlide' }, range: [12, 12] as [number, number] },
   { component: NotesBetweenNotes, props: { class: 'SamSlide' }, range: [15, 15] as [number, number] },
+  { component: ColorIsAll, props: { class: 'SamSlide' }, range: [16, 16] as [number, number] },
+];
+
+
+const actTwoSlideConfig: SlideConfig[] = [
+  { component: ActTwoIntro, props: {}, range: [1, 1] as [number, number] },
 ];
 
 // Generate pages configuration from slide config
-const totalSlidesInAct1 = Math.max(...slideConfig.map(s => s.range[1]));
+const totalSlidesInAct1 = Math.max(...actOneSlideConfig.map(s => s.range[1]));
+const totalSlidesInAct2 = Math.max(...actTwoSlideConfig.map(s => s.range[1]));
 const pages = [
   { name: "act1", slides: totalSlidesInAct1 },
-  { name: "act2", slides: 8 },
-  { name: "act3", slides: 5 },
+  { name: "act2", slides: totalSlidesInAct2 },
+  { name: "act3", slides: 0 },
 ]
 
 const act = ref(1)
@@ -46,10 +63,12 @@ const lastSlide = computed(() => {
 
 // Find the current slide configuration
 const currentSlideConfig = computed(() => {
-  return slideConfig.find(config => {
+  const configArray = act.value === 1 ? actOneSlideConfig : act.value === 2 ? actTwoSlideConfig : [];
+  return configArray.find(config => {
     const [start, end] = config.range;
     return slide.value >= start && slide.value <= end;
   });
+
 });
 
 // Get the component props for the current slide
@@ -72,6 +91,7 @@ onKeyStroke('ArrowRight', () => {
   if (slide.value > slidesInThisAct.value) {
     slide.value = slidesInThisAct.value;
     act.value++;
+    slide.value = 1;
   }
   if (act.value > pages.length) act.value = pages.length;
 });

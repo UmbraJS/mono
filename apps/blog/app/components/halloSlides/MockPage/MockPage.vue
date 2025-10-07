@@ -17,12 +17,14 @@ onMounted(() => {
   const mockCards = mockPageRef.value.querySelectorAll('.MockCard');
   const mockLinks = mockPageRef.value.querySelectorAll('.MockLink');
   const mockTitles = mockPageRef.value.querySelectorAll('.MockTitle');
+  const mockCardsSectionTitle = mockPageRef.value.querySelector('.MockCardsSectionTitle');
   const mockDisplayTitle = mockPageRef.value.querySelector('.MockDisplayTitle');
 
   const animatableElements = [
     mockTitles,
     mockLinks,
     mockDisplayTitle,
+    mockCardsSectionTitle,
     mockCTA,
     mockCards,
   ];
@@ -68,6 +70,13 @@ onMounted(() => {
       ease: 'back.out(1.7)'
     }, '-=0.4')
 
+    .to(mockCardsSectionTitle, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      ease: 'back.out(1.7)'
+    }, '-=0.3')
     // Cards with stagger
     .to(mockCards, {
       opacity: 1,
@@ -101,9 +110,12 @@ onUnmounted(() => timeline.kill());
       </header>
 
       <div ref="bodyRef" class="MockBody MockBG">
-        <div class="MockDisplayTitle MockText"></div>
+        <div class="MockDisplayTitle MockTextReveal">
+          <p>Typography</p>
+        </div>
         <button class="MockCTA MockAccent"></button>
         <div class="MockCardGrid">
+          <div class="MockCardsSectionTitle"></div>
           <div class="MockCard MockBGSubtle">
             <div class="MockCardImage MockImg"></div>
             <div class="MockCardContent">
@@ -151,6 +163,27 @@ onUnmounted(() => timeline.kill());
   background-color: var(--mockText);
 }
 
+.MockTextReveal {
+  position: relative;
+}
+
+.MockPage:hover .MockTextReveal::after {
+  width: 0%;
+}
+
+.MockTextReveal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--mockText);
+  border-radius: var(--radius);
+  z-index: 1;
+  transition: .2s ease;
+}
+
 .MockImg {
   background-color: var(--mockImg);
 }
@@ -159,7 +192,22 @@ onUnmounted(() => timeline.kill());
   background-color: var(--mockAccent);
 }
 
+.MockCardsSectionTitle {
+  width: 20%;
+  height: 20px;
+  border-radius: var(--radius);
+  background-color: var(--base-50);
+  grid-column: 1 / -1;
+}
+
 .MockPage {
+  --space-1: 10px;
+  --space-2: calc(10px * 2);
+  --space-3: calc(10px * 4);
+  --space-4: calc(10px * 8);
+  --space-5: calc(10px * 16);
+  --space-6: calc(10px * 32);
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -203,14 +251,17 @@ onUnmounted(() => timeline.kill());
   gap: var(--space-1);
 
   width: 100%;
-  padding: var(--space-5) var(--space-3);
+  padding: var(--space-4) var(--space-3);
   padding-bottom: var(--space-3);
 }
 
 .MockDisplayTitle {
   width: 60%;
-  height: 60px;
   border-radius: var(--radius);
+}
+
+.MockDisplayTitle p {
+  font-size: 2em;
 }
 
 .MockCTA {
@@ -224,7 +275,7 @@ onUnmounted(() => timeline.kill());
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-1);
-  margin-top: var(--space-3);
+  margin-top: var(--space-4);
 }
 
 .MockCard {
@@ -244,7 +295,7 @@ onUnmounted(() => timeline.kill());
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  padding: var(--space-1);
+  padding: var(--space-2);
   padding-left: 0px;
   width: 100%;
 }

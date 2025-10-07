@@ -2,6 +2,10 @@
 import { gsap } from 'gsap';
 import { onMounted, useTemplateRef } from 'vue';
 
+defineProps<{
+  title: string;
+}>();
+
 const revealBox = useTemplateRef<HTMLElement[]>("revealBox");
 const introText = useTemplateRef<HTMLElement[]>("introText");
 
@@ -48,17 +52,25 @@ onMounted(() => {
 
 <template>
   <div class="SamSlide">
-    <div class="IntroText">
-      <div ref="revealBox" class="RevealBox"></div>
-      <p ref="introText" class="display">
-        A design <span>system</span> isn't UI components. It isn't dark mode <br /> or rounded corners. It's the
-        underlying <span>rules</span> that make <br /> those decisions possible.
-      </p>
+    <div class="IntroTextWrapper">
+      <h3>{{ title }}</h3>
+      <div class="IntroText">
+        <div ref="revealBox" class="RevealBox"></div>
+        <div ref="introText">
+          <slot />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style>
+.IntroTextWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
 .IntroText {
   position: relative;
 }
