@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { onKeyStroke, useRefHistory } from '@vueuse/core';
 import RoundedTokens from '../components/halloSlides/RoundedTokens.vue';
 import Trinity from '../components/halloSlides/Trinity.vue';
@@ -11,8 +11,22 @@ import PersonalSpaceTokens from '../components/halloSlides/PersonalSpaceTokens.v
 import SpaceTokens from '../components/halloSlides/SpaceTokens.vue';
 import NotesBetweenNotes from '../components/halloSlides/NotesBetweenNotes.vue';
 
+// Slide configuration - easy to maintain and extend
+const slideConfig = [
+  { component: Intro, props: {}, range: [1, 1] as [number, number] },
+  { component: RoundedTokens, props: { class: 'SamSlide' }, range: [2, 2] as [number, number] },
+  { component: Trinity, props: { class: 'SamSlide' }, range: [3, 3] as [number, number] },
+  { component: Eden, props: { class: 'SamSlide' }, range: [4, 11] as [number, number], dynamicProps: (slide: number) => ({ stage: slide - 3 }) },
+  { component: ThatsTheWebFolks, props: { class: 'SamSlide' }, range: [12, 12] as [number, number] },
+  { component: PersonalSpaceTokens, props: { class: 'SamSlide' }, range: [13, 13] as [number, number] },
+  { component: SpaceTokens, props: { class: 'SamSlide' }, range: [14, 14] as [number, number] },
+  { component: NotesBetweenNotes, props: { class: 'SamSlide' }, range: [15, 15] as [number, number] },
+];
+
+// Generate pages configuration from slide config
+const totalSlidesInAct1 = Math.max(...slideConfig.map(s => s.range[1]));
 const pages = [
-  { name: "act1", slides: 20 },
+  { name: "act1", slides: totalSlidesInAct1 },
   { name: "act2", slides: 8 },
   { name: "act3", slides: 5 },
 ]
@@ -28,6 +42,29 @@ const slideHistory = useRefHistory(slide);
 
 const lastSlide = computed(() => {
   return slideHistory.history.value[slideHistory.history.value.length - 2] || 1;
+});
+
+// Find the current slide configuration
+const currentSlideConfig = computed(() => {
+  return slideConfig.find(config => {
+    const [start, end] = config.range;
+    return slide.value >= start && slide.value <= end;
+  });
+});
+
+// Get the component props for the current slide
+const currentSlideProps = computed(() => {
+  const config = currentSlideConfig.value;
+  if (!config) return {};
+
+  let props = { ...config.props };
+
+  // Add dynamic props if they exist
+  if (config.dynamicProps) {
+    props = { ...props, ...config.dynamicProps(slide.value) };
+  }
+
+  return props;
 });
 
 onKeyStroke('ArrowRight', () => {
@@ -50,14 +87,8 @@ onKeyStroke('ArrowLeft', () => {
 </script>
 
 <template>
-  <Intro v-if="slide === 1" />
-  <RoundedTokens v-if="slide === 2" class="SamSlide" />
-  <Trinity v-if="slide === 3" class="SamSlide" />
-  <Eden v-if="slide >= 4 && slide <= 11" class="SamSlide" :stage="slide - 3" />
-  <ThatsTheWebFolks v-if="slide === 12" class="SamSlide" />
-  <PersonalSpaceTokens v-if="slide === 13" class="SamSlide" />
-  <SpaceTokens v-if="slide === 14" class="SamSlide" />
-  <NotesBetweenNotes v-if="slide === 15" class="SamSlide" />
+  <!-- Dynamic component rendering based on current slide -->
+  <component :is="currentSlideConfig.component" v-if="currentSlideConfig" v-bind="currentSlideProps" />
 
   <div class="SlidePage">
     <p>{{ act }} / {{ pages.length }}</p>
