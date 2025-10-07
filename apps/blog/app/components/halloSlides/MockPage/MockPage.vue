@@ -1,42 +1,97 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
+import { gsap } from 'gsap'
 
-// Internal toggle for click interaction (fallback/demo)
-const visible = ref(false);
+const mockPageRef = ref<HTMLElement>()
+const timeline = gsap.timeline({ paused: false });
 
-const totalDuration = ref(400); // in ms
-
-const stageOne = computed(() => {
-  return totalDuration.value * 0.25;
-});
-
-const stageTwo = computed(() => {
-  return stageOne.value * 0.25;
-});
-
-const stageThree = computed(() => {
-  return stageTwo.value * 0.25;
-});
-
-function toggleVisibility() {
-  visible.value = !visible.value;
+function playTimeline() {
+  if (!timeline) return
+  timeline.restart();
 }
 
+onMounted(() => {
+  if (!mockPageRef.value) return;
+
+  const mockCTA = mockPageRef.value.querySelector('.MockCTA');
+  const mockCards = mockPageRef.value.querySelectorAll('.MockCard');
+  const mockLinks = mockPageRef.value.querySelectorAll('.MockLink');
+  const mockTitles = mockPageRef.value.querySelectorAll('.MockTitle');
+  const mockDisplayTitle = mockPageRef.value.querySelector('.MockDisplayTitle');
+
+  const animatableElements = [
+    mockTitles,
+    mockLinks,
+    mockDisplayTitle,
+    mockCTA,
+    mockCards,
+  ];
+
+  gsap.set(animatableElements, {
+    y: 20,
+    opacity: 0,
+    scale: 0.95
+  });
+
+  // Header animation
+  timeline
+    .to(mockTitles, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'back.out(1.7)'
+    })
+    .to(mockLinks, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.4,
+      ease: 'back.out(1.7)',
+      stagger: 0.1
+    }, '-=0.4')
+
+    // Body elements
+    .to(mockDisplayTitle, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.8,
+      ease: 'back.out(1.7)'
+    }, '-=0.2')
+    .to(mockCTA, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+      ease: 'back.out(1.7)'
+    }, '-=0.4')
+
+    // Cards with stagger
+    .to(mockCards, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.7,
+      ease: 'back.out(1.7)',
+      stagger: 0.15
+    }, '-=0.3')
+});
+
+onUnmounted(() => timeline.kill());
 </script>
 
 <template>
   <div>
-    <div class="MockPage border" :class="{
-      'MockVisible': visible,
-      'MockHidden': !visible
-    }" :style="{
+    <div ref="mockPageRef" class="MockPage border" :style="{
       '--mockBG': 'var(--base-10)',
       '--mockBGSubtle': 'var(--base-20)',
       '--mockText': 'var(--base-text)',
       '--mockImg': 'var(--base-50)',
       '--mockAccent': 'var(--accent-100)',
-    }" @click="toggleVisibility">
-      <header class="MockBGSubtle">
+    }" @click="playTimeline">
+      <header ref="headerRef" class="MockBGSubtle">
         <div class="MockTitle MockText"></div>
         <nav>
           <div class="MockLink MockText"></div>
@@ -45,7 +100,7 @@ function toggleVisibility() {
         </nav>
       </header>
 
-      <div class="MockBody MockBG">
+      <div ref="bodyRef" class="MockBody MockBG">
         <div class="MockDisplayTitle MockText"></div>
         <button class="MockCTA MockAccent"></button>
         <div class="MockCardGrid">
@@ -75,7 +130,7 @@ function toggleVisibility() {
         </div>
       </div>
 
-      <div class="MockFooter MockBGSubtle">
+      <div ref="footerRef" class="MockFooter MockBGSubtle">
         <div class="MockTitle MockText"></div>
         <div class="MockTitle MockText"></div>
       </div>
@@ -86,47 +141,22 @@ function toggleVisibility() {
 <style>
 .MockBG {
   background-color: var(--mockBG);
-  transition: .4s;
-}
-
-.MockHidden .MockBG {
-  opacity: 0;
 }
 
 .MockBGSubtle {
   background-color: var(--mockBGSubtle);
-  transition: .8s;
-}
-
-.MockHidden .MockBGSubtle {
-  opacity: 0;
 }
 
 .MockText {
   background-color: var(--mockText);
-  transition: 1.2s;
-}
-
-.MockHidden .MockText {
-  opacity: 0;
 }
 
 .MockImg {
   background-color: var(--mockImg);
-  transition: .8s;
-}
-
-.MockHidden .MockImg {
-  opacity: 0;
 }
 
 .MockAccent {
   background-color: var(--mockAccent);
-  transition: .8s;
-}
-
-.MockHidden .MockAccent {
-  opacity: 0;
 }
 
 .MockPage {
