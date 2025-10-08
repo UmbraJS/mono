@@ -37,7 +37,7 @@ function handleClick() {
 <template>
   <div class="DyePallet" :class="{ copied }" @click="handleClick">
     <div class="edit" v-if="compact">
-      <p>Edit</p>
+      <!-- <p>Edit</p> -->
     </div>
 
     <div class="DyePalletContent">

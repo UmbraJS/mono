@@ -81,6 +81,9 @@ const splineHook2 = ref<HTMLElement | null>(null)
 const splineHook1End = ref<HTMLElement | null>(null)
 const splineHook2End = ref<HTMLElement | null>(null)
 
+// SVG container ref for relative positioning
+const svgContainer = ref<HTMLElement | null>(null)
+
 // Splines for visual annotations
 const buttonSpline = useSplinePath({
   start: splineHook1End,
@@ -88,8 +91,9 @@ const buttonSpline = useSplinePath({
   color: 'var(--accent-text)',
   stroke: 2,
   angle: -90,
-  endTension: 3,
-  startTension: 3,
+  endTension: 6,
+  startTension: 6,
+  svgContainer,
 })
 
 const textSpline = useSplinePath({
@@ -98,9 +102,15 @@ const textSpline = useSplinePath({
   color: 'var(--accent-text)',
   stroke: 2,
   angle: 90,
-  endTension: 3,
-  startTension: 3,
+  endTension: 6,
+  startTension: 6,
+  svgContainer,
 })
+
+const buttonBgColor = ref(spaceTokens.find(t => t.name === '--interactive_warning__resting')?.value ||
+  'rgba(255, 146, 0, 1)')
+const buttonTextColor = ref(spaceTokens.find(t => t.name === '--interactive_warning__text')?.value ||
+  'rgba(173, 98, 0, 1)')
 </script>
 
 <template>
@@ -117,17 +127,24 @@ const textSpline = useSplinePath({
       <!-- Token annotations -->
       <div class="annotations">
         <div ref="buttonLabelElement" class="token-label button-label border">
-          <DyePicker />
-          <span class="token-name">interactive_warning__resting</span>
-          <span class="token-value">{{spaceTokens.find(t => t.name === '--interactive_warning__resting')?.value ||
-            'rgba(255, 146, 0, 1)'}}</span>
+          <DyePicker @change="(color) => {
+            buttonBgColor = color;
+          }" />
+          <div>
+            <span class="token-name">interactive_warning__resting</span>
+            <span class="token-value">{{ buttonBgColor }} </span>
+          </div>
           <span ref="splineHook1End" class="SplineHook1End"></span>
         </div>
 
         <div ref="textLabelElement" class="token-label text-label border">
-          <span class="token-name">interactive_warning__text</span>
-          <span class="token-value">{{spaceTokens.find(t => t.name === '--interactive_warning__text')?.value ||
-            'rgba(173, 98, 0, 1)'}}</span>
+          <DyePicker @change="(color) => {
+            buttonTextColor = color;
+          }" />
+          <div>
+            <span class="token-name">interactive_warning__text</span>
+            <span class="token-value">{{ buttonTextColor }} </span>
+          </div>
           <span ref="splineHook2End" class="SplineHook2End">
           </span>
         </div>
@@ -135,14 +152,12 @@ const textSpline = useSplinePath({
     </div>
 
     <!-- SVG for splines -->
-    <Teleport to="body">
-      <svg class="spline-overlay" width="100%" height="100%">
-        <path :d="buttonSpline.d.value" :stroke="buttonSpline.color" :stroke-width="buttonSpline.stroke" fill="none"
-          stroke-linecap="round" />
-        <path :d="textSpline.d.value" :stroke="textSpline.color" :stroke-width="textSpline.stroke" fill="none"
-          stroke-linecap="round" />
-      </svg>
-    </Teleport>
+    <svg ref="svgContainer" class="spline-overlay" width="100%" height="100%">
+      <path :d="buttonSpline.d.value" :stroke="buttonSpline.color" :stroke-width="buttonSpline.stroke" fill="none"
+        stroke-linecap="round" />
+      <path :d="textSpline.d.value" :stroke="textSpline.color" :stroke-width="textSpline.stroke" fill="none"
+        stroke-linecap="round" />
+    </svg>
   </div>
 </template>
 
@@ -178,10 +193,10 @@ const textSpline = useSplinePath({
   transform: translateY(-50%);
 }
 
-
 .SpacingTokens {
   position: relative;
   min-height: 400px;
+  width: 100%;
   padding: 2rem;
 }
 
@@ -201,14 +216,14 @@ const textSpline = useSplinePath({
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  background-color: var(--interactive_warning__resting);
+  background-color: v-bind(buttonBgColor);
   transition: background-color 0.2s ease;
 }
 
 .target-text {
   position: relative;
   margin: 0;
-  color: var(--interactive_warning__text);
+  color: v-bind(buttonTextColor);
   font-weight: 900;
   font-size: 16px;
 }
@@ -221,23 +236,24 @@ const textSpline = useSplinePath({
 }
 
 .token-label {
+  display: flex;
   position: absolute;
+  gap: var(--space-1);
   background: var(--base-10);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 12px;
+  border-radius: var(--radius);
+  padding: var(--space-1);
   font-family: 'Monaco', 'Consolas', monospace;
   pointer-events: auto;
 }
 
 .button-label {
-  top: 20px;
-  left: 20px;
+  top: -70px;
+  left: 90px;
 }
 
 .text-label {
-  bottom: 20px;
-  right: 20px;
+  bottom: -66px;
+  right: -20px;
 }
 
 .token-name {
@@ -248,7 +264,7 @@ const textSpline = useSplinePath({
 
 .token-value {
   display: block;
-  opacity: 0.7;
+  color: var(--base-80);
   font-size: 10px;
 }
 
@@ -256,6 +272,8 @@ const textSpline = useSplinePath({
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   z-index: 1;
 }

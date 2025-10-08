@@ -1,32 +1,65 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { DyePicker } from "@umbrajs/dye";
 import "@umbrajs/dye/dist/dye.css";
 
-const open = ref(true);
+const emit = defineEmits<{
+  change: [color: string]
+}>();
+
+const open = ref(false);
 </script>
 
 <template>
-  <div class="DyePickerContainer">
-    <Teleport to="body">
-      <DyePicker :open="open" default="#3498db" @change="(dye) => console.log('Color changed:', dye)" />
-    </Teleport>
+  <div class="DyePickerContainer" :class="{ open }">
+    <div class="DyePickerCarrier">
+      <DyePicker v-model:open="open" default="#3498db" @change="(dye) => emit('change', dye.color.toRgbString())" />
+    </div>
   </div>
 </template>
 
 <style>
 .DyepickerWrapper {
-  position: absolute;
   width: 200px;
   height: 200px;
-  z-index: 99;
+  position: relative;
+  z-index: 10;
 }
 
 .DyePickerContainer {
   position: relative;
-  --size: 40px;
+  --size: 50px;
+  z-index: 99;
   width: var(--size);
   height: var(--size);
   background-color: RED;
   border-radius: var(--radius);
+}
+
+
+.DyePickerCarrier {
+  position: absolute;
+  z-index: 1;
+}
+
+.DyePickerCarrier::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: var(--base);
+  border-radius: var(--radius);
+  transform: scale(2);
+  filter: blur(8px);
+  pointer-events: none;
+  opacity: 0;
+  transition: .4s;
+}
+
+.DyePickerContainer.open .DyePickerCarrier::after {
+  opacity: 0.7;
 }
 </style>

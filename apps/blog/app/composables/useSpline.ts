@@ -1,5 +1,5 @@
 import { onBeforeUnmount, ref, onMounted, type ShallowRef } from 'vue'
-import { generateSpline, cubic, quadratic, elbow } from '@nobel/bifrost';
+import { generateSpline, cubic } from '@nobel/bifrost';
 
 export interface SplineOpts {
   start: Readonly<ShallowRef<HTMLElement | null>>
@@ -9,6 +9,7 @@ export interface SplineOpts {
   startTension?: number
   endTension?: number
   color?: string
+  svgContainer?: Readonly<ShallowRef<HTMLElement | null>>
 }
 
 function useRafSchedule(callback: () => void) {
@@ -37,8 +38,13 @@ export function useSplinePath(opts: SplineOpts) {
   const endCoords = ref<{ x: number; y: number } | null>(null)
 
   const recalc = () => {
-    const s = getCenter(opts.start.value) ?? { x: 0, y: 0 }
-    const e = getCenter(opts.end.value) ?? { x: 150, y: 150 }
+    const svgContainer = opts.svgContainer?.value
+    const s = svgContainer
+      ? getCenterRelativeTo(opts.start.value, svgContainer) ?? { x: 0, y: 0 }
+      : getCenter(opts.start.value) ?? { x: 0, y: 0 }
+    const e = svgContainer
+      ? getCenterRelativeTo(opts.end.value, svgContainer) ?? { x: 150, y: 150 }
+      : getCenter(opts.end.value) ?? { x: 150, y: 150 }
 
     startCoords.value = s
     endCoords.value = e
@@ -80,7 +86,8 @@ export function useSplinePath(opts: SplineOpts) {
     createSpline,
     destroySpline,
     id: splineId,
-    getCenter
+    getCenter,
+    getCenterRelativeTo
   }
 }
 
@@ -99,5 +106,23 @@ export function getCenter(el: HTMLElement | null | undefined) {
   return {
     x: box.left + window.scrollX + box.width / 2,
     y: box.top + window.scrollY + box.height / 2,
+  }
+}
+
+// overloads for getCenterRelativeTo
+export function getCenterRelativeTo(el: HTMLElement, container: HTMLElement): Point
+export function getCenterRelativeTo(el: null | undefined, container: HTMLElement): null
+export function getCenterRelativeTo(el: HTMLElement | null | undefined, container: HTMLElement): Point | null
+
+// Get center coordinates of an element relative to a container element
+export function getCenterRelativeTo(el: HTMLElement | null | undefined, container: HTMLElement) {
+  if (!el) return null
+
+  const elBox = el.getBoundingClientRect()
+  const containerBox = container.getBoundingClientRect()
+
+  return {
+    x: elBox.left - containerBox.left + elBox.width / 2,
+    y: elBox.top - containerBox.top + elBox.height / 2,
   }
 }
