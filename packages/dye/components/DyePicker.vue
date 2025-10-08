@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { swatch, UmbraSwatch } from '../../umbra/swatch'
 import { vOnClickOutside } from '@vueuse/components'
 import { ref } from 'vue'
@@ -18,24 +18,30 @@ interface Dye {
 
 const emit = defineEmits<{
   (e: 'change', dye: Dye): void
+  (e: 'update:open', open: boolean): void
 }>()
 
 interface DyeProps {
   default?: string
-  compact?: boolean
+  open?: boolean
 }
 
 const props = withDefaults(defineProps<DyeProps>(), {
-  default: '#ff0000',
-  compact: true
+  default: '#ff0000'
 })
 
 // Provide isolated context for this DyePicker instance
 const context = provideDyeContext(props.default)
 
 // Logic
-const compact = ref(props.compact)
+const internalCompact = ref(true)
 const dye = context.dye
+
+// Use controlled mode if open prop is provided (not undefined)
+// Otherwise use uncontrolled mode with internal state
+const compact = computed(() => {
+  return props.open !== undefined ? !props.open : internalCompact.value
+})
 
 onMounted(() => dye.setColor(props.default, true))
 
@@ -46,11 +52,31 @@ function change(color: OutputColor) {
     color: swatch(color.hex)
   })
 }
+
+function handleOpen() {
+  if (props.open !== undefined) {
+    // Controlled mode - emit event for parent to handle
+    emit('update:open', true)
+  } else {
+    // Uncontrolled mode - update internal state
+    internalCompact.value = false
+  }
+}
+
+function handleClose() {
+  if (props.open !== undefined) {
+    // Controlled mode - emit event for parent to handle
+    emit('update:open', false)
+  } else {
+    // Uncontrolled mode - update internal state
+    internalCompact.value = true
+  }
+}
 </script>
 
 <template>
-  <DyeWrapper :compact="compact" v-on-click-outside="() => (compact = true)">
-    <Pallet :compact="compact" @click="() => (compact = false)" />
+  <DyeWrapper :compact="compact" v-on-click-outside="handleClose">
+    <Pallet :compact="compact" @click="handleOpen" />
     <ColorCanvas @change="change" :min="0" :max="100" />
     <HueCanvas @change="change" :min="0" :max="100" />
   </DyeWrapper>

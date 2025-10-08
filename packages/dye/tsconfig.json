@@ -19,6 +19,10 @@
         "./composables/*"
       ]
     },
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     /* Linting */
@@ -39,7 +43,8 @@
     "**/*.d.ts",
     "**/*.tsx",
     "components/*.vue",
-    "components/canvas/*.vue"
+    "components/canvas/*.vue",
+    "types/**/*.d.ts"
   ],
   "exclude": [
     "vite.config.ts",

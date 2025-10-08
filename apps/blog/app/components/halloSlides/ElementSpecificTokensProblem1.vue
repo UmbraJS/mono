@@ -90,7 +90,6 @@ const buttonSpline = useSplinePath({
   angle: -90,
   endTension: 3,
   startTension: 3,
-
 })
 
 const textSpline = useSplinePath({

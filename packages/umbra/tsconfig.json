@@ -1,13 +1,22 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
     "paths": {
-      "@/*": ["./engine/*"]
+      "@/*": [
+        "./engine/*"
+      ]
     },
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
     "resolveJsonModule": true,
     "strict": true,
     "noImplicitReturns": true,

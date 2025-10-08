@@ -26,7 +26,11 @@ function copyToClipboard() {
 }
 
 function handleClick() {
-  props.compact ? emit('click') : copyToClipboard()
+  if (props.compact) {
+    emit('click')
+  } else {
+    copyToClipboard()
+  }
 }
 </script>
 
@@ -38,7 +42,7 @@ function handleClick() {
 
     <div class="DyePalletContent">
       <p>{{ dye.color.hex }}</p>
-      <p class="h3 name">{{ dye.color.name }}</p>
+      <p class="name">{{ dye.color.name }}</p>
     </div>
 
     <div class="shade" style="background: var(--base)"></div>
