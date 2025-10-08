@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSplinePath } from '../../composables/useSpline'
 import DyePicker from '../DyePicker.vue';
+import { swatch } from "@umbrajs/core";
 
 const spaceTokens = [
   { name: "--text__static_icons__default", value: "rgba(61, 61, 61, 1)" },
@@ -111,6 +112,14 @@ const buttonBgColor = ref(spaceTokens.find(t => t.name === '--interactive_warnin
   'rgba(255, 146, 0, 1)')
 const buttonTextColor = ref(spaceTokens.find(t => t.name === '--interactive_warning__text')?.value ||
   'rgba(173, 98, 0, 1)')
+
+const buttonBgHex = computed(() => {
+  return swatch(buttonBgColor.value).toHex()
+})
+
+const buttonTextHex = computed(() => {
+  return swatch(buttonTextColor.value).toHex()
+})
 </script>
 
 <template>
@@ -127,7 +136,7 @@ const buttonTextColor = ref(spaceTokens.find(t => t.name === '--interactive_warn
       <!-- Token annotations -->
       <div class="annotations">
         <div ref="buttonLabelElement" class="token-label button-label border">
-          <DyePicker @change="(color) => {
+          <DyePicker :default-color="buttonBgHex" @change="(color) => {
             buttonBgColor = color;
           }" />
           <div>
@@ -138,7 +147,7 @@ const buttonTextColor = ref(spaceTokens.find(t => t.name === '--interactive_warn
         </div>
 
         <div ref="textLabelElement" class="token-label text-label border">
-          <DyePicker @change="(color) => {
+          <DyePicker :default-color="buttonTextHex" @change="(color) => {
             buttonTextColor = color;
           }" />
           <div>

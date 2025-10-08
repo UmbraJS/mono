@@ -3,6 +3,11 @@ import { ref } from 'vue';
 import { DyePicker } from "@umbrajs/dye";
 import "@umbrajs/dye/dist/dye.css";
 
+defineProps<{
+  // You can define props here if needed
+  defaultColor: string
+}>();
+
 const emit = defineEmits<{
   change: [color: string]
 }>();
@@ -13,7 +18,8 @@ const open = ref(false);
 <template>
   <div class="DyePickerContainer" :class="{ open }">
     <div class="DyePickerCarrier">
-      <DyePicker v-model:open="open" default="#3498db" @change="(dye) => emit('change', dye.color.toRgbString())" />
+      <DyePicker v-model:open="open" :default="defaultColor"
+        @change="(dye) => emit('change', dye.color.toRgbString())" />
     </div>
   </div>
 </template>
