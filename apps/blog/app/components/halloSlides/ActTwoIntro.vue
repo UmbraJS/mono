@@ -5,8 +5,7 @@ import ActIntro from './ActIntro.vue';
 <template>
   <ActIntro title="Act 2: Organizing Colour">
     <p class="display">
-      A design <span>system</span> isn't UI components. It isn't dark mode <br /> or rounded corners. It's the
-      underlying <span>rules</span> that make <br /> those decisions possible.
+      It's possible to be too schematic with your color tokens.
     </p>
   </ActIntro>
 </template>

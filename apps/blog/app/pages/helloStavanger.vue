@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import type { Component } from 'vue';
 import { onKeyStroke, useRefHistory } from '@vueuse/core';
+import { useRoute, useRouter } from 'vue-router';
+
 import RoundedTokens from '../components/halloSlides/RoundedTokens.vue';
 import Trinity from '../components/halloSlides/Trinity.vue';
 import Eden from '../components/halloSlides/Eden.vue';
@@ -13,6 +15,9 @@ import SpaceTokens from '../components/halloSlides/SpaceTokens.vue';
 import NotesBetweenNotes from '../components/halloSlides/NotesBetweenNotes.vue';
 import ColorIsAll from '../components/halloSlides/ColorIsAll.vue';
 import ActTwoIntro from '../components/halloSlides/ActTwoIntro.vue';
+import ElementSpecificTokens from '../components/halloSlides/ElementSpecificTokens.vue';
+import ElementSpecificTokensExpanded from '../components/halloSlides/ElementSpecificTokensExpanded.vue';
+import ElementSpecificTokensProblem1 from '../components/halloSlides/ElementSpecificTokensProblem1.vue';
 
 interface SlideConfig {
   component: Component; // Vue component
@@ -34,9 +39,11 @@ const actOneSlideConfig: SlideConfig[] = [
   { component: ColorIsAll, props: { class: 'SamSlide' }, range: [16, 16] as [number, number] },
 ];
 
-
 const actTwoSlideConfig: SlideConfig[] = [
   { component: ActTwoIntro, props: {}, range: [1, 1] as [number, number] },
+  { component: ElementSpecificTokens, props: { class: 'SamSlide' }, range: [2, 2] as [number, number] },
+  { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' }, range: [3, 3] as [number, number] },
+  { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' }, range: [4, 4] as [number, number] },
 ];
 
 // Generate pages configuration from slide config
@@ -48,8 +55,53 @@ const pages = [
   { name: "act3", slides: 0 },
 ]
 
+const route = useRoute();
+const router = useRouter();
+
 const act = ref(1)
 const slide = ref(1);
+
+// Function to update URL with current act and slide
+const updateURL = () => {
+  router.push({
+    query: {
+      ...route.query,
+      act: act.value.toString(),
+      slide: slide.value.toString()
+    }
+  });
+};
+
+// Initialize from URL parameters
+onMounted(() => {
+  const urlAct = parseInt(route.query.act as string) || 1;
+  const urlSlide = parseInt(route.query.slide as string) || 1;
+
+  // Validate that the act and slide are within valid ranges
+  if (urlAct >= 1 && urlAct <= pages.length) {
+    act.value = urlAct;
+    const maxSlidesInAct = pages[urlAct - 1]?.slides || 1;
+    if (urlSlide >= 1 && urlSlide <= maxSlidesInAct) {
+      slide.value = urlSlide;
+    }
+  }
+});
+
+// Watch for URL changes (browser back/forward)
+watch(() => route.query, (newQuery) => {
+  const urlAct = parseInt(newQuery.act as string) || 1;
+  const urlSlide = parseInt(newQuery.slide as string) || 1;
+
+  // Validate and update if different from current values
+  if (urlAct >= 1 && urlAct <= pages.length && urlAct !== act.value) {
+    act.value = urlAct;
+  }
+
+  const maxSlidesInAct = pages[act.value - 1]?.slides || 1;
+  if (urlSlide >= 1 && urlSlide <= maxSlidesInAct && urlSlide !== slide.value) {
+    slide.value = urlSlide;
+  }
+}, { deep: true });
 
 const slidesInThisAct = computed(() => {
   return pages[act.value - 1]?.slides || 1;
@@ -94,6 +146,7 @@ onKeyStroke('ArrowRight', () => {
     slide.value = 1;
   }
   if (act.value > pages.length) act.value = pages.length;
+  updateURL();
 });
 
 onKeyStroke('ArrowLeft', () => {
@@ -103,6 +156,7 @@ onKeyStroke('ArrowLeft', () => {
     act.value--;
     slide.value = pages[act.value - 1]?.slides || 1;
   }
+  updateURL();
 });
 </script>
 

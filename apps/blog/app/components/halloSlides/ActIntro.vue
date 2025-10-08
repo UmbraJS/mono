@@ -53,6 +53,7 @@ onMounted(() => {
 <template>
   <div class="SamSlide">
     <div class="IntroTextWrapper">
+      <!-- <h1 class="ActThesis">thesis</h1> -->
       <h3>{{ title }}</h3>
       <div class="IntroText">
         <div ref="revealBox" class="RevealBox"></div>
@@ -65,6 +66,14 @@ onMounted(() => {
 </template>
 
 <style>
+.ActThesis {
+  position: absolute;
+  transform: rotate(-90deg) translateY(-250%) translateX(-40%);
+  color: var(--base-30);
+  text-transform: uppercase;
+  letter-spacing: 0px;
+}
+
 .IntroTextWrapper {
   display: flex;
   flex-direction: column;
