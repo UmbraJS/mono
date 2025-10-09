@@ -4,12 +4,18 @@ import { useMouse, useMousePressed } from '@vueuse/core'
 import { clamp, gsapTo, nearestSnapPoint } from './utils'
 import { useSliderZoom } from './useSliderZoom'
 
+export interface UpdateSliderProps {
+  value: number
+  handle: 'start' | 'end'
+}
+
 interface UseSliderValue {
   slider: Readonly<ShallowRef<HTMLDivElement | null>>
   track: Readonly<ShallowRef<HTMLDivElement | null>>
+  callback: (props: UpdateSliderProps) => void
 }
 
-export function useSliderValue({ slider, track }: UseSliderValue) {
+export function useSliderValue({ slider, track, callback }: UseSliderValue) {
   const startHandleClicked = ref(false)
 
   const { x, y } = useMouse()
@@ -64,8 +70,10 @@ export function useSliderValue({ slider, track }: UseSliderValue) {
 
   function updateSlider(percent = cursor.value) {
     if (startHandleClicked.value) {
+      callback({ value: percent, handle: 'start' })
       moveLeftHandle(percent)
     } else {
+      callback({ value: percent, handle: 'end' })
       moveRightHandle(percent)
     }
   }

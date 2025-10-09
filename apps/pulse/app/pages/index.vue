@@ -12,7 +12,6 @@ const todaysMood = ref<number>(0);
 
 <template>
   <WorkDays />
-
   <div class="TodaySection">
     <div class="TodayCore ContentWidth">
       <div class="TodayHeader">
@@ -20,7 +19,10 @@ const todaysMood = ref<number>(0);
         <p>{{ getMoodEmoji(todaysMood) }} {{ todaysMood }} / 10</p>
       </div>
       <textarea class="Textarea" placeholder="What are you working on today?" rows="6"></textarea>
-      <Slider v-model="todaysMood" :min="0" :max="10" step="0.1" />
+      <Slider :min="0" :max="10" step="0.1" @update:model-value="(props) => {
+        console.log('rex: ', props);
+        if (props.handle === 'end') todaysMood = props.value
+      }" />
     </div>
   </div>
 </template>

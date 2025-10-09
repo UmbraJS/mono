@@ -78,10 +78,10 @@ const actTwoSlideConfig: SlideConfig[] = [
   { component: TailwindTokens, props: { class: 'SamSlide' } },
   { component: RadixColors, props: { class: 'SamSlide' } },
   { component: UmbraRange, props: { class: 'SamSlide' } },
-  { component: UmbraRanges, props: { class: 'SamSlide' } },
   { component: SingleRangePage, props: { class: 'SamSlide' } },
   { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
   { component: ColourReassignment, props: { class: 'SamSlide' } },
+  { component: UmbraRanges, props: { class: 'SamSlide' } },
 ];
 
 const actThreeSlideConfig: SlideConfig[] = [

@@ -1,20 +1,26 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import { useDyeContext } from '../composables/useDyeContext'
 
-withDefaults(
-  defineProps<{
-    compact?: boolean
-  }>(),
-  {
-    compact: false
-  }
-)
+const { compact = false } = defineProps<{
+  compact?: boolean
+}>()
+
+const renderPriority = ref(false)
+
+watch(() => compact, () => {
+  renderPriority.value = true
+  setTimeout(() => {
+    renderPriority.value = false
+  }, 300)
+})
 
 const dye = useDyeContext()
 </script>
 
 <template>
-  <div :ref="(el) => dye.setWrapper(el as HTMLDivElement)" class="DyepickerWrapper" :class="{ compact }">
+  <div :ref="(el) => dye.setWrapper(el as HTMLDivElement)" class="DyepickerWrapper"
+    :class="{ compact, renderPriority }">
     <slot />
   </div>
 </template>

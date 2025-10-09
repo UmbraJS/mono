@@ -86,9 +86,6 @@ function getVariableName(prefix: string, entryNumber: number): string {
         </div>
       </div>
     </div>
-
-
-
   </div>
 </template>
 
@@ -103,6 +100,12 @@ function getVariableName(prefix: string, entryNumber: number): string {
   grid-column: 1 / -1;
   gap: var(--space-2);
   align-items: center;
+}
+
+.SpaceToken:has(.DyepickerWrapper:not(.compact)),
+.SpaceToken:has(.DyepickerWrapper.renderPriority) {
+  position: relative;
+  z-index: 999999;
 }
 
 .SpacingTokens {

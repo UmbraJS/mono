@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
+import { Slider, Button } from "umbraco"
 import DyePicker from '../DyePicker.vue';
 
-const bg = ref("black");
-const fg = ref("white");
+const bg = ref("#000000");
+const fg = ref("#ffffff");
 const ac = ref("#6400ff");
+
+const minimumReadability = ref(50);
 
 const theme = umbra({
   background: bg.value,
@@ -15,11 +18,14 @@ const theme = umbra({
 
 const formated = ref(theme.format().formated)
 
-watch([bg, fg, ac], ([newBg, newFg, newAc]) => {
+watch([bg, fg, ac, minimumReadability], ([newBg, newFg, newAc, newMinRead]) => {
   const newTheme = umbra({
     background: newBg,
     foreground: newFg,
-    accents: [newAc]
+    accents: [newAc],
+    settings: {
+      readability: newMinRead
+    }
   });
   formated.value = newTheme.format().formated;
 });
@@ -47,28 +53,48 @@ function changeTheme({
   if (foreground) fg.value = foreground;
   if (accentValue) ac.value = accentValue;
 }
+
+function applyTheme() {
+  umbra({
+    background: bg.value,
+    foreground: fg.value,
+    accents: [ac.value],
+    settings: {
+      readability: minimumReadability.value
+    }
+  }).apply()
+}
 </script>
 
 <template>
   <div class="SpacingTokens">
     <div class="AliasedWrapper">
-      <div class="UmbraActions">
 
+      <div class="UmbraActions border">
         <div class="ColorEdit">
-          <p>Background</p>
+          <p class="caption">Background</p>
           <DyePicker label="Background" :default-color="bg" @change="(color) => changeTheme({ background: color })" />
         </div>
 
         <div class="ColorEdit">
-          <p>Foreground</p>
+          <p class="caption">Foreground</p>
           <DyePicker label="Foreground" :default-color="fg" @change="(color) => changeTheme({ foreground: color })" />
         </div>
 
         <div class="ColorEdit">
-          <p>Accent</p>
+          <p class="caption">Accent</p>
           <DyePicker label="Accent" :default-color="ac" @change="(color) => changeTheme({ accentValue: color })" />
         </div>
 
+
+        <div class="ReadabilityWrapper">
+          <p class="caption">Minimum Readability {{ minimumReadability }}</p>
+          <Slider @update:model-value="(min) => minimumReadability = min.value" />
+        </div>
+
+        <Button @click="applyTheme">
+          Apply
+        </Button>
       </div>
 
 
@@ -78,7 +104,7 @@ function changeTheme({
             <div class="SpaceToken">
               <span class="TokenName">--base:</span>
               <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--base)' }" />
+              <div class="Swatch border" :style="{ '--color': bg }" />
             </div>
           </div>
 
@@ -94,7 +120,7 @@ function changeTheme({
             <div class="SpaceToken">
               <span class="TokenName">--base-text:</span>
               <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--base-text)' }" />
+              <div class="Swatch border" :style="{ '--color': fg }" />
             </div>
           </div>
         </div>
@@ -136,16 +162,41 @@ function changeTheme({
 </template>
 
 <style>
-.UmbraActions {
+.AliasedWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-1);
+  justify-content: center;
+  align-items: center;
+}
+
+.ReadabilityWrapper {
   display: flex;
   flex-direction: column;
+  gap: var(--space-1);
+  min-width: 400px;
+}
+
+
+.UmbraActions {
+  display: flex;
   gap: var(--space-4);
+  grid-column: span 2;
+  padding: var(--space-2);
+  justify-content: center;
+  align-items: center;
 }
 
 .ColorEdit {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+}
+
+.ColorEdit:has(.DyePickerContainer.open),
+.ColorEdit:hover {
+  position: relative;
+  z-index: 999999;
 }
 
 .SpacingTitle {

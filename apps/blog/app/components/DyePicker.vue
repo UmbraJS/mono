@@ -17,7 +17,7 @@ const open = ref(false);
 
 <template>
   <div class="DyePickerContainer" :class="{ open }">
-    <div class="DyePickerCarrier">
+    <div class="DyePickerCarrier border">
       <DyePicker v-model:open="open" :default="defaultColor"
         @change="(dye) => emit('change', dye.color.toRgbString())" />
     </div>

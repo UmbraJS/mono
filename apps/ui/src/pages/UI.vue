@@ -66,7 +66,7 @@ const options = [
 
     <section id="radio" class="column">
       <h2>Tooltip</h2>
-      <Tooltip />
+      <Tooltip text="This is a tooltip" />
     </section>
 
     <section id="radio" class="column">

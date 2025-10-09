@@ -3,7 +3,7 @@ import { TooltipArrow, TooltipContent, TooltipPortal, TooltipProvider, TooltipRo
 
 defineProps<{
   text: string
-  class?: string
+  className?: string
 }>()
 
 </script>
@@ -15,7 +15,7 @@ defineProps<{
         <slot></slot>
       </TooltipTrigger>
       <TooltipPortal class="lol">
-        <TooltipContent class="TooltipContent border" :class="class" :side-offset="5">
+        <TooltipContent class="TooltipContent border" :class="className" :side-offset="5">
           <p>{{ text }}</p>
           <TooltipArrow class="TooltipArrow" :width="8" />
         </TooltipContent>

@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <div v-if="error" class="InputErrorIcon">
-    <Tooltip :text="error" class="base-warning">
+    <Tooltip :text="error" class-name="base-warning">
       <Icon name="carbon:error" />
     </Tooltip>
   </div>

@@ -5,6 +5,11 @@ import { useSliderValue } from './useSliderValue'
 import SnapPoints from './SnapPoints.vue'
 import SliderHandle from './SliderHandle.vue'
 import SliderRuler from './SliderRuler.vue'
+import type { UpdateSliderProps } from './useSliderValue'
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', props: UpdateSliderProps): void
+}>()
 
 const slider = useTemplateRef<HTMLDivElement>('slider')
 const track = useTemplateRef<HTMLDivElement>('track')
@@ -12,7 +17,7 @@ const track = useTemplateRef<HTMLDivElement>('track')
 const {
   zoom,
   pressed,
-  endHandle,
+  // endHandle,
   snapPoints,
   startHandle,
   updateSlider,
@@ -21,6 +26,7 @@ const {
 } = useSliderValue({
   slider,
   track,
+  callback: (props) => emit('update:modelValue', props)
 })
 
 useSliderKeys(slider, {
