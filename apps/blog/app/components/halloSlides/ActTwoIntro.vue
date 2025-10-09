@@ -5,7 +5,7 @@ import ActIntro from './ActIntro.vue';
 <template>
   <ActIntro title="Act 2: Organizing Colour">
     <p class="display">
-      It's possible to be too schematic with your color tokens.
+      It's possible to be too semantic with your color tokens.
     </p>
   </ActIntro>
 </template>

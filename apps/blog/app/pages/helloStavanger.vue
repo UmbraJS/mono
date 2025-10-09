@@ -45,6 +45,9 @@ import colorGammut from "../../public/colorGammut.avif";
 import APCAFormula from "../../public/apcaFormula.png";
 import umbraControl from "../../public/umbraControl.png";
 import wcagVsAPCA from "../../public/wcagVsApca.png";
+import simpleUmbra from "../../public/simpleUmbra.png";
+import umbraExecute from "../../public/umbraExecute.png";
+import umbraInsights from "../../public/umbraInsight.png";
 
 interface SlideConfig {
   component: Component; // Vue component
@@ -96,6 +99,9 @@ const actThreeSlideConfig: SlideConfig[] = [
   { component: ImageIllustration, props: { class: 'SamSlide', url: colorGammut } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: APCAFormula } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: wcagVsAPCA } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: simpleUmbra } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: umbraExecute } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: umbraInsights } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: umbraControl } },
   { component: UmbraRange, props: { class: 'SamSlide' } },
   { component: TheEnd, props: { class: 'SamSlide' } },

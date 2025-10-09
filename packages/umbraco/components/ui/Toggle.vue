@@ -2,21 +2,22 @@
 import { Icon } from '@iconify/vue'
 import Button from './Button/Button.vue'
 
-defineProps<{
+const { value, icon = "carbon:face-satisfied" } = defineProps<{
   value: boolean
+  icon?: string
 }>()
 </script>
 
 <template>
-  <Button class="ToggleWrapper" :class="{ right: value }" size="small">
+  <Button id="ToggleWrapper" :class="{ right: value }" size="small">
     <div class="handle">
-      <Icon icon="carbon:face-satisfied" />
+      <Icon :icon="icon" />
     </div>
   </Button>
 </template>
 
 <style lang="scss">
-button.ToggleWrapper.small {
+#ToggleWrapper.buttonSmall {
   display: inline-block;
 
   width: calc(var(--block) * 2);
@@ -41,7 +42,7 @@ button.ToggleWrapper.small {
   }
 }
 
-button.ToggleWrapper.small:focus {
+#ToggleWrapper.buttonSmall:focus {
   background-color: var(--base-50);
 }
 </style>

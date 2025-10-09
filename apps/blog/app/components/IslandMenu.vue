@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, ButtonGroup } from 'umbraco'
+import { Button, ButtonGroup, Toggle } from 'umbraco'
 import { onClickOutside } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import UserPanelWrapper from './UserPanelWrapper.vue'
@@ -42,8 +42,8 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
       <SettingsPanel v-if="activeTab === 'settings'" />
     </div>
 
-    <ButtonGroup class="island-actions">
-      <Button size="small" :variant="activeVariant('user')" @click="() => switchTab('user')">
+    <!-- <ButtonGroup class="island-actions"> -->
+    <!-- <Button size="small" :variant="activeVariant('user')" @click="() => switchTab('user')">
         <Icon name="pixelarticons:user" size="1em" />
       </Button>
 
@@ -53,12 +53,15 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
 
       <Button variant="base" size="small" @click="theme.inverse()">
         <Icon name="pixelarticons:card-text" />
-      </Button>
+      </Button> -->
 
-      <Button :variant="theme.isDark ? 'primary' : 'base'" size="small" @click="theme.inverse()">
-        <Icon name="pixelarticons:paint-bucket" />
-      </Button>
-    </ButtonGroup>
+    <!-- <Button :variant="theme.isDark ? 'primary' : 'base'" size="small" @click="theme.inverse()">
+      <Icon name="pixelarticons:paint-bucket" />
+    </Button> -->
+
+    <Toggle :value="theme.isDark" :icon="theme.isDark ? 'pixelarticons:moon' : 'carbon:light'"
+      @click="theme.inverse()" />
+    <!-- </ButtonGroup> -->
   </nav>
   <div class="haze island-position"></div>
 </template>
@@ -80,6 +83,7 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
   border: solid var(--border-size) var(--base-50);
   border-radius: var(--outer-radius);
   overflow: hidden;
+  padding: var(--space-1);
 
   bottom: var(--space-1);
   margin: auto;
@@ -125,7 +129,8 @@ onClickOutside(islandMenu, () => (expandedTab.value = false))
 
 .haze {
   height: var(--block-big);
-  width: 123px;
+  /* width: 123px; */
+  width: 50px;
   background: var(--accent);
   box-shadow: -0px 22px 115px v-bind(hazeStrength) var(--accent);
   border-radius: var(--outer-radius);

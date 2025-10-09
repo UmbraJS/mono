@@ -99,7 +99,8 @@ const spaceTokenStyleObject = computed(() => {
     <h3 class="SpacingTitle">
       Scaled up: 50+ tokens
     </h3>
-    <p>Many duplicate colors under different names. No defined relationship between colors</p>
+    <p>Many duplicate colors under different names. Color relationships are very loosely defined if at all. And even if
+      they are defined, it takes a tremendous amount of upkeep and communication to maintain these relationships.</p>
     <p></p>
     <ScrollArea class="ScrollArea">
       <div class="TokensTable">
