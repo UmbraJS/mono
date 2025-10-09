@@ -9,31 +9,42 @@ import SliderRuler from './SliderRuler.vue'
 const slider = useTemplateRef<HTMLDivElement>('slider')
 const track = useTemplateRef<HTMLDivElement>('track')
 
-const { size, left, zoom, pressed, updateSlider, leftHandleClicked, snapPoints } = useSliderValue({
+const {
+  zoom,
+  pressed,
+  endHandle,
+  snapPoints,
+  startHandle,
+  updateSlider,
+  activeTrackSize,
+  startHandleClicked,
+} = useSliderValue({
   slider,
   track,
 })
 
-useSliderKeys(slider, { size, snapPoints })
+useSliderKeys(slider, {
+  activeTrackSize,
+  snapPoints
+})
 
 watch(pressed, (isPressed) => {
   if (isPressed) return
-  leftHandleClicked.value = false
+  startHandleClicked.value = false
 })
 </script>
 
 <template>
   <div class="SliderContainer">
-    <SliderRuler v-if="zoom > 1" :value="leftHandleClicked ? left : size + left" :min="0" :max="100"
-      :snapPoints="snapPoints" :pressed="pressed" :zoom="zoom" />
+    <SliderRuler v-if="zoom > 1" :value="startHandleClicked ? startHandle : activeTrackSize + startHandle" :min="0"
+      :max="100" :snapPoints="snapPoints" :pressed="pressed" :zoom="zoom" />
     <div ref="slider" tabindex="1" class="SliderWrapper border focus" @mousedown="() => updateSlider()">
       <div ref="track" class="SliderTrack">
         <div class="SliderRange">
-          <SliderHandle variant="secondary" side="left" @mousedown="leftHandleClicked = true" />
+          <SliderHandle variant="secondary" side="left" @mousedown="startHandleClicked = true" />
           <SliderHandle variant="primary" side="right" />
         </div>
-
-        <SnapPoints :value="size + left" :snapPoints="snapPoints" />
+        <SnapPoints :value="activeTrackSize + startHandle" :snapPoints="snapPoints" />
       </div>
     </div>
   </div>
@@ -87,8 +98,8 @@ watch(pressed, (isPressed) => {
   position: relative;
   z-index: 2;
   height: 100%;
-  width: calc(v-bind(size) * 1%);
-  margin-left: calc(v-bind(left) * 1%);
+  width: calc(v-bind(activeTrackSize) * 1%);
+  margin-left: calc(v-bind(startHandle) * 1%);
   background: var(--accent-100);
   border-radius: var(--radius);
 }

@@ -4,20 +4,20 @@ import { onKeyStroke } from '@vueuse/core'
 import { clamp, switchPoint } from './utils'
 
 interface UseSliderKeys {
-  size: Ref<number>
+  activeTrackSize: Ref<number>
   snapPoints: Ref<number[]>
 }
 
 export function useSliderKeys(
   slider: Readonly<ShallowRef<HTMLDivElement | null>> | null,
-  { size, snapPoints }: UseSliderKeys,
+  { activeTrackSize, snapPoints }: UseSliderKeys,
 ) {
   const modifier = ref(false)
   const hasSnapPoints = computed(() => snapPoints.value.length > 0)
 
   function setValue(percent: number, add = 0) {
     const adder = modifier.value ? add * 10 : add
-    size.value = clamp(percent + adder, 0, 100)
+    activeTrackSize.value = clamp(percent + adder, 0, 100)
   }
 
   function snapOrMove(value: number, add = 0) {
@@ -43,12 +43,12 @@ export function useSliderKeys(
     target: slider,
   })
 
-  onKeyStroke('ArrowLeft', () => snapOrMove(size.value, -1), {
+  onKeyStroke('ArrowLeft', () => snapOrMove(activeTrackSize.value, -1), {
     eventName: 'keydown',
     target: slider,
   })
 
-  onKeyStroke('ArrowRight', () => snapOrMove(size.value, 1), {
+  onKeyStroke('ArrowRight', () => snapOrMove(activeTrackSize.value, 1), {
     eventName: 'keydown',
     target: slider,
   })
