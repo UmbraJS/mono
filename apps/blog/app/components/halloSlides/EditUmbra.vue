@@ -24,7 +24,6 @@ watch([bg, fg, ac], ([newBg, newFg, newAc]) => {
   formated.value = newTheme.format().formated;
 });
 
-
 const base = computed(() => formated.value[0] as FormatedRange);
 const accent = computed(() => formated.value[1] as FormatedRange);
 

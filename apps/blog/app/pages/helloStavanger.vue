@@ -32,6 +32,19 @@ import ActThreeIntro from '../components/halloSlides/ActThreeIntro.vue';
 import TheEnd from '../components/halloSlides/TheEnd.vue';
 import ManualRangeEdit from '../components/halloSlides/ManualRangeEdit.vue';
 import EditUmbra from '../components/halloSlides/EditUmbra.vue';
+import ImageIllustration from '../components/halloSlides/ImageIllustration.vue';
+import SamSigningOff from '../components/halloSlides/SamSigningOff.vue';
+
+//Images
+import queryAboutImages from "../../public/query.png";
+import wcag from "../../public/wcag.png";
+import localisedColors from "../../public/localisedColor.png";
+import localisedColors2 from "../../public/localisedColor2.png";
+import APCA from "../../public/APCA.png";
+import colorGammut from "../../public/colorGammut.avif";
+import APCAFormula from "../../public/apcaFormula.png";
+import umbraControl from "../../public/umbraControl.png";
+import wcagVsAPCA from "../../public/wcagVsApca.png";
 
 interface SlideConfig {
   component: Component; // Vue component
@@ -75,7 +88,18 @@ const actThreeSlideConfig: SlideConfig[] = [
   { component: ActThreeIntro, props: {} },
   { component: ManualRangeEdit, props: { class: 'SamSlide' } },
   { component: EditUmbra, props: { class: 'SamSlide' } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: queryAboutImages } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: wcag } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors2 } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: APCA } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: colorGammut } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: APCAFormula } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: wcagVsAPCA } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: umbraControl } },
+  { component: UmbraRange, props: { class: 'SamSlide' } },
   { component: TheEnd, props: { class: 'SamSlide' } },
+  { component: SamSigningOff, props: { class: 'SamSlide' } },
 ];
 
 // Helper function to calculate total slides from slide config
