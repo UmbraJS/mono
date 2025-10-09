@@ -23,42 +23,53 @@ import RadixColors from '../components/halloSlides/RadixColors.vue';
 import UmbraRanges from '../components/halloSlides/UmbraRanges.vue';
 import TailwindTokens from '../components/halloSlides/TailwindTokens.vue';
 import Gallery from '../components/halloSlides/Gallery.vue';
+import BGFGRange from '../components/halloSlides/BGFGRange.vue';
+import MaterialColors from '../components/halloSlides/MaterialColors.vue';
+import AliasedBGFGRange from '../components/halloSlides/AliasedBGFGRange.vue';
 
 interface SlideConfig {
   component: Component; // Vue component
-  props: Record<string, any>; // Static props
-  range: [number, number]; // Slide range [start, end]
-  dynamicProps?: (slide: number) => Record<string, any>; // Function to generate dynamic props based on slide number
+  props: Record<string, unknown>; // Static props
+  range?: number; // How many slides this component spans (defaults to 1)
+  dynamicProps?: (slideWithinRange: number) => Record<string, unknown>; // Function to generate dynamic props based on slide number within the range
 }
 
 // Slide configuration - easy to maintain and extend
 const actOneSlideConfig: SlideConfig[] = [
-  { component: Intro, props: {}, range: [1, 1] },
-  { component: RoundedTokens, props: { class: 'SamSlide' }, range: [2, 2] },
-  { component: Trinity, props: { class: 'SamSlide' }, range: [3, 3] },
-  { component: Eden, props: { class: 'SamSlide' }, range: [4, 11], dynamicProps: (slide: number) => ({ stage: slide - 3 }) },
-  { component: PersonalSpaceTokens, props: { class: 'SamSlide' }, range: [13, 13] },
-  { component: SpaceTokens, props: { class: 'SamSlide' }, range: [14, 14] },
-  { component: ThatsTheWebFolks, props: { class: 'SamSlide' }, range: [12, 12] },
-  { component: NotesBetweenNotes, props: { class: 'SamSlide' }, range: [15, 15] },
-  { component: ColorIsAll, props: { class: 'SamSlide' }, range: [16, 16] },
+  { component: Intro, props: {} },
+  { component: RoundedTokens, props: { class: 'SamSlide' } },
+  { component: Trinity, props: { class: 'SamSlide' } },
+  { component: Eden, props: { class: 'SamSlide' }, range: 8, dynamicProps: (slideWithinRange: number) => ({ stage: slideWithinRange }) },
+  { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
+  { component: PersonalSpaceTokens, props: { class: 'SamSlide' } },
+  { component: SpaceTokens, props: { class: 'SamSlide' } },
+  { component: NotesBetweenNotes, props: { class: 'SamSlide' } },
+  { component: ColorIsAll, props: { class: 'SamSlide' } },
 ];
 
 const actTwoSlideConfig: SlideConfig[] = [
-  { component: ActTwoIntro, props: {}, range: [1, 1] },
-  { component: ElementSpecificTokens, props: { class: 'SamSlide' }, range: [2, 2] },
-  { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' }, range: [3, 3] },
-  { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' }, range: [4, 4] },
-  { component: UmbraRange, props: { class: 'SamSlide' }, range: [5, 5] },
-  { component: TailwindTokens, props: { class: 'SamSlide' }, range: [6, 6] },
-  { component: RadixColors, props: { class: 'SamSlide' }, range: [7, 7] },
-  { component: UmbraRanges, props: { class: 'SamSlide' }, range: [8, 8] },
-  { component: Gallery, props: { class: 'SamSlide' }, range: [9, 9] },
+  { component: ActTwoIntro, props: {} },
+  { component: ElementSpecificTokens, props: { class: 'SamSlide' } },
+  { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' } },
+  { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' } },
+  { component: Gallery, props: { class: 'SamSlide' } },
+  { component: BGFGRange, props: { class: 'SamSlide' } },
+  { component: AliasedBGFGRange, props: { class: 'SamSlide' } },
+  { component: UmbraRange, props: { class: 'SamSlide' } },
+  { component: MaterialColors, props: { class: 'SamSlide' } },
+  { component: TailwindTokens, props: { class: 'SamSlide' } },
+  { component: RadixColors, props: { class: 'SamSlide' } },
+  { component: UmbraRanges, props: { class: 'SamSlide' } },
 ];
 
+// Helper function to calculate total slides from slide config
+const calculateTotalSlides = (config: SlideConfig[]): number => {
+  return config.reduce((total, slide) => total + (slide.range || 1), 0);
+};
+
 // Generate pages configuration from slide config
-const totalSlidesInAct1 = Math.max(...actOneSlideConfig.map(s => s.range[1]));
-const totalSlidesInAct2 = Math.max(...actTwoSlideConfig.map(s => s.range[1]));
+const totalSlidesInAct1 = calculateTotalSlides(actOneSlideConfig);
+const totalSlidesInAct2 = calculateTotalSlides(actTwoSlideConfig);
 const pages = [
   { name: "act1", slides: totalSlidesInAct1 },
   { name: "act2", slides: totalSlidesInAct2 },
@@ -123,26 +134,45 @@ const lastSlide = computed(() => {
   return slideHistory.history.value[slideHistory.history.value.length - 2] || 1;
 });
 
-// Find the current slide configuration
-const currentSlideConfig = computed(() => {
-  const configArray = act.value === 1 ? actOneSlideConfig : act.value === 2 ? actTwoSlideConfig : [];
-  return configArray.find(config => {
-    const [start, end] = config.range;
-    return slide.value >= start && slide.value <= end;
-  });
+// Helper function to find which slide config matches the current slide number
+const findSlideConfig = (configArray: SlideConfig[], targetSlide: number): { config: SlideConfig; slideWithinRange: number } | null => {
+  let currentSlidePosition = 1;
 
+  for (const config of configArray) {
+    const rangeSize = config.range || 1;
+    const endPosition = currentSlidePosition + rangeSize - 1;
+
+    if (targetSlide >= currentSlidePosition && targetSlide <= endPosition) {
+      return {
+        config,
+        slideWithinRange: targetSlide - currentSlidePosition + 1
+      };
+    }
+
+    currentSlidePosition += rangeSize;
+  }
+
+  return null;
+};
+
+// Find the current slide configuration
+const currentSlideResult = computed(() => {
+  const configArray = act.value === 1 ? actOneSlideConfig : act.value === 2 ? actTwoSlideConfig : [];
+  return findSlideConfig(configArray, slide.value);
 });
+
+const currentSlideConfig = computed(() => currentSlideResult.value?.config);
 
 // Get the component props for the current slide
 const currentSlideProps = computed(() => {
-  const config = currentSlideConfig.value;
-  if (!config) return {};
+  const result = currentSlideResult.value;
+  if (!result) return {};
 
-  let props = { ...config.props };
+  let props = { ...result.config.props };
 
   // Add dynamic props if they exist
-  if (config.dynamicProps) {
-    props = { ...props, ...config.dynamicProps(slide.value) };
+  if (result.config.dynamicProps) {
+    props = { ...props, ...result.config.dynamicProps(result.slideWithinRange) };
   }
 
   return props;

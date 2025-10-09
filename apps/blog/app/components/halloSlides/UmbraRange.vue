@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { umbra } from '@umbrajs/core';
+import type { FormatedRange } from '@umbrajs/core';
 import { ScrollArea } from "umbraco";
 
 const lol = umbra({
@@ -10,10 +11,17 @@ const lol = umbra({
   ]
 });
 
-const tokens = lol.format().flattened.map(token => ({
-  name: token.name,
-  value: token.color
-}));
+const formated = lol.format();
+const base = formated.formated[0] as FormatedRange;
+const accent = formated.formated[1] as FormatedRange;
+
+console.log("rex: ", lol.format());
+
+const baseTokens = base.shades
+
+function getVariableName(prefix: string, entryNumber: number): string {
+  return `--${prefix}-${entryNumber * 10}`;
+}
 
 </script>
 
@@ -25,10 +33,10 @@ const tokens = lol.format().flattened.map(token => ({
 
     <ScrollArea class="ScrollArea">
       <div class="TokensTable">
-        <div v-for="token in tokens" :key="token.name" class="SpaceToken">
-          <span class="TokenName">{{ token.name }}:</span>
-          <span class="TokenValue">{{ token.value }};</span>
-          <div class="Swatch border" :style="{ '--color': token.value }" />
+        <div v-for="(token, index) in baseTokens" :key="token" class="SpaceToken">
+          <span class="TokenName">{{ getVariableName("base", index + 1) }}:</span>
+          <span class="TokenValue">{{ token }};</span>
+          <div class="Swatch border" :style="{ '--color': token }" />
         </div>
       </div>
     </ScrollArea>
