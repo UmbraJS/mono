@@ -1,40 +1,79 @@
 <script setup lang="ts">
 import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
-import { ScrollArea } from "umbraco";
-import TokensTable from './TokensTable.vue';
+import DyePicker from '../DyePicker.vue';
 
-const lol = umbra({
-  background: 'black',
-  foreground: 'white',
-  accents: [
-    "#ff0000",
-  ]
+const bg = ref("black");
+const fg = ref("white");
+const ac = ref("#6400ff");
+
+const theme = umbra({
+  background: bg.value,
+  foreground: fg.value,
+  accents: [ac.value]
 });
 
-const formated = lol.format();
-const base = formated.formated[0] as FormatedRange;
-const accent = formated.formated[1] as FormatedRange;
+const formated = ref(theme.format().formated)
 
-console.log("rex: ", lol.format());
+watch([bg, fg, ac], ([newBg, newFg, newAc]) => {
+  const newTheme = umbra({
+    background: newBg,
+    foreground: newFg,
+    accents: [newAc]
+  });
+  formated.value = newTheme.format().formated;
+});
 
-const baseTokens = base.shades
-const accentTokens = accent.shades
+
+const base = computed(() => formated.value[0] as FormatedRange);
+const accent = computed(() => formated.value[1] as FormatedRange);
+
+const baseTokens = computed(() => base.value.shades);
+const accentTokens = computed(() => accent.value.shades);
 
 function getVariableName(prefix: string, entryNumber: number): string {
   return `--${prefix}-${entryNumber * 10}`;
+}
+
+function changeTheme({
+  background,
+  foreground,
+  accentValue
+}: {
+  background?: string;
+  foreground?: string;
+  accentValue?: string;
+}) {
+  if (background) bg.value = background;
+  if (foreground) fg.value = foreground;
+  if (accentValue) ac.value = accentValue;
 }
 </script>
 
 <template>
   <div class="SpacingTokens">
-    <h3 class="SpacingTitle">
-      Semantic Range Tokens
-    </h3>
-
     <div class="AliasedWrapper">
+      <div class="UmbraActions">
+
+        <div class="ColorEdit">
+          <p>Background</p>
+          <DyePicker label="Background" :default-color="bg" @change="(color) => changeTheme({ background: color })" />
+        </div>
+
+        <div class="ColorEdit">
+          <p>Foreground</p>
+          <DyePicker label="Foreground" :default-color="fg" @change="(color) => changeTheme({ foreground: color })" />
+        </div>
+
+        <div class="ColorEdit">
+          <p>Accent</p>
+          <DyePicker label="Accent" :default-color="ac" @change="(color) => changeTheme({ accentValue: color })" />
+        </div>
+
+      </div>
+
+
       <div class="ColorLayer border">
-        <h3>Base Range</h3>
         <div class="TokensTables">
           <div class="TokensTable">
             <div class="SpaceToken">
@@ -63,7 +102,6 @@ function getVariableName(prefix: string, entryNumber: number): string {
       </div>
 
       <div class="ColorLayer border">
-        <h3>Accent Range</h3>
         <div class="TokensTables">
           <div class="TokensTable">
             <div class="SpaceToken">
@@ -99,6 +137,18 @@ function getVariableName(prefix: string, entryNumber: number): string {
 </template>
 
 <style>
+.UmbraActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.ColorEdit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 .SpacingTitle {
   color: var(--base-50);
 }

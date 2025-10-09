@@ -26,6 +26,12 @@ import Gallery from '../components/halloSlides/Gallery.vue';
 import BGFGRange from '../components/halloSlides/BGFGRange.vue';
 import MaterialColors from '../components/halloSlides/MaterialColors.vue';
 import AliasedBGFGRange from '../components/halloSlides/AliasedBGFGRange.vue';
+import SingleRangePage from '../components/halloSlides/SingleRangePage.vue';
+import ColourReassignment from '../components/halloSlides/ColourReassignmen.vue';
+import ActThreeIntro from '../components/halloSlides/ActThreeIntro.vue';
+import TheEnd from '../components/halloSlides/TheEnd.vue';
+import ManualRangeEdit from '../components/halloSlides/ManualRangeEdit.vue';
+import EditUmbra from '../components/halloSlides/EditUmbra.vue';
 
 interface SlideConfig {
   component: Component; // Vue component
@@ -55,11 +61,21 @@ const actTwoSlideConfig: SlideConfig[] = [
   { component: Gallery, props: { class: 'SamSlide' } },
   { component: BGFGRange, props: { class: 'SamSlide' } },
   { component: AliasedBGFGRange, props: { class: 'SamSlide' } },
-  { component: UmbraRange, props: { class: 'SamSlide' } },
   { component: MaterialColors, props: { class: 'SamSlide' } },
   { component: TailwindTokens, props: { class: 'SamSlide' } },
   { component: RadixColors, props: { class: 'SamSlide' } },
+  { component: UmbraRange, props: { class: 'SamSlide' } },
   { component: UmbraRanges, props: { class: 'SamSlide' } },
+  { component: SingleRangePage, props: { class: 'SamSlide' } },
+  { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
+  { component: ColourReassignment, props: { class: 'SamSlide' } },
+];
+
+const actThreeSlideConfig: SlideConfig[] = [
+  { component: ActThreeIntro, props: {} },
+  { component: ManualRangeEdit, props: { class: 'SamSlide' } },
+  { component: EditUmbra, props: { class: 'SamSlide' } },
+  { component: TheEnd, props: { class: 'SamSlide' } },
 ];
 
 // Helper function to calculate total slides from slide config
@@ -70,10 +86,11 @@ const calculateTotalSlides = (config: SlideConfig[]): number => {
 // Generate pages configuration from slide config
 const totalSlidesInAct1 = calculateTotalSlides(actOneSlideConfig);
 const totalSlidesInAct2 = calculateTotalSlides(actTwoSlideConfig);
+const totalSlidesInAct3 = calculateTotalSlides(actThreeSlideConfig);
 const pages = [
   { name: "act1", slides: totalSlidesInAct1 },
   { name: "act2", slides: totalSlidesInAct2 },
-  { name: "act3", slides: 0 },
+  { name: "act3", slides: totalSlidesInAct3 },
 ]
 
 const route = useRoute();
@@ -157,7 +174,7 @@ const findSlideConfig = (configArray: SlideConfig[], targetSlide: number): { con
 
 // Find the current slide configuration
 const currentSlideResult = computed(() => {
-  const configArray = act.value === 1 ? actOneSlideConfig : act.value === 2 ? actTwoSlideConfig : [];
+  const configArray = act.value === 1 ? actOneSlideConfig : act.value === 2 ? actTwoSlideConfig : actThreeSlideConfig;
   return findSlideConfig(configArray, slide.value);
 });
 

@@ -48,6 +48,11 @@ const open = ref(false);
   z-index: 1;
 }
 
+.DyePickerCarrier:focus-within {
+  position: absolute;
+  z-index: 99;
+}
+
 .DyePickerCarrier::after {
   content: '';
   position: absolute;

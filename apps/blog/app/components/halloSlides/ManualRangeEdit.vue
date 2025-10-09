@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
-import { ScrollArea } from "umbraco";
-import TokensTable from './TokensTable.vue';
+import DyePicker from '../DyePicker.vue';
 
 const lol = umbra({
   background: 'black',
@@ -28,67 +27,62 @@ function getVariableName(prefix: string, entryNumber: number): string {
 
 <template>
   <div class="SpacingTokens">
-    <h3 class="SpacingTitle">
-      Semantic Range Tokens
-    </h3>
-
     <div class="AliasedWrapper">
       <div class="ColorLayer border">
-        <h3>Base Range</h3>
         <div class="TokensTables">
-          <div class="TokensTable">
+          <!-- <div class="TokensTable">
             <div class="SpaceToken">
               <span class="TokenName">--base:</span>
               <span class="TokenValue"></span>
               <div class="Swatch border" :style="{ '--color': 'var(--base)' }" />
             </div>
-          </div>
+          </div> -->
 
           <div class="TokensTable">
             <div v-for="(token, index) in baseTokens" :key="token" class="SpaceToken">
               <span class="TokenName">{{ getVariableName("base", index + 1) }}:</span>
               <span class="TokenValue">{{ token }};</span>
-              <div class="Swatch border" :style="{ '--color': token }" />
+              <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
+              <DyePicker :default-color="token" />
             </div>
           </div>
 
-          <div class="TokensTable">
+          <!-- <div class="TokensTable">
             <div class="SpaceToken">
               <span class="TokenName">--base-text:</span>
               <span class="TokenValue"></span>
               <div class="Swatch border" :style="{ '--color': 'var(--base-text)' }" />
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
       <div class="ColorLayer border">
-        <h3>Accent Range</h3>
         <div class="TokensTables">
-          <div class="TokensTable">
+          <!-- <div class="TokensTable">
             <div class="SpaceToken">
               <span class="TokenName">--accent:</span>
               <span class="TokenValue"></span>
               <div class="Swatch border" :style="{ '--color': 'var(--base)' }" />
             </div>
-          </div>
+          </div> -->
 
           <div class="TokensTable">
             <div v-for="(token, index) in accentTokens" :key="token" class="SpaceToken">
               <span class="TokenName">{{ getVariableName("accent", index + 1) }}:</span>
-              <span class="TokenValue">{{ token }};</span>
-              <div class="Swatch border" :style="{ '--color': token }" />
+              <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
+              <DyePicker :default-color="token" />
             </div>
           </div>
 
-
+          <!--
           <div class="TokensTable">
             <div class="SpaceToken">
               <span class="TokenName">--accent-text:</span>
               <span class="TokenValue"></span>
               <div class="Swatch border" :style="{ '--color': 'var(--accent-text)' }" />
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

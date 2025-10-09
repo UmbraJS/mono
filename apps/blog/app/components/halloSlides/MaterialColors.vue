@@ -10,7 +10,7 @@
 </template>
 
 <style>
-img {
+.MaterialColors img {
   width: 70vw;
   height: 80vh;
   border: none;
