@@ -152,7 +152,7 @@ const buttonTextHex = computed(() => {
           }" />
           <div>
             <span class="token-name">interactive_warning__text</span>
-            <span class="token-value">{{ buttonTextColor }} </span>
+            <span class="token-value">{{ buttonTextColor }}</span>
           </div>
           <span ref="splineHook2End" class="SplineHook2End">
           </span>

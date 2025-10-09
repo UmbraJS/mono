@@ -18,6 +18,11 @@ import ActTwoIntro from '../components/halloSlides/ActTwoIntro.vue';
 import ElementSpecificTokens from '../components/halloSlides/ElementSpecificTokens.vue';
 import ElementSpecificTokensExpanded from '../components/halloSlides/ElementSpecificTokensExpanded.vue';
 import ElementSpecificTokensProblem1 from '../components/halloSlides/ElementSpecificTokensProblem1.vue';
+import UmbraRange from '../components/halloSlides/UmbraRange.vue';
+import RadixColors from '../components/halloSlides/RadixColors.vue';
+import UmbraRanges from '../components/halloSlides/UmbraRanges.vue';
+import TailwindTokens from '../components/halloSlides/TailwindTokens.vue';
+import Gallery from '../components/halloSlides/Gallery.vue';
 
 interface SlideConfig {
   component: Component; // Vue component
@@ -28,22 +33,27 @@ interface SlideConfig {
 
 // Slide configuration - easy to maintain and extend
 const actOneSlideConfig: SlideConfig[] = [
-  { component: Intro, props: {}, range: [1, 1] as [number, number] },
-  { component: RoundedTokens, props: { class: 'SamSlide' }, range: [2, 2] as [number, number] },
-  { component: Trinity, props: { class: 'SamSlide' }, range: [3, 3] as [number, number] },
-  { component: Eden, props: { class: 'SamSlide' }, range: [4, 11] as [number, number], dynamicProps: (slide: number) => ({ stage: slide - 3 }) },
-  { component: PersonalSpaceTokens, props: { class: 'SamSlide' }, range: [13, 13] as [number, number] },
-  { component: SpaceTokens, props: { class: 'SamSlide' }, range: [14, 14] as [number, number] },
-  { component: ThatsTheWebFolks, props: { class: 'SamSlide' }, range: [12, 12] as [number, number] },
-  { component: NotesBetweenNotes, props: { class: 'SamSlide' }, range: [15, 15] as [number, number] },
-  { component: ColorIsAll, props: { class: 'SamSlide' }, range: [16, 16] as [number, number] },
+  { component: Intro, props: {}, range: [1, 1] },
+  { component: RoundedTokens, props: { class: 'SamSlide' }, range: [2, 2] },
+  { component: Trinity, props: { class: 'SamSlide' }, range: [3, 3] },
+  { component: Eden, props: { class: 'SamSlide' }, range: [4, 11], dynamicProps: (slide: number) => ({ stage: slide - 3 }) },
+  { component: PersonalSpaceTokens, props: { class: 'SamSlide' }, range: [13, 13] },
+  { component: SpaceTokens, props: { class: 'SamSlide' }, range: [14, 14] },
+  { component: ThatsTheWebFolks, props: { class: 'SamSlide' }, range: [12, 12] },
+  { component: NotesBetweenNotes, props: { class: 'SamSlide' }, range: [15, 15] },
+  { component: ColorIsAll, props: { class: 'SamSlide' }, range: [16, 16] },
 ];
 
 const actTwoSlideConfig: SlideConfig[] = [
-  { component: ActTwoIntro, props: {}, range: [1, 1] as [number, number] },
-  { component: ElementSpecificTokens, props: { class: 'SamSlide' }, range: [2, 2] as [number, number] },
-  { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' }, range: [3, 3] as [number, number] },
-  { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' }, range: [4, 4] as [number, number] },
+  { component: ActTwoIntro, props: {}, range: [1, 1] },
+  { component: ElementSpecificTokens, props: { class: 'SamSlide' }, range: [2, 2] },
+  { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' }, range: [3, 3] },
+  { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' }, range: [4, 4] },
+  { component: UmbraRange, props: { class: 'SamSlide' }, range: [5, 5] },
+  { component: TailwindTokens, props: { class: 'SamSlide' }, range: [6, 6] },
+  { component: RadixColors, props: { class: 'SamSlide' }, range: [7, 7] },
+  { component: UmbraRanges, props: { class: 'SamSlide' }, range: [8, 8] },
+  { component: Gallery, props: { class: 'SamSlide' }, range: [9, 9] },
 ];
 
 // Generate pages configuration from slide config
