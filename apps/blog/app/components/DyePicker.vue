@@ -38,7 +38,6 @@ const open = ref(false);
   z-index: 99;
   width: var(--size);
   height: var(--size);
-  background-color: RED;
   border-radius: var(--radius);
 }
 

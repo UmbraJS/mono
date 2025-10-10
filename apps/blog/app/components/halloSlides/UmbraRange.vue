@@ -8,7 +8,9 @@ const lol = umbra({
   background: 'black',
   foreground: 'white',
   accents: [
+    "#0000ff",
     "#ff0000",
+    "#00ff00",
   ]
 });
 
@@ -16,7 +18,6 @@ const formated = lol.format();
 const base = formated.formated[0] as FormatedRange;
 const accent = formated.formated[1] as FormatedRange;
 
-console.log("rex: ", lol.format());
 
 const baseTokens = base.shades
 const accentTokens = accent.shades
