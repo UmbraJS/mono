@@ -219,7 +219,7 @@ const skeletonSoldier: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 2, shield: 5, cooldown: 2, actionCount: 1 },
+    bash: { attack: 2, shield: 5, cooldown: 2, castTime: 1, actionCount: 1 },
     slot: 'army',
     effects: [],
     tags: ['guard', 'undead'],
@@ -246,7 +246,7 @@ const skeletonArcher: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 7, shield: 3, cooldown: 3, actionCount: 1 },
+    bash: { attack: 7, shield: 3, cooldown: 3, castTime: 1, actionCount: 1 },
     effects: [],
     slot: 'army',
     tags: ['guard', 'undead'],
@@ -273,7 +273,7 @@ const archer: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 7, cooldown: 2, actionCount: 1 },
+    bash: { attack: 7, cooldown: 2, castTime: 1, actionCount: 1 },
     slot: 'army',
     effects: [],
     tags: ['guard'],
@@ -301,7 +301,7 @@ const halberdier: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 10, shield: 10, cooldown: 5, actionCount: 1 },
+    bash: { attack: 10, shield: 10, cooldown: 5, castTime: 1, actionCount: 1 },
     effects: [hasteYourSibling],
     slot: 'army',
     tags: ['guard'],
@@ -328,7 +328,7 @@ const doomCloak: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 20, shield: 20, cooldown: 10, actionCount: 1 },
+    bash: { attack: 20, shield: 20, cooldown: 10, castTime: 1, actionCount: 1 },
     effects: [],
     slot: 'cloak',
     tags: ['guard'],
@@ -355,7 +355,7 @@ const skeletonHealer: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { heal: 10, cooldown: 3, actionCount: 1 },
+    bash: { heal: 10, cooldown: 3, castTime: 1, actionCount: 1 },
     slot: 'army',
     effects: [],
     tags: ['guard', 'undead'],
@@ -382,7 +382,7 @@ const skeletonHorseman: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 7, shield: 5, cooldown: 3.5, actionCount: 1 },
+    bash: { attack: 7, shield: 5, cooldown: 3.5, castTime: 1, actionCount: 1 },
     slot: 'army',
     effects: [],
     tags: ['guard', 'undead'],
@@ -410,7 +410,7 @@ export const gauntletOfSigmar: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 20, shield: 10, actionCount: 1, cooldown: 5 },
+    bash: { attack: 20, shield: 10, actionCount: 1, cooldown: 5, castTime: 1, },
     slot: 'hands',
     effects: [hasteYourSibling],
     tags: ['weapon'],
@@ -447,7 +447,7 @@ export const glimmerCloak: Card = {
   stats: {
     level: 1,
     cost: 100,
-    bash: { attack: 10, banter: 10, heal: 10, shield: 10, cooldown: 3, actionCount: 1 },
+    bash: { attack: 10, banter: 10, heal: 10, shield: 10, cooldown: 3, castTime: 1, actionCount: 1 },
     slot: 'cloak',
     effects: [],
     tags: ['artifact'],
@@ -474,7 +474,7 @@ export const viking: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 2, shield: 2, actionCount: 2, cooldown: 2 },
+    bash: { attack: 2, shield: 2, actionCount: 2, cooldown: 2, castTime: 1, },
     slot: 'army',
     effects: [],
     tags: ['guard'],
@@ -501,7 +501,7 @@ const thunderCannon: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 20, actionCount: 1, cooldown: 5 },
+    bash: { attack: 20, actionCount: 1, cooldown: 5, castTime: 1 },
     slot: 'building',
     effects: [],
     tags: ['weapon'],
@@ -528,7 +528,7 @@ const treasure: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { cooldown: 5, actionCount: 1 },
+    bash: { cooldown: 5, castTime: 1, actionCount: 1 },
     slot: 'utility',
     effects: [],
     tags: ['artifact'],
@@ -565,7 +565,7 @@ export const saintDenis: Card = {
   stats: {
     level: 1,
     cost: 10,
-    bash: { attack: 0, shield: 50, cooldown: 4, actionCount: 1 },
+    bash: { attack: 0, shield: 50, cooldown: 4, castTime: 1, actionCount: 1 },
     effects: [],
     tags: ['saint'],
     aspects: [aspects.light],
