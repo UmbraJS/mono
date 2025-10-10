@@ -103,7 +103,7 @@ const actThreeSlideConfig: SlideConfig[] = [
   { component: ImageIllustration, props: { class: 'SamSlide', url: umbraExecute } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: umbraInsights } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: umbraControl } },
-  { component: UmbraRange, props: { class: 'SamSlide' } },
+  { component: UmbraRange, props: { class: 'SamSlide', simple: true } },
   { component: TheEnd, props: { class: 'SamSlide' } },
   { component: SamSigningOff, props: { class: 'SamSlide' } },
 ];

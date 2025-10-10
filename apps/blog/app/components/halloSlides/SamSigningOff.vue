@@ -1,8 +1,12 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <div class="Slide">
     <div class="TheBox">
       <h1>The End</h1>
       <p class="display">Thank you for joining me on this journey through design tokens and their applications!</p>
+      <Icon name="carbon:3d-curve-auto-colon" scale="4" />
     </div>
   </div>
 </template>

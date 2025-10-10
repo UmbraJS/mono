@@ -35,7 +35,7 @@ onMounted(() => {
     <div class="author">
       <NuxtImg src="/sam.jpg" width="96" height="96" alt="Author avatar" class="avatar" />
       <div class="meta">
-        <div class="meta-header">
+        <!-- <div class="meta-header">
           <h3 class="caption">Hey 😊</h3>
           <nav id="SocialLinks">
             <NuxtLink v-for="link in socials" :key="link.href" :to="link.href" class="social-link" target="_blank"
@@ -43,17 +43,25 @@ onMounted(() => {
               <Icon :name="link.icon" size="1em" />
             </NuxtLink>
           </nav>
-        </div>
+        </div> -->
 
-        <p>You're my favorite visitor. Have my number:</p>
+        <!-- <p>You're my favorite visitor. Have my number:</p> -->
+
+        <!-- <p>You're my favorite visitor. Let's keep in touch</p> -->
 
         <nav id="SocialLinks" class="links">
           <div v-if="isClient" class="time-chip">
-            🇳🇴 +47 929 85 290
+            <!-- 🇳🇴 +47 929 85 290 -->
+            <p>LinkedIn: <NuxtLink to="https://www.linkedin.com/in/samuelmbednarz/" target="_blank"
+                rel="noopener noreferrer" class="call-me">samuelmbednarz</NuxtLink>
+            </p>
+            <p>Instagram: <NuxtLink to="https://www.instagram.com/carelesscourage/" target="_blank"
+                rel="noopener noreferrer" class="call-me">raw_samuel_</NuxtLink>
+            </p>
           </div>
-          <div v-if="isClient" class="time-chip">
+          <!-- <div v-if="isClient" class="time-chip">
             <Icon name="carbon:time" size="1em" /> Stavanger: {{ stavangerTime }}
-          </div>
+          </div> -->
         </nav>
       </div>
     </div>
@@ -94,10 +102,14 @@ onMounted(() => {
 
 .time-chip {
   display: inline-flex;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
   gap: var(--space-quark);
   width: fit-content;
+  width: 100%;
   padding: var(--space-quark) var(--space-1);
+  padding: var(--space-2);
   border-radius: var(--radius);
   border: 1px solid var(--base-30);
   background: var(--base-10);

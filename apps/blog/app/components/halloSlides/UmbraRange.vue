@@ -2,7 +2,11 @@
 import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
 import { ScrollArea } from "umbraco";
-import TokensTable from './TokensTable.vue';
+import ColorLayer from './ColorLayer.vue';
+
+defineProps<{
+  simple?: boolean
+}>();
 
 const lol = umbra({
   background: 'black',
@@ -17,99 +21,52 @@ const lol = umbra({
 const formated = lol.format();
 const base = formated.formated[0] as FormatedRange;
 const accent = formated.formated[1] as FormatedRange;
-
+const warning = formated.formated[2] as FormatedRange;
+const success = formated.formated[3] as FormatedRange;
 
 const baseTokens = base.shades
 const accentTokens = accent.shades
-
-function getVariableName(prefix: string, entryNumber: number): string {
-  return `--${prefix}-${entryNumber * 10}`;
-}
+const warningTokens = warning.shades
+const successTokens = success.shades
 </script>
 
 <template>
   <div class="SpacingTokens">
-    <h3 class="SpacingTitle">
-      Semantic Range Tokens
-    </h3>
+    <div class="ColorLayersWrapper">
+      <ColorLayer title="Base Range" :tokens="baseTokens" prefix="base" main-color-var="var(--base)"
+        text-color-var="var(--base-text)" />
 
-    <div class="AliasedWrapper">
-      <div class="ColorLayer border">
-        <h3>Base Range</h3>
-        <div class="TokensTables">
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--base:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--base)' }" />
-            </div>
-          </div>
+      <div class="divider"></div>
 
-          <div class="TokensTable">
-            <div v-for="(token, index) in baseTokens" :key="token" class="SpaceToken">
-              <span class="TokenName">{{ getVariableName("base", index + 1) }}:</span>
-              <span class="TokenValue">{{ token }};</span>
-              <div class="Swatch border" :style="{ '--color': token }" />
-            </div>
-          </div>
+      <ColorLayer title="Accent Range" :tokens="accentTokens" prefix="accent" main-color-var="var(--accent)"
+        text-color-var="var(--accent-text)" />
 
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--base-text:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--base-text)' }" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <ColorLayer v-if="!simple" title="Warning Range" :tokens="warningTokens" prefix="warning"
+        main-color-var="var(--warning)" text-color-var="var(--warning-text)" />
 
-      <div class="ColorLayer border">
-        <h3>Accent Range</h3>
-        <div class="TokensTables">
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--accent:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--base)' }" />
-            </div>
-          </div>
-
-          <div class="TokensTable">
-            <div v-for="(token, index) in accentTokens" :key="token" class="SpaceToken">
-              <span class="TokenName">{{ getVariableName("accent", index + 1) }}:</span>
-              <span class="TokenValue">{{ token }};</span>
-              <div class="Swatch border" :style="{ '--color': token }" />
-            </div>
-          </div>
-
-
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--accent-text:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--accent-text)' }" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <ColorLayer v-if="!simple" title="Success Range" :tokens="successTokens" prefix="success"
+        main-color-var="var(--success)" text-color-var="var(--success-text)" />
     </div>
-
-
-
   </div>
 </template>
 
 <style>
-.SpacingTitle {
-  color: var(--base-50);
+.divider {
+  width: 1px;
+  background-color: var(--base-50);
+  margin: 0 var(--space-2);
+  height: 100%;
 }
 
-.SpaceToken {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: 1 / -1;
-  gap: var(--space-2);
+.ColorLayersWrapper {
+  display: flex;
+  gap: var(--space-1);
+  justify-content: center;
   align-items: center;
+}
+
+.SpacingTitle {
+  color: var(--base-50);
 }
 
 .SpacingTokens {
@@ -117,12 +74,6 @@ function getVariableName(prefix: string, entryNumber: number): string {
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
-}
-
-.TokensTable {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: var(--space-1);
 }
 
 .TokenText {
@@ -134,21 +85,5 @@ function getVariableName(prefix: string, entryNumber: number): string {
 
 .TokenText span {
   color: var(--base-text);
-}
-
-.TokenName {
-  color: var(--base-text);
-  font-weight: 500;
-}
-
-.TokenValue {
-  color: var(--base-50);
-  font-family: monospace;
-}
-
-.Swatch {
-  height: 1.8em;
-  width: 1.8em;
-  background-color: var(--color);
 }
 </style>
