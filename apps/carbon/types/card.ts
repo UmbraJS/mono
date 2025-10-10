@@ -182,6 +182,7 @@ export interface CardBash {
   critDamage?: number
   actionCount?: number
   cooldown: number
+  castTime: number
 }
 
 export interface TimeEffect {
