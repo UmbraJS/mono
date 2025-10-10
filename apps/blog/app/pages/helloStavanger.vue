@@ -80,6 +80,7 @@ const actTwoSlideConfig: SlideConfig[] = [
   { component: MaterialColors, props: { class: 'SamSlide' } },
   { component: TailwindTokens, props: { class: 'SamSlide' } },
   { component: RadixColors, props: { class: 'SamSlide' } },
+  { component: UmbraRange, props: { class: 'SamSlide', simple: true } },
   { component: UmbraRange, props: { class: 'SamSlide' } },
   { component: SingleRangePage, props: { class: 'SamSlide' } },
   { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },

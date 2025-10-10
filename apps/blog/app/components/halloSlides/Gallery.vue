@@ -12,7 +12,7 @@ const images = [
     <div class="GalleryGrid">
       <div v-for="(image, index) in images" :key="index" class="GalleryItem">
         <img :src="image.url" :alt="`Image by ${image.author}`" />
-        <p class="Author">Photo by {{ image.author }}</p>
+        <p class="Author">Painting by {{ image.author }}</p>
       </div>
     </div>
   </div>
