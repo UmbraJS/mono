@@ -61,7 +61,6 @@ export function performanceSimulator(props: Decks) {
     onAttack: (attackEntry) => player.hurt(attackEntry)
   });
 
-
   player.hurt({
     attack: 3000,
     timestamp: 0,

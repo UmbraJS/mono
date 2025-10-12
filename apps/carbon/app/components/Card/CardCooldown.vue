@@ -97,8 +97,13 @@ function buildDashTimeline() {
     { scale: pulseSize, autoAlpha: 0, duration: shrinkDuration * 4 },
     'shrink'
   )
-  return tl
+  return {
+    timeline: tl,
+    totalDuration
+  }
 }
+
+console.log('rex: Cooldown setup for card', card.simulation.chunks)
 
 // Integrate dash timeline at end of each cooldown segment
 const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(card.simulation.chunks, {

@@ -7,7 +7,10 @@ interface UseCooldownOptions {
   /** Called when an entire cooldown segment finishes */
   onSegmentComplete?: () => void
   /** Called when any cooldown segment finishes, should return a gsap timeline to append AFTER callback */
-  attackTimelineFactory?: () => gsap.core.Timeline | undefined
+  attackTimelineFactory?: () => {
+    timeline: gsap.core.Timeline
+    totalDuration: number
+  } | undefined
   /** Legacy callback (attack trigger) maintained for backwards compat */
   onAttack?: () => void
 }
@@ -81,7 +84,8 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
         const atk = normalized.attackTimelineFactory?.()
         if (atk) {
           // Ensure attack timeline starts after cooldown segment fully done
-          cooldownTimeline.add(atk, '+=0')
+          const hitDelay = 0.1 // slight delay to help the human brain catch up
+          cooldownTimeline.add(atk.timeline, '-=' + (atk.totalDuration + hitDelay))
         }
       },
     }, 0)

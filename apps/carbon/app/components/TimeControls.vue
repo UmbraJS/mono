@@ -57,6 +57,9 @@ function floorTo1Decimal(value: number) {
     <slot />
 
     <div class="ControlPanel">
+      <input v-model="simulation.time.value" type="text" style="width: 3rem; text-align: center;">
+      <input id="volume" type="range" name="volume" min="0" max="11">
+
       <Button @click="handleReset">
         <Icon name="carbon:restart" size="2rem" />
       </Button>
