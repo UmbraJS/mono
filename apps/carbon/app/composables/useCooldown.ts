@@ -2,6 +2,9 @@ import { gsap } from 'gsap'
 import type { OutputChunk } from '../../utils/time/types';
 import { useAudio } from '../stores/useAudio'
 import { useSimulationInject } from '~/composables/useSimulationProvider'
+import { GSDevTools } from 'gsap/GSDevTools';
+
+gsap.registerPlugin(GSDevTools);
 
 interface UseCooldownOptions {
   /** Called when an entire cooldown segment finishes */
@@ -36,6 +39,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
 
   const cardTimeline = gsap.timeline()
 
+
   if (simulation) {
     simulation.timeline.add(cardTimeline, 0)
   }
@@ -50,6 +54,8 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
     segments.forEach((segment) => {
       animateCooldown(segment)
     })
+
+    GSDevTools.create({ animation: cardTimeline });
   })
 
   function animateCooldown(segment: Segment) {
@@ -86,11 +92,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
 
         // Ensure attack timeline starts after cooldown segment fully done
         const hitDelay = 0.0 // slight delay to help the human brain
-        console.log('rex: ', {
-          totalDuration: atk?.totalDuration,
-          hitDelay: hitDelay,
-          addTime: '-=' + (atk.totalDuration + hitDelay),
-        })
+        console.log('rex: derp')
         cooldownTimeline.add(atk.timeline, '-=' + (atk.totalDuration - hitDelay))
       },
     }, 0)
