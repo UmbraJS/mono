@@ -23,15 +23,26 @@ export function useAnimationTimeline(refs: AnimationRefs) {
    * Creates a GSAP timeline for the dash animation effect
    * Phases: Growth (0-30%) -> Travel (30-70%) -> Shrink (70-100%)
    */
-  function buildDashTimeline(): AnimationTimelineResult | undefined {
+  function buildDashTimeline(): AnimationTimelineResult {
     const { splinePath, startPulse, endPulse } = refs
 
+    const durations = calculatePhaseDurations()
+    const timeline = gsap.timeline({
+      defaults: { ease: 'none' }
+    })
+
     if (!splinePath.value || !startPulse.value || !endPulse.value) {
-      return undefined
+      return {
+        timeline,
+        totalDuration: 0
+      }
     }
 
-    const durations = calculatePhaseDurations()
-    const timeline = gsap.timeline({ defaults: { ease: 'none' } })
+    // Reset all elements to their initial state before creating the timeline
+    gsap.set(splinePath.value, { drawSVG: '0% 0%' })
+    gsap.set(startPulse.value, { scale: DASH_ANIMATION.PULSE_SIZE, autoAlpha: 0 })
+    gsap.set(endPulse.value, { scale: 0, autoAlpha: 1 })
+
 
     // Phase 1: Initial growth and path drawing start
     addGrowthPhase(timeline, durations, { startPulse: startPulse.value, splinePath: splinePath.value })
@@ -42,7 +53,8 @@ export function useAnimationTimeline(refs: AnimationRefs) {
     // Phase 3: Path shrinks and end pulse appears
     addShrinkPhase(timeline, durations, { endPulse: endPulse.value, splinePath: splinePath.value })
 
-    GSDevTools.create({ animation: timeline });
+    // GSDevTools removed to prevent conflicts when multiple timelines are created
+    // GSDevTools.create({ animation: timeline });
 
     return {
       timeline,
@@ -81,7 +93,7 @@ export function useAnimationTimeline(refs: AnimationRefs) {
         autoAlpha: 1,
         duration: durations.growth,
         onStart: () => {
-          console.log('rex: derp 2')
+          console.log('Dash animation growth phase started')
         },
       },
       0

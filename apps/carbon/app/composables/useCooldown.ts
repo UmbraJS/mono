@@ -7,23 +7,14 @@ import { GSDevTools } from 'gsap/GSDevTools';
 gsap.registerPlugin(GSDevTools);
 
 interface UseCooldownOptions {
-  /** Called when an entire cooldown segment finishes */
-  onSegmentComplete?: () => void
-  /** Called when any cooldown segment finishes, should return a gsap timeline to append AFTER callback */
-  attackTimelineFactory?: () => {
+  attackTimelineFactory: () => {
     timeline: gsap.core.Timeline
     totalDuration: number
-  } | undefined
-  /** Legacy callback (attack trigger) maintained for backwards compat */
-  onAttack?: () => void
+  }
+  onAttack: () => void
 }
 
-export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: (() => void) | UseCooldownOptions) {
-  // Normalize arguments (support old signature useCooldown(chunks, cb))
-  const normalized: UseCooldownOptions = typeof callbackOrOptions === 'function'
-    ? { onAttack: callbackOrOptions }
-    : callbackOrOptions || {}
-
+export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: UseCooldownOptions) {
   const audio = useAudio()
 
   const cooldownValue = ref(100)
@@ -71,6 +62,16 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
 
     cooldownTimeline.add(chunkTimeline, 0)
     cooldownTimeline.add(durationTimeline, 0)
+
+    // Get attack timeline BEFORE creating the duration timeline so we can position it correctly
+    const atk = callbackOrOptions.attackTimelineFactory?.()
+    if (atk) {
+      // Position attack timeline so it ends exactly when cooldown ends
+      const attackStartTime = Math.max(0, segment.duration - atk.totalDuration)
+      console.log('Attack timeline - Duration:', atk.totalDuration, 'Segment duration:', segment.duration, 'Start time:', attackStartTime)
+      cooldownTimeline.add(atk.timeline, attackStartTime)
+    }
+
     cardTimeline.add(cooldownTimeline)
 
     durationTimeline.fromTo(cooldownDuration, {
@@ -83,17 +84,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
         cooldownValue.value = 100
 
         audio.playPunchSound()
-        normalized.onAttack?.()
-        normalized.onSegmentComplete?.()
-
-        // Append attack dash timeline if provided (after segment completes)
-        const atk = normalized.attackTimelineFactory?.()
-        if (!atk) return
-
-        // Ensure attack timeline starts after cooldown segment fully done
-        const hitDelay = 0.0 // slight delay to help the human brain
-        console.log('rex: derp')
-        cooldownTimeline.add(atk.timeline, '-=' + (atk.totalDuration - hitDelay))
+        callbackOrOptions.onAttack()
       },
     }, 0)
 
