@@ -41,6 +41,18 @@ const timeInMinutesAndSeconds = computed(() => {
   return `${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`
 })
 
+// Timeline slider progress (0-100%)
+const timelineProgress = computed({
+  get: () => {
+    const duration = simulation.timeline.duration()
+    if (duration === 0) return 0
+    return (simulation.time.value / duration) * 100
+  },
+  set: (value: number) => {
+    simulation.timeline.progress(value / 100)
+  }
+})
+
 function floorTo1Decimal(value: number) {
   return Math.floor(value * 10) / 10
 }
@@ -57,8 +69,7 @@ function floorTo1Decimal(value: number) {
     <slot />
 
     <div class="ControlPanel">
-      <input v-model="simulation.time.value" type="text" style="width: 3rem; text-align: center;">
-      <input id="volume" type="range" name="volume" min="0" max="11">
+      <input id="TimelineSlider" v-model="timelineProgress" type="range" name="volume" min="0" max="100">
 
       <Button @click="handleReset">
         <Icon name="carbon:restart" size="2rem" />
@@ -82,6 +93,17 @@ function floorTo1Decimal(value: number) {
 </template>
 
 <style>
+#TimelineSlider {
+  -webkit-appearance: none;
+  width: 100%;
+  min-width: 300px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--accent-20);
+  outline: none;
+}
+
+
 #ControlPanels {
   display: grid;
   grid-template-columns: auto 1fr auto;

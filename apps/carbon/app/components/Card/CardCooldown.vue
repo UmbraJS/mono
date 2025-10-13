@@ -53,57 +53,56 @@ const spline = useSplinePath({
 
 function buildDashTimeline() {
   if (!SplinePath.value || !StartPulse.value || !EndPulse.value) return undefined
-  const totalDuration = 0.4
+  const totalDuration = 2
   const pulseSize = 4
-  const growthDuration = (10 / 100) * totalDuration
-  const travelDuration = (80 / 100) * totalDuration
-  const shrinkDuration = (10 / 100) * totalDuration
+  const pulsePercent = 30
+  // Growth duration is pulsePercent% of total duration (time to grow and fade out)
+  const growthDuration = (totalDuration * pulsePercent) / 100
+  const travelDuration = ((100 - pulsePercent * 2) / 100) * totalDuration
+  const shrinkDuration = growthDuration // Same as growth for symmetry
   const tl = gsap.timeline({ defaults: { ease: 'none' } })
+
+  // Phase 1: Initial growth (0% to 30% of total time)
   tl.fromTo(
     StartPulse.value,
     { scale: pulseSize, autoAlpha: 0, transformOrigin: '50% 50%' },
-    { scale: 1, autoAlpha: 1, duration: growthDuration },
-  )
-  tl.addLabel('grow')
-  tl.fromTo(
-    StartPulse.value,
-    { scale: 1, autoAlpha: 1, transformOrigin: '50% 50%' },
-    { scale: 0, autoAlpha: 1, duration: growthDuration * 4 },
-    'grow'
+    { scale: 0, autoAlpha: 1, duration: growthDuration },
+    0 // Start immediately
   )
   tl.fromTo(
     SplinePath.value,
     { drawSVG: '0% 0%' },
     { duration: growthDuration, drawSVG: '0% 10%' },
-    'grow'
+    0 // Start immediately
   )
-  tl.addLabel('travel')
+
+  // Phase 2: Travel (30% to 70% of total time)
   tl.fromTo(
     SplinePath.value,
     { drawSVG: '0% 10%' },
     { duration: travelDuration, drawSVG: '90% 100%' },
-    'travel'
+    growthDuration // Start after growth phase
   )
-  tl.addLabel('shrink')
+
+  // Phase 3: Final shrink (70% to 100% of total time)
   tl.fromTo(
     SplinePath.value,
     { drawSVG: '90% 100%' },
     { duration: shrinkDuration, drawSVG: '100% 100%' },
-    'shrink'
+    growthDuration + travelDuration // Start after travel phase
   )
   tl.fromTo(
     EndPulse.value,
     { scale: 0, autoAlpha: 1, transformOrigin: '50% 50%' },
-    { scale: pulseSize, autoAlpha: 0, duration: shrinkDuration * 4 },
-    'shrink'
+    { scale: pulseSize, autoAlpha: 0, duration: shrinkDuration },
+    growthDuration + travelDuration // Start after travel phase
   )
+
   return {
     timeline: tl,
-    totalDuration
+    totalDuration: totalDuration - shrinkDuration
   }
 }
-
-console.log('rex: Cooldown setup for card', card.simulation.chunks)
 
 // Integrate dash timeline at end of each cooldown segment
 const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(card.simulation.chunks, {

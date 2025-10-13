@@ -82,11 +82,16 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
 
         // Append attack dash timeline if provided (after segment completes)
         const atk = normalized.attackTimelineFactory?.()
-        if (atk) {
-          // Ensure attack timeline starts after cooldown segment fully done
-          const hitDelay = 0.1 // slight delay to help the human brain catch up
-          cooldownTimeline.add(atk.timeline, '-=' + (atk.totalDuration + hitDelay))
-        }
+        if (!atk) return
+
+        // Ensure attack timeline starts after cooldown segment fully done
+        const hitDelay = 0.0 // slight delay to help the human brain
+        console.log('rex: ', {
+          totalDuration: atk?.totalDuration,
+          hitDelay: hitDelay,
+          addTime: '-=' + (atk.totalDuration + hitDelay),
+        })
+        cooldownTimeline.add(atk.timeline, '-=' + (atk.totalDuration - hitDelay))
       },
     }, 0)
 
