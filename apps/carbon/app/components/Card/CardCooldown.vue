@@ -105,7 +105,7 @@ function buildDashTimeline() {
 }
 
 // Integrate dash timeline at end of each cooldown segment
-const { cooldown, cooldownDuration, slow, haste, frozen, slowSource, hasteSource, frozenSource } = useCooldown(card.simulation.chunks, {
+const cooldown = useCooldown(card.simulation.chunks, {
   onAttack: () => emit('cardAttack'),
   attackTimelineFactory: () => buildDashTimeline()
 })
@@ -121,13 +121,26 @@ function onStartRef(el: HTMLElement) {
 function onEndRef(el: HTMLElement) {
   EndPulse.value = el
 }
+
+const cooldownState = computed(() => {
+  if (cooldown.frozen.value > 0) return 'frozen'
+  if (cooldown.slow.value > 0) return 'slow'
+  if (cooldown.haste.value > 0) return 'haste'
+  return 'normal'
+})
+
+const cooldownStateColourClass = computed(() => {
+  if (cooldown.frozen.value > 0) return 'base-info'
+  if (cooldown.slow.value > 0) return 'base-warning'
+  if (cooldown.haste.value > 0) return 'base-success'
+  return 'base-120'
+})
 </script>
 
 <template>
-  <div id="CardCooldown" ref="cardEl" :class="{ slow, haste, frozen }">
-    <div v-if="cooldown > 0" class="cooldown" :class="{
-      'base-warning': slow, 'base-success': haste, 'base-info': frozen
-    }" :style="{ height: `${cooldown}%` }" />
+  <div id="CardCooldown" ref="cardEl" :class="cooldownState">
+    <div v-if="cooldown.cooldownValue.value > 0" class="cooldown" :class="cooldownStateColourClass"
+      :style="{ height: `${cooldown.cooldownValue.value}%` }" />
 
     <CardSpline v-if="spline && cardEl && targetEl" :owner="card.owner.board" :start-center="spline.getCenter(cardEl)"
       :end-center="spline.getCenter(targetEl)" :stroke-width="spline.stroke" :path="spline.d.value"
@@ -135,20 +148,20 @@ function onEndRef(el: HTMLElement) {
 
     <div v-if="debug" class="debugPanel">
       <div class="debug grid">
-        <p>{{ cooldownDuration.toFixed(1) }}</p>
-        <p>{{ Math.floor(cooldown) }}</p>
+        <p>{{ cooldown.cooldownDuration.value.toFixed(1) }}</p>
+        <p>{{ Math.floor(cooldown.cooldownValue.value) }}</p>
       </div>
       <div class="debug slowed">
-        <p>{{ slow.toFixed(1) }}</p>
-        <p>{{ slowSource }}</p>
+        <p>{{ cooldown.slow.value.toFixed(1) }}</p>
+        <p>{{ cooldown.slowSource.value }}</p>
       </div>
       <div class="debug hasted">
-        <p>{{ haste.toFixed(1) }}</p>
-        <p>{{ hasteSource }}</p>
+        <p>{{ cooldown.haste.value.toFixed(1) }}</p>
+        <p>{{ cooldown.hasteSource.value }}</p>
       </div>
       <div class="debug freezed">
-        <p>{{ frozen.toFixed(1) }}</p>
-        <p>{{ frozenSource }}</p>
+        <p>{{ cooldown.frozen.value.toFixed(1) }}</p>
+        <p>{{ cooldown.frozenSource.value }}</p>
       </div>
     </div>
   </div>

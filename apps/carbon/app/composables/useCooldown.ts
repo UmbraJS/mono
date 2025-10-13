@@ -23,7 +23,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
 
   const audio = useAudio()
 
-  const cooldown = ref(100)
+  const cooldownValue = ref(100)
   const cooldownDuration = ref(0)
   const slow = ref(0)
   const slowSource = ref<string>('slow')
@@ -59,7 +59,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
     const chunkTimeline = gsap.timeline()
     const cooldownTimeline = gsap.timeline({
       onStart: () => {
-        cooldown.value = 100
+        cooldownValue.value = 100
       },
     })
 
@@ -74,7 +74,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
       duration: segment.duration,
       ease: 'none',
       onComplete: () => {
-        cooldown.value = 100
+        cooldownValue.value = 100
 
         audio.playPunchSound()
         normalized.onAttack?.()
@@ -126,7 +126,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
       toPercent,
       duration,
     }: AnimationProp) {
-      chunkTimeline.to(cooldown, {
+      chunkTimeline.to(cooldownValue, {
         value: toPercent,
         duration: duration,
         ease: 'none',
@@ -140,7 +140,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
     }: AnimationProp) {
       const slowTimeline = gsap.timeline()
 
-      chunkTimeline.to(cooldown, {
+      chunkTimeline.to(cooldownValue, {
         value: toPercent,
         duration: duration,
         ease: 'none',
@@ -170,7 +170,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
     }: AnimationProp) {
       const hasteTimeline = gsap.timeline()
 
-      chunkTimeline.to(cooldown, {
+      chunkTimeline.to(cooldownValue, {
         value: toPercent,
         duration: duration,
         ease: 'none',
@@ -200,7 +200,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
     }: AnimationProp) {
       const freezeTimeline = gsap.timeline()
 
-      chunkTimeline.to(cooldown, {
+      chunkTimeline.to(cooldownValue, {
         value: toPercent,
         duration: duration,
         ease: 'none',
@@ -225,7 +225,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: ((
   }
 
   return {
-    cooldown,
+    cooldownValue,
     cooldownDuration,
     slow,
     slowSource,
