@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { Teleport, ref, computed, onMounted, onUnmounted } from 'vue';
 
 interface Props {
   act: number;
@@ -210,7 +210,6 @@ const slideProgressBarColor = computed(() => {
       </div>
     </div>
 
-
     <!-- Slide/Act counter -->
     <div class="slide-counter">
       <p>{{ act }} / {{ totalActs }}</p>
@@ -218,21 +217,23 @@ const slideProgressBarColor = computed(() => {
         {{ slide }} / {{ slidesInCurrentAct }}
       </p>
       <p class="progress-label">{{ formattedTimeRemaining }}</p>
-
     </div>
-
   </div>
 </template>
 
 <style scoped>
 .slide-progress {
   position: absolute;
-  bottom: var(--space-7);
-  right: var(--space-3);
+  bottom: var(--space-1);
+  right: var(--space-1);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--space-1);
+
+  background: var(--base);
+  border-radius: var(--radius);
+  padding: var(--space-2);
 }
 
 .slide-counter {
@@ -252,7 +253,7 @@ const slideProgressBarColor = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--space-2);
+  gap: var(--space-quark);
 }
 
 .progress-section {

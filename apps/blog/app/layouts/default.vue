@@ -38,7 +38,7 @@ onKeyStroke('Escape', () => toggleReveal())
     dark: theme.isDark,
   }">
     <div class="burger" @click="toggleReveal" />
-    <FrostLayer />
+    <!-- <FrostLayer /> -->
     <div class="content-layer">
       <div class="vignet" @click="toggleReveal" />
       <main class="page">
