@@ -179,11 +179,11 @@ const slideProgressBarColor = computed(() => {
   <div class="slide-progress">
     <!-- Mode indicator -->
     <div class="mode-indicator">
-      <span class="mode-badge" :class="{ 'practice': practiceMode, 'live': !practiceMode }" @click="togglePracticeMode">
-        {{ practiceMode ? 'PRACTICE' : 'LIVE' }}
-      </span>
       <span v-if="!practiceMode && targetDateTime" class="target-time">
         Target: {{ new Date(targetDateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}
+      </span>
+      <span class="mode-badge" :class="{ 'practice': practiceMode, 'live': !practiceMode }" @click="togglePracticeMode">
+        {{ practiceMode ? 'PRACTICE' : 'LIVE' }}
       </span>
     </div>
 
@@ -212,9 +212,9 @@ const slideProgressBarColor = computed(() => {
 
     <!-- Slide/Act counter -->
     <div class="slide-counter">
-      <p>{{ act }} / {{ totalActs }}</p>
+      <p>{{ act.toString().padStart(2, '0') }}/{{ totalActs.toString().padStart(2, '0') }}</p>
       <p class="display">
-        {{ slide }} / {{ slidesInCurrentAct }}
+        {{ slide.toString().padStart(2, '0') }}/{{ slidesInCurrentAct.toString().padStart(2, '0') }}
       </p>
       <p class="progress-label">{{ formattedTimeRemaining }}</p>
     </div>
@@ -245,8 +245,15 @@ const slideProgressBarColor = computed(() => {
 }
 
 .slide-counter p {
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
   font-size: 0.875rem;
-  opacity: 0.8;
+  opacity: 0.2;
+  font-variant-numeric: tabular-nums;
+}
+
+
+.slide-counter p:last-child {
+  opacity: 1;
 }
 
 .progress-bars {
@@ -289,8 +296,7 @@ const slideProgressBarColor = computed(() => {
 
 .mode-indicator {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   gap: var(--space-1);
 }
 
