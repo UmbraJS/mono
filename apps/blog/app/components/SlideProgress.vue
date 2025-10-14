@@ -6,22 +6,49 @@ interface Props {
   slide: number;
   totalActs: number;
   slidesInCurrentAct: number;
+  // New props for presentation mode
+  practiceMode?: boolean;
+  targetDateTime?: string; // ISO string format like "2024-10-21T13:20:00"
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  practiceMode: true,
+  targetDateTime: undefined
+});
+
+const emit = defineEmits<{
+  'update:practiceMode': [value: boolean]
+}>();
+
+// Toggle practice mode
+const togglePracticeMode = () => {
+  emit('update:practiceMode', !props.practiceMode);
+};
 
 // Timer state
 const startTime = ref<number>(Date.now());
 const currentTime = ref<number>(Date.now());
 const timerInterval = ref<NodeJS.Timeout | null>(null);
 
-// Constants - time allocation per act in milliseconds
-const TOTAL_PRESENTATION_MS = 30 * 60 * 1000; // 30 minutes total
+// Practice mode settings
+const PRACTICE_PRESENTATION_MS = 30 * 60 * 1000; // 30 minutes total for practice
 const ACT_DURATIONS_MS = [
   10 * 60 * 1000, // Act 1: 10 minutes
   10 * 60 * 1000, // Act 2: 10 minutes
   10 * 60 * 1000  // Act 3: 10 minutes
 ];
+
+// Calculate total presentation time based on mode
+const totalPresentationTime = computed(() => {
+  if (props.practiceMode) {
+    return PRACTICE_PRESENTATION_MS;
+  } else if (props.targetDateTime) {
+    const targetTime = new Date(props.targetDateTime).getTime();
+    const remaining = targetTime - currentTime.value;
+    return Math.max(0, remaining); // Don't go negative for total time calculation
+  }
+  return PRACTICE_PRESENTATION_MS; // Fallback to practice mode
+});
 
 // Initialize timer
 onMounted(() => {
@@ -56,7 +83,7 @@ const timeRemainingInCurrentAct = computed(() => {
     .reduce((total, duration) => total + duration, 0);
 
   // Time remaining = Total time - elapsed time - time needed for future acts
-  const remaining = TOTAL_PRESENTATION_MS - totalElapsedTime.value - futureActsTime;
+  const remaining = totalPresentationTime.value - totalElapsedTime.value - futureActsTime;
 
   return remaining; // Allow negative values to show how much over time you are
 });
@@ -71,10 +98,8 @@ const currentActTotalTime = computed(() => {
     .reduce((total, duration) => total + duration, 0);
 
   // This act's total available time = Total presentation time - time needed for future acts
-  return TOTAL_PRESENTATION_MS - futureActsTime;
-});
-
-// Calculate how much time has been used in this act
+  return totalPresentationTime.value - futureActsTime;
+});// Calculate how much time has been used in this act
 const timeUsedInCurrentAct = computed(() => {
   const totalAvailable = currentActTotalTime.value;
   const remaining = timeRemainingInCurrentAct.value;
@@ -92,11 +117,31 @@ const progressPercentage = computed(() => {
   return Math.min(100, Math.max(0, progress));
 });
 
-// Format time in MM:SS, handling negative values
+// Format time with different formats based on duration
 const formatTime = (milliseconds: number): string => {
   const isNegative = milliseconds < 0;
   const absMilliseconds = Math.abs(milliseconds);
   const totalSeconds = Math.floor(absMilliseconds / 1000);
+
+  // If more than a day, format as "X days X hours X minutes"
+  if (totalSeconds >= 86400) { // 24 * 60 * 60 = 86400 seconds in a day
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const timeString = `${days}d ${hours}h ${minutes}m`;
+    return isNegative ? `-${timeString}` : timeString;
+  }
+
+  // If more than an hour, format as "X:XX:XX"
+  if (totalSeconds >= 3600) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    const timeString = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return isNegative ? `-${timeString}` : timeString;
+  }
+
+  // Less than an hour, format as "MM:SS"
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
   const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -132,6 +177,16 @@ const slideProgressBarColor = computed(() => {
 
 <template>
   <div class="slide-progress">
+    <!-- Mode indicator -->
+    <div class="mode-indicator">
+      <span class="mode-badge" :class="{ 'practice': practiceMode, 'live': !practiceMode }" @click="togglePracticeMode">
+        {{ practiceMode ? 'PRACTICE' : 'LIVE' }}
+      </span>
+      <span v-if="!practiceMode && targetDateTime" class="target-time">
+        Target: {{ new Date(targetDateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) }}
+      </span>
+    </div>
+
     <!-- Progress bars -->
     <div class="progress-bars">
       <!-- Time progress bar -->
@@ -153,16 +208,19 @@ const slideProgressBarColor = computed(() => {
           }" />
         </div>
       </div>
-
-      <!-- Slide/Act counter -->
-      <div class="slide-counter">
-        <p>{{ act }} / {{ totalActs }}</p>
-        <p class="display">
-          {{ slide }} / {{ slidesInCurrentAct }}
-        </p>
-        <p class="progress-label">{{ formattedTimeRemaining }}</p>
-      </div>
     </div>
+
+
+    <!-- Slide/Act counter -->
+    <div class="slide-counter">
+      <p>{{ act }} / {{ totalActs }}</p>
+      <p class="display">
+        {{ slide }} / {{ slidesInCurrentAct }}
+      </p>
+      <p class="progress-label">{{ formattedTimeRemaining }}</p>
+
+    </div>
+
   </div>
 </template>
 
@@ -226,5 +284,59 @@ const slideProgressBarColor = computed(() => {
   min-width: 40px;
   text-align: right;
   color: white;
+}
+
+.mode-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+}
+
+.mode-badge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.mode-badge:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.mode-badge.practice {
+  background-color: #059669;
+  color: white;
+}
+
+.mode-badge.live {
+  background-color: #dc2626;
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+.target-time {
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 0.625rem;
+  opacity: 0.8;
+  color: white;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 </style>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import type { Component } from 'vue';
 import { useSlideNavigation } from '../composables/useSlideNavigation';
 
@@ -125,6 +126,10 @@ const pages = [
 
 const actConfigs = [actOneSlideConfig, actTwoSlideConfig, actThreeSlideConfig];
 
+// Presentation timing configuration
+const practiceMode = ref(true); // Toggle this for practice vs live mode
+const targetDateTime = "2025-10-23T11:35:00"; // Your presentation end time
+
 // Use the slide navigation composable
 const {
   act,
@@ -139,7 +144,8 @@ const {
   <!-- Dynamic component rendering based on current slide -->
   <component :is="currentSlideConfig.component" v-if="currentSlideConfig" v-bind="currentSlideProps" />
 
-  <SlideProgress :act="act" :slide="slide" :total-acts="pages.length" :slides-in-current-act="slidesInThisAct" />
+  <SlideProgress v-model:practice-mode="practiceMode" :act="act" :slide="slide" :total-acts="pages.length"
+    :slides-in-current-act="slidesInThisAct" :target-date-time="targetDateTime" />
 
   <!-- <div class="EmojiPanel">
     <LiveEmojiPanel />
