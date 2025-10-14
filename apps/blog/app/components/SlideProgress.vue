@@ -108,6 +108,11 @@ const formattedTimeRemaining = computed(() => {
   return formatTime(timeRemainingInCurrentAct.value);
 });
 
+// Calculate slide progress percentage (0-100)
+const slideProgressPercentage = computed(() => {
+  return (props.slide / props.slidesInCurrentAct) * 100;
+});
+
 // Progress bar color based on time remaining
 const progressBarColor = computed(() => {
   const remaining = timeRemainingInCurrentAct.value;
@@ -118,27 +123,45 @@ const progressBarColor = computed(() => {
   if (percentage < 80) return '#22c55e'; // Green - plenty of time
   return '#f59e0b'; // Orange - running out of time
 });
+
+// Slide progress bar color - always blue for consistency
+const slideProgressBarColor = computed(() => {
+  return 'var(--accent-100)'; // Blue for slide progress
+});
 </script>
 
 <template>
   <div class="slide-progress">
-    <!-- Slide/Act counter -->
-    <div class="slide-counter">
-      <p>{{ act }} / {{ totalActs }}</p>
-      <p class="display">
-        {{ slide }} / {{ slidesInCurrentAct }}
-      </p>
-    </div>
-
-    <!-- Time progress bar -->
-    <div class="time-progress">
-      <div class="progress-bar-container">
-        <div class="progress-bar" :style="{
-          width: `${progressPercentage}%`,
-          backgroundColor: progressBarColor
-        }" />
+    <!-- Progress bars -->
+    <div class="progress-bars">
+      <!-- Time progress bar -->
+      <div class="progress-section">
+        <div class="progress-bar-container">
+          <div class="progress-bar" :style="{
+            width: `${progressPercentage}%`,
+            backgroundColor: progressBarColor
+          }" />
+        </div>
       </div>
-      <p class="time-remaining">{{ formattedTimeRemaining }}</p>
+
+      <!-- Slide progress bar -->
+      <div class="progress-section">
+        <div class="progress-bar-container">
+          <div class="progress-bar" :style="{
+            width: `${slideProgressPercentage}%`,
+            backgroundColor: slideProgressBarColor
+          }" />
+        </div>
+      </div>
+
+      <!-- Slide/Act counter -->
+      <div class="slide-counter">
+        <p>{{ act }} / {{ totalActs }}</p>
+        <p class="display">
+          {{ slide }} / {{ slidesInCurrentAct }}
+        </p>
+        <p class="progress-label">{{ formattedTimeRemaining }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -151,24 +174,30 @@ const progressBarColor = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 .slide-counter {
   text-align: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-quark);
 }
 
 .slide-counter p {
-  margin: 0;
-  line-height: 1.2;
-}
-
-.slide-counter .display {
   font-size: 0.875rem;
   opacity: 0.8;
 }
 
-.time-progress {
+.progress-bars {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.progress-section {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -189,12 +218,13 @@ const progressBarColor = computed(() => {
   border-radius: 2px;
 }
 
-.time-remaining {
+.progress-label {
   font-family: 'Monaco', 'Menlo', monospace;
   font-size: 0.75rem;
   margin: 0;
   opacity: 0.9;
   min-width: 40px;
   text-align: right;
+  color: white;
 }
 </style>

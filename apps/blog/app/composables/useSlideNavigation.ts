@@ -126,13 +126,22 @@ export function useSlideNavigation({ actConfigs, pages }: UseSlideNavigationOpti
 
   // Navigation functions
   const nextSlide = () => {
+    // If we're at the last slide of the last act, don't advance
+    if (act.value === pages.length && slide.value === slidesInThisAct.value) {
+      return;
+    }
+    
     slide.value++;
     if (slide.value > slidesInThisAct.value) {
-      slide.value = slidesInThisAct.value;
-      act.value++;
-      slide.value = 1;
+      // Only advance to next act if we're not at the last act
+      if (act.value < pages.length) {
+        act.value++;
+        slide.value = 1;
+      } else {
+        // Stay at the last slide of the last act
+        slide.value = slidesInThisAct.value;
+      }
     }
-    if (act.value > pages.length) act.value = pages.length;
     updateURL();
   };
 
