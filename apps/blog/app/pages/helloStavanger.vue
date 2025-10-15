@@ -34,6 +34,7 @@ import EditUmbra from '../components/halloSlides/EditUmbra.vue';
 import ImageIllustration from '../components/halloSlides/ImageIllustration.vue';
 import SamSigningOff from '../components/halloSlides/SamSigningOff.vue';
 import SlideProgress from '../components/SlideProgress.vue';
+import ItsMeMario from '../components/halloSlides/Me.vue';
 
 //Images
 import queryAboutImages from "../../public/query.png";
@@ -58,33 +59,34 @@ interface SlideConfig {
 
 // Slide configuration - easy to maintain and extend
 const actOneSlideConfig: SlideConfig[] = [
+  { component: ItsMeMario, props: {} },
   { component: Intro, props: {} },
   { component: RoundedTokens, props: { class: 'SamSlide' } },
   { component: Trinity, props: { class: 'SamSlide' } },
   { component: Eden, props: { class: 'SamSlide' }, range: 8, dynamicProps: (slideWithinRange: number) => ({ stage: slideWithinRange }) },
   { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
   { component: PersonalSpaceTokens, props: { class: 'SamSlide' } },
-  { component: SpaceTokens, props: { class: 'SamSlide' } },
+  // { component: SpaceTokens, props: { class: 'SamSlide' } },
   { component: NotesBetweenNotes, props: { class: 'SamSlide' } },
-  { component: ColorIsAll, props: { class: 'SamSlide' } },
+  // { component: ColorIsAll, props: { class: 'SamSlide' } },
 ];
 
 const actTwoSlideConfig: SlideConfig[] = [
   { component: ActTwoIntro, props: {} },
-  { component: ElementSpecificTokens, props: { class: 'SamSlide' } },
+  // { component: ElementSpecificTokens, props: { class: 'SamSlide' } },
   { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' } },
   { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' } },
   { component: Gallery, props: { class: 'SamSlide' } },
   { component: BGFGRange, props: { class: 'SamSlide' } },
-  { component: AliasedBGFGRange, props: { class: 'SamSlide' } },
-  { component: MaterialColors, props: { class: 'SamSlide' } },
+  // { component: AliasedBGFGRange, props: { class: 'SamSlide' } },
+  // { component: MaterialColors, props: { class: 'SamSlide' } },
   { component: TailwindTokens, props: { class: 'SamSlide' } },
   { component: RadixColors, props: { class: 'SamSlide' } },
   { component: UmbraRange, props: { class: 'SamSlide', simple: true } },
   { component: UmbraRange, props: { class: 'SamSlide' } },
   { component: SingleRangePage, props: { class: 'SamSlide' } },
   { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
-  { component: ColourReassignment, props: { class: 'SamSlide' } },
+  // { component: ColourReassignment, props: { class: 'SamSlide' } },
   { component: UmbraRanges, props: { class: 'SamSlide' } },
 ];
 
@@ -144,8 +146,8 @@ const {
   <!-- Dynamic component rendering based on current slide -->
   <component :is="currentSlideConfig.component" v-if="currentSlideConfig" v-bind="currentSlideProps" />
 
-  <SlideProgress v-model:practice-mode="practiceMode" :act="act" :slide="slide" :total-acts="pages.length"
-    :slides-in-current-act="slidesInThisAct" :target-date-time="targetDateTime" />
+  <!-- <SlideProgress v-model:practice-mode="practiceMode" :act="act" :slide="slide" :total-acts="pages.length"
+    :slides-in-current-act="slidesInThisAct" :target-date-time="targetDateTime" /> -->
 
   <!-- <div class="EmojiPanel">
     <LiveEmojiPanel />
@@ -158,6 +160,12 @@ const {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  /* --paragraph: 2rem; */
+}
+
+.SamSlide p.display {
+  line-height: 1.6;
+  font-size: clamp(14px, 4vw, 30px);
 }
 
 .EmojiPanel {
