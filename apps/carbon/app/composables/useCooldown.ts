@@ -18,6 +18,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
   const audio = useAudio()
 
   const cooldownValue = ref(100)
+  const castStart = ref(0)
   const cooldownDuration = ref(0)
   const slow = ref(0)
   const slowSource = ref<string>('slow')
@@ -79,6 +80,9 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
           const attackStartTime = Math.max(0, segment.duration - atk.totalDuration)
           cooldownTimeline.add(atk.timeline, attackStartTime)
           cooldownTimeline.addLabel('CastStart', attackStartTime)
+          const totalDuration = segment.duration
+          const castStartAsAPercentageOfTotalDuration = (attackStartTime / totalDuration) * 100
+          castStart.value = castStartAsAPercentageOfTotalDuration
         }
       },
       onComplete: () => {
@@ -224,6 +228,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
   return {
     master: cardTimeline,
     cooldownValue,
+    castStart,
     cooldownDuration,
     slow,
     slowSource,

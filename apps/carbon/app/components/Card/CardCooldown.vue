@@ -102,6 +102,9 @@ const debugData = computed(() => ({
     <div v-if="cooldown.cooldownValue.value > 0" class="cooldown" :class="cooldownStateColourClass"
       :style="{ height: `${cooldown.cooldownValue.value}%` }" />
 
+    <div v-if="cooldown.castStart.value > 0" class="castTime" :class="cooldownStateColourClass"
+      :style="{ height: `${100 - cooldown.castStart.value}%` }" />
+
     <CardSpline v-if="spline && cardEl && targetEl" :owner="card.owner.board" :start-center="spline.getCenter(cardEl)"
       :end-center="spline.getCenter(targetEl)" :stroke-width="spline.stroke" :path="spline.d.value"
       @spline-path-ref="handleSplinePathRef" @end-ref="handleEndRef" @start-ref="handleStartRef" />
@@ -116,7 +119,8 @@ const debugData = computed(() => ({
 </template>
 
 <style>
-.cooldown {
+.cooldown,
+.castTime {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -127,6 +131,11 @@ const debugData = computed(() => ({
   pointer-events: none;
   opacity: v-bind(opacity);
   transition: opacity var(--time);
+}
+
+.castTime {
+  border-top: dashed 2px var(--base-80);
+
 }
 
 .cooldown::after {
