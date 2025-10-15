@@ -1,5 +1,9 @@
 <script setup lang="ts">
 
+defineProps<{
+  grayscale?: boolean;
+}>();
+
 const images = [
   { author: "Dan Scott", url: "https://drawpaintacademy.com/wp-content/uploads/2022/11/Dan-Scott-New-Zealand-Foggy-Mountains-2020.jpg" },
   { author: "Peder Severin Krøyer", url: "https://drawpaintacademy.com/wp-content/uploads/2022/11/Peder-Severin-Kroyer-Self-Portrait-Sitting-by-His-Easel-at-Skagen-Beach-1902.jpg" },
@@ -8,7 +12,7 @@ const images = [
 </script>
 
 <template>
-  <div class="Gallery">
+  <div class="Gallery" :class="{ grayscale: grayscale }">
     <div class="GalleryGrid">
       <div v-for="(image, index) in images" :key="index" class="GalleryItem">
         <img :src="image.url" :alt="`Image by ${image.author}`" />
@@ -24,6 +28,10 @@ const images = [
   justify-content: center;
   align-items: center;
   padding: var(--space-5);
+}
+
+.Gallery.grayscale img {
+  filter: grayscale(100%);
 }
 
 .GalleryGrid {

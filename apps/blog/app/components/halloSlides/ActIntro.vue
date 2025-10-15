@@ -54,7 +54,7 @@ onMounted(() => {
   <div class="SamSlide">
     <div class="IntroTextWrapper">
       <!-- <h1 class="ActThesis">thesis</h1> -->
-      <h3>{{ title }}</h3>
+      <!-- <h1 class="ActTitle display">{{ title }}</h1> -->
       <div class="IntroText">
         <div ref="revealBox" class="RevealBox"></div>
         <div ref="introText">
@@ -66,6 +66,10 @@ onMounted(() => {
 </template>
 
 <style>
+.ActTitle {
+  color: var(--base-50);
+}
+
 .ActThesis {
   position: absolute;
   transform: rotate(-90deg) translateY(-250%) translateX(-40%);

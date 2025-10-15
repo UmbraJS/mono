@@ -5,8 +5,9 @@ import ActIntro from './ActIntro.vue';
 <template>
   <ActIntro title="Act 1: Systems for Design">
     <p class="display">
-      A design <span>system</span> isn't UI components. It isn't dark mode or rounded corners. It's the
-      underlying <span>rules</span> that make those decisions possible.
+      <span>Act 1: Systems for Design.</span>
+      A design system isn't UI components. It isn't dark mode or rounded corners. It's the
+      underlying rules that make those decisions possible.
     </p>
   </ActIntro>
 </template>

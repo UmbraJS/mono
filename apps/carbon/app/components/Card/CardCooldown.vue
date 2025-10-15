@@ -9,6 +9,7 @@ import { useAnimationTimeline } from './composables/useAnimationTimeline'
 import { useCooldownState } from './composables/useCooldownState'
 import { useSplineRefs } from './composables/useSplineRefs'
 import CardCooldownDebugPanel from './CardCooldownDebugPanel.vue'
+import GsapTimelineInspector from '../GSAPInspector.vue'
 
 gsap.registerPlugin(DrawSVGPlugin);
 
@@ -105,6 +106,9 @@ const debugData = computed(() => ({
       @spline-path-ref="handleSplinePathRef" @end-ref="handleEndRef" @start-ref="handleStartRef" />
 
     <CardCooldownDebugPanel v-if="debug" :data="debugData" :current-state="cooldownState" />
+
+    <GsapTimelineInspector v-if="cooldown.master" :root="cooldown.master" :nested="true" :bake-time-scale="false"
+      :px-per-sec="140" />
   </div>
 </template>
 

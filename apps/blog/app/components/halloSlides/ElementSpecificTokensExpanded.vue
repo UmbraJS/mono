@@ -96,17 +96,13 @@ const spaceTokenStyleObject = computed(() => {
 
 <template>
   <div class="SpacingTokens" :style="spaceTokenStyleObject">
-    <h3 class="SpacingTitle">
-      Element-Specific Semantic Tokens
-    </h3>
-    <p>Many duplicate colors under different names. Color relationships are very loosely defined if at all. And even if
-      they are defined, it takes a tremendous amount of upkeep and communication to maintain these relationships.</p>
-    <p></p>
+    <h1 class="SpacingTitle">
+      So many tokens! 😱 (50+)
+    </h1>
     <ScrollArea class="ScrollArea">
-      <div class="TokensTable">
+      <div class="MyElementTokensTable">
         <div v-for="token in spaceTokens" :key="token.name" class="SpaceToken">
-          <span class="TokenName">{{ token.name }}:</span>
-          <span class="TokenValue">{{ token.value }};</span>
+          <p class="display"><span class="TokenName">{{ token.name }}:</span></p>
           <div class="Swatch border" :style="{ '--color': token.value }" />
         </div>
       </div>
@@ -152,15 +148,16 @@ const spaceTokenStyleObject = computed(() => {
   gap: var(--space-3);
 }
 
-.TokensTable {
+.MyElementTokensTable {
   display: grid;
-  grid-template-columns: auto auto 1fr;
-  gap: var(--space-1);
+  grid-template-columns: auto auto;
+  align-items: space-between;
+  justify-content: space-between;
 }
 
 .TokenText {
   display: grid;
-  grid-template-columns: 1fr auto;
+  justify-content: space-between;
   gap: 0px var(--space-2);
   color: var(--base-50);
 }

@@ -21,7 +21,10 @@ const foregroundTokens = [
 </script>
 
 <template>
-  <div class="SpacingTokens">
+  <div class="MySpacingTokens">
+    <h1 class="SpacingTitle">
+      My first attempt 👶
+    </h1>
     <div class="TokensTables">
       <TokensTable :tokens="backgroundTokens" />
       <TokensTable :tokens="middleTokens" />
@@ -41,9 +44,11 @@ const foregroundTokens = [
   color: var(--base-50);
 }
 
-.SpacingTokens {
+.MySpacingTokens {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
 }
 </style>

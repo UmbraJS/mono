@@ -85,6 +85,7 @@ const actTwoSlideConfig: SlideConfig[] = [
   { component: UmbraRange, props: { class: 'SamSlide', simple: true } },
   { component: UmbraRange, props: { class: 'SamSlide' } },
   { component: SingleRangePage, props: { class: 'SamSlide' } },
+  { component: Gallery, props: { class: 'SamSlide', grayscale: true } },
   { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
   // { component: ColourReassignment, props: { class: 'SamSlide' } },
   { component: UmbraRanges, props: { class: 'SamSlide' } },

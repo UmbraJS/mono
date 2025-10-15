@@ -51,8 +51,7 @@ const spaceTokenStyleObject = computed(() => {
 
     <div class="TokensTable">
       <div v-for="token in spaceTokens" :key="token.name" class="SpaceToken">
-        <span class="TokenName">{{ token.name }}:</span>
-        <span class="TokenValue">{{ token.value }};</span>
+        <p class="display"><span class="TokenName">{{ token.name }}:</span></p>
         <div class="SpaceBox border" :style="{ '--size': token.value }" />
       </div>
     </div>
@@ -61,7 +60,7 @@ const spaceTokenStyleObject = computed(() => {
 
 <style>
 .SpacingTitle {
-  color: var(--base-50);
+  color: var(--base-120) !important;
 }
 
 .SpaceToken {
@@ -75,14 +74,14 @@ const spaceTokenStyleObject = computed(() => {
 .SpacingTokens {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start !important;
   gap: var(--space-3);
 }
 
 .TokensTable {
   display: grid;
   grid-template-columns: auto auto 1fr;
-  gap: var(--space-1);
+  gap: 0px !important;
 }
 
 .TokenText {

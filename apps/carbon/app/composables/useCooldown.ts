@@ -2,9 +2,9 @@ import { gsap } from 'gsap'
 import type { OutputChunk } from '../../utils/time/types';
 import { useAudio } from '../stores/useAudio'
 import { useSimulationInject } from '~/composables/useSimulationProvider'
-import { GSDevTools } from 'gsap/GSDevTools';
+// import { GSDevTools } from 'gsap/GSDevTools';
 
-gsap.registerPlugin(GSDevTools);
+// gsap.registerPlugin(GSDevTools);
 
 interface UseCooldownOptions {
   attackTimelineFactory: () => {
@@ -46,7 +46,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
       animateCooldown(segment)
     })
 
-    GSDevTools.create({ animation: cardTimeline });
+    // GSDevTools.create({ animation: cardTimeline });
   })
 
   function animateCooldown(segment: Segment) {
@@ -218,6 +218,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
   }
 
   return {
+    master: cardTimeline,
     cooldownValue,
     cooldownDuration,
     slow,

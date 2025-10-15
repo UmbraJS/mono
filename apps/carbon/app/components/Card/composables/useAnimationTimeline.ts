@@ -1,8 +1,8 @@
 import { gsap } from 'gsap'
 import { DASH_ANIMATION } from '../constants/animation'
-import { GSDevTools } from 'gsap/GSDevTools';
+// import { GSDevTools } from 'gsap/GSDevTools';
 
-gsap.registerPlugin(GSDevTools);
+// gsap.registerPlugin(GSDevTools);
 interface AnimationRefs {
   splinePath: Ref<SVGPathElement | null>
   startPulse: Ref<HTMLElement | null>

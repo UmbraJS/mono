@@ -73,16 +73,15 @@ onMounted(() => {
     <div class="ActConclusions">
 
       <div class="MetaBox">
-        <h3>{{ title }}</h3>
+        <p class="display"><span>{{ title }}</span></p>
       </div>
 
       <div v-for="(item, index) in conclusion" :key="index" class="IntroText">
         <div ref="revealBox" class="RevealBox"></div>
-        <blockquote ref="introText" class="display">
+        <p ref="introText" class="display">
           {{ item.text }}
-          <br />
           <span>- {{ item.author }}</span>
-        </blockquote>
+        </p>
       </div>
     </div>
   </div>
@@ -94,10 +93,7 @@ onMounted(() => {
 }
 
 .MetaBox {
-  padding: var(--space-2);
-  padding-bottom: var(--space-2);
-  color: var(--base-60);
-  border-bottom: solid 1px var(--base-40);
+  color: var(--base-120);
 }
 
 .ActConclusions {
