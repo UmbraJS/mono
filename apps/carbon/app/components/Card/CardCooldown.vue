@@ -100,6 +100,7 @@ const debugData = computed(() => ({
     <div v-if="cooldown.cooldownValue.value > 0" class="cooldown" :class="cooldownStateColourClass"
       :style="{ height: `${cooldown.cooldownValue.value}%` }" />
 
+    <!-- TODO: Im pretty sure that currently this castTime is not effected by haste or slow. Which means that the cast end might not allign with the cooldown end. We should fix this. -->
     <div v-if="cooldown.castStart.value > 0" class="castTime" :class="cooldownStateColourClass"
       :style="{ height: `${100 - cooldown.castStart.value}%` }" />
 

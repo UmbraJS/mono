@@ -2,6 +2,9 @@ import { gsap } from 'gsap'
 import type { SpaceOutput } from '../../utils/matchSimulator'
 import type { Character } from '../../types'
 
+//TODO: We need to add some sort of health and shield change log system so that we can display number changes in the UI
+//TODO: Once we have these change numbers we can more easily debug and verify that the health and shield changes are working correctly
+
 export function useSpace(timeline: gsap.core.Timeline, space: Pick<SpaceOutput, 'healthLog' | 'shieldLog'>, characters: Character[]) {
   const maxHealth = characters.reduce((total, character) => total + character.maxHealth, 0)
 
