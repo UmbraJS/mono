@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Teleport } from 'vue'
 import type { SimCard } from '../../../types/card'
 import { useCooldown } from '../../composables/useCooldown'
 import { gsap } from 'gsap'
@@ -107,8 +108,10 @@ const debugData = computed(() => ({
 
     <CardCooldownDebugPanel v-if="debug" :data="debugData" :current-state="cooldownState" />
 
-    <GsapTimelineInspector v-if="cooldown.master" :root="cooldown.master" :nested="true" :bake-time-scale="false"
-      :px-per-sec="140" />
+    <Teleport to="body">
+      <GsapTimelineInspector v-if="cooldown.master" :root="cooldown.master" :nested="true" :bake-time-scale="false"
+        :px-per-sec="140" />
+    </Teleport>
   </div>
 </template>
 

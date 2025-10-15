@@ -140,13 +140,6 @@ function rowTop(depth: number) {
   return 28 + depth * (rowHeight + vGap)
 }
 
-const trackHeight = computed(() => {
-  const maxDepth = rows.value.reduce((m, r) => Math.max(m, r.depth), 0)
-  return (maxDepth + 1) * (rowHeight + vGap) + 56
-})
-
-const trackMinWidth = computed(() => leftPad + totalDuration.value * pxPerSec.value + 180)
-
 function barStyle(r: Row) {
   const x = leftPad + r.start * pxPerSec.value
   const w = Math.max(2, r.duration * pxPerSec.value)
@@ -164,11 +157,6 @@ function barTitle(r: Row) {
 function refresh() {
   if (!props.root) return
   rows.value = collectRows(props.root, props.nested, bakeTimeScaleState.value)
-}
-
-function onClose() {
-  visible.value = false
-  emit('closed')
 }
 
 let cancelTicker: (() => void) | null = null
@@ -202,17 +190,15 @@ watchEffect(() => { if (bakeTimeScaleState.value) refresh() })
 
 <template>
   <div v-if="visible" class="gi-wrap" role="dialog" aria-label="GSAP Inspector">
-    <div class="gi-header">
-      <strong>GSAP Inspector</strong>
-      <span class="gi-time">t={{ currentTime.toFixed(2) }}s</span>
+    <!-- <div class="gi-header">
       <label class="gi-check">
         <input v-model="bakeTimeScaleState" type="checkbox">
         <span>bake timeScale</span>
       </label>
       <button class="gi-btn" @click="onClose">Close</button>
-    </div>
+    </div> -->
 
-    <div ref="scrollEl" class="gi-trackWrap" :style="{ minWidth: trackMinWidth + 'px', height: trackHeight + 'px' }">
+    <div ref="scrollEl" class="gi-trackWrap">
       <!-- Ruler -->
       <div class="gi-ruler">
         <div v-for="tick in ticks" :key="tick.key" class="gi-tick" :style="{ left: tick.left + 'px' }">
@@ -228,7 +214,9 @@ watchEffect(() => { if (bakeTimeScaleState.value) refresh() })
 
       <!-- Bars + names -->
       <div v-for="row in barRows" :key="row.path" class="gi-row" :style="{ top: rowTop(row.depth) + 'px' }">
-        <div class="gi-name" :title="row.name + ' (' + row.type + ')'">{{ row.name }} <small>({{ row.type }})</small>
+        <div class="gi-name" :title="row.name + ' (' + row.type + ')'">
+          {{ row.name }}
+          <small>({{ row.type }})</small>
         </div>
         <div class="gi-bar" :title="barTitle(row)" :style="barStyle(row)" />
       </div>
@@ -245,13 +233,12 @@ watchEffect(() => { if (bakeTimeScaleState.value) refresh() })
   left: 0;
   right: 0;
   bottom: 0;
-  max-height: 45vh;
   background: rgba(20, 20, 26, 0.92);
   color: #e6e6e6;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
-  backdrop-filter: saturate(1.2) blur(6px);
   z-index: 999999;
+  overflow: scroll;
+  max-height: 40vh;
 }
 
 .gi-header {
@@ -263,10 +250,6 @@ watchEffect(() => { if (bakeTimeScaleState.value) refresh() })
   top: 0;
   background: inherit;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.gi-time {
-  opacity: 0.9;
 }
 
 .gi-check {
@@ -319,11 +302,9 @@ watchEffect(() => { if (bakeTimeScaleState.value) refresh() })
 }
 
 .gi-row {
-  position: absolute;
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 22px;
   left: 8px;
 }
 
@@ -336,7 +317,7 @@ watchEffect(() => { if (bakeTimeScaleState.value) refresh() })
 }
 
 .gi-bar {
-  height: 100%;
+  height: 4px;
   border-radius: 6px;
   position: absolute;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
