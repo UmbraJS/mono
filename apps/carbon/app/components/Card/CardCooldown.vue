@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Teleport } from 'vue'
 import type { SimCard } from '../../../types/card'
 import { useCooldown } from '../../composables/useCooldown'
 import { gsap } from 'gsap'
@@ -10,7 +9,6 @@ import { useAnimationTimeline } from './composables/useAnimationTimeline'
 import { useCooldownState } from './composables/useCooldownState'
 import { useSplineRefs } from './composables/useSplineRefs'
 import CardCooldownDebugPanel from './CardCooldownDebugPanel.vue'
-import GsapTimelineInspector from '../GSAPInspector.vue'
 
 gsap.registerPlugin(DrawSVGPlugin);
 

@@ -47,9 +47,9 @@ const user: User = {
   characters: [warrior],
   field: cards.find((card) => card.info.name === 'Village') || cards[0]!, // Use first card as fallback
   deck: [
-    // { ...cards.find((card) => card.info.name === 'Archer'), index: 0 },
+    { ...cards.find((card) => card.info.name === 'Archer'), index: 0 },
     { ...cards.find((card) => card.info.name === 'Halberdier'), index: 2 },
-    // { ...cards.find((card) => card.info.name === 'Doom Cloak'), index: 5 },
+    { ...cards.find((card) => card.info.name === 'Doom Cloak'), index: 5 },
   ].filter((card): card is Card => card !== undefined),
   inventory: [
     cards.find((card) => card.info.name === 'Fenrir Viking'),
@@ -77,10 +77,9 @@ const bot: User = {
   name: 'Undead Legion',
   characters: [skeletonKing, skeletonKing],
   field: cards.find((card) => card.info.name === 'Abandoned Halls') || cards[0]!,
-  deck: [],
-  // [
-  //   { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, owner: { board: 'opponent', characterIndex: 0 } },
-  // ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index })),
+  deck: [
+    { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, owner: { board: 'opponent', characterIndex: 0 } },
+  ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index })),
   inventory: [
     cards.find((card) => card.info.name === 'Alien Halls'),
     cards.find((card) => card.info.name === 'Abandoned Halls'),
