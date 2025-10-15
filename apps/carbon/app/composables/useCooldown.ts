@@ -63,15 +63,6 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
     cooldownTimeline.add(chunkTimeline, 0)
     cooldownTimeline.add(durationTimeline, 0)
 
-    // Get attack timeline BEFORE creating the duration timeline so we can position it correctly
-    const atk = callbackOrOptions.attackTimelineFactory?.()
-    if (atk) {
-      // Position attack timeline so it ends exactly when cooldown ends
-      const attackStartTime = Math.max(0, segment.duration - atk.totalDuration)
-      console.log('Attack timeline - Duration:', atk.totalDuration, 'Segment duration:', segment.duration, 'Start time:', attackStartTime)
-      cooldownTimeline.add(atk.timeline, attackStartTime)
-    }
-
     cardTimeline.add(cooldownTimeline)
 
     durationTimeline.fromTo(cooldownDuration, {
@@ -80,13 +71,26 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
       value: 0,
       duration: segment.duration,
       ease: 'none',
+      onStart: () => {
+        // Get attack timeline BEFORE creating the duration timeline so we can position it correctly
+        const atk = callbackOrOptions.attackTimelineFactory?.()
+        if (atk) {
+          // Position attack timeline so it ends exactly when cooldown ends
+          const attackStartTime = Math.max(0, segment.duration - atk.totalDuration)
+          cooldownTimeline.add(atk.timeline, attackStartTime)
+          cooldownTimeline.addLabel('CastStart', attackStartTime)
+        }
+      },
       onComplete: () => {
         cooldownValue.value = 100
-
         audio.playPunchSound()
         callbackOrOptions.onAttack()
+        cooldownTimeline.addLabel('CastComplete', '>')
       },
     }, 0)
+
+    durationTimeline.addLabel('CooldownStart', 0)
+    durationTimeline.addLabel('CooldownEnd', segment.duration)
 
     timelineChunks.forEach((chunk) => {
       const duration = chunk.duration

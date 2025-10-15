@@ -108,10 +108,10 @@ const debugData = computed(() => ({
 
     <CardCooldownDebugPanel v-if="debug" :data="debugData" :current-state="cooldownState" />
 
-    <Teleport to="body">
+    <!-- <Teleport to="body">
       <GsapTimelineInspector v-if="cooldown.master" :root="cooldown.master" :nested="true" :bake-time-scale="false"
         :px-per-sec="140" />
-    </Teleport>
+    </Teleport> -->
   </div>
 </template>
 

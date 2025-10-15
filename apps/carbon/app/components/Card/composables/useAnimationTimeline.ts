@@ -108,6 +108,8 @@ export function useAnimationTimeline(refs: AnimationRefs) {
       },
       0
     )
+
+    timeline.addLabel('GrowthEnd', durations.growth)
   }
 
   /**
@@ -127,6 +129,8 @@ export function useAnimationTimeline(refs: AnimationRefs) {
       },
       durations.growth
     )
+
+    timeline.addLabel('TravelEnd', durations.growth + durations.travel)
   }
 
   /**
@@ -163,6 +167,7 @@ export function useAnimationTimeline(refs: AnimationRefs) {
       },
       shrinkStartTime
     )
+    timeline.addLabel('ShrinkEnd', DASH_ANIMATION.TOTAL_DURATION)
   }
 
   return {
