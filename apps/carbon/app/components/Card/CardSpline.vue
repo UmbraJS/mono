@@ -16,6 +16,12 @@ const { owner, startCenter, endCenter, strokeWidth, path } = defineProps<{
   path: string;
 }>()
 
+// Generate unique IDs for this component instance
+const instanceId = `spline-${Math.random().toString(36).substr(2, 9)}`
+const gradientId = `cometGradient-${instanceId}`
+const maskId = `splineMask-${instanceId}`
+const maskFollowerId = `maskFollower-${instanceId}`
+
 const splinesStore = useSplinesStore()
 const targetEl = computed(() => {
   return owner === 'player' ? splinesStore.tankCharacter.opponent : splinesStore.tankCharacter.player
@@ -48,20 +54,20 @@ function maskElementRef(el: SVGRectElement | null) {
       <svg class="IntegratedSpline">
         <defs>
           <!-- Comet-style gradient for the mask -->
-          <linearGradient id="cometGradient" x1="0%" y1="50%" x2="100%" y2="50%" gradientUnits="objectBoundingBox">
+          <linearGradient :id="gradientId" x1="0%" y1="50%" x2="100%" y2="50%" gradientUnits="objectBoundingBox">
             <stop offset="0%" stop-color="white" stop-opacity="0" />
             <stop offset="70%" stop-color="white" stop-opacity="1" />
             <stop offset="100%" stop-color="white" stop-opacity="1" />
           </linearGradient>
           
           <!-- Mask definition -->
-          <mask id="splineMask" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%" mask-type="alpha">
+          <mask :id="maskId" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%" mask-type="alpha">
             <rect :ref="(e) => maskElementRef(e as SVGRectElement)" 
-                  id="maskFollower"
+                  :id="maskFollowerId"
                   x="-30" y="-15" 
                   width="60" height="30" 
                   rx="15" ry="15" 
-                  fill="url(#cometGradient)" />
+                  :fill="`url(#${gradientId})`" />
           </mask>
         </defs>
         
@@ -71,7 +77,7 @@ function maskElementRef(el: SVGRectElement | null) {
               stroke="var(--accent-120)"
               :stroke-width="strokeWidth" 
               fill="transparent"
-              mask="url(#splineMask)" />
+              :mask="`url(#${maskId})`" />
       </svg>
       <div :ref="(e) => startRef(e as HTMLElement)" class="SplinePulse"
         :style="{ top: `${(startCenter.y) || 0}px`, left: `${(startCenter.x) || 0}px` }" />

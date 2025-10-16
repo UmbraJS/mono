@@ -77,9 +77,10 @@ const bot: User = {
   name: 'Undead Legion',
   characters: [skeletonKing, skeletonKing],
   field: cards.find((card) => card.info.name === 'Abandoned Halls') || cards[0]!,
-  deck: [
-    { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, owner: { board: 'opponent', characterIndex: 0 } },
-  ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index })),
+  deck: [],
+  // [
+  //   { ...cards.find((card) => card.info.name === 'Skeleton Archer')!, owner: { board: 'opponent', characterIndex: 0 } },
+  // ].filter((card): card is Card => card !== undefined).map((card, index) => ({ ...card, index: index })),
   inventory: [
     cards.find((card) => card.info.name === 'Alien Halls'),
     cards.find((card) => card.info.name === 'Abandoned Halls'),

@@ -138,7 +138,7 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
     durations: ReturnType<typeof calculatePhaseDurations>,
     elements: { maskElement: SVGRectElement; splinePath: SVGPathElement }
   ) {
-    // Animate mask along the path
+    // Animate mask along the path using direct element reference
     timeline.to(
       elements.maskElement,
       {
