@@ -16,8 +16,10 @@ const simulation = useSimulationProvider({
 <template>
   <CarbonGrid grid-layout="match">
     <OpponentHeader :health="simulation.bot.health" :shield="simulation.bot.shield"
+      :health-log="simulation.simulatedMatch.space.opponent.healthLog"
+      :shield-log="simulation.simulatedMatch.space.opponent.shieldLog" :time="simulation.time.value"
       :characters="botStore.characters.value" />
     <MatchBoard :max-slots="botStore.maxSlots.value" />
-    <PlayerHeader :health="simulation.user.health.value" :shield="simulation.user.shield.value" />
+    <PlayerHeader :health="simulation.user.health" :shield="simulation.user.shield" />
   </CarbonGrid>
 </template>

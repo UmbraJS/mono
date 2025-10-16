@@ -7,8 +7,8 @@ const store = useStore()
 const view = useView()
 
 defineProps<{
-  health: number;
-  shield: number;
+  health: Ref<number>;
+  shield: Ref<number>;
 }>()
 
 function toggleInventory() {

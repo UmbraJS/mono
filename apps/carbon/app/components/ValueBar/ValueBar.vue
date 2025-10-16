@@ -10,8 +10,11 @@ const props = defineProps<{
   gridArea: 'health' | 'shield'
 }>()
 
+const safeValue = computed(() => Number.isFinite(props.value) ? Math.max(0, props.value) : 0)
+const safeMaxValue = computed(() => Number.isFinite(props.maxValue) && props.maxValue > 0 ? props.maxValue : 1)
+
 const percentage = computed(() => {
-  return (Math.max(0, props.value) / props.maxValue) * 100
+  return (safeValue.value / safeMaxValue.value) * 100
 })
 
 const percentageDelayed = ref(percentage.value)
@@ -22,6 +25,17 @@ watch(percentage, (newValue) => {
     value: newValue,
   })
 })
+
+// Debug logging for invalid values
+watchEffect(() => {
+  if (!Number.isFinite(props.value) || !Number.isFinite(props.maxValue) || props.maxValue <= 0) {
+    console.warn('ValueBar: Invalid props detected:', {
+      value: props.value,
+      maxValue: props.maxValue,
+      gridArea: props.gridArea
+    })
+  }
+})
 </script>
 
 <template>
@@ -30,7 +44,7 @@ watch(percentage, (newValue) => {
     '--delayColor': props.delayColor,
     gridArea: props.gridArea,
   }">
-    <MeterLines :value="props.maxValue" :meter="30" />
+    <MeterLines :value="safeMaxValue" :meter="30" />
     <p class="digits">
       <slot />
     </p>

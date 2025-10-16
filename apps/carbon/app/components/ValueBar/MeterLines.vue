@@ -5,7 +5,15 @@ const { value = 0, meter = 30 } = defineProps<{
 }>()
 
 const amountOfMeterLines = computed(() => {
-  return Math.ceil(value / meter)
+  // Ensure value is a valid number and within reasonable bounds
+  const safeValue = Number.isFinite(value) ? Math.max(0, value) : 0
+  const safeMeter = Number.isFinite(meter) && meter > 0 ? meter : 30
+
+  const result = Math.ceil(safeValue / safeMeter)
+
+  // Limit the number of meter lines to prevent performance issues and invalid array lengths
+  // Maximum array length in JavaScript is 2^32 - 1, but we'll use a much smaller practical limit
+  return Math.min(result, 1000)
 })
 </script>
 

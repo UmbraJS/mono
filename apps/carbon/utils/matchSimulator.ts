@@ -50,7 +50,6 @@ export function matchSimulator(props: SpaceTimeProps) {
 }
 
 export function performanceSimulator(props: Decks) {
-
   const player = spaceStore({
     maxHealth: 3000,
     onAttack: (attackEntry) => opponent.hurt(attackEntry)
