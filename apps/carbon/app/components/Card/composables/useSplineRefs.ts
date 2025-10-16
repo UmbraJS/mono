@@ -5,6 +5,7 @@ interface SplineRefs {
   startPulse: Ref<HTMLElement | null>
   endPulse: Ref<HTMLElement | null>
   cardEl: Ref<HTMLElement | null>
+  maskElement: Ref<SVGRectElement | null>
 }
 
 /**
@@ -15,6 +16,7 @@ export function useSplineRefs() {
   const splinePath = ref<SVGPathElement | null>(null)
   const startPulse = ref<HTMLElement | null>(null)
   const endPulse = ref<HTMLElement | null>(null)
+  const maskElement = ref<SVGRectElement | null>(null)
   // Use useTemplateRef for the main card element
   const cardEl = useTemplateRef<HTMLElement | null>('cardEl')
 
@@ -24,7 +26,8 @@ export function useSplineRefs() {
   const allRefsReady = computed(() =>
     splinePath.value !== null &&
     startPulse.value !== null &&
-    endPulse.value !== null
+    endPulse.value !== null &&
+    maskElement.value !== null
   )
 
   /**
@@ -39,13 +42,15 @@ export function useSplineRefs() {
     splinePath,
     startPulse,
     endPulse,
-    cardEl
+    cardEl,
+    maskElement
   }))
 
   return {
     splinePath,
     startPulse,
     endPulse,
+    maskElement,
     cardEl,
     allRefsReady,
     cardElReady,

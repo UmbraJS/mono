@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import type { SimCard } from '../../../types/card'
 import { useCooldown } from '../../composables/useCooldown'
-import { gsap } from 'gsap'
-import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
+
 import { useSplinePath } from './useSpline'
 import { useSplinesStore } from '@/stores/useSplinesStore'
-import { useAnimationTimeline } from './composables/useAnimationTimeline'
+import { useMotionPathTimeline } from './composables/useMotionPathTimeline'
 import { useCooldownState } from './composables/useCooldownState'
 import { useSplineRefs } from './composables/useSplineRefs'
 import CardCooldownDebugPanel from './CardCooldownDebugPanel.vue'
 
-gsap.registerPlugin(DrawSVGPlugin);
+
 
 const emit = defineEmits<{
   (e: 'functionRef', el: HTMLElement): void
@@ -52,12 +51,12 @@ const spline = useSplinePath({
 })
 
 // Animation timeline management
-const animationTimeline = useAnimationTimeline(splineRefs.refs.value)
+const animationTimeline = useMotionPathTimeline(splineRefs.refs.value)
 
 // Integrate dash timeline at end of each cooldown segment
 const cooldown = useCooldown(card.simulation.chunks, {
   onAttack: () => emit('cardAttack'),
-  attackTimelineFactory: () => animationTimeline.buildDashTimeline()
+  attackTimelineFactory: () => animationTimeline.buildMotionPathTimeline()
 })
 
 // Cooldown state management
@@ -80,6 +79,10 @@ function handleStartRef(el: HTMLElement) {
 
 function handleEndRef(el: HTMLElement) {
   splineRefs.endPulse.value = el
+}
+
+function handleMaskElementRef(el: SVGRectElement) {
+  splineRefs.maskElement.value = el
 }
 
 // Debug data for the debug panel
@@ -106,7 +109,8 @@ const debugData = computed(() => ({
 
     <CardSpline v-if="spline && cardEl && targetEl" :owner="card.owner.board" :start-center="spline.getCenter(cardEl)"
       :end-center="spline.getCenter(targetEl)" :stroke-width="spline.stroke" :path="spline.d.value"
-      @spline-path-ref="handleSplinePathRef" @end-ref="handleEndRef" @start-ref="handleStartRef" />
+      @spline-path-ref="handleSplinePathRef" @end-ref="handleEndRef" @start-ref="handleStartRef" 
+      @mask-element-ref="handleMaskElementRef" />
 
     <CardCooldownDebugPanel v-if="debug" :data="debugData" :current-state="cooldownState" />
 
