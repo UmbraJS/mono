@@ -69,7 +69,7 @@ export function convertSegmentsToChunks(baseDuration = 10, segments: ChunkSegmen
   // If there are no modifiers or if there should be additional chunks after the last modifier -
   // we need to add chunks until we get have a total lifetime that exceeds the startTime of this simulation call.
   // TLDR: Keep adding base chunks until we reach a total lifetime which exceeds the startTime
-  while (getTimestamp(chunks) < startTime) {
+  while (getTimestamp(chunks) <= startTime) {
     const lastChunk = chunks[chunks.length - 1];
     const lastChunkEnd = lastChunk ? lastChunk.end : 0;
     chunks.push({

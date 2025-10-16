@@ -56,6 +56,7 @@ export function simulateTime({
   while (count < MAX_SIMULATION_ITERATIONS) {
     const processedCards = processCards(simCards);
     if (!processedCards || processedCards.nextCardsToFinish.length === 0) {
+      count++;
       continue;
     };
 
@@ -82,9 +83,7 @@ export function simulateTime({
   function mutateTime(processedCards: Exclude<ReturnType<typeof processCards>, undefined>) {
     // Mutate data
     for (const nextCardToFinish of processedCards.nextCardsToFinish) {
-      if (!nextCardToFinish.allCurrentModifiers) continue; // No modifiers to apply so nothing to do
-
-      // Store data on the next card
+      // ALWAYS update the card's state after processing, regardless of modifiers
       nextCardToFinish.card.simulation.chunks = nextCardToFinish.chunks;
       const nextCardCooldownDuration = nextCardToFinish.segmentedChunks[nextCardToFinish.segmentedChunks.length - 1];
       if (!nextCardCooldownDuration) continue;
@@ -92,20 +91,21 @@ export function simulateTime({
       nextCardToFinish.card.simulation.lifetime.push(nextCardCooldownDuration);
 
       if (((nextCardToFinish?.totalLifetime ?? 0)) > 30) continue;
-      if (!nextCardToFinish) continue;
 
-      // Store data on every card modified by this next card
-      for (const modifier of nextCardToFinish.allCurrentModifiers) {
-        modifier.playerModifiers.forEach(mod => {
-          const targetCard = playerSimCards.find(c => c.index === mod.index);
-          if (!targetCard) return;
-          targetCard.simulation.modifiers.push(mod);
-        })
-        modifier.opponentModifiers.forEach(mod => {
-          const targetCard = opponentSimCards.find(c => c.index === mod.index);
-          if (!targetCard) return;
-          targetCard.simulation.modifiers.push(mod);
-        })
+      // Apply modifiers if they exist
+      if (nextCardToFinish.allCurrentModifiers) {
+        for (const modifier of nextCardToFinish.allCurrentModifiers) {
+          modifier.playerModifiers.forEach(mod => {
+            const targetCard = playerSimCards.find(c => c.index === mod.index);
+            if (!targetCard) return;
+            targetCard.simulation.modifiers.push(mod);
+          })
+          modifier.opponentModifiers.forEach(mod => {
+            const targetCard = opponentSimCards.find(c => c.index === mod.index);
+            if (!targetCard) return;
+            targetCard.simulation.modifiers.push(mod);
+          })
+        }
       }
     }
   }
@@ -188,6 +188,8 @@ export function simulateTime({
     if (!nextCardToFinish) return;
     const nextCardsToFinish = cardEvents.filter(e => e.nextCooldownEnd === nextCardToFinish.nextCooldownEnd);
     if (nextCardsToFinish.length === 0) return;
+
+
 
     return {
       nextCardsToFinish: nextCardsToFinish,

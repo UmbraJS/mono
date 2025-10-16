@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import type { Character } from '~~/types'
 import PartyBoard from './PartyBoard.vue'
 import type { ValueLog } from '../../utils/space/types'
@@ -12,10 +12,6 @@ const props = defineProps<{
   time: number;
   characters: Character[];
 }>()
-
-onMounted(() => {
-  console.log('Rex: debug: ', props.healthLog)
-})
 
 const healthLogsUpUntilNow = computed(() => {
   return props.healthLog.filter(log => log.timestamp <= props.time)
