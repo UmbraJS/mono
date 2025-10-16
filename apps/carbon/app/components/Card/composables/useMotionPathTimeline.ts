@@ -25,10 +25,10 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
    * Creates a GSAP timeline for the motion path animation effect
    * Phases: Growth (0-30%) -> Travel (30-70%) -> Shrink (70-100%)
    */
-  function buildMotionPathTimeline(): AnimationTimelineResult {
+  function buildMotionPathTimeline(segmentDuration: number): AnimationTimelineResult {
     const { splinePath, startPulse, endPulse, maskElement } = refs
 
-    const durations = calculatePhaseDurations()
+    const durations = calculatePhaseDurations(segmentDuration)
     const timeline = gsap.timeline({
       defaults: { ease: 'none' }
     })
@@ -70,16 +70,17 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
 
     return {
       timeline,
-      totalDuration: DASH_ANIMATION.TOTAL_DURATION
+      totalDuration: segmentDuration * DASH_ANIMATION.TOTAL_DURATION
     }
   }
 
   /**
-   * Calculate phase durations based on configuration
+   * Calculate phase durations based on segmentDuration and configuration percentages
    */
-  function calculatePhaseDurations() {
-    const growthDuration = (DASH_ANIMATION.TOTAL_DURATION * DASH_ANIMATION.PULSE_PERCENT) / 100
-    const travelDuration = ((100 - DASH_ANIMATION.PULSE_PERCENT * 2) / 100) * DASH_ANIMATION.TOTAL_DURATION
+  function calculatePhaseDurations(segmentDuration: number) {
+    const totalAnimationDuration = segmentDuration * DASH_ANIMATION.TOTAL_DURATION
+    const growthDuration = (totalAnimationDuration * DASH_ANIMATION.PULSE_PERCENT) / 100
+    const travelDuration = ((100 - DASH_ANIMATION.PULSE_PERCENT * 2) / 100) * totalAnimationDuration
     const shrinkDuration = growthDuration // Symmetric timing
 
     return { growth: growthDuration, travel: travelDuration, shrink: shrinkDuration }
@@ -164,6 +165,7 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
     elements: { endPulse: HTMLElement }
   ) {
     const shrinkStartTime = durations.growth + durations.travel
+    const totalDuration = durations.growth + durations.travel + durations.shrink
 
     // End pulse animation
     timeline.fromTo(
@@ -181,7 +183,7 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
       shrinkStartTime
     )
 
-    timeline.addLabel('ShrinkEnd', DASH_ANIMATION.TOTAL_DURATION)
+    timeline.addLabel('ShrinkEnd', totalDuration)
   }
 
   return {

@@ -56,7 +56,7 @@ const animationTimeline = useMotionPathTimeline(splineRefs.refs.value)
 // Integrate dash timeline at end of each cooldown segment
 const cooldown = useCooldown(card.simulation.chunks, {
   onAttack: () => emit('cardAttack'),
-  attackTimelineFactory: () => animationTimeline.buildMotionPathTimeline()
+  attackTimelineFactory: (segmentDuration) => animationTimeline.buildMotionPathTimeline(segmentDuration)
 })
 
 // Cooldown state management

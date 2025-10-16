@@ -3,7 +3,7 @@
  */
 
 export const DASH_ANIMATION = {
-  /** Total duration of the dash animation in seconds */
+  /** Multiplier for segment duration to determine total dash animation duration (0.3 = 30% of segment) */
   TOTAL_DURATION: 0.3,
 
   /** Size multiplier for pulse elements */

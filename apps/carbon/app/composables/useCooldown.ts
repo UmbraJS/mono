@@ -7,7 +7,7 @@ import { useSimulationInject } from '~/composables/useSimulationProvider'
 // gsap.registerPlugin(GSDevTools);
 
 interface UseCooldownOptions {
-  attackTimelineFactory: () => {
+  attackTimelineFactory: (segmentDuration: number) => {
     timeline: gsap.core.Timeline
     totalDuration: number
   }
@@ -74,7 +74,7 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
       ease: 'none',
       onStart: () => {
         // Get attack timeline BEFORE creating the duration timeline so we can position it correctly
-        const atk = callbackOrOptions.attackTimelineFactory?.()
+        const atk = callbackOrOptions.attackTimelineFactory?.(segment.duration)
         if (atk) {
           // Position attack timeline so it ends exactly when cooldown ends
           const attackStartTime = Math.max(0, segment.duration - atk.totalDuration)
