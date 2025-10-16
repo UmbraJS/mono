@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
-    "umbraco": "workspace:*",
     "@nobel/bifrost": "workspace:*",
     "@nuxt/eslint": "catalog:",
     "@pinia/nuxt": "catalog:",
@@ -24,12 +23,14 @@
     "gsap": "catalog:",
     "nuxt": "catalog:",
     "pinia": "catalog:",
+    "umbraco": "workspace:*",
     "vue": "catalog:",
     "vue-router": "catalog:"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "catalog:",
     "eslint": "catalog:",
+    "jsdom": "^27.0.0",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "vue-tsc": "catalog:"
