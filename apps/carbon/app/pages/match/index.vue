@@ -11,18 +11,6 @@ const simulation = useSimulationProvider({
   userCharacters: store.user.characters,
   botCharacters: botStore.characters.value
 })
-
-onMounted(() => {
-  console.log('Rex: debug space opponent health log: ')
-  simulation.simulatedMatch.space.opponent.healthLog.forEach((entry, i) => {
-    console.log(`${i}: ${entry.actualChange} damage at ${entry.timestamp}s from card ${entry.index} (${entry.board} side)`)
-  })
-  console.log('Rex: debug player time calculations: ')
-  simulation.simulatedMatch.time.player.forEach((card, i) => {
-    console.log(`Card ${i} "${card.info.name}": lifetime segments [${card.simulation.lifetime.join(', ')}]`)
-  })
-})
-
 </script>
 
 <template>

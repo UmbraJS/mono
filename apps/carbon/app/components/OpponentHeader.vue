@@ -23,6 +23,14 @@ function functionRef(el: HTMLElement) {
   if (splinesStore.tankCharacter.opponent) return
   splinesStore.addTank('opponent', el);
 }
+
+function entryValueLog(log: ValueLog) {
+  const isTheSame = log.attemptedChange === log.actualChange
+  if (isTheSame) {
+    return log.attemptedChange > 0 ? `+${log.attemptedChange}` : `${log.attemptedChange}`
+  }
+  return log.attemptedChange > 0 ? `+${log.attemptedChange}` : `${log.attemptedChange}`
+}
 </script>
 
 <template>
@@ -36,7 +44,7 @@ function functionRef(el: HTMLElement) {
       <!-- <div class="money" /> -->
       <div class="BashLogs">
         <div v-for="value in healthLogsUpUntilNow" :key="value.index" class="BashLog">
-          <p>+{{ value.attemptedChange }} / {{ value.attemptedChange }}</p>
+          <p>{{ entryValueLog(value) }}</p>
         </div>
       </div>
     </div>
@@ -44,3 +52,10 @@ function functionRef(el: HTMLElement) {
       :modal-button="true" /> -->
   </PartyBoard>
 </template>
+
+<style scoped>
+.BashLogs {
+  overflow: scroll;
+  height: calc(var(--side-size) - var(--space-3));
+}
+</style>
