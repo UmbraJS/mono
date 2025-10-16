@@ -36,7 +36,6 @@ export function useSpace(timeline: gsap.core.Timeline, space: Pick<SpaceOutput, 
     }, timestamp)
   })
 
-
   space.shieldLog.forEach(({ timestamp, newValue }) => {
     shieldTimeline.to(shield, {
       duration: 0.1,
