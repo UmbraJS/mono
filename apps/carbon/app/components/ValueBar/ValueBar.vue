@@ -25,8 +25,7 @@ watch(percentage, (newValue) => {
 </script>
 
 <template>
-  <div
-class="character-health" :style="{
+  <div class="character-health" :style="{
     '--barColor': props.barColor,
     '--delayColor': props.delayColor,
     gridArea: props.gridArea,
@@ -35,12 +34,11 @@ class="character-health" :style="{
     <p class="digits">
       <slot />
     </p>
-    <div
-class="death bar" :style="{
+    <div class="death bar" :style="{
       width: percentage === 0 ? '100%' : `calc(100% - ${percentageDelayed}% - var(--space-quark))`
-    }"/>
-    <div class="delayedLife bar"/>
-    <div class="life bar"/>
+    }" />
+    <div class="delayedLife bar" />
+    <div class="life bar" />
   </div>
 </template>
 

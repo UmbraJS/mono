@@ -21,7 +21,7 @@ function functionRef(el: HTMLElement) {
     <div class="location border">
       <!-- <img :src="skeletonKing.field?.image?.default" alt="Location" /> -->
     </div>
-    <PlayerCharacter :characters="characters" :health="health.value" :shield="shield.value" :reverse="false"
+    <PlayerCharacter :characters="characters" :health="health" :shield="shield" :reverse="false"
       @character-loaded="functionRef" />
     <div class="location border">
       <div class="money" />

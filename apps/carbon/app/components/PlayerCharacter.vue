@@ -3,13 +3,16 @@ import type { Character } from '~~/types'
 import ValueBar from './ValueBar/ValueBar.vue'
 import FrostLayer from './FrostLayer.vue'
 import CharacterModal from './CharacterModal.vue';
+import { useRefHistory } from '@vueuse/core'
 
 const props = defineProps<{
   reverse: boolean
   characters: Character[]
-  health: number
-  shield: number
+  health: Ref<number>
+  shield: Ref<number>
 }>()
+
+const { history } = useRefHistory(props.health)
 
 const emit = defineEmits<{
   (e: 'characterLoaded', value: HTMLElement): void
@@ -41,18 +44,18 @@ function functionRef(el: HTMLElement | null) {
         </div>
       </CharacterModal>
       <div class="healthImpact">
-        <FrostLayer :reversed="reverse" :health="health" :max-health="maxHealth" />
+        <FrostLayer :reversed="reverse" :health="health.value" :max-health="maxHealth" />
       </div>
     </header>
 
-    <ValueBar :value="shield" :max-value="Math.max(maxHealth, shield)" bar-color="var(--info-90)"
+    <ValueBar :value="shield.value" :max-value="Math.max(maxHealth, shield.value)" bar-color="var(--info-90)"
       delay-color="var(--info-50)" grid-area="shield">
-      {{ Math.floor(shield) }}
+      {{ Math.floor(shield.value) }}
     </ValueBar>
 
-    <ValueBar :value="health" :max-value="maxHealth" bar-color="var(--success-50)" delay-color="var(--warning-50)"
+    <ValueBar :value="health.value" :max-value="maxHealth" bar-color="var(--success-50)" delay-color="var(--warning-50)"
       grid-area="health">
-      {{ Math.floor(health) }} / {{ maxHealth }}
+      {{ Math.floor(health.value) }} / {{ maxHealth }}
     </ValueBar>
   </section>
 </template>
