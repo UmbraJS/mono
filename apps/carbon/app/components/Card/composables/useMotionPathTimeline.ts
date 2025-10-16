@@ -70,7 +70,7 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
 
     return {
       timeline,
-      totalDuration: segmentDuration * DASH_ANIMATION.TOTAL_DURATION
+      totalDuration: segmentDuration * DASH_ANIMATION.TOTAL_DURATION - durations.shrink // Total duration minus shrink phase to sync with cooldown end
     }
   }
 
