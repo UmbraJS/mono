@@ -4,7 +4,7 @@
 
 export const DASH_ANIMATION = {
   /** Total duration of the dash animation in seconds */
-  TOTAL_DURATION: 2,
+  TOTAL_DURATION: 0.3,
 
   /** Size multiplier for pulse elements */
   PULSE_SIZE: 4,

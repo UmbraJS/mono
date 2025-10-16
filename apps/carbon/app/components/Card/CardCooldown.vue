@@ -109,7 +109,7 @@ const debugData = computed(() => ({
 
     <CardSpline v-if="spline && cardEl && targetEl" :owner="card.owner.board" :start-center="spline.getCenter(cardEl)"
       :end-center="spline.getCenter(targetEl)" :stroke-width="spline.stroke" :path="spline.d.value"
-      @spline-path-ref="handleSplinePathRef" @end-ref="handleEndRef" @start-ref="handleStartRef" 
+      @spline-path-ref="handleSplinePathRef" @end-ref="handleEndRef" @start-ref="handleStartRef"
       @mask-element-ref="handleMaskElementRef" />
 
     <CardCooldownDebugPanel v-if="debug" :data="debugData" :current-state="cooldownState" />

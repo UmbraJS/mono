@@ -43,29 +43,29 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
     // Reset all elements to their initial state
     gsap.set(startPulse.value, { scale: DASH_ANIMATION.PULSE_SIZE, autoAlpha: 0 })
     gsap.set(endPulse.value, { scale: 0, autoAlpha: 1 })
-    
+
     // Position mask at start of path (it will be animated along the path)
-    gsap.set(maskElement.value, { 
-      x: 0, 
+    gsap.set(maskElement.value, {
+      x: 0,
       y: 0,
       transformOrigin: '50% 50%'
     })
 
     // Phase 1: Initial growth and mask animation start
-    addGrowthPhase(timeline, durations, { 
-      startPulse: startPulse.value, 
-      maskElement: maskElement.value 
+    addGrowthPhase(timeline, durations, {
+      startPulse: startPulse.value,
+      maskElement: maskElement.value
     })
 
     // Phase 2: Mask travels along the path
-    addTravelPhase(timeline, durations, { 
+    addTravelPhase(timeline, durations, {
       maskElement: maskElement.value,
-      splinePath: splinePath.value 
+      splinePath: splinePath.value
     })
 
     // Phase 3: End pulse appears
-    addShrinkPhase(timeline, durations, { 
-      endPulse: endPulse.value 
+    addShrinkPhase(timeline, durations, {
+      endPulse: endPulse.value
     })
 
     return {
@@ -115,7 +115,7 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
     // Mask appears at start
     timeline.fromTo(
       elements.maskElement,
-      { 
+      {
         opacity: 0,
         scale: 0.5
       },
@@ -131,14 +131,14 @@ export function useMotionPathTimeline(refs: AnimationRefs) {
   }
 
   /**
-   * Add travel phase animation (mask moves along path)
+   * Add travel phase animation (mask moves along path using template refs)
    */
   function addTravelPhase(
     timeline: gsap.core.Timeline,
     durations: ReturnType<typeof calculatePhaseDurations>,
     elements: { maskElement: SVGRectElement; splinePath: SVGPathElement }
   ) {
-    // Animate mask along the path using direct element reference
+    // Animate mask along the path using direct element references (no IDs needed!)
     timeline.to(
       elements.maskElement,
       {

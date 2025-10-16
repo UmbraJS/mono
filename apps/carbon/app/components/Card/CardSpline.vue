@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { OwnerBoard } from '../../../types/card'
+import type { ComponentPublicInstance } from 'vue'
 import { useSplinesStore } from '@/stores/useSplinesStore'
 
 const emit = defineEmits<{
@@ -16,11 +17,14 @@ const { owner, startCenter, endCenter, strokeWidth, path } = defineProps<{
   path: string;
 }>()
 
-// Generate unique IDs for this component instance
+// Generate unique IDs only for SVG definitions (gradients and masks still need IDs)
 const instanceId = `spline-${Math.random().toString(36).substr(2, 9)}`
 const gradientId = `cometGradient-${instanceId}`
 const maskId = `splineMask-${instanceId}`
-const maskFollowerId = `maskFollower-${instanceId}`
+
+// Template refs for direct element access
+const maskElementRef = ref<SVGRectElement | null>(null)
+const splinePathRef = ref<SVGPathElement | null>(null)
 
 const splinesStore = useSplinesStore()
 const targetEl = computed(() => {
@@ -37,14 +41,17 @@ function endRef(el: HTMLElement | null) {
   emit('endRef', el)
 }
 
-function splinePathRef(el: SVGPathElement | null) {
-  if (!el) return
-  emit('splinePathRef', el)
+// Handle template refs and emit to parent
+function handleSplinePathRef(el: Element | ComponentPublicInstance | null) {
+  const pathEl = el as SVGPathElement | null
+  splinePathRef.value = pathEl
+  if (pathEl) emit('splinePathRef', pathEl)
 }
 
-function maskElementRef(el: SVGRectElement | null) {
-  if (!el) return
-  emit('maskElementRef', el)
+function handleMaskElementRef(el: Element | ComponentPublicInstance | null) {
+  const rectEl = el as SVGRectElement | null
+  maskElementRef.value = rectEl
+  if (rectEl) emit('maskElementRef', rectEl)
 }
 </script>
 
@@ -59,25 +66,17 @@ function maskElementRef(el: SVGRectElement | null) {
             <stop offset="70%" stop-color="white" stop-opacity="1" />
             <stop offset="100%" stop-color="white" stop-opacity="1" />
           </linearGradient>
-          
+
           <!-- Mask definition -->
           <mask :id="maskId" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%" mask-type="alpha">
-            <rect :ref="(e) => maskElementRef(e as SVGRectElement)" 
-                  :id="maskFollowerId"
-                  x="-30" y="-15" 
-                  width="60" height="30" 
-                  rx="15" ry="15" 
-                  :fill="`url(#${gradientId})`" />
+            <rect :ref="handleMaskElementRef" x="-30" y="-15" width="60" height="30" rx="15" ry="15"
+              :fill="`url(#${gradientId})`" />
           </mask>
         </defs>
-        
+
         <!-- The path with mask applied -->
-        <path :ref="(e) => splinePathRef(e as SVGPathElement)" 
-              :d="path" 
-              stroke="var(--accent-120)"
-              :stroke-width="strokeWidth" 
-              fill="transparent"
-              :mask="`url(#${maskId})`" />
+        <path :ref="handleSplinePathRef" :d="path" stroke="var(--accent-120)" :stroke-width="strokeWidth"
+          fill="transparent" :mask="`url(#${maskId})`" />
       </svg>
       <div :ref="(e) => startRef(e as HTMLElement)" class="SplinePulse"
         :style="{ top: `${(startCenter.y) || 0}px`, left: `${(startCenter.x) || 0}px` }" />
