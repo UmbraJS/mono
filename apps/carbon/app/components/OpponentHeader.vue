@@ -31,6 +31,8 @@ function entryValueLog(log: ValueLog) {
   }
   return log.attemptedChange > 0 ? `+${log.attemptedChange}` : `${log.attemptedChange}`
 }
+
+
 </script>
 
 <template>
@@ -45,6 +47,7 @@ function entryValueLog(log: ValueLog) {
       <div class="BashLogs">
         <div v-for="value in healthLogsUpUntilNow" :key="value.index" class="BashLog">
           <p>{{ entryValueLog(value) }}</p>
+          <p>{{ value.timestamp }}</p>
         </div>
       </div>
     </div>
@@ -57,5 +60,13 @@ function entryValueLog(log: ValueLog) {
 .BashLogs {
   overflow: scroll;
   height: calc(var(--side-size) - var(--space-3));
+}
+
+.BashLog {
+  display: flex;
+  gap: var(--space-2);
+  background: var(--base-10);
+  padding: var(--space-1);
+  border-radius: var(--radius);
 }
 </style>

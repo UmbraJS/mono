@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useStore } from '~/stores/useStore'
 
 const prop = defineProps<{
   board?: 'deck' | 'inventory';
@@ -15,7 +14,7 @@ const templateAreas = computed(() => {
   return areas;
 })
 
-const store = useStore()
+const store = useUser()
 
 function range(start: number, end: number) {
   return Array.from({ length: end - start + 1 }, (_, i) => start + i);

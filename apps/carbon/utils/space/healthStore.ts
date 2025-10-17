@@ -27,7 +27,6 @@ export function healthStore(maxHealth: number) {
 
   function hurt({ actualChange, attemptedChange, timestamp, index, banter, board }: ValueLogCore) {
     const currentHealth = getHealth()
-    console.log(`Rex: DEBUG - Health hurt entry: ${actualChange} damage at ${timestamp}s from card index ${index} on ${board} side`);
     healthLog.push({
       actualChange: Math.max(0, actualChange),
       attemptedChange: attemptedChange,

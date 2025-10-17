@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ChipPassive from './ChipPassive.vue'
-const store = useStore()
+const store = useUser()
 </script>
 
 <template>
@@ -9,7 +9,7 @@ const store = useStore()
       <Icon name="carbon:money" size="1.5em" />
       <p>{{ store.money.value }}</p>
       <p>(+{{ store.money.income }})</p>
-    </ChipPassive>
+    </ChipPassive>Ps
     <ChipPassive v-if="store.money.totalValue > 0">
       <Icon name="carbon:money" size="1.5em" />
       <p>{{ store.money.totalValue }}</p>

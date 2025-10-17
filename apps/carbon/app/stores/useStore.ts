@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import { user } from '../data/character'
+import { user, bot } from '../data/character'
 import type { Card, Character } from '../../types'
 import { matchSimulator } from '../../utils/matchSimulator'
 import { gsap } from 'gsap'
 import { usePerson } from '../composables/usePerson'
 
-export const useStore = defineStore('store', () => {
+export const useUser = defineStore('user', () => {
 
   const userStore = usePerson(user)
 
@@ -20,6 +20,11 @@ export const useStore = defineStore('store', () => {
     user: userStore,
     money
   }
+})
+
+export const useBot = defineStore('bot', () => {
+  const botStore = usePerson(bot)
+  return botStore
 })
 
 function useMoney(props: {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { CardStats } from '../../../types'
-import { useStore } from '~/stores/useStore'
 import { useCardDrag } from '../../composables/useCardDrag'
 import { checkZoneHit } from '../../../utils/cardSwap/zoneHit'
 
@@ -47,7 +46,7 @@ function triggerFlipSound() {
 
 const fragElement = useTemplateRef('fragElement')
 const actionBall = useTemplateRef('actionBall')
-const store = useStore()
+const store = useUser()
 
 const hitZone = ref<Element | null>(null)
 const dragging = ref(false)

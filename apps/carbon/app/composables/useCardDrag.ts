@@ -1,5 +1,4 @@
 import type { CardStats } from '../../types'
-import { useStore } from '~/stores/useStore'
 import { gsap } from 'gsap'
 import { Flip } from 'gsap/Flip'
 import { checkZoneHit } from '../../utils/cardSwap/zoneHit'
@@ -33,7 +32,7 @@ interface DropZoneAttributes {
  */
 export function useCardDrag(props: CardDragProps) {
   const zones = document.querySelectorAll('[data-dropzone]') as NodeListOf<HTMLElement>;
-  const store = useStore();
+  const store = useUser();
 
   const {
     moveCardInsideDeck,

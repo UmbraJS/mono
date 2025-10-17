@@ -113,7 +113,7 @@ export const useQuest = defineStore('quest', () => {
     hoveredEvent.value = event
   }
 
-  const store = useStore()
+  const store = useUser()
   function passDay() {
     store.money.passDay()
     const daysInAct = quest.value.acts[progress.value.act]?.events.length
@@ -146,7 +146,7 @@ function useMatch() {
 
   function getMatch() {
     if (!opponent.value) return null
-    const store = useStore()
+    const store = useUser()
     const botStore = usePerson(opponent.value)
 
     return useSimulationProvider({

@@ -3,7 +3,7 @@ import { useView } from '~/stores/useStore'
 import PartyBoard from './PartyBoard.vue'
 import { DrawerButton, DrawerTitle, DrawerDescription, Slider } from 'umbraco'
 
-const store = useStore()
+const store = useUser()
 const view = useView()
 
 defineProps<{

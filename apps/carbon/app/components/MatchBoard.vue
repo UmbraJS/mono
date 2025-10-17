@@ -5,7 +5,7 @@ const props = defineProps<{
   maxSlots: number;
 }>()
 
-const store = useStore()
+const store = useUser()
 
 const simulation = useSimulationInject()
 

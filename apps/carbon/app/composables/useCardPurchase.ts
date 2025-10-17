@@ -26,7 +26,7 @@ export function useCardPurchase({
     income: number
   }>
 }) {
-  const store = useStore()
+  const store = useUser()
   const quest = useQuest()
   const audio = useAudio()
 
