@@ -13,7 +13,7 @@ export function shieldStore() {
     if (actualChange < 0) console.error('Shield up called with negative change', actualChange)
     const lastLog = shieldLog[shieldLog.length - 1]?.newValue || 0
     shieldLog.push({
-      actualChange: actualChange,
+      actualChange: Math.max(actualChange, lastLog),
       attemptedChange: actualChange,
       oldValue: lastLog,
       newValue: Math.max(0, lastLog + actualChange),

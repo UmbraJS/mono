@@ -16,11 +16,13 @@ export const useAudio = defineStore('audio', () => {
 
   return {
     speak: async (text: string) => {
+      if (sound.muted.value) return
       const voices = await getAvailableVoices()
       const norwegian = voices.find(v => v.lang.startsWith('no'))
       sound.speak(text, { voice: norwegian, pitch: 1.1 })
     },
     speakElevenLabs: async (text: string, voice: ElevenLabsVoice) => {
+      if (sound.muted.value) return
       const url = await fetchElevenLabsSpeech(text, voice)
       await sound.play({
         category: 'voice',
@@ -38,6 +40,9 @@ export const useAudio = defineStore('audio', () => {
     },
     masterVolume: sound.masterVolume,
     volumes: sound.volumes,
+    muted: sound.muted,
+    toggleMute: sound.toggleMute,
+    setMuted: sound.setMute,
   }
 })
 
@@ -109,7 +114,10 @@ function soundFactory() {
       preLoad: async () => { },
       speak: () => { },
       volumes: {},
-      masterVolume: ref(0.1)
+      masterVolume: ref(0.1),
+      muted: ref(true),
+      toggleMute: () => { },
+      setMute: () => { }
     }
   }
 
@@ -131,18 +139,25 @@ function soundFactory() {
   })
 
   const masterVolume = ref(1)
-  watch(masterVolume, (v) => {
-    masterGain.gain.value = Math.max(0, Math.min(v, 1))
-  })
+  const muted = ref(true)
 
-  // Set initial master volume
-  masterGain.gain.value = masterVolume.value
+  const clamp = (value: number) => Math.max(0, Math.min(value, 1))
+
+  const applyMasterGain = () => {
+    masterGain.gain.value = muted.value ? 0 : clamp(masterVolume.value)
+  }
+
+  watch(masterVolume, applyMasterGain)
+  watch(muted, applyMasterGain)
+
+  // Set initial master volume respecting mute state
+  applyMasterGain()
 
   watch(volumes, (newVal) => {
     for (const category in newVal) {
       if (!(category in categoryGains)) return
       const gain = categoryGains[category as SoundCategories]
-      gain.gain.value = Math.max(0, Math.min(newVal[category as SoundCategories], 1))
+      gain.gain.value = clamp(newVal[category as SoundCategories])
     }
   })
 
@@ -150,7 +165,7 @@ function soundFactory() {
   for (const category in volumes) {
     if (!(category in categoryGains)) continue
     const gain = categoryGains[category as SoundCategories]
-    gain.gain.value = Math.max(0, Math.min(volumes[category as SoundCategories], 1))
+    gain.gain.value = clamp(volumes[category as SoundCategories])
   }
 
   function getGain() {
@@ -166,6 +181,8 @@ function soundFactory() {
     rate?: number
     volume?: number
   }) {
+    if (muted.value) return
+
     if (!('speechSynthesis' in window)) {
       console.warn('[soundFactory] SpeechSynthesis not supported')
       return
@@ -188,9 +205,8 @@ function soundFactory() {
   const bufferCache = new Map<string, AudioBuffer>()
 
   async function resumeAudioContext() {
-    if (audioContext.state === 'suspended') {
-      await audioContext.resume()
-    }
+    if (audioContext.state !== 'suspended') return
+    await audioContext.resume()
   }
 
   async function loadSound(path: string) {
@@ -205,6 +221,7 @@ function soundFactory() {
   }
 
   async function play(sound: SoundPath) {
+    if (muted.value) return
     if (!(sound.category in categoryGains)) {
       console.warn(`[soundFactory] Unknown category "${sound.category}"`)
       return
@@ -224,12 +241,23 @@ function soundFactory() {
     }
   }
 
+  function setMute(value: boolean) {
+    muted.value = value
+  }
+
+  function toggleMute() {
+    muted.value = !muted.value
+  }
+
   return {
     play,
     speak,
     preLoad: loadSound,
     volumes,
-    masterVolume
+    masterVolume,
+    muted,
+    toggleMute,
+    setMute
   }
 }
 

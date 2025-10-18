@@ -22,6 +22,12 @@ function getUserCard(index: number) {
   return userDeck.value.find((card) => card.index === index)
 }
 
+const botStore = useBot()
+const botDeck = computed(() => botStore.deck)
+function getBotCard(index: number) {
+  return botDeck.value.find((card) => card.index === index)
+}
+
 const splinesStore = useSplinesStore()
 
 function handleOpponentCharacterLoaded(el: HTMLElement) {
@@ -31,13 +37,14 @@ function handleOpponentCharacterLoaded(el: HTMLElement) {
 }
 
 const healthLogsUpUntilNow = computed(() => {
+  console.log('shieldLog', props.shieldLog)
   // if you want to show both player/opponent logs, merge here; keeping your health logs for now
   return [...props.healthLog, ...props.shieldLog]
     .slice() // avoid mutating
     .sort((a, b) => a.timestamp - b.timestamp)
     .map((log) => ({
       ...log,
-      card: getUserCard(log.index)
+      card: log.board === 'player' ? getUserCard(log.index) : getBotCard(log.index)
     }))
 })
 
@@ -51,9 +58,9 @@ const healthLogsWithActiveState = computed(() => {
 function entryValueLog(log: ValueLog) {
   const isTheSame = log.attemptedChange === log.actualChange
   if (isTheSame) {
-    return log.attemptedChange > 0 ? `-${log.attemptedChange}` : `${log.attemptedChange}`
+    return log.actualChange > 0 ? `+${log.actualChange}` : `${log.actualChange}`
   }
-  return log.attemptedChange > 0 ? `-${log.attemptedChange}` : `${log.attemptedChange}`
+  return log.actualChange > 0 ? `+${log.actualChange}/${log.attemptedChange}` : `${log.actualChange}/${log.attemptedChange}`
 }
 
 /* ----- GSAP-driven “scroll” ----- */
