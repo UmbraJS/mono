@@ -14,11 +14,12 @@ const simulation = useSimulationProvider({
 
 <template>
   <CarbonGrid grid-layout="match">
-    <OpponentHeader v-if="simulation.bot" :health="simulation.bot.health" :shield="simulation.bot.shield"
+    <OpponentHeader v-if="simulation.bot" :health="simulation.bot.health.value" :shield="simulation.bot.shield.value"
       :health-log="simulation.simulatedMatch.space.opponent.healthLog"
-      :shield-log="simulation.simulatedMatch.space.opponent.shieldLog" :time="simulation.time.value"
+      :shield-log="simulation.simulatedMatch.space.opponent.shieldLog" :time="simulation.time"
       :characters="botStore.characters" />
     <MatchBoard :max-slots="botStore.maxSlots" />
-    <PlayerHeader v-if="simulation.user" :health="simulation.user.health" :shield="simulation.user.shield" />
+    <PlayerHeader v-if="simulation.user" :health="simulation.user.health.value"
+      :shield="simulation.user.shield.value" />
   </CarbonGrid>
 </template>

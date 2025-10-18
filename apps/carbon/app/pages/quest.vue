@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const store = useStore()
+const store = useUser()
 const health = store.user.maxHealth
 const shield = 0
 </script>

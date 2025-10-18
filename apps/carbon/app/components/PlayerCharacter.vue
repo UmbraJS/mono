@@ -8,8 +8,8 @@ import CharacterModal from './CharacterModal.vue';
 const props = defineProps<{
   reverse: boolean
   characters: Character[]
-  health: Ref<number>
-  shield: Ref<number>
+  health: number
+  shield: number
 }>()
 
 const emit = defineEmits<{
@@ -57,52 +57,52 @@ interface DamageAccumulator {
 const healthAccumulator = ref<DamageAccumulator>({ totalChange: 0, timeout: null })
 const shieldAccumulator = ref<DamageAccumulator>({ totalChange: 0, timeout: null })
 
-function accumulateDamage(change: number, type: 'health' | 'shield') {
-  const accumulator = type === 'health' ? healthAccumulator : shieldAccumulator
+// function accumulateDamage(change: number, type: 'health' | 'shield') {
+//   const accumulator = type === 'health' ? healthAccumulator : shieldAccumulator
 
-  // Add the change to the running total
-  accumulator.value.totalChange += change
+//   // Add the change to the running total
+//   accumulator.value.totalChange += change
 
-  // Clear any existing timeout
-  if (accumulator.value.timeout) {
-    clearTimeout(accumulator.value.timeout)
-  }
+//   // Clear any existing timeout
+//   if (accumulator.value.timeout) {
+//     clearTimeout(accumulator.value.timeout)
+//   }
 
-  // Set a new timeout to create the damage number after changes stop
-  accumulator.value.timeout = setTimeout(() => {
-    if (accumulator.value.totalChange !== 0) {
-      createDamageNumber(accumulator.value.totalChange, type)
-      accumulator.value.totalChange = 0
-    }
-    accumulator.value.timeout = null
-  }, 100) // Wait 100ms after last change before showing damage number
-}
+//   // Set a new timeout to create the damage number after changes stop
+//   accumulator.value.timeout = setTimeout(() => {
+//     if (accumulator.value.totalChange !== 0) {
+//       createDamageNumber(accumulator.value.totalChange, type)
+//       accumulator.value.totalChange = 0
+//     }
+//     accumulator.value.timeout = null
+//   }, 100) // Wait 100ms after last change before showing damage number
+// }
 
-function createDamageNumber(value: number, type: 'health' | 'shield') {
-  if (value === 0) return
+// function createDamageNumber(value: number, type: 'health' | 'shield') {
+//   if (value === 0) return
 
-  const damageNumber: DamageNumber = {
-    id: crypto.randomUUID(),
-    value: Math.floor(value),
-    type,
-    x: `${Math.random() * 80 + 10}%`, // Random position between 10% and 90%
-    y: '50%'
-  }
+//   const damageNumber: DamageNumber = {
+//     id: crypto.randomUUID(),
+//     value: Math.floor(value),
+//     type,
+//     x: `${Math.random() * 80 + 10}%`, // Random position between 10% and 90%
+//     y: '50%'
+//   }
 
-  damageNumbers.value.push(damageNumber)
+//   damageNumbers.value.push(damageNumber)
 
-  // Remove the damage number after animation completes
-  setTimeout(() => {
-    removeDamageNumber(damageNumber.id)
-  }, 2000)
-}
+//   // Remove the damage number after animation completes
+//   setTimeout(() => {
+//     removeDamageNumber(damageNumber.id)
+//   }, 2000)
+// }
 
-function removeDamageNumber(id: string) {
-  const index = damageNumbers.value.findIndex(d => d.id === id)
-  if (index > -1) {
-    damageNumbers.value.splice(index, 1)
-  }
-}
+// function removeDamageNumber(id: string) {
+//   const index = damageNumbers.value.findIndex(d => d.id === id)
+//   if (index > -1) {
+//     damageNumbers.value.splice(index, 1)
+//   }
+// }
 
 function animateDamageNumber(el: HTMLElement, _damageNumber: DamageNumber) {
   if (!el) return
@@ -135,22 +135,21 @@ function animateDamageNumber(el: HTMLElement, _damageNumber: DamageNumber) {
   //   }, '-=0.4')
 }
 
-// Watch for health changes
-watch(() => props.health.value, (newValue, oldValue) => {
-  if (oldValue === undefined) return
-  const change = newValue - oldValue
-  if (change === 0) return
-  console.log('REX: Health change detected:', { newValue, oldValue, change })
-  accumulateDamage(change, 'health')
-})
+// // Watch for health changes
+// watch(() => props.health, (newValue, oldValue) => {
+//   if (oldValue === undefined) return
+//   const change = newValue - oldValue
+//   if (change === 0) return
+//   accumulateDamage(change, 'health')
+// })
 
-// Watch for shield changes
-watch(() => props.shield.value, (newValue, oldValue) => {
-  if (oldValue === undefined) return
-  const change = newValue - oldValue
-  if (change === 0) return
-  accumulateDamage(change, 'shield')
-})
+// // Watch for shield changes
+// watch(() => props.shield, (newValue, oldValue) => {
+//   if (oldValue === undefined) return
+//   const change = newValue - oldValue
+//   if (change === 0) return
+//   accumulateDamage(change, 'shield')
+// })
 
 // Cleanup timeouts when component unmounts
 onUnmounted(() => {
@@ -185,7 +184,7 @@ function functionRef(el: HTMLElement | null) {
         </div>
       </CharacterModal>
       <div class="healthImpact">
-        <FrostLayer :reversed="reverse" :health="health.value" :max-health="maxHealth" />
+        <FrostLayer :reversed="reverse" :health="health" :max-health="maxHealth" />
       </div>
     </header>
 
@@ -198,14 +197,14 @@ function functionRef(el: HTMLElement | null) {
       </div>
     </div>
 
-    <ValueBar :value="shield.value" :max-value="Math.max(maxHealth, shield.value)" bar-color="var(--info-90)"
+    <ValueBar :value="shield" :max-value="Math.max(maxHealth, shield)" bar-color="var(--info-90)"
       delay-color="var(--info-50)" grid-area="shield">
-      {{ Math.floor(shield.value) }}
+      {{ Math.floor(shield) }}
     </ValueBar>
 
-    <ValueBar :value="health.value" :max-value="maxHealth" bar-color="var(--success-50)" delay-color="var(--warning-50)"
+    <ValueBar :value="health" :max-value="maxHealth" bar-color="var(--success-50)" delay-color="var(--warning-50)"
       grid-area="health">
-      {{ Math.floor(health.value) }} / {{ maxHealth }}
+      {{ Math.floor(health) }} / {{ maxHealth }}
     </ValueBar>
   </section>
 </template>

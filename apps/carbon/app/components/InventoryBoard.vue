@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import CardBoard from '~/components/CardBoard.vue'
-import { useStore } from '~/stores/useStore'
 import { getDeckCost } from '../../utils/cardCost'
-const store = useStore()
+const store = useUser()
 
 const deckStats = computed(() => {
   const deck = store.user?.deck ?? []

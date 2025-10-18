@@ -6,11 +6,11 @@ import PartyBoard from './PartyBoard.vue'
 import type { ValueLog } from '../../utils/space/types'
 
 const props = defineProps<{
-  health: globalThis.Ref<number>;
-  shield: globalThis.Ref<number>;
+  health: number;
+  shield: number;
   healthLog: ValueLog[];
   shieldLog: ValueLog[];
-  time: number;                 // master time that should scrub the list
+  time: globalThis.Ref<number>;                 // master time that should scrub the list
   characters: Character[];
 }>()
 
@@ -30,7 +30,7 @@ const healthLogsUpUntilNow = computed(() => {
 const healthLogsWithActiveState = computed(() => {
   return healthLogsUpUntilNow.value.map((log) => ({
     ...log,
-    isActive: props.time >= log.timestamp
+    isActive: props.time.value >= log.timestamp
   }))
 })
 
@@ -45,7 +45,7 @@ function entryValueLog(log: ValueLog) {
 /* ----- GSAP-driven “scroll” ----- */
 const viewportRef = ref<HTMLElement | null>(null)  // the .BashLogs container
 const listRef = ref<HTMLElement | null>(null)      // an inner list wrapper
-const tl = ref<gsap.core.Timeline | null>(null)
+const currentLogIndex = ref(-1) // Which log index should be visible
 
 // compute the translateY so that we scroll from bottom up (first log at bottom)
 function yForIndex(i: number) {
@@ -53,91 +53,116 @@ function yForIndex(i: number) {
   const list = listRef.value!
   const logs = healthLogsUpUntilNow.value
 
-  if (logs.length === 0) return 0
+  if (logs.length === 0 || i < 0) return vp.clientHeight // Off-screen
 
-  // For the first log (index 0), position it at the bottom of the viewport
-  if (i === 0) {
-    const minY = Math.min(0, vp.clientHeight - (list.scrollHeight ?? list.clientHeight))
-    return Math.max(minY, vp.clientHeight - (list.children[0] as HTMLElement)?.offsetHeight || 0)
-  }
-
-  // For subsequent logs, scroll upward progressively
-  const rows = list.children as unknown as HTMLElement[]
+  const rows = Array.from(list.children) as HTMLElement[]
   let totalHeight = 0
-  
-  // Calculate cumulative height up to current index
+
+  // Calculate cumulative height up to and including current index
   for (let j = 0; j <= i; j++) {
-    const row = rows[j] as HTMLElement
+    const row = rows[j]
     if (row) {
       totalHeight += row.offsetHeight
-      // Add margin between logs (matching CSS)
-      if (j > 0) totalHeight += 8 // var(--space-1) equivalent
+      // Add margin between logs (8px = var(--space-1))
+      if (j > 0) totalHeight += 8
     }
   }
 
-  // Position so the accumulated logs fit from bottom up
-  const y = vp.clientHeight - totalHeight
-  const minY = Math.min(0, vp.clientHeight - (list.scrollHeight ?? list.clientHeight))
-  return Math.max(minY, y)
+  // Position so the bottom of the i-th log aligns with bottom of viewport
+  const targetY = vp.clientHeight - totalHeight
+
+  // Don't scroll past the top of the container
+  const minY = Math.min(0, vp.clientHeight - list.scrollHeight)
+  return Math.max(minY, targetY)
 }
 
-function buildTimeline() {
-  tl.value?.kill()
-  const list = listRef.value!
+// Find which log should be showing based on current time
+function getCurrentLogIndex() {
   const logs = healthLogsUpUntilNow.value
-  if (!logs.length) return
+  if (logs.length === 0) return -1
 
-  // normalize timestamps to [0,1]
-  const t0 = logs[0]?.timestamp || 0
-  const t1 = logs[logs.length - 1]?.timestamp || 0
-  const total = Math.max(0.0001, t1 - t0)
-  const positions = logs.map(l => (l.timestamp - t0) / total)
+  // Find the last log whose timestamp has passed
+  let lastActiveIndex = -1
+  for (let i = 0; i < logs.length; i++) {
+    const log = logs[i]
+    if (log && props.time.value >= log.timestamp) {
+      lastActiveIndex = i
+    } else {
+      break
+    }
+  }
 
-  const startY = yForIndex(0)
-  gsap.set(list, { y: startY, willChange: 'transform' })
-
-  const local = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
-  positions.forEach((pos, i) => {
-    local.to(list, { y: yForIndex(i) }, pos)
-  })
-  tl.value = local
+  return lastActiveIndex
 }
 
-// map props.time to tl.progress()
-function syncProgressWithTime() {
-  const logs = healthLogsUpUntilNow.value
-  if (!tl.value || logs.length === 0) return
-  const t0 = logs[0]?.timestamp || 0
-  const t1 = logs[logs.length - 1]?.timestamp || 0
-  const p = (props.time - t0) / Math.max(0.0001, t1 - t0)
-  tl.value.progress(Math.max(0, Math.min(1, p)))
+// Jump to show the current active log
+function jumpToCurrentLog() {
+  const list = listRef.value
+  const vp = viewportRef.value
+  if (!list || !vp) return
+
+  const newIndex = getCurrentLogIndex()
+
+  if (newIndex !== currentLogIndex.value) {
+    currentLogIndex.value = newIndex
+
+    if (newIndex >= 0) {
+      const targetY = yForIndex(newIndex)
+      // Use gsap.set for instant positioning
+      gsap.set(list, {
+        y: targetY,
+        willChange: 'transform'
+      })
+    } else {
+      // No logs active yet, position off-screen
+      gsap.set(list, {
+        y: vp.clientHeight,
+        willChange: 'transform'
+      })
+    }
+  }
+}
+
+// Initialize position
+function initializePosition() {
+  const list = listRef.value
+  const vp = viewportRef.value
+  if (!list || !vp) return
+
+  // Start with logs positioned below viewport (not visible)
+  gsap.set(list, { y: vp.clientHeight, willChange: 'transform' })
+  currentLogIndex.value = -1
 }
 
 onMounted(async () => {
   if (import.meta.server) return
   await nextTick()
-  buildTimeline()
-  syncProgressWithTime()
+  initializePosition()
+  jumpToCurrentLog()
 
   // reflow after async font load
   document.fonts?.ready?.then(() => {
-    const p = tl.value?.progress() ?? 0
-    buildTimeline()
-    tl.value?.progress(p)
+    initializePosition()
+    jumpToCurrentLog()
   })
 })
 
-onBeforeUnmount(() => tl.value?.kill())
+onBeforeUnmount(() => {
+  // Clean up any running GSAP animations
+  const list = listRef.value
+  if (list) {
+    gsap.killTweensOf(list)
+  }
+})
 
-watch(() => props.time, () => {
-  syncProgressWithTime()
+watch(() => props.time.value, () => {
+  jumpToCurrentLog()
 })
 
 watch(healthLogsWithActiveState, async () => {
   await nextTick()
-  const p = tl.value?.progress() ?? 0
-  buildTimeline()
-  tl.value?.progress(p)
+  initializePosition()
+  jumpToCurrentLog()
 })
 </script>
 
@@ -150,9 +175,8 @@ watch(healthLogsWithActiveState, async () => {
       <div ref="viewportRef" class="BashLogs">
         <!-- inner wrapper so we only transform this element -->
         <div ref="listRef" class="BashList">
-          <div v-for="value in healthLogsWithActiveState" :key="value.timestamp + '-' + value.index" 
-               class="BashLog" 
-               :class="{ 'active': value.isActive, 'inactive': !value.isActive }">
+          <div v-for="value in healthLogsWithActiveState" :key="value.timestamp + '-' + value.index" class="BashLog"
+            :class="{ 'active': value.isActive, 'inactive': !value.isActive }">
             <NuxtImg :src="value.card?.info.image?.default" alt="Card Image" width="30" height="30" />
             <p>{{ entryValueLog(value) }}</p>
             <p>{{ value.timestamp }}</p>
