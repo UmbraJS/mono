@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 import type { Character } from '~~/types'
 import PartyBoard from './PartyBoard.vue'
 import type { ValueLog } from '../../utils/space/types'
+import { useSplinesStore } from '@/stores/useSplinesStore'
 
 const props = defineProps<{
   health: number;
@@ -17,14 +18,27 @@ const props = defineProps<{
 /* ----- your existing bits ----- */
 const userStore = useUser()
 const userDeck = computed(() => userStore.user.deck)
-function getUserCard(index: number) { return userDeck.value[index] }
+function getUserCard(index: number) {
+  return userDeck.value.find((card) => card.index === index)
+}
+
+const splinesStore = useSplinesStore()
+
+function handleOpponentCharacterLoaded(el: HTMLElement) {
+  if (!el) return
+  if (splinesStore.tankCharacter.opponent) return
+  splinesStore.addTank('opponent', el)
+}
 
 const healthLogsUpUntilNow = computed(() => {
   // if you want to show both player/opponent logs, merge here; keeping your health logs for now
-  return props.healthLog
+  return [...props.healthLog, ...props.shieldLog]
     .slice() // avoid mutating
     .sort((a, b) => a.timestamp - b.timestamp)
-    .map((log) => ({ ...log, card: getUserCard(log.index) }))
+    .map((log) => ({
+      ...log,
+      card: getUserCard(log.index)
+    }))
 })
 
 const healthLogsWithActiveState = computed(() => {
@@ -103,23 +117,21 @@ function jumpToCurrentLog() {
 
   const newIndex = getCurrentLogIndex()
 
-  if (newIndex !== currentLogIndex.value) {
-    currentLogIndex.value = newIndex
-
-    if (newIndex >= 0) {
-      const targetY = yForIndex(newIndex)
-      // Use gsap.set for instant positioning
-      gsap.set(list, {
-        y: targetY,
-        willChange: 'transform'
-      })
-    } else {
-      // No logs active yet, position off-screen
-      gsap.set(list, {
-        y: vp.clientHeight,
-        willChange: 'transform'
-      })
-    }
+  if (newIndex === currentLogIndex.value) return
+  currentLogIndex.value = newIndex
+  if (newIndex >= 0) {
+    const targetY = yForIndex(newIndex)
+    // Use gsap.set for instant positioning
+    gsap.set(list, {
+      y: targetY,
+      willChange: 'transform'
+    })
+  } else {
+    // No logs active yet, position off-screen
+    gsap.set(list, {
+      y: vp.clientHeight,
+      willChange: 'transform'
+    })
   }
 }
 
@@ -150,9 +162,8 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   // Clean up any running GSAP animations
   const list = listRef.value
-  if (list) {
-    gsap.killTweensOf(list)
-  }
+  if (!list) return
+  gsap.killTweensOf(list)
 })
 
 watch(() => props.time.value, () => {
@@ -169,17 +180,24 @@ watch(healthLogsWithActiveState, async () => {
 <template>
   <PartyBoard>
     <div class="location border" />
-    <PlayerCharacter :characters="characters" :health="health" :shield="shield" :reverse="false" />
+    <PlayerCharacter :characters="characters" :health="health" :shield="shield" :reverse="false"
+      @character-loaded="handleOpponentCharacterLoaded" />
 
     <div class="location border">
       <div ref="viewportRef" class="BashLogs">
         <!-- inner wrapper so we only transform this element -->
         <div ref="listRef" class="BashList">
-          <div v-for="value in healthLogsWithActiveState" :key="value.timestamp + '-' + value.index" class="BashLog"
-            :class="{ 'active': value.isActive, 'inactive': !value.isActive }">
+          <div v-for="value in healthLogsWithActiveState" :key="value.timestamp + '-' + value.index"
+            class="BashLog border" :class="{
+              'active': value.isActive, 'inactive': !value.isActive,
+              'base-warning': value.type === 'attack',
+              'base-success': value.type === 'heal',
+              'base-info': value.type === 'shield'
+            }">
             <NuxtImg :src="value.card?.info.image?.default" alt="Card Image" width="30" height="30" />
             <p>{{ entryValueLog(value) }}</p>
-            <p>{{ value.timestamp }}</p>
+            <!-- <p>{{ value.timestamp }}</p> -->
+            <p>{{ value.newValue }}</p>
           </div>
         </div>
       </div>
@@ -202,10 +220,12 @@ watch(healthLogsWithActiveState, async () => {
 }
 
 .BashLog {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   gap: var(--space-2);
   align-items: center;
   background: var(--base-10);
+  color: var(--base-120);
   padding: var(--space-1);
   border-radius: var(--radius);
   transition: opacity 0.3s ease, transform 0.3s ease;

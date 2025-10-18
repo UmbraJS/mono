@@ -40,19 +40,7 @@ function addPlayerAttackSource({ id, element }: { id: string; element: HTMLEleme
         </CardHeader>
       </CardModal>
     </CardBoard>
-    <TimeControls>
-      <div id="DeckPanels">
-        <div id="DeckPanel" class="opponent">
-          <Icon name="carbon:3d-curve-auto-vessels" size="1.5rem" />
-          <p>Opponent</p>
-        </div>
-
-        <div id="DeckPanel" class="player">
-          <Icon name="carbon:3d-curve-auto-vessels" size="1.5rem" />
-          <p>{{ store.user.name }}</p>
-        </div>
-      </div>
-    </TimeControls>
+    <TimeControls />
     <CardBoard board="deck" :max-slots="maxUserSlots">
       <CardModal v-for="card in playerTimeline" :key="card.id" :card="card" :chunks="card.simulation.chunks">
         <CardHeader :card="card">

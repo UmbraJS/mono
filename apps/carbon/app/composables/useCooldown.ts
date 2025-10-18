@@ -74,11 +74,11 @@ export function useCooldown(cardSimulation: OutputChunk[], callbackOrOptions: Us
       ease: 'none',
       onStart: () => {
         // Get attack timeline BEFORE creating the duration timeline so we can position it correctly
-        const atk = callbackOrOptions.attackTimelineFactory?.(segment.duration)
-        if (atk) {
+        const cast = callbackOrOptions.attackTimelineFactory?.(segment.duration)
+        if (cast) {
           // Position attack timeline so it ends exactly when cooldown ends
-          const attackStartTime = Math.max(0, segment.duration - atk.totalDuration)
-          cooldownTimeline.add(atk.timeline, attackStartTime)
+          const attackStartTime = Math.max(0, segment.duration - cast.totalDuration)
+          cooldownTimeline.add(cast.timeline, attackStartTime)
           cooldownTimeline.addLabel('CastStart', attackStartTime)
           const totalDuration = segment.duration
           const castStartAsAPercentageOfTotalDuration = (attackStartTime / totalDuration) * 100

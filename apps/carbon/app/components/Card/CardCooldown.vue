@@ -9,8 +9,6 @@ import { useCooldownState } from './composables/useCooldownState'
 import { useSplineRefs } from './composables/useSplineRefs'
 import CardCooldownDebugPanel from './CardCooldownDebugPanel.vue'
 
-
-
 const emit = defineEmits<{
   (e: 'functionRef', el: HTMLElement): void
   (e: 'cardAttack'): void

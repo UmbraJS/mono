@@ -69,36 +69,37 @@ function floorTo1Decimal(value: number) {
     <slot />
 
     <div class="ControlPanel">
-      <input id="TimelineSlider" v-model="timelineProgress" type="range" name="volume" min="0" max="100">
+      <input id="TimelineSlider" v-model="timelineProgress" type="range" name="volume" min="0" max="100" step="0.01">
 
-      <Button @click="handleReset">
-        <Icon name="carbon:restart" size="2rem" />
-      </Button>
-      <Button v-if="!isPaused" @click="() => pausePlay(true)">
-        <Icon name="carbon:pause-filled" size="2rem" />
-      </Button>
-      <Button v-else @click="() => pausePlay(false)">
-        <Icon name="carbon:play-filled-alt" size="2rem" />
-      </Button>
+      <div class="ControlButtons">
+        <Button @click="handleReset">
+          <Icon name="carbon:restart" size="2rem" />
+        </Button>
+        <Button v-if="!isPaused" @click="() => pausePlay(true)">
+          <Icon name="carbon:pause-filled" size="2rem" />
+        </Button>
+        <Button v-else @click="() => pausePlay(false)">
+          <Icon name="carbon:play-filled-alt" size="2rem" />
+        </Button>
 
-      <Button @click="setSpeed">
-        <p>x {{ floorTo1Decimal(timesSpeed) }}</p>
-      </Button>
+        <Button @click="setSpeed">
+          <p>x {{ floorTo1Decimal(timesSpeed) }}</p>
+        </Button>
 
-      <Button @click="lowerSpeed">
-        <p>x {{ floorTo1Decimal(Math.abs(timesSpeed)) }}</p>
-      </Button>
+        <Button @click="lowerSpeed">
+          <p>x {{ floorTo1Decimal(Math.abs(timesSpeed)) }}</p>
+        </Button>
+      </div>
     </div>
   </div>
 </template>
 
 <style>
 #TimelineSlider {
-  -webkit-appearance: none;
   width: 100%;
-  min-width: 300px;
+  min-width: 100%;
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--radius);
   background: var(--accent-20);
   outline: none;
 }
@@ -106,7 +107,7 @@ function floorTo1Decimal(value: number) {
 
 #ControlPanels {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   grid-column: 1 / -1;
   justify-content: space-between;
   align-items: center;
@@ -114,6 +115,14 @@ function floorTo1Decimal(value: number) {
 }
 
 #ControlPanels .ControlPanel {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+#ControlPanels .ControlButtons {
   display: flex;
   justify-content: center;
   align-items: center;
