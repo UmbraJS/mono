@@ -27,6 +27,13 @@ const healthLogsUpUntilNow = computed(() => {
     .map((log) => ({ ...log, card: getUserCard(log.index) }))
 })
 
+const healthLogsWithActiveState = computed(() => {
+  return healthLogsUpUntilNow.value.map((log) => ({
+    ...log,
+    isActive: props.time >= log.timestamp
+  }))
+})
+
 function entryValueLog(log: ValueLog) {
   const isTheSame = log.attemptedChange === log.actualChange
   if (isTheSame) {
@@ -39,25 +46,39 @@ function entryValueLog(log: ValueLog) {
 const viewportRef = ref<HTMLElement | null>(null)  // the .BashLogs container
 const listRef = ref<HTMLElement | null>(null)      // an inner list wrapper
 const tl = ref<gsap.core.Timeline | null>(null)
-const ro: ResizeObserver | null = null
 
-// compute the translateY so that row i’s bottom touches viewport’s bottom
+// compute the translateY so that we scroll from bottom up (first log at bottom)
 function yForIndex(i: number) {
   const vp = viewportRef.value!
   const list = listRef.value!
+  const logs = healthLogsUpUntilNow.value
+
+  if (logs.length === 0) return 0
+
+  // For the first log (index 0), position it at the bottom of the viewport
+  if (i === 0) {
+    const minY = Math.min(0, vp.clientHeight - (list.scrollHeight ?? list.clientHeight))
+    return Math.max(minY, vp.clientHeight - (list.children[0] as HTMLElement)?.offsetHeight || 0)
+  }
+
+  // For subsequent logs, scroll upward progressively
   const rows = list.children as unknown as HTMLElement[]
-  const target = rows[i] as HTMLElement
+  let totalHeight = 0
+  
+  // Calculate cumulative height up to current index
+  for (let j = 0; j <= i; j++) {
+    const row = rows[j] as HTMLElement
+    if (row) {
+      totalHeight += row.offsetHeight
+      // Add margin between logs (matching CSS)
+      if (j > 0) totalHeight += 8 // var(--space-1) equivalent
+    }
+  }
 
-  const vpRect = vp.getBoundingClientRect()
-  const listRect = list.getBoundingClientRect()
-  const rowRect = target.getBoundingClientRect()
-
-  const distanceFromListTopToRowBottom = rowRect.bottom - listRect.top
-  const y = vpRect.height - distanceFromListTopToRowBottom
-
+  // Position so the accumulated logs fit from bottom up
+  const y = vp.clientHeight - totalHeight
   const minY = Math.min(0, vp.clientHeight - (list.scrollHeight ?? list.clientHeight))
-  const maxY = 0
-  return Math.max(minY, Math.min(maxY, y))
+  return Math.max(minY, y)
 }
 
 function buildTimeline() {
@@ -112,7 +133,7 @@ watch(() => props.time, () => {
   syncProgressWithTime()
 })
 
-watch(healthLogsUpUntilNow, async () => {
+watch(healthLogsWithActiveState, async () => {
   await nextTick()
   const p = tl.value?.progress() ?? 0
   buildTimeline()
@@ -129,7 +150,9 @@ watch(healthLogsUpUntilNow, async () => {
       <div ref="viewportRef" class="BashLogs">
         <!-- inner wrapper so we only transform this element -->
         <div ref="listRef" class="BashList">
-          <div v-for="value in healthLogsUpUntilNow" :key="value.timestamp + '-' + value.index" class="BashLog">
+          <div v-for="value in healthLogsWithActiveState" :key="value.timestamp + '-' + value.index" 
+               class="BashLog" 
+               :class="{ 'active': value.isActive, 'inactive': !value.isActive }">
             <NuxtImg :src="value.card?.info.image?.default" alt="Card Image" width="30" height="30" />
             <p>{{ entryValueLog(value) }}</p>
             <p>{{ value.timestamp }}</p>
@@ -161,6 +184,20 @@ watch(healthLogsUpUntilNow, async () => {
   background: var(--base-10);
   padding: var(--space-1);
   border-radius: var(--radius);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Active logs are fully visible */
+.BashLog.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Inactive logs are hidden/dimmed */
+.BashLog.inactive {
+  opacity: 0.2;
+  transform: scale(0.95);
+  pointer-events: none;
 }
 
 /* optional: fixed gap between logs */
