@@ -6,7 +6,6 @@ import { gsap } from 'gsap'
 import { usePerson } from '../composables/usePerson'
 
 export const useUser = defineStore('user', () => {
-
   const userStore = usePerson(user)
 
   const money = useMoney({
