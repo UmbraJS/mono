@@ -211,10 +211,19 @@ function applyTheme() {
   align-items: center;
 }
 
+.ExampleResult {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+}
+
 .SpacingTokens {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--space-3);
 }
 
