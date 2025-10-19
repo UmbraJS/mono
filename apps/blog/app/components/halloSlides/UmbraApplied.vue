@@ -75,6 +75,24 @@ const themes = [
     foreground: "#E6F2E1",
     accents: ["#A3CFA0", "#6B8E23", "#C4DFAA"],
   },
+  {
+    name: "Starfish L",
+    background: "#FFFFFF",
+    foreground: "#0B1A2D",
+    accents: ["#FF6F61", "#6B5B95", "#88B04B"],
+  },
+  {
+    name: "Sunset L",
+    background: "#d3bcfe",
+    foreground: "#310000",
+    accents: ["#fe10d6", "#FFD97D", "#FF6F91"],
+  },
+  {
+    name: "Forest L",
+    background: "#E6F2E1",
+    foreground: "#1B2A20",
+    accents: ["#A3CFA0", "#6B8E23", "#C4DFAA"],
+  }
 ]
 
 const themeRefs = ref<HTMLButtonElement[]>([])
@@ -121,7 +139,7 @@ function applyTheme(themeName: string) {
       <UmbraAppliedToElement />
     </div>
     <div class="AliasedWrapper">
-      <p class="display">Premade Themes</p>
+      <p class="display">Multiple Themes!</p>
       <div class="MyUmbraActions">
         <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)" class="Theme"
           @click="applyTheme(value.name)">
@@ -132,7 +150,7 @@ function applyTheme(themeName: string) {
             <div class="AccentShade3"></div>
           </div>
           <div class="ThemeInfo">
-            <p class="display"><span>{{ value.name }}</span></p>
+            <p class=""><span>{{ value.name }}</span></p>
           </div>
         </button>
       </div>
@@ -211,7 +229,8 @@ button.Theme p {
 
 
 .MyUmbraActions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-4);
   grid-column: span 2;
   justify-content: center;
