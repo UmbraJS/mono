@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
-import { ScrollArea } from "umbraco";
+import { Button } from "umbraco";
 import ColorLayer from './ColorLayer.vue';
 
 defineProps<{
@@ -28,6 +28,8 @@ const baseTokens = base.shades
 const accentTokens = accent.shades
 const warningTokens = warning.shades
 const successTokens = success.shades
+
+const addedRanges = ref(0);
 </script>
 
 <template>
@@ -37,16 +39,26 @@ const successTokens = success.shades
       <ColorLayer :helpers="true" title="Base Range" :tokens="baseTokens" prefix="base" main-color-var="var(--base)"
         text-color-var="var(--base-text)" />
 
-      <div class="divider"></div>
+      <div v-if="addedRanges > 0" class="divider"></div>
 
-      <ColorLayer title="Accent Range" :tokens="accentTokens" prefix="accent" main-color-var="var(--accent)"
-        text-color-var="var(--accent-text)" />
+      <ColorLayer v-if="addedRanges > 0" title="Accent Range" :tokens="accentTokens" prefix="accent"
+        main-color-var="var(--accent)" text-color-var="var(--accent-text)" />
 
-      <ColorLayer v-if="!simple" title="Warning Range" :tokens="warningTokens" prefix="warning"
+      <ColorLayer v-if="addedRanges > 1" title="Warning Range" :tokens="warningTokens" prefix="warning"
         main-color-var="var(--warning)" text-color-var="var(--warning-text)" />
 
-      <ColorLayer v-if="!simple" title="Success Range" :tokens="successTokens" prefix="success"
+      <ColorLayer v-if="addedRanges > 2" title="Success Range" :tokens="successTokens" prefix="success"
         main-color-var="var(--success)" text-color-var="var(--success-text)" />
+
+
+      <div class="AddRangeButton">
+        <Button v-if="addedRanges < 3" @click="addedRanges++">
+          <Icon name="carbon:add" />
+        </Button>
+        <Button v-if="addedRanges > 0" @click="addedRanges--">
+          <Icon name="carbon:subtract" />
+        </Button>
+      </div>
     </div>
   </div>
 </template>
