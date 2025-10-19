@@ -65,9 +65,9 @@ const themes = [
   },
   {
     name: "Sunset",
-    background: "#2E1A47",
-    foreground: "#F0EDEE",
-    accents: ["#FF9A76", "#FFD97D", "#FF6F91"],
+    background: "#310000",
+    foreground: "#d3bcfe",
+    accents: ["#fe10d6", "#FFD97D", "#FF6F91"],
   },
   {
     name: "Forest",
@@ -122,10 +122,18 @@ function applyTheme(themeName: string) {
     </div>
     <div class="AliasedWrapper">
       <p class="display">Premade Themes</p>
-      <div class="UmbraActions border">
+      <div class="MyUmbraActions">
         <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)" class="Theme"
           @click="applyTheme(value.name)">
-          <p>{{ value.name }}</p>
+          <div class="AccentRange">
+            <div class="PrimaryAccent"></div>
+            <div class="AccentShade1"></div>
+            <div class="AccentShade2"></div>
+            <div class="AccentShade3"></div>
+          </div>
+          <div class="ThemeInfo">
+            <p class="display"><span>{{ value.name }}</span></p>
+          </div>
         </button>
       </div>
     </div>
@@ -137,12 +145,49 @@ function applyTheme(themeName: string) {
 
 <style>
 button.Theme {
-  padding: var(--space-2);
   background-color: var(--base);
   border: 1px solid var(--base-40);
   color: var(--base-120);
   border-radius: var(--radius);
   cursor: pointer;
+  overflow: hidden;
+  width: 150px;
+}
+
+button.Theme:hover {
+  border-color: var(--accent-100);
+}
+
+button.Theme:active {
+  border-color: var(--accent-120);
+}
+
+.ThemeInfo {
+  display: flex;
+  padding: var(--space-1);
+}
+
+.AccentRange {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  height: 40px;
+  width: 100%;
+}
+
+.PrimaryAccent {
+  background-color: var(--accent-100);
+}
+
+.AccentShade1 {
+  background-color: var(--accent-80);
+}
+
+.AccentShade2 {
+  background-color: var(--accent-60);
+}
+
+.AccentShade3 {
+  background-color: var(--accent-40);
 }
 
 button.Theme p {
@@ -165,11 +210,10 @@ button.Theme p {
 }
 
 
-.UmbraActions {
+.MyUmbraActions {
   display: flex;
   gap: var(--space-4);
   grid-column: span 2;
-  padding: var(--space-2);
   justify-content: center;
   align-items: center;
 }
