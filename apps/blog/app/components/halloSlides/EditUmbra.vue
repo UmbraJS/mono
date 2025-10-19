@@ -69,7 +69,7 @@ function applyTheme() {
 <template>
   <div class="SpacingTokens">
     <div class="AliasedWrapper">
-
+      <p class="display">We can automate it! Look how fast this is 👀</p>
       <div class="UmbraActions border">
         <div class="ColorEdit">
           <p class="caption">Background</p>
@@ -92,9 +92,16 @@ function applyTheme() {
           <Slider @update:model-value="(min) => minimumReadability = min.value" />
         </div>
 
-        <Button @click="applyTheme">
-          Apply
-        </Button>
+
+        <div class="ApplyWrapper">
+          <p class="caption">Triggers the Umbra Function</p>
+          <Button @click="applyTheme">
+            Apply
+          </Button>
+        </div>
+
+
+
       </div>
 
 
@@ -154,6 +161,7 @@ function applyTheme() {
           </div>
         </div>
       </div>
+      <!-- <p class="display">Look how fast this is 👀</p> -->
     </div>
 
 
@@ -170,6 +178,11 @@ function applyTheme() {
   align-items: center;
 }
 
+.AliasedWrapper>p {
+  grid-column: span 2;
+  margin-bottom: var(--space-1);
+}
+
 .ReadabilityWrapper {
   display: flex;
   flex-direction: column;
@@ -177,6 +190,11 @@ function applyTheme() {
   min-width: 400px;
 }
 
+.ApplyWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
 
 .UmbraActions {
   display: flex;

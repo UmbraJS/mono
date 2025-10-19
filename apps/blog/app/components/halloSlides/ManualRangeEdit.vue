@@ -27,7 +27,9 @@ function getVariableName(prefix: string, entryNumber: number): string {
 
 <template>
   <div class="SpacingTokens">
+    <p class="display"> <span>All this manual work is still kinda slow 🤔</span></p>
     <div class="AliasedWrapper">
+
       <div class="ColorLayer border">
         <div class="TokensTables">
           <!-- <div class="TokensTable">
