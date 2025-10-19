@@ -102,20 +102,20 @@ const actThreeSlideConfig: SlideConfig[] = [
   { component: EditUmbra, props: { class: 'SamSlide', focus: "element" } },
   { component: UmbraApplied, props: { class: 'SamSlide' } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: queryAboutImages } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: wcag } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors2 } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: APCA } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: colorGammut } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: APCAFormula } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: wcagVsAPCA } },
+  // { component: ImageIllustration, props: { class: 'SamSlide', url: APCAFormula } },
+  // { component: ImageIllustration, props: { class: 'SamSlide', url: wcagVsAPCA } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: simpleUmbra } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: umbraExecute } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: umbraInsights } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: umbraControl } },
-  { component: UmbraRange, props: { class: 'SamSlide', simple: true } },
+  { component: EditUmbra, props: { class: 'SamSlide' } },
   { component: TheEnd, props: { class: 'SamSlide' } },
   { component: SamSigningOff, props: { class: 'SamSlide' } },
+  { component: ItsMeMario, props: {} },
 ];
 
 // Helper function to calculate total slides from slide config
@@ -153,8 +153,8 @@ const {
   <!-- Dynamic component rendering based on current slide -->
   <component :is="currentSlideConfig.component" v-if="currentSlideConfig" v-bind="currentSlideProps" />
 
-  <!-- <SlideProgress v-model:practice-mode="practiceMode" :act="act" :slide="slide" :total-acts="pages.length"
-    :slides-in-current-act="slidesInThisAct" :target-date-time="targetDateTime" /> -->
+  <SlideProgress v-model:practice-mode="practiceMode" :act="act" :slide="slide" :total-acts="pages.length"
+    :slides-in-current-act="slidesInThisAct" :target-date-time="targetDateTime" />
 
   <!-- <div class="EmojiPanel">
     <LiveEmojiPanel />
