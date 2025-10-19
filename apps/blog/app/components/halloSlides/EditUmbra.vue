@@ -3,6 +3,13 @@ import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
 import { Slider, Button } from "umbraco"
 import DyePicker from '../DyePicker.vue';
+import ColorLayer from './ColorLayer.vue';
+import ColorLayerHorizontal from './ColorLayerHorizontal.vue';
+import UmbraAppliedToElement from './UmbraAppliedToElement.vue';
+
+const { focus = "tokens" } = defineProps<{
+  focus: "tokens" | "element"
+}>();
 
 const bg = ref("#000000");
 const fg = ref("#ffffff");
@@ -35,10 +42,6 @@ const accent = computed(() => formated.value[1] as FormatedRange);
 
 const baseTokens = computed(() => base.value.shades);
 const accentTokens = computed(() => accent.value.shades);
-
-function getVariableName(prefix: string, entryNumber: number): string {
-  return `--${prefix}-${entryNumber * 10}`;
-}
 
 function changeTheme({
   background,
@@ -86,12 +89,10 @@ function applyTheme() {
           <DyePicker label="Accent" :default-color="ac" @change="(color) => changeTheme({ accentValue: color })" />
         </div>
 
-
         <div class="ReadabilityWrapper">
           <p class="caption">Minimum Readability {{ minimumReadability }}</p>
-          <Slider @update:model-value="(min) => minimumReadability = min.value" />
+          <Slider @update:model-value="(min) => (minimumReadability = min.value)" />
         </div>
-
 
         <div class="ApplyWrapper">
           <p class="caption">Triggers the Umbra Function</p>
@@ -99,77 +100,38 @@ function applyTheme() {
             Apply
           </Button>
         </div>
-
-
-
       </div>
 
+      <ColorLayer v-if="focus === 'tokens'" title="Base Tokens" :tokens="baseTokens" prefix="base" :main-color-var="bg"
+        :text-color-var="fg" />
 
-      <div class="ColorLayer border">
-        <div class="TokensTables">
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--base:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': bg }" />
-            </div>
-          </div>
+      <ColorLayer v-if="focus === 'tokens'" title="Accent Tokens" :tokens="accentTokens" prefix="accent"
+        main-color-var="var(--base)" text-color-var="var(--accent-text)" />
 
-          <div class="TokensTable">
-            <div v-for="(token, index) in baseTokens" :key="token" class="SpaceToken">
-              <span class="TokenName">{{ getVariableName("base", index + 1) }}:</span>
-              <span class="TokenValue">{{ token }};</span>
-              <div class="Swatch border" :style="{ '--color': token }" />
-            </div>
-          </div>
-
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--base-text:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': fg }" />
-            </div>
-          </div>
-        </div>
+      <div v-if="focus === 'element'" class="ShorterColorLayer border">
+        <UmbraAppliedToElement />
       </div>
 
-      <div class="ColorLayer border">
-        <div class="TokensTables">
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--accent:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--base)' }" />
-            </div>
-          </div>
+      <div v-if="focus === 'element'" class="ShorterColorLayer border">
+        <ColorLayerHorizontal title="Base Tokens" :tokens="baseTokens" prefix="base" :main-color-var="bg"
+          :text-color-var="fg" />
 
-          <div class="TokensTable">
-            <div v-for="(token, index) in accentTokens" :key="token" class="SpaceToken">
-              <span class="TokenName">{{ getVariableName("accent", index + 1) }}:</span>
-              <span class="TokenValue">{{ token }};</span>
-              <div class="Swatch border" :style="{ '--color': token }" />
-            </div>
-          </div>
-
-
-          <div class="TokensTable">
-            <div class="SpaceToken">
-              <span class="TokenName">--accent-text:</span>
-              <span class="TokenValue"></span>
-              <div class="Swatch border" :style="{ '--color': 'var(--accent-text)' }" />
-            </div>
-          </div>
-        </div>
+        <ColorLayerHorizontal title="Accent Tokens" :tokens="accentTokens" prefix="accent" main-color-var="var(--base)"
+          text-color-var="var(--accent-text)" />
       </div>
       <!-- <p class="display">Look how fast this is 👀</p> -->
     </div>
-
-
-
   </div>
 </template>
 
 <style>
+.ShorterColorLayer {
+  grid-column: span 2;
+  padding: var(--space-2);
+  display: flex;
+  gap: var(--space-4);
+}
+
 .AliasedWrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -98,7 +98,8 @@ const actTwoSlideConfig: SlideConfig[] = [
 const actThreeSlideConfig: SlideConfig[] = [
   { component: ActThreeIntro, props: {} },
   { component: ManualRangeEdit, props: { class: 'SamSlide' } },
-  { component: EditUmbra, props: { class: 'SamSlide' } },
+  // { component: EditUmbra, props: { class: 'SamSlide' } },
+  { component: EditUmbra, props: { class: 'SamSlide', focus: "element" } },
   { component: UmbraApplied, props: { class: 'SamSlide' } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: queryAboutImages } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: wcag } },

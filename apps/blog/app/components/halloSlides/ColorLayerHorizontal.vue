@@ -18,33 +18,29 @@ function getVariableName(prefix: string, entryNumber: number): string {
 </script>
 
 <template>
-  <div class="ColorLayer border">
-    <h3>{{ title }}</h3>
+  <div class="MyColorLayer">
+    <p>{{ title }}</p>
     <div class="TokensTables">
-      <!-- Main color token -->
-      <div class="TokensTable">
-        <TokenRow :token-name="`--${prefix}`" :color-value="mainColorVar" />
-      </div>
-
       <!-- Range tokens -->
       <div class="TokensTable">
-        <TokenRow v-for="(token, index) in tokens" :key="token" :token-name="getVariableName(prefix, index + 1)"
-          :token-value="token" :color-value="token" />
-      </div>
-
-      <!-- Text color token -->
-      <div class="TokensTable">
-        <TokenRow :token-name="`--${prefix}-text`" :color-value="textColorVar" />
+        <div class="Swatch border" :style="{ '--color': mainColorVar }" />
+        <div v-for="(token) in tokens" :key="token" class="Swatch border" :style="{ '--color': token }" />
+        <div class="Swatch border" :style="{ '--color': textColorVar }" />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.MyColorLayer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 .TokensTable {
   position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   gap: var(--space-1);
 }
 
