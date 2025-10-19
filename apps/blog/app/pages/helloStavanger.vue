@@ -15,6 +15,7 @@ import NotesBetweenNotes from '../components/halloSlides/NotesBetweenNotes.vue';
 import ColorIsAll from '../components/halloSlides/ColorIsAll.vue';
 import ActTwoIntro from '../components/halloSlides/ActTwoIntro.vue';
 import ElementSpecificTokens from '../components/halloSlides/ElementSpecificTokens.vue';
+import TokenAnatomy from '../components/halloSlides/TokenAnatomy.vue';
 import ElementSpecificTokensExpanded from '../components/halloSlides/ElementSpecificTokensExpanded.vue';
 import ElementSpecificTokensProblem1 from '../components/halloSlides/ElementSpecificTokensProblem1.vue';
 import UmbraRange from '../components/halloSlides/UmbraRange.vue';
@@ -74,6 +75,7 @@ const actOneSlideConfig: SlideConfig[] = [
 const actTwoSlideConfig: SlideConfig[] = [
   { component: ActTwoIntro, props: {} },
   // { component: ElementSpecificTokens, props: { class: 'SamSlide' } },
+  { component: TokenAnatomy, props: { class: 'SamSlide' } },
   { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' } },
   { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' } },
   { component: Gallery, props: { class: 'SamSlide' } },

@@ -123,7 +123,7 @@ const buttonTextHex = computed(() => {
 </script>
 
 <template>
-  <div class="SpacingTokens" :style="spaceTokenStyleObject">
+  <div class="TheseSpacingTokens" :style="spaceTokenStyleObject">
     <div class="ProblemWrapper">
       <button ref="buttonElement" class="target-button">
         <span ref="splineHook1" class="SplineHook1"></span>
@@ -202,7 +202,7 @@ const buttonTextHex = computed(() => {
   transform: translateY(-50%);
 }
 
-.SpacingTokens {
+.TheseSpacingTokens {
   position: relative;
   min-height: 400px;
   width: 100%;

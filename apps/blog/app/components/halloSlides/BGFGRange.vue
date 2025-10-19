@@ -30,6 +30,7 @@ const foregroundTokens = [
       <TokensTable :tokens="middleTokens" />
       <TokensTable :tokens="foregroundTokens" />
     </div>
+    <h1>🤔</h1>
   </div>
 </template>
 

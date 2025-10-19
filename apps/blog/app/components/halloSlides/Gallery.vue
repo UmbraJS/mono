@@ -13,6 +13,7 @@ const images = [
 
 <template>
   <div class="Gallery" :class="{ grayscale: grayscale }">
+    <h1>How Painters Think 👨‍🎨</h1>
     <div class="GalleryGrid">
       <div v-for="(image, index) in images" :key="index" class="GalleryItem">
         <img :src="image.url" :alt="`Image by ${image.author}`" />
@@ -27,7 +28,9 @@ const images = [
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   padding: var(--space-5);
+  gap: var(--space-5);
 }
 
 .Gallery.grayscale img {
