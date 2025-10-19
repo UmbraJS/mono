@@ -9,22 +9,23 @@ import UmbraAppliedToElement from './UmbraAppliedToElement.vue';
 const bg = ref("#000000");
 const fg = ref("#ffffff");
 const ac = ref("#6400ff");
+const accentPalette = ref<string[]>([ac.value]);
 
 const minimumReadability = ref(50);
 
 const theme = umbra({
   background: bg.value,
   foreground: fg.value,
-  accents: [ac.value]
+  accents: accentPalette.value,
 });
 
 const formated = ref(theme.format().formated)
 
-watch([bg, fg, ac, minimumReadability], ([newBg, newFg, newAc, newMinRead]) => {
+watch([bg, fg, ac, accentPalette, minimumReadability], ([newBg, newFg, _newAc, palette, newMinRead]) => {
   const newTheme = umbra({
     background: newBg,
     foreground: newFg,
-    accents: [newAc],
+    accents: palette,
     settings: {
       readability: newMinRead
     }
@@ -42,6 +43,8 @@ function getVariableName(prefix: string, entryNumber: number): string {
   return `--${prefix}-${entryNumber * 10}`;
 }
 
+const activeThemeName = ref<string | null>(null)
+
 function changeTheme({
   background,
   foreground,
@@ -51,9 +54,13 @@ function changeTheme({
   foreground?: string;
   accentValue?: string;
 }) {
+  activeThemeName.value = null
   if (background) bg.value = background;
   if (foreground) fg.value = foreground;
-  if (accentValue) ac.value = accentValue;
+  if (accentValue) {
+    ac.value = accentValue;
+    accentPalette.value = [accentValue];
+  }
 }
 
 const themes = [
@@ -123,8 +130,19 @@ function setThemeRef(el: Element | ComponentPublicInstance | null, index: number
 
 
 function applyTheme(themeName: string) {
-  const selectedTheme = themes.find(t => t.name === themeName);
+  const themeIndex = themes.findIndex((t) => t.name === themeName)
+  if (themeIndex === -1) return
+
+  const selectedTheme = themes[themeIndex]
   if (!selectedTheme) return
+  activeThemeName.value = selectedTheme.name
+  bg.value = selectedTheme.background
+  fg.value = selectedTheme.foreground
+  ac.value = selectedTheme.accents[0] || ac.value
+  accentPalette.value = [...selectedTheme.accents]
+
+  themeRefs.value[themeIndex]?.focus()
+
   umbra({
     background: selectedTheme.background,
     foreground: selectedTheme.foreground,
@@ -141,7 +159,8 @@ function applyTheme(themeName: string) {
     <div class="AliasedWrapper">
       <p class="display">Multiple Themes!</p>
       <div class="MyUmbraActions">
-        <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)" class="Theme"
+        <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)"
+          :class="['Theme', { active: activeThemeName === value.name }]" :aria-pressed="activeThemeName === value.name"
           @click="applyTheme(value.name)">
           <div class="AccentRange">
             <div class="PrimaryAccent"></div>
@@ -178,6 +197,11 @@ button.Theme:hover {
 
 button.Theme:active {
   border-color: var(--accent-120);
+}
+
+button.Theme.active {
+  outline: solid 4px var(--accent-100);
+  box-shadow: 0 0 0 2px var(--accent-80);
 }
 
 .ThemeInfo {
