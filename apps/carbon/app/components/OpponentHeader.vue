@@ -203,7 +203,6 @@ watch(healthLogsWithActiveState, async () => {
             }">
             <NuxtImg :src="value.card?.info.image?.default" alt="Card Image" width="30" height="30" />
             <p>{{ entryValueLog(value) }}</p>
-            <!-- <p>{{ value.timestamp }}</p> -->
             <p>{{ value.newValue }}</p>
           </div>
         </div>
