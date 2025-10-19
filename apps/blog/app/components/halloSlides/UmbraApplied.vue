@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
+import type { ComponentPublicInstance } from 'vue';
 import { Slider, Button } from "umbraco"
 import DyePicker from '../DyePicker.vue';
 import UmbraAppliedToElement from './UmbraAppliedToElement.vue';
@@ -76,6 +77,32 @@ const themes = [
   },
 ]
 
+const themeRefs = ref<HTMLButtonElement[]>([])
+
+onBeforeUpdate(() => {
+  themeRefs.value = []
+})
+
+function applyThemeToElement(index: number) {
+  const element = themeRefs.value[index]
+  const themeInput = themes[index]
+  if (!element || !themeInput) return
+
+  umbra({
+    background: themeInput.background,
+    foreground: themeInput.foreground,
+    accents: themeInput.accents,
+  }).apply({
+    target: element,
+  })
+}
+
+function setThemeRef(el: Element | ComponentPublicInstance | null, index: number) {
+  if (!(el instanceof HTMLButtonElement)) return
+  themeRefs.value[index] = el
+  applyThemeToElement(index)
+}
+
 
 function applyTheme(themeName: string) {
   const selectedTheme = themes.find(t => t.name === themeName);
@@ -96,7 +123,8 @@ function applyTheme(themeName: string) {
     <div class="AliasedWrapper">
       <p class="display">Premade Themes</p>
       <div class="UmbraActions border">
-        <button v-for="value in themes" :key="value.name" class="Theme" @click="applyTheme(value.name)">
+        <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)" class="Theme"
+          @click="applyTheme(value.name)">
           <p>{{ value.name }}</p>
         </button>
       </div>
@@ -110,10 +138,15 @@ function applyTheme(themeName: string) {
 <style>
 button.Theme {
   padding: var(--space-2);
-  background-color: var(--base-20);
-  color: var(--base-text);
+  background-color: var(--base);
+  border: 1px solid var(--base-40);
+  color: var(--base-120);
   border-radius: var(--radius);
   cursor: pointer;
+}
+
+button.Theme p {
+  color: var(--base-120);
 }
 
 .AliasedWrapper {
