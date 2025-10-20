@@ -37,6 +37,7 @@ import SamSigningOff from '../components/halloSlides/SamSigningOff.vue';
 import SlideProgress from '../components/SlideProgress.vue';
 import ItsMeMario from '../components/halloSlides/Me.vue';
 import UmbraApplied from '../components/halloSlides/UmbraApplied.vue';
+import LetsRethink from '../components/halloSlides/LetsRethink.vue';
 
 //Images
 import queryAboutImages from "../../public/query.png";
@@ -76,11 +77,12 @@ const actOneSlideConfig: SlideConfig[] = [
 
 const actTwoSlideConfig: SlideConfig[] = [
   { component: ActTwoIntro, props: {} },
-  // { component: ElementSpecificTokens, props: { class: 'SamSlide' } },
-  { component: TokenAnatomy, props: { class: 'SamSlide' } },
+  { component: ElementSpecificTokens, props: { class: 'SamSlide' } },
+  // { component: TokenAnatomy, props: { class: 'SamSlide' } },
   { component: ElementSpecificTokensExpanded, props: { class: 'SamSlide' } },
   { component: ElementSpecificTokensProblem1, props: { class: 'SamSlide' } },
   // { component: UmbraAppliedToElement, props: { class: 'SamSlide' } },
+  { component: LetsRethink, props: { class: 'SamSlide' } },
   { component: Gallery, props: { class: 'SamSlide' } },
   { component: BGFGRange, props: { class: 'SamSlide' } },
   // { component: AliasedBGFGRange, props: { class: 'SamSlide' } },
@@ -101,9 +103,9 @@ const actThreeSlideConfig: SlideConfig[] = [
   // { component: EditUmbra, props: { class: 'SamSlide' } },
   { component: EditUmbra, props: { class: 'SamSlide', focus: "element" } },
   { component: UmbraApplied, props: { class: 'SamSlide' } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: queryAboutImages } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors2 } },
+  // { component: ImageIllustration, props: { class: 'SamSlide', url: queryAboutImages } },
+  // { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors } },
+  // { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors2 } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: APCA } },
   { component: ImageIllustration, props: { class: 'SamSlide', url: colorGammut } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: APCAFormula } },

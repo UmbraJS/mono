@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
 import { onMounted, ref } from 'vue';
+import TokenAnatomy from './TokenAnatomy.vue';
 
 const exampleRefs = ref<HTMLElement[]>([]);
 
@@ -29,9 +30,6 @@ const spaceTokens = [
   { name: '--button-primary', value: '#007bff' },
   { name: '--button-primary-hover', value: '#0056b3' },
   { name: '--button-primary-active', value: '#004085' },
-  { name: '--button-secondary', value: '#6c757d' },
-  { name: '--button-secondary-hover', value: '#5a6268' },
-  { name: '--button-secondary-active', value: '#495057' }
 ];
 
 const spaceTokenStyleObject = computed(() => {
@@ -45,21 +43,30 @@ const spaceTokenStyleObject = computed(() => {
 
 <template>
   <div class="SpacingTokens" :style="spaceTokenStyleObject">
-    <h3 class="SpacingTitle">
-      Element-Specific Semantic Tokens
-    </h3>
+    <h1 class="SpacingTitle">
+      The most common approach
+    </h1>
+
+    <div class="Anatomy">
+      <TokenAnatomy />
+    </div>
 
     <div class="TokensTable">
       <div v-for="token in spaceTokens" :key="token.name" class="SpaceToken">
-        <span class="TokenName">{{ token.name }}:</span>
-        <span class="TokenValue">{{ token.value }};</span>
+        <p class="display"><span class="TokenName">{{ token.name }}:</span></p>
         <div class="Swatch border" :style="{ '--color': token.value }" />
       </div>
     </div>
+
   </div>
 </template>
 
 <style>
+.Anatomy {
+  padding-bottom: var(--space-7);
+  padding-top: var(--space-4);
+}
+
 .SpacingTitle {
   color: var(--base-50);
 }

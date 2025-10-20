@@ -41,29 +41,31 @@ const spaceTokenStyleObject = computed(() => {
 
 <template>
   <div class="SpacingTokens" :style="spaceTokenStyleObject">
-    <h1 class="SpacingTitle">
+    <!-- <h1 class="SpacingTitle">
       This is very specific! 👀
-    </h1>
+    </h1> -->
     <div class="MyElementTokensTable">
       <div class="SpaceToken">
         <div class="TokenName">
           <p class="display">--</p>
-          <div class="TokenSection base-accent">
-            <p class="display">primary</p>
-            <div class="TokenSectionBracket">
-              <p>type</p>
-            </div>
-          </div>
-          <p class="display">-</p>
           <div class="TokenSection base-warning">
-            <p class="display">button</p>
+            <p class="display"><span>button</span></p>
             <div class="TokenSectionBracket">
               <p>element</p>
             </div>
           </div>
           <p class="display">-</p>
+
+          <div class="TokenSection base-accent">
+            <p class="display"><span>primary</span></p>
+            <div class="TokenSectionBracket">
+              <p>type</p>
+            </div>
+          </div>
+
+          <p class="display">-</p>
           <div class="TokenSection base-success">
-            <p class="display">hover</p>
+            <p class="display"><span>hover</span></p>
             <div class="TokenSectionBracket">
               <p>state</p>
             </div>
