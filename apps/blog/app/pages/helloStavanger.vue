@@ -174,7 +174,8 @@ const {
 
 .SamSlide p.display {
   line-height: 1.6;
-  font-size: clamp(14px, 4vw, 30px);
+  font-size: clamp(14px, 4vw, 51px);
+  max-width: clamp(300px, 100vw, 1080px);
 }
 
 .EmojiPanel {

@@ -51,7 +51,9 @@
 }
 
 .BlogHeaderCluster h1 {
+  width: max-content;
   margin-bottom: 10px;
+  text-wrap: wrap;
 }
 
 .BlogHeaderCluster h2 {

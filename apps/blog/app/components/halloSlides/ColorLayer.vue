@@ -28,6 +28,21 @@ function getVariableName(prefix: string, entryNumber: number): string {
 
       <!-- Range tokens -->
       <div class="TokensTable">
+        <div v-if="helpers" class="SelectBox" :style="{ top: '0%', height: '33%' }">
+          <p>background</p>
+          <div class="ActualBox"></div>
+        </div>
+
+        <div v-if="helpers" class="SelectBox" :style="{ top: '34%', height: '33%' }">
+          <p>middleground</p>
+          <div class="ActualBox"></div>
+        </div>
+
+        <div v-if="helpers" class="SelectBox" :style="{ top: '68%', height: '33%' }">
+          <p>foreground</p>
+          <div class="ActualBox"></div>
+        </div>
+
         <TokenRow v-for="(token, index) in tokens" :key="token" :token-name="getVariableName(prefix, index + 1)"
           :token-value="token" :color-value="token" />
       </div>
@@ -49,15 +64,23 @@ function getVariableName(prefix: string, entryNumber: number): string {
 }
 
 .SelectBox {
+  opacity: 0;
   height: 100px;
   width: 100px;
   position: absolute;
   z-index: 999;
   top: 0px;
-  left: -50px;
+  left: -70px;
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: translateX(10%);
+  transition: .4s;
+}
+
+.TokensTable:hover .SelectBox {
+  transform: translateX(0%);
+  opacity: 1;
 }
 
 .SelectBox p {
