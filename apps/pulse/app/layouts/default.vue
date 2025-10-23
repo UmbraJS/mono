@@ -12,7 +12,6 @@ onMounted(() => {
   <div class="layout" :class="{
     dark: theme.isDark,
   }">
-
     <main class="page">
       <slot />
     </main>

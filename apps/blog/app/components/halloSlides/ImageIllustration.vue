@@ -1,9 +1,13 @@
 <script setup lang="ts">
-defineProps<{ url: string }>();
+defineProps<{
+  url: string
+  title?: string
+}>();
 </script>
 
 <template>
   <div class="Gallery">
+    <h2 v-if="title" class="Author">{{ title }}</h2>
     <div class="GalleryGrid">
       <div class="GalleryItem">
         <img :src="url" :alt="`Image by him`" />

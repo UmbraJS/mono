@@ -13,7 +13,7 @@ const images = [
 
 <template>
   <div class="Gallery" :class="{ grayscale: grayscale }">
-    <h1>How Painters Think 👨‍🎨</h1>
+    <h1>How Painters Think</h1>
     <div class="GalleryGrid">
       <div v-for="(image, index) in images" :key="index" class="GalleryItem">
         <img :src="image.url" :alt="`Image by ${image.author}`" />
@@ -46,6 +46,9 @@ const images = [
 }
 
 .GalleryItem {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-1);
   position: relative;
   overflow: hidden;
   border-radius: var(--radius);

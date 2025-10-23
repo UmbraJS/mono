@@ -27,7 +27,7 @@ onMounted(() => {
 });
 
 const spaceTokens = [
-  { name: "--primary-button-hover", value: "rgba(61, 61, 61, 1)" }
+  { name: "--primary-button-hover", value: "#0056b3" }
 ];
 
 const spaceTokenStyleObject = computed(() => {
@@ -75,7 +75,7 @@ const spaceTokenStyleObject = computed(() => {
         </div>
 
         <div class="TokenColor">
-          <div class="Swatch border" :style="{ '--color': 'rgba(61, 61, 61, 1)' }" />
+          <div class="MySwatch border" :style="{ '--color': '#0056b3' }" />
         </div>
       </div>
     </div>

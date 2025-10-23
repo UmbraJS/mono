@@ -23,21 +23,20 @@ const foregroundTokens = [
 <template>
   <div class="MySpacingTokens">
     <h1 class="SpacingTitle">
-      My first attempt 👶
+      My first attempt
     </h1>
-    <div class="TokensTables">
+    <div class="MyTokensTables">
       <TokensTable :tokens="backgroundTokens" />
       <TokensTable :tokens="middleTokens" />
       <TokensTable :tokens="foregroundTokens" />
     </div>
-    <h1>🤔</h1>
   </div>
 </template>
 
-<style>
-.TokensTables {
+<style scoped>
+.MyTokensTables {
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  width: 100%;
   gap: var(--space-4);
 }
 

@@ -3,7 +3,7 @@ import ActConclusion from './ActConclusion.vue';
 </script>
 
 <template>
-  <ActConclusion title="Act 2: Conclusion 1" :conclusion="[
-    { text: 'A system of semantic colour ranges are both simpler and more powerful than element based semantic token systems.', author: '😎' },
+  <ActConclusion title="Act 2: Conclusion" :conclusion="[
+    { text: 'Semantic colour ranges are more flexible than specific color tokens.' },
   ]" />
 </template>

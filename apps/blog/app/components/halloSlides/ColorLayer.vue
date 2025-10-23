@@ -20,7 +20,7 @@ function getVariableName(prefix: string, entryNumber: number): string {
 <template>
   <div class="ColorLayer border">
     <h3>{{ title }}</h3>
-    <div class="TokensTables">
+    <div class="MyTokensTables">
       <!-- Main color token -->
       <div class="TokensTable">
         <TokenRow :token-name="`--${prefix}`" :color-value="mainColorVar" />
@@ -56,11 +56,10 @@ function getVariableName(prefix: string, entryNumber: number): string {
 </template>
 
 <style scoped>
-.TokensTable {
+.MyTokensTables {
   position: relative;
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: var(--space-1);
+  gap: var(--space-2);
 }
 
 .SelectBox {

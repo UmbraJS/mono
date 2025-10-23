@@ -56,7 +56,7 @@ const handleMouseLeave = () => {
   <div class="TheWeb" :class="{ hovered }">
     <p ref="typographyQuote" class="typographyQuote"><span>Typography is just a bunch of shapes in a line</span></p>
     <MockPage @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" />
-    <p class="display">And onto this we attempt to build systems.</p>
+    <p class="display">And onto this we attempt to build systems</p>
   </div>
 </template>
 
@@ -66,5 +66,6 @@ const handleMouseLeave = () => {
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
+  max-width: 660px;
 }
 </style>

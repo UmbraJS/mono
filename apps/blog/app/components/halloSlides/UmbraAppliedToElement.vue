@@ -153,6 +153,7 @@ const textSpline = useSplinePath({
 .annotations {
   position: absolute;
   width: 100%;
+  max-width: 500px;
   height: 100%;
   pointer-events: none;
 }

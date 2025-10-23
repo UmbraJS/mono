@@ -63,7 +63,13 @@ const addedRanges = ref(0);
   </div>
 </template>
 
-<style>
+<style scoped>
+.AddRangeButton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 .divider {
   width: 1px;
   background-color: var(--base-50);

@@ -51,8 +51,8 @@ const spaceTokenStyleObject = computed(() => {
 
     <div class="TokensTable">
       <div v-for="token in spaceTokens" :key="token.name" class="SpaceToken">
-        <p class="display"><span class="TokenName">{{ token.name }}:</span></p>
-        <div class="SpaceBox border" :style="{ '--size': token.value }" />
+        <p class="display">{{ token.name }}:</p>
+        <div class="MySpaceBox border" :style="{ '--size': token.value }" />
       </div>
     </div>
   </div>
@@ -84,29 +84,13 @@ const spaceTokenStyleObject = computed(() => {
   gap: 0px !important;
 }
 
-.TokenText {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0px var(--space-2);
-  color: var(--base-50);
-}
-
-.TokenText span {
-  color: var(--base-text);
-}
-
-.TokenName {
-  color: var(--base-text);
-  font-weight: 500;
-}
-
 .TokenValue {
   color: var(--base-50);
   font-family: monospace;
 }
 
-.SpaceBox {
-  height: 1.8em;
+.MySpaceBox {
+  height: 3em;
   width: var(--size);
   background-color: var(--base-30);
 }

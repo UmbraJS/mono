@@ -26,12 +26,12 @@ function getVariableName(prefix: string, entryNumber: number): string {
 </script>
 
 <template>
-  <div class="SpacingTokens">
-    <p class="display"> <span>All this manual work is still kinda slow 🤔</span></p>
-    <div class="AliasedWrapper">
+  <div class="MySpacingTokens">
+    <p class="display"> <span>Manual work is slow</span></p>
+    <div class="MyAliasedWrapper">
 
-      <div class="ColorLayer border">
-        <div class="TokensTables">
+      <div class="ColorLayer">
+        <div class="MyTokensTables">
           <!-- <div class="TokensTable">
             <div class="SpaceToken">
               <span class="TokenName">--base:</span>
@@ -40,10 +40,9 @@ function getVariableName(prefix: string, entryNumber: number): string {
             </div>
           </div> -->
 
-          <div class="TokensTable">
+          <div class="MyTokensTable">
             <div v-for="(token, index) in baseTokens" :key="token" class="SpaceToken">
-              <span class="TokenName">{{ getVariableName("base", index + 1) }}:</span>
-              <span class="TokenValue">{{ token }};</span>
+              <p class="MyTokenName"><span>{{ getVariableName("base", index + 1) }}:</span></p>
               <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
               <DyePicker :default-color="token" />
             </div>
@@ -59,8 +58,8 @@ function getVariableName(prefix: string, entryNumber: number): string {
         </div>
       </div>
 
-      <div class="ColorLayer border">
-        <div class="TokensTables">
+      <div class="ColorLayer">
+        <div class="MyTokensTables">
           <!-- <div class="TokensTable">
             <div class="SpaceToken">
               <span class="TokenName">--accent:</span>
@@ -69,9 +68,9 @@ function getVariableName(prefix: string, entryNumber: number): string {
             </div>
           </div> -->
 
-          <div class="TokensTable">
+          <div class="MyTokensTable">
             <div v-for="(token, index) in accentTokens" :key="token" class="SpaceToken">
-              <span class="TokenName">{{ getVariableName("accent", index + 1) }}:</span>
+              <p class="MyTokenName"><span>{{ getVariableName("base", index + 1) }}:</span></p>
               <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
               <DyePicker :default-color="token" />
             </div>
@@ -92,6 +91,11 @@ function getVariableName(prefix: string, entryNumber: number): string {
 </template>
 
 <style>
+.MyAliasedWrapper {
+  display: flex;
+  gap: var(--space-5);
+}
+
 .SpacingTitle {
   color: var(--base-50);
 }
@@ -110,14 +114,14 @@ function getVariableName(prefix: string, entryNumber: number): string {
   z-index: 999999;
 }
 
-.SpacingTokens {
+.MySpacingTokens {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
 }
 
-.TokensTable {
+.MyTokensTable {
   display: grid;
   grid-template-columns: auto 1fr auto;
   gap: var(--space-1);
@@ -134,9 +138,10 @@ function getVariableName(prefix: string, entryNumber: number): string {
   color: var(--base-text);
 }
 
-.TokenName {
+.MyTokenName {
   color: var(--base-text);
   font-weight: 500;
+  font-size: 2em;
 }
 
 .TokenValue {

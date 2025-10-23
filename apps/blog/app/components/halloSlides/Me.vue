@@ -27,7 +27,7 @@
           <!-- <h2>Building Flexible Style Strategies</h2> -->
 
           <p class="subtitle display">
-            by <span class="">Samuel M. Bednarz</span> - from <span class="">Olavstoppen</span>
+            by <span class="">Samuel M. Bednarz</span><br />from <span class="">Olavstoppen</span>
           </p>
         </div>
       </div>
@@ -89,7 +89,7 @@
 .BlogHeaderCluster {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .BlogHeaderCluster span {

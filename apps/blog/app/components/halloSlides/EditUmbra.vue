@@ -71,22 +71,28 @@ function applyTheme() {
 
 <template>
   <div class="SpacingTokens">
+
     <div class="AliasedWrapper">
-      <p class="display">We can automate it! Look how fast this is 👀</p>
+      <div v-if="focus === 'element'" class="ShorterColorLayer">
+        <UmbraAppliedToElement />
+      </div>
+      <!-- <p class="display">We can automate it</p> -->
       <div class="UmbraActions border">
-        <div class="ColorEdit">
-          <p class="caption">Background</p>
-          <DyePicker label="Background" :default-color="bg" @change="(color) => changeTheme({ background: color })" />
-        </div>
+        <div class="DyePickers">
+          <div class="ColorEdit">
+            <p class="caption">Background</p>
+            <DyePicker label="Background" :default-color="bg" @change="(color) => changeTheme({ background: color })" />
+          </div>
 
-        <div class="ColorEdit">
-          <p class="caption">Foreground</p>
-          <DyePicker label="Foreground" :default-color="fg" @change="(color) => changeTheme({ foreground: color })" />
-        </div>
+          <div class="ColorEdit">
+            <p class="caption">Foreground</p>
+            <DyePicker label="Foreground" :default-color="fg" @change="(color) => changeTheme({ foreground: color })" />
+          </div>
 
-        <div class="ColorEdit">
-          <p class="caption">Accent</p>
-          <DyePicker label="Accent" :default-color="ac" @change="(color) => changeTheme({ accentValue: color })" />
+          <div class="ColorEdit">
+            <p class="caption">Accent</p>
+            <DyePicker label="Accent" :default-color="ac" @change="(color) => changeTheme({ accentValue: color })" />
+          </div>
         </div>
 
         <div class="ReadabilityWrapper">
@@ -109,14 +115,10 @@ function applyTheme() {
         main-color-var="var(--base)" text-color-var="var(--accent-text)" />
 
       <div v-if="focus === 'element'" class="ShorterColorLayer border">
-        <UmbraAppliedToElement />
-      </div>
-
-      <div v-if="focus === 'element'" class="ShorterColorLayer border">
-        <ColorLayerHorizontal title="Base Tokens" :tokens="baseTokens" prefix="base" :main-color-var="bg"
+        <ColorLayerHorizontal title="Base Range" :tokens="baseTokens" prefix="base" :main-color-var="bg"
           :text-color-var="fg" />
 
-        <ColorLayerHorizontal title="Accent Tokens" :tokens="accentTokens" prefix="accent" main-color-var="var(--base)"
+        <ColorLayerHorizontal title="Accent Range" :tokens="accentTokens" prefix="accent" main-color-var="var(--base)"
           text-color-var="var(--accent-text)" />
       </div>
       <!-- <p class="display">Look how fast this is 👀</p> -->
@@ -125,6 +127,11 @@ function applyTheme() {
 </template>
 
 <style>
+.DyePickers {
+  display: flex;
+  gap: var(--space-2);
+}
+
 .ShorterColorLayer {
   grid-column: span 2;
   padding: var(--space-2);
@@ -163,7 +170,7 @@ function applyTheme() {
   gap: var(--space-4);
   grid-column: span 2;
   padding: var(--space-2);
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 

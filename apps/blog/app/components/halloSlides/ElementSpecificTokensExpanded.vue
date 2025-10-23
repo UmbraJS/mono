@@ -95,15 +95,15 @@ const spaceTokenStyleObject = computed(() => {
 </script>
 
 <template>
-  <div class="SpacingTokens" :style="spaceTokenStyleObject">
+  <div class="MySpacingTokens" :style="spaceTokenStyleObject">
     <h1 class="SpacingTitle">
-      So many tokens! 😱 (50+)
+      So many tokens!
     </h1>
     <ScrollArea class="ScrollArea">
       <div class="MyElementTokensTable">
         <div v-for="token in spaceTokens" :key="token.name" class="SpaceToken">
-          <p class="display"><span class="TokenName">{{ token.name }}:</span></p>
-          <div class="Swatch border" :style="{ '--color': token.value }" />
+          <p class="display">{{ token.name }}:</p>
+          <div class="MySwatch border" :style="{ '--color': token.value }" />
         </div>
       </div>
     </ScrollArea>
@@ -141,7 +141,7 @@ const spaceTokenStyleObject = computed(() => {
   align-items: center;
 }
 
-.SpacingTokens {
+.MySpacingTokens {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -166,19 +166,14 @@ const spaceTokenStyleObject = computed(() => {
   color: var(--base-text);
 }
 
-.TokenName {
-  color: var(--base-text);
-  font-weight: 500;
-}
-
 .TokenValue {
   color: var(--base-50);
   font-family: monospace;
 }
 
-.Swatch {
-  height: 1.8em;
-  width: 1.8em;
+.MySwatch {
+  height: 3em;
+  width: 3em;
   background-color: var(--color);
 }
 </style>

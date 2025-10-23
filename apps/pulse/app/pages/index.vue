@@ -11,6 +11,7 @@ const todaysMood = ref<number>(0);
 </script>
 
 <template>
+  <UserProfile />
   <WorkDays />
   <div class="TodaySection">
     <div class="TodayCore ContentWidth">

@@ -75,4 +75,10 @@ function getVariableName(prefix: string, entryNumber: number): string {
   left: 0;
   clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
 }
+
+.Swatch {
+  height: 2.2em;
+  width: 2.2em;
+  background-color: var(--color);
+}
 </style>

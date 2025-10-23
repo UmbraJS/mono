@@ -90,9 +90,9 @@ const actTwoSlideConfig: SlideConfig[] = [
   { component: TailwindTokens, props: { class: 'SamSlide' } },
   { component: RadixColors, props: { class: 'SamSlide' } },
   { component: UmbraRange, props: { class: 'SamSlide', simple: true } },
-  { component: SingleRangePage, props: { class: 'SamSlide' } },
-  { component: Gallery, props: { class: 'SamSlide', grayscale: true } },
-  { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
+  // { component: SingleRangePage, props: { class: 'SamSlide' } },
+  // { component: Gallery, props: { class: 'SamSlide', grayscale: true } },
+  // { component: ThatsTheWebFolks, props: { class: 'SamSlide' } },
   // { component: ColourReassignment, props: { class: 'SamSlide' } },
   { component: UmbraRanges, props: { class: 'SamSlide' } },
 ];
@@ -106,8 +106,8 @@ const actThreeSlideConfig: SlideConfig[] = [
   // { component: ImageIllustration, props: { class: 'SamSlide', url: queryAboutImages } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: localisedColors2 } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: APCA } },
-  { component: ImageIllustration, props: { class: 'SamSlide', url: colorGammut } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: APCA, title: 'The Limitations of WCAG' } },
+  { component: ImageIllustration, props: { class: 'SamSlide', url: colorGammut, title: 'The limitations of the human eye' } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: APCAFormula } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: wcagVsAPCA } },
   // { component: ImageIllustration, props: { class: 'SamSlide', url: simpleUmbra } },
@@ -155,8 +155,8 @@ const {
   <!-- Dynamic component rendering based on current slide -->
   <component :is="currentSlideConfig.component" v-if="currentSlideConfig" v-bind="currentSlideProps" />
 
-  <SlideProgress v-model:practice-mode="practiceMode" :act="act" :slide="slide" :total-acts="pages.length"
-    :slides-in-current-act="slidesInThisAct" :target-date-time="targetDateTime" />
+  <!-- <SlideProgress v-model:practice-mode="practiceMode" :act="act" :slide="slide" :total-acts="pages.length"
+    :slides-in-current-act="slidesInThisAct" :target-date-time="targetDateTime" /> -->
 
   <!-- <div class="EmojiPanel">
     <LiveEmojiPanel />
@@ -172,10 +172,20 @@ const {
   /* --paragraph: 2rem; */
 }
 
+.SamSlide p {
+  letter-spacing: 2px;
+}
+
+.SamSlide h1 {
+  letter-spacing: 1.5px;
+}
+
+
 .SamSlide p.display {
-  line-height: 1.6;
+  line-height: 1.3;
   font-size: clamp(14px, 4vw, 51px);
   max-width: clamp(300px, 100vw, 1080px);
+  letter-spacing: 3px;
 }
 
 .EmojiPanel {

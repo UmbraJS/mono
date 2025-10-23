@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
-import { onMounted, ref, useTemplateRef } from 'vue';
-
+import { onMounted, useTemplateRef } from 'vue';
 
 const space = useTemplateRef('space');
 const shape = useTemplateRef('shape');
@@ -15,54 +14,53 @@ const from = {
 };
 
 const duration = 0.4;
+const tl = gsap.timeline({
+  paused: true
+});
 
 onMounted(() => {
-  const tl = gsap.timeline();
+  gsap.set([space.value, shape.value], from);
+  gsap.set(color.value, {
+    ...from,
+    opacity: 1
+  });
 
-  tl.fromTo(
-    color.value,
-    from,
-    {
-      scale: 1,
-      x: -125,
-      y: 50,
-      opacity: 1,
-      duration,
-      ease: "back.out(1.7)",
-    }
-  );
+  tl.to(color.value, {
+    scale: 1,
+    x: -125,
+    y: 50,
+    opacity: 1,
+    duration,
+    ease: "back.out(1.7)",
+  });
 
-  tl.fromTo(
-    shape.value,
-    from,
-    {
-      scale: 1,
-      x: 0,
-      y: -75,
-      opacity: 1,
-      duration,
-      ease: "back.out(1.7)",
-    }, "-=0.3"
-  );
+  tl.to(shape.value, {
+    scale: 1,
+    x: 0,
+    y: -75,
+    opacity: 1,
+    duration,
+    ease: "back.out(1.7)",
+  }, "-=0.3");
 
 
-  tl.fromTo(
-    space.value,
-    from,
-    {
-      scale: 1,
-      x: 125,
-      y: 50,
-      opacity: 1,
-      duration,
-      ease: "back.out(1.7)",
-    }, "-=0.3"
-  );
+  tl.to(space.value, {
+    scale: 1,
+    x: 125,
+    y: 50,
+    opacity: 1,
+    duration,
+    ease: "back.out(1.7)",
+  }, "-=0.3");
 });
+
+function playTimeline() {
+  tl.play();
+}
 </script>
 
 <template>
-  <div class="SamSlide Trinity">
+  <div class="SamSlide Trinity" @click="playTimeline">
     <div ref="space" class="TrinityItem">
       <h1>Space</h1>
     </div>
@@ -82,6 +80,7 @@ onMounted(() => {
   align-items: center;
   height: 100%;
   width: 30em;
+  cursor: pointer;
 }
 
 .TrinityItem {

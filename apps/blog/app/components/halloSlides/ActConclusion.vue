@@ -6,7 +6,7 @@ defineProps<{
   title: string;
   conclusion: {
     text: string;
-    author: string;
+    author?: string;
   }[];
 }>();
 
@@ -80,7 +80,7 @@ onMounted(() => {
         <div ref="revealBox" class="RevealBox"></div>
         <p ref="introText" class="display">
           {{ item.text }}
-          <span>- {{ item.author }}</span>
+          <span v-if="item.author">- {{ item.author }}</span>
         </p>
       </div>
     </div>

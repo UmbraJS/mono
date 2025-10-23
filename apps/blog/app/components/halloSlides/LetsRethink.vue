@@ -3,7 +3,7 @@
 
 <template>
   <div class="Gallery">
-    <h1>Let’s Rethink 🤔</h1>
+    <h1>Let’s Rethink</h1>
   </div>
 </template>
 

@@ -70,14 +70,14 @@ onMounted(() => {
 }
 
 .Example:nth-child(1) {
-  border-top-left-radius: var(--radius-1);
+  border-radius: var(--radius-1);
 }
 
 .Example:nth-child(2) {
-  border-top-left-radius: var(--radius-2);
+  border-radius: var(--radius-2);
 }
 
 .Example:nth-child(3) {
-  border-top-left-radius: var(--radius-3);
+  border-radius: var(--radius-3);
 }
 </style>
