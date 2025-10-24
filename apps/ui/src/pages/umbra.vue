@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { umbra } from '@umbrajs/core'
-import type { Accent, Umbra, UmbraInput } from '@umbrajs/core'
+import { umbra, swatch } from '@umbrajs/core'
+import type { Accent, Umbra, UmbraInput, UmbraSwatch } from '@umbrajs/core'
+import { Button } from "umbraco"
 import { ref } from 'vue'
 import {
   gray,
@@ -71,20 +72,29 @@ function useUmbra(schema: UmbraInput) {
   }
 }
 
-
 function getTokenName(index: number) {
   return index * 10 + 10
+}
+
+function getColorLightness(color: UmbraSwatch) {
+  return Math.round(color.toHsl().l * 100);
 }
 </script>
 
 <template>
   <div id="ThemeControls">
-    <button @click="() => theme.inverseTheme(false)">Inverse Theme</button>
+    <Button @click="() => theme.inverseTheme(false)">Inverse Theme</Button>
   </div>
   <div class="umbra-wrapper">
     <div class="range-list">
-      <div v-for="range in theme.generatedTheme.value.output" :key="range.name" class="color-list">
-        <div class="color-name">{{ range.name }}</div>
+      <div v-for="range in theme.generatedTheme.value.output" :key="range.name" class="ColorList">
+        <!-- <div class="color-name">{{ range.name }}</div> -->
+        <div class="TokensLightness">
+          <div v-for="(color, index) in range.range" class="TokenLightness">
+            <p>{{ getColorLightness(color) }}</p>
+          </div>
+        </div>
+
         <div class="tokens border">
           <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
           <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.toHex()}`">
@@ -97,7 +107,7 @@ function getTokenName(index: number) {
   </div>
 </template>
 
-<style>
+<style scoped>
 :root {
   --color: var(--accent);
   --color-10: var(--accent-10);
@@ -120,19 +130,19 @@ function getTokenName(index: number) {
   font-weight: 900;
 }
 
-.color-list:first-of-type .tokens {
+.ColorList:first-of-type .tokens {
   border-bottom: none;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
 
-.color-list:last-of-type .tokens {
+.ColorList:last-of-type .tokens {
   border-top: none;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 }
 
-.color-list:not(:last-of-type, :first-of-type) .tokens {
+.ColorList:not(:last-of-type, :first-of-type) .tokens {
   border-top: none;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
@@ -160,20 +170,20 @@ function getTokenName(index: number) {
   flex-direction: column;
 }
 
-.color-list {
+.ColorList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.ColorList:hover {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0px;
 }
-
-.color-list:hover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0px;
-}
-
 
 .color-name {
   display: flex;

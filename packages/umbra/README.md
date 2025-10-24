@@ -427,7 +427,6 @@ const themeInput: UmbraInput = {
 }
 ```
 
-
 **Example of providing multiple theme options to the user:**
 These themes could be used in a theme switcher component, allowing users to choose their preferred style.
 ```typescript
@@ -440,7 +439,6 @@ const successAccent: Accent = {
   name: 'success',
   color: '#00ff00',
 }
-
 
 const linearTheme: UmbraInput = {
   foreground: '#f3f6ea',
