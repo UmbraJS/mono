@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { UmbraSwatch } from '@umbrajs/core'
+import { computed } from 'vue';
 
 const props = defineProps<{
   color: UmbraSwatch
