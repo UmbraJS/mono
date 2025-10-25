@@ -15,6 +15,7 @@ import {
 } from "@radix-ui/colors";
 import ColourLightness from '../components/colour/Lightness.vue';
 import ColourSaturation from '../components/colour/Saturation.vue';
+import ColourHue from '../components/colour/Hue.vue';
 
 const warningAccent: Accent = {
   name: 'warning',
@@ -44,13 +45,7 @@ const theme = useUmbra({
     {
       name: 'primary',
       shades: defaultSettings.tints,
-      tints: [2, 5, 6, {
-        mix: 18,
-        saturation: 88
-      }, {
-          mix: 33,
-          saturation: 20
-        }, 14, 18, 15, '#0090ff', 15, 15, 25],
+      tints: ["+=2", "+=3", "+=6", "+=8", "+=8", "+=14", "+=18", "+=15", '#0090ff', "+=15", "+=15", "+=25"],
     },
     infoAccent,
     warningAccent,
@@ -91,19 +86,40 @@ function useUmbra(schema: UmbraInput) {
 function getTokenName(index: number) {
   return index * 10 + 10
 }
+
+type DisplayMode = 'lightness' | 'saturation' | 'hue'
+const displayMode = ref<DisplayMode>('lightness')
+
+function cycleMode() {
+  const modes: DisplayMode[] = ['lightness', 'saturation', 'hue']
+  const currentIndex = modes.indexOf(displayMode.value)
+  const nextIndex = (currentIndex + 1) % modes.length
+  displayMode.value = modes[nextIndex]
+}
 </script>
 
 <template>
   <div id="ThemeControls">
     <Button @click="() => theme.inverseTheme(false)">Inverse Theme</Button>
+    <Button @click="cycleMode">
+      Mode: {{ displayMode.charAt(0).toUpperCase() + displayMode.slice(1) }}
+    </Button>
   </div>
   <div class="umbra-wrapper">
     <div class="range-list">
       <div v-for="range in theme.generatedTheme.value.output" :key="range.name" class="ColorList">
         <!-- <div class="color-name">{{ range.name }}</div> -->
-        <!-- <div class="TokensLightness">
+        <div v-if="displayMode === 'lightness'" class="TokensLightness">
           <ColourLightness v-for="color in range.range" :color="color" />
-        </div> -->
+        </div>
+
+        <div v-if="displayMode === 'saturation'" class="TokensSaturation">
+          <ColourSaturation v-for="color in range.range" :color="color" />
+        </div>
+
+        <div v-if="displayMode === 'hue'" class="TokensHue">
+          <ColourHue v-for="color in range.range" :color="color" />
+        </div>
 
         <div class="tokens border">
           <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
@@ -118,7 +134,9 @@ function getTokenName(index: number) {
 </template>
 
 <style scoped>
-.TokensLightness {
+.TokensLightness,
+.TokensSaturation,
+.TokensHue {
   display: flex;
   align-items: flex-end;
   height: 100px;

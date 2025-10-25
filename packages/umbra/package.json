@@ -34,6 +34,8 @@
     "dev": "vite",
     "buildall": "tsc && vite build && cp package.json dist && cp README.md dist",
     "build": "tsc && vite build",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
     "publish": "cd dist && npm publish"
   },
   "dependencies": {
@@ -44,6 +46,7 @@
     "@types/node": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-dts": "catalog:"
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:"
   }
 }

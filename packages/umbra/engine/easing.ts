@@ -41,11 +41,14 @@ export function generateTints(options: EasingOptions = {}): number[] {
   })
 }
 
+// Relative value: "+=40" (add 40%) or "-=40" (subtract 40%)
+export type RelativeValue = `+=${number}` | `-=${number}`
+
 export interface HSLInterpolation {
-  mix: number           // Base mix percentage (0-100)
-  hue?: number         // Independent hue mix percentage (overrides mix if provided)
-  saturation?: number  // Independent saturation mix percentage (overrides mix if provided)
-  lightness?: number   // Independent lightness mix percentage (overrides mix if provided)
+  mix: number | RelativeValue           // Base mix percentage (0-100) or relative
+  hue?: number | RelativeValue         // Independent hue mix percentage
+  saturation?: number | RelativeValue  // Independent saturation mix percentage
+  lightness?: number | RelativeValue   // Independent lightness mix percentage
 }
 
 export type UmbraShade = number | string | HSLInterpolation

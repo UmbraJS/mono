@@ -114,14 +114,50 @@ export function colorMix(from: string | UmbraSwatch, to: string | UmbraSwatch, p
 }
 
 export interface HSLMixOptions {
-  mix: number           // Base mix percentage
-  hue?: number         // Independent hue mix percentage (overrides mix if provided)
-  saturation?: number  // Independent saturation mix percentage (overrides mix if provided)
-  lightness?: number   // Independent lightness mix percentage (overrides mix if provided)
+  mix: number | string           // Base mix percentage or relative (e.g., "+=40")
+  hue?: number | string         // Independent hue mix percentage
+  saturation?: number | string  // Independent saturation mix percentage
+  lightness?: number | string   // Independent lightness mix percentage
+}
+
+/**
+ * Parse a value that can be absolute (number) or relative (string like "+=40" or "-=40")
+ * @param value - The value to parse
+ * @param currentPercent - The current percentage (0-100) for relative calculations
+ * @param min - Minimum allowed value (default 0)
+ * @param max - Maximum allowed value (default 100)
+ * @returns Resolved absolute percentage
+ */
+function parseRelativeValue(
+  value: number | string,
+  currentPercent: number,
+  min = 0,
+  max = 100
+): number {
+  if (typeof value === 'number') {
+    return Math.max(min, Math.min(max, value)) // Clamp absolute value
+  }
+
+  // Parse relative values like "+=40" or "-=40"
+  const match = value.match(/^([+-])=(\d+(?:\.\d+)?)$/)
+  if (!match) {
+    console.warn(`Invalid relative value: ${value}, treating as current (${currentPercent})`)
+    return currentPercent
+  }
+
+  const [, operator, amount] = match
+  const delta = parseFloat(amount)
+
+  if (operator === '+') {
+    return Math.min(max, currentPercent + delta)
+  } else {
+    return Math.max(min, currentPercent - delta)
+  }
 }
 
 /**
  * Mix two colors with independent control over HSL channel interpolation
+ * Supports both absolute and relative values for each channel
  */
 export function colorMixHSL(
   from: string | UmbraSwatch,
@@ -139,10 +175,38 @@ export function colorMixHSL(
   const fromHsl = fromColor.toHsl()
   const toHsl = toColor.toHsl()
 
-  // Get mix percentages for each channel (default to base mix if not specified)
-  const hueMix = (options.hue ?? options.mix) / 100
-  const satMix = (options.saturation ?? options.mix) / 100
-  const lightMix = (options.lightness ?? options.mix) / 100
+  // Parse the base mix value (could be relative, but starts at 0)
+  const baseMix = parseRelativeValue(options.mix, 0)
+
+  // For each channel, determine if it's relative or absolute
+  // Relative values are relative to the START color's channel value mapped to 0-100 scale
+  let hueMix: number
+  let satMix: number
+  let lightMix: number
+
+  if (options.hue !== undefined) {
+    // If hue is specified, parse it (could be relative or absolute)
+    hueMix = parseRelativeValue(options.hue, baseMix) / 100
+  } else {
+    // Default to base mix
+    hueMix = baseMix / 100
+  }
+
+  if (options.saturation !== undefined) {
+    // If saturation is specified, parse it
+    satMix = parseRelativeValue(options.saturation, baseMix) / 100
+  } else {
+    // Default to base mix
+    satMix = baseMix / 100
+  }
+
+  if (options.lightness !== undefined) {
+    // If lightness is specified, parse it
+    lightMix = parseRelativeValue(options.lightness, baseMix) / 100
+  } else {
+    // Default to base mix
+    lightMix = baseMix / 100
+  }
 
   // Interpolate each channel independently
   // For hue, handle circular interpolation (0-360 degrees)
@@ -163,8 +227,8 @@ export function colorMixHSL(
 
   return swatch({
     h: interpolatedHue,
-    s: interpolatedSat,
-    l: interpolatedLight,
+    s: Math.max(0, Math.min(100, interpolatedSat)),
+    l: Math.max(0, Math.min(100, interpolatedLight)),
     a: fromHsl.a + ((toHsl.a - fromHsl.a) * hueMix) // Use hue mix for alpha
   })
 }

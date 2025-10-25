@@ -1,122 +1,223 @@
-# Independent HSL Channel Interpolation
+# Independent HSL Channel Interpolation with Absolute & Relative Values
 
 ## Overview
 
-The Umbra color scale generator now supports independent control over hue, saturation, and lightness interpolation. This allows you to create non-linear progressions for each color channel separately.
+The Umbra color scale generator now supports:
+1. **Independent control over hue, saturation, and lightness** interpolation
+2. **Absolute values** (like keyframes): `40` = 40% from start to target
+3. **Relative values** (incremental): `"+=40"` = add 40% from current position, `"-=40"` = subtract 40%
+
+This allows you to create complex, non-linear color progressions with precise control.
+
+## Basic Concepts
+
+### Absolute Mode (Default)
+Numbers represent the absolute position from start (0%) to target (100%):
+
+```typescript
+const shades = [0, 25, 50, 75, 100]
+// Each value is the exact percentage from start to end
+```
+
+### Relative Mode
+Strings with `+=` or `-=` modify the current position:
+
+```typescript
+const shades = [20, "+=20", "+=20", "+=20"]
+// 20%, then 40%, then 60%, then 80%
+```
+
+### Uniform Spacing with Relative Values
+```typescript
+const shades = [10, "+=10", "+=10", "+=10", "+=10"]
+// Creates evenly spaced steps: 10%, 20%, 30%, 40%, 50%
+```
 
 ## Usage
 
-Instead of using a simple number for the mix value, you can now use an object with independent channel controls:
-
-### Basic Example
+### Simple Number Values (Absolute)
 
 ```typescript
-// Old way - single mix percentage
-const shade = { mix: 50 }
-
-// New way - independent channel control
-const shade = {
-  mix: 50,           // Base mix (used as fallback if channel not specified)
-  saturation: 70,    // Saturation mixes at 70% while other channels use 50%
-  lightness: 30,     // Lightness mixes at 30%
-  hue: 50            // Hue mixes at 50% (explicitly set)
-}
+// Creates a scale at specific positions
+const shades = [10, 20, 30, 40, 50]
 ```
 
-### Real-World Example
+### Relative Values
 
 ```typescript
-// Create a color scale where:
-// - Saturation ramps up quickly early on (to show more color hints)
-// - Lightness progresses steadily
-// - Hue stays closer to the starting color initially
+// Incremental progression
+const shades = [20, "+=20", "+=20", "+=20", "+=20"]
+// Results in: 20%, 40%, 60%, 80%, 100%
 
+// Going backwards
+const shades = [40, "+=30", "-=20", "+=40"]
+// Results in: 40%, 70%, 50%, 90%
+```
+
+### Mixed Absolute and Relative
+
+```typescript
 const shades = [
-  0,    // Start color (0% mix)
-  { mix: 20, saturation: 40 },  // At 20% mix, saturation is already at 40%
-  { mix: 40, saturation: 60 },  // Non-linear saturation progression
-  { mix: 60, saturation: 75 },
-  { mix: 80, saturation: 90 },
-  100   // End color (100% mix)
+  10,        // Absolute: 10%
+  "+=15",    // Relative: 10 + 15 = 25%
+  "+=15",    // Relative: 25 + 15 = 40%
+  70,        // Absolute: jump to 70%
+  "+=10"     // Relative: 70 + 10 = 80%
 ]
 ```
 
-### Advanced Example - All Channels Independent
+### Object Syntax with Independent Channels
 
 ```typescript
 const shades = [
-  '#000000',  // Start with pure black
+  0,
+  { mix: 20, saturation: 40 },  // mix at 20%, saturation at 40%
+  { mix: 40, saturation: 60 },  // non-linear saturation
+  { mix: 60, saturation: 80 },
+  100
+]
+```
+
+### Relative Values in Object Syntax
+
+```typescript
+const shades = [
+  { mix: 20 },                        // Absolute: 20%
+  { mix: "+=20", saturation: "+=30" }, // mix to 40%, saturation boosted by 30%
+  { mix: "+=20", saturation: "+=20" }, // mix to 60%, saturation to 90%
+  { mix: 50, hue: 70 },               // mix absolute to 50%, hue absolute to 70%
+  100
+]
+```
+
+## Real-World Examples
+
+### Example 1: Early Color Hints with Boosted Saturation
+
+```typescript
+// Make colors visible early by ramping saturation faster than lightness
+const shades = [
+  0,
+  { mix: 15, saturation: 35 },  // Quick saturation boost
+  { mix: 30, saturation: 55 },  // Continues faster
+  { mix: 50, saturation: 75 },  // Leveling off
+  { mix: 70 },                  // Back to linear
+  100
+]
+```
+
+### Example 2: Smooth Gradient with Relative Steps
+
+```typescript
+// Create uniform spacing without calculating percentages
+const shades = [
+  5,
+  "+=8",
+  "+=8", 
+  "+=8",
+  "+=8",
+  "+=8",
+  "+=8",
+  "+=8",
+  "+=8"
+]
+// Results in: 5%, 13%, 21%, 29%, 37%, 45%, 53%, 61%, 69%
+```
+
+### Example 3: Complex Multi-Channel Control
+
+```typescript
+const shades = [
+  '#1a1a1a',  // Dark start
   {
-    mix: 25,        // Default fallback
-    hue: 10,        // Hue changes slowly
-    saturation: 50, // Saturation ramps up quickly
-    lightness: 25   // Lightness matches the base mix
+    mix: 20,
+    hue: 10,         // Hue shifts slowly (10% to target)
+    saturation: 40,  // Saturation ramps quickly (40% to target)
+    lightness: 20    // Lightness steady with mix
   },
   {
-    mix: 50,
-    hue: 30,
-    saturation: 80,
-    lightness: 50
+    mix: "+=20",      // Relative: now at 40%
+    saturation: "+=25" // Saturation gets extra boost to 65%
   },
   {
-    mix: 75,
-    hue: 60,
-    saturation: 95,
-    lightness: 75
+    mix: 70,          // Jump to 70%
+    hue: "+=20",      // Hue catches up
+    saturation: 90    // Saturation near complete
   },
-  '#0066ff'   // End with a vibrant blue
+  '#3b82f6'   // Vibrant blue end
+]
+```
+
+### Example 4: Backwards Movement for Color Variation
+
+```typescript
+const shades = [
+  30,
+  "+=25",    // 55%
+  "+=20",    // 75%
+  "-=15",    // 60% - go back for variation
+  "+=30",    // 90%
+  100
 ]
 ```
 
 ## How It Works
 
-The system interpolates between colors in HSL color space:
+### Position Tracking
+The generator tracks the current absolute position (0-100%) as it processes each shade:
 
-1. **Hue (0-360°)**: Handles circular interpolation, taking the shorter path around the color wheel
-2. **Saturation (0-100%)**: Linear interpolation between saturation values
-3. **Lightness (0-100%)**: Linear interpolation between lightness values
+- **Numbers** set the position directly
+- **Relative strings** (`"+=X"`, `"-=X"`) modify the current position
+- **Objects** can use either absolute or relative values for `mix` and individual channels
 
-Each channel can have its own interpolation percentage, allowing for complete control over the color progression.
+### Channel Interpolation
+Each HSL channel interpolates independently from start to target:
 
-## Migration from Old System
+1. **Hue (0-360°)**: Circular interpolation (shortest path around color wheel)
+2. **Saturation (0-100%)**: Linear interpolation with clamping
+3. **Lightness (0-100%)**: Linear interpolation with clamping
 
-If you were using `{ mix: number, saturation: number }` format, the new system is slightly different:
+### Relative Calculations
 
-**Old approach** (trying to modify after mixing):
+For the base `mix`:
 ```typescript
-// ❌ This didn't work - colors were already saturated
-{ mix: 50, saturation: 400 }  // Attempted to saturate the mixed color
+// Absolute
+{ mix: 50 }  // Position = 50%
+
+// Relative
+{ mix: "+=20" }  // Position = currentPosition + 20
+{ mix: "-=10" }  // Position = currentPosition - 10
 ```
 
-**New approach** (independent interpolation):
+For individual channels (when using objects):
 ```typescript
-// ✅ This works - controls how saturation interpolates
-{ mix: 50, saturation: 80 }  // At 50% mix overall, saturation is 80% to target
+{
+  mix: 30,           // Base at 30%
+  saturation: "+=20" // Saturation at 50% (30 + 20)
+}
 ```
 
 ## Benefits
 
-1. **More Perceptual Control**: HSL is more intuitive for designers
-2. **Independent Curves**: Each channel can have its own easing
-3. **Better Color Progression**: Create scales that better match human perception
-4. **Flexible**: Use simple numbers for basic mixing, objects for advanced control
+1. **Expressive**: Describe exactly how you want colors to progress
+2. **Flexible**: Mix absolute and relative values as needed
+3. **Intuitive**: Relative values are great for uniform spacing
+4. **Powerful**: Independent channel control for perceptual tuning
+5. **Concise**: `[10, "+=10", "+=10", "+=10"]` vs `[10, 20, 30, 40]`
 
-## Example Use Case
+## Migration Notes
 
-Creating a blue accent scale where you want:
-- Subtle blue hints early (fast saturation ramp)
-- Smooth lightness progression
-- Controlled hue shift
-
+### Old Approach
 ```typescript
-const blueAccentShades = [
-  0,
-  { mix: 15, saturation: 35, lightness: 15 },  // Quick saturation, slow lightness
-  { mix: 30, saturation: 55, lightness: 30 },
-  { mix: 50, saturation: 75, lightness: 50 },
-  { mix: 70, saturation: 90, lightness: 70 },
-  100
-]
+// This never worked properly:
+{ mix: 50, saturation: 400 }  // Tried to saturate after mixing
 ```
 
-This gives you a scale where the blue color becomes visible earlier in the progression while maintaining smooth lightness transitions.
+### New Approach
+```typescript
+// Independent channel interpolation:
+{ mix: 50, saturation: 80 }  // Saturation at 80% to target
+
+// Or with relative values:
+{ mix: "+=20", saturation: "+=30" }  // Both relative to current
+```

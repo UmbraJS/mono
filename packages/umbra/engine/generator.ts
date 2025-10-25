@@ -2,7 +2,7 @@ import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
 import type { UmbraAdjusted, UmbraScheme, Accent } from './types'
 import { pickContrast, colorMix, colorMixHSL } from './primitives/color'
-import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils'
+import { insertColorIntoRange, getStrings } from './primitives/utils'
 import { resolveTints, type TintsInput, type UmbraShade } from './easing'
 import { defaultSettings } from './defaults'
 
@@ -13,25 +13,88 @@ interface GetRange {
 }
 
 function getRange({ from, to, range }: GetRange): UmbraSwatch[] {
-  const accents = getStrings(range)
+  const colorStops = getStrings(range)
+
+  // Track current absolute position (0-100%) for relative calculations
+  let currentPosition = 0
+
+  // Track the last color we generated (starts at 'from')
   let lastColor = from
-  let nextColor = accents.length > 0 ? swatch(accents[0] as string) : to
+
+  // Determine the next color stop (starts with first stop or 'to' if no stops)
+  let nextColor = colorStops.length > 0 ? swatch(colorStops[0]) : to
 
   return range.map((val) => {
-    if (typeof val === 'string') {
+    // Check if it's a relative value string (+=X or -=X)
+    if (typeof val === 'string' && /^[+-]=\d+(?:\.\d+)?$/.test(val)) {
+      // Relative value as a simple string (not in an object)
+      const match = val.match(/^([+-])=(\d+(?:\.\d+)?)$/)
+      if (match) {
+        const [, operator, amount] = match
+        const delta = parseFloat(amount)
+        if (operator === '+') {
+          currentPosition = Math.min(100, currentPosition + delta)
+        } else {
+          currentPosition = Math.max(0, currentPosition - delta)
+        }
+      }
+      // Mix between lastColor and nextColor
+      const newColor = colorMix(lastColor, nextColor, currentPosition)
+      lastColor = newColor
+      return newColor
+    } else if (typeof val === 'string') {
+      // Color stop (hex, named color, etc.)
       const color = swatch(val)
       lastColor = color
-      accents.shift()
+      colorStops.shift()
+      // Update nextColor to the next stop or 'to' if no more stops
+      nextColor = colorStops.length > 0 ? swatch(colorStops[0]) : to
+      // Reset position for the next segment
+      currentPosition = 0
       return color
     } else if (typeof val === 'object') {
-      nextColor = nextAccent(accents, to)
-      // Use HSL mixing for independent channel control
-      const mixedColor = colorMixHSL(lastColor, nextColor, val)
+
+      // Parse the mix value to update current position
+      const mixValue = val.mix
+      if (typeof mixValue === 'number') {
+        // Absolute: set position directly
+        currentPosition = mixValue
+      } else if (typeof mixValue === 'string') {
+        // Relative: calculate from current position
+        const match = mixValue.match(/^([+-])=(\d+(?:\.\d+)?)$/)
+        if (match) {
+          const [, operator, amount] = match
+          const delta = parseFloat(amount)
+          if (operator === '+') {
+            currentPosition = Math.min(100, currentPosition + delta)
+          } else {
+            currentPosition = Math.max(0, currentPosition - delta)
+          }
+        }
+      }
+
+      // Create options with potentially relative values for each channel
+      const options = {
+        mix: currentPosition, // Use absolute position for the actual interpolation
+        hue: val.hue !== undefined
+          ? (typeof val.hue === 'string' ? val.hue : val.hue)
+          : undefined,
+        saturation: val.saturation !== undefined
+          ? (typeof val.saturation === 'string' ? val.saturation : val.saturation)
+          : undefined,
+        lightness: val.lightness !== undefined
+          ? (typeof val.lightness === 'string' ? val.lightness : val.lightness)
+          : undefined,
+      }
+
+      // Mix between lastColor and nextColor using HSL
+      const mixedColor = colorMixHSL(lastColor, nextColor, options)
       lastColor = mixedColor
       return mixedColor
     } else {
-      nextColor = nextAccent(accents, to)
-      const newColor = colorMix(lastColor, nextColor, val as number)
+      // Simple number - absolute position
+      currentPosition = val as number
+      const newColor = colorMix(lastColor, nextColor, currentPosition)
       lastColor = newColor
       return newColor
     }
