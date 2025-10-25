@@ -112,3 +112,59 @@ export function colorMix(from: string | UmbraSwatch, to: string | UmbraSwatch, p
   const tinyTo = swatch(to)
   return swatch(tinyFrom).mix(tinyTo, percent / 100)
 }
+
+export interface HSLMixOptions {
+  mix: number           // Base mix percentage
+  hue?: number         // Independent hue mix percentage (overrides mix if provided)
+  saturation?: number  // Independent saturation mix percentage (overrides mix if provided)
+  lightness?: number   // Independent lightness mix percentage (overrides mix if provided)
+}
+
+/**
+ * Mix two colors with independent control over HSL channel interpolation
+ */
+export function colorMixHSL(
+  from: string | UmbraSwatch,
+  to: string | UmbraSwatch,
+  options: number | HSLMixOptions
+): UmbraSwatch {
+  // If just a number, use standard mix
+  if (typeof options === 'number') {
+    return colorMix(from, to, options)
+  }
+
+  const fromColor = swatch(from)
+  const toColor = swatch(to)
+
+  const fromHsl = fromColor.toHsl()
+  const toHsl = toColor.toHsl()
+
+  // Get mix percentages for each channel (default to base mix if not specified)
+  const hueMix = (options.hue ?? options.mix) / 100
+  const satMix = (options.saturation ?? options.mix) / 100
+  const lightMix = (options.lightness ?? options.mix) / 100
+
+  // Interpolate each channel independently
+  // For hue, handle circular interpolation (0-360 degrees)
+  let interpolatedHue: number
+  const hueDiff = toHsl.h - fromHsl.h
+
+  // Take the shorter path around the color wheel
+  if (Math.abs(hueDiff) <= 180) {
+    interpolatedHue = fromHsl.h + (hueDiff * hueMix)
+  } else {
+    // Wrap around the other direction
+    const adjustedDiff = hueDiff > 0 ? hueDiff - 360 : hueDiff + 360
+    interpolatedHue = (fromHsl.h + (adjustedDiff * hueMix) + 360) % 360
+  }
+
+  const interpolatedSat = fromHsl.s + ((toHsl.s - fromHsl.s) * satMix)
+  const interpolatedLight = fromHsl.l + ((toHsl.l - fromHsl.l) * lightMix)
+
+  return swatch({
+    h: interpolatedHue,
+    s: interpolatedSat,
+    l: interpolatedLight,
+    a: fromHsl.a + ((toHsl.a - fromHsl.a) * hueMix) // Use hue mix for alpha
+  })
+}

@@ -41,12 +41,22 @@ export function generateTints(options: EasingOptions = {}): number[] {
   })
 }
 
+export interface HSLInterpolation {
+  mix: number           // Base mix percentage (0-100)
+  hue?: number         // Independent hue mix percentage (overrides mix if provided)
+  saturation?: number  // Independent saturation mix percentage (overrides mix if provided)
+  lightness?: number   // Independent lightness mix percentage (overrides mix if provided)
+}
+
+export type UmbraShade = number | string | HSLInterpolation
+
 // Type for flexible tints/shades input
 export type TintsInput =
-  | (number | string)[]  // Original array format
+  | UmbraShade[]  // Original array format
   | EasingType           // Simple easing string
   | EasingOptions        // Full easing options object// Convert any TintsInput to (number | string) array with fallback support
-export function resolveTints(input?: TintsInput, fallback?: TintsInput, defaultValue?: TintsInput): (number | string)[] {
+
+export function resolveTints(input?: TintsInput, fallback?: TintsInput, defaultValue?: TintsInput): UmbraShade[] {
   // Priority: input -> fallback -> defaultValue
   const actualInput = input ?? fallback ?? defaultValue
 

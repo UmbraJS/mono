@@ -6,6 +6,7 @@ import { format, hex, rgb } from './engine/primitives/format'
 import type { FlattenColor, Formater, UmbraOutputs } from './engine/primitives/format'
 import { generateTints, resolveTints, easingFunctions } from './engine/easing'
 import type { EasingType, EasingOptions, TintsInput } from './engine/easing'
+import { defaultSettings } from './engine/defaults'
 
 import { attach } from './engine/primitives/attach'
 import { mostReadable, getReadability, colorMix } from './engine/primitives/color'
@@ -57,6 +58,7 @@ export {
   generateTints,
   resolveTints,
   easingFunctions,
+  defaultSettings,
   hex,
   rgb,
   // Export swatch functionality

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { umbra, swatch } from '@umbrajs/core'
+import { umbra, defaultSettings, resolveTints } from '@umbrajs/core'
 import type { Accent, Umbra, UmbraInput, UmbraSwatch } from '@umbrajs/core'
 import { Button } from "umbraco"
 import { ref } from 'vue'
@@ -13,6 +13,8 @@ import {
   redDark,
   greenDark,
 } from "@radix-ui/colors";
+import ColourLightness from '../components/colour/Lightness.vue';
+import ColourSaturation from '../components/colour/Saturation.vue';
 
 const warningAccent: Accent = {
   name: 'warning',
@@ -39,16 +41,30 @@ const theme = useUmbra({
   background: '#ffffff',
   accents: [
     "#ff00ff",
-    '#9999ff',
+    {
+      name: 'primary',
+      shades: defaultSettings.tints,
+      tints: [2, 5, 6, {
+        mix: 18,
+        saturation: 88
+      }, {
+          mix: 33,
+          saturation: 20
+        }, 14, 18, 15, '#0090ff', 15, 15, 25],
+    },
+    infoAccent,
     warningAccent,
     successAccent,
-    infoAccent,
   ],
   settings: {
     shades: Object.values(grayDark),
     tints: Object.values(gray),
   }
 })
+
+// theme.generatedTheme.value.output.forEach(range => {
+//   range.range = range.range.map(color => swatch(color.toHex()))
+// })
 
 function useUmbra(schema: UmbraInput) {
   const initTheme = umbra(schema)
@@ -75,10 +91,6 @@ function useUmbra(schema: UmbraInput) {
 function getTokenName(index: number) {
   return index * 10 + 10
 }
-
-function getColorLightness(color: UmbraSwatch) {
-  return Math.round(color.toHsl().l * 100);
-}
 </script>
 
 <template>
@@ -89,11 +101,9 @@ function getColorLightness(color: UmbraSwatch) {
     <div class="range-list">
       <div v-for="range in theme.generatedTheme.value.output" :key="range.name" class="ColorList">
         <!-- <div class="color-name">{{ range.name }}</div> -->
-        <div class="TokensLightness">
-          <div v-for="(color, index) in range.range" class="TokenLightness">
-            <p>{{ getColorLightness(color) }}</p>
-          </div>
-        </div>
+        <!-- <div class="TokensLightness">
+          <ColourLightness v-for="color in range.range" :color="color" />
+        </div> -->
 
         <div class="tokens border">
           <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
@@ -108,6 +118,12 @@ function getColorLightness(color: UmbraSwatch) {
 </template>
 
 <style scoped>
+.TokensLightness {
+  display: flex;
+  align-items: flex-end;
+  height: 100px;
+}
+
 :root {
   --color: var(--accent);
   --color-10: var(--accent-10);

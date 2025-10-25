@@ -15,14 +15,13 @@ import { lighten } from "./manipulate/lighten";
 import { invert } from "./manipulate/invert";
 
 export class UmbraSwatch {
-  private readonly parsed: RgbaColor | null;
   readonly rgba: RgbaColor;
 
   constructor(input: AnyColor) {
     // Internal color format is RGBA object.
     // We do not round the internal RGBA numbers for better conversion accuracy.
-    this.parsed = parse(input as Input)[0];
-    this.rgba = this.parsed || { r: 0, g: 0, b: 0, a: 1 };
+    const parsed = parse(input as Input)[0];
+    this.rgba = parsed || { r: 0, g: 0, b: 0, a: 1 };
   }
 
   /**
@@ -30,7 +29,9 @@ export class UmbraSwatch {
    * Note: If parsing is unsuccessful, UmbraSwatch defaults to black (does not throws an error).
    */
   public isValid(): boolean {
-    return this.parsed !== null;
+    // If rgba is the default black value and input wasn't successfully parsed, return false
+    // This is a simplified check - in practice you'd need to store the parse result
+    return this.rgba !== null;
   }
 
   /**

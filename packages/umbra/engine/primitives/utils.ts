@@ -4,13 +4,14 @@ import type { UmbraSwatch } from '../../swatch'
 import type { UmbraScheme, UmbraSettings } from '../types'
 import { getReadability } from './color'
 import { defaultSettings } from '../defaults'
+import { UmbraShade } from '../easing'
 
 interface RandomSettings extends UmbraSettings {
   amount: number
 }
 
 interface NewRange {
-  range: (number | string)[]
+  range: UmbraShade[]
   shades: UmbraSwatch[]
   color: UmbraSwatch
 }
@@ -48,7 +49,7 @@ export function nextAccent(accents: string[], foreground: UmbraSwatch) {
   return accents.length > 0 ? swatch(accents[0] as string) : foreground
 }
 
-export function getStrings(range: (number | string)[]) {
+export function getStrings(range: UmbraShade[]) {
   return range.reduce((acc, val) => {
     if (typeof val === 'string') acc.push(val)
     return acc

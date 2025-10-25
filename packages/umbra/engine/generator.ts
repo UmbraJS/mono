@@ -1,18 +1,18 @@
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
 import type { UmbraAdjusted, UmbraScheme, Accent } from './types'
-import { pickContrast, colorMix } from './primitives/color'
+import { pickContrast, colorMix, colorMixHSL } from './primitives/color'
 import { insertColorIntoRange, nextAccent, getStrings } from './primitives/utils'
-import { resolveTints, type TintsInput } from './easing'
+import { resolveTints, type TintsInput, type UmbraShade } from './easing'
 import { defaultSettings } from './defaults'
 
 interface GetRange {
   from: UmbraSwatch
   to: UmbraSwatch
-  range: (number | string)[]
+  range: UmbraShade[]
 }
 
-function getRange({ from, to, range }: GetRange) {
+function getRange({ from, to, range }: GetRange): UmbraSwatch[] {
   const accents = getStrings(range)
   let lastColor = from
   let nextColor = accents.length > 0 ? swatch(accents[0] as string) : to
@@ -23,6 +23,12 @@ function getRange({ from, to, range }: GetRange) {
       lastColor = color
       accents.shift()
       return color
+    } else if (typeof val === 'object') {
+      nextColor = nextAccent(accents, to)
+      // Use HSL mixing for independent channel control
+      const mixedColor = colorMixHSL(lastColor, nextColor, val)
+      lastColor = mixedColor
+      return mixedColor
     } else {
       nextColor = nextAccent(accents, to)
       const newColor = colorMix(lastColor, nextColor, val as number)
@@ -35,7 +41,7 @@ function getRange({ from, to, range }: GetRange) {
 interface RangeProps {
   input: UmbraScheme
   adjusted: UmbraAdjusted
-  range: (number | string)[]
+  range: UmbraShade[]
   color?: string
 }
 
@@ -49,7 +55,7 @@ function autoPlacedRange({ input, adjusted, range, color }: RangeProps) {
   return insertColorIntoRange({ range, shades: baseRange, color: swatch(color) })
 }
 
-function replaceAtIndex(array: (number | string)[], index: number, value: string) {
+function replaceAtIndex(array: UmbraShade[], index: number, value: string) {
   const newArray = array.slice()
   newArray[index] = value
   return newArray
@@ -88,7 +94,7 @@ interface RangeValues {
   tints?: TintsInput
 }
 
-function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): (number | string)[] {
+function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): UmbraShade[] {
   const isDark = adjusted.background.isDark()
   const tintsInput = isDark ? scheme?.shades : scheme?.tints
   const rangeInput = scheme?.range  // Fallback to range property
@@ -102,7 +108,7 @@ function containsStrings(input?: TintsInput): boolean {
   return input.some(v => typeof v === 'string')
 }
 
-function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filterStrings: boolean = false): (number | string)[] {
+function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filterStrings: boolean = false): UmbraShade[] {
   const isDark = adjusted.background.isDark()
   const tintsInput = isDark ? scheme?.shades : scheme?.tints
   const rangeInput = scheme?.range  // Fallback to range property
