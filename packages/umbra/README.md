@@ -498,8 +498,8 @@ const theme = umbra({
     // Default: 12 shades between stops (14 total colors)
     // The amount of change between each shade as they move from the background to the foreground does not have to be linear. 
     // And the dark theme and the light theme might require different non-linear curves through the range to their target.
-    // Therefore shades and tints are separated out. Shades to describe the colors moving from a light stop towards a dark stop ergo light mode. 
-    // And tints to describe the colors moving from a dark stop towards a light stop ergo dark mode.
+    // Therefore shades and tints are separated out. Tints to describe the colors moving from a light stop towards a dark stop (light mode). 
+    // And shades to describe the colors moving from a dark stop towards a light stop (dark mode).
     shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25], 
     tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25]
   }
