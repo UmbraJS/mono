@@ -64,6 +64,12 @@ const infoAccent: Accent = {
   tints: Object.values(blue),
 }
 
+const tomatoAccent: Accent = {
+  name: 'tomato',
+  shades: Object.values(redDark),
+  tints: Object.values(tomato),
+}
+
 console.log("rex: ", Object.values(blue))
 
 const radixGrayMap: Accent = {
@@ -130,6 +136,77 @@ const radixGreenMap: Accent = {
   ],
 }
 
+const radixTomatoMap: Accent = {
+  name: 'tomato-tuned',
+  color: '#e54d2e',
+  tints: [
+    { mix: 2, hue: "next" },
+    { mix: 2, hue: "next", saturation: "+=99" },
+    8,
+    10,
+    10,
+    10,
+    24,
+    31,
+    "primary",
+    { mix: "+=6", hue: 0, saturation: "-=4" },
+    { mix: "+=5", hue: 0, saturation: "-=12" },
+    { mix: "+=36", hue: 0, saturation: "-=29" }
+  ],
+}
+
+const radixCrimsonMap: Accent = {
+  name: 'crimson-tuned',
+  color: '#e93d82',
+  tints: [
+    { mix: 2, hue: "next" },
+    { mix: 2, hue: "next", saturation: "+=99" },
+    6,
+    10,
+    13,
+    14,
+    25,
+    36,
+    "primary",
+    { mix: "+=7", hue: 0, saturation: "-=4" },
+    { mix: "+=0", hue: 0, saturation: "-=12" },
+    { mix: "+=42", hue: 0, saturation: "-=29" }
+  ],
+}
+
+const crimsonAccent: Accent = {
+  name: 'crimson',
+  shades: Object.values(redDark),
+  tints: Object.values(crimson),
+}
+
+const radixPinkMap: Accent = {
+  name: 'pink-tuned',
+  color: '#d6409f',
+  tints: [
+    { mix: 2, hue: "next" },
+    { mix: 2, hue: "next", saturation: "+=99" },
+    7,
+    10,
+    10,
+    9,
+    24,
+    36,
+    "primary",
+    { mix: "+=6", hue: 0, saturation: "-=4" },
+    { mix: "+=5", hue: 0, saturation: "-=12" },
+    { mix: "+=40", hue: 0, saturation: "-=29" }
+  ],
+}
+
+const pinkAccent: Accent = {
+  name: 'pink',
+  shades: Object.values(redDark),
+  tints: Object.values(pink),
+}
+
+
+
 const theme = useUmbra({
   foreground: '#000000',  // Pure black (shared across all accents)
   background: '#ffffff',  // Pure white (shared across all accents)
@@ -141,6 +218,12 @@ const theme = useUmbra({
     warningAccent,
     radixGreenMap,
     successAccent,
+    radixTomatoMap,
+    tomatoAccent,
+    radixCrimsonMap,
+    crimsonAccent,
+    radixPinkMap,
+    pinkAccent,
   ],
   settings: {
     shades: Object.values(grayDark),
