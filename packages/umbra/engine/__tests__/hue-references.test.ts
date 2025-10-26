@@ -66,7 +66,7 @@ describe('Hue References (next/prev)', () => {
 
       // Should have red hue
       expect(Math.abs(color0.h - redHue)).toBeLessThan(10)
-      
+
       // Should have boosted saturation
       expect(color0.s).toBeGreaterThan(80)
     })
@@ -236,7 +236,7 @@ describe('Hue References (next/prev)', () => {
 
       // Hue should be preserved (not shift toward purple)
       expect(Math.abs(darkenedHue - originalHue)).toBeLessThan(3)
-      
+
       // Should be darker
       expect(result[1].toHsl().l).toBeLessThan(result[0].toHsl().l)
     })
@@ -289,7 +289,7 @@ describe('Hue References (next/prev)', () => {
       const result = umbraGenerate(scheme, createAdjusted(scheme))
 
       expect(result).toHaveLength(2) // Base + accent
-      
+
       const accentRange = result[1].range
       const blueHue = swatch('#0090ff').toHsl().h
 

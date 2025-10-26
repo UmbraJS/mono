@@ -17,7 +17,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
 
       // Verify it generated 3 colors from tints config
       expect(lightTheme.output[0].range).toHaveLength(3)
-      
+
       // First color should be close to 10% from white→black
       const firstLightness = lightTheme.output[0].range[0].toHsl().l
       expect(firstLightness).toBeGreaterThan(85)  // Very light
@@ -35,7 +35,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       })
 
       expect(darkTheme.output[0].range).toHaveLength(3)
-      
+
       // First color should be 20% from black→white (darker than tints would be)
       const firstLightness = darkTheme.output[0].range[0].toHsl().l
       expect(firstLightness).toBeLessThan(30)  // Fairly dark
@@ -74,7 +74,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       const accentRange = theme.output.find(r => r.name !== 'base')
       expect(accentRange).toBeDefined()
       expect(accentRange!.range.length).toBeGreaterThan(0)
-      
+
       // Should contain colors - verify it worked
       const firstColor = accentRange!.range[0]
       expect(firstColor).toBeDefined()
@@ -95,7 +95,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       const accentRange = theme.output.find(r => r.name !== 'base')
       expect(accentRange).toBeDefined()
       expect(accentRange!.range.length).toBeGreaterThan(0)
-      
+
       // Should contain valid colors
       const firstColor = accentRange!.range[0]
       expect(firstColor).toBeDefined()
@@ -120,7 +120,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
 
       const accentRange = theme.output.find(r => r.name !== 'base')
       expect(accentRange).toBeDefined()
-      
+
       // Should use settings.tints as fallback
       expect(accentRange!.range.length).toBeGreaterThan(0)
     })
@@ -141,7 +141,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
 
       const accentRange = theme.output.find(r => r.name !== 'base')
       expect(accentRange).toBeDefined()
-      
+
       // Should use settings.shades as fallback
       expect(accentRange!.range.length).toBeGreaterThan(0)
     })
@@ -174,10 +174,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       // Both should work
       expect(lightTheme.output[0].range).toHaveLength(12)
       expect(darkTheme.output[0].range).toHaveLength(12)
-      
+
       // Light theme first color should be very light
       expect(lightTheme.output[0].range[0].toHsl().l).toBeGreaterThan(95)
-      
+
       // Dark theme first color should be very dark
       expect(darkTheme.output[0].range[0].toHsl().l).toBeLessThan(10)
     })
@@ -216,13 +216,13 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       // Both should generate successfully
       expect(lightTheme.output[1].range.length).toBeGreaterThan(0)
       expect(darkTheme.output[1].range.length).toBeGreaterThan(0)
-      
+
       // Light theme should have blue-ish color from next reference
       const lightHue = lightTheme.output[1].range[0].toHsl().h
       const blueHue = swatch('#0090ff').toHsl().h
-      
+
       expect(Math.abs(lightHue - blueHue)).toBeLessThan(15)
-      
+
       // Dark theme first color exists and is valid
       const darkColor = darkTheme.output[1].range[0]
       expect(darkColor).toBeDefined()
@@ -231,7 +231,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
 
     it('should allow different saturation strategies per theme', () => {
       const accent = '#3b82f6'
-      
+
       const lightTheme = umbra({
         background: '#ffffff',
         foreground: '#000000',
@@ -269,7 +269,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
   describe('Real-world patterns', () => {
     it('should support Radix-like gray that works in both themes', () => {
       const grayConfig = [0.3, 1, 4.4, 3, 3, 3, 3, 9, 23, 7, 23, 70]
-      
+
       const lightTheme = umbra({
         background: '#ffffff',
         foreground: '#000000',
@@ -295,12 +295,12 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       // Both should produce 12 grays
       expect(lightTheme.output[1].range).toHaveLength(12)
       expect(darkTheme.output[1].range).toHaveLength(12)
-      
+
       // All colors should be neutral (very low saturation)
       lightTheme.output[1].range.forEach(color => {
         expect(color.toHsl().s).toBeLessThan(5)
       })
-      
+
       darkTheme.output[1].range.forEach(color => {
         expect(color.toHsl().s).toBeLessThan(5)
       })
@@ -333,11 +333,11 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       })
 
       const accentRange = theme.output[1].range
-      
+
       // Should generate colors (might be 11 or 12 depending on how duplicates are handled)
       expect(accentRange.length).toBeGreaterThanOrEqual(10)
       expect(accentRange.length).toBeLessThanOrEqual(12)
-      
+
       // All should be blue-ish
       const blueHue = swatch('#0090ff').toHsl().h
       accentRange.forEach(color => {

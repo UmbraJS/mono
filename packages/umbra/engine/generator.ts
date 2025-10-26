@@ -10,16 +10,25 @@ interface GetRange {
   from: UmbraSwatch
   to: UmbraSwatch
   range: UmbraShade[]
+  accentColor?: string  // Optional accent color to replace "primary" keyword
 }
 
-function getRange({ from, to, range }: GetRange): UmbraSwatch[] {
-  const colorStops = getStrings(range)
+function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
+  // Replace "primary" keyword with accent color if provided
+  const processedRange = range.map(val => {
+    if (val === 'primary' && accentColor) {
+      return accentColor
+    }
+    return val
+  })
+
+  const colorStops = getStrings(processedRange)
 
   // Pre-scan to find all color stop indices and their colors
   const colorStopIndices: number[] = []
   const colorStopColors: UmbraSwatch[] = []
-  range.forEach((val, index) => {
-    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val)) {
+  processedRange.forEach((val, index) => {
+    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val) && val !== 'primary') {
       colorStopIndices.push(index)
       colorStopColors.push(swatch(val))
     }
@@ -34,7 +43,7 @@ function getRange({ from, to, range }: GetRange): UmbraSwatch[] {
   // Determine the next color stop (starts with first stop or 'to' if no stops)
   let nextColor = colorStops.length > 0 ? swatch(colorStops[0]) : to
 
-  return range.map((val, index) => {
+  return processedRange.map((val, index) => {
     // Check if it's a relative value string (+=X or -=X)
     if (typeof val === 'string' && /^[+-]=\d+(?:\.\d+)?$/.test(val)) {
       // Relative value as a simple string (not in an object)
@@ -167,6 +176,10 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   const fallback = accentRangeValues(adjusted, input.settings, true) // Filter strings for settings fallback
   const range = isString ? fallback : accentRangeValues(adjusted, accent, false) || fallback // Don't filter for accent's own properties
 
+  // If range contains "primary" keyword, skip auto-insertion since user explicitly positioned it
+  const hasPrimaryKeyword = range.some(val => val === 'primary')
+  if (hasPrimaryKeyword) return range
+
   if (insertion && color) return replaceAtIndex(range, insertion, color)
   if (!insertion && color) return autoPlacedRange({ input, adjusted, range, color })
   return range
@@ -176,12 +189,18 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
   return adjusted.accents.map((accent) => {
     const isString = typeof accent === 'string'
     const name = isString ? undefined : accent.name
+    const color = isString ? accent : accent.color
     const range = putAccentInRange(adjusted, accent, input)
     return {
       name: name || `accent`,
       background: pickContrast(adjusted.foreground, adjusted),
       foreground: pickContrast(adjusted.background, adjusted),
-      range: getRange({ from: adjusted.background, to: adjusted.foreground, range })
+      range: getRange({
+        from: adjusted.background,
+        to: adjusted.foreground,
+        range,
+        accentColor: color  // Pass accent color to replace "primary" keyword
+      })
     }
   })
 }
@@ -203,7 +222,8 @@ function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): UmbraShade[
 function containsStrings(input?: TintsInput): boolean {
   if (!input) return false
   if (!Array.isArray(input)) return false
-  return input.some(v => typeof v === 'string')
+  // Check for color strings, but exclude "primary" keyword which is allowed
+  return input.some(v => typeof v === 'string' && v !== 'primary' && !/^[+-]=\d+(?:\.\d+)?$/.test(v))
 }
 
 function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filterStrings: boolean = false): UmbraShade[] {

@@ -39,36 +39,82 @@ const infoAccent: Accent = {
 
 console.log("rex: ", Object.values(blue))
 
+const radixGrayMap = {
+  name: 'gray',
+  shades: defaultSettings.shades,
+  tints: [0.3, 1, 4.4, 3, 3, 3, 3, 9, 23, 7, 23, 70],
+}
+
+const radixBlueMap = {
+  name: 'blue',
+  color: '#0090ff',
+  shades: defaultSettings.shades,
+  tints: [
+    { mix: 2, hue: "next" },
+    { mix: 2, hue: "next", saturation: "+=99" },
+    9,
+    10,
+    17,
+    19,
+    35,
+    65,
+    "primary",  // The main accent - brightest, most saturated blue
+    { mix: "+=5", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
+    { mix: "+=6", hue: 0, saturation: "-=12" },  // Continue darkening
+    { mix: "+=35", hue: 0, saturation: "-=29" } // Dark blue
+  ],
+}
+
+const radixRedMap = {
+  name: 'red',
+  shades: Object.values(redDark),
+  tints: [0.3, 1, 4.4, 3, 3, 3, 3, 9, 23, 7, 23, 70],
+}
+
 const theme = useUmbra({
   foreground: '#000000',  // Pure black (shared across all accents)
   background: '#ffffff',  // Pure white (shared across all accents)
   accents: [
+    radixGrayMap,
+    radixBlueMap,
+    infoAccent,
     {
-      name: 'gray',
-      shades: defaultSettings.tints,
-      tints: [0.3, 1, 4.4, 3, 3, 3, 3, 9, 23, 7, 23, 70],
-    },
-    "#ff00ff",
-    {
-      name: 'primary',
-      shades: defaultSettings.tints,
+      name: 'neutral',
+      color: '#e5484d',
       tints: [
         { mix: 2, hue: "next" },
         { mix: 2, hue: "next", saturation: "+=99" },
-        5,
-        8,
-        12,
-        17,
+        6,
+        10,
+        10,
+        11,
         24,
         35,
-        "#0090ff",  // The main accent - brightest, most saturated blue
-        { mix: "+=5", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
-        { mix: "+=12", hue: 0, saturation: "-=12" },  // Continue darkening
-        { mix: "+=25", hue: 0, saturation: "-=29" } // Dark blue
+        "primary",  // The main accent - brightest, most saturated blue
+        { mix: "+=6", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
+        { mix: "+=5", hue: 0, saturation: "-=12" },  // Continue darkening
+        { mix: "+=40", hue: 0, saturation: "-=29" } // Dark blue
       ],
     },
-    infoAccent,
     warningAccent,
+    {
+      name: 'neutral',
+      color: '#30a46c',
+      tints: [
+        { mix: 2, hue: "next" },
+        { mix: 3, hue: "next", saturation: "+=99" },
+        9,
+        8,
+        10,
+        20,
+        28,
+        55,
+        "primary",  // The main accent - brightest, most saturated blue
+        { mix: "+=6", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
+        { mix: "+=12", hue: 0, saturation: "-=12" },  // Continue darkening
+        { mix: "+=31", hue: 0, saturation: "-=29" } // Dark blue
+      ],
+    },
     successAccent,
   ],
   settings: {
