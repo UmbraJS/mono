@@ -43,6 +43,11 @@ const theme = useUmbra({
   foreground: '#000000',  // Pure black (shared across all accents)
   background: '#ffffff',  // Pure white (shared across all accents)
   accents: [
+    {
+      name: 'gray',
+      shades: defaultSettings.tints,
+      tints: [0.3, 1, 4.4, 3, 3, 3, 3, 9, 23, 7, 23, 70],
+    },
     "#ff00ff",
     {
       name: 'primary',
