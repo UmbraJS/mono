@@ -15,6 +15,16 @@ interface GetRange {
 function getRange({ from, to, range }: GetRange): UmbraSwatch[] {
   const colorStops = getStrings(range)
 
+  // Pre-scan to find all color stop indices and their colors
+  const colorStopIndices: number[] = []
+  const colorStopColors: UmbraSwatch[] = []
+  range.forEach((val, index) => {
+    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val)) {
+      colorStopIndices.push(index)
+      colorStopColors.push(swatch(val))
+    }
+  })
+
   // Track current absolute position (0-100%) for relative calculations
   let currentPosition = 0
 
@@ -24,7 +34,7 @@ function getRange({ from, to, range }: GetRange): UmbraSwatch[] {
   // Determine the next color stop (starts with first stop or 'to' if no stops)
   let nextColor = colorStops.length > 0 ? swatch(colorStops[0]) : to
 
-  return range.map((val) => {
+  return range.map((val, index) => {
     // Check if it's a relative value string (+=X or -=X)
     if (typeof val === 'string' && /^[+-]=\d+(?:\.\d+)?$/.test(val)) {
       // Relative value as a simple string (not in an object)
@@ -73,11 +83,36 @@ function getRange({ from, to, range }: GetRange): UmbraSwatch[] {
         }
       }
 
+      // Resolve "next" and "prev" hue references
+      let resolvedHue = val.hue
+      if (val.hue === 'next') {
+        // Find the next color stop after this index
+        const nextStopIndex = colorStopIndices.find(i => i > index)
+        if (nextStopIndex !== undefined) {
+          const nextStopColor = colorStopColors[colorStopIndices.indexOf(nextStopIndex)]
+          resolvedHue = nextStopColor.toHsl().h - lastColor.toHsl().h
+        } else {
+          // No more color stops, use 'to' (foreground)
+          resolvedHue = to.toHsl().h - lastColor.toHsl().h
+        }
+      } else if (val.hue === 'prev') {
+        // Find the previous color stop before this index
+        const prevStopIndices = colorStopIndices.filter(i => i < index)
+        if (prevStopIndices.length > 0) {
+          const prevStopIndex = prevStopIndices[prevStopIndices.length - 1]
+          const prevStopColor = colorStopColors[colorStopIndices.indexOf(prevStopIndex)]
+          resolvedHue = prevStopColor.toHsl().h - lastColor.toHsl().h
+        } else {
+          // No previous color stop, use 'from' (background)
+          resolvedHue = from.toHsl().h - lastColor.toHsl().h
+        }
+      }
+
       // Create options with potentially relative values for each channel
       const options = {
         mix: currentPosition, // Use absolute position for the actual interpolation
-        hue: val.hue !== undefined
-          ? (typeof val.hue === 'string' ? val.hue : val.hue)
+        hue: resolvedHue !== undefined
+          ? (typeof resolvedHue === 'string' ? resolvedHue : resolvedHue)
           : undefined,
         saturation: val.saturation !== undefined
           ? (typeof val.saturation === 'string' ? val.saturation : val.saturation)

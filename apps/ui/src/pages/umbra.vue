@@ -37,15 +37,30 @@ const infoAccent: Accent = {
   tints: Object.values(blue),
 }
 
+console.log("rex: ", Object.values(blue))
+
 const theme = useUmbra({
-  foreground: '#000000',
-  background: '#ffffff',
+  foreground: '#000000',  // Pure black (shared across all accents)
+  background: '#ffffff',  // Pure white (shared across all accents)
   accents: [
     "#ff00ff",
     {
       name: 'primary',
       shades: defaultSettings.tints,
-      tints: ["+=2", "+=3", "+=6", "+=8", "+=8", "+=14", "+=18", "+=15", '#0090ff', "+=15", "+=15", "+=25"],
+      tints: [
+        { mix: 2, hue: "next" },
+        { mix: 2, hue: "next", saturation: "+=99" },
+        5,
+        8,
+        12,
+        17,
+        24,
+        35,
+        "#0090ff",  // The main accent - brightest, most saturated blue
+        { mix: "+=5", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
+        { mix: "+=12", hue: 0, saturation: "-=12" },  // Continue darkening
+        { mix: "+=25", hue: 0, saturation: "-=29" } // Dark blue
+      ],
     },
     infoAccent,
     warningAccent,

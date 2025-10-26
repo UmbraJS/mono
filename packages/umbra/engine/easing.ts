@@ -44,9 +44,12 @@ export function generateTints(options: EasingOptions = {}): number[] {
 // Relative value: "+=40" (add 40%) or "-=40" (subtract 40%)
 export type RelativeValue = `+=${number}` | `-=${number}`
 
+// Hue reference: "next" (use hue from next color stop) or "prev" (use hue from previous color stop)
+export type HueReference = 'next' | 'prev'
+
 export interface HSLInterpolation {
   mix: number | RelativeValue           // Base mix percentage (0-100) or relative
-  hue?: number | RelativeValue         // Independent hue mix percentage
+  hue?: number | RelativeValue | HueReference  // Independent hue mix percentage or reference
   saturation?: number | RelativeValue  // Independent saturation mix percentage
   lightness?: number | RelativeValue   // Independent lightness mix percentage
 }
