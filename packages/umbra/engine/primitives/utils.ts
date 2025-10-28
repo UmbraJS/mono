@@ -51,8 +51,8 @@ export function nextAccent(accents: string[], foreground: UmbraSwatch) {
 
 export function getStrings(range: UmbraShade[]) {
   return range.reduce((acc, val) => {
-    // Only add actual color strings, not relative values like "+=10" or keywords like "primary"
-    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val) && val !== 'primary') {
+    // Only add actual color strings, not relative values like "+=10" or keywords like "primer"
+    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val) && val !== 'primer') {
       acc.push(val)
     }
     return acc

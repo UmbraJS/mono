@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { umbra } from '../index'
 import { swatch } from '../../swatch'
 
-describe('Primary Keyword', () => {
+describe('Primer Keyword', () => {
   describe('Basic functionality', () => {
     it('should replace "primary" with accent color', () => {
       const theme = umbra({
@@ -10,7 +10,7 @@ describe('Primary Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [10, 50, 'primary', 90]
+          tints: [10, 50, 'primer', 90]
         }],
         settings: {}
       })
@@ -29,7 +29,7 @@ describe('Primary Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#ff0000',
-          tints: ['primary', 50, 90]  // First position
+          tints: ['primer', 50, 90]  // First position
         }],
         settings: {}
       })
@@ -48,7 +48,7 @@ describe('Primary Keyword', () => {
             { mix: 1, hue: 'next' },  // Should reference primary
             { mix: 2, hue: 'next', saturation: '+=99' },
             5,
-            'primary',
+            'primer',
             { mix: '+=10', hue: 0 }
           ]
         }],
@@ -78,7 +78,7 @@ describe('Primary Keyword', () => {
           color: '#00ff00',
           tints: [
             10,
-            'primary',
+            'primer',
             { mix: '+=20', hue: 'prev' },  // Should reference primary
             90
           ]
@@ -119,8 +119,8 @@ describe('Primary Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#3b82f6',
-          tints: [10, 'primary', 90],
-          shades: [5, 'primary', 95]
+          tints: [10, 'primer', 90],
+          shades: [5, 'primer', 95]
         }],
         settings: {}
       })
@@ -130,8 +130,8 @@ describe('Primary Keyword', () => {
         foreground: '#ffffff',
         accents: [{
           color: '#3b82f6',
-          tints: [10, 'primary', 90],
-          shades: [5, 'primary', 95]
+          tints: [10, 'primer', 90],
+          shades: [5, 'primer', 95]
         }],
         settings: {}
       })
@@ -153,7 +153,7 @@ describe('Primary Keyword', () => {
             { mix: 2, hue: 'next' },
             { mix: 2, hue: 'next', saturation: '+=99' },
             5, 8, 12, 17, 24, 35,
-            'primary',  // Instead of "#0090ff"
+            'primer',  // Instead of "#0090ff"
             { mix: '+=5', hue: 0, saturation: '-=4' },
             { mix: '+=12', hue: 0, saturation: '-=12' },
             { mix: '+=25', hue: 0, saturation: '-=29' }
@@ -184,7 +184,7 @@ describe('Primary Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#ff0000',
-          tints: [10, 'primary', 90]  // Accent explicitly uses primary in its own tints
+          tints: [10, 'primer', 90]  // Accent explicitly uses primary in its own tints
         }],
         settings: {
           tints: [20, 50, 80]  // Settings don't matter here
@@ -203,7 +203,7 @@ describe('Primary Keyword', () => {
         foreground: '#000000',
         accents: ['#00ff00'],  // Simple string accent
         settings: {
-          tints: [20, 'primary', 80]
+          tints: [20, 'primer', 80]
         }
       })
 
@@ -215,13 +215,13 @@ describe('Primary Keyword', () => {
   })
 
   describe('Validation', () => {
-    it('should handle multiple primary keywords (uses first occurrence)', () => {
+    it('should handle multiple primer keywords (uses first occurrence)', () => {
       const theme = umbra({
         background: '#ffffff',
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [10, 'primary', 50, 'primary', 90]  // Two primaries
+          tints: [10, 'primer', 50, 'primer', 90]  // Two primaries
         }],
         settings: {}
       })
@@ -241,7 +241,7 @@ describe('Primary Keyword', () => {
           color: '#0090ff',
           tints: [
             '#e0f2ff',  // Explicit color
-            'primary',   // Keyword
+            'primer',   // Keyword
             '#003d82'    // Another explicit color
           ]
         }],
@@ -256,7 +256,7 @@ describe('Primary Keyword', () => {
       expect(accentRange!.range[2].toHex()).toBe('#003d82')
     })
 
-    it('should not duplicate accent color when primary keyword is used', () => {
+    it('should not duplicate accent color when primer keyword is used', () => {
       const theme = umbra({
         background: '#ffffff',
         foreground: '#000000',
@@ -266,7 +266,7 @@ describe('Primary Keyword', () => {
             { mix: 2, hue: 'next' },
             { mix: 2, hue: 'next', saturation: '+=99' },
             5, 8, 12, 17, 24, 35,
-            'primary',  // User explicitly positioned the color here
+            'primer',  // User explicitly positioned the color here
             { mix: '+=5', hue: 0, saturation: '-=4' },
             { mix: '+=12', hue: 0, saturation: '-=12' },
             { mix: '+=25', hue: 0, saturation: '-=29' }

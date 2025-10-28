@@ -515,7 +515,7 @@ const theme = umbra({
   background: '#ffffff',
   foreground: '#000000',
   accents: [{
-    name: 'primary',
+    name: 'primer',
     shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, '#007acc', 25, 25],
   }],
 })
@@ -530,7 +530,7 @@ const theme = umbra({
   background: '#ffffff',
   foreground: '#000000',
   accents: [{
-    name: 'primary',
+    name: 'primer',
     color: '#007acc',
     shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25],
   }],
@@ -546,7 +546,7 @@ const theme = umbra({
   background: '#ffffff',
   foreground: '#000000',
   accents: [{
-    name: 'primary',
+    name: 'primer',
     shades: [5, 5, 5, 5, 15, '#007acc', 10, 25, 30, '#0066aa', 25, 25],
   }],
 })
@@ -661,7 +661,7 @@ const theme = umbra({
   foreground: '#ffffff',
   accents: [
     // It's recommended to name your accents if you have multiple
-    { name: 'primary', color: '#3b82f6' },
+    { name: 'primer', color: '#3b82f6' },
     { name: 'success', color: '#10b981' },
     { name: 'danger', color: '#ef4444' }
   ]

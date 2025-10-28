@@ -47,8 +47,8 @@ export type RelativeValue = `+=${number}` | `-=${number}`
 // Hue reference: "next" (use hue from next color stop) or "prev" (use hue from previous color stop)
 export type HueReference = 'next' | 'prev'
 
-// Primary keyword: "primary" (placeholder for the accent color)
-export type PrimaryKeyword = 'primary'
+// Primer keyword: "primer" (placeholder for the accent color)
+export type PrimerKeyword = 'primer'
 
 export interface HSLInterpolation {
   mix: number | RelativeValue           // Base mix percentage (0-100) or relative
@@ -57,7 +57,7 @@ export interface HSLInterpolation {
   lightness?: number | RelativeValue   // Independent lightness mix percentage
 }
 
-export type UmbraShade = number | string | HSLInterpolation | PrimaryKeyword
+export type UmbraShade = number | string | HSLInterpolation | PrimerKeyword
 
 // Type for flexible tints/shades input
 export type TintsInput =

@@ -10,13 +10,13 @@ interface GetRange {
   from: UmbraSwatch
   to: UmbraSwatch
   range: UmbraShade[]
-  accentColor?: string  // Optional accent color to replace "primary" keyword
+  accentColor?: string  // Optional accent color to replace "primer" keyword
 }
 
 function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
-  // Replace "primary" keyword with accent color if provided
+  // Replace "primer" keyword with accent color if provided
   const processedRange = range.map(val => {
-    if (val === 'primary' && accentColor) {
+    if (val === 'primer' && accentColor) {
       return accentColor
     }
     return val
@@ -28,7 +28,7 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
   const colorStopIndices: number[] = []
   const colorStopColors: UmbraSwatch[] = []
   processedRange.forEach((val, index) => {
-    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val) && val !== 'primary') {
+    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val) && val !== 'primer') {
       colorStopIndices.push(index)
       colorStopColors.push(swatch(val))
     }
@@ -199,7 +199,7 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
         from: adjusted.background,
         to: adjusted.foreground,
         range,
-        accentColor: color  // Pass accent color to replace "primary" keyword
+        accentColor: color  // Pass accent color to replace "primer" keyword
       })
     }
   })

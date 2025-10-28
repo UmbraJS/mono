@@ -118,7 +118,7 @@ const radixBlueMap: Accent = {
     19,
     35,
     65,
-    "primary",  // The main accent - brightest, most saturated blue
+    "primer",  // The main accent - brightest, most saturated blue
     { mix: "+=5", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
     { mix: "+=6", hue: 0, saturation: "-=12" },  // Continue darkening
     { mix: "+=35", hue: 0, saturation: "-=29" } // Dark blue
@@ -137,7 +137,7 @@ const radixRedMap: Accent = {
     11,
     24,
     35,
-    "primary",  // The main accent - brightest, most saturated blue
+    "primer",  // The main accent - brightest, most saturated blue
     { mix: "+=6", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
     { mix: "+=5", hue: 0, saturation: "-=12" },  // Continue darkening
     { mix: "+=40", hue: 0, saturation: "-=29" } // Dark blue
@@ -156,7 +156,7 @@ const radixGreenMap: Accent = {
     20,
     28,
     55,
-    "primary",  // The main accent - brightest, most saturated blue
+    "primer",  // The main accent - brightest, most saturated blue
     { mix: "+=6", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
     { mix: "+=12", hue: 0, saturation: "-=12" },  // Continue darkening
     { mix: "+=31", hue: 0, saturation: "-=29" } // Dark blue
@@ -175,7 +175,7 @@ const radixTomatoMap: Accent = {
     10,
     24,
     31,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=36", hue: 0, saturation: "-=29" }
@@ -194,7 +194,7 @@ const radixCrimsonMap: Accent = {
     18,
     23,
     36,
-    "primary",
+    "primer",
     { mix: "+=7", hue: 0, saturation: "-=4" },
     { mix: "+=9", hue: 0, saturation: "-=12" },
     { mix: "+=30", hue: 0, saturation: "-=29" }
@@ -219,7 +219,7 @@ const radixPinkMap: Accent = {
     15,
     20,
     30,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -244,7 +244,7 @@ const radixPlumMap: Accent = {
     12,
     20,
     27,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=3", hue: 0, saturation: "-=12" },
     { mix: "+=38", hue: 0, saturation: "-=29" }
@@ -269,7 +269,7 @@ const radixPurpleMap: Accent = {
     14,
     14,
     27,
-    "primary",
+    "primer",
     { mix: "+=8", hue: 0, saturation: "-=4" },
     { mix: "+=10", hue: 0, saturation: "-=0" },
     { mix: "+=20", hue: 0, saturation: "-=29" }
@@ -294,7 +294,7 @@ const radixVioletMap: Accent = {
     11,
     15,
     29,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=10", hue: 0, saturation: "-=12" },
     { mix: "+=26", hue: 0, saturation: "-=29" }
@@ -319,7 +319,7 @@ const radixIrisMap: Accent = {
     11,
     16,
     27,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -345,7 +345,7 @@ const radixIndigoMap: Accent = {
     11,
     24,
     28,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=6", hue: 0, saturation: "-=12" },
     { mix: "+=35", hue: 0, saturation: "-=29" }
@@ -371,7 +371,7 @@ const radixCyanMap: Accent = {
     11,
     42,
     75,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -392,7 +392,7 @@ const radixTealMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -413,7 +413,7 @@ const radixJadeMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -434,7 +434,7 @@ const radixGrassMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -455,7 +455,7 @@ const radixBronzeMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -476,7 +476,7 @@ const radixGoldMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 6, hue: "next", saturation: "+=99" },
     6, 10, 10, 12, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=14", hue: 0, saturation: "-=12" },
     { mix: "+=25", hue: 0, saturation: "-=29" }
@@ -497,7 +497,7 @@ const radixBrownMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     9, 9, 9, 14, 24, 39,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=12", hue: 0, saturation: "-=12" },
     { mix: "+=28", hue: 0, saturation: "-=29" }
@@ -518,7 +518,7 @@ const radixOrangeMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 7, hue: "next", saturation: "+=99" },
     10, 18, 18, 18, 24, 45,
-    "primary",
+    "primer",
     { mix: "+=12", hue: 0, saturation: "-=4" },
     { mix: "+=2", hue: 0, saturation: "-=12" },
     { mix: "+=28", hue: 0, saturation: "-=29" }
@@ -539,7 +539,7 @@ const radixAmberMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -560,7 +560,7 @@ const radixYellowMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -581,7 +581,7 @@ const radixLimeMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -602,7 +602,7 @@ const radixMintMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6, 10, 10, 11, 24, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
@@ -623,7 +623,7 @@ const radixSkyMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 10, hue: "next", saturation: "+=99" },
     15, 19, 35, 50, 104, 35,
-    "primary",
+    "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
     { mix: "+=40", hue: 0, saturation: "-=29" }
