@@ -97,12 +97,10 @@ const tomatoAccent: Accent = {
   tints: Object.values(tomato),
 }
 
-console.log("rex: ", Object.values(blue))
-
 const radixGrayMap: Accent = {
   name: 'gray',
   shades: defaultSettings.shades,
-  tints: [0.3, 1, 4.4, 3, 3, 3, 3, 9, 23, 7, 23, 70],
+  tints: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 50, 59.5, 79],
 }
 
 const radixBlueMap: Accent = {
@@ -110,14 +108,14 @@ const radixBlueMap: Accent = {
   color: '#0090ff',
   shades: defaultSettings.shades,
   tints: [
-    { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    9,
-    10,
-    17,
-    19,
+    { mix: 3, hue: "next" },
+    { mix: 5, hue: "next", saturation: "+=99" },
+    14,
+    24,
     35,
-    65,
+    49,
+    68,
+    88,
     "primer",  // The main accent - brightest, most saturated blue
     { mix: "+=5", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
     { mix: "+=6", hue: 0, saturation: "-=12" },  // Continue darkening
@@ -130,13 +128,13 @@ const radixRedMap: Accent = {
   color: '#e5484d',
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6,
+    { mix: 4, hue: "next", saturation: "+=99" },
     10,
-    10,
-    11,
-    24,
+    19,
+    26,
     35,
+    49,
+    67,
     "primer",  // The main accent - brightest, most saturated blue
     { mix: "+=6", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
     { mix: "+=5", hue: 0, saturation: "-=12" },  // Continue darkening
@@ -149,13 +147,13 @@ const radixGreenMap: Accent = {
   color: '#30a46c',
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 3, hue: "next", saturation: "+=99" },
-    9,
-    8,
-    10,
+    { mix: 5, hue: "next", saturation: "+=99" },
+    12,
     20,
-    28,
-    55,
+    30,
+    41,
+    58,
+    82,
     "primer",  // The main accent - brightest, most saturated blue
     { mix: "+=6", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
     { mix: "+=12", hue: 0, saturation: "-=12" },  // Continue darkening
@@ -168,13 +166,13 @@ const radixTomatoMap: Accent = {
   color: '#e54d2e',
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    8,
-    10,
-    10,
-    10,
-    24,
-    31,
+    { mix: 4, hue: "next", saturation: "+=99" },
+    12,
+    20,
+    27,
+    38,
+    51,
+    68,
     "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
@@ -187,13 +185,13 @@ const radixCrimsonMap: Accent = {
   color: '#e93d82',
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6,
-    10,
-    13,
-    18,
-    23,
-    36,
+    { mix: 4, hue: "next", saturation: "+=99" },
+    12,
+    21,
+    31,
+    43,
+    56,
+    72,
     "primer",
     { mix: "+=7", hue: 0, saturation: "-=4" },
     { mix: "+=9", hue: 0, saturation: "-=12" },
@@ -212,13 +210,13 @@ const radixPinkMap: Accent = {
   color: '#d6409f',
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    7,
-    10,
-    10,
-    15,
+    { mix: 4, hue: "next", saturation: "+=99" },
+    12,
     20,
-    30,
+    28,
+    39,
+    52,
+    67,
     "primer",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
@@ -636,6 +634,32 @@ const skyAccent: Accent = {
   tints: Object.values(sky),
 }
 
+// const theme = useUmbra({
+//   foreground: '#12222e',  // Pure black (shared across all accents)
+//   background: '#ffffff',  // Pure white (shared across all accents)
+//   accents: [
+//     {
+//       name: 'test',
+//       color: '#542920',
+//       shades: defaultSettings.shades,
+//       tints: [
+//         { mix: 10, hue: "next" },
+//         { mix: "+=10", hue: "next", saturation: 90 },
+//         { mix: "+=15", hue: "next", saturation: 90 },
+//         19, 20, 20, 35, 35,
+//         "primer",
+//         { mix: "+=6", hue: 0, saturation: "-=4" },
+//         { mix: "+=5", hue: 0, saturation: "-=12" },
+//         { mix: "+=20", hue: 0, saturation: "-=29" }
+//       ],
+//     },
+//   ],
+//   settings: {
+//     shades: Object.values(grayDark),
+//     tints: Object.values(gray),
+//   }
+// })
+
 const theme = useUmbra({
   foreground: '#000000',  // Pure black (shared across all accents)
   background: '#ffffff',  // Pure white (shared across all accents)
@@ -751,30 +775,30 @@ const finishedEntries = ref<string[]>([
   "crimson",
   "pink-tuned",
   "pink",
-  "plum-tuned",
-  "plum",
-  "purple-tuned",
-  "purple",
-  "violet-tuned",
-  "violet",
-  "iris-tuned",
-  "iris",
-  "indigo-tuned",
-  "indigo",
-  "cyan-tuned",
-  "cyan",
-  "teal-tuned",
-  "teal",
-  "jade-tuned",
-  "jade",
-  "grass-tuned",
-  "grass",
-  "bronze-tuned",
-  "bronze",
-  "gold-tuned",
-  "gold",
-  "brown-tuned",
-  "brown",
+  // "plum-tuned",
+  // "plum",
+  // "purple-tuned",
+  // "purple",
+  // "violet-tuned",
+  // "violet",
+  // "iris-tuned",
+  // "iris",
+  // "indigo-tuned",
+  // "indigo",
+  // "cyan-tuned",
+  // "cyan",
+  // "teal-tuned",
+  // "teal",
+  // "jade-tuned",
+  // "jade",
+  // "grass-tuned",
+  // "grass",
+  // "bronze-tuned",
+  // "bronze",
+  // "gold-tuned",
+  // "gold",
+  // "brown-tuned",
+  // "brown",
 ])
 
 const filteredUmbraOutput = computed(() => {

@@ -47,7 +47,7 @@ function parseRelativePosition(relativeValue: string, currentPosition: number): 
  * @param index - Current index in the range
  * @param colorStopIndices - Array of indices where color stops occur
  * @param colorStopColors - Array of color swatches at those indices
- * @param lastColor - The last generated color
+ * @param referenceColor - The reference color to calculate hue difference from (lastColor or lastColorStop)
  * @param fromColor - The starting color (background)
  * @param toColor - The ending color (foreground)
  * @returns Resolved hue value
@@ -57,7 +57,7 @@ function resolveHueReference(
   index: number,
   colorStopIndices: number[],
   colorStopColors: UmbraSwatch[],
-  lastColor: UmbraSwatch,
+  referenceColor: UmbraSwatch,
   fromColor: UmbraSwatch,
   toColor: UmbraSwatch
 ): number | string | undefined {
@@ -65,9 +65,9 @@ function resolveHueReference(
     const nextStopIndex = colorStopIndices.find(i => i > index)
     if (nextStopIndex !== undefined) {
       const nextStopColor = colorStopColors[colorStopIndices.indexOf(nextStopIndex)]
-      return nextStopColor.toHsl().h - lastColor.toHsl().h
+      return nextStopColor.toHsl().h - referenceColor.toHsl().h
     }
-    return toColor.toHsl().h - lastColor.toHsl().h
+    return toColor.toHsl().h - referenceColor.toHsl().h
   }
 
   if (hueValue === 'prev') {
@@ -75,9 +75,9 @@ function resolveHueReference(
     if (prevStopIndices.length > 0) {
       const prevStopIndex = prevStopIndices[prevStopIndices.length - 1]
       const prevStopColor = colorStopColors[colorStopIndices.indexOf(prevStopIndex)]
-      return prevStopColor.toHsl().h - lastColor.toHsl().h
+      return prevStopColor.toHsl().h - referenceColor.toHsl().h
     }
-    return fromColor.toHsl().h - lastColor.toHsl().h
+    return fromColor.toHsl().h - referenceColor.toHsl().h
   }
 
   return hueValue
@@ -123,6 +123,9 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
   // Track the last color we generated (starts at 'from')
   let lastColor = from
 
+  // Track the last color STOP (for absolute mixing)
+  let lastColorStop = from
+
   // Determine the next color stop (starts with first stop or 'to' if no stops)
   let nextColor = stringColorStops.length > 0 ? swatch(stringColorStops[0]) : to
 
@@ -139,6 +142,7 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
     if (isColorString(shade)) {
       const color = swatch(shade)
       lastColor = color
+      lastColorStop = color  // Update the last color stop
       stringColorStops.shift()
       // Update nextColor to the next stop or 'to' if no more stops
       nextColor = stringColorStops.length > 0 ? swatch(stringColorStops[0]) : to
@@ -151,19 +155,24 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
     if (typeof shade === 'object') {
       // Update current position based on mix value
       const mixValue = shade.mix
+      const isRelative = typeof mixValue === 'string'
+
       if (typeof mixValue === 'number') {
         currentPosition = mixValue
       } else if (typeof mixValue === 'string') {
         currentPosition = parseRelativePosition(mixValue, currentPosition)
       }
 
-      // Resolve hue references ('next' or 'prev')
+      // For absolute values, use last color STOP; for relative, use last color
+      const fromColor = isRelative ? lastColor : lastColorStop
+
+      // Resolve hue references ('next' or 'prev') - use the same reference as mixing
       const resolvedHue = resolveHueReference(
         shade.hue,
         index,
         colorStopIndices,
         colorStopColors,
-        lastColor,
+        fromColor,  // Use the same reference color as the mix
         from,
         to
       )
@@ -176,14 +185,14 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
         lightness: shade.lightness,
       }
 
-      const interpolatedColor = colorMixHSL(lastColor, nextColor, options)
+      const interpolatedColor = colorMixHSL(fromColor, nextColor, options)
       lastColor = interpolatedColor
       return interpolatedColor
     }
 
     // Handle simple numeric values (absolute position)
     currentPosition = shade as number
-    const interpolatedColor = colorMix(lastColor, nextColor, currentPosition)
+    const interpolatedColor = colorMix(lastColorStop, nextColor, currentPosition)
     lastColor = interpolatedColor
     return interpolatedColor
   })
