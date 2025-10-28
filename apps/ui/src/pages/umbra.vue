@@ -513,9 +513,14 @@ const radixOrangeMap: Accent = {
   color: '#f76b15',
   shades: defaultSettings.shades,
   tints: [
-    { mix: 2, hue: "next" },
-    { mix: 9, hue: "next", saturation: "+=99" },
-    18, 33, 44, 55, 64, 82,
+    { mix: 2, hue: "next+=0.5", saturation: "+=99" },
+    { mix: 9, hue: "next+=10", saturation: "+=99" },
+    { mix: 18, hue: "next+=14", saturation: "+=99" },
+    { mix: 31, hue: "next+=11", saturation: "+=99" },
+    { mix: 42, hue: "next+=10", saturation: "+=99" },
+    { mix: 54, hue: "next+=7", saturation: "+=99" },
+    { mix: 61, hue: "next+=4", saturation: "+=99" },
+    { mix: 79, hue: "next+=2", saturation: "+=99" },
     "primer",
     { mix: "+=12", hue: 0, saturation: "-=4" },
     { mix: "+=2", hue: 0, saturation: "-=12" },
@@ -535,12 +540,13 @@ const radixAmberMap: Accent = {
   shades: defaultSettings.shades,
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    { mix: 12, hue: "next", saturation: "+=99" },
+    32, 51, 74, 81, 94,
+    { mix: 88, hue: "next", saturation: "+=99" },
     "primer",
-    { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=10", hue: 0, saturation: "-=4" },
+    { mix: "+=29", hue: 0, saturation: "-=12" },
+    { mix: "+=10", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -799,8 +805,8 @@ const finishedEntries = ref<string[]>([
   "gold",
   "brown-tuned",
   "brown",
-  // "orange-tuned",
-  // "orange",
+  "orange-tuned",
+  "orange",
 ])
 
 const filteredUmbraOutput = computed(() => {

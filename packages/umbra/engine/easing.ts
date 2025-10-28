@@ -45,7 +45,8 @@ export function generateTints(options: EasingOptions = {}): number[] {
 export type RelativeValue = `+=${number}` | `-=${number}`
 
 // Hue reference: "next" (use hue from next color stop) or "prev" (use hue from previous color stop)
-export type HueReference = 'next' | 'prev'
+// Can also include relative adjustments: "next+=20", "next-=10", "prev+=15", "prev-=5"
+export type HueReference = 'next' | 'prev' | `next+=${number}` | `next-=${number}` | `prev+=${number}` | `prev-=${number}`
 
 // Primer keyword: "primer" (placeholder for the accent color)
 export type PrimerKeyword = 'primer'

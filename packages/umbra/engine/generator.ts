@@ -42,42 +42,170 @@ function parseRelativePosition(relativeValue: string, currentPosition: number): 
 }
 
 /**
- * Resolves hue references ('next' or 'prev') to actual hue values
- * @param hueValue - Hue value which can be a number, string, 'next', or 'prev'
+ * Resolves hue references ('next' or 'prev') to actual hue mix percentages
+ * Supports relative adjustments like 'next+=12' or 'prev-=10'
+ * @param hueValue - Hue value which can be a number, string, 'next', 'prev', or 'next±X'/'prev±X'
  * @param index - Current index in the range
  * @param colorStopIndices - Array of indices where color stops occur
  * @param colorStopColors - Array of color swatches at those indices
- * @param referenceColor - The reference color to calculate hue difference from (lastColor or lastColorStop)
- * @param fromColor - The starting color (background)
- * @param toColor - The ending color (foreground)
- * @returns Resolved hue value
+ * @param fromColor - The starting color for this mix
+ * @param toColor - The ending color for this mix
+ * @param from - The background color (global start)
+ * @param to - The foreground color (global end)
+ * @returns Resolved hue value (percentage 0-100 or relative string)
  */
 function resolveHueReference(
   hueValue: number | string | 'next' | 'prev' | undefined,
   index: number,
   colorStopIndices: number[],
   colorStopColors: UmbraSwatch[],
-  referenceColor: UmbraSwatch,
   fromColor: UmbraSwatch,
-  toColor: UmbraSwatch
+  toColor: UmbraSwatch,
+  globalFrom: UmbraSwatch,
+  globalTo: UmbraSwatch
 ): number | string | undefined {
+  // Handle relative adjustments to hue references like 'next+=12' or 'prev-=10'
+  if (typeof hueValue === 'string') {
+    const relativeMatch = hueValue.match(/^(next|prev)([+-]=)(\d+(?:\.\d+)?)$/)
+    if (relativeMatch) {
+      const [, reference, operator, amount] = relativeMatch
+      const adjustment = parseFloat(amount)
+      const delta = operator === '+=' ? adjustment : -adjustment
+
+      // Get the base hue from next or prev
+      let baseHue: number
+      if (reference === 'next') {
+        const nextStopIndex = colorStopIndices.find(i => i > index)
+        if (nextStopIndex !== undefined) {
+          const nextStopColor = colorStopColors[colorStopIndices.indexOf(nextStopIndex)]
+          baseHue = nextStopColor.toHsl().h
+        } else {
+          baseHue = globalTo.toHsl().h
+        }
+      } else { // 'prev'
+        const prevStopIndices = colorStopIndices.filter(i => i < index)
+        if (prevStopIndices.length > 0) {
+          const prevStopIndex = prevStopIndices[prevStopIndices.length - 1]
+          const prevStopColor = colorStopColors[colorStopIndices.indexOf(prevStopIndex)]
+          baseHue = prevStopColor.toHsl().h
+        } else {
+          baseHue = globalFrom.toHsl().h
+        }
+      }
+
+      // Calculate the target hue (base + adjustment)
+      let targetHue = (baseHue + delta) % 360
+      if (targetHue < 0) targetHue += 360
+
+      // Calculate what percentage would produce this hue
+      const fromHsl = fromColor.toHsl()
+      const toHsl = toColor.toHsl()
+
+      // If there's no significant hue difference between from and to,
+      // we need to treat it specially - use the target hue as the destination
+      if (Math.abs(toHsl.h - fromHsl.h) < 1) {
+        // Replace the destination hue with our target
+        toHsl.h = targetHue
+      }
+
+      // Use the same circular interpolation logic as colorMixHSL
+      let hueDiff = toHsl.h - fromHsl.h
+      let adjustedTarget = targetHue
+
+      // colorMixHSL takes the shorter path
+      if (Math.abs(hueDiff) > 180) {
+        // Will wrap around
+        const adjustedDiff = hueDiff > 0 ? hueDiff - 360 : hueDiff + 360
+        hueDiff = adjustedDiff
+
+        // Adjust target to match the same circular direction
+        // Find the equivalent angle on the wrapped path
+        if (targetHue > fromHsl.h + 180) {
+          adjustedTarget = targetHue - 360
+        } else if (targetHue < fromHsl.h - 180) {
+          adjustedTarget = targetHue + 360
+        }
+      }
+
+      // Now calculate the percentage
+      const hueMixPercent = ((adjustedTarget - fromHsl.h) / hueDiff) * 100
+
+      // Return the percentage (can be outside 0-100 for extrapolation)
+      return hueMixPercent
+    }
+  }
+
   if (hueValue === 'next') {
     const nextStopIndex = colorStopIndices.find(i => i > index)
+    let targetHue: number
     if (nextStopIndex !== undefined) {
       const nextStopColor = colorStopColors[colorStopIndices.indexOf(nextStopIndex)]
-      return nextStopColor.toHsl().h - referenceColor.toHsl().h
+      targetHue = nextStopColor.toHsl().h
+    } else {
+      targetHue = globalTo.toHsl().h
     }
-    return toColor.toHsl().h - referenceColor.toHsl().h
+
+    const fromHsl = fromColor.toHsl()
+    const toHsl = toColor.toHsl()
+
+    if (Math.abs(toHsl.h - fromHsl.h) < 1) {
+      toHsl.h = targetHue
+    }
+
+    // Use the same circular interpolation logic as colorMixHSL
+    let hueDiff = toHsl.h - fromHsl.h
+    let adjustedTarget = targetHue
+
+    if (Math.abs(hueDiff) > 180) {
+      const adjustedDiff = hueDiff > 0 ? hueDiff - 360 : hueDiff + 360
+      hueDiff = adjustedDiff
+
+      if (targetHue > fromHsl.h + 180) {
+        adjustedTarget = targetHue - 360
+      } else if (targetHue < fromHsl.h - 180) {
+        adjustedTarget = targetHue + 360
+      }
+    }
+
+    const hueMixPercent = ((adjustedTarget - fromHsl.h) / hueDiff) * 100
+    return hueMixPercent
   }
 
   if (hueValue === 'prev') {
     const prevStopIndices = colorStopIndices.filter(i => i < index)
+    let targetHue: number
     if (prevStopIndices.length > 0) {
       const prevStopIndex = prevStopIndices[prevStopIndices.length - 1]
       const prevStopColor = colorStopColors[colorStopIndices.indexOf(prevStopIndex)]
-      return prevStopColor.toHsl().h - referenceColor.toHsl().h
+      targetHue = prevStopColor.toHsl().h
+    } else {
+      targetHue = globalFrom.toHsl().h
     }
-    return fromColor.toHsl().h - referenceColor.toHsl().h
+
+    const fromHsl = fromColor.toHsl()
+    const toHsl = toColor.toHsl()
+
+    if (Math.abs(toHsl.h - fromHsl.h) < 1) {
+      toHsl.h = targetHue
+    }
+
+    // Use the same circular interpolation logic as colorMixHSL
+    let hueDiff = toHsl.h - fromHsl.h
+    let adjustedTarget = targetHue
+
+    if (Math.abs(hueDiff) > 180) {
+      const adjustedDiff = hueDiff > 0 ? hueDiff - 360 : hueDiff + 360
+      hueDiff = adjustedDiff
+
+      if (targetHue > fromHsl.h + 180) {
+        adjustedTarget = targetHue - 360
+      } else if (targetHue < fromHsl.h - 180) {
+        adjustedTarget = targetHue + 360
+      }
+    }
+
+    const hueMixPercent = ((adjustedTarget - fromHsl.h) / hueDiff) * 100
+    return hueMixPercent
   }
 
   return hueValue
@@ -172,7 +300,8 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
         index,
         colorStopIndices,
         colorStopColors,
-        fromColor,  // Use the same reference color as the mix
+        fromColor,
+        nextColor,
         from,
         to
       )

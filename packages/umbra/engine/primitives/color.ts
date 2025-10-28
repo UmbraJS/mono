@@ -186,7 +186,12 @@ export function colorMixHSL(
 
   if (options.hue !== undefined) {
     // If hue is specified, parse it (could be relative or absolute)
-    hueMix = parseRelativeValue(options.hue, baseMix) / 100
+    // For hue, we allow values outside 0-100 range for extrapolation
+    if (typeof options.hue === 'number') {
+      hueMix = options.hue / 100 // Don't clamp for hue
+    } else {
+      hueMix = parseRelativeValue(options.hue, baseMix) / 100
+    }
   } else {
     // Default to base mix
     hueMix = baseMix / 100

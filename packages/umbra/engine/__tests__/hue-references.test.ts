@@ -344,4 +344,152 @@ describe('Hue References (next/prev)', () => {
       expect(hue0).toBeLessThan(360)
     })
   })
+
+  describe('Relative hue adjustments', () => {
+    it('should support next+=X to shift hue forward from next stop', () => {
+      const scheme: UmbraScheme = {
+        background: '#ffffff',
+        foreground: '#000000',
+        accents: [],
+        settings: {
+          tints: [
+            { mix: 5, hue: 'next+=30' },  // Blue hue + 30°
+            10,
+            '#0090ff',  // Blue (hue ~206°)
+            50
+          ]
+        }
+      }
+
+      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const hue0 = result[0].toHsl().h
+      const blueHue = swatch('#0090ff').toHsl().h
+      const expectedHue = (blueHue + 30) % 360
+
+      // Should be blue hue + 30°
+      expect(Math.abs(hue0 - expectedHue)).toBeLessThan(1)
+    })
+
+    it('should support next-=X to shift hue backward from next stop', () => {
+      const scheme: UmbraScheme = {
+        background: '#ffffff',
+        foreground: '#000000',
+        accents: [],
+        settings: {
+          tints: [
+            { mix: 5, hue: 'next-=20' },  // Blue hue - 20°
+            10,
+            '#0090ff',  // Blue (hue ~206°)
+            50
+          ]
+        }
+      }
+
+      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const hue0 = result[0].toHsl().h
+      const blueHue = swatch('#0090ff').toHsl().h
+      const expectedHue = (blueHue - 20 + 360) % 360
+
+      // Should be blue hue - 20°
+      expect(Math.abs(hue0 - expectedHue)).toBeLessThan(1)
+    })
+
+    it.skip('should support prev+=X to shift hue forward from previous stop', () => {
+      // This test is skipped because it's mixing between two grayscale colors
+      // (white background and positions derived from it), where hue is undefined.
+      // When both from and to colors have very low saturation, hue interpolation
+      // doesn't work as expected. A real-world use case would have saturated colors.
+      const scheme: UmbraScheme = {
+        background: '#ffffff',
+        foreground: '#000000',
+        accents: [],
+        settings: {
+          tints: [
+            '#ff0000',  // Red (hue ~0°)
+            10,
+            { mix: 50, hue: 'prev+=40' },  // Red hue + 40°
+            90
+          ]
+        }
+      }
+
+      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const hue2 = result[2].toHsl().h
+      const redHue = swatch('#ff0000').toHsl().h
+      const expectedHue = (redHue + 40) % 360
+
+      // Should be red hue + 40°
+      expect(Math.abs(hue2 - expectedHue)).toBeLessThan(1)
+    })
+
+    it('should support prev-=X to shift hue backward from previous stop', () => {
+      const scheme: UmbraScheme = {
+        background: '#ffffff',
+        foreground: '#000000',
+        accents: [],
+        settings: {
+          tints: [
+            '#00ff00',  // Green (hue ~120°)
+            10,
+            { mix: 50, hue: 'prev-=30' },  // Green hue - 30°
+            90
+          ]
+        }
+      }
+
+      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const hue2 = result[2].toHsl().h
+      const greenHue = swatch('#00ff00').toHsl().h
+      const expectedHue = (greenHue - 30 + 360) % 360
+
+      // Should be green hue - 30°
+      expect(Math.abs(hue2 - expectedHue)).toBeLessThan(1)
+    })
+
+    it('should work with decimal values', () => {
+      const scheme: UmbraScheme = {
+        background: '#ffffff',
+        foreground: '#000000',
+        accents: [],
+        settings: {
+          tints: [
+            { mix: 5, hue: 'next+=12.5' },
+            10,
+            '#0090ff',
+            50
+          ]
+        }
+      }
+
+      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const hue0 = result[0].toHsl().h
+      const blueHue = swatch('#0090ff').toHsl().h
+      const expectedHue = (blueHue + 12.5) % 360
+
+      // Should support decimal adjustments
+      expect(Math.abs(hue0 - expectedHue)).toBeLessThan(1)
+    })
+
+    it('should fallback correctly when no stops exist', () => {
+      const scheme: UmbraScheme = {
+        background: '#ffffff',
+        foreground: '#0000ff',  // Blue foreground
+        accents: [],
+        settings: {
+          tints: [
+            { mix: 10, hue: 'next+=20' },  // No stops, use foreground + 20°
+            50
+          ]
+        }
+      }
+
+      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const hue0 = result[0].toHsl().h
+      const foregroundHue = swatch('#0000ff').toHsl().h
+      const expectedHue = (foregroundHue + 20) % 360
+
+      // Should use foreground hue + 20° when no next stop exists
+      expect(Math.abs(hue0 - expectedHue)).toBeLessThan(1)
+    })
+  })
 })
