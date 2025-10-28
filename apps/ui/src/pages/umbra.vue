@@ -2,7 +2,7 @@
 import { umbra, defaultSettings, resolveTints } from '@umbrajs/core'
 import type { Accent, Umbra, UmbraInput, UmbraSwatch } from '@umbrajs/core'
 import { Button } from "umbraco"
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   gray,
   mauve,
@@ -106,7 +106,7 @@ const radixGrayMap: Accent = {
 }
 
 const radixBlueMap: Accent = {
-  name: 'blue',
+  name: 'blue-tuned',
   color: '#0090ff',
   shades: defaultSettings.shades,
   tints: [
@@ -126,7 +126,7 @@ const radixBlueMap: Accent = {
 }
 
 const radixRedMap: Accent = {
-  name: 'red',
+  name: 'red-tuned',
   color: '#e5484d',
   tints: [
     { mix: 2, hue: "next" },
@@ -145,7 +145,7 @@ const radixRedMap: Accent = {
 }
 
 const radixGreenMap: Accent = {
-  name: 'green',
+  name: 'green-tuned',
   color: '#30a46c',
   tints: [
     { mix: 2, hue: "next" },
@@ -191,13 +191,13 @@ const radixCrimsonMap: Accent = {
     6,
     10,
     13,
-    14,
-    25,
+    18,
+    23,
     36,
     "primary",
     { mix: "+=7", hue: 0, saturation: "-=4" },
-    { mix: "+=0", hue: 0, saturation: "-=12" },
-    { mix: "+=42", hue: 0, saturation: "-=29" }
+    { mix: "+=9", hue: 0, saturation: "-=12" },
+    { mix: "+=30", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -216,9 +216,9 @@ const radixPinkMap: Accent = {
     7,
     10,
     10,
-    9,
-    24,
-    36,
+    15,
+    20,
+    30,
     "primary",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
@@ -239,15 +239,15 @@ const radixPlumMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6,
-    10,
-    10,
-    11,
-    24,
+    8,
+    8,
+    12,
+    20,
     27,
     "primary",
     { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=3", hue: 0, saturation: "-=12" },
+    { mix: "+=38", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -264,15 +264,15 @@ const radixPurpleMap: Accent = {
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6,
-    13,
-    11,
-    11,
-    17,
-    25,
+    3,
+    8,
+    14,
+    14,
+    27,
     "primary",
-    { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=8", hue: 0, saturation: "-=4" },
+    { mix: "+=10", hue: 0, saturation: "-=0" },
+    { mix: "+=20", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -287,17 +287,17 @@ const radixVioletMap: Accent = {
   color: '#6e56cf',
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
+    { mix: 1, hue: "next", saturation: "+=99" },
+    3,
     6,
-    10,
-    10,
+    6,
     11,
-    17,
-    26,
+    15,
+    29,
     "primary",
     { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=10", hue: 0, saturation: "-=12" },
+    { mix: "+=26", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -311,7 +311,7 @@ const radixIrisMap: Accent = {
   name: 'iris-tuned',
   color: '#5b5bd6',
   tints: [
-    { mix: 2, hue: "next" },
+    { mix: 3, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
     6,
     10,
@@ -333,7 +333,7 @@ const irisAccent: Accent = {
 }
 
 const radixIndigoMap: Accent = {
-  name: 'indigo',
+  name: 'indigo-tuned',
   color: '#3e63dd',
   shades: defaultSettings.shades,
   tints: [
@@ -359,7 +359,7 @@ const indigoAccent: Accent = {
 }
 
 const radixCyanMap: Accent = {
-  name: 'cyan',
+  name: 'cyan-tuned',
   color: '#00a2c7',
   shades: defaultSettings.shades,
   tints: [
@@ -385,7 +385,7 @@ const cyanAccent: Accent = {
 }
 
 const radixTealMap: Accent = {
-  name: 'teal',
+  name: 'teal-tuned',
   color: '#12a594',
   shades: defaultSettings.shades,
   tints: [
@@ -406,7 +406,7 @@ const tealAccent: Accent = {
 }
 
 const radixJadeMap: Accent = {
-  name: 'jade',
+  name: 'jade-tuned',
   color: '#29a383',
   shades: defaultSettings.shades,
   tints: [
@@ -427,7 +427,7 @@ const jadeAccent: Accent = {
 }
 
 const radixGrassMap: Accent = {
-  name: 'grass',
+  name: 'grass-tuned',
   color: '#46a758',
   shades: defaultSettings.shades,
   tints: [
@@ -448,7 +448,7 @@ const grassAccent: Accent = {
 }
 
 const radixBronzeMap: Accent = {
-  name: 'bronze',
+  name: 'bronze-tuned',
   color: '#a18072',
   shades: defaultSettings.shades,
   tints: [
@@ -469,17 +469,17 @@ const bronzeAccent: Accent = {
 }
 
 const radixGoldMap: Accent = {
-  name: 'gold',
+  name: 'gold-tuned',
   color: '#978365',
   shades: defaultSettings.shades,
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    { mix: 6, hue: "next", saturation: "+=99" },
+    6, 10, 10, 12, 24, 35,
     "primary",
     { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=14", hue: 0, saturation: "-=12" },
+    { mix: "+=25", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -490,17 +490,17 @@ const goldAccent: Accent = {
 }
 
 const radixBrownMap: Accent = {
-  name: 'brown',
+  name: 'brown-tuned',
   color: '#ad7f58',
   shades: defaultSettings.shades,
   tints: [
     { mix: 2, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    9, 9, 9, 14, 24, 39,
     "primary",
     { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=12", hue: 0, saturation: "-=12" },
+    { mix: "+=28", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -511,17 +511,17 @@ const brownAccent: Accent = {
 }
 
 const radixOrangeMap: Accent = {
-  name: 'orange',
+  name: 'orange-tuned',
   color: '#f76b15',
   shades: defaultSettings.shades,
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    { mix: 7, hue: "next", saturation: "+=99" },
+    10, 18, 18, 18, 24, 45,
     "primary",
-    { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=12", hue: 0, saturation: "-=4" },
+    { mix: "+=2", hue: 0, saturation: "-=12" },
+    { mix: "+=28", hue: 0, saturation: "-=29" }
   ],
 }
 
@@ -532,7 +532,7 @@ const orangeAccent: Accent = {
 }
 
 const radixAmberMap: Accent = {
-  name: 'amber',
+  name: 'amber-tuned',
   color: '#ffc53d',
   shades: defaultSettings.shades,
   tints: [
@@ -553,7 +553,7 @@ const amberAccent: Accent = {
 }
 
 const radixYellowMap: Accent = {
-  name: 'yellow',
+  name: 'yellow-tuned',
   color: '#ffdc00',
   shades: defaultSettings.shades,
   tints: [
@@ -574,7 +574,7 @@ const yellowAccent: Accent = {
 }
 
 const radixLimeMap: Accent = {
-  name: 'lime',
+  name: 'lime-tuned',
   color: '#bdee63',
   shades: defaultSettings.shades,
   tints: [
@@ -595,7 +595,7 @@ const limeAccent: Accent = {
 }
 
 const radixMintMap: Accent = {
-  name: 'mint',
+  name: 'mint-tuned',
   color: '#86ead4',
   shades: defaultSettings.shades,
   tints: [
@@ -616,13 +616,13 @@ const mintAccent: Accent = {
 }
 
 const radixSkyMap: Accent = {
-  name: 'sky',
+  name: 'sky-tuned',
   color: '#7ce2fe',
   shades: defaultSettings.shades,
   tints: [
     { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    { mix: 10, hue: "next", saturation: "+=99" },
+    15, 19, 35, 50, 104, 35,
     "primary",
     { mix: "+=6", hue: 0, saturation: "-=4" },
     { mix: "+=5", hue: 0, saturation: "-=12" },
@@ -635,8 +635,6 @@ const skyAccent: Accent = {
   shades: Object.values(skyDark),
   tints: Object.values(sky),
 }
-
-
 
 const theme = useUmbra({
   foreground: '#000000',  // Pure black (shared across all accents)
@@ -737,6 +735,57 @@ function cycleMode() {
   const nextIndex = (currentIndex + 1) % modes.length
   displayMode.value = modes[nextIndex]
 }
+
+const finishedEntries = ref<string[]>([
+  "base",
+  "gray",
+  "blue-tuned",
+  "info",
+  "red-tuned",
+  "warning",
+  "green-tuned",
+  "success",
+  "tomato-tuned",
+  "tomato",
+  "crimson-tuned",
+  "crimson",
+  "pink-tuned",
+  "pink",
+  "plum-tuned",
+  "plum",
+  "purple-tuned",
+  "purple",
+  "violet-tuned",
+  "violet",
+  "iris-tuned",
+  "iris",
+  "indigo-tuned",
+  "indigo",
+  "cyan-tuned",
+  "cyan",
+  "teal-tuned",
+  "teal",
+  "jade-tuned",
+  "jade",
+  "grass-tuned",
+  "grass",
+  "bronze-tuned",
+  "bronze",
+  "gold-tuned",
+  "gold",
+  "brown-tuned",
+  "brown",
+])
+
+const filteredUmbraOutput = computed(() => {
+  return theme.generatedTheme.value.output.filter(range => {
+    return !finishedEntries.value.includes(range.name)
+  })
+})
+
+function stringIncludesTheWordTuned(str: string) {
+  return str.toLowerCase().includes("tuned")
+}
 </script>
 
 <template>
@@ -748,10 +797,11 @@ function cycleMode() {
   </div>
   <div class="umbra-wrapper">
     <div class="range-list">
-      <div v-for="range in theme.generatedTheme.value.output" :key="range.name" class="ColorList">
-        <!-- <div class="color-name">{{ range.name }}</div> -->
+      <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorList"
+        @click="finishedEntries.push(range.name)">
         <div v-if="displayMode === 'lightness'" class="TokensLightness">
-          <ColourLightness v-for="color in range.range" :color="color" />
+          <ColourLightness v-for="color in range.range" :color="color"
+            :previous-color="!stringIncludesTheWordTuned(range.name) ? filteredUmbraOutput[filteredUmbraOutput.indexOf(range) - 1]?.range[range.range.indexOf(color)] : undefined" />
         </div>
 
         <div v-if="displayMode === 'saturation'" class="TokensSaturation">
@@ -769,6 +819,7 @@ function cycleMode() {
           </div>
           <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.toHex()}`"></div>
         </div>
+        <div class="color-name">{{ range.name }}</div>
       </div>
     </div>
   </div>
