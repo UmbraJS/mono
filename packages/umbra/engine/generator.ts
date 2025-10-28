@@ -6,6 +6,83 @@ import { insertColorIntoRange, getStrings } from './primitives/utils'
 import { resolveTints, type TintsInput, type UmbraShade } from './easing'
 import { defaultSettings } from './defaults'
 
+// Constants
+const RELATIVE_VALUE_PATTERN = /^[+-]=\d+(?:\.\d+)?$/
+const MIN_POSITION = 0
+const MAX_POSITION = 100
+const DEFAULT_ACCENT_NAME = 'accent'
+
+// Type guards
+function isRelativeValueString(shade: UmbraShade): shade is string {
+  return typeof shade === 'string' && RELATIVE_VALUE_PATTERN.test(shade)
+}
+
+function isColorString(shade: UmbraShade): shade is string {
+  return typeof shade === 'string' && !RELATIVE_VALUE_PATTERN.test(shade) && shade !== 'primer'
+}
+
+/**
+ * Parses a relative value string (e.g., "+=10" or "-=5") and updates the position
+ * @param relativeValue - String in format "+=X" or "-=X"
+ * @param currentPosition - Current position (0-100)
+ * @returns Updated position clamped between MIN_POSITION and MAX_POSITION
+ */
+function parseRelativePosition(relativeValue: string, currentPosition: number): number {
+  const match = relativeValue.match(/^([+-])=(\d+(?:\.\d+)?)$/)
+  if (!match) return currentPosition
+
+  const [, operator, amount] = match
+  const delta = parseFloat(amount)
+
+  if (operator === '+') {
+    return Math.min(MAX_POSITION, currentPosition + delta)
+  } else {
+    return Math.max(MIN_POSITION, currentPosition - delta)
+  }
+}
+
+/**
+ * Resolves hue references ('next' or 'prev') to actual hue values
+ * @param hueValue - Hue value which can be a number, string, 'next', or 'prev'
+ * @param index - Current index in the range
+ * @param colorStopIndices - Array of indices where color stops occur
+ * @param colorStopColors - Array of color swatches at those indices
+ * @param lastColor - The last generated color
+ * @param fromColor - The starting color (background)
+ * @param toColor - The ending color (foreground)
+ * @returns Resolved hue value
+ */
+function resolveHueReference(
+  hueValue: number | string | 'next' | 'prev' | undefined,
+  index: number,
+  colorStopIndices: number[],
+  colorStopColors: UmbraSwatch[],
+  lastColor: UmbraSwatch,
+  fromColor: UmbraSwatch,
+  toColor: UmbraSwatch
+): number | string | undefined {
+  if (hueValue === 'next') {
+    const nextStopIndex = colorStopIndices.find(i => i > index)
+    if (nextStopIndex !== undefined) {
+      const nextStopColor = colorStopColors[colorStopIndices.indexOf(nextStopIndex)]
+      return nextStopColor.toHsl().h - lastColor.toHsl().h
+    }
+    return toColor.toHsl().h - lastColor.toHsl().h
+  }
+
+  if (hueValue === 'prev') {
+    const prevStopIndices = colorStopIndices.filter(i => i < index)
+    if (prevStopIndices.length > 0) {
+      const prevStopIndex = prevStopIndices[prevStopIndices.length - 1]
+      const prevStopColor = colorStopColors[colorStopIndices.indexOf(prevStopIndex)]
+      return prevStopColor.toHsl().h - lastColor.toHsl().h
+    }
+    return fromColor.toHsl().h - lastColor.toHsl().h
+  }
+
+  return hueValue
+}
+
 interface GetRange {
   from: UmbraSwatch
   to: UmbraSwatch
@@ -13,24 +90,30 @@ interface GetRange {
   accentColor?: string  // Optional accent color to replace "primer" keyword
 }
 
+/**
+ * Generates a color range by interpolating between start and end colors
+ * Supports color stops, relative positioning, and HSL adjustments
+ * @param params - Configuration object containing from/to colors, range definition, and optional accent color
+ * @returns Array of interpolated color swatches
+ */
 function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
   // Replace "primer" keyword with accent color if provided
-  const processedRange = range.map(val => {
-    if (val === 'primer' && accentColor) {
+  const processedRange = range.map(shade => {
+    if (shade === 'primer' && accentColor) {
       return accentColor
     }
-    return val
+    return shade
   })
 
-  const colorStops = getStrings(processedRange)
+  const stringColorStops = getStrings(processedRange)
 
   // Pre-scan to find all color stop indices and their colors
   const colorStopIndices: number[] = []
   const colorStopColors: UmbraSwatch[] = []
-  processedRange.forEach((val, index) => {
-    if (typeof val === 'string' && !/^[+-]=\d+(?:\.\d+)?$/.test(val) && val !== 'primer') {
+  processedRange.forEach((shade, index) => {
+    if (isColorString(shade)) {
       colorStopIndices.push(index)
-      colorStopColors.push(swatch(val))
+      colorStopColors.push(swatch(shade))
     }
   })
 
@@ -41,107 +124,68 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
   let lastColor = from
 
   // Determine the next color stop (starts with first stop or 'to' if no stops)
-  let nextColor = colorStops.length > 0 ? swatch(colorStops[0]) : to
+  let nextColor = stringColorStops.length > 0 ? swatch(stringColorStops[0]) : to
 
-  return processedRange.map((val, index) => {
-    // Check if it's a relative value string (+=X or -=X)
-    if (typeof val === 'string' && /^[+-]=\d+(?:\.\d+)?$/.test(val)) {
-      // Relative value as a simple string (not in an object)
-      const match = val.match(/^([+-])=(\d+(?:\.\d+)?)$/)
-      if (match) {
-        const [, operator, amount] = match
-        const delta = parseFloat(amount)
-        if (operator === '+') {
-          currentPosition = Math.min(100, currentPosition + delta)
-        } else {
-          currentPosition = Math.max(0, currentPosition - delta)
-        }
-      }
-      // Mix between lastColor and nextColor
-      const newColor = colorMix(lastColor, nextColor, currentPosition)
-      lastColor = newColor
-      return newColor
-    } else if (typeof val === 'string') {
-      // Color stop (hex, named color, etc.)
-      const color = swatch(val)
+  return processedRange.map((shade, index) => {
+    // Handle relative value strings (+=X or -=X)
+    if (isRelativeValueString(shade)) {
+      currentPosition = parseRelativePosition(shade, currentPosition)
+      const interpolatedColor = colorMix(lastColor, nextColor, currentPosition)
+      lastColor = interpolatedColor
+      return interpolatedColor
+    }
+
+    // Handle color stop strings (hex, named color, etc.)
+    if (isColorString(shade)) {
+      const color = swatch(shade)
       lastColor = color
-      colorStops.shift()
+      stringColorStops.shift()
       // Update nextColor to the next stop or 'to' if no more stops
-      nextColor = colorStops.length > 0 ? swatch(colorStops[0]) : to
+      nextColor = stringColorStops.length > 0 ? swatch(stringColorStops[0]) : to
       // Reset position for the next segment
       currentPosition = 0
       return color
-    } else if (typeof val === 'object') {
+    }
 
-      // Parse the mix value to update current position
-      const mixValue = val.mix
+    // Handle HSL interpolation objects
+    if (typeof shade === 'object') {
+      // Update current position based on mix value
+      const mixValue = shade.mix
       if (typeof mixValue === 'number') {
-        // Absolute: set position directly
         currentPosition = mixValue
       } else if (typeof mixValue === 'string') {
-        // Relative: calculate from current position
-        const match = mixValue.match(/^([+-])=(\d+(?:\.\d+)?)$/)
-        if (match) {
-          const [, operator, amount] = match
-          const delta = parseFloat(amount)
-          if (operator === '+') {
-            currentPosition = Math.min(100, currentPosition + delta)
-          } else {
-            currentPosition = Math.max(0, currentPosition - delta)
-          }
-        }
+        currentPosition = parseRelativePosition(mixValue, currentPosition)
       }
 
-      // Resolve "next" and "prev" hue references
-      let resolvedHue = val.hue
-      if (val.hue === 'next') {
-        // Find the next color stop after this index
-        const nextStopIndex = colorStopIndices.find(i => i > index)
-        if (nextStopIndex !== undefined) {
-          const nextStopColor = colorStopColors[colorStopIndices.indexOf(nextStopIndex)]
-          resolvedHue = nextStopColor.toHsl().h - lastColor.toHsl().h
-        } else {
-          // No more color stops, use 'to' (foreground)
-          resolvedHue = to.toHsl().h - lastColor.toHsl().h
-        }
-      } else if (val.hue === 'prev') {
-        // Find the previous color stop before this index
-        const prevStopIndices = colorStopIndices.filter(i => i < index)
-        if (prevStopIndices.length > 0) {
-          const prevStopIndex = prevStopIndices[prevStopIndices.length - 1]
-          const prevStopColor = colorStopColors[colorStopIndices.indexOf(prevStopIndex)]
-          resolvedHue = prevStopColor.toHsl().h - lastColor.toHsl().h
-        } else {
-          // No previous color stop, use 'from' (background)
-          resolvedHue = from.toHsl().h - lastColor.toHsl().h
-        }
-      }
+      // Resolve hue references ('next' or 'prev')
+      const resolvedHue = resolveHueReference(
+        shade.hue,
+        index,
+        colorStopIndices,
+        colorStopColors,
+        lastColor,
+        from,
+        to
+      )
 
-      // Create options with potentially relative values for each channel
+      // Build interpolation options
       const options = {
-        mix: currentPosition, // Use absolute position for the actual interpolation
-        hue: resolvedHue !== undefined
-          ? (typeof resolvedHue === 'string' ? resolvedHue : resolvedHue)
-          : undefined,
-        saturation: val.saturation !== undefined
-          ? (typeof val.saturation === 'string' ? val.saturation : val.saturation)
-          : undefined,
-        lightness: val.lightness !== undefined
-          ? (typeof val.lightness === 'string' ? val.lightness : val.lightness)
-          : undefined,
+        mix: currentPosition,
+        hue: resolvedHue,
+        saturation: shade.saturation,
+        lightness: shade.lightness,
       }
 
-      // Mix between lastColor and nextColor using HSL
-      const mixedColor = colorMixHSL(lastColor, nextColor, options)
-      lastColor = mixedColor
-      return mixedColor
-    } else {
-      // Simple number - absolute position
-      currentPosition = val as number
-      const newColor = colorMix(lastColor, nextColor, currentPosition)
-      lastColor = newColor
-      return newColor
+      const interpolatedColor = colorMixHSL(lastColor, nextColor, options)
+      lastColor = interpolatedColor
+      return interpolatedColor
     }
+
+    // Handle simple numeric values (absolute position)
+    currentPosition = shade as number
+    const interpolatedColor = colorMix(lastColor, nextColor, currentPosition)
+    lastColor = interpolatedColor
+    return interpolatedColor
   })
 }
 
@@ -152,6 +196,12 @@ interface RangeProps {
   color?: string
 }
 
+/**
+ * Automatically places a color in the optimal position within a range
+ * Uses contrast analysis to find the best insertion point
+ * @param params - Configuration object with input scheme, adjusted colors, range, and color to insert
+ * @returns Updated range with color inserted at optimal position, or original range if no color provided
+ */
 function autoPlacedRange({ input, adjusted, range, color }: RangeProps) {
   if (!color) return range
   const baseRange = getRange({
@@ -162,12 +212,28 @@ function autoPlacedRange({ input, adjusted, range, color }: RangeProps) {
   return insertColorIntoRange({ range, shades: baseRange, color: swatch(color) })
 }
 
+/**
+ * Creates a new array with a value replaced at a specific index
+ * @param array - Source array
+ * @param index - Index to replace at
+ * @param value - New value to insert
+ * @returns New array with replaced value
+ */
 function replaceAtIndex(array: UmbraShade[], index: number, value: string) {
   const newArray = array.slice()
   newArray[index] = value
   return newArray
 }
 
+/**
+ * Determines the appropriate range for an accent color
+ * Handles both string and object accent definitions
+ * Supports manual positioning via "primary" keyword or automatic insertion
+ * @param adjusted - Adjusted color values
+ * @param accent - Accent color definition (string or object with properties)
+ * @param input - Input scheme with settings
+ * @returns Range array with accent color appropriately positioned
+ */
 function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, input: UmbraScheme) {
   const isString = typeof accent === 'string'
   const color = isString ? accent : accent.color
@@ -176,15 +242,22 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   const fallback = accentRangeValues(adjusted, input.settings, true) // Filter strings for settings fallback
   const range = isString ? fallback : accentRangeValues(adjusted, accent, false) || fallback // Don't filter for accent's own properties
 
-  // If range contains "primary" keyword, skip auto-insertion since user explicitly positioned it
-  const hasPrimaryKeyword = range.some(val => val === 'primary')
-  if (hasPrimaryKeyword) return range
+  // If range contains "primer" keyword, skip auto-insertion since user explicitly positioned it
+  const hasPrimerKeyword = range.some(shade => shade === 'primer')
+  if (hasPrimerKeyword) return range
 
   if (insertion && color) return replaceAtIndex(range, insertion, color)
   if (!insertion && color) return autoPlacedRange({ input, adjusted, range, color })
   return range
 }
 
+/**
+ * Generates accent color palettes
+ * Each accent gets its own range interpolated between background and foreground
+ * @param input - Input color scheme
+ * @param adjusted - Adjusted color values
+ * @returns Array of accent palette objects with name, colors, and ranges
+ */
 function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
   return adjusted.accents.map((accent) => {
     const isString = typeof accent === 'string'
@@ -192,7 +265,7 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
     const color = isString ? accent : accent.color
     const range = putAccentInRange(adjusted, accent, input)
     return {
-      name: name || `accent`,
+      name: name || DEFAULT_ACCENT_NAME,
       background: pickContrast(adjusted.foreground, adjusted),
       foreground: pickContrast(adjusted.background, adjusted),
       range: getRange({
@@ -211,6 +284,13 @@ interface RangeValues {
   tints?: TintsInput
 }
 
+/**
+ * Resolves the appropriate range values based on theme mode (dark/light)
+ * Uses shades for dark themes and tints for light themes
+ * @param adjusted - Adjusted color values (determines if theme is dark)
+ * @param scheme - Optional scheme with range/shades/tints configuration
+ * @returns Resolved shade array
+ */
 function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): UmbraShade[] {
   const isDark = adjusted.background.isDark()
   const tintsInput = isDark ? scheme?.shades : scheme?.tints
@@ -219,13 +299,27 @@ function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): UmbraShade[
   return resolveTints(tintsInput, rangeInput, defaultInput)
 }
 
+/**
+ * Checks if a TintsInput contains color string values
+ * Excludes "primer" keyword and relative value patterns
+ * @param input - Tints input to check
+ * @returns True if input contains color strings
+ */
 function containsStrings(input?: TintsInput): boolean {
   if (!input) return false
   if (!Array.isArray(input)) return false
-  // Check for color strings, but exclude "primary" keyword which is allowed
-  return input.some(v => typeof v === 'string' && v !== 'primary' && !/^[+-]=\d+(?:\.\d+)?$/.test(v))
+  // Check for color strings, but exclude "primer" keyword which is allowed
+  return input.some(v => typeof v === 'string' && v !== 'primer' && !RELATIVE_VALUE_PATTERN.test(v))
 }
 
+/**
+ * Resolves range values for accent colors with optional string filtering
+ * Similar to rangeValues but can filter out color strings for fallback safety
+ * @param adjusted - Adjusted color values
+ * @param scheme - Optional scheme with range/shades/tints configuration
+ * @param filterStrings - If true, exclude ranges containing color strings
+ * @returns Resolved shade array
+ */
 function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filterStrings: boolean = false): UmbraShade[] {
   const isDark = adjusted.background.isDark()
   const tintsInput = isDark ? scheme?.shades : scheme?.tints
@@ -242,6 +336,13 @@ function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filter
   return resolveTints(tintsInput, rangeInput, defaultInput)
 }
 
+/**
+ * Generates the base color palette
+ * Creates the fundamental color range between background and foreground
+ * @param input - Input color scheme
+ * @param adjusted - Adjusted color values
+ * @returns Base palette object with name, background, foreground, and range
+ */
 function base(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
   const range = rangeValues(adjusted, input.settings)
@@ -253,6 +354,13 @@ function base(input: UmbraScheme, adjusted: UmbraAdjusted) {
   }
 }
 
+/**
+ * Generates a complete Umbra color scheme
+ * Creates base palette plus all accent palettes
+ * @param input - Input color scheme configuration
+ * @param adjusted - Adjusted and normalized color values
+ * @returns Array of palette objects (base + accents)
+ */
 export function umbraGenerate(input: UmbraScheme, adjusted: UmbraAdjusted) {
   return [base(input, adjusted), ...accents(input, adjusted)]
 }
