@@ -99,14 +99,27 @@ const tomatoAccent: Accent = {
 
 const radixGrayMap: Accent = {
   name: 'gray',
-  shades: defaultSettings.shades,
-  tints: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 50, 59.5, 79],
+  shades: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
+  tints: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
 }
 
 const radixBlueMap: Accent = {
   name: 'blue-tuned',
   color: '#0090ff',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 18, hue: "next" },
+    { mix: 21, hue: "next", saturation: "+=99" },
+    25,
+    30,
+    37,
+    51,
+    64,
+    82,
+    "primer",  // The main accent - brightest, most saturated blue
+    { mix: "+=23", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
+    { mix: "+=4", hue: 0, saturation: "-=12" },  // Continue darkening
+    { mix: "+=31", hue: 0, saturation: "-=29" } // Dark blue
+  ],
   tints: [
     { mix: 3, hue: "next" },
     { mix: 5, hue: "next", saturation: "+=99" },
@@ -126,6 +139,20 @@ const radixBlueMap: Accent = {
 const radixRedMap: Accent = {
   name: 'red-tuned',
   color: '#e5484d',
+  shades: [
+    { mix: 14, hue: "next", saturation: "+=20" },
+    { mix: 17, hue: "next", saturation: "+=25" },
+    24,
+    31,
+    39,
+    49,
+    63,
+    84,
+    "primer",  // The main accent - brightest, most saturated blue
+    { mix: "+=14", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
+    { mix: "+=25", hue: 0, saturation: "-=10" },  // Continue darkening
+    { mix: "+=20", hue: 0, saturation: "-=10" } // Dark blue
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -539,14 +566,17 @@ const radixAmberMap: Accent = {
   color: '#ffc53d',
   shades: defaultSettings.shades,
   tints: [
-    { mix: 2, hue: "next" },
-    { mix: 12, hue: "next", saturation: "+=99" },
-    32, 51, 74, 81, 94,
-    { mix: 88, hue: "next", saturation: "+=99" },
+    { mix: 6, hue: "next", saturation: 90 },
+    { mix: 25, hue: "next-=10", saturation: 90 },
+    { mix: 52, hue: "next-=10", saturation: 90 },
     "primer",
-    { mix: "+=10", hue: 0, saturation: "-=4" },
-    { mix: "+=29", hue: 0, saturation: "-=12" },
-    { mix: "+=10", hue: 0, saturation: "-=29" }
+    { mix: "+=2", hue: "+=5" },
+    { mix: "+=2", hue: "+=5" },
+    "+=2", "+=2",
+    { mix: "+=5", hue: "+=2", saturation: "-=32" },
+    "+=2",
+    { mix: "+=5", hue: "+=5", saturation: "+=22" },
+    "+=15"
   ],
 }
 
@@ -561,13 +591,17 @@ const radixYellowMap: Accent = {
   color: '#ffdc00',
   shades: defaultSettings.shades,
   tints: [
-    { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    { mix: 8, hue: "next", saturation: 90 },
+    { mix: 25, hue: "next-=10", saturation: 90 },
+    { mix: 52, hue: "next-=10", saturation: 90 },
     "primer",
-    { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=2", hue: "+=5" },
+    { mix: "+=2", hue: "+=5" },
+    { mix: "+=5", hue: "+=2", saturation: "-=32" },
+    "+=4", "+=2",
+    "+=2",
+    { mix: "+=5", hue: "+=5", saturation: "+=22" },
+    "+=20"
   ],
 }
 
@@ -582,13 +616,17 @@ const radixLimeMap: Accent = {
   color: '#bdee63',
   shades: defaultSettings.shades,
   tints: [
-    { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    { mix: 8, hue: "next", saturation: 90 },
+    { mix: 30, hue: "next", saturation: 90 },
+    { mix: 60, hue: "next", saturation: 90 },
     "primer",
-    { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    { mix: "+=6", hue: "+=5" },
+    { mix: "+=6", hue: "+=5" },
+    "+=2", "+=2",
+    { mix: "+=3", hue: "+=2", saturation: "-=12" },
+    "+=3",
+    { mix: "+=3", hue: "+=5" },
+    "+=3"
   ],
 }
 
@@ -603,13 +641,18 @@ const radixMintMap: Accent = {
   color: '#86ead4',
   shades: defaultSettings.shades,
   tints: [
-    { mix: 2, hue: "next" },
-    { mix: 2, hue: "next", saturation: "+=99" },
-    6, 10, 10, 11, 24, 35,
+    { mix: 10, hue: "next", saturation: 90 },
+    { mix: 25, hue: "next", saturation: 90 },
+    { mix: 52, hue: "next", saturation: 90 },
     "primer",
-    { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    "+=6",
+    "+=4",
+    "+=3",
+    "+=3",
+    "+=5",
+    "+=2",
+    "+=5",
+    "+=15"
   ],
 }
 
@@ -624,13 +667,18 @@ const radixSkyMap: Accent = {
   color: '#7ce2fe',
   shades: defaultSettings.shades,
   tints: [
-    { mix: 2, hue: "next" },
-    { mix: 10, hue: "next", saturation: "+=99" },
-    15, 19, 35, 50, 104, 35,
+    { mix: 10, hue: "next", saturation: 90 },
+    { mix: 25, hue: "next", saturation: 90 },
+    { mix: 52, hue: "next", saturation: 90 },
     "primer",
-    { mix: "+=6", hue: 0, saturation: "-=4" },
-    { mix: "+=5", hue: 0, saturation: "-=12" },
-    { mix: "+=40", hue: 0, saturation: "-=29" }
+    "+=6",
+    "+=4",
+    "+=3",
+    "+=3",
+    "+=5",
+    "+=2",
+    "+=5",
+    "+=15"
   ],
 }
 
@@ -667,8 +715,8 @@ const skyAccent: Accent = {
 // })
 
 const theme = useUmbra({
-  foreground: '#000000',  // Pure black (shared across all accents)
-  background: '#ffffff',  // Pure white (shared across all accents)
+  foreground: '#ffffff',  // Pure black (shared across all accents)
+  background: '#000000',  // Pure white (shared across all accents)
   accents: [
     radixGrayMap,
     radixBlueMap,
@@ -771,42 +819,52 @@ const finishedEntries = ref<string[]>([
   "gray",
   "blue-tuned",
   "info",
-  "red-tuned",
-  "warning",
-  "green-tuned",
-  "success",
-  "tomato-tuned",
-  "tomato",
-  "crimson-tuned",
-  "crimson",
-  "pink-tuned",
-  "pink",
-  "plum-tuned",
-  "plum",
-  "purple-tuned",
-  "purple",
-  "violet-tuned",
-  "violet",
-  "iris-tuned",
-  "iris",
-  "indigo-tuned",
-  "indigo",
-  "cyan-tuned",
-  "cyan",
-  "teal-tuned",
-  "teal",
-  "jade-tuned",
-  "jade",
-  "grass-tuned",
-  "grass",
-  "bronze-tuned",
-  "bronze",
-  "gold-tuned",
-  "gold",
-  "brown-tuned",
-  "brown",
-  "orange-tuned",
-  "orange",
+  // "red-tuned",
+  // "warning",
+  // "green-tuned",
+  // "success",
+  // "tomato-tuned",
+  // "tomato",
+  // "crimson-tuned",
+  // "crimson",
+  // "pink-tuned",
+  // "pink",
+  // "plum-tuned",
+  // "plum",
+  // "purple-tuned",
+  // "purple",
+  // "violet-tuned",
+  // "violet",
+  // "iris-tuned",
+  // "iris",
+  // "indigo-tuned",
+  // "indigo",
+  // "cyan-tuned",
+  // "cyan",
+  // "teal-tuned",
+  // "teal",
+  // "jade-tuned",
+  // "jade",
+  // "grass-tuned",
+  // "grass",
+  // "bronze-tuned",
+  // "bronze",
+  // "gold-tuned",
+  // "gold",
+  // "brown-tuned",
+  // "brown",
+  // "orange-tuned",
+  // "orange",
+  // "amber-tuned",
+  // "amber",
+  // "yellow-tuned",
+  // "yellow",
+  // "lime-tuned",
+  // "lime",
+  // "mint-tuned",
+  // "mint",
+  // "sky-tuned",
+  // "sky",
 ])
 
 const filteredUmbraOutput = computed(() => {
