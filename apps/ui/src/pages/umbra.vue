@@ -5,97 +5,17 @@ import { Button } from "umbraco"
 import { ref, computed } from 'vue'
 import {
   gray,
+  grayDark,
   mauve,
   slate,
   sage,
   olive,
   sand,
-  tomato,
-  red,
-  ruby,
-  crimson,
-  pink,
-  plum,
-  purple,
-  violet,
-  iris,
-  indigo,
-  blue,
-  cyan,
-  teal,
-  jade,
-  green,
-  grass,
-  bronze,
-  gold,
-  brown,
-  orange,
-  amber,
-  yellow,
-  lime,
-  mint,
-  sky,
-  grayDark,
-  mauveDark,
-  slateDark,
-  sageDark,
-  oliveDark,
-  sandDark,
-  tomatoDark,
-  redDark,
-  rubyDark,
-  crimsonDark,
-  pinkDark,
-  plumDark,
-  purpleDark,
-  violetDark,
-  irisDark,
-  indigoDark,
-  blueDark,
-  cyanDark,
-  tealDark,
-  jadeDark,
-  greenDark,
-  grassDark,
-  bronzeDark,
-  goldDark,
-  brownDark,
-  orangeDark,
-  amberDark,
-  yellowDark,
-  limeDark,
-  mintDark,
-  skyDark,
+  ruby
 } from "@radix-ui/colors";
 import ColourLightness from '../components/colour/Lightness.vue';
 import ColourSaturation from '../components/colour/Saturation.vue';
 import ColourHue from '../components/colour/Hue.vue';
-
-const warningAccent: Accent = {
-  name: 'warning',
-  range: Object.values(red),
-  shades: Object.values(redDark),
-  tints: Object.values(red),
-}
-
-const successAccent: Accent = {
-  name: 'success',
-  shades: Object.values(greenDark),
-  tints: Object.values(green),
-}
-
-const infoAccent: Accent = {
-  name: 'info',
-  range: Object.values(blue),
-  shades: Object.values(blueDark),
-  tints: Object.values(blue),
-}
-
-const tomatoAccent: Accent = {
-  name: 'tomato',
-  shades: Object.values(redDark),
-  tints: Object.values(tomato),
-}
 
 const radixGrayMap: Accent = {
   name: 'gray',
@@ -149,9 +69,9 @@ const radixRedMap: Accent = {
     63,
     84,
     "primer",  // The main accent - brightest, most saturated blue
-    { mix: "+=14", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
-    { mix: "+=25", hue: 0, saturation: "-=10" },  // Continue darkening
-    { mix: "+=20", hue: 0, saturation: "-=10" } // Dark blue
+    { mix: "+=14", hue: "prev", saturation: "-=34" },   // Darken but keep blue hue
+    { mix: "+=25", hue: "prev", saturation: "-=40" },  // Continue darkening
+    { mix: "+=20", hue: "prev", saturation: "-=90" } // Dark blue
   ],
   tints: [
     { mix: 2, hue: "next" },
@@ -172,6 +92,20 @@ const radixRedMap: Accent = {
 const radixGreenMap: Accent = {
   name: 'green-tuned',
   color: '#30a46c',
+  shades: [
+    { mix: 17, hue: "next" },
+    { mix: 22, hue: "next" },
+    25,
+    32,
+    42,
+    52,
+    66,
+    81,
+    "primer",  // The main accent - brightest, most saturated blue
+    { mix: "+=6", hue: 0, saturation: "-=4" },   // Darken but keep blue hue
+    { mix: "+=12", hue: 0, saturation: "-=12" },  // Continue darkening
+    { mix: "+=41", hue: 0, saturation: "-=29" } // Dark blue
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 5, hue: "next", saturation: "+=99" },
@@ -191,6 +125,20 @@ const radixGreenMap: Accent = {
 const radixTomatoMap: Accent = {
   name: 'tomato-tuned',
   color: '#e54d2e',
+  shades: [
+    { mix: 15, saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=39" },
+    25,
+    35,
+    42,
+    53,
+    65,
+    85,
+    "primer",
+    { mix: "+=11", hue: 0, saturation: "-=99" },
+    { mix: "+=27", hue: 0, saturation: "-=99" },
+    { mix: "+=16", hue: 0, saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -210,6 +158,20 @@ const radixTomatoMap: Accent = {
 const radixCrimsonMap: Accent = {
   name: 'crimson-tuned',
   color: '#e93d82',
+  shades: [
+    { mix: 13, hue: "next" },
+    { mix: 17, hue: "next", saturation: "+=19" },
+    24,
+    31,
+    39,
+    49,
+    62,
+    83,
+    "primer",
+    { mix: "+=12", hue: 0, saturation: "-=4" },
+    { mix: "+=31", hue: 0, saturation: "-=92" },
+    { mix: "+=15", hue: 0, saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -226,15 +188,23 @@ const radixCrimsonMap: Accent = {
   ],
 }
 
-const crimsonAccent: Accent = {
-  name: 'crimson',
-  shades: Object.values(crimsonDark),
-  tints: Object.values(crimson),
-}
-
 const radixPinkMap: Accent = {
   name: 'pink-tuned',
   color: '#d6409f',
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=49" },
+    25,
+    32,
+    40,
+    52,
+    67,
+    87,
+    "primer",
+    { mix: "+=8", hue: 0, saturation: "-=4" },
+    { mix: "+=39", hue: 0, saturation: "-=99" },
+    { mix: "+=12", hue: 0, saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -251,15 +221,23 @@ const radixPinkMap: Accent = {
   ],
 }
 
-const pinkAccent: Accent = {
-  name: 'pink',
-  shades: Object.values(pinkDark),
-  tints: Object.values(pink),
-}
-
 const radixPlumMap: Accent = {
   name: 'plum-tuned',
   color: '#ab4aba',
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=49" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=37", hue: "prev", saturation: "-=99" },
+    { mix: "+=3", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -276,15 +254,23 @@ const radixPlumMap: Accent = {
   ],
 }
 
-const plumAccent: Accent = {
-  name: 'plum',
-  shades: Object.values(plumDark),
-  tints: Object.values(plum),
-}
-
 const radixPurpleMap: Accent = {
   name: 'purple-tuned',
   color: '#8e4ec6',
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=49" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=37", hue: "prev", saturation: "-=99" },
+    { mix: "+=3", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -301,15 +287,23 @@ const radixPurpleMap: Accent = {
   ],
 }
 
-const purpleAccent: Accent = {
-  name: 'purple',
-  shades: Object.values(purpleDark),
-  tints: Object.values(purple),
-}
-
 const radixVioletMap: Accent = {
   name: 'violet-tuned',
   color: '#6e56cf',
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=49" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=37", hue: "prev", saturation: "-=99" },
+    { mix: "+=3", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next", saturation: "+=99" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -326,15 +320,23 @@ const radixVioletMap: Accent = {
   ],
 }
 
-const violetAccent: Accent = {
-  name: 'violet',
-  shades: Object.values(violetDark),
-  tints: Object.values(violet),
-}
-
 const radixIrisMap: Accent = {
   name: 'iris-tuned',
   color: '#5b5bd6',
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=49" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=37", hue: "prev", saturation: "-=99" },
+    { mix: "+=3", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 1, hue: "next" },
     { mix: 2, hue: "next", saturation: "+=99" },
@@ -351,16 +353,23 @@ const radixIrisMap: Accent = {
   ],
 }
 
-const irisAccent: Accent = {
-  name: 'iris',
-  shades: Object.values(irisDark),
-  tints: Object.values(iris),
-}
-
 const radixIndigoMap: Accent = {
   name: 'indigo-tuned',
   color: '#3e63dd',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=49" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=37", hue: "prev", saturation: "-=99" },
+    { mix: "+=3", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -377,16 +386,23 @@ const radixIndigoMap: Accent = {
   ],
 }
 
-const indigoAccent: Accent = {
-  name: 'indigo',
-  shades: Object.values(indigoDark),
-  tints: Object.values(indigo),
-}
-
 const radixCyanMap: Accent = {
   name: 'cyan-tuned',
   color: '#00a2c7',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=29" },
+    { mix: 19, hue: "next", saturation: "+=49" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=37", hue: "prev", saturation: "-=99" },
+    { mix: "+=3", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 5, hue: "next", saturation: "+=99" },
@@ -403,16 +419,23 @@ const radixCyanMap: Accent = {
   ],
 }
 
-const cyanAccent: Accent = {
-  name: 'cyan',
-  shades: Object.values(cyanDark),
-  tints: Object.values(cyan),
-}
-
 const radixTealMap: Accent = {
   name: 'teal-tuned',
   color: '#12a594',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=99" },
+    { mix: 24, hue: "next", saturation: "+=99" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=17", hue: "prev", saturation: "-=99" },
+    { mix: "+=28", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -424,16 +447,23 @@ const radixTealMap: Accent = {
   ],
 }
 
-const tealAccent: Accent = {
-  name: 'teal',
-  shades: Object.values(tealDark),
-  tints: Object.values(teal),
-}
-
 const radixJadeMap: Accent = {
   name: 'jade-tuned',
   color: '#29a383',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=99" },
+    { mix: 24, hue: "next", saturation: "+=99" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    92,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=17", hue: "prev", saturation: "-=99" },
+    { mix: "+=28", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 5, hue: "next", saturation: "+=99" },
@@ -445,16 +475,23 @@ const radixJadeMap: Accent = {
   ],
 }
 
-const jadeAccent: Accent = {
-  name: 'jade',
-  shades: Object.values(jadeDark),
-  tints: Object.values(jade),
-}
-
 const radixGrassMap: Accent = {
   name: 'grass-tuned',
   color: '#46a758',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=99" },
+    { mix: 20, hue: "next", saturation: "+=99" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    78,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=17", hue: "prev", saturation: "-=99" },
+    { mix: "+=28", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 6, hue: "next", saturation: "+=99" },
@@ -466,16 +503,23 @@ const radixGrassMap: Accent = {
   ],
 }
 
-const grassAccent: Accent = {
-  name: 'grass',
-  shades: Object.values(grassDark),
-  tints: Object.values(grass),
-}
-
 const radixBronzeMap: Accent = {
   name: 'bronze-tuned',
   color: '#a18072',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=99" },
+    { mix: 20, hue: "next", saturation: "+=99" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    78,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=17", hue: "prev", saturation: "-=99" },
+    { mix: "+=28", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -487,16 +531,23 @@ const radixBronzeMap: Accent = {
   ],
 }
 
-const bronzeAccent: Accent = {
-  name: 'bronze',
-  shades: Object.values(bronzeDark),
-  tints: Object.values(bronze),
-}
-
 const radixGoldMap: Accent = {
   name: 'gold-tuned',
   color: '#978365',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=99" },
+    { mix: 20, hue: "next", saturation: "+=99" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    78,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=26", hue: "prev", saturation: "-=99" },
+    { mix: "+=28", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 7, hue: "next", saturation: "+=99" },
@@ -508,16 +559,23 @@ const radixGoldMap: Accent = {
   ],
 }
 
-const goldAccent: Accent = {
-  name: 'gold',
-  shades: Object.values(goldDark),
-  tints: Object.values(gold),
-}
-
 const radixBrownMap: Accent = {
   name: 'brown-tuned',
   color: '#ad7f58',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=99" },
+    { mix: 20, hue: "next", saturation: "+=99" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    78,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=26", hue: "prev", saturation: "-=99" },
+    { mix: "+=28", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next" },
     { mix: 4, hue: "next", saturation: "+=99" },
@@ -529,16 +587,23 @@ const radixBrownMap: Accent = {
   ],
 }
 
-const brownAccent: Accent = {
-  name: 'brown',
-  shades: Object.values(brownDark),
-  tints: Object.values(brown),
-}
-
 const radixOrangeMap: Accent = {
   name: 'orange-tuned',
   color: '#f76b15',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 15, hue: "next", saturation: "+=99" },
+    { mix: 20, hue: "next", saturation: "+=99" },
+    28,
+    38,
+    47,
+    56,
+    71,
+    78,
+    "primer",
+    { mix: "+=10", hue: "prev", saturation: "-=99" },
+    { mix: "+=26", hue: "prev", saturation: "-=99" },
+    { mix: "+=28", hue: "prev", saturation: "-=99" }
+  ],
   tints: [
     { mix: 2, hue: "next+=0.5", saturation: "+=99" },
     { mix: 9, hue: "next+=10", saturation: "+=99" },
@@ -555,16 +620,23 @@ const radixOrangeMap: Accent = {
   ],
 }
 
-const orangeAccent: Accent = {
-  name: 'orange',
-  shades: Object.values(orangeDark),
-  tints: Object.values(orange),
-}
-
 const radixAmberMap: Accent = {
   name: 'amber-tuned',
   color: '#ffc53d',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 9, hue: "next", saturation: 60 },
+    { mix: 15, hue: "next-=5", saturation: 39 },
+    { mix: 18, hue: "next-=5", saturation: 70 },
+    { mix: 20, hue: "next-=5", saturation: 99 },
+    { mix: 24, hue: "next-=5", saturation: 99 },
+    { mix: 30, hue: "next-=5", saturation: 99 },
+    { mix: 43, hue: "next-=5", saturation: 90 },
+    { mix: 56, hue: "next-=5", saturation: 90 },
+    "primer",
+    { mix: "+=30", hue: "prev-=0", saturation: 0 },
+    { mix: "+=20", hue: "prev-=5", saturation: 0 },
+    { mix: "+=18", hue: "prev-=10", saturation: 0 }
+  ],
   tints: [
     { mix: 6, hue: "next", saturation: 90 },
     { mix: 25, hue: "next-=10", saturation: 90 },
@@ -580,16 +652,23 @@ const radixAmberMap: Accent = {
   ],
 }
 
-const amberAccent: Accent = {
-  name: 'amber',
-  shades: Object.values(amberDark),
-  tints: Object.values(amber),
-}
-
 const radixYellowMap: Accent = {
   name: 'yellow-tuned',
   color: '#ffdc00',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 9, hue: "next", saturation: 60 },
+    { mix: 15, hue: "next-=5", saturation: 39 },
+    { mix: 18, hue: "next-=5", saturation: 70 },
+    { mix: 20, hue: "next-=5", saturation: 99 },
+    { mix: 24, hue: "next-=5", saturation: 99 },
+    { mix: 30, hue: "next-=5", saturation: 99 },
+    { mix: 43, hue: "next-=5", saturation: 90 },
+    { mix: 56, hue: "next-=5", saturation: 90 },
+    "primer",
+    { mix: "+=30", hue: "prev-=0", saturation: 0 },
+    { mix: "+=20", hue: "prev-=5", saturation: 0 },
+    { mix: "+=18", hue: "prev-=10", saturation: 0 }
+  ],
   tints: [
     { mix: 8, hue: "next", saturation: 90 },
     { mix: 25, hue: "next-=10", saturation: 90 },
@@ -605,16 +684,23 @@ const radixYellowMap: Accent = {
   ],
 }
 
-const yellowAccent: Accent = {
-  name: 'yellow',
-  shades: Object.values(yellowDark),
-  tints: Object.values(yellow),
-}
-
 const radixLimeMap: Accent = {
   name: 'lime-tuned',
   color: '#bdee63',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 9, hue: "next", saturation: 60 },
+    { mix: 15, hue: "next-=5", saturation: 39 },
+    { mix: 18, hue: "next-=5", saturation: 70 },
+    { mix: 20, hue: "next-=5", saturation: 99 },
+    { mix: 24, hue: "next-=5", saturation: 99 },
+    { mix: 30, hue: "next-=5", saturation: 99 },
+    { mix: 43, hue: "next-=5", saturation: 90 },
+    { mix: 56, hue: "next-=5", saturation: 90 },
+    "primer",
+    { mix: "+=25", hue: "prev-=0", saturation: "-=90" },
+    { mix: "+=10", hue: "prev-=10", saturation: "-=90" },
+    { mix: "+=7", hue: "prev-=10", saturation: "-=90" }
+  ],
   tints: [
     { mix: 8, hue: "next", saturation: 90 },
     { mix: 30, hue: "next", saturation: 90 },
@@ -630,16 +716,23 @@ const radixLimeMap: Accent = {
   ],
 }
 
-const limeAccent: Accent = {
-  name: 'lime',
-  shades: Object.values(limeDark),
-  tints: Object.values(lime),
-}
-
 const radixMintMap: Accent = {
   name: 'mint-tuned',
   color: '#86ead4',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 9, hue: "next", saturation: 60 },
+    { mix: 15, hue: "next-=5", saturation: 39 },
+    { mix: 25, hue: "next-=5", saturation: 70 },
+    { mix: 30, hue: "next-=5", saturation: 99 },
+    { mix: 44, hue: "next-=5", saturation: 99 },
+    { mix: 60, hue: "next-=5", saturation: 99 },
+    { mix: 73, hue: "next-=5", saturation: 90 },
+    { mix: 86, hue: "next-=5", saturation: 90 },
+    "primer",
+    { mix: "+=25", hue: "prev-=0", saturation: "-=90" },
+    { mix: "+=10", hue: "prev-=10", saturation: "-=90" },
+    { mix: "+=7", hue: "prev-=10", saturation: "-=90" }
+  ],
   tints: [
     { mix: 10, hue: "next", saturation: 90 },
     { mix: 25, hue: "next", saturation: 90 },
@@ -654,18 +747,25 @@ const radixMintMap: Accent = {
     "+=5",
     "+=15"
   ],
-}
-
-const mintAccent: Accent = {
-  name: 'mint',
-  shades: Object.values(mintDark),
-  tints: Object.values(mint),
 }
 
 const radixSkyMap: Accent = {
   name: 'sky-tuned',
   color: '#7ce2fe',
-  shades: defaultSettings.shades,
+  shades: [
+    { mix: 9, hue: "next+=10", saturation: 90 },
+    { mix: 15, hue: "next+=10", saturation: 99 },
+    { mix: 25, hue: "next+=10", saturation: 90 },
+    { mix: 30, hue: "next+=10", saturation: 99 },
+    { mix: 44, hue: "next+=10", saturation: 99 },
+    { mix: 60, hue: "next+=10", saturation: 99 },
+    { mix: 73, hue: "next+=10", saturation: 90 },
+    { mix: 86, hue: "next+=10", saturation: 90 },
+    "primer",
+    { mix: "+=25", hue: "prev-=0", saturation: "-=90" },
+    { mix: "+=10", hue: "prev-=0", saturation: "-=90" },
+    { mix: "+=7", hue: "prev-=0", saturation: "-=90" }
+  ],
   tints: [
     { mix: 10, hue: "next", saturation: 90 },
     { mix: 25, hue: "next", saturation: 90 },
@@ -680,12 +780,6 @@ const radixSkyMap: Accent = {
     "+=5",
     "+=15"
   ],
-}
-
-const skyAccent: Accent = {
-  name: 'sky',
-  shades: Object.values(skyDark),
-  tints: Object.values(sky),
 }
 
 // const theme = useUmbra({
@@ -720,53 +814,29 @@ const theme = useUmbra({
   accents: [
     radixGrayMap,
     radixBlueMap,
-    infoAccent,
     radixRedMap,
-    warningAccent,
     radixGreenMap,
-    successAccent,
     radixTomatoMap,
-    tomatoAccent,
     radixCrimsonMap,
-    crimsonAccent,
     radixPinkMap,
-    pinkAccent,
     radixPlumMap,
-    plumAccent,
     radixPurpleMap,
-    purpleAccent,
     radixVioletMap,
-    violetAccent,
     radixIrisMap,
-    irisAccent,
     radixIndigoMap,
-    indigoAccent,
     radixCyanMap,
-    cyanAccent,
     radixTealMap,
-    tealAccent,
     radixJadeMap,
-    jadeAccent,
     radixGrassMap,
-    grassAccent,
     radixBronzeMap,
-    bronzeAccent,
     radixGoldMap,
-    goldAccent,
     radixBrownMap,
-    brownAccent,
     radixOrangeMap,
-    orangeAccent,
     radixAmberMap,
-    amberAccent,
     radixYellowMap,
-    yellowAccent,
     radixLimeMap,
-    limeAccent,
     radixMintMap,
-    mintAccent,
     radixSkyMap,
-    skyAccent,
   ],
   settings: {
     shades: Object.values(grayDark),
@@ -817,54 +887,30 @@ function cycleMode() {
 const finishedEntries = ref<string[]>([
   "base",
   "gray",
-  "blue-tuned",
-  "info",
+  // "blue-tuned",
   // "red-tuned",
-  // "warning",
   // "green-tuned",
-  // "success",
   // "tomato-tuned",
-  // "tomato",
   // "crimson-tuned",
-  // "crimson",
   // "pink-tuned",
-  // "pink",
   // "plum-tuned",
-  // "plum",
   // "purple-tuned",
-  // "purple",
   // "violet-tuned",
-  // "violet",
   // "iris-tuned",
-  // "iris",
   // "indigo-tuned",
-  // "indigo",
   // "cyan-tuned",
-  // "cyan",
   // "teal-tuned",
-  // "teal",
   // "jade-tuned",
-  // "jade",
   // "grass-tuned",
-  // "grass",
   // "bronze-tuned",
-  // "bronze",
   // "gold-tuned",
-  // "gold",
   // "brown-tuned",
-  // "brown",
   // "orange-tuned",
-  // "orange",
   // "amber-tuned",
-  // "amber",
   // "yellow-tuned",
-  // "yellow",
   // "lime-tuned",
-  // "lime",
   // "mint-tuned",
-  // "mint",
   // "sky-tuned",
-  // "sky",
 ])
 
 const filteredUmbraOutput = computed(() => {
