@@ -7,6 +7,7 @@ A flexible, type-safe theme management library that creates semantic color syste
 ## ✨ Features
 
 - **🎯 Simple** - Single function call to generate complete theme systems
+- **🎨 Color Presets** - Built-in optimized presets for common colors (use 'tomato' instead of '#E54D2E')
 - **💪 Flexible** - Extensible primitives for building custom theming logic
 - **🔒 Type-safe** - Full TypeScript support with intelligent autocompletion
 - **♿ Accessible** - Built-in APCA color contrast compliance and readability scoring
@@ -40,7 +41,16 @@ const theme = umbra({
   foreground: '#c0aea3',
   accents: ['#c97074']
 }).apply();
+
+// Or use color names with optimized presets
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: ['tomato', 'blue', 'green']  // Use preset names instead of hex
+}).apply();
 ```
+
+**🎨 New: Color Presets** - UmbraJS now includes optimized presets for common colors. Just use color names like `'tomato'`, `'blue'`, or `'green'` instead of hex values to get perfectly tuned color scales. [Learn more about color presets →](COLOR_PRESETS.md)
 
 Generated CSS variables:
 ```css
@@ -1278,6 +1288,91 @@ const config: UmbraInput = {
 const theme = umbra(config)
 const output: UmbraOutputs = theme.apply()
 ```
+
+# Color Presets Quick Reference
+
+## Available Colors
+
+```
+tomato  #E54D2E  (red)
+blue    #0090FF  (azure, sky)
+green   #30A46C  (emerald, grass)
+purple  #8E4EC6  (violet, lavender)
+orange  #F76B15  (amber)
+yellow  #FFE629  (gold)
+pink    #E93D82  (rose, crimson)
+cyan    #00A2C7  (teal, aqua)
+indigo  #3E63DD
+lime    #BDEE63
+brown   #AD7F58  (bronze)
+gray    #8B8D98  (grey, slate)
+```
+
+## Basic Usage
+
+```typescript
+import { umbra } from '@umbrajs/core'
+
+// Use color names
+umbra({
+  accents: ['tomato', 'blue', 'green']
+}).apply()
+
+// Use aliases
+umbra({
+  accents: ['red', 'sky', 'emerald']
+}).apply()
+
+// Mix names and hex
+umbra({
+  accents: ['blue', '#FF00FF']
+}).apply()
+```
+
+## API Functions
+
+```typescript
+import { 
+  colorPresets,        // Array of all presets
+  getPresetByName,     // Get by name/alias
+  findClosestPreset,   // Match hex to preset
+  resolveColorPreset   // Resolve any color
+} from '@umbrajs/core'
+
+// Get preset
+const blue = getPresetByName('blue')
+// → { name: 'blue', hex: '#0090FF', ... }
+
+// Find closest
+const closest = findClosestPreset('#0095FF')
+// → blue preset
+
+// Resolve
+const { hex, preset } = resolveColorPreset('tomato')
+// → { hex: '#E54D2E', preset: tomato }
+```
+
+## Override Presets
+
+```typescript
+umbra({
+  accents: [
+    'blue',              // Use preset
+    {
+      color: 'tomato',   // Use preset color
+      tints: [...]       // Custom tints
+    }
+  ]
+})
+```
+
+## Benefits
+
+- ✅ **1 line** instead of 20+
+- ✅ **Optimized** for each color
+- ✅ **Readable** code
+- ✅ **Consistent** quality
+- ✅ **Flexible** overrides
 
 ## 🤝 Contributing
 

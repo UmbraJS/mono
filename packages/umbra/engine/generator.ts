@@ -5,6 +5,7 @@ import { pickContrast, colorMix, colorMixHSL } from './primitives/color'
 import { insertColorIntoRange, getStrings } from './primitives/utils'
 import { resolveTints, type TintsInput, type UmbraShade } from './easing'
 import { defaultSettings } from './defaults'
+import { resolveColorPreset } from './presets'
 
 // Constants
 const RELATIVE_VALUE_PATTERN = /^[+-]=\d+(?:\.\d+)?$/
@@ -367,6 +368,7 @@ function replaceAtIndex(array: UmbraShade[], index: number, value: string) {
  * Determines the appropriate range for an accent color
  * Handles both string and object accent definitions
  * Supports manual positioning via "primary" keyword or automatic insertion
+ * Uses color presets when available for optimal tints/shades
  * @param adjusted - Adjusted color values
  * @param accent - Accent color definition (string or object with properties)
  * @param input - Input scheme with settings
@@ -377,8 +379,23 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   const color = isString ? accent : accent.color
   const insertion = input.settings?.insertion
 
-  const fallback = accentRangeValues(adjusted, input.settings, true) // Filter strings for settings fallback
-  const range = isString ? fallback : accentRangeValues(adjusted, accent, false) || fallback // Don't filter for accent's own properties
+  // If accent has explicit tints/shades, use those
+  const hasExplicitRange = !isString && (accent.tints || accent.shades || accent.range)
+
+  // If no explicit range and we have a color, try to use preset
+  let range: UmbraShade[]
+  if (!hasExplicitRange && color) {
+    const { preset } = resolveColorPreset(color)
+    const isDark = adjusted.background.isDark()
+    const presetRange = isDark ? preset.shades : preset.tints
+
+    // Use preset range as the base
+    range = resolveTints(presetRange)
+  } else {
+    // Use explicit range or fallback to settings
+    const fallback = accentRangeValues(adjusted, input.settings, true) // Filter strings for settings fallback
+    range = isString ? fallback : accentRangeValues(adjusted, accent, false) || fallback // Don't filter for accent's own properties
+  }
 
   // If range contains "primer" keyword, skip auto-insertion since user explicitly positioned it
   const hasPrimerKeyword = range.some(shade => shade === 'primer')
@@ -392,6 +409,7 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
 /**
  * Generates accent color palettes
  * Each accent gets its own range interpolated between background and foreground
+ * Resolves color preset names to their hex values
  * @param input - Input color scheme
  * @param adjusted - Adjusted color values
  * @returns Array of accent palette objects with name, colors, and ranges
@@ -400,7 +418,14 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
   return adjusted.accents.map((accent) => {
     const isString = typeof accent === 'string'
     const name = isString ? undefined : accent.name
-    const color = isString ? accent : accent.color
+    let color = isString ? accent : accent.color
+
+    // Resolve color preset names to hex values
+    if (color) {
+      const { hex } = resolveColorPreset(color)
+      color = hex
+    }
+
     const range = putAccentInRange(adjusted, accent, input)
     return {
       name: name || DEFAULT_ACCENT_NAME,
