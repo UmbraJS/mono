@@ -382,9 +382,14 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   // If accent has explicit tints/shades, use those
   const hasExplicitRange = !isString && (accent.tints || accent.shades || accent.range)
 
+  // Get settings fallback first to check if it contains "primer"
+  const fallback = accentRangeValues(adjusted, input.settings, true)
+  const settingsHasPrimer = fallback.some(shade => shade === 'primer')
+
   // If no explicit range and we have a color, try to use preset
+  // BUT: Don't use preset if settings contain "primer" keyword (user wants explicit control)
   let range: UmbraShade[]
-  if (!hasExplicitRange && color) {
+  if (!hasExplicitRange && color && !settingsHasPrimer) {
     const { preset } = resolveColorPreset(color)
     const isDark = adjusted.background.isDark()
     const presetRange = isDark ? preset.shades : preset.tints
@@ -393,7 +398,6 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
     range = resolveTints(presetRange)
   } else {
     // Use explicit range or fallback to settings
-    const fallback = accentRangeValues(adjusted, input.settings, true) // Filter strings for settings fallback
     range = isString ? fallback : accentRangeValues(adjusted, accent, false) || fallback // Don't filter for accent's own properties
   }
 
