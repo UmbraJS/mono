@@ -2,6 +2,7 @@ import type { UmbraSwatch } from '../../swatch'
 import type { Alias } from '../primitives/attach'
 import type { Formater, UmbraOutputs } from '../primitives/format'
 import type { TintsInput } from '../easing'
+import type { ColorString } from '../presets'
 
 export interface UmbraRange {
   name: string
@@ -25,7 +26,7 @@ export interface UmbraOutput {
 
 export interface Accent {
   name?: string
-  color?: string
+  color?: ColorString
   range?: TintsInput     // Used for both light-to-dark and dark-to-light
   shades?: TintsInput    // Dark-to-light range (falls back to range)
   tints?: TintsInput     // Light-to-dark range (falls back to range)
@@ -40,9 +41,9 @@ export interface UmbraScheme extends UmbraColors {
 }
 
 export interface UmbraColors {
-  background: string
-  foreground: string
-  accents: string | (string | Accent)[]
+  background: ColorString
+  foreground: ColorString
+  accents: ColorString | (ColorString | Accent)[]
 }
 
 export interface UmbraAdjusted {

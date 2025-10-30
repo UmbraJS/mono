@@ -1,26 +1,27 @@
 import type { TintsInput } from './easing'
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
+import type { UmbraShade } from './easing'
 
 /**
  * Color preset definition with optimized tints and shades
  */
 export interface ColorPreset {
   /** Display name of the color */
-  name: string
+  readonly name: string
   /** Hex color value */
-  hex: string
+  readonly hex: string
   /** Optimized tints for light themes (white background) */
-  tints: TintsInput
+  readonly tints: readonly UmbraShade[] | TintsInput
   /** Optimized shades for dark themes (dark background) */
-  shades: TintsInput
+  readonly shades: readonly UmbraShade[] | TintsInput
 }
 
 /**
  * Lookup table of optimized color presets
  * Each preset includes the color name, hex value, and optimal tints/shades configurations
  */
-export const colorPresets: ColorPreset[] = [
+export const colorPresets = [
   {
     name: 'gray',
     hex: '#8B8D98',
@@ -610,7 +611,18 @@ export const colorPresets: ColorPreset[] = [
       { mix: "+=7", hue: "prev-=0", saturation: "-=90" }
     ]
   }
-]
+] as const
+
+/**
+ * Extract preset names as a union type for autocomplete
+ */
+export type PresetName = typeof colorPresets[number]['name']
+
+/**
+ * Type-safe color string that accepts preset names OR any other string (like hex colors)
+ * Provides autocomplete for preset names while still allowing arbitrary color strings
+ */
+export type ColorString = PresetName | (string & {})
 
 /**
  * Map of color names (including aliases) to their preset configurations
@@ -659,7 +671,7 @@ function colorDistance(color1: UmbraSwatch, color2: UmbraSwatch): number {
 export function findClosestPreset(hexColor: string): ColorPreset {
   const targetColor = swatch(hexColor)
 
-  let closestPreset = colorPresets[0]
+  let closestPreset: ColorPreset = colorPresets[0]
   let minDistance = Infinity
 
   for (const preset of colorPresets) {
@@ -668,7 +680,7 @@ export function findClosestPreset(hexColor: string): ColorPreset {
 
     if (distance < minDistance) {
       minDistance = distance
-      closestPreset = preset
+      closestPreset = preset as ColorPreset
     }
   }
 

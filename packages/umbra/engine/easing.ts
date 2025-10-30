@@ -63,9 +63,11 @@ export type UmbraShade = number | string | HSLInterpolation | PrimerKeyword
 // Type for flexible tints/shades input
 export type TintsInput =
   | UmbraShade[]  // Original array format
+  | readonly UmbraShade[]  // Readonly array format (for presets)
   | EasingType           // Simple easing string
-  | EasingOptions        // Full easing options object// Convert any TintsInput to (number | string) array with fallback support
+  | EasingOptions        // Full easing options object
 
+// Convert any TintsInput to (number | string) array with fallback support
 export function resolveTints(input?: TintsInput, fallback?: TintsInput, defaultValue?: TintsInput): UmbraShade[] {
   // Priority: input -> fallback -> defaultValue
   const actualInput = input ?? fallback ?? defaultValue
@@ -73,7 +75,7 @@ export function resolveTints(input?: TintsInput, fallback?: TintsInput, defaultV
   if (!actualInput) return []
 
   if (Array.isArray(actualInput)) {
-    // Original array format - keep strings as-is, convert numeric strings to numbers
+    // Original array format (both mutable and readonly) - keep strings as-is, convert numeric strings to numbers
     return actualInput.map(v => {
       if (typeof v === 'string') {
         // If it looks like a color (starts with # or named color), keep as string
@@ -92,6 +94,6 @@ export function resolveTints(input?: TintsInput, fallback?: TintsInput, defaultV
     return generateTints({ easing: actualInput })
   }
 
-  // EasingOptions object
-  return generateTints(actualInput)
+  // EasingOptions object (not an array, not a string)
+  return generateTints(actualInput as EasingOptions)
 }

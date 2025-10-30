@@ -8,7 +8,7 @@ import { generateTints, resolveTints, easingFunctions } from './engine/easing'
 import type { EasingType, EasingOptions, TintsInput } from './engine/easing'
 import { defaultSettings } from './engine/defaults'
 import { colorPresets, getPresetByName, findClosestPreset, resolveColorPreset } from './engine/presets'
-import type { ColorPreset } from './engine/presets'
+import type { ColorPreset, PresetName, ColorString } from './engine/presets'
 
 import { attach } from './engine/primitives/attach'
 import { mostReadable, getReadability, colorMix } from './engine/primitives/color'
@@ -92,6 +92,8 @@ export type {
   EasingOptions,
   TintsInput,
   ColorPreset,
+  PresetName,
+  ColorString,
   // Export swatch types
   Plugin,
   HslColor,
