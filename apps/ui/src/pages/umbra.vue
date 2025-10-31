@@ -287,7 +287,7 @@ function stringIncludesTheWordTuned(str: string) {
 
 <template>
   <div id="ThemeControls">
-    <Button @click="() => theme.inverseTheme(false)">Inverse Theme</Button>
+    <Button @click="() => theme.inverseTheme(false)" class="base-warning">Inverse Theme</Button>
     <!-- <Button @click="cycleMode">
       Mode: {{ displayMode.charAt(0).toUpperCase() + displayMode.slice(1) }}
     </Button> -->

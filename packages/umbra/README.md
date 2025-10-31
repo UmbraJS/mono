@@ -34,6 +34,9 @@ Uses APCA (the future WCAG 3.0 standard) instead of broken WCAG 2.x ratios. Your
 **🌓 Dark Mode Built-In**  
 Call `.inverse()` and get a perfectly inverted theme. All colors maintain their relationships and readability.
 
+**🔄 Range Mapping**  
+Write component styles once using base variables. Get infinite color variants by adding a class (`.base-primary`, `.base-success`, etc.).
+
 **🎨 Scales With You**  
 Start with three colors. Add semantic accents (`danger`, `success`, `warning`) as you grow. Umbra scales from MVP to design system.
 
@@ -235,6 +238,11 @@ Your code becomes self-documenting. New developers know what colors mean just by
 Different parts of your app can have different themes:
 
 ```typescript
+### Scoped Themes
+
+Apply different themes to different parts of your application:
+
+```typescript
 // Global theme
 umbra({
   background: '#ffffff',
@@ -255,6 +263,153 @@ umbra({
   foreground: '#ffffff',
   accents: ['orange']
 }).apply({ target: '.admin' })
+```
+
+Each scope gets its own complete color system. No conflicts, no complexity.
+
+---
+
+## Range Mapping Classes
+
+**New in v1.0:** Umbra automatically generates CSS classes that let you remap the base range to any accent range. This is incredibly powerful for component-based design.
+
+### The Problem
+
+Imagine you build all your UI components using only the base range:
+
+```css
+.button {
+  background: var(--base-40);
+  color: var(--base-text);
+  border: 1px solid var(--base-60);
+}
+
+.button:hover {
+  background: var(--base-50);
+}
+```
+
+Now you need a warning button, a success button, a primary button... do you rewrite all the CSS for each variant? **No!**
+
+### The Solution
+
+Umbra generates range mapping classes automatically:
+
+```typescript
+umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [
+    { name: 'primary', color: 'blue' },
+    { name: 'warning', color: 'yellow' },
+    { name: 'success', color: 'green' },
+    { name: 'danger', color: 'tomato' }
+  ]
+}).apply()
+```
+
+This generates classes like:
+
+```css
+.base-primary {
+  --base: var(--primary);
+  --base-10: var(--primary-10);
+  --base-20: var(--primary-20);
+  /* ... all shades ... */
+  --base-text: var(--primary-text);
+}
+
+.base-warning {
+  --base: var(--warning);
+  --base-10: var(--warning-10);
+  /* ... all shades ... */
+}
+
+.base-success { /* ... */ }
+.base-danger { /* ... */ }
+```
+
+### Usage
+
+Now your single button component works for all variants:
+
+```html
+<!-- Generic button (uses base range) -->
+<button class="button">
+  Default
+</button>
+
+<!-- Primary button (remaps base to primary) -->
+<button class="button base-primary">
+  Primary
+</button>
+
+<!-- Warning button (remaps base to warning) -->
+<button class="button base-warning">
+  Warning
+</button>
+
+<!-- Success button (remaps base to success) -->
+<button class="button base-success">
+  Success
+</button>
+```
+
+**Your CSS stays the same. Just add a class.**
+
+### Why This Is Powerful
+
+**🎯 Component Reusability**  
+Write your component styles once using base variables. Get infinite variants for free.
+
+**🎨 Consistent Design**  
+All variants use the same shade structure. Your warning button and success button will have the same visual weight.
+
+**⚡ Tiny Bundle Size**  
+No duplicate CSS. One set of styles works for all variants through CSS variable remapping.
+
+**🔧 Easy Maintenance**  
+Change your base button? All variants update automatically.
+
+### Real-World Example
+
+```css
+/* Write once */
+.card {
+  background: var(--base-10);
+  border: 1px solid var(--base-30);
+  color: var(--base-text);
+}
+
+.card-header {
+  background: var(--base-20);
+  border-bottom: 1px solid var(--base-40);
+}
+
+.card-badge {
+  background: var(--base);
+  color: var(--base-text);
+  padding: 0.25rem 0.5rem;
+}
+```
+
+```html
+<!-- Use everywhere with different colors -->
+<div class="card">Default Card</div>
+<div class="card base-primary">Primary Card</div>
+<div class="card base-success">Success Card</div>
+<div class="card base-warning">Warning Card</div>
+```
+
+### Disable Range Mapping
+
+If you don't want these classes generated:
+
+```typescript
+umbra({
+  accents: ['blue']
+}).apply({ rangeMapping: false })
+```
 ```
 
 Each scope gets its own complete color system. No conflicts, no complexity. 
@@ -577,7 +732,15 @@ theme.apply({ target: '.my-component' })
 theme.apply({ 
   formatter: (color) => color.toHex()
 })
+
+// Disable range mapping classes
+theme.apply({ rangeMapping: false })
 ```
+
+**Options:**
+- `target` - Element or selector to apply theme to (default: `:root`)
+- `rangeMapping` - Generate `.base-*` mapping classes (default: `true`)
+- `alias` - CSS variable aliases object
 
 #### `.inverse()`
 
@@ -1236,6 +1399,7 @@ setTheme(getPreferredMode())
 ### Documentation
 
 - **[Color Presets Guide](COLOR_PRESETS.md)** - Complete guide to using color presets
+- **[Range Mapping Guide](RANGE_MAPPING.md)** - Component style remapping with `.base-*` classes
 - **[Implementation Details](PRESET_IMPLEMENTATION.md)** - Technical documentation for contributors
 
 ### Examples

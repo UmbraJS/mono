@@ -29,6 +29,7 @@ export interface Target {
 export interface AttachProps {
   alias?: Alias | boolean
   target?: Target
+  rangeMapping?: boolean
 }
 
 export const format = ({
@@ -69,12 +70,13 @@ export const format = ({
 
   return {
     ...outputs,
-    attach: ({ target, alias }: AttachProps) => {
+    attach: ({ target, alias, rangeMapping }: AttachProps) => {
       if (!document) return outputs
-      callback && callback(outputs)
+      if (callback) callback(outputs)
       return attach({
         outputs,
         alias: typeof alias === 'boolean' ? undefined : alias,
+        rangeMapping,
         target: target || {
           selector: ':root'
         }
