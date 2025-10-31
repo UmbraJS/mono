@@ -1,7 +1,30 @@
-import type { TintsInput } from './easing'
+import type { UmbraShade, TintsInput } from './easing'
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
-import type { UmbraShade } from './easing'
+
+// Shared tints and shades arrays
+export const TINTS_GRAY = [0.5, 2, 5, 8, 11, 13, 17, 24, 'primer', 42, 46, 58] as const;
+export const SHADES_GRAY = TINTS_GRAY;
+
+export const SHADES_COMMON = [
+  { mix: 15, hue: "next", saturation: "+=99" },
+  { mix: 20, hue: "next", saturation: "+=99" },
+  28, 38, 47, 56, 71, 78,
+  "primer",
+  { mix: "+=10", hue: "prev", saturation: "-=99" },
+  { mix: "+=17", hue: "prev", saturation: "-=99" },
+  { mix: "+=28", hue: "prev", saturation: "-=99" }
+] as const;
+
+export const SHADES_COMMON2 = [
+  { mix: 15, hue: "next", saturation: "+=99" },
+  { mix: 20, hue: "next", saturation: "+=99" },
+  28, 38, 47, 56, 71, 78,
+  "primer",
+  { mix: "+=10", hue: "prev", saturation: "-=99" },
+  { mix: "+=17", hue: "prev", saturation: "-=99" },
+  { mix: "+=28", hue: "prev", saturation: "-=99" }
+] as const;
 
 /**
  * Color preset definition with optimized tints and shades
@@ -25,8 +48,8 @@ export const colorPresets = [
   {
     name: 'gray',
     hex: '#8B8D98',
-    tints: [0.5, 2, 5, 8, 11, 13, 17, 24, 'primer', 42, 46, 58],
-    shades: [0.5, 2, 5, 8, 11, 13, 17, 24, 'primer', 42, 46, 58]
+    tints: TINTS_GRAY,
+    shades: SHADES_GRAY
   },
   {
     name: 'blue',
@@ -370,15 +393,7 @@ export const colorPresets = [
       { mix: "+=10", hue: 0, saturation: "-=12" },
       { mix: "+=29", hue: 0, saturation: "-=29" }
     ],
-    shades: [
-      { mix: 15, hue: "next", saturation: "+=99" },
-      { mix: 20, hue: "next", saturation: "+=99" },
-      28, 38, 47, 56, 71, 78,
-      "primer",
-      { mix: "+=10", hue: "prev", saturation: "-=99" },
-      { mix: "+=17", hue: "prev", saturation: "-=99" },
-      { mix: "+=28", hue: "prev", saturation: "-=99" }
-    ]
+    shades: SHADES_COMMON
   },
   {
     name: 'gold',
@@ -392,15 +407,7 @@ export const colorPresets = [
       { mix: "+=14", hue: 0, saturation: "-=12" },
       { mix: "+=25", hue: 0, saturation: "-=29" }
     ],
-    shades: [
-      { mix: 15, hue: "next", saturation: "+=99" },
-      { mix: 20, hue: "next", saturation: "+=99" },
-      28, 38, 47, 56, 71, 78,
-      "primer",
-      { mix: "+=10", hue: "prev", saturation: "-=99" },
-      { mix: "+=26", hue: "prev", saturation: "-=99" },
-      { mix: "+=28", hue: "prev", saturation: "-=99" }
-    ]
+    shades: SHADES_COMMON
   },
   {
     name: 'brown',
@@ -414,15 +421,7 @@ export const colorPresets = [
       { mix: "+=12", hue: 0, saturation: "-=12" },
       { mix: "+=28", hue: 0, saturation: "-=29" }
     ],
-    shades: [
-      { mix: 15, hue: "next", saturation: "+=99" },
-      { mix: 20, hue: "next", saturation: "+=99" },
-      28, 38, 47, 56, 71, 78,
-      "primer",
-      { mix: "+=10", hue: "prev", saturation: "-=99" },
-      { mix: "+=26", hue: "prev", saturation: "-=99" },
-      { mix: "+=28", hue: "prev", saturation: "-=99" }
-    ]
+    shades: SHADES_COMMON
   },
   {
     name: 'orange',
@@ -441,15 +440,7 @@ export const colorPresets = [
       { mix: "+=2", hue: 0, saturation: "-=12" },
       { mix: "+=28", hue: 0, saturation: "-=29" }
     ],
-    shades: [
-      { mix: 15, hue: "next", saturation: "+=99" },
-      { mix: 20, hue: "next", saturation: "+=99" },
-      28, 38, 47, 56, 71, 78,
-      "primer",
-      { mix: "+=10", hue: "prev", saturation: "-=99" },
-      { mix: "+=26", hue: "prev", saturation: "-=99" },
-      { mix: "+=28", hue: "prev", saturation: "-=99" }
-    ]
+    shades: SHADES_COMMON
   },
   {
     name: 'amber',
