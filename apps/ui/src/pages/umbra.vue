@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { umbra, defaultSettings, resolveTints } from '@umbrajs/core'
+import { umbra, defaultSettings, resolveTints, format } from '@umbrajs/core'
 import type { Accent, Umbra, UmbraInput, UmbraSwatch } from '@umbrajs/core'
 import { Button } from "umbraco"
 import { ref, computed } from 'vue'
@@ -19,13 +19,24 @@ import ColourHue from '../components/colour/Hue.vue';
 
 const radixGrayMap: Accent = {
   name: 'gray',
-  shades: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
-  tints: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
+  range: {
+    light: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
+    dark: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
+  },
 }
 
 const radixBlueMap: Accent = {
   name: 'blue',
   color: 'blue',
+}
+
+const radixBlueTestMap: Accent = {
+  name: 'blue-test',
+  color: '#001099',
+  // range: {
+  //   dark: "easeInOut",
+  //   light: "easeInOut",
+  // }
 }
 
 const radixRedMap: Accent = {
@@ -174,6 +185,7 @@ const theme = useUmbra({
   background: '#000000',  // Pure white (shared across all accents)
   accents: [
     radixGrayMap,
+    radixBlueTestMap,
     radixBlueMap,
     radixRedMap,
     radixGreenMap,
@@ -211,6 +223,10 @@ const theme = useUmbra({
 
 function useUmbra(schema: UmbraInput) {
   const initTheme = umbra(schema)
+  console.log('Initialized Umbra Theme:', {
+    init: initTheme,
+    formatted: initTheme.format(),
+  })
   const generatedTheme = ref<Umbra>(initTheme)
 
   function applyTheme() {
@@ -296,7 +312,7 @@ function stringIncludesTheWordTuned(str: string) {
     <div class="range-list">
       <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorList"
         @click="finishedEntries.push(range.name)">
-        <!-- <div v-if="displayMode === 'lightness'" class="TokensLightness">
+        <div v-if="displayMode === 'lightness'" class="TokensLightness">
           <ColourLightness v-for="color in range.range" :color="color"
             :previous-color="!stringIncludesTheWordTuned(range.name) ? filteredUmbraOutput[filteredUmbraOutput.indexOf(range) - 1]?.range[range.range.indexOf(color)] : undefined" />
         </div>
@@ -307,7 +323,7 @@ function stringIncludesTheWordTuned(str: string) {
 
         <div v-if="displayMode === 'hue'" class="TokensHue">
           <ColourHue v-for="color in range.range" :color="color" />
-        </div> -->
+        </div>
 
         <div class="tokens border">
           <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
