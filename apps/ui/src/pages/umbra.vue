@@ -145,8 +145,8 @@ const radixSkyMap: Accent = {
 }
 
 const theme = useUmbra({
-  foreground: '#ffffff',  // Pure black (shared across all accents)
-  background: '#000000',  // Pure white (shared across all accents)
+  foreground: '#000000',  // Pure black (shared across all accents)
+  background: '#ffffff',  // Pure white (shared across all accents)
   baseRange: {
     dark: Object.values(slateDark),
     light: Object.values(slate),
@@ -216,13 +216,6 @@ function getTokenName(index: number) {
 
 type DisplayMode = 'lightness' | 'saturation' | 'hue'
 const displayMode = ref<DisplayMode>('lightness')
-
-function cycleMode() {
-  const modes: DisplayMode[] = ['lightness', 'saturation', 'hue']
-  const currentIndex = modes.indexOf(displayMode.value)
-  const nextIndex = (currentIndex + 1) % modes.length
-  displayMode.value = modes[nextIndex]
-}
 
 const finishedEntries = ref<string[]>([
   // "base",

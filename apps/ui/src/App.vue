@@ -30,13 +30,13 @@ const theme = umbra({
 });
 
 // Apply theme after component is mounted
-onMounted(() => {
-  try {
-    inversed.value ? theme.inverse().apply() : theme.apply();
-  } catch (error) {
-    console.error("Theme application error:", error);
-  }
-});
+// onMounted(() => {
+//   try {
+//     inversed.value ? theme.inverse().apply() : theme.apply();
+//   } catch (error) {
+//     console.error("Theme application error:", error);
+//   }
+// });
 
 function toggleTheme() {
   try {

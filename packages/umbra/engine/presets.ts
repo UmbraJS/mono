@@ -1,12 +1,13 @@
 import type { UmbraShade, TintsInput } from './easing'
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
+import { defaultSettings } from './defaults'
 
 // Shared tints and shades arrays
 const TINTS_GRAY = [0.5, 2, 5, 8, 11, 13, 17, 24, 'primer', 42, 46, 58] as const;
 const SHADES_GRAY = TINTS_GRAY;
 
-const evenContrast = [
+const evenContrastDark = [
   { mix: 15, hue: "next", saturation: "+=99" },
   { mix: 20, hue: "next", saturation: "+=99" },
   { mix: 25, hue: "next", saturation: "+=99" },
@@ -19,6 +20,31 @@ const evenContrast = [
   { mix: "+=16", hue: "prev", saturation: "-=99" },
   { mix: "+=22", hue: "prev", saturation: "-=92" },
   { mix: "+=21", hue: "prev", saturation: "-=99" }
+] as const;
+
+const evenContrastLight = [
+  { mix: 3, hue: "next" },
+  { mix: 5, hue: "next", saturation: "+=99" },
+  14, 24, 35, 49, 68, 88,
+  "primer",
+  { mix: "+=5", hue: 0, saturation: "-=4" },
+  { mix: "+=6", hue: 0, saturation: "-=12" },
+  { mix: "+=35", hue: 0, saturation: "-=29" }
+] as const;
+
+const orangeContrastLight = [
+  { mix: 2, hue: "next+=0.5", saturation: "+=99" },
+  { mix: 9, hue: "next+=10", saturation: "+=99" },
+  { mix: 18, hue: "next+=14", saturation: "+=99" },
+  { mix: 31, hue: "next+=11", saturation: "+=99" },
+  { mix: 42, hue: "next+=10", saturation: "+=99" },
+  { mix: 54, hue: "next+=7", saturation: "+=99" },
+  { mix: 61, hue: "next+=4", saturation: "+=99" },
+  { mix: 79, hue: "next+=2", saturation: "+=99" },
+  "primer",
+  { mix: "+=12", hue: 0, saturation: "-=4" },
+  { mix: "+=2", hue: 0, saturation: "-=12" },
+  { mix: "+=28", hue: 0, saturation: "-=29" }
 ] as const;
 
 const antiMud = [
@@ -51,6 +77,45 @@ const deepContrast = [
   { mix: "+=7", hue: "prev-=0", saturation: "-=90" }
 ] as const;
 
+const frontLoadedAmber = [
+  { mix: 8, hue: "next", saturation: 90 },
+  { mix: 25, hue: "next-=10", saturation: 90 },
+  { mix: 52, hue: "next-=10", saturation: 90 },
+  "primer",
+  { mix: "+=2", hue: "+=5" },
+  { mix: "+=2", hue: "+=5" },
+  { mix: "+=5", hue: "+=2", saturation: "-=32" },
+  "+=4",
+  "+=2",
+  "+=2",
+  { mix: "+=5", hue: "+=5", saturation: "+=22" },
+  "+=20"
+] as const;
+
+const limeLight = [
+  { mix: 10, hue: "next", saturation: 90 },
+  { mix: 25, hue: "next", saturation: 90 },
+  { mix: 52, hue: "next", saturation: 90 },
+  "primer",
+  "+=6",
+  "+=4",
+  "+=3",
+  "+=3",
+  "+=5",
+  "+=2",
+  "+=5",
+  "+=15"
+] as const;
+
+
+const evenContrast = {
+  name: 'evenContrast',
+  range: {
+    light: evenContrastLight,
+    dark: evenContrastDark
+  }
+}
+
 /**
  * Color preset definition with optimized range configurations
  */
@@ -76,482 +141,146 @@ export const colorPresets = [
   {
     name: 'blue',
     hex: '#0090FF',
+    range: evenContrast.range
+  },
+  {
+    name: 'darkBlue',
+    hex: '#001F3F',
     range: {
-      light: [
-        { mix: 3, hue: "next" },
-        { mix: 5, hue: "next", saturation: "+=99" },
-        14, 24, 35, 49, 68, 88,
-        "primer",
-        { mix: "+=5", hue: 0, saturation: "-=4" },
-        { mix: "+=6", hue: 0, saturation: "-=12" },
-        { mix: "+=35", hue: 0, saturation: "-=29" }
-      ],
-      dark: evenContrast
+      light: TINTS_GRAY,
+      dark: [5, 9, 13, 17, 20, 25, 30, 41, 46, 51, 74, 94],
     }
   },
   {
     name: 'red',
     hex: '#E5484D',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        10, 19, 26, 35, 49, 67,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=40", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'green',
     hex: '#30A46C',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 5, hue: "next", saturation: "+=99" },
-        12, 20, 30, 41, 58, 82,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=31", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'tomato',
     hex: '#E54D2E',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 20, 27, 38, 51, 68,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=36", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'crimson',
     hex: '#E93D82',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 21, 31, 43, 56, 72,
-        "primer",
-        { mix: "+=7", hue: 0, saturation: "-=4" },
-        { mix: "+=9", hue: 0, saturation: "-=12" },
-        { mix: "+=30", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'pink',
     hex: '#D6409F',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 20, 28, 39, 52, 67,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=40", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'plum',
     hex: '#AB4ABA',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        11, 17, 23, 32, 46, 59,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=3", hue: 0, saturation: "-=12" },
-        { mix: "+=38", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'purple',
     hex: '#8E4EC6',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        9, 13, 19, 31, 42, 57,
-        "primer",
-        { mix: "+=8", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=0" },
-        { mix: "+=10", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'violet',
     hex: '#6E56CF',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next", saturation: "+=99" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        8, 11, 16, 26, 36, 55,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=26", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'iris',
     hex: '#5B5BD6',
-    range: {
-
-      light: [
-        { mix: 1, hue: "next" },
-        { mix: 2, hue: "next", saturation: "+=99" },
-        8, 11, 16, 24, 37, 57,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=10", hue: 0, saturation: "-=12" },
-        { mix: "+=20", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'indigo',
     hex: '#3E63DD',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        10, 15, 24, 30, 47, 62,
-        "primer",
-        { mix: "+=12", hue: 0, saturation: "-=4" },
-        { mix: "+=15", hue: 0, saturation: "-=12" },
-        { mix: "+=10", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'cyan',
     hex: '#00A2C7',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 5, hue: "next", saturation: "+=99" },
-        16, 25, 35, 49, 64, 89,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=40", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'teal',
     hex: '#12A594',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 21, 32, 44, 60, 81,
-        "primer",
-        { mix: "+=9", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=20", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'jade',
     hex: '#29A383',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 5, hue: "next", saturation: "+=99" },
-        11, 19, 29, 41, 57, 82,
-        "primer",
-        { mix: "+=8", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=35", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'grass',
     hex: '#46A758',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 6, hue: "next", saturation: "+=99" },
-        12, 20, 30, 42, 60, 84,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=18", hue: 0, saturation: "-=12" },
-        { mix: "+=20", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'bronze',
     hex: '#A18072',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        13, 19, 28, 39, 50, 69,
-        "primer",
-        { mix: "+=8", hue: 0, saturation: "-=4" },
-        { mix: "+=10", hue: 0, saturation: "-=12" },
-        { mix: "+=29", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'gold',
     hex: '#978365',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 7, hue: "next", saturation: "+=99" },
-        14, 20, 29, 38, 52, 70,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=14", hue: 0, saturation: "-=12" },
-        { mix: "+=25", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'brown',
     hex: '#AD7F58',
-    range: {
-
-      light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        13, 21, 29, 39, 52, 71,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=28", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
-    }
+    range: evenContrast.range
   },
   {
     name: 'orange',
     hex: '#F76B15',
     range: {
-
-      light: [
-        { mix: 2, hue: "next+=0.5", saturation: "+=99" },
-        { mix: 9, hue: "next+=10", saturation: "+=99" },
-        { mix: 18, hue: "next+=14", saturation: "+=99" },
-        { mix: 31, hue: "next+=11", saturation: "+=99" },
-        { mix: 42, hue: "next+=10", saturation: "+=99" },
-        { mix: 54, hue: "next+=7", saturation: "+=99" },
-        { mix: 61, hue: "next+=4", saturation: "+=99" },
-        { mix: 79, hue: "next+=2", saturation: "+=99" },
-        "primer",
-        { mix: "+=12", hue: 0, saturation: "-=4" },
-        { mix: "+=2", hue: 0, saturation: "-=12" },
-        { mix: "+=28", hue: 0, saturation: "-=29" }
-      ],
-
-      dark: evenContrast
-
+      light: orangeContrastLight,
+      dark: evenContrastDark
     }
   },
   {
     name: 'amber',
     hex: '#FFC53D',
     range: {
-
-      light: [
-        { mix: 6, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next-=10", saturation: 90 },
-        { mix: 52, hue: "next-=10", saturation: 90 },
-        "primer",
-        { mix: "+=2", hue: "+=5" },
-        { mix: "+=2", hue: "+=5" },
-        "+=2",
-        "+=2",
-        { mix: "+=5", hue: "+=2", saturation: "-=32" },
-        "+=2",
-        { mix: "+=5", hue: "+=5", saturation: "+=22" },
-        "+=15"
-      ],
-
+      light: frontLoadedAmber,
       dark: antiMud
-
     }
   },
   {
     name: 'yellow',
     hex: '#FFDC00',
     range: {
-
-      light: [
-        { mix: 8, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next-=10", saturation: 90 },
-        { mix: 52, hue: "next-=10", saturation: 90 },
-        "primer",
-        { mix: "+=2", hue: "+=5" },
-        { mix: "+=2", hue: "+=5" },
-        { mix: "+=5", hue: "+=2", saturation: "-=32" },
-        "+=4",
-        "+=2",
-        "+=2",
-        { mix: "+=5", hue: "+=5", saturation: "+=22" },
-        "+=20"
-      ],
-
+      light: frontLoadedAmber,
       dark: antiMud
-
     }
   },
   {
     name: 'lime',
     hex: '#BDEE63',
     range: {
-
-      light: [
-        { mix: 8, hue: "next", saturation: 90 },
-        { mix: 30, hue: "next", saturation: 90 },
-        { mix: 60, hue: "next", saturation: 90 },
-        "primer",
-        { mix: "+=6", hue: "+=5" },
-        { mix: "+=6", hue: "+=5" },
-        "+=2",
-        "+=2",
-        { mix: "+=3", hue: "+=2", saturation: "-=12" },
-        "+=3",
-        { mix: "+=3", hue: "+=5" },
-        "+=3"
-      ],
-
+      light: limeLight,
       dark: antiMud
-
     }
   },
   {
     name: 'mint',
     hex: '#86EAD4',
     range: {
-
-      light: [
-        { mix: 10, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next", saturation: 90 },
-        { mix: 52, hue: "next", saturation: 90 },
-        "primer",
-        "+=6",
-        "+=4",
-        "+=3",
-        "+=3",
-        "+=5",
-        "+=2",
-        "+=5",
-        "+=15"
-      ],
-
+      light: limeLight,
       dark: deepContrast
-
     }
   },
   {
     name: 'sky',
     hex: '#7CE2FE',
     range: {
-
-      light: [
-        { mix: 10, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next", saturation: 90 },
-        { mix: 52, hue: "next", saturation: 90 },
-        "primer",
-        "+=6",
-        "+=4",
-        "+=3",
-        "+=3",
-        "+=5",
-        "+=2",
-        "+=5",
-        "+=15"
-      ],
-
+      light: limeLight,
       dark: deepContrast
 
     }
