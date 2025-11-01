@@ -622,28 +622,30 @@ Context: { accentName: 'primary', contrast: 12.5, threshold: 30, against: 'backg
 
 ### Validation Rules
 
-Umbra validates that accent **primer colors** (the base color you provide) have sufficient contrast:
+Umbra validates color contrast at two levels:
 
-| Check | Requirement | Why It Matters |
-|-------|-------------|----------------|
-| **Accent vs Background** | APCA Lc ≥ 30 | Ensures accent elements are visible against the page background |
-| **Accent vs Foreground** | APCA Lc ≥ 30 | Prevents accent colors from blending with text |
+| Check | Requirement | Setting | Why It Matters |
+|-------|-------------|---------|----------------|
+| **Foreground vs Background** | APCA Lc ≥ 70 | `readability` | Ensures base text is readable |
+| **Accent vs Background** | APCA Lc ≥ 30 | `minContrastThreshold` | Ensures accent elements are visible |
+| **Accent vs Foreground** | APCA Lc ≥ 30 | `minContrastThreshold` | Prevents accents from blending with text |
 
-The default threshold is **30 APCA Lc units**—this ensures accents are distinguishable while allowing design flexibility.
+The defaults balance accessibility with design flexibility: **70 APCA Lc** for text readability, **30 APCA Lc** for accent visibility.
 
-### Customizing the Threshold
+### Customizing Thresholds
 
-Need stricter or more lenient validation? Adjust the threshold:
+Adjust validation thresholds independently:
 
 ```typescript
 const theme = umbra({
   background: '#ffffff',
-  foreground: '#1a1a1a',
+  foreground: '#f5f5f5',  // Close to background
   accents: {
-    primary: '#e8e8e8',
+    primary: '#e8e8e8',   // Also close to background
   },
   settings: {
-    minContrastThreshold: 45  // Stricter validation
+    readability: 45,            // Stricter base fg/bg requirement
+    minContrastThreshold: 30    // Standard accent validation
   }
 })
 ```
@@ -1103,9 +1105,9 @@ interface Accent {
 
 ```typescript
 interface UmbraSettings {
-  readability?: number           // APCA target (default: 70)
+  readability?: number           // APCA target for base fg/bg (default: 70)
   iterations?: number            // Adjustment iterations (default: 20)
-  minContrastThreshold?: number  // Validation threshold (default: 30)
+  minContrastThreshold?: number  // Accent primer validation (default: 30)
   shades?: UmbraShade[]         // Dark theme progression
   tints?: UmbraShade[]          // Light theme progression
   formatter?: Formatter          // Output format
@@ -1113,9 +1115,9 @@ interface UmbraSettings {
 ```
 
 **Settings:**
-- `readability` - APCA Lc contrast target for generated scales (default: 70)
+- `readability` - APCA Lc contrast target for base foreground/background (default: 70)
 - `iterations` - Number of color adjustment iterations (default: 20)
-- `minContrastThreshold` - Minimum APCA Lc for accent validation (default: 30)
+- `minContrastThreshold` - Minimum APCA Lc for accent primer validation (default: 30)
 - `shades` - Custom progression for dark mode color scales
 - `tints` - Custom progression for light mode color scales
 - `formatter` - Default output formatter for colors

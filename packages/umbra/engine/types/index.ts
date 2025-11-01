@@ -88,12 +88,13 @@ export interface UmbraAdjusted {
 export interface UmbraSettings {
   power?: number
   iterations?: number
+  /** APCA contrast target for base foreground/background (default: 30) */
   readability?: number
   insertion?: number
   aliases?: Alias | true
   range?: TintsInput | { light?: TintsInput; dark?: TintsInput }
   callback?: (props: UmbraOutputs) => void
   formater?: Formater
-  /** Minimum contrast threshold for validation warnings (default: 30) */
+  /** Minimum APCA contrast for accent primer validation (default: 30) */
   minContrastThreshold?: number
 }

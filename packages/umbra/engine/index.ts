@@ -82,8 +82,10 @@ function umbraAdjust(scheme = defaultScheme): {
 } {
   const background = swatch(scheme.background)
   const originalForeground = swatch(scheme.foreground)
+  const readabilityThreshold = fallback({ number: scheme.settings?.readability, fallback: 30 })
+  
   const foreground = getReadable({
-    readability: fallback({ number: scheme.settings?.readability, fallback: 4 }),
+    readability: readabilityThreshold,
     foreground: originalForeground,
     background,
   })
@@ -91,17 +93,17 @@ function umbraAdjust(scheme = defaultScheme): {
   const warnings: ValidationWarning[] = []
   
   // Check if original foreground and background have sufficient contrast
+  // Use the same readability threshold that's used for generating the range
   const contrast = getReadability(originalForeground, background)
-  const threshold = scheme.settings?.minContrastThreshold ?? 30
   
-  if (contrast < threshold) {
+  if (contrast < readabilityThreshold) {
     warnings.push({
       type: 'contrast',
       severity: 'warning',
-      message: `Foreground and background colors have low contrast (${contrast.toFixed(1)} Lc, threshold: ${threshold})`,
+      message: `Foreground and background colors have low contrast (${contrast.toFixed(1)} Lc, threshold: ${readabilityThreshold})`,
       context: {
         contrast,
-        threshold,
+        threshold: readabilityThreshold,
         originalForeground: originalForeground.toHex(),
         background: background.toHex(),
         adjustedForeground: foreground.toHex(),

@@ -150,7 +150,7 @@ describe('Validation Warnings', () => {
     expect(warning.type).toBe('contrast')
     expect(warning.message).toContain('Foreground and background')
     expect(warning.context?.contrast).toBeDefined()
-    expect(warning.context?.threshold).toBe(30)
+    expect(warning.context?.threshold).toBe(70) // Default readability
     expect(warning.context?.originalForeground).toBe('#f5f5f5')
     expect(warning.context?.adjustedForeground).toBeDefined()
   })
@@ -196,7 +196,7 @@ describe('Validation Warnings', () => {
       foreground: '#d0d0d0',
       accents: [],
       settings: {
-        minContrastThreshold: 50
+        readability: 50  // Use readability for base fg/bg validation
       }
     })
 
@@ -204,5 +204,39 @@ describe('Validation Warnings', () => {
     expect(themeStrict.validationWarnings.length).toBeGreaterThanOrEqual(
       themeDefault.validationWarnings.length
     )
+  })
+
+  it('should use readability setting for base validation', () => {
+    const theme = umbra({
+      background: '#ffffff',
+      foreground: '#e0e0e0',
+      accents: [],
+      settings: {
+        readability: 40  // Custom readability threshold
+      }
+    })
+
+    if (theme.validationWarnings.length > 0) {
+      const warning = theme.validationWarnings[0]
+      expect(warning.context?.threshold).toBe(40)
+    }
+  })
+
+  it('should use minContrastThreshold for accent validation', () => {
+    const theme = umbra({
+      background: '#ffffff',
+      foreground: '#000000',
+      accents: [
+        { name: 'test', color: '#e0e0e0' }
+      ],
+      settings: {
+        minContrastThreshold: 40  // Custom accent threshold
+      }
+    })
+
+    if (theme.validationWarnings.length > 0) {
+      const warning = theme.validationWarnings[0]
+      expect(warning.context?.minContrast).toBe(40)
+    }
   })
 })
