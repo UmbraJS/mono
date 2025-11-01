@@ -23,18 +23,19 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 1, hue: 'next' },
-            { mix: 2, hue: 'next' },
-            5,
-            '#0090ff',  // h:206°
-            50
-          ]
+          range: {
+            light: [
+              { mix: 1, hue: 'next' },
+              { mix: 2, hue: 'next' },
+              5,
+              '#0090ff',  // h:206°
+              50
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       // First two colors should have blue hue (~206°) from #0090ff
       const hue0 = result[0].toHsl().h
@@ -52,16 +53,17 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 1, hue: 'next', saturation: '+=99' },
-            5,
-            '#ff0000'
-          ]
+          range: {
+            light: [
+              { mix: 1, hue: 'next', saturation: '+=99' },
+              5,
+              '#ff0000'
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const color0 = result[0].toHsl()
       const redHue = swatch('#ff0000').toHsl().h
@@ -79,18 +81,19 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 1, hue: 'next' },  // Should use #00ff00 (first next)
-            5,
-            '#00ff00',  // Green
-            10,
-            '#0000ff'   // Blue
-          ]
+          range: {
+            light: [
+              { mix: 1, hue: 'next' },  // Should use #00ff00 (first next)
+              5,
+              '#00ff00',  // Green
+              10,
+              '#0000ff'   // Blue
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const hue0 = result[0].toHsl().h
       const greenHue = swatch('#00ff00').toHsl().h
@@ -105,15 +108,16 @@ describe('Hue References (next/prev)', () => {
         foreground: '#0000ff',  // Blue
         accents: [],
         settings: {
-          range: { light: [
-            50,
-            { mix: 70, hue: 'next' }  // No color stop ahead, should use foreground
-          ]
+          range: {
+            light: [
+              50,
+              { mix: 70, hue: 'next' }  // No color stop ahead, should use foreground
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const hue1 = result[1].toHsl().h
       const blueHue = swatch('#0000ff').toHsl().h
@@ -130,17 +134,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            '#ff0000',  // Red stop
-            5,
-            { mix: 20, hue: 'prev' },  // Should use red hue
-            50
-          ]
+          range: {
+            light: [
+              '#ff0000',  // Red stop
+              5,
+              { mix: 20, hue: 'prev' },  // Should use red hue
+              50
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const hue2 = result[2].toHsl().h
       const redHue = swatch('#ff0000').toHsl().h
@@ -154,18 +159,19 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            '#0000ff',  // Blue
-            5,
-            '#00ff00',  // Green
-            10,
-            { mix: 30, hue: 'prev' }  // Should use green (closest prev)
-          ]
+          range: {
+            light: [
+              '#0000ff',  // Blue
+              5,
+              '#00ff00',  // Green
+              10,
+              { mix: 30, hue: 'prev' }  // Should use green (closest prev)
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const hue4 = result[4].toHsl().h
       const greenHue = swatch('#00ff00').toHsl().h
@@ -179,15 +185,16 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 5, hue: 'prev' },  // No prev stop, should use background
-            20
-          ]
+          range: {
+            light: [
+              { mix: 5, hue: 'prev' },  // No prev stop, should use background
+              20
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const hue0 = result[0].toHsl().h
       const magentaHue = swatch('#ff00ff').toHsl().h
@@ -203,17 +210,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            5,
-            '#0090ff',  // Blue (h:206°)
-            { mix: '+=10', hue: 0 },  // Should keep h:206°
-            { mix: '+=20', hue: 0 }   // Should still keep h:206°
-          ]
+          range: {
+            light: [
+              5,
+              '#0090ff',  // Blue (h:206°)
+              { mix: '+=10', hue: 0 },  // Should keep h:206°
+              { mix: '+=20', hue: 0 }   // Should still keep h:206°
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const blueHue = result[1].toHsl().h
       const afterBlue1 = result[2].toHsl().h
@@ -230,15 +238,16 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            '#0090ff',  // Blue
-            { mix: '+=30', hue: 0 }  // Darken but stay blue
-          ]
+          range: {
+            light: [
+              '#0090ff',  // Blue
+              { mix: '+=30', hue: 0 }  // Darken but stay blue
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const originalHue = result[0].toHsl().h
       const darkenedHue = result[1].toHsl().h
@@ -258,18 +267,19 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 1, hue: 'next' },   // → red
-            5,
-            '#ff0000',  // Red
-            { mix: '+=10', hue: 'prev' },  // ← red
-            { mix: '+=20', hue: 0 }     // stay red
-          ]
+          range: {
+            light: [
+              { mix: 1, hue: 'next' },   // → red
+              5,
+              '#ff0000',  // Red
+              { mix: '+=10', hue: 'prev' },  // ← red
+              { mix: '+=20', hue: 0 }     // stay red
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       const redHue = swatch('#ff0000').toHsl().h
 
@@ -286,12 +296,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          range: { light: [
-            { mix: 1, hue: 'next' },
-            5,
-            '#0090ff',
-            { mix: '+=10', hue: 0 }
-          ]
+          range: {
+            light: [
+              { mix: 1, hue: 'next' },
+              5,
+              '#0090ff',
+              { mix: '+=10', hue: 0 }
+            ]
           }
         }],
         settings: {}
@@ -299,9 +310,9 @@ describe('Hue References (next/prev)', () => {
 
       const result = umbraGenerate(scheme, createAdjusted(scheme))
 
-      expect(result).toHaveLength(2) // Base + accent
+      expect(result.output).toHaveLength(2) // Base + accent
 
-      const accentRange = result[1].range
+      const accentRange = result.output[1].range
       const blueHue = swatch('#0090ff').toHsl().h
 
       // First and last should have blue hue
@@ -317,15 +328,16 @@ describe('Hue References (next/prev)', () => {
         foreground: '#0000ff',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 10, hue: 'next' },  // No stops, use foreground
-            { mix: 50, hue: 'prev' }   // No stops, use background
-          ]
+          range: {
+            light: [
+              { mix: 10, hue: 'next' },  // No stops, use foreground
+              { mix: 50, hue: 'prev' }   // No stops, use background
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       // Should not crash
       expect(result).toHaveLength(2)
@@ -339,17 +351,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 5, hue: 'next' },
-            10,
-            '#ff0000',  // Red (hue ~0°)
-            50
-          ]
+          range: {
+            light: [
+              { mix: 5, hue: 'next' },
+              10,
+              '#ff0000',  // Red (hue ~0°)
+              50
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
 
       // Should handle hue wrapping around 360°
       const hue0 = result[0].toHsl().h
@@ -365,17 +378,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 5, hue: 'next+=30' },  // Blue hue + 30°
-            10,
-            '#0090ff',  // Blue (hue ~206°)
-            50
-          ]
+          range: {
+            light: [
+              { mix: 5, hue: 'next+=30' },  // Blue hue + 30°
+              10,
+              '#0090ff',  // Blue (hue ~206°)
+              50
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
       const hue0 = result[0].toHsl().h
       const blueHue = swatch('#0090ff').toHsl().h
       const expectedHue = (blueHue + 30) % 360
@@ -390,17 +404,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 5, hue: 'next-=20' },  // Blue hue - 20°
-            10,
-            '#0090ff',  // Blue (hue ~206°)
-            50
-          ]
+          range: {
+            light: [
+              { mix: 5, hue: 'next-=20' },  // Blue hue - 20°
+              10,
+              '#0090ff',  // Blue (hue ~206°)
+              50
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
       const hue0 = result[0].toHsl().h
       const blueHue = swatch('#0090ff').toHsl().h
       const expectedHue = (blueHue - 20 + 360) % 360
@@ -419,17 +434,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            '#ff0000',  // Red (hue ~0°)
-            10,
-            { mix: 50, hue: 'prev+=40' },  // Red hue + 40°
-            90
-          ]
+          range: {
+            light: [
+              '#ff0000',  // Red (hue ~0°)
+              10,
+              { mix: 50, hue: 'prev+=40' },  // Red hue + 40°
+              90
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
       const hue2 = result[2].toHsl().h
       const redHue = swatch('#ff0000').toHsl().h
       const expectedHue = (redHue + 40) % 360
@@ -444,17 +460,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            '#00ff00',  // Green (hue ~120°)
-            10,
-            { mix: 50, hue: 'prev-=30' },  // Green hue - 30°
-            90
-          ]
+          range: {
+            light: [
+              '#00ff00',  // Green (hue ~120°)
+              10,
+              { mix: 50, hue: 'prev-=30' },  // Green hue - 30°
+              90
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
       const hue2 = result[2].toHsl().h
       const greenHue = swatch('#00ff00').toHsl().h
       const expectedHue = (greenHue - 30 + 360) % 360
@@ -469,17 +486,18 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 5, hue: 'next+=12.5' },
-            10,
-            '#0090ff',
-            50
-          ]
+          range: {
+            light: [
+              { mix: 5, hue: 'next+=12.5' },
+              10,
+              '#0090ff',
+              50
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
       const hue0 = result[0].toHsl().h
       const blueHue = swatch('#0090ff').toHsl().h
       const expectedHue = (blueHue + 12.5) % 360
@@ -494,15 +512,16 @@ describe('Hue References (next/prev)', () => {
         foreground: '#0000ff',  // Blue foreground
         accents: [],
         settings: {
-          range: { light: [
-            { mix: 10, hue: 'next+=20' },  // No stops, use foreground + 20°
-            50
-          ]
+          range: {
+            light: [
+              { mix: 10, hue: 'next+=20' },  // No stops, use foreground + 20°
+              50
+            ]
           }
         }
       }
 
-      const result = umbraGenerate(scheme, createAdjusted(scheme))[0].range
+      const result = umbraGenerate(scheme, createAdjusted(scheme)).output[0].range
       const hue0 = result[0].toHsl().h
       const foregroundHue = swatch('#0000ff').toHsl().h
       const expectedHue = (foregroundHue + 20) % 360

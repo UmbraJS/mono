@@ -1,6 +1,6 @@
 import type { UmbraSwatch } from '../../swatch'
 import { umbra } from '../..'
-import type { UmbraRange, FormatedRange, UmbraScheme, StableScheme } from '../types'
+import type { UmbraRange, FormatedRange, UmbraScheme, StableScheme, ValidationWarning } from '../types'
 import { attach } from './attach'
 import type { Alias } from './attach'
 
@@ -12,6 +12,7 @@ interface FormatProps {
   formater?: Formater
   target?: HTMLElement | null | string
   callback?: (outputs: UmbraOutputs) => void
+  validationWarnings?: ValidationWarning[]
 }
 
 export interface UmbraOutputs {
@@ -20,6 +21,7 @@ export interface UmbraOutputs {
   output: UmbraRange[]
   input: Partial<UmbraScheme>
   stable: StableScheme
+  validationWarnings: ValidationWarning[]
 }
 
 export interface Target {
@@ -37,7 +39,8 @@ export const format = ({
   input,
   output = umbra().output,
   formater = defaultFormater,
-  callback
+  callback,
+  validationWarnings = []
 }: FormatProps) => {
   let existingAccents = 0
   function getName(name: string) {
@@ -70,7 +73,8 @@ export const format = ({
     formated,
     output,
     input,
-    stable
+    stable,
+    validationWarnings
   }
 
   return {

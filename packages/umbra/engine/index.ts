@@ -1,6 +1,6 @@
 import { swatch } from '../swatch'
 import { defaultSettings, defaultScheme } from './defaults'
-import type { UmbraInput, UmbraScheme, UmbraRange } from './types'
+import type { UmbraInput, UmbraScheme, UmbraRange, ValidationWarning } from './types'
 
 import { format } from './primitives/format'
 import type { Formater, UmbraOutputs, AttachProps } from './primitives/format'
@@ -24,6 +24,7 @@ interface Format extends UmbraOutputs {
 export interface Umbra {
   output: UmbraRange[]
   input: UmbraInput
+  validationWarnings: ValidationWarning[]
   apply: (props?: ApplyProps) => UmbraOutputs
   format: (formater?: Formater) => Format
   isDark: () => boolean
@@ -33,9 +34,11 @@ export interface Umbra {
 export function umbra(scheme: UmbraInput = defaultScheme): Umbra {
   const input = insertFallbacks(scheme)
   const adjustment = umbraAdjust(input)
+  const generated = umbraGenerate(input, adjustment)
   return umbraHydrate({
     input,
-    output: umbraGenerate(input, adjustment),
+    output: generated.output,
+    validationWarnings: generated.validationWarnings,
     inversed: input.inversed,
   })
 }
@@ -96,20 +99,23 @@ function getTarget(target?: string | HTMLElement | null) {
 export function umbraHydrate({
   input,
   output,
+  validationWarnings = [],
   inversed,
 }: {
   input: UmbraScheme
   output: UmbraRange[]
+  validationWarnings?: ValidationWarning[]
   inversed?: UmbraInput
 }) {
   function getFormat(passedFormater?: Formater) {
     const formater = passedFormater || input.settings?.formater
-    return format({ output, formater, input, callback: input.settings?.callback })
+    return format({ output, formater, input, callback: input.settings?.callback, validationWarnings })
   }
 
   return {
     input,
     output,
+    validationWarnings,
     isDark: () => isDark(input.background),
     format: (formater?: Formater) => getFormat(formater),
     inverse: () => umbra(inverse(input, inversed)),

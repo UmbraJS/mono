@@ -31,6 +31,9 @@ Write `'tomato'` instead of `'#E54D2E'`. Each preset includes hand-tuned color s
 **♿ Actually Accessible**  
 Uses APCA (the future WCAG 3.0 standard) instead of broken WCAG 2.x ratios. Your dark mode will actually be readable.
 
+**✅ Built-In Validation**  
+Automatic contrast checking warns you when accent colors are too close to backgrounds. Catch accessibility issues before they ship.
+
 **🌓 Dark Mode Built-In**  
 Call `.inverse()` and get a perfectly inverted theme. All colors maintain their relationships and readability.
 
@@ -585,6 +588,121 @@ By the time WCAG 3.0 becomes the standard, your themes will already be compliant
 
 ---
 
+## Color Validation
+
+Umbra automatically validates your color choices and warns you about potential accessibility issues.
+
+### Automatic Contrast Checking
+
+When you generate a theme, Umbra checks if your accent colors have enough contrast with the background and foreground:
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#1a1a1a',
+  accents: {
+    primary: '#f0f0f0',  // Too close to background!
+  }
+})
+
+// Check for validation warnings
+if (theme.validationWarnings.length > 0) {
+  theme.validationWarnings.forEach(warning => {
+    console.warn(`${warning.severity}: ${warning.message}`)
+    console.log('Context:', warning.context)
+  })
+}
+```
+
+Output:
+```
+warning: Accent color 'primary' primer has low contrast with background
+Context: { accentName: 'primary', contrast: 12.5, threshold: 30, against: 'background' }
+```
+
+### Validation Rules
+
+Umbra validates that accent **primer colors** (the base color you provide) have sufficient contrast:
+
+| Check | Requirement | Why It Matters |
+|-------|-------------|----------------|
+| **Accent vs Background** | APCA Lc ≥ 30 | Ensures accent elements are visible against the page background |
+| **Accent vs Foreground** | APCA Lc ≥ 30 | Prevents accent colors from blending with text |
+
+The default threshold is **30 APCA Lc units**—this ensures accents are distinguishable while allowing design flexibility.
+
+### Customizing the Threshold
+
+Need stricter or more lenient validation? Adjust the threshold:
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#1a1a1a',
+  accents: {
+    primary: '#e8e8e8',
+  },
+  settings: {
+    minContrastThreshold: 45  // Stricter validation
+  }
+})
+```
+
+### Handling Warnings in Production
+
+Validation warnings are development aids—use them to improve your color choices:
+
+```typescript
+function createTheme(colors) {
+  const theme = umbra(colors)
+  
+  if (process.env.NODE_ENV === 'development') {
+    if (theme.validationWarnings.length > 0) {
+      console.group('🎨 Theme Validation Warnings')
+      theme.validationWarnings.forEach(w => {
+        console.warn(w.message)
+        console.log('Details:', w.context)
+      })
+      console.groupEnd()
+    }
+  }
+  
+  return theme
+}
+```
+
+### What Gets Validated
+
+| Validated | Not Validated |
+|-----------|---------------|
+| ✅ Accent primer colors | ❌ Generated scale colors |
+| ✅ Contrast with background | ❌ Color harmony |
+| ✅ Contrast with foreground | ❌ Color blindness |
+| ✅ APCA-based checks | ❌ WCAG 2.x ratios |
+
+**Why only primer colors?** The generated color scales are mathematically derived to meet accessibility standards. If the primer passes validation, the entire scale will be accessible.
+
+### TypeScript Support
+
+Full type safety for validation warnings:
+
+```typescript
+import { umbra, type ValidationWarning } from '@umbrajs/core'
+
+const theme = umbra({ /* ... */ })
+
+theme.validationWarnings.forEach((warning: ValidationWarning) => {
+  // warning.type: 'low-contrast'
+  // warning.severity: 'warning' | 'error'
+  // warning.message: string
+  // warning.context: { accentName, contrast, threshold, against }
+})
+```
+
+For more details, see [VALIDATION.md](./VALIDATION.md).
+
+---
+
 ## Framework Integration
 
 ### React
@@ -879,6 +997,25 @@ const theme = umbra({
 
 ### Theme Methods
 
+#### `.validationWarnings`
+
+An array of validation warnings about potential accessibility issues.
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#1a1a1a',
+  accents: { primary: '#f5f5f5' }  // Too close to background
+})
+
+theme.validationWarnings.forEach(warning => {
+  console.warn(warning.message)
+  // "Accent color 'primary' primer has low contrast with background"
+})
+```
+
+See the [Color Validation](#color-validation) section for details.
+
 #### `.apply(options?)`
 
 Applies the theme to the DOM as CSS variables.
@@ -966,13 +1103,22 @@ interface Accent {
 
 ```typescript
 interface UmbraSettings {
-  readability?: number     // APCA target (default: 70)
-  iterations?: number      // Adjustment iterations (default: 20)
-  shades?: UmbraShade[]   // Dark theme progression
-  tints?: UmbraShade[]    // Light theme progression
-  formatter?: Formatter    // Output format
+  readability?: number           // APCA target (default: 70)
+  iterations?: number            // Adjustment iterations (default: 20)
+  minContrastThreshold?: number  // Validation threshold (default: 30)
+  shades?: UmbraShade[]         // Dark theme progression
+  tints?: UmbraShade[]          // Light theme progression
+  formatter?: Formatter          // Output format
 }
 ```
+
+**Settings:**
+- `readability` - APCA Lc contrast target for generated scales (default: 70)
+- `iterations` - Number of color adjustment iterations (default: 20)
+- `minContrastThreshold` - Minimum APCA Lc for accent validation (default: 30)
+- `shades` - Custom progression for dark mode color scales
+- `tints` - Custom progression for light mode color scales
+- `formatter` - Default output formatter for colors
 
 ### Utility Functions
 

@@ -4,6 +4,19 @@ import type { Formater, UmbraOutputs } from '../primitives/format'
 import type { TintsInput } from '../easing'
 import type { ColorString } from '../presets'
 
+export interface ValidationWarning {
+  type: 'contrast' | 'readability' | 'accessibility'
+  severity: 'warning' | 'error'
+  message: string
+  context?: {
+    accentName?: string
+    accentColor?: string
+    targetColor?: string
+    contrastValue?: number
+    minContrast?: number
+  }
+}
+
 export interface UmbraRange {
   name: string
   background: UmbraSwatch
@@ -35,6 +48,7 @@ export interface UmbraOutput {
   input: UmbraInput
   adjusted: UmbraAdjusted
   generated: UmbraRange[]
+  validationWarnings: ValidationWarning[]
 }
 
 export interface Accent {
@@ -73,4 +87,6 @@ export interface UmbraSettings {
   range?: TintsInput | { light?: TintsInput; dark?: TintsInput }
   callback?: (props: UmbraOutputs) => void
   formater?: Formater
+  /** Minimum contrast threshold for validation warnings (default: 30) */
+  minContrastThreshold?: number
 }

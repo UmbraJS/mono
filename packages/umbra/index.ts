@@ -21,7 +21,8 @@ import type {
   UmbraRange,
   FormatedRange,
   StableScheme,
-  StableAccent
+  StableAccent,
+  ValidationWarning
 } from './engine/types'
 import { inverse, isDark, findContrast } from './engine/primitives/scheme'
 
@@ -92,6 +93,7 @@ export type {
   FormatedRange,
   StableScheme,
   StableAccent,
+  ValidationWarning,
   EasingType,
   EasingOptions,
   TintsInput,

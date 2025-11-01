@@ -31,10 +31,10 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      expect(result).toHaveLength(1) // Just base, no accents
-      expect(result[0].range).toHaveLength(3)
-      expect(result[0].range[0].toHex()).toBe('#000000')
-      expect(result[0].range[2].toHex()).toBe('#ffffff')
+      expect(result.output).toHaveLength(1) // Just base, no accents
+      expect(result.output[0].range).toHaveLength(3)
+      expect(result.output[0].range[0].toHex()).toBe('#000000')
+      expect(result.output[0].range[2].toHex()).toBe('#ffffff')
     })
 
     it('should interpolate at correct percentages', () => {
@@ -50,7 +50,7 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      const lightnesses = result[0].range.map(c => c.toHsl().l)
+      const lightnesses = result.output[0].range.map(c => c.toHsl().l)
 
       // Should be progressively lighter
       for (let i = 1; i < lightnesses.length; i++) {
@@ -73,13 +73,13 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      expect(result[0].range).toHaveLength(5)
-      expect(result[0].range[0].toHex()).toBe('#000000')
-      expect(result[0].range[2].toHex()).toBe('#ff0000') // Color stop
-      expect(result[0].range[4].toHex()).toBe('#ffffff')
+      expect(result.output[0].range).toHaveLength(5)
+      expect(result.output[0].range[0].toHex()).toBe('#000000')
+      expect(result.output[0].range[2].toHex()).toBe('#ff0000') // Color stop
+      expect(result.output[0].range[4].toHex()).toBe('#ffffff')
 
       // First segment should move towards red
-      const hue1 = result[0].range[1].toHsl().h
+      const hue1 = result.output[0].range[1].toHsl().h
       expect(hue1).toBeGreaterThanOrEqual(0)
       expect(hue1).toBeLessThan(30) // Close to red hue
     })
@@ -97,9 +97,9 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      expect(result[0].range).toHaveLength(4)
-      expect(result[0].range[1].toHex()).toBe('#0066ff')
-      expect(result[0].range[2].toHex()).toBe('#00ff66')
+      expect(result.output[0].range).toHaveLength(4)
+      expect(result.output[0].range[1].toHex()).toBe('#0066ff')
+      expect(result.output[0].range[2].toHex()).toBe('#00ff66')
     })
   })
 
@@ -118,7 +118,7 @@ describe('Color Scale Generator', () => {
       const result = umbraGenerate(scheme, adjusted)
 
       // Should be at 10%, 30%, 50%, 70%
-      const lightnesses = result[0].range.map(c => c.toHsl().l)
+      const lightnesses = result.output[0].range.map(c => c.toHsl().l)
 
       // Verify progressive lightening
       expect(lightnesses[1]).toBeGreaterThan(lightnesses[0])
@@ -144,7 +144,7 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      const colors = result[0].range.map(c => c.toHex())
+      const colors = result.output[0].range.map(c => c.toHex())
 
       // Verify we get 4 different colors
       expect(colors).toHaveLength(4)
@@ -172,7 +172,7 @@ describe('Color Scale Generator', () => {
       // First two should be 20%, 40% towards red
       // Then red stop
       // Then reset and 30%, 60% from red to white
-      expect(result[0].range[2].toHex()).toBe('#ff0000')
+      expect(result.output[0].range[2].toHex()).toBe('#ff0000')
     })
   })
 
@@ -196,9 +196,9 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      const sat0 = result[0].range[0].toHsl().s
-      const sat1 = result[0].range[1].toHsl().s
-      const sat2 = result[0].range[2].toHsl().s
+      const sat0 = result.output[0].range[0].toHsl().s
+      const sat1 = result.output[0].range[1].toHsl().s
+      const sat2 = result.output[0].range[2].toHsl().s
 
       // Middle should have boosted saturation
       expect(sat1).toBeGreaterThan(sat0)
@@ -225,9 +225,9 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      expect(result[0].range).toHaveLength(4)
+      expect(result.output[0].range).toHaveLength(4)
       // Should not throw and should produce valid colors
-      result[0].range.forEach(color => {
+      result.output[0].range.forEach(color => {
         expect(color.toHex()).toMatch(/^#[0-9a-f]{6}$/)
       })
     })
@@ -248,11 +248,11 @@ describe('Color Scale Generator', () => {
       const adjusted = createAdjusted(scheme)
       const result = umbraGenerate(scheme, adjusted)
 
-      expect(result).toHaveLength(2) // Base + 1 accent
+      expect(result.output).toHaveLength(2) // Base + 1 accent
 
       // Find the color stops in the range
-      const yellowIndex = result[1].range.findIndex(c => c.toHex() === '#fbbf24')
-      const blueIndex = result[1].range.findIndex(c => c.toHex() === '#3b82f6')
+      const yellowIndex = result.output[1].range.findIndex(c => c.toHex() === '#fbbf24')
+      const blueIndex = result.output[1].range.findIndex(c => c.toHex() === '#3b82f6')
 
       expect(yellowIndex).toBeGreaterThan(-1) // Yellow stop exists
       expect(blueIndex).toBeGreaterThan(-1)   // Blue (accent) exists

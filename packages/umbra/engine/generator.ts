@@ -1,7 +1,7 @@
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
-import type { UmbraAdjusted, UmbraScheme, Accent } from './types'
-import { pickContrast, colorMix, colorMixHSL } from './primitives/color'
+import type { UmbraAdjusted, UmbraScheme, Accent, ValidationWarning } from './types'
+import { pickContrast, colorMix, colorMixHSL, getReadability } from './primitives/color'
 import { insertColorIntoRange, getStrings } from './primitives/utils'
 import { resolveTints, type TintsInput, type UmbraShade } from './easing'
 import { defaultSettings } from './defaults'
@@ -415,15 +415,83 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
 }
 
 /**
+ * Validates accent primer contrast against background and foreground
+ * Creates warning if contrast is below threshold
+ * @param accentColor - The accent primer color
+ * @param accentName - Name of the accent
+ * @param background - Background color to check against
+ * @param foreground - Foreground color to check against
+ * @param minThreshold - Minimum acceptable contrast (default: 30)
+ * @returns ValidationWarning if contrast is too low, undefined otherwise
+ */
+function validateAccentContrast(
+  accentColor: string,
+  accentName: string,
+  background: UmbraSwatch,
+  foreground: UmbraSwatch,
+  minThreshold = 30
+): ValidationWarning | undefined {
+  const accentSwatch = swatch(accentColor)
+  const bgContrast = getReadability(accentSwatch, background)
+  const fgContrast = getReadability(accentSwatch, foreground)
+
+  // Check if accent is too close to background
+  if (bgContrast < minThreshold) {
+    return {
+      type: 'contrast',
+      severity: 'warning',
+      message: `Accent '${accentName}' primer has low contrast (${bgContrast.toFixed(1)}) with background. Consider using a different color.`,
+      context: {
+        accentName,
+        accentColor,
+        targetColor: background.toHex(),
+        contrastValue: bgContrast,
+        minContrast: minThreshold
+      }
+    }
+  }
+
+  // Check if accent is too close to foreground
+  if (fgContrast < minThreshold) {
+    return {
+      type: 'contrast',
+      severity: 'warning',
+      message: `Accent '${accentName}' primer has low contrast (${fgContrast.toFixed(1)}) with foreground. Consider using a different color.`,
+      context: {
+        accentName,
+        accentColor,
+        targetColor: foreground.toHex(),
+        contrastValue: fgContrast,
+        minContrast: minThreshold
+      }
+    }
+  }
+
+  return undefined
+}
+
+/**
  * Generates accent color palettes
  * Each accent gets its own range interpolated between background and foreground
  * Resolves color preset names to their hex values
+ * Also performs validation checks on accent primers
  * @param input - Input color scheme
  * @param adjusted - Adjusted color values
- * @returns Array of accent palette objects with name, colors, and ranges
+ * @returns Object containing accent palettes and validation warnings
  */
-function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
-  return adjusted.accents.map((accent) => {
+function accents(input: UmbraScheme, adjusted: UmbraAdjusted): {
+  palettes: Array<{
+    name: string
+    background: UmbraSwatch
+    foreground: UmbraSwatch
+    range: UmbraSwatch[]
+  }>
+  warnings: ValidationWarning[]
+} {
+  const warnings: ValidationWarning[] = []
+  const minContrastThreshold = input.settings?.minContrastThreshold ?? 30
+
+  const palettes = adjusted.accents.map((accent) => {
     const isString = typeof accent === 'string'
     const name = isString ? undefined : accent.name
     let color = isString ? accent : accent.color
@@ -432,6 +500,20 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
     if (color) {
       const { hex } = resolveColorPreset(color)
       color = hex
+    }
+
+    // Validate accent primer contrast if we have a color
+    if (color) {
+      const warning = validateAccentContrast(
+        color,
+        name || DEFAULT_ACCENT_NAME,
+        adjusted.background,
+        adjusted.foreground,
+        minContrastThreshold
+      )
+      if (warning) {
+        warnings.push(warning)
+      }
     }
 
     const range = putAccentInRange(adjusted, accent, input)
@@ -447,6 +529,8 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
       })
     }
   })
+
+  return { palettes, warnings }
 }
 
 interface RangeValues {
@@ -553,8 +637,20 @@ function base(input: UmbraScheme, adjusted: UmbraAdjusted) {
  * Creates base palette plus all accent palettes
  * @param input - Input color scheme configuration
  * @param adjusted - Adjusted and normalized color values
- * @returns Array of palette objects (base + accents)
+ * @returns Object containing palette array and validation warnings
  */
-export function umbraGenerate(input: UmbraScheme, adjusted: UmbraAdjusted) {
-  return [base(input, adjusted), ...accents(input, adjusted)]
+export function umbraGenerate(input: UmbraScheme, adjusted: UmbraAdjusted): {
+  output: Array<{
+    name: string
+    background: UmbraSwatch
+    foreground: UmbraSwatch
+    range: UmbraSwatch[]
+  }>
+  validationWarnings: ValidationWarning[]
+} {
+  const { palettes, warnings } = accents(input, adjusted)
+  return {
+    output: [base(input, adjusted), ...palettes],
+    validationWarnings: warnings
+  }
 }
