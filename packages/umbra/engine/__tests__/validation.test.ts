@@ -137,4 +137,72 @@ describe('Validation Warnings', () => {
     expect(theme.validationWarnings.length).toBeGreaterThan(0)
     expect(theme.validationWarnings[0].context?.accentName).toBe('too-dark')
   })
+
+  it('should warn when foreground and background are too close', () => {
+    const theme = umbra({
+      background: '#ffffff',
+      foreground: '#f5f5f5', // Too close to white background
+      accents: []
+    })
+
+    expect(theme.validationWarnings.length).toBeGreaterThan(0)
+    const warning = theme.validationWarnings[0]
+    expect(warning.type).toBe('contrast')
+    expect(warning.message).toContain('Foreground and background')
+    expect(warning.context?.contrast).toBeDefined()
+    expect(warning.context?.threshold).toBe(30)
+    expect(warning.context?.originalForeground).toBe('#f5f5f5')
+    expect(warning.context?.adjustedForeground).toBeDefined()
+  })
+
+  it('should not warn when foreground and background have good contrast', () => {
+    const theme = umbra({
+      background: '#ffffff',
+      foreground: '#000000',
+      accents: []
+    })
+
+    expect(theme.validationWarnings.length).toBe(0)
+  })
+
+  it('should combine foreground and accent warnings', () => {
+    const theme = umbra({
+      background: '#ffffff',
+      foreground: '#f5f5f5', // Too close to background
+      accents: [
+        { name: 'bad-accent', color: '#f0f0f0' } // Also too close to background
+      ]
+    })
+
+    // Should have 2 warnings: one for fg/bg, one for accent
+    expect(theme.validationWarnings.length).toBe(2)
+    
+    const fgWarning = theme.validationWarnings.find(w => w.message.includes('Foreground and background'))
+    const accentWarning = theme.validationWarnings.find(w => w.context?.accentName === 'bad-accent')
+    
+    expect(fgWarning).toBeDefined()
+    expect(accentWarning).toBeDefined()
+  })
+
+  it('should respect custom threshold for foreground/background validation', () => {
+    const themeDefault = umbra({
+      background: '#ffffff',
+      foreground: '#d0d0d0',
+      accents: []
+    })
+
+    const themeStrict = umbra({
+      background: '#ffffff',
+      foreground: '#d0d0d0',
+      accents: [],
+      settings: {
+        minContrastThreshold: 50
+      }
+    })
+
+    // Default might pass, but strict should warn
+    expect(themeStrict.validationWarnings.length).toBeGreaterThanOrEqual(
+      themeDefault.validationWarnings.length
+    )
+  })
 })

@@ -5,7 +5,7 @@ import type { UmbraInput, UmbraScheme, UmbraRange, ValidationWarning } from './t
 import { format } from './primitives/format'
 import type { Formater, UmbraOutputs, AttachProps } from './primitives/format'
 import { inverse, isDark } from './primitives/scheme'
-import { getReadable } from './primitives/color'
+import { getReadable, getReadability } from './primitives/color'
 import { umbraGenerate } from './generator'
 import { fallback } from './primitives/utils'
 
@@ -35,10 +35,14 @@ export function umbra(scheme: UmbraInput = defaultScheme): Umbra {
   const input = insertFallbacks(scheme)
   const adjustment = umbraAdjust(input)
   const generated = umbraGenerate(input, adjustment)
+  
+  // Combine warnings from adjustment and generation
+  const allWarnings = [...adjustment.warnings, ...generated.validationWarnings]
+  
   return umbraHydrate({
     input,
     output: generated.output,
-    validationWarnings: generated.validationWarnings,
+    validationWarnings: allWarnings,
     inversed: input.inversed,
   })
 }
@@ -70,19 +74,47 @@ function insertFallbacks(scheme: UmbraInput = defaultScheme): UmbraScheme {
   }
 }
 
-function umbraAdjust(scheme = defaultScheme) {
+function umbraAdjust(scheme = defaultScheme): {
+  accents: (string | import('./types').Accent)[]
+  background: import('../swatch').UmbraSwatch
+  foreground: import('../swatch').UmbraSwatch
+  warnings: ValidationWarning[]
+} {
   const background = swatch(scheme.background)
+  const originalForeground = swatch(scheme.foreground)
   const foreground = getReadable({
     readability: fallback({ number: scheme.settings?.readability, fallback: 4 }),
-    foreground: swatch(scheme.foreground),
+    foreground: originalForeground,
     background,
   })
+
+  const warnings: ValidationWarning[] = []
+  
+  // Check if original foreground and background have sufficient contrast
+  const contrast = getReadability(originalForeground, background)
+  const threshold = scheme.settings?.minContrastThreshold ?? 30
+  
+  if (contrast < threshold) {
+    warnings.push({
+      type: 'contrast',
+      severity: 'warning',
+      message: `Foreground and background colors have low contrast (${contrast.toFixed(1)} Lc, threshold: ${threshold})`,
+      context: {
+        contrast,
+        threshold,
+        originalForeground: originalForeground.toHex(),
+        background: background.toHex(),
+        adjustedForeground: foreground.toHex(),
+      }
+    })
+  }
 
   const accents = Array.isArray(scheme.accents) ? scheme.accents : [scheme.accents]
   return {
     accents,
     background,
     foreground,
+    warnings,
   }
 }
 

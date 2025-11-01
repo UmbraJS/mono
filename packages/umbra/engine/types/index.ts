@@ -14,6 +14,13 @@ export interface ValidationWarning {
     targetColor?: string
     contrastValue?: number
     minContrast?: number
+    // For base foreground/background validation
+    contrast?: number
+    threshold?: number
+    originalForeground?: string
+    background?: string
+    adjustedForeground?: string
+    against?: string
   }
 }
 

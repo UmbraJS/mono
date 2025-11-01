@@ -189,10 +189,6 @@ const validationWarnings = computed(() => theme.generatedTheme.value.validationW
 
 function useUmbra(schema: UmbraInput) {
   const initTheme = umbra(schema)
-  console.log('Initialized Umbra Theme:', {
-    init: initTheme,
-    formatted: initTheme.format(),
-  })
   const generatedTheme = ref<Umbra>(initTheme)
 
   function applyTheme() {
