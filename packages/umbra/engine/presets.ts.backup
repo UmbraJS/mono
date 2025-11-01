@@ -95,14 +95,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        10, 19, 26, 35, 49, 67,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=40", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      10, 19, 26, 35, 49, 67,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=5", hue: 0, saturation: "-=12" },
+      { mix: "+=40", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -114,14 +114,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 5, hue: "next", saturation: "+=99" },
-        12, 20, 30, 41, 58, 82,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=31", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 5, hue: "next", saturation: "+=99" },
+      12, 20, 30, 41, 58, 82,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=12", hue: 0, saturation: "-=12" },
+      { mix: "+=31", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -133,14 +133,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 20, 27, 38, 51, 68,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=36", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      12, 20, 27, 38, 51, 68,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=5", hue: 0, saturation: "-=12" },
+      { mix: "+=36", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -152,14 +152,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 21, 31, 43, 56, 72,
-        "primer",
-        { mix: "+=7", hue: 0, saturation: "-=4" },
-        { mix: "+=9", hue: 0, saturation: "-=12" },
-        { mix: "+=30", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      12, 21, 31, 43, 56, 72,
+      "primer",
+      { mix: "+=7", hue: 0, saturation: "-=4" },
+      { mix: "+=9", hue: 0, saturation: "-=12" },
+      { mix: "+=30", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -171,14 +171,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 20, 28, 39, 52, 67,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=40", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      12, 20, 28, 39, 52, 67,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=5", hue: 0, saturation: "-=12" },
+      { mix: "+=40", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -190,14 +190,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        11, 17, 23, 32, 46, 59,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=3", hue: 0, saturation: "-=12" },
-        { mix: "+=38", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      11, 17, 23, 32, 46, 59,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=3", hue: 0, saturation: "-=12" },
+      { mix: "+=38", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -209,14 +209,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        9, 13, 19, 31, 42, 57,
-        "primer",
-        { mix: "+=8", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=0" },
-        { mix: "+=10", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      9, 13, 19, 31, 42, 57,
+      "primer",
+      { mix: "+=8", hue: 0, saturation: "-=4" },
+      { mix: "+=12", hue: 0, saturation: "-=0" },
+      { mix: "+=10", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -228,14 +228,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next", saturation: "+=99" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        8, 11, 16, 26, 36, 55,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=26", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next", saturation: "+=99" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      8, 11, 16, 26, 36, 55,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=12", hue: 0, saturation: "-=12" },
+      { mix: "+=26", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -247,14 +247,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 1, hue: "next" },
-        { mix: 2, hue: "next", saturation: "+=99" },
-        8, 11, 16, 24, 37, 57,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=10", hue: 0, saturation: "-=12" },
-        { mix: "+=20", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 1, hue: "next" },
+      { mix: 2, hue: "next", saturation: "+=99" },
+      8, 11, 16, 24, 37, 57,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=10", hue: 0, saturation: "-=12" },
+      { mix: "+=20", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -266,14 +266,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        10, 15, 24, 30, 47, 62,
-        "primer",
-        { mix: "+=12", hue: 0, saturation: "-=4" },
-        { mix: "+=15", hue: 0, saturation: "-=12" },
-        { mix: "+=10", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      10, 15, 24, 30, 47, 62,
+      "primer",
+      { mix: "+=12", hue: 0, saturation: "-=4" },
+      { mix: "+=15", hue: 0, saturation: "-=12" },
+      { mix: "+=10", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -285,14 +285,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 5, hue: "next", saturation: "+=99" },
-        16, 25, 35, 49, 64, 89,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=40", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 5, hue: "next", saturation: "+=99" },
+      16, 25, 35, 49, 64, 89,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=5", hue: 0, saturation: "-=12" },
+      { mix: "+=40", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -304,14 +304,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        12, 21, 32, 44, 60, 81,
-        "primer",
-        { mix: "+=9", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=20", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      12, 21, 32, 44, 60, 81,
+      "primer",
+      { mix: "+=9", hue: 0, saturation: "-=4" },
+      { mix: "+=12", hue: 0, saturation: "-=12" },
+      { mix: "+=20", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -323,14 +323,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 5, hue: "next", saturation: "+=99" },
-        11, 19, 29, 41, 57, 82,
-        "primer",
-        { mix: "+=8", hue: 0, saturation: "-=4" },
-        { mix: "+=5", hue: 0, saturation: "-=12" },
-        { mix: "+=35", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 5, hue: "next", saturation: "+=99" },
+      11, 19, 29, 41, 57, 82,
+      "primer",
+      { mix: "+=8", hue: 0, saturation: "-=4" },
+      { mix: "+=5", hue: 0, saturation: "-=12" },
+      { mix: "+=35", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -342,14 +342,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 6, hue: "next", saturation: "+=99" },
-        12, 20, 30, 42, 60, 84,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=18", hue: 0, saturation: "-=12" },
-        { mix: "+=20", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 6, hue: "next", saturation: "+=99" },
+      12, 20, 30, 42, 60, 84,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=18", hue: 0, saturation: "-=12" },
+      { mix: "+=20", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -361,14 +361,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        13, 19, 28, 39, 50, 69,
-        "primer",
-        { mix: "+=8", hue: 0, saturation: "-=4" },
-        { mix: "+=10", hue: 0, saturation: "-=12" },
-        { mix: "+=29", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      13, 19, 28, 39, 50, 69,
+      "primer",
+      { mix: "+=8", hue: 0, saturation: "-=4" },
+      { mix: "+=10", hue: 0, saturation: "-=12" },
+      { mix: "+=29", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -380,14 +380,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 7, hue: "next", saturation: "+=99" },
-        14, 20, 29, 38, 52, 70,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=14", hue: 0, saturation: "-=12" },
-        { mix: "+=25", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 7, hue: "next", saturation: "+=99" },
+      14, 20, 29, 38, 52, 70,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=14", hue: 0, saturation: "-=12" },
+      { mix: "+=25", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -399,14 +399,14 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next" },
-        { mix: 4, hue: "next", saturation: "+=99" },
-        13, 21, 29, 39, 52, 71,
-        "primer",
-        { mix: "+=6", hue: 0, saturation: "-=4" },
-        { mix: "+=12", hue: 0, saturation: "-=12" },
-        { mix: "+=28", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next" },
+      { mix: 4, hue: "next", saturation: "+=99" },
+      13, 21, 29, 39, 52, 71,
+      "primer",
+      { mix: "+=6", hue: 0, saturation: "-=4" },
+      { mix: "+=12", hue: 0, saturation: "-=12" },
+      { mix: "+=28", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -418,19 +418,19 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 2, hue: "next+=0.5", saturation: "+=99" },
-        { mix: 9, hue: "next+=10", saturation: "+=99" },
-        { mix: 18, hue: "next+=14", saturation: "+=99" },
-        { mix: 31, hue: "next+=11", saturation: "+=99" },
-        { mix: 42, hue: "next+=10", saturation: "+=99" },
-        { mix: 54, hue: "next+=7", saturation: "+=99" },
-        { mix: 61, hue: "next+=4", saturation: "+=99" },
-        { mix: 79, hue: "next+=2", saturation: "+=99" },
-        "primer",
-        { mix: "+=12", hue: 0, saturation: "-=4" },
-        { mix: "+=2", hue: 0, saturation: "-=12" },
-        { mix: "+=28", hue: 0, saturation: "-=29" }
-      ],
+      { mix: 2, hue: "next+=0.5", saturation: "+=99" },
+      { mix: 9, hue: "next+=10", saturation: "+=99" },
+      { mix: 18, hue: "next+=14", saturation: "+=99" },
+      { mix: 31, hue: "next+=11", saturation: "+=99" },
+      { mix: 42, hue: "next+=10", saturation: "+=99" },
+      { mix: 54, hue: "next+=7", saturation: "+=99" },
+      { mix: 61, hue: "next+=4", saturation: "+=99" },
+      { mix: 79, hue: "next+=2", saturation: "+=99" },
+      "primer",
+      { mix: "+=12", hue: 0, saturation: "-=4" },
+      { mix: "+=2", hue: 0, saturation: "-=12" },
+      { mix: "+=28", hue: 0, saturation: "-=29" }
+    ],
 
       dark: evenContrast
 
@@ -442,19 +442,19 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 6, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next-=10", saturation: 90 },
-        { mix: 52, hue: "next-=10", saturation: 90 },
-        "primer",
-        { mix: "+=2", hue: "+=5" },
-        { mix: "+=2", hue: "+=5" },
-        "+=2",
-        "+=2",
-        { mix: "+=5", hue: "+=2", saturation: "-=32" },
-        "+=2",
-        { mix: "+=5", hue: "+=5", saturation: "+=22" },
-        "+=15"
-      ],
+      { mix: 6, hue: "next", saturation: 90 },
+      { mix: 25, hue: "next-=10", saturation: 90 },
+      { mix: 52, hue: "next-=10", saturation: 90 },
+      "primer",
+      { mix: "+=2", hue: "+=5" },
+      { mix: "+=2", hue: "+=5" },
+      "+=2",
+      "+=2",
+      { mix: "+=5", hue: "+=2", saturation: "-=32" },
+      "+=2",
+      { mix: "+=5", hue: "+=5", saturation: "+=22" },
+      "+=15"
+    ],
 
       dark: antiMud
 
@@ -466,19 +466,19 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 8, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next-=10", saturation: 90 },
-        { mix: 52, hue: "next-=10", saturation: 90 },
-        "primer",
-        { mix: "+=2", hue: "+=5" },
-        { mix: "+=2", hue: "+=5" },
-        { mix: "+=5", hue: "+=2", saturation: "-=32" },
-        "+=4",
-        "+=2",
-        "+=2",
-        { mix: "+=5", hue: "+=5", saturation: "+=22" },
-        "+=20"
-      ],
+      { mix: 8, hue: "next", saturation: 90 },
+      { mix: 25, hue: "next-=10", saturation: 90 },
+      { mix: 52, hue: "next-=10", saturation: 90 },
+      "primer",
+      { mix: "+=2", hue: "+=5" },
+      { mix: "+=2", hue: "+=5" },
+      { mix: "+=5", hue: "+=2", saturation: "-=32" },
+      "+=4",
+      "+=2",
+      "+=2",
+      { mix: "+=5", hue: "+=5", saturation: "+=22" },
+      "+=20"
+    ],
 
       dark: antiMud
 
@@ -490,19 +490,19 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 8, hue: "next", saturation: 90 },
-        { mix: 30, hue: "next", saturation: 90 },
-        { mix: 60, hue: "next", saturation: 90 },
-        "primer",
-        { mix: "+=6", hue: "+=5" },
-        { mix: "+=6", hue: "+=5" },
-        "+=2",
-        "+=2",
-        { mix: "+=3", hue: "+=2", saturation: "-=12" },
-        "+=3",
-        { mix: "+=3", hue: "+=5" },
-        "+=3"
-      ],
+      { mix: 8, hue: "next", saturation: 90 },
+      { mix: 30, hue: "next", saturation: 90 },
+      { mix: 60, hue: "next", saturation: 90 },
+      "primer",
+      { mix: "+=6", hue: "+=5" },
+      { mix: "+=6", hue: "+=5" },
+      "+=2",
+      "+=2",
+      { mix: "+=3", hue: "+=2", saturation: "-=12" },
+      "+=3",
+      { mix: "+=3", hue: "+=5" },
+      "+=3"
+    ],
 
       dark: antiMud
 
@@ -514,19 +514,19 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 10, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next", saturation: 90 },
-        { mix: 52, hue: "next", saturation: 90 },
-        "primer",
-        "+=6",
-        "+=4",
-        "+=3",
-        "+=3",
-        "+=5",
-        "+=2",
-        "+=5",
-        "+=15"
-      ],
+      { mix: 10, hue: "next", saturation: 90 },
+      { mix: 25, hue: "next", saturation: 90 },
+      { mix: 52, hue: "next", saturation: 90 },
+      "primer",
+      "+=6",
+      "+=4",
+      "+=3",
+      "+=3",
+      "+=5",
+      "+=2",
+      "+=5",
+      "+=15"
+    ],
 
       dark: deepContrast
 
@@ -538,19 +538,19 @@ export const colorPresets = [
     range: {
 
       light: [
-        { mix: 10, hue: "next", saturation: 90 },
-        { mix: 25, hue: "next", saturation: 90 },
-        { mix: 52, hue: "next", saturation: 90 },
-        "primer",
-        "+=6",
-        "+=4",
-        "+=3",
-        "+=3",
-        "+=5",
-        "+=2",
-        "+=5",
-        "+=15"
-      ],
+      { mix: 10, hue: "next", saturation: 90 },
+      { mix: 25, hue: "next", saturation: 90 },
+      { mix: 52, hue: "next", saturation: 90 },
+      "primer",
+      "+=6",
+      "+=4",
+      "+=3",
+      "+=3",
+      "+=5",
+      "+=2",
+      "+=5",
+      "+=15"
+    ],
 
       dark: deepContrast
 

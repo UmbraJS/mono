@@ -10,8 +10,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [10, 50, 90],    // Should use this
-          shades: [20, 60, 80]    // Should NOT use this
+          range: {
+            light: [10, 50, 90],    // Should use this
+            dark: [20, 60, 80]      // Should NOT use this
+          }
         }
       })
 
@@ -29,8 +31,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#ffffff',
         accents: [],
         settings: {
-          tints: [10, 50, 90],    // Should NOT use this
-          shades: [20, 60, 80]    // Should use this
+          range: {
+            light: [10, 50, 90],    // Should NOT use this
+            dark: [20, 60, 80]      // Should use this
+          }
         }
       })
 
@@ -48,8 +52,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [50],
-          shades: [50]
+          range: {
+            light: [50],
+            dark: [50]
+          }
         }
       })
 
@@ -65,7 +71,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [10, 50, 90]
+          range: { light: [10, 50, 90] }
           // Note: System may add default settings, test for presence not exact count
         }],
         settings: {}
@@ -87,7 +93,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#ffffff',
         accents: [{
           color: '#0090ff',
-          shades: [5, 25, 75]
+          range: { dark: [5, 25, 75] }
         }],
         settings: {}
       })
@@ -113,8 +119,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
           // No tints/shades specified
         }],
         settings: {
-          tints: [20, 50, 80],
-          shades: [10, 40, 70]
+          range: {
+            light: [20, 50, 80],
+            dark: [10, 40, 70]
+          }
         }
       })
 
@@ -134,8 +142,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
           // No tints/shades specified
         }],
         settings: {
-          tints: [20, 50, 80],
-          shades: [10, 40, 70]
+          range: {
+            light: [20, 50, 80],
+            dark: [10, 40, 70]
+          }
         }
       })
 
@@ -156,8 +166,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: config,
-          shades: config
+          range: {
+            light: config,
+            dark: config
+          }
         }
       })
 
@@ -166,8 +178,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#ffffff',
         accents: [],
         settings: {
-          tints: config,
-          shades: config
+          range: {
+            light: config,
+            dark: config
+          }
         }
       })
 
@@ -190,11 +204,13 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [
-            { mix: 1, hue: 'next' },  // Light theme uses next
-            10,
-            '#0090ff'
-          ]
+          range: {
+            light: [
+              { mix: 1, hue: 'next' },  // Light theme uses next
+              10,
+              '#0090ff'
+            ]
+          }
         }],
         settings: {}
       })
@@ -204,11 +220,13 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#ffffff',
         accents: [{
           color: '#0090ff',
-          shades: [
-            { mix: 5, hue: 'prev' },  // Dark theme uses prev (will use bg or accent color)
-            20,
-            '#0090ff'
-          ]
+          range: {
+            dark: [
+              { mix: 5, hue: 'prev' },  // Dark theme uses prev (will use bg or accent color)
+              20,
+              '#0090ff'
+            ]
+          }
         }],
         settings: {}
       })
@@ -237,10 +255,12 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [{
           color: accent,
-          tints: [
-            { mix: 10, saturation: '+=50' },  // High saturation for light
-            50
-          ]
+          range: {
+            light: [
+              { mix: 10, saturation: '+=50' },  // High saturation for light
+              50
+            ]
+          }
         }],
         settings: {}
       })
@@ -250,10 +270,12 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#ffffff',
         accents: [{
           color: accent,
-          shades: [
-            { mix: 10, saturation: '+=20' },  // Lower saturation for dark
-            50
-          ]
+          range: {
+            dark: [
+              { mix: 10, saturation: '+=20' },  // Lower saturation for dark
+              50
+            ]
+          }
         }],
         settings: {}
       })
@@ -275,8 +297,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [{
           name: 'gray',
-          tints: grayConfig,
-          shades: grayConfig  // Same for both
+          range: {
+            light: grayConfig,
+            dark: grayConfig  // Same for both
+          }
         }],
         settings: {}
       })
@@ -286,8 +310,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#ffffff',
         accents: [{
           name: 'gray',
-          tints: grayConfig,
-          shades: grayConfig
+          range: {
+            light: grayConfig,
+            dark: grayConfig
+          }
         }],
         settings: {}
       })
@@ -312,22 +338,24 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [
-            { mix: 2, hue: 'next', saturation: '+=99' },
-            5, 8, 12, 17, 24, 35,
-            '#0090ff',
-            { mix: '+=5', hue: 0, saturation: '-=4' },
-            { mix: '+=12', hue: 0, saturation: '-=12' },
-            { mix: '+=25', hue: 0, saturation: '-=29' }
-          ],
-          shades: [
-            { mix: 3, hue: 'next', saturation: '+=80' },
-            8, 15, 22, 30, 40, 50,
-            '#0090ff',
-            { mix: '+=8', hue: 0, saturation: '-=10' },
-            { mix: '+=18', hue: 0, saturation: '-=25' },
-            { mix: '+=35', hue: 0, saturation: '-=40' }
-          ]
+          range: {
+            light: [
+              { mix: 2, hue: 'next', saturation: '+=99' },
+              5, 8, 12, 17, 24, 35,
+              '#0090ff',
+              { mix: '+=5', hue: 0, saturation: '-=4' },
+              { mix: '+=12', hue: 0, saturation: '-=12' },
+              { mix: '+=25', hue: 0, saturation: '-=29' }
+            ],
+            dark: [
+              { mix: 3, hue: 'next', saturation: '+=80' },
+              8, 15, 22, 30, 40, 50,
+              '#0090ff',
+              { mix: '+=8', hue: 0, saturation: '-=10' },
+              { mix: '+=18', hue: 0, saturation: '-=25' },
+              { mix: '+=35', hue: 0, saturation: '-=40' }
+            ]
+          }
         }],
         settings: {}
       })

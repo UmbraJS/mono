@@ -23,13 +23,14 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 1, hue: 'next' },
             { mix: 2, hue: 'next' },
             5,
             '#0090ff',  // h:206°
             50
           ]
+          }
         }
       }
 
@@ -51,11 +52,12 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 1, hue: 'next', saturation: '+=99' },
             5,
             '#ff0000'
           ]
+          }
         }
       }
 
@@ -77,13 +79,14 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 1, hue: 'next' },  // Should use #00ff00 (first next)
             5,
             '#00ff00',  // Green
             10,
             '#0000ff'   // Blue
           ]
+          }
         }
       }
 
@@ -102,10 +105,11 @@ describe('Hue References (next/prev)', () => {
         foreground: '#0000ff',  // Blue
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             50,
             { mix: 70, hue: 'next' }  // No color stop ahead, should use foreground
           ]
+          }
         }
       }
 
@@ -126,12 +130,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             '#ff0000',  // Red stop
             5,
             { mix: 20, hue: 'prev' },  // Should use red hue
             50
           ]
+          }
         }
       }
 
@@ -149,13 +154,14 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             '#0000ff',  // Blue
             5,
             '#00ff00',  // Green
             10,
             { mix: 30, hue: 'prev' }  // Should use green (closest prev)
           ]
+          }
         }
       }
 
@@ -173,10 +179,11 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 5, hue: 'prev' },  // No prev stop, should use background
             20
           ]
+          }
         }
       }
 
@@ -196,12 +203,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             5,
             '#0090ff',  // Blue (h:206°)
             { mix: '+=10', hue: 0 },  // Should keep h:206°
             { mix: '+=20', hue: 0 }   // Should still keep h:206°
           ]
+          }
         }
       }
 
@@ -222,10 +230,11 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             '#0090ff',  // Blue
             { mix: '+=30', hue: 0 }  // Darken but stay blue
           ]
+          }
         }
       }
 
@@ -249,13 +258,14 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 1, hue: 'next' },   // → red
             5,
             '#ff0000',  // Red
             { mix: '+=10', hue: 'prev' },  // ← red
             { mix: '+=20', hue: 0 }     // stay red
           ]
+          }
         }
       }
 
@@ -276,12 +286,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [
+          range: { light: [
             { mix: 1, hue: 'next' },
             5,
             '#0090ff',
             { mix: '+=10', hue: 0 }
           ]
+          }
         }],
         settings: {}
       }
@@ -306,10 +317,11 @@ describe('Hue References (next/prev)', () => {
         foreground: '#0000ff',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 10, hue: 'next' },  // No stops, use foreground
             { mix: 50, hue: 'prev' }   // No stops, use background
           ]
+          }
         }
       }
 
@@ -327,12 +339,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 5, hue: 'next' },
             10,
             '#ff0000',  // Red (hue ~0°)
             50
           ]
+          }
         }
       }
 
@@ -352,12 +365,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 5, hue: 'next+=30' },  // Blue hue + 30°
             10,
             '#0090ff',  // Blue (hue ~206°)
             50
           ]
+          }
         }
       }
 
@@ -376,12 +390,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 5, hue: 'next-=20' },  // Blue hue - 20°
             10,
             '#0090ff',  // Blue (hue ~206°)
             50
           ]
+          }
         }
       }
 
@@ -404,12 +419,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             '#ff0000',  // Red (hue ~0°)
             10,
             { mix: 50, hue: 'prev+=40' },  // Red hue + 40°
             90
           ]
+          }
         }
       }
 
@@ -428,12 +444,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             '#00ff00',  // Green (hue ~120°)
             10,
             { mix: 50, hue: 'prev-=30' },  // Green hue - 30°
             90
           ]
+          }
         }
       }
 
@@ -452,12 +469,13 @@ describe('Hue References (next/prev)', () => {
         foreground: '#000000',
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 5, hue: 'next+=12.5' },
             10,
             '#0090ff',
             50
           ]
+          }
         }
       }
 
@@ -476,10 +494,11 @@ describe('Hue References (next/prev)', () => {
         foreground: '#0000ff',  // Blue foreground
         accents: [],
         settings: {
-          tints: [
+          range: { light: [
             { mix: 10, hue: 'next+=20' },  // No stops, use foreground + 20°
             50
           ]
+          }
         }
       }
 

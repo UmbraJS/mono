@@ -10,7 +10,7 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [10, 50, 'primer', 90]
+          range: { light: [10, 50, 'primer', 90] }
         }],
         settings: {}
       })
@@ -29,7 +29,7 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#ff0000',
-          tints: ['primer', 50, 90]  // First position
+          range: { light: ['primer', 50, 90] }  // First position
         }],
         settings: {}
       })
@@ -44,13 +44,15 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [
-            { mix: 1, hue: 'next' },  // Should reference primary
-            { mix: 2, hue: 'next', saturation: '+=99' },
-            5,
-            'primer',
-            { mix: '+=10', hue: 0 }
-          ]
+          range: {
+            light: [
+              { mix: 1, hue: 'next' },  // Should reference primary
+              { mix: 2, hue: 'next', saturation: '+=99' },
+              5,
+              'primer',
+              { mix: '+=10', hue: 0 }
+            ]
+          }
         }],
         settings: {}
       })
@@ -76,12 +78,14 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#00ff00',
-          tints: [
-            10,
-            'primer',
-            { mix: '+=20', hue: 'prev' },  // Should reference primary
-            90
-          ]
+          range: {
+            light: [
+              10,
+              'primer',
+              { mix: '+=20', hue: 'prev' },  // Should reference primary
+              90
+            ]
+          }
         }],
         settings: {}
       })
@@ -119,8 +123,10 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#3b82f6',
-          tints: [10, 'primer', 90],
-          shades: [5, 'primer', 95]
+          range: {
+            light: [10, 'primer', 90],
+            dark: [5, 'primer', 95]
+          }
         }],
         settings: {}
       })
@@ -130,8 +136,10 @@ describe('Primer Keyword', () => {
         foreground: '#ffffff',
         accents: [{
           color: '#3b82f6',
-          tints: [10, 'primer', 90],
-          shades: [5, 'primer', 95]
+          range: {
+            light: [10, 'primer', 90],
+            dark: [5, 'primer', 95]
+          }
         }],
         settings: {}
       })
@@ -149,15 +157,17 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [
-            { mix: 2, hue: 'next' },
-            { mix: 2, hue: 'next', saturation: '+=99' },
-            5, 8, 12, 17, 24, 35,
-            'primer',  // Instead of "#0090ff"
-            { mix: '+=5', hue: 0, saturation: '-=4' },
-            { mix: '+=12', hue: 0, saturation: '-=12' },
-            { mix: '+=25', hue: 0, saturation: '-=29' }
-          ]
+          range: {
+            light: [
+              { mix: 2, hue: 'next' },
+              { mix: 2, hue: 'next', saturation: '+=99' },
+              5, 8, 12, 17, 24, 35,
+              'primer',  // Instead of "#0090ff"
+              { mix: '+=5', hue: 0, saturation: '-=4' },
+              { mix: '+=12', hue: 0, saturation: '-=12' },
+              { mix: '+=25', hue: 0, saturation: '-=29' }
+            ]
+          }
         }],
         settings: {}
       })
@@ -184,10 +194,10 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#ff0000',
-          tints: [10, 'primer', 90]  // Accent explicitly uses primary in its own tints
+          range: { light: [10, 'primer', 90] }  // Accent explicitly uses primary in its own tints
         }],
         settings: {
-          tints: [20, 50, 80]  // Settings don't matter here
+          range: { light: [20, 50, 80] }  // Settings don't matter here
         }
       })
 
@@ -203,7 +213,7 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: ['#00ff00'],  // Simple string accent
         settings: {
-          tints: [20, 'primer', 80]
+          range: { light: [20, 'primer', 80] }
         }
       })
 
@@ -221,7 +231,7 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [10, 'primer', 50, 'primer', 90]  // Two primaries
+          range: { light: [10, 'primer', 50, 'primer', 90] }  // Two primaries
         }],
         settings: {}
       })
@@ -239,11 +249,13 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [
-            '#e0f2ff',  // Explicit color
-            'primer',   // Keyword
-            '#003d82'    // Another explicit color
-          ]
+          range: {
+            light: [
+              '#e0f2ff',  // Explicit color
+              'primer',   // Keyword
+              '#003d82'    // Another explicit color
+            ]
+          }
         }],
         settings: {}
       })
@@ -262,15 +274,17 @@ describe('Primer Keyword', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090ff',
-          tints: [
-            { mix: 2, hue: 'next' },
-            { mix: 2, hue: 'next', saturation: '+=99' },
-            5, 8, 12, 17, 24, 35,
-            'primer',  // User explicitly positioned the color here
-            { mix: '+=5', hue: 0, saturation: '-=4' },
-            { mix: '+=12', hue: 0, saturation: '-=12' },
-            { mix: '+=25', hue: 0, saturation: '-=29' }
-          ]
+          range: {
+            light: [
+              { mix: 2, hue: 'next' },
+              { mix: 2, hue: 'next', saturation: '+=99' },
+              5, 8, 12, 17, 24, 35,
+              'primer',  // User explicitly positioned the color here
+              { mix: '+=5', hue: 0, saturation: '-=4' },
+              { mix: '+=12', hue: 0, saturation: '-=12' },
+              { mix: '+=25', hue: 0, saturation: '-=29' }
+            ]
+          }
         }],
         settings: {}
       })

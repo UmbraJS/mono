@@ -212,8 +212,10 @@ const theme = useUmbra({
     radixSkyMap,
   ],
   settings: {
-    shades: Object.values(grayDark),
-    tints: Object.values(gray),
+    range: {
+      dark: Object.values(grayDark),
+      light: Object.values(gray),
+    },
   }
 })
 

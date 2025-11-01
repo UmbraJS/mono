@@ -34,10 +34,11 @@ describe('Color Presets', () => {
 
     it('should have tints and shades for each preset', () => {
       colorPresets.forEach(preset => {
-        expect(preset.tints).toBeDefined()
-        expect(preset.shades).toBeDefined()
-        expect(Array.isArray(preset.tints)).toBe(true)
-        expect(Array.isArray(preset.shades)).toBe(true)
+        expect(preset.range).toBeDefined()
+        expect(preset.range.light).toBeDefined()
+        expect(preset.range.dark).toBeDefined()
+        expect(Array.isArray(preset.range.light)).toBe(true)
+        expect(Array.isArray(preset.range.dark)).toBe(true)
       })
     })
   })
@@ -152,8 +153,10 @@ describe('Color Presets', () => {
         foreground: '#000000',
         accents: [{
           color: '#0090FF',
-          tints: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25],
-          shades: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25]
+          range: {
+            light: [5, 10, 10, 10, 15, 15, 25, 15, 15, 15, 15, 25],
+            dark: [5, 5, 5, 5, 15, 10, 10, 25, 30, 25, 25, 25]
+          }
         }]
       })
 
@@ -173,7 +176,7 @@ describe('Color Presets', () => {
           {
             name: 'custom',
             color: '#FF00FF',
-            tints: [1, 2, 5, 10, 15, 20, 30, 40, 'primer', 60, 70, 85]
+            range: { light: [1, 2, 5, 10, 15, 20, 30, 40, 'primer', 60, 70, 85] }
           },
           'red'  // Uses preset
         ]
@@ -220,7 +223,7 @@ describe('Color Presets', () => {
       const sky = getPresetByName('sky')
 
       expect(blue?.hex).not.toBe(sky?.hex)
-      expect(blue?.tints).not.toEqual(sky?.tints)
+      expect(blue?.range.light).not.toEqual(sky?.range.light)
     })
 
     it('should have different tints for red and tomato', () => {
@@ -228,7 +231,7 @@ describe('Color Presets', () => {
       const tomato = getPresetByName('tomato')
 
       expect(red?.hex).not.toBe(tomato?.hex)
-      expect(red?.tints).not.toEqual(tomato?.tints)
+      expect(red?.range.light).not.toEqual(tomato?.range.light)
     })
 
     it('should have different tints for green and grass', () => {
@@ -236,7 +239,7 @@ describe('Color Presets', () => {
       const grass = getPresetByName('grass')
 
       expect(green?.hex).not.toBe(grass?.hex)
-      expect(green?.tints).not.toEqual(grass?.tints)
+      expect(green?.range.light).not.toEqual(grass?.range.light)
     })
   })
 })

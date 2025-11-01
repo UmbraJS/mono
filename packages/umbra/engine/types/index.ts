@@ -56,8 +56,7 @@ export interface UmbraSettings {
   readability?: number
   insertion?: number
   aliases?: Alias | true
-  shades?: TintsInput
-  tints?: TintsInput
+  range?: TintsInput | { light?: TintsInput; dark?: TintsInput }
   callback?: (props: UmbraOutputs) => void
   formater?: Formater
 }

@@ -379,8 +379,8 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   const color = isString ? accent : accent.color
   const insertion = input.settings?.insertion
 
-  // If accent has explicit tints/shades, use those
-  const hasExplicitRange = !isString && (accent.tints || accent.shades || accent.range)
+  // If accent has explicit range, use it
+  const hasExplicitRange = !isString && accent.range
 
   // Get settings fallback first to check if it contains "primer"
   const fallback = accentRangeValues(adjusted, input.settings, true)
@@ -392,7 +392,7 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   if (!hasExplicitRange && color && !settingsHasPrimer) {
     const { preset } = resolveColorPreset(color)
     const isDark = adjusted.background.isDark()
-    const presetRange = isDark ? preset.shades : preset.tints
+    const presetRange = isDark ? preset.range.dark : preset.range.light
 
     // Use preset range as the base
     range = resolveTints(presetRange)
@@ -446,24 +446,33 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted) {
 }
 
 interface RangeValues {
-  range?: TintsInput     // Fallback for both shades and tints
-  shades?: TintsInput
-  tints?: TintsInput
+  range?: TintsInput | { light?: TintsInput; dark?: TintsInput }
 }
 
 /**
  * Resolves the appropriate range values based on theme mode (dark/light)
- * Uses shades for dark themes and tints for light themes
+ * Uses the new range API: either an array or an object with light/dark properties
  * @param adjusted - Adjusted color values (determines if theme is dark)
- * @param scheme - Optional scheme with range/shades/tints configuration
+ * @param scheme - Optional scheme with range configuration
  * @returns Resolved shade array
  */
 function rangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues): UmbraShade[] {
   const isDark = adjusted.background.isDark()
-  const tintsInput = isDark ? scheme?.shades : scheme?.tints
-  const rangeInput = scheme?.range  // Fallback to range property
-  const defaultInput = isDark ? defaultSettings.shades : defaultSettings.tints
-  return resolveTints(tintsInput, rangeInput, defaultInput)
+  const rangeInput = scheme?.range
+  const defaultRange = defaultSettings.range
+  const defaultInput = defaultRange && typeof defaultRange === 'object' && !Array.isArray(defaultRange) && ('light' in defaultRange || 'dark' in defaultRange)
+    ? (isDark ? defaultRange.dark : defaultRange.light)
+    : undefined
+
+  // Handle the new range API
+  if (rangeInput && typeof rangeInput === 'object' && !Array.isArray(rangeInput) && ('light' in rangeInput || 'dark' in rangeInput)) {
+    // It's an object with light/dark properties
+    const resolvedRange = isDark ? rangeInput.dark : rangeInput.light
+    return resolveTints(resolvedRange, undefined, defaultInput)
+  }
+
+  // It's an array or undefined
+  return resolveTints(rangeInput as TintsInput | undefined, undefined, defaultInput)
 }
 
 /**
@@ -481,26 +490,37 @@ function containsStrings(input?: TintsInput): boolean {
 
 /**
  * Resolves range values for accent colors with optional string filtering
- * Similar to rangeValues but can filter out color strings for fallback safety
+ * Uses the new range API: either an array or an object with light/dark properties
  * @param adjusted - Adjusted color values
- * @param scheme - Optional scheme with range/shades/tints configuration
+ * @param scheme - Optional scheme with range configuration
  * @param filterStrings - If true, exclude ranges containing color strings
  * @returns Resolved shade array
  */
 function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filterStrings: boolean = false): UmbraShade[] {
   const isDark = adjusted.background.isDark()
-  const tintsInput = isDark ? scheme?.shades : scheme?.tints
-  const rangeInput = scheme?.range  // Fallback to range property
-  const defaultInput = isDark ? defaultSettings.shades : defaultSettings.tints
+  const rangeInput = scheme?.range
+  const defaultRange = defaultSettings.range
+  const defaultInput = defaultRange && typeof defaultRange === 'object' && !Array.isArray(defaultRange) && ('light' in defaultRange || 'dark' in defaultRange)
+    ? (isDark ? defaultRange.dark : defaultRange.light)
+    : undefined
 
-  if (filterStrings) {
-    // Only use tintsInput and rangeInput as fallbacks if they don't contain strings
-    const safeTintsInput = containsStrings(tintsInput) ? undefined : tintsInput
-    const safeRangeInput = containsStrings(rangeInput) ? undefined : rangeInput
-    return resolveTints(safeTintsInput, safeRangeInput, defaultInput)
+  // Handle the new range API
+  let resolvedRange: TintsInput | undefined
+  if (rangeInput && typeof rangeInput === 'object' && !Array.isArray(rangeInput) && ('light' in rangeInput || 'dark' in rangeInput)) {
+    // It's an object with light/dark properties
+    resolvedRange = isDark ? rangeInput.dark : rangeInput.light
+  } else {
+    // It's an array or undefined
+    resolvedRange = rangeInput as TintsInput | undefined
   }
 
-  return resolveTints(tintsInput, rangeInput, defaultInput)
+  if (filterStrings) {
+    // Only use resolvedRange as fallback if it doesn't contain strings
+    const safeRangeInput = containsStrings(resolvedRange) ? undefined : resolvedRange
+    return resolveTints(safeRangeInput, undefined, defaultInput)
+  }
+
+  return resolveTints(resolvedRange, undefined, defaultInput)
 }
 
 /**

@@ -24,7 +24,7 @@ describe('Color Scale Generator', () => {
         foreground: '#ffffff',
         accents: [],
         settings: {
-          shades: [0, 50, 100]
+          range: { dark: [0, 50, 100] }
         }
       }
 
@@ -43,7 +43,7 @@ describe('Color Scale Generator', () => {
         foreground: '#ffffff',
         accents: [],
         settings: {
-          shades: [0, 25, 50, 75, 100]
+          range: { dark: [0, 25, 50, 75, 100] }
         }
       }
 
@@ -66,7 +66,7 @@ describe('Color Scale Generator', () => {
         foreground: '#ffffff',
         accents: [],
         settings: {
-          shades: [0, 25, '#ff0000', 50, 100]
+          range: { dark: [0, 25, '#ff0000', 50, 100] }
         }
       }
 
@@ -90,7 +90,7 @@ describe('Color Scale Generator', () => {
         foreground: '#f0f0f0',
         accents: [],
         settings: {
-          shades: [0, '#0066ff', '#00ff66', 100]
+          range: { dark: [0, '#0066ff', '#00ff66', 100] }
         }
       }
 
@@ -110,7 +110,7 @@ describe('Color Scale Generator', () => {
         foreground: '#ffffff',
         accents: [],
         settings: {
-          shades: [10, '+=20', '+=20', '+=20']
+          range: { dark: [10, '+=20', '+=20', '+=20'] }
         }
       }
 
@@ -137,7 +137,7 @@ describe('Color Scale Generator', () => {
         accents: [],
         settings: {
           // Start at 40, go to 60, back to 30, then to 80
-          shades: [40, '+=20', '-=30', '+=50']
+          range: { dark: [40, '+=20', '-=30', '+=50'] }
         }
       }
 
@@ -162,7 +162,7 @@ describe('Color Scale Generator', () => {
         foreground: '#ffffff',
         accents: [],
         settings: {
-          shades: ['+=20', '+=20', '#ff0000', '+=30', '+=30']
+          range: { dark: ['+=20', '+=20', '#ff0000', '+=30', '+=30'] }
         }
       }
 
@@ -183,11 +183,13 @@ describe('Color Scale Generator', () => {
         foreground: '#3b82f6',
         accents: [],
         settings: {
-          shades: [
-            0,
-            { mix: 30, saturation: 60 },
-            100
-          ]
+          range: {
+            dark: [
+              0,
+              { mix: 30, saturation: 60 },
+              100
+            ]
+          }
         }
       }
 
@@ -209,12 +211,14 @@ describe('Color Scale Generator', () => {
         foreground: '#10b981',
         accents: [],
         settings: {
-          shades: [
-            0,
-            { mix: 20, saturation: 35 },
-            { mix: '+=20', saturation: '+=25' }, // Should be 40%, sat 60%
-            100
-          ]
+          range: {
+            dark: [
+              0,
+              { mix: 20, saturation: 35 },
+              { mix: '+=20', saturation: '+=25' }, // Should be 40%, sat 60%
+              100
+            ]
+          }
         }
       }
 
@@ -236,7 +240,7 @@ describe('Color Scale Generator', () => {
         foreground: '#e2e8f0',
         accents: [{
           color: '#3b82f6',
-          shades: [0, '#fbbf24', 100]
+          range: { dark: [0, '#fbbf24', 100] }
         }],
         settings: {}
       }
