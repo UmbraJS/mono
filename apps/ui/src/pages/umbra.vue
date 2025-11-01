@@ -18,6 +18,7 @@ import {
 import ColourLightness from '../components/colour/Lightness.vue';
 import ColourSaturation from '../components/colour/Saturation.vue';
 import ColourHue from '../components/colour/Hue.vue';
+import ValidationWarnings from '../components/ValidationWarnings.vue';
 
 const radixBlueMap: Accent = {
   name: 'blue',
@@ -180,6 +181,8 @@ const theme = useUmbra({
   ],
 })
 
+const validationWarnings = computed(() => theme.generatedTheme.value.validationWarnings || [])
+
 // theme.generatedTheme.value.output.forEach(range => {
 //   range.range = range.range.map(color => swatch(color.toHex()))
 // })
@@ -264,13 +267,15 @@ function stringIncludesTheWordTuned(str: string) {
       Mode: {{ displayMode.charAt(0).toUpperCase() + displayMode.slice(1) }}
     </Button> -->
   </div>
+
+  <ValidationWarnings :warnings="validationWarnings" />
+
   <div class="umbra-wrapper">
     <div class="range-list">
       <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorList"
         @click="finishedEntries.push(range.name)">
         <div v-if="displayMode === 'lightness'" class="TokensLightness">
-          <ColourLightness v-for="color in range.range" :color="color"
-            :previous-color="!stringIncludesTheWordTuned(range.name) ? filteredUmbraOutput[filteredUmbraOutput.indexOf(range) - 1]?.range[range.range.indexOf(color)] : undefined" />
+          <ColourLightness v-for="color in range.range" :color="color" />
         </div>
 
         <div v-if="displayMode === 'saturation'" class="TokensSaturation">
