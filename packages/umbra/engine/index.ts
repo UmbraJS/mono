@@ -35,10 +35,10 @@ export function umbra(scheme: UmbraInput = defaultScheme): Umbra {
   const input = insertFallbacks(scheme)
   const adjustment = umbraAdjust(input)
   const generated = umbraGenerate(input, adjustment)
-  
+
   // Combine warnings from adjustment and generation
   const allWarnings = [...adjustment.warnings, ...generated.validationWarnings]
-  
+
   return umbraHydrate({
     input,
     output: generated.output,
@@ -83,7 +83,7 @@ function umbraAdjust(scheme = defaultScheme): {
   const background = swatch(scheme.background)
   const originalForeground = swatch(scheme.foreground)
   const readabilityThreshold = fallback({ number: scheme.settings?.readability, fallback: 30 })
-  
+
   const foreground = getReadable({
     readability: readabilityThreshold,
     foreground: originalForeground,
@@ -91,11 +91,11 @@ function umbraAdjust(scheme = defaultScheme): {
   })
 
   const warnings: ValidationWarning[] = []
-  
+
   // Check if original foreground and background have sufficient contrast
   // Use the same readability threshold that's used for generating the range
   const contrast = getReadability(originalForeground, background)
-  
+
   if (contrast < readabilityThreshold) {
     warnings.push({
       type: 'contrast',

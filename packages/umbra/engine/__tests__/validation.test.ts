@@ -176,10 +176,10 @@ describe('Validation Warnings', () => {
 
     // Should have 2 warnings: one for fg/bg, one for accent
     expect(theme.validationWarnings.length).toBe(2)
-    
+
     const fgWarning = theme.validationWarnings.find(w => w.message.includes('Foreground and background'))
     const accentWarning = theme.validationWarnings.find(w => w.context?.accentName === 'bad-accent')
-    
+
     expect(fgWarning).toBeDefined()
     expect(accentWarning).toBeDefined()
   })

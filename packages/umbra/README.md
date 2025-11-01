@@ -22,28 +22,28 @@ umbra({
 
 ## Why You'll Love It
 
-**🎯 Dead Simple**  
+**🎯 Dead Simple**
 One function call. Three inputs. Done. No PhD in color theory required.
 
-**🎨 Smart Color Presets**  
+**🎨 Smart Color Presets**
 Write `'tomato'` instead of `'#E54D2E'`. Each preset includes hand-tuned color scales that just look *right*.
 
-**♿ Actually Accessible**  
+**♿ Actually Accessible**
 Uses APCA (the future WCAG 3.0 standard) instead of broken WCAG 2.x ratios. Your dark mode will actually be readable.
 
-**✅ Built-In Validation**  
+**✅ Built-In Validation**
 Automatic contrast checking warns you when accent colors are too close to backgrounds. Catch accessibility issues before they ship.
 
-**🌓 Dark Mode Built-In**  
+**🌓 Dark Mode Built-In**
 Call `.inverse()` and get a perfectly inverted theme. All colors maintain their relationships and readability.
 
-**🔄 Range Mapping**  
+**🔄 Range Mapping**
 Write component styles once using base variables. Get infinite color variants by adding a class (`.base-primary`, `.base-success`, etc.).
 
-**🎨 Scales With You**  
+**🎨 Scales With You**
 Start with three colors. Add semantic accents (`danger`, `success`, `warning`) as you grow. Umbra scales from MVP to design system.
 
-**⚡ Framework Agnostic**  
+**⚡ Framework Agnostic**
 Plain CSS variables. Works with React, Vue, Svelte, vanilla JS, or your framework of next week.
 
 ---
@@ -84,7 +84,7 @@ Umbra generated 28 CSS variables for you:
   --base-110: #333333;
   --base-120: #1a1a1a;
   --base-text: #000000;
-  
+
   /* Accent colors (14 shades of blue) */
   --accent: #0090ff;
   --accent-10: #e6f4ff;
@@ -362,16 +362,16 @@ Now your single button component works for all variants:
 
 ### Why This Is Powerful
 
-**🎯 Component Reusability**  
+**🎯 Component Reusability**
 Write your component styles once using base variables. Get infinite variants for free.
 
-**🎨 Consistent Design**  
+**🎨 Consistent Design**
 All variants use the same shade structure. Your warning button and success button will have the same visual weight.
 
-**⚡ Tiny Bundle Size**  
+**⚡ Tiny Bundle Size**
 No duplicate CSS. One set of styles works for all variants through CSS variable remapping.
 
-**🔧 Easy Maintenance**  
+**🔧 Easy Maintenance**
 Change your base button? All variants update automatically.
 
 ### Real-World Example
@@ -415,7 +415,7 @@ umbra({
 ```
 ```
 
-Each scope gets its own complete color system. No conflicts, no complexity. 
+Each scope gets its own complete color system. No conflicts, no complexity.
 
 ---
 
@@ -657,7 +657,7 @@ Validation warnings are development aids—use them to improve your color choice
 ```typescript
 function createTheme(colors) {
   const theme = umbra(colors)
-  
+
   if (process.env.NODE_ENV === 'development') {
     if (theme.validationWarnings.length > 0) {
       console.group('🎨 Theme Validation Warnings')
@@ -668,7 +668,7 @@ function createTheme(colors) {
       console.groupEnd()
     }
   }
-  
+
   return theme
 }
 ```
@@ -715,15 +715,15 @@ import { useEffect, useState } from 'react'
 
 function useTheme(initialTheme) {
   const [theme, setTheme] = useState(() => umbra(initialTheme))
-  
+
   useEffect(() => {
     theme.apply()
   }, [theme])
-  
+
   const toggleDarkMode = () => {
     setTheme(current => current.inverse())
   }
-  
+
   return { theme, toggleDarkMode, isDark: theme.isDark() }
 }
 
@@ -734,7 +734,7 @@ function App() {
     foreground: '#000000',
     accents: ['blue']
   })
-  
+
   return (
     <button onClick={toggleDarkMode}>
       Switch to {isDark ? 'light' : 'dark'} mode
@@ -751,15 +751,15 @@ import { ref, watch } from 'vue'
 
 export function useUmbra(initialTheme) {
   const currentTheme = ref(umbra(initialTheme))
-  
+
   watch(currentTheme, (theme) => {
     theme.apply()
   }, { immediate: true })
-  
+
   const toggleDarkMode = () => {
     currentTheme.value = currentTheme.value.inverse()
   }
-  
+
   return {
     theme: currentTheme,
     toggleDarkMode,
@@ -913,7 +913,7 @@ The stable schema is just another valid `umbra()` input—no special handling ne
 export async function getServerSideProps() {
   const theme = umbra({ background: '#fff', foreground: '#000', accents: ['blue'] })
   const { stable } = theme.format()
-  
+
   return {
     props: {
       themeSchema: stable  // ✅ Serializes perfectly
@@ -934,19 +934,19 @@ export default function Page({ themeSchema }) {
 ```typescript
 export const useThemeStore = defineStore('theme', () => {
   const stableScheme = ref<StableScheme | null>(null)
-  
+
   function saveTheme(theme: Umbra) {
     const { stable } = theme.format()
     stableScheme.value = stable
     // Pinia can serialize this perfectly
   }
-  
+
   function applyTheme() {
     if (stableScheme.value) {
       umbra(stableScheme.value).apply()
     }
   }
-  
+
   return { stableScheme, saveTheme, applyTheme }
 })
 ```
@@ -970,10 +970,10 @@ umbra(saved.schema).apply()
 
 ### Key Benefits
 
-✅ **Version Stable** - Colors never change across Umbra updates  
-✅ **SSR Ready** - 100% serializable with `JSON.stringify/parse`  
-✅ **State Management** - Works with Pinia, Redux, Zustand, etc.  
-✅ **Database Friendly** - Store as JSON in any database  
+✅ **Version Stable** - Colors never change across Umbra updates
+✅ **SSR Ready** - 100% serializable with `JSON.stringify/parse`
+✅ **State Management** - Works with Pinia, Redux, Zustand, etc.
+✅ **Database Friendly** - Store as JSON in any database
 ✅ **No Special API** - Just pass the stable schema to `umbra()`
 
 ---
@@ -1030,7 +1030,7 @@ theme.apply()
 theme.apply({ target: '.my-component' })
 
 // Custom formatter
-theme.apply({ 
+theme.apply({
   formatter: (color) => color.toHex()
 })
 
@@ -1058,7 +1058,7 @@ Formats colors without applying them.
 
 ```typescript
 theme.format('hex')    // Hex strings
-theme.format('rgb')    // RGB strings  
+theme.format('rgb')    // RGB strings
 theme.format('hsl')    // HSL strings
 
 // Custom formatter
@@ -1154,11 +1154,11 @@ findContrast('#888888')
 #### Presets
 
 ```typescript
-import { 
+import {
   colorPresets,
-  getPresetByName, 
+  getPresetByName,
   findClosestPreset,
-  resolveColorPreset 
+  resolveColorPreset
 } from '@umbrajs/core'
 
 // All available presets
@@ -1250,14 +1250,14 @@ const themes = {
   default: umbra({
     accents: ['blue']
   }),
-  
+
   brand: umbra({
     accents: [
       { name: 'primary', color: 'purple' },
       { name: 'secondary', color: 'pink' }
     ]
   }),
-  
+
   high-contrast: umbra({
     background: '#000000',
     foreground: '#ffffff',
@@ -1351,7 +1351,7 @@ Each preset includes hand-tuned color progressions that:
 - Follow design best practices
 - Save you hours of manual tuning
 
-**Without presets:** ~30 lines of configuration per color  
+**Without presets:** ~30 lines of configuration per color
 **With presets:** 1 word
 
 ---
@@ -1375,7 +1375,7 @@ const themes = {
       { name: 'warning', color: 'yellow' }
     ]
   },
-  
+
   dark: {
     background: '#0a0a0a',
     foreground: '#ffffff',
@@ -1386,7 +1386,7 @@ const themes = {
       { name: 'warning', color: 'yellow' }
     ]
   },
-  
+
   brand: {
     background: '#ffffff',
     foreground: '#1a1a1a',
@@ -1426,13 +1426,13 @@ const designSystem = umbra({
     // UI States
     { name: 'primary', color: 'blue' },
     { name: 'secondary', color: 'purple' },
-    
+
     // Feedback
     { name: 'success', color: 'green' },
     { name: 'warning', color: 'yellow' },
     { name: 'danger', color: 'tomato' },
     { name: 'info', color: 'cyan' },
-    
+
     // Neutrals are handled by base range automatically
   ]
 }).apply()
@@ -1443,17 +1443,17 @@ const styles = `
     background: var(--primary);
     color: var(--primary-text);
   }
-  
+
   .btn-primary:hover {
     background: var(--primary-90);
   }
-  
+
   .alert-success {
     background: var(--success-20);
     border: 1px solid var(--success-60);
     color: var(--success-110);
   }
-  
+
   .badge-warning {
     background: var(--warning-30);
     color: var(--warning-100);

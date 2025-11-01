@@ -27,9 +27,9 @@ const evenContrastLight = [
   { mix: 5, hue: "next", saturation: "+=99" },
   14, 24, 35, 49, 68, 88,
   "primer",
-  { mix: "+=5", hue: 0, saturation: "-=4" },
-  { mix: "+=6", hue: 0, saturation: "-=12" },
-  { mix: "+=35", hue: 0, saturation: "-=29" }
+  { mix: "+=15", hue: 0, saturation: "-=4" },
+  { mix: "+=10", hue: 0, saturation: "-=12" },
+  { mix: "+=10", hue: 0, saturation: "-=29" }
 ] as const;
 
 const orangeContrastLight = [
@@ -79,10 +79,10 @@ const deepContrast = [
 
 const frontLoadedAmber = [
   { mix: 8, hue: "next", saturation: 90 },
-  { mix: 25, hue: "next-=10", saturation: 90 },
-  { mix: 52, hue: "next-=10", saturation: 90 },
+  { mix: 35, hue: "next-=5", saturation: 90 },
+  { mix: 52, hue: "next-=5", saturation: 80 },
+  { mix: 72, hue: "next-=5", saturation: 80 },
   "primer",
-  { mix: "+=2", hue: "+=5" },
   { mix: "+=2", hue: "+=5" },
   { mix: "+=5", hue: "+=2", saturation: "-=32" },
   "+=4",
@@ -91,6 +91,23 @@ const frontLoadedAmber = [
   { mix: "+=5", hue: "+=5", saturation: "+=22" },
   "+=20"
 ] as const;
+
+const frontLoadedYellow = [
+  { mix: "+=10" },
+  { mix: "+=10" },
+  { mix: "+=2" },
+  { mix: "+=2" },
+  { mix: "+=2" },
+  { mix: "+=5" },
+  "primer",
+  "+=4",
+  "+=2",
+  "+=2",
+  { mix: "+=5" },
+  "+=5"
+] as const;
+
+const endLoadedBlue = [0.5, 2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 'primer'];
 
 const limeLight = [
   { mix: 10, hue: "next", saturation: 90 },
@@ -147,7 +164,7 @@ export const colorPresets = [
     name: 'darkBlue',
     hex: '#001F3F',
     range: {
-      light: TINTS_GRAY,
+      light: endLoadedBlue,
       dark: [5, 9, 13, 17, 20, 25, 30, 41, 46, 51, 74, 94],
     }
   },
