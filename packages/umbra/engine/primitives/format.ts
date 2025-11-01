@@ -1,6 +1,6 @@
 import type { UmbraSwatch } from '../../swatch'
 import { umbra } from '../..'
-import type { UmbraRange, FormatedRange, UmbraScheme } from '../types'
+import type { UmbraRange, FormatedRange, UmbraScheme, StableScheme } from '../types'
 import { attach } from './attach'
 import type { Alias } from './attach'
 
@@ -19,6 +19,7 @@ export interface UmbraOutputs {
   formated: FormatedRange[]
   output: UmbraRange[]
   input: Partial<UmbraScheme>
+  stable: StableScheme
 }
 
 export interface Target {
@@ -61,11 +62,15 @@ export const format = ({
     formated
   })
 
+  // Generate stable schema from output
+  const stable = generateStableScheme(output, formater)
+
   const outputs: UmbraOutputs = {
     flattened,
     formated,
     output,
-    input
+    input,
+    stable
   }
 
   return {
@@ -86,6 +91,52 @@ export const format = ({
 }
 
 export const defaultFormater = hex
+
+/**
+ * Generates a stable, serializable schema from the output
+ * This schema uses only strings and is version-independent
+ */
+function generateStableScheme(output: UmbraRange[], formater: Formater = hex): StableScheme {
+  // Find base range (should be first)
+  const baseRange = output.find(range => range.name === 'base')
+  if (!baseRange) {
+    throw new Error('Base range not found in output')
+  }
+
+  // All other ranges are accents
+  const accentRanges = output.filter(range => range.name !== 'base')
+
+  return {
+    background: formater(baseRange.background),
+    foreground: formater(baseRange.foreground),
+    baseRange: baseRange.range.map(color => formater(color)),
+    accents: accentRanges.map(accent => ({
+      name: accent.name,
+      color: findAccentColor(accent, formater),
+      range: accent.range.map(color => formater(color))
+    }))
+  }
+}
+
+/**
+ * Finds the primary accent color from a range
+ * This is typically the color with highest saturation or the middle color
+ */
+function findAccentColor(accent: UmbraRange, formater: Formater): string {
+  // Find the color with highest saturation - likely the "pure" accent color
+  let maxSaturation = -1
+  let accentColor = accent.range[0]
+
+  accent.range.forEach(color => {
+    const hsl = color.toHsl()
+    if (hsl.s > maxSaturation) {
+      maxSaturation = hsl.s
+      accentColor = color
+    }
+  })
+
+  return formater(accentColor)
+}
 
 /**
  * Formats a color as a hexadecimal string: `#ff0000`

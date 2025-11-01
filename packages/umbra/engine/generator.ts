@@ -405,6 +405,10 @@ function putAccentInRange(adjusted: UmbraAdjusted, accent: Accent | string, inpu
   const hasPrimerKeyword = range.some(shade => shade === 'primer')
   if (hasPrimerKeyword) return range
 
+  // If range contains only strings (stable schema), use it as-is without auto-placement
+  const isStableRange = range.every(shade => typeof shade === 'string' && shade !== 'primer')
+  if (isStableRange) return range
+
   if (insertion && color) return replaceAtIndex(range, insertion, color)
   if (!insertion && color) return autoPlacedRange({ input, adjusted, range, color })
   return range
@@ -532,7 +536,10 @@ function accentRangeValues(adjusted: UmbraAdjusted, scheme?: RangeValues, filter
  */
 function base(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const { background, foreground } = adjusted
-  const range = rangeValues(adjusted, input.settings)
+  // Use baseRange if provided, otherwise fall back to settings.range
+  const range = input.baseRange
+    ? rangeValues(adjusted, { range: input.baseRange })
+    : rangeValues(adjusted, input.settings)
   return {
     name: 'base',
     background,

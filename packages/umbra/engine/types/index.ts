@@ -18,6 +18,19 @@ export interface FormatedRange {
   foreground: string
 }
 
+export interface StableAccent {
+  name: string
+  color: string
+  range: string[]
+}
+
+export interface StableScheme {
+  background: string
+  foreground: string
+  baseRange: string[]
+  accents: StableAccent[]
+}
+
 export interface UmbraOutput {
   input: UmbraInput
   adjusted: UmbraAdjusted
@@ -31,7 +44,7 @@ export interface Accent {
   readability?: number
 }
 
-export type UmbraInput = Partial<UmbraScheme>
+export type UmbraInput = Partial<UmbraScheme> | StableScheme
 
 export interface UmbraScheme extends UmbraColors {
   settings: UmbraSettings
@@ -42,6 +55,7 @@ export interface UmbraColors {
   background: ColorString
   foreground: ColorString
   accents: ColorString | (ColorString | Accent)[]
+  baseRange?: TintsInput | { light?: TintsInput; dark?: TintsInput }
 }
 
 export interface UmbraAdjusted {

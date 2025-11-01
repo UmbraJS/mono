@@ -696,6 +696,168 @@ Then use normal Tailwind classes:
 
 ---
 
+## Storing Themes: The Stable Schema
+
+When you generate a theme dynamically, the configuration uses logic (numbers, easing functions, etc.) to create colors. This means if Umbra's generation algorithm improves in a future version, your theme could change unexpectedly when you update the package.
+
+**The solution:** Use the `stable` property on the output. It's a serializable representation of your generated theme using only color strings—perfect for storage and SSR.
+
+### Why You Need This
+
+**Problem 1: Version Stability**
+```typescript
+// Your config uses generation logic
+const theme = umbra({
+  baseRange: [10, 20, '+=10', 50, 60, 70, 80, 90],
+  accents: ['blue']
+})
+
+// If Umbra updates its generation algorithm, these numbers
+// might produce different colors in the next version
+```
+
+**Problem 2: SSR & Serialization**
+```typescript
+// This won't serialize for SSR or Pinia state
+const config = {
+  baseRange: [10, 20, '+=10', 50], // Contains logic
+  accents: [{ name: 'primary', color: 'blue' }]
+}
+
+JSON.stringify(config) // ❌ Works, but will regenerate differently later
+```
+
+### The Solution: Stable Schema
+
+Every theme output includes a `stable` property with the exact colors that were generated:
+
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: [{ name: 'primary', color: 'blue' }]
+})
+
+const outputs = theme.format()
+
+// outputs.stable contains only strings - perfectly serializable
+console.log(outputs.stable)
+// {
+//   background: "#ffffff",
+//   foreground: "#000000",
+//   baseRange: [
+//     "#f5f5f5", "#e0e0e0", "#d0d0d0", ...
+//   ],
+//   accents: [
+//     {
+//       name: "primary",
+//       color: "#0066ff",
+//       range: ["#f0f6ff", "#e0edff", ...]
+//     }
+//   ]
+// }
+```
+
+### Storing & Loading Themes
+
+**1. Generate and Store**
+```typescript
+const theme = umbra({
+  background: '#ffffff',
+  foreground: '#000000',
+  accents: ['blue', 'red']
+})
+
+const { stable } = theme.format()
+
+// Store anywhere - localStorage, database, Pinia, etc.
+localStorage.setItem('myTheme', JSON.stringify(stable))
+```
+
+**2. Load and Apply**
+```typescript
+// Load the stable schema
+const stored = JSON.parse(localStorage.getItem('myTheme'))
+
+// Pass it directly to umbra - it just works!
+const theme = umbra(stored)
+theme.apply()
+```
+
+The stable schema is just another valid `umbra()` input—no special handling needed.
+
+### SSR Example (Nuxt/Next)
+
+```typescript
+// Server-side: generate theme
+export async function getServerSideProps() {
+  const theme = umbra({ background: '#fff', foreground: '#000', accents: ['blue'] })
+  const { stable } = theme.format()
+  
+  return {
+    props: {
+      themeSchema: stable  // ✅ Serializes perfectly
+    }
+  }
+}
+
+// Client-side: hydrate theme
+export default function Page({ themeSchema }) {
+  useEffect(() => {
+    umbra(themeSchema).apply()
+  }, [])
+}
+```
+
+### State Management Example (Pinia)
+
+```typescript
+export const useThemeStore = defineStore('theme', () => {
+  const stableScheme = ref<StableScheme | null>(null)
+  
+  function saveTheme(theme: Umbra) {
+    const { stable } = theme.format()
+    stableScheme.value = stable
+    // Pinia can serialize this perfectly
+  }
+  
+  function applyTheme() {
+    if (stableScheme.value) {
+      umbra(stableScheme.value).apply()
+    }
+  }
+  
+  return { stableScheme, saveTheme, applyTheme }
+})
+```
+
+### Database Storage
+
+```typescript
+// Save generated theme
+const theme = umbra({ /* ... */ })
+const { stable } = theme.format()
+
+await db.themes.create({
+  name: 'My Brand Theme',
+  schema: stable  // Store as JSON
+})
+
+// Load and apply later
+const saved = await db.themes.findOne({ name: 'My Brand Theme' })
+umbra(saved.schema).apply()
+```
+
+### Key Benefits
+
+✅ **Version Stable** - Colors never change across Umbra updates  
+✅ **SSR Ready** - 100% serializable with `JSON.stringify/parse`  
+✅ **State Management** - Works with Pinia, Redux, Zustand, etc.  
+✅ **Database Friendly** - Store as JSON in any database  
+✅ **No Special API** - Just pass the stable schema to `umbra()`
+
+---
+
 ## API Reference
 
 ### Core Function: `umbra(config?)`

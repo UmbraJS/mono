@@ -19,7 +19,9 @@ import type {
   UmbraOutput,
   UmbraSettings,
   UmbraRange,
-  FormatedRange
+  FormatedRange,
+  StableScheme,
+  StableAccent
 } from './engine/types'
 import { inverse, isDark, findContrast } from './engine/primitives/scheme'
 
@@ -88,6 +90,8 @@ export type {
   Formater,
   FlattenColor,
   FormatedRange,
+  StableScheme,
+  StableAccent,
   EasingType,
   EasingOptions,
   TintsInput,

@@ -43,21 +43,21 @@ export function umbra(scheme: UmbraInput = defaultScheme): Umbra {
 function insertFallbacks(scheme: UmbraInput = defaultScheme): UmbraScheme {
   const schemeSettings = {
     ...defaultSettings,
-    ...scheme.settings,
+    ...('settings' in scheme ? scheme.settings : {}),
   }
 
   const settingsFallback = {
     settings: schemeSettings,
     inversed: {
       ...schemeSettings,
-      ...scheme.inversed?.settings,
+      ...('inversed' in scheme && scheme.inversed && 'settings' in scheme.inversed ? scheme.inversed.settings : {}),
     },
   }
 
-  const inversed = scheme.inversed && {
+  const inversed = ('inversed' in scheme && scheme.inversed) ? {
     ...scheme.inversed,
     settings: settingsFallback.inversed,
-  }
+  } : undefined
 
   return {
     ...defaultScheme,

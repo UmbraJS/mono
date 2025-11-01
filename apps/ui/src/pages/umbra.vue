@@ -7,7 +7,9 @@ import {
   gray,
   grayDark,
   mauve,
+  mauveDark,
   slate,
+  slateDark,
   sage,
   olive,
   sand,
@@ -17,14 +19,6 @@ import ColourLightness from '../components/colour/Lightness.vue';
 import ColourSaturation from '../components/colour/Saturation.vue';
 import ColourHue from '../components/colour/Hue.vue';
 
-const radixGrayMap: Accent = {
-  name: 'gray',
-  range: {
-    light: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
-    dark: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
-  },
-}
-
 const radixBlueMap: Accent = {
   name: 'blue',
   color: 'blue',
@@ -33,10 +27,6 @@ const radixBlueMap: Accent = {
 const radixBlueTestMap: Accent = {
   name: 'blue-test',
   color: '#001099',
-  // range: {
-  //   dark: "easeInOut",
-  //   light: "easeInOut",
-  // }
 }
 
 const radixRedMap: Accent = {
@@ -154,37 +144,14 @@ const radixSkyMap: Accent = {
   color: 'sky',
 }
 
-// const theme = useUmbra({
-//   foreground: '#12222e',  // Pure black (shared across all accents)
-//   background: '#ffffff',  // Pure white (shared across all accents)
-//   accents: [
-//     {
-//       name: 'test',
-//       color: '#542920',
-//       shades: defaultSettings.shades,
-//       tints: [
-//         { mix: 10, hue: "next" },
-//         { mix: "+=10", hue: "next", saturation: 90 },
-//         { mix: "+=15", hue: "next", saturation: 90 },
-//         19, 20, 20, 35, 35,
-//         "primer",
-//         { mix: "+=6", hue: 0, saturation: "-=4" },
-//         { mix: "+=5", hue: 0, saturation: "-=12" },
-//         { mix: "+=20", hue: 0, saturation: "-=29" }
-//       ],
-//     },
-//   ],
-//   settings: {
-//     shades: Object.values(grayDark),
-//     tints: Object.values(gray),
-//   }
-// })
-
 const theme = useUmbra({
   foreground: '#ffffff',  // Pure black (shared across all accents)
   background: '#000000',  // Pure white (shared across all accents)
+  baseRange: {
+    dark: Object.values(slateDark),
+    light: Object.values(slate),
+  },
   accents: [
-    radixGrayMap,
     radixBlueTestMap,
     radixBlueMap,
     radixRedMap,
@@ -211,12 +178,6 @@ const theme = useUmbra({
     radixMintMap,
     radixSkyMap,
   ],
-  settings: {
-    range: {
-      dark: Object.values(grayDark),
-      light: Object.values(gray),
-    },
-  }
 })
 
 // theme.generatedTheme.value.output.forEach(range => {
@@ -264,8 +225,8 @@ function cycleMode() {
 }
 
 const finishedEntries = ref<string[]>([
-  "base",
-  "gray",
+  // "base",
+  // "gray",
   // "blue-tuned",
   // "red-tuned",
   // "green-tuned",
