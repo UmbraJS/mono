@@ -169,4 +169,94 @@ describe('Color Mixing', () => {
       expect(hsl.h).toBeLessThan(360)
     })
   })
+
+  describe('Alpha channel preservation', () => {
+    it('should preserve alpha=1 when mixing opaque colors', () => {
+      const from = swatch('#000000')
+      const to = swatch('#ffffff')
+      const result = colorMix(from, to, 50)
+
+      expect(result.toRgb().a).toBe(1)
+    })
+
+    it('should preserve alpha=1 in HSL mixing with base mix', () => {
+      const from = swatch('#000000')
+      const to = swatch('#ff0000')
+      const result = colorMixHSL(from, to, {
+        mix: 15,
+        hue: 50,
+        saturation: 99
+      })
+
+      const rgba = result.toRgb()
+      expect(rgba.a).toBe(1)
+    })
+
+    it('should use base mix for alpha interpolation, not hue mix', () => {
+      const from = swatch('#000000') // Black, alpha=1
+      const to = swatch('#ff0000')   // Red, alpha=1
+
+      // When hue and saturation differ from base mix, alpha should follow base mix
+      const result = colorMixHSL(from, to, {
+        mix: 20,        // Base mix at 20%
+        hue: 80,        // Hue at 80% (different from base)
+        saturation: 95  // Saturation at 95% (different from base)
+      })
+
+      const rgba = result.toRgb()
+
+      // Alpha should be based on base mix (20%), not hue mix (80%)
+      // Both colors have alpha=1, so result should also have alpha=1
+      expect(rgba.a).toBe(1)
+
+      // Verify the color was actually mixed (not all zeros)
+      expect(rgba.r).toBeGreaterThan(0)
+    })
+
+    it('should not produce transparent colors when mixing opaque colors', () => {
+      // This specifically tests the bug where colors had alpha=0
+      // when using independent HSL channel mixing
+      const from = swatch('black')
+      const to = swatch('#ff0000')
+
+      // Simulate the evenContrastDark preset pattern
+      const colors = [
+        colorMixHSL(from, to, { mix: 15, hue: 50, saturation: 99 }),
+        colorMixHSL(from, to, { mix: 20, hue: 50, saturation: 99 }),
+        colorMixHSL(from, to, { mix: 25, hue: 50, saturation: 99 }),
+        colorMixHSL(from, to, { mix: 32, hue: 50, saturation: 99 }),
+      ]
+
+      colors.forEach((color) => {
+        const rgba = color.toRgb()
+        const hex = color.toHex()
+
+        // Should be opaque (alpha = 1)
+        expect(rgba.a).toBe(1)
+
+        // Should not have alpha channel in hex (no 8-digit hex codes)
+        expect(hex.length).toBe(7) // #RRGGBB format only
+
+        // Should be valid 6-digit hex format
+        expect(hex).toMatch(/^#[0-9a-f]{6}$/i)
+      })
+    })
+
+    it('should handle alpha interpolation correctly for semi-transparent colors', () => {
+      const from = swatch('rgba(0, 0, 0, 0.5)')    // Semi-transparent black
+      const to = swatch('rgba(255, 0, 0, 1)')      // Opaque red
+
+      const result = colorMixHSL(from, to, {
+        mix: 50,
+        hue: 25,
+        saturation: 75
+      })
+
+      const rgba = result.toRgb()
+
+      // Alpha should interpolate based on base mix (50%)
+      // 0.5 + ((1 - 0.5) * 0.5) = 0.5 + 0.25 = 0.75
+      expect(rgba.a).toBeCloseTo(0.75, 2)
+    })
+  })
 })

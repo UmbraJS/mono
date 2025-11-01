@@ -15,10 +15,10 @@ const formated = lol.format();
 const base = formated.formated[0] as FormatedRange;
 const accent = formated.formated[1] as FormatedRange;
 
-console.log("rex: ", lol.format());
-
 const baseTokens = base.shades
 const accentTokens = accent.shades
+
+console.log('Base Tokens:', accentTokens);
 
 function getVariableName(prefix: string, entryNumber: number): string {
   return `--${prefix}-${entryNumber * 10}`;
@@ -44,7 +44,7 @@ function getVariableName(prefix: string, entryNumber: number): string {
             <div v-for="(token, index) in baseTokens" :key="token" class="SpaceToken">
               <p class="MyTokenName"><span>{{ getVariableName("base", index + 1) }}:</span></p>
               <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
-              <DyePicker :default-color="token" />
+              <!-- <DyePicker :default-color="token" /> -->
             </div>
           </div>
 
@@ -72,7 +72,7 @@ function getVariableName(prefix: string, entryNumber: number): string {
             <div v-for="(token, index) in accentTokens" :key="token" class="SpaceToken">
               <p class="MyTokenName"><span>{{ getVariableName("base", index + 1) }}:</span></p>
               <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
-              <DyePicker :default-color="token" />
+              <!-- <DyePicker :default-color="token" /> -->
             </div>
           </div>
 

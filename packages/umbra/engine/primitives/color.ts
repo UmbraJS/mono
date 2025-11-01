@@ -234,6 +234,6 @@ export function colorMixHSL(
     h: interpolatedHue,
     s: Math.max(0, Math.min(100, interpolatedSat)),
     l: Math.max(0, Math.min(100, interpolatedLight)),
-    a: fromHsl.a + ((toHsl.a - fromHsl.a) * hueMix) // Use hue mix for alpha
+    a: fromHsl.a + ((toHsl.a - fromHsl.a) * (baseMix / 100)) // Use base mix for alpha
   })
 }

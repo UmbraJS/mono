@@ -1,7 +1,6 @@
 import type { UmbraShade, TintsInput } from './easing'
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
-import { defaultSettings } from './defaults'
 
 // Shared tints and shades arrays
 const TINTS_GRAY = [0.5, 2, 5, 8, 11, 13, 17, 24, 'primer', 42, 46, 58] as const;
@@ -92,20 +91,21 @@ const frontLoadedAmber = [
   "+=20"
 ] as const;
 
-const frontLoadedYellow = [
-  { mix: "+=10" },
-  { mix: "+=10" },
-  { mix: "+=2" },
-  { mix: "+=2" },
-  { mix: "+=2" },
-  { mix: "+=5" },
-  "primer",
-  "+=4",
-  "+=2",
-  "+=2",
-  { mix: "+=5" },
-  "+=5"
-] as const;
+// Unused but kept for potential future use
+// const frontLoadedYellow = [
+//   { mix: "+=10" },
+//   { mix: "+=10" },
+//   { mix: "+=2" },
+//   { mix: "+=2" },
+//   { mix: "+=2" },
+//   { mix: "+=5" },
+//   "primer",
+//   "+=4",
+//   "+=2",
+//   "+=2",
+//   { mix: "+=5" },
+//   "+=5"
+// ] as const;
 
 const endLoadedBlue = [0.5, 2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 'primer'];
 
