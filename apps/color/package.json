@@ -26,8 +26,10 @@
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
+    "@nobel/bifrost": "workspace:*",
     "@radix-ui/colors": "catalog:",
     "@umbrajs/core": "workspace:*",
+    "@umbrajs/dye": "workspace:*",
     "@vueuse/components": "catalog:",
     "@vueuse/core": "catalog:",
     "pinia": "catalog:",

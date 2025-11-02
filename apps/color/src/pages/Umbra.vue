@@ -262,30 +262,20 @@ function stringIncludesTheWordTuned(str: string) {
       <div class="controls">
         <Button @click="() => theme.inverseTheme(false)" class="base-warning">Inverse Theme</Button>
         <div class="mode-selector">
-          <Button 
-            :variant="displayMode === 'lightness' ? 'primary' : 'default'" 
-            size="small"
-            @click="displayMode = 'lightness'"
-          >
+          <Button :variant="displayMode === 'lightness' ? 'primary' : 'base'" size="small"
+            @click="displayMode = 'lightness'">
             Lightness
           </Button>
-          <Button 
-            :variant="displayMode === 'saturation' ? 'primary' : 'default'" 
-            size="small"
-            @click="displayMode = 'saturation'"
-          >
+          <Button :variant="displayMode === 'saturation' ? 'primary' : 'base'" size="small"
+            @click="displayMode = 'saturation'">
             Saturation
           </Button>
-          <Button 
-            :variant="displayMode === 'hue' ? 'primary' : 'default'" 
-            size="small"
-            @click="displayMode = 'hue'"
-          >
+          <Button :variant="displayMode === 'hue' ? 'primary' : 'base'" size="small" @click="displayMode = 'hue'">
             Hue
           </Button>
         </div>
       </div>
-      
+
       <ValidationWarnings :warnings="validationWarnings" />
     </div>
 
@@ -293,7 +283,7 @@ function stringIncludesTheWordTuned(str: string) {
       <div class="range-grid">
         <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorCard"
           @click="finishedEntries.push(range.name)">
-          
+
           <div class="card-header">
             <h3 class="color-name">{{ range.name }}</h3>
           </div>
@@ -313,7 +303,8 @@ function stringIncludesTheWordTuned(str: string) {
 
             <div class="tokens">
               <div class="caps color" :style="`--color: ${range.background.swatch.toHex()}`"></div>
-              <div v-for="(color, index) in range.range" :key="index" class="color" :style="`--color: ${color.swatch.toHex()}`">
+              <div v-for="(color, index) in range.range" :key="index" class="color"
+                :style="`--color: ${color.swatch.toHex()}`">
                 <p class="token-label caption">{{ getTokenName(index) }}</p>
               </div>
               <div class="caps color" :style="`--color: ${range.foreground.swatch.toHex()}`"></div>

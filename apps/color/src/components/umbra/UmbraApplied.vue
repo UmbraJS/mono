@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import { ref, computed, watch, onBeforeUpdate } from 'vue';
 import { umbra } from '@umbrajs/core';
 import type { FormatedRange } from '@umbrajs/core';
 import type { ComponentPublicInstance } from 'vue';
-import { Slider, Button } from "umbraco"
-import DyePicker from '../DyePicker.vue';
-import UmbraAppliedToElement from './UmbraAppliedToElement.vue';
+import { Button } from "umbraco"
 
 const bg = ref("#000000");
 const fg = ref("#ffffff");
@@ -38,10 +37,6 @@ const accent = computed(() => formated.value[1] as FormatedRange);
 
 const baseTokens = computed(() => base.value.shades);
 const accentTokens = computed(() => accent.value.shades);
-
-function getVariableName(prefix: string, entryNumber: number): string {
-  return `--${prefix}-${entryNumber * 10}`;
-}
 
 const activeThemeName = ref<string | null>(null)
 
@@ -128,7 +123,6 @@ function setThemeRef(el: Element | ComponentPublicInstance | null, index: number
   applyThemeToElement(index)
 }
 
-
 async function applyTheme(themeName: string) {
   const themeIndex = themes.findIndex((t) => t.name === themeName)
   if (themeIndex === -1) return
@@ -153,11 +147,8 @@ async function applyTheme(themeName: string) {
 
 <template>
   <div class="SpacingTokens">
-    <div class="ExampleResult">
-      <UmbraAppliedToElement />
-    </div>
     <div class="AliasedWrapper">
-      <p class="display">Multiple Themes!</p>
+      <h2 class="section-title">Multiple Themes!</h2>
       <div class="MyUmbraActions">
         <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)"
           :class="['Theme', { active: activeThemeName === value.name }]" :aria-pressed="activeThemeName === value.name"
@@ -177,7 +168,42 @@ async function applyTheme(themeName: string) {
   </div>
 </template>
 
-<style>
+<style scoped>
+.SpacingTokens {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  width: 100%;
+}
+
+.AliasedWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.section-title {
+  margin: 0;
+  color: var(--base-text);
+  font-size: var(--font-size-5);
+}
+
+.MyUmbraActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 800px;
+  justify-content: center;
+  align-items: center;
+}
+
 button.Theme {
   background-color: var(--base);
   border: 1px solid var(--base-40);
@@ -185,11 +211,13 @@ button.Theme {
   border-radius: var(--radius);
   cursor: pointer;
   overflow: hidden;
-  width: 150px;
+  width: 100%;
+  transition: all 0.2s ease;
 }
 
 button.Theme:hover {
   border-color: var(--accent-100);
+  transform: translateY(-2px);
 }
 
 button.Theme:active {
@@ -203,7 +231,12 @@ button.Theme.active {
 
 .ThemeInfo {
   display: flex;
-  padding: var(--space-1);
+  padding: var(--space-2);
+}
+
+.ThemeInfo p {
+  color: var(--base-120);
+  margin: 0;
 }
 
 .AccentRange {
@@ -227,107 +260,5 @@ button.Theme.active {
 
 .AccentShade3 {
   background-color: var(--accent-40);
-}
-
-button.Theme p {
-  color: var(--base-120);
-}
-
-.AliasedWrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-1);
-  justify-content: center;
-  align-items: center;
-}
-
-.ReadabilityWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  min-width: 400px;
-}
-
-
-.MyUmbraActions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-  grid-column: span 2;
-  justify-content: center;
-  align-items: center;
-}
-
-.ColorEdit {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.ColorEdit:has(.DyePickerContainer.open),
-.ColorEdit:hover {
-  position: relative;
-  z-index: 999999;
-}
-
-.SpacingTitle {
-  color: var(--base-50);
-}
-
-.SpaceToken {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: 1 / -1;
-  gap: var(--space-2);
-  align-items: center;
-}
-
-.ExampleResult {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 500px;
-}
-
-.SpacingTokens {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-3);
-}
-
-.TokensTable {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: var(--space-1);
-}
-
-.TokenText {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0px var(--space-2);
-  color: var(--base-50);
-}
-
-.TokenText span {
-  color: var(--base-text);
-}
-
-.TokenName {
-  color: var(--base-text);
-  font-weight: 500;
-}
-
-.TokenValue {
-  color: var(--base-50);
-  font-family: monospace;
-}
-
-.Swatch {
-  height: 1.8em;
-  width: 1.8em;
-  background-color: var(--color);
 }
 </style>
