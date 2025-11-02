@@ -69,10 +69,6 @@ async function toggleTheme() {
           <Icon icon="pixelarticons:building" />
         </RouterLink>
 
-        <RouterLink to="/color" class="button buttonFocus buttonSmall" activeClass="primary">
-          <Icon icon="pixelarticons:paint-bucket" />
-        </RouterLink>
-
         <Button variant="primary" size="small" @click="toggleTheme">
           <Icon icon="pixelarticons:paint-bucket" />
         </Button>
