@@ -18,7 +18,6 @@ import {
 import ColourLightness from '../components/colour/Lightness.vue';
 import ColourSaturation from '../components/colour/Saturation.vue';
 import ColourHue from '../components/colour/Hue.vue';
-import ValidationWarnings from '../components/ValidationWarnings.vue';
 
 const radixBlueMap: Accent = {
   name: 'blue',
@@ -251,6 +250,32 @@ const filteredUmbraOutput = computed(() => {
   })
 })
 
+// Map warnings to their respective ranges
+const warningsByRange = computed(() => {
+  const warningsMap = new Map<string, typeof validationWarnings.value>()
+
+  validationWarnings.value.forEach(warning => {
+    const rangeName = warning.context?.accentName || 'base'
+    if (!warningsMap.has(rangeName)) {
+      warningsMap.set(rangeName, [])
+    }
+    warningsMap.get(rangeName)?.push(warning)
+  })
+
+  return warningsMap
+})
+
+// Track which ranges have their warnings expanded
+const expandedWarnings = ref<Set<string>>(new Set())
+
+function toggleWarnings(rangeName: string) {
+  if (expandedWarnings.value.has(rangeName)) {
+    expandedWarnings.value.delete(rangeName)
+  } else {
+    expandedWarnings.value.add(rangeName)
+  }
+}
+
 function stringIncludesTheWordTuned(str: string) {
   return str.toLowerCase().includes("tuned")
 }
@@ -275,17 +300,35 @@ function stringIncludesTheWordTuned(str: string) {
           </Button>
         </div>
       </div>
-
-      <ValidationWarnings :warnings="validationWarnings" />
     </div>
 
     <div class="umbra-wrapper">
       <div class="range-grid">
-        <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorCard"
-          @click="finishedEntries.push(range.name)">
+        <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorCard">
 
-          <div class="card-header">
+          <div class="card-header" @click="finishedEntries.push(range.name)">
             <h3 class="color-name">{{ range.name }}</h3>
+            <button v-if="warningsByRange.get(range.name)?.length" class="warning-indicator"
+              :class="{ expanded: expandedWarnings.has(range.name) }" @click.stop="toggleWarnings(range.name)"
+              :title="`${warningsByRange.get(range.name)?.length} warning(s)`">
+              <span class="warning-icon">⚠️</span>
+              <span class="warning-count">{{ warningsByRange.get(range.name)?.length }}</span>
+            </button>
+          </div>
+
+          <!-- Validation Warnings Section (Expandable) -->
+          <div v-if="expandedWarnings.has(range.name) && warningsByRange.get(range.name)?.length"
+            class="warnings-section">
+            <div v-for="(warning, index) in warningsByRange.get(range.name)" :key="index" class="warning-item">
+              <div class="warning-header">
+                <span class="warning-severity" :class="warning.severity">{{ warning.severity }}</span>
+                <span class="warning-type">{{ warning.type }}</span>
+              </div>
+              <p class="warning-message">{{ warning.message }}</p>
+              <div v-if="warning.context" class="warning-context">
+                <code>{{ JSON.stringify(warning.context, null, 2) }}</code>
+              </div>
+            </div>
           </div>
 
           <div class="card-content">
@@ -374,6 +417,15 @@ function stringIncludesTheWordTuned(str: string) {
   padding: var(--space-3);
   background: var(--base-20);
   border-bottom: 1px solid var(--base-30);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.card-header:hover {
+  background: var(--base-30);
 }
 
 .color-name {
@@ -382,6 +434,127 @@ function stringIncludesTheWordTuned(str: string) {
   font-weight: 600;
   color: var(--base-text);
   text-transform: capitalize;
+}
+
+.warning-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background: var(--warning-20);
+  border: 1px solid var(--warning-40);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--warning-text);
+  font-size: var(--font-size-1);
+}
+
+.warning-indicator:hover {
+  background: var(--warning-30);
+  border-color: var(--warning-60);
+  transform: scale(1.05);
+}
+
+.warning-indicator.expanded {
+  background: var(--warning-40);
+  border-color: var(--warning-80);
+}
+
+.warning-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.warning-count {
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.warnings-section {
+  padding: var(--space-3);
+  background: var(--warning-10);
+  border-bottom: 1px solid var(--warning-30);
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.warning-item {
+  background: var(--base);
+  border: 1px solid var(--warning-40);
+  border-radius: var(--radius-2);
+  padding: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.warning-item:last-child {
+  margin-bottom: 0;
+}
+
+.warning-header {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.warning-severity {
+  padding: 2px var(--space-1);
+  border-radius: var(--radius-1);
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.warning-severity.warning {
+  background: var(--warning-40);
+  color: var(--warning-text);
+}
+
+.warning-severity.error {
+  background: var(--error-40);
+  color: var(--error-text);
+}
+
+.warning-type {
+  padding: 2px var(--space-1);
+  background: var(--base-20);
+  color: var(--base-text);
+  border-radius: var(--radius-1);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.warning-message {
+  margin: var(--space-1) 0;
+  color: var(--base-text);
+  font-size: var(--font-size-1);
+  line-height: 1.4;
+}
+
+.warning-context {
+  margin-top: var(--space-1);
+  padding: var(--space-1);
+  background: var(--base-10);
+  border-radius: var(--radius-1);
+  overflow-x: auto;
+}
+
+.warning-context code {
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 10px;
+  color: var(--base-110);
+  white-space: pre;
 }
 
 .card-content {
