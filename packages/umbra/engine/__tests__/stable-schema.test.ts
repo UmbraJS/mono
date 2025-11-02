@@ -71,11 +71,11 @@ describe('Stable Schema', () => {
       const restored = umbra(stable)
 
       // Compare output colors directly (not formatted, to avoid any formatting differences)
-      const originalBase = original.output[0].range.map(c => c.toHex())
-      const restoredBase = restored.output[0].range.map(c => c.toHex())
+      const originalBase = original.output[0].range.map(c => c.swatch.toHex())
+      const restoredBase = restored.output[0].range.map(c => c.swatch.toHex())
 
-      const originalAccent = original.output[1].range.map(c => c.toHex())
-      const restoredAccent = restored.output[1].range.map(c => c.toHex())
+      const originalAccent = original.output[1].range.map(c => c.swatch.toHex())
+      const restoredAccent = restored.output[1].range.map(c => c.swatch.toHex())
 
       // Base ranges should match
       expect(restoredBase).toEqual(originalBase)
@@ -105,8 +105,8 @@ describe('Stable Schema', () => {
 
       // Compare all output ranges directly
       original.output.forEach((range, i) => {
-        const originalColors = range.range.map(c => c.toHex())
-        const restoredColors = restored.output[i].range.map(c => c.toHex())
+        const originalColors = range.range.map(c => c.swatch.toHex())
+        const restoredColors = restored.output[i].range.map(c => c.swatch.toHex())
         expect(restoredColors).toEqual(originalColors)
       })
     })
@@ -123,8 +123,8 @@ describe('Stable Schema', () => {
 
       const restored = umbra(stable)
 
-      const originalBase = original.output[0].range.map(c => c.toHex())
-      const restoredBase = restored.output[0].range.map(c => c.toHex())
+      const originalBase = original.output[0].range.map(c => c.swatch.toHex())
+      const restoredBase = restored.output[0].range.map(c => c.swatch.toHex())
 
       expect(restoredBase).toEqual(originalBase)
     })
@@ -146,7 +146,7 @@ describe('Stable Schema', () => {
 
       // It should be blue-ish (hue around 210-240)
       const theme2 = umbra({ background: '#fff', foreground: '#000', accents: [{ color: accentColor }] })
-      const hsl = theme2.output[1].range[0].toHsl()
+      const hsl = theme2.output[1].range[0].swatch.toHsl()
       expect(hsl.h).toBeGreaterThan(180)
       expect(hsl.h).toBeLessThan(260)
     })
@@ -198,8 +198,8 @@ describe('Stable Schema', () => {
       const serialized = JSON.stringify(stable)
       const restored = umbra(JSON.parse(serialized))
 
-      const originalColors = theme.output[0].range.map(c => c.toHex())
-      const restoredColors = restored.output[0].range.map(c => c.toHex())
+      const originalColors = theme.output[0].range.map(c => c.swatch.toHex())
+      const restoredColors = restored.output[0].range.map(c => c.swatch.toHex())
 
       expect(restoredColors).toEqual(originalColors)
     })
@@ -235,16 +235,16 @@ describe('Stable Schema', () => {
 
       // Store colors
       const originalColors = {
-        base: dynamic.output[0].range.map(c => c.toHex()),
-        accent: dynamic.output[1].range.map(c => c.toHex())
+        base: dynamic.output[0].range.map(c => c.swatch.toHex()),
+        accent: dynamic.output[1].range.map(c => c.swatch.toHex())
       }
 
       // Load from stable schema
       const fromStable = umbra(stable)
 
       const stableColors = {
-        base: fromStable.output[0].range.map(c => c.toHex()),
-        accent: fromStable.output[1].range.map(c => c.toHex())
+        base: fromStable.output[0].range.map(c => c.swatch.toHex()),
+        accent: fromStable.output[1].range.map(c => c.swatch.toHex())
       }
 
       // Colors should be identical
@@ -255,8 +255,8 @@ describe('Stable Schema', () => {
       const fromStableAgain = umbra(stable)
 
       const stableColors2 = {
-        base: fromStableAgain.output[0].range.map(c => c.toHex()),
-        accent: fromStableAgain.output[1].range.map(c => c.toHex())
+        base: fromStableAgain.output[0].range.map(c => c.swatch.toHex()),
+        accent: fromStableAgain.output[1].range.map(c => c.swatch.toHex())
       }
 
       // Should still be identical

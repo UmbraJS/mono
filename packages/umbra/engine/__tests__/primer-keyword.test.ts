@@ -20,7 +20,7 @@ describe('Primer Keyword', () => {
 
       // The third color (index 2) should be the accent color
       const primaryColor = accentRange!.range[2]
-      expect(primaryColor.toHex()).toBe('#0090ff')
+      expect(primaryColor.swatch.toHex()).toBe('#0090ff')
     })
 
     it('should work at any position in the array', () => {
@@ -35,7 +35,7 @@ describe('Primer Keyword', () => {
       })
 
       const accentRange = theme.output.find(r => r.name !== 'base')
-      expect(accentRange!.range[0].toHex()).toBe('#ff0000')
+      expect(accentRange!.range[0].swatch.toHex()).toBe('#ff0000')
     })
 
     it('should work with hue references before primary', () => {
@@ -61,11 +61,11 @@ describe('Primer Keyword', () => {
       expect(accentRange).toBeDefined()
 
       // Primary should be at index 3
-      expect(accentRange!.range[3].toHex()).toBe('#0090ff')
+      expect(accentRange!.range[3].swatch.toHex()).toBe('#0090ff')
 
       // First two colors should have blue hue from referencing primary
-      const hue0 = accentRange!.range[0].toHsl().h
-      const hue1 = accentRange!.range[1].toHsl().h
+      const hue0 = accentRange!.range[0].swatch.toHsl().h
+      const hue1 = accentRange!.range[1].swatch.toHsl().h
       const blueHue = swatch('#0090ff').toHsl().h
 
       expect(Math.abs(hue0 - blueHue)).toBeLessThan(15)
@@ -94,10 +94,10 @@ describe('Primer Keyword', () => {
       expect(accentRange).toBeDefined()
 
       // Primary at index 1
-      expect(accentRange!.range[1].toHex()).toBe('#00ff00')
+      expect(accentRange!.range[1].swatch.toHex()).toBe('#00ff00')
 
       // Color after should reference green hue
-      const hue2 = accentRange!.range[2].toHsl().h
+      const hue2 = accentRange!.range[2].swatch.toHsl().h
       const greenHue = swatch('#00ff00').toHsl().h
 
       expect(Math.abs(hue2 - greenHue)).toBeLessThan(15)
@@ -145,10 +145,10 @@ describe('Primer Keyword', () => {
       })
 
       // Light theme uses tints - primary at index 1
-      expect(lightTheme.output[1].range[1].toHex()).toBe('#3b82f6')
+      expect(lightTheme.output[1].range[1].swatch.toHex()).toBe('#3b82f6')
 
       // Dark theme uses shades - primary also at index 1
-      expect(darkTheme.output[1].range[1].toHex()).toBe('#3b82f6')
+      expect(darkTheme.output[1].range[1].swatch.toHex()).toBe('#3b82f6')
     })
 
     it('should work in complex real-world config', () => {
@@ -175,15 +175,15 @@ describe('Primer Keyword', () => {
       const accentRange = theme.output[1].range
 
       // Primary should be at index 8
-      expect(accentRange[8].toHex()).toBe('#0090ff')
+      expect(accentRange[8].swatch.toHex()).toBe('#0090ff')
 
       // Should have generated all colors
       expect(accentRange.length).toBeGreaterThanOrEqual(11)
 
       // Colors after primary should preserve blue hue
       const bluHue = swatch('#0090ff').toHsl().h
-      expect(Math.abs(accentRange[9].toHsl().h - bluHue)).toBeLessThan(10)
-      expect(Math.abs(accentRange[10].toHsl().h - bluHue)).toBeLessThan(10)
+      expect(Math.abs(accentRange[9].swatch.toHsl().h - bluHue)).toBeLessThan(10)
+      expect(Math.abs(accentRange[10].swatch.toHsl().h - bluHue)).toBeLessThan(10)
     })
   })
 
@@ -204,7 +204,7 @@ describe('Primer Keyword', () => {
       const accentRange = theme.output.find(r => r.name !== 'base')
 
       // Should replace primary with accent color
-      expect(accentRange!.range[1].toHex()).toBe('#ff0000')
+      expect(accentRange!.range[1].swatch.toHex()).toBe('#ff0000')
     })
 
     it('should work when accent has no explicit color (just string)', () => {
@@ -220,7 +220,7 @@ describe('Primer Keyword', () => {
       const accentRange = theme.output.find(r => r.name !== 'base')
 
       // Should use the string color for primary
-      expect(accentRange!.range[1].toHex()).toBe('#00ff00')
+      expect(accentRange!.range[1].swatch.toHex()).toBe('#00ff00')
     })
   })
 
@@ -239,8 +239,8 @@ describe('Primer Keyword', () => {
       const accentRange = theme.output.find(r => r.name !== 'base')
 
       // Both should be replaced with the color
-      expect(accentRange!.range[1].toHex()).toBe('#0090ff')
-      expect(accentRange!.range[3].toHex()).toBe('#0090ff')
+      expect(accentRange!.range[1].swatch.toHex()).toBe('#0090ff')
+      expect(accentRange!.range[3].swatch.toHex()).toBe('#0090ff')
     })
 
     it('should not interfere with other string color stops', () => {
@@ -263,9 +263,9 @@ describe('Primer Keyword', () => {
       const accentRange = theme.output.find(r => r.name !== 'base')
 
       // All three should be in place
-      expect(accentRange!.range[0].toHex()).toBe('#e0f2ff')
-      expect(accentRange!.range[1].toHex()).toBe('#0090ff')
-      expect(accentRange!.range[2].toHex()).toBe('#003d82')
+      expect(accentRange!.range[0].swatch.toHex()).toBe('#e0f2ff')
+      expect(accentRange!.range[1].swatch.toHex()).toBe('#0090ff')
+      expect(accentRange!.range[2].swatch.toHex()).toBe('#003d82')
     })
 
     it('should not duplicate accent color when primer keyword is used', () => {
@@ -294,13 +294,13 @@ describe('Primer Keyword', () => {
 
       // Count how many times the exact accent color appears in the range
       const accentColorHex = '#0090ff'
-      const occurrences = range.filter(color => color.toHex() === accentColorHex).length
+      const occurrences = range.filter(color => color.swatch.toHex() === accentColorHex).length
 
       // Should appear exactly once (where "primary" was placed)
       expect(occurrences).toBe(1)
 
       // Verify it's at the correct index (where "primary" was - index 8)
-      expect(range[8].toHex()).toBe(accentColorHex)
+      expect(range[8].swatch.toHex()).toBe(accentColorHex)
     })
   })
 })

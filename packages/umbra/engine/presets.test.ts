@@ -136,9 +136,9 @@ describe('Color Presets', () => {
       })
 
       expect(scheme.output).toHaveLength(4) // background + 3 accents
-      expect(scheme.output[1].range[8].toHex()).toBe('#0090ff')
-      expect(scheme.output[2].range[8].toHex()).toBe('#e5484d')
-      expect(scheme.output[3].range[8].toHex()).toBe('#30a46c')
+      expect(scheme.output[1].range[8].swatch.toHex()).toBe('#0090ff')
+      expect(scheme.output[2].range[8].swatch.toHex()).toBe('#e5484d')
+      expect(scheme.output[3].range[8].swatch.toHex()).toBe('#30a46c')
     })
 
     it('should use preset tints/shades when color name is provided', () => {
@@ -161,8 +161,8 @@ describe('Color Presets', () => {
       })
 
       // Preset should produce different (optimized) results than default tints
-      const presetColors = schemeWithPreset.output[1].range.slice(0, 3).map(c => c.toHex())
-      const defaultColors = schemeWithHex.output[1].range.slice(0, 3).map(c => c.toHex())
+      const presetColors = schemeWithPreset.output[1].range.slice(0, 3).map(c => c.swatch.toHex())
+      const defaultColors = schemeWithHex.output[1].range.slice(0, 3).map(c => c.swatch.toHex())
 
       expect(presetColors).not.toEqual(defaultColors)
     })
@@ -183,8 +183,8 @@ describe('Color Presets', () => {
       })
 
       expect(scheme.output).toHaveLength(4)
-      expect(scheme.output[1].range[8].toHex()).toBe('#0090ff') // blue
-      expect(scheme.output[3].range[8].toHex()).toBe('#e5484d') // red
+      expect(scheme.output[1].range[8].swatch.toHex()).toBe('#0090ff') // blue
+      expect(scheme.output[3].range[8].swatch.toHex()).toBe('#e5484d') // red
     })
 
     it('should auto-match custom colors to closest preset', () => {
@@ -196,7 +196,7 @@ describe('Color Presets', () => {
 
       // Should still generate valid colors
       expect(scheme.output[1].range).toHaveLength(12)
-      expect(scheme.output[1].range[8].toHex()).toBe('#e64d2e')
+      expect(scheme.output[1].range[8].swatch.toHex()).toBe('#e64d2e')
     })
 
     it('should handle all 25 color names', () => {

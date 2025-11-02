@@ -3,6 +3,30 @@ import type { Alias } from '../primitives/attach'
 import type { Formater, UmbraOutputs } from '../primitives/format'
 import type { TintsInput } from '../easing'
 import type { ColorString } from '../presets'
+import type { UmbraShade } from '../easing'
+
+/**
+ * Enriched color information with metadata about its role, origin, and relationships
+ */
+export interface UmbraColour {
+  /** Role of this color in the palette */
+  type: 'foreground' | 'background' | 'primer' | 'shade'
+  /** Position in the range (0-based index) */
+  index: number
+  /** Original input value that produced this color */
+  input: UmbraShade | 'background' | 'foreground'
+  /** Visual section this color belongs to */
+  section: 'foreground' | 'middleground' | 'background'
+  /** The actual color swatch */
+  swatch: UmbraSwatch
+  /** Contrast relationships to other colors */
+  contrasts: {
+    /** APCA contrast value against the previous color in this range */
+    previousColour?: number
+    /** APCA contrast value against the last color of the previous section */
+    previousSection?: number
+  }
+}
 
 export interface ValidationWarning {
   type: 'contrast' | 'readability' | 'accessibility'
@@ -26,9 +50,9 @@ export interface ValidationWarning {
 
 export interface UmbraRange {
   name: string
-  background: UmbraSwatch
-  range: UmbraSwatch[]
-  foreground: UmbraSwatch
+  background: UmbraColour
+  range: UmbraColour[]
+  foreground: UmbraColour
 }
 
 export interface FormatedRange {

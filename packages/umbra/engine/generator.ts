@@ -1,6 +1,6 @@
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
-import type { UmbraAdjusted, UmbraScheme, Accent, ValidationWarning } from './types'
+import type { UmbraAdjusted, UmbraScheme, Accent, ValidationWarning, UmbraColour } from './types'
 import { pickContrast, colorMix, colorMixHSL, getReadability } from './primitives/color'
 import { insertColorIntoRange, getStrings } from './primitives/utils'
 import { resolveTints, type TintsInput, type UmbraShade } from './easing'
@@ -12,6 +12,64 @@ const RELATIVE_VALUE_PATTERN = /^[+-]=\d+(?:\.\d+)?$/
 const MIN_POSITION = 0
 const MAX_POSITION = 100
 const DEFAULT_ACCENT_NAME = 'accent'
+
+/**
+ * Determines which visual section a color belongs to based on its position
+ * @param index - Position in the range (0-based)
+ * @param totalLength - Total number of colors in the range
+ * @returns Section classification
+ */
+function getColorSection(index: number, totalLength: number): 'background' | 'middleground' | 'foreground' {
+  const position = index / (totalLength - 1)
+  if (position < 0.33) return 'background'
+  if (position > 0.67) return 'foreground'
+  return 'middleground'
+}
+
+/**
+ * Determines the type of color based on its input
+ * @param input - The original input value
+ * @returns Color type classification
+ */
+function getColorType(input: UmbraShade | 'background' | 'foreground'): 'foreground' | 'background' | 'primer' | 'shade' {
+  if (input === 'foreground') return 'foreground'
+  if (input === 'background') return 'background'
+
+  // If input is a color string (not a number, not HSL object, not relative pattern, not "primer")
+  if (typeof input === 'string' && input !== 'primer' && !RELATIVE_VALUE_PATTERN.test(input)) {
+    return 'primer'
+  }
+
+  return 'shade'
+}
+
+/**
+ * Creates an enriched color object with metadata
+ * @param params - Configuration object
+ * @returns UmbraColour with full metadata
+ */
+function createEnrichedColor(params: {
+  swatch: UmbraSwatch
+  input: UmbraShade | 'background' | 'foreground'
+  index: number
+  totalLength: number
+  previousColor?: UmbraSwatch
+  lastSectionColor?: UmbraSwatch
+}): UmbraColour {
+  const { swatch: colorSwatch, input, index, totalLength, previousColor, lastSectionColor } = params
+
+  return {
+    type: getColorType(input),
+    index,
+    input,
+    section: getColorSection(index, totalLength),
+    swatch: colorSwatch,
+    contrasts: {
+      previousColour: previousColor ? getReadability(colorSwatch, previousColor) : undefined,
+      previousSection: lastSectionColor ? getReadability(colorSwatch, lastSectionColor) : undefined
+    }
+  }
+}
 
 // Type guards
 function isRelativeValueString(shade: UmbraShade): shade is string {
@@ -220,12 +278,9 @@ interface GetRange {
 }
 
 /**
- * Generates a color range by interpolating between start and end colors
- * Supports color stops, relative positioning, and HSL adjustments
- * @param params - Configuration object containing from/to colors, range definition, and optional accent color
- * @returns Array of interpolated color swatches
+ * Internal version that returns both swatches and their corresponding inputs
  */
-function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
+function getRangeWithInputs({ from, to, range, accentColor }: GetRange): Array<{ swatch: UmbraSwatch, input: UmbraShade }> {
   // Replace "primer" keyword with accent color if provided
   const processedRange = range.map(shade => {
     if (shade === 'primer' && accentColor) {
@@ -259,12 +314,15 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
   let nextColor = stringColorStops.length > 0 ? swatch(stringColorStops[0]) : to
 
   return processedRange.map((shade, index) => {
+    // Store the original input for tracking
+    const originalInput = range[index]
+
     // Handle relative value strings (+=X or -=X)
     if (isRelativeValueString(shade)) {
       currentPosition = parseRelativePosition(shade, currentPosition)
       const interpolatedColor = colorMix(lastColor, nextColor, currentPosition)
       lastColor = interpolatedColor
-      return interpolatedColor
+      return { swatch: interpolatedColor, input: originalInput }
     }
 
     // Handle color stop strings (hex, named color, etc.)
@@ -277,7 +335,7 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
       nextColor = stringColorStops.length > 0 ? swatch(stringColorStops[0]) : to
       // Reset position for the next segment
       currentPosition = 0
-      return color
+      return { swatch: color, input: originalInput }
     }
 
     // Handle HSL interpolation objects
@@ -317,14 +375,62 @@ function getRange({ from, to, range, accentColor }: GetRange): UmbraSwatch[] {
 
       const interpolatedColor = colorMixHSL(fromColor, nextColor, options)
       lastColor = interpolatedColor
-      return interpolatedColor
+      return { swatch: interpolatedColor, input: originalInput }
     }
 
     // Handle simple numeric values (absolute position)
     currentPosition = shade as number
     const interpolatedColor = colorMix(lastColorStop, nextColor, currentPosition)
     lastColor = interpolatedColor
-    return interpolatedColor
+    return { swatch: interpolatedColor, input: originalInput }
+  })
+}
+
+/**
+ * Generates a color range by interpolating between start and end colors
+ * Supports color stops, relative positioning, and HSL adjustments
+ * @param params - Configuration object containing from/to colors, range definition, and optional accent color
+ * @returns Array of interpolated color swatches
+ */
+function getRange(params: GetRange): UmbraSwatch[] {
+  return getRangeWithInputs(params).map(item => item.swatch)
+}
+
+/**
+ * Generates an enriched color range with full metadata
+ * @param params - Configuration object containing from/to colors, range definition, and optional accent color
+ * @returns Array of UmbraColour objects with metadata
+ */
+function getEnrichedRange(params: GetRange): UmbraColour[] {
+  const rangeWithInputs = getRangeWithInputs(params)
+  const totalLength = rangeWithInputs.length
+
+  let previousColor: UmbraSwatch | undefined
+  let lastSectionColor: UmbraSwatch | undefined
+  let lastSection: 'background' | 'middleground' | 'foreground' | undefined
+
+  return rangeWithInputs.map(({ swatch: colorSwatch, input }, index) => {
+    const currentSection = getColorSection(index, totalLength)
+
+    // Track section boundaries
+    if (lastSection && lastSection !== currentSection) {
+      lastSectionColor = previousColor
+    }
+
+    const enrichedColor = createEnrichedColor({
+      swatch: colorSwatch,
+      input,
+      index,
+      totalLength,
+      previousColor,
+      lastSectionColor
+    })
+
+    // Update for next iteration
+    previousColor = colorSwatch
+    lastSection = currentSection
+
+    return enrichedColor
   })
 }
 
@@ -482,9 +588,9 @@ function validateAccentContrast(
 function accents(input: UmbraScheme, adjusted: UmbraAdjusted): {
   palettes: Array<{
     name: string
-    background: UmbraSwatch
-    foreground: UmbraSwatch
-    range: UmbraSwatch[]
+    background: UmbraColour
+    foreground: UmbraColour
+    range: UmbraColour[]
   }>
   warnings: ValidationWarning[]
 } {
@@ -517,16 +623,36 @@ function accents(input: UmbraScheme, adjusted: UmbraAdjusted): {
     }
 
     const range = putAccentInRange(adjusted, accent, input)
+    const bgSwatch = pickContrast(adjusted.foreground, adjusted)
+    const fgSwatch = pickContrast(adjusted.background, adjusted)
+    const enrichedRange = getEnrichedRange({
+      from: adjusted.background,
+      to: adjusted.foreground,
+      range,
+      accentColor: color  // Pass accent color to replace "primer" keyword
+    })
+
     return {
       name: name || DEFAULT_ACCENT_NAME,
-      background: pickContrast(adjusted.foreground, adjusted),
-      foreground: pickContrast(adjusted.background, adjusted),
-      range: getRange({
-        from: adjusted.background,
-        to: adjusted.foreground,
-        range,
-        accentColor: color  // Pass accent color to replace "primer" keyword
-      })
+      background: createEnrichedColor({
+        swatch: bgSwatch,
+        input: 'background',
+        index: -1,
+        totalLength: enrichedRange.length + 2,
+        previousColor: undefined,
+        lastSectionColor: undefined
+      }),
+      foreground: createEnrichedColor({
+        swatch: fgSwatch,
+        input: 'foreground',
+        index: enrichedRange.length,
+        totalLength: enrichedRange.length + 2,
+        previousColor: enrichedRange[enrichedRange.length - 1]?.swatch,
+        lastSectionColor: enrichedRange.length > 0 
+          ? enrichedRange.find(c => c?.section === 'foreground')?.swatch 
+          : undefined
+      }),
+      range: enrichedRange
     }
   })
 
@@ -624,27 +750,46 @@ function base(input: UmbraScheme, adjusted: UmbraAdjusted) {
   const range = input.baseRange
     ? rangeValues(adjusted, { range: input.baseRange })
     : rangeValues(adjusted, input.settings)
+
+  const enrichedRange = getEnrichedRange({ from: background, to: foreground, range })
+
   return {
     name: 'base',
-    background,
-    foreground,
-    range: getRange({ from: background, to: foreground, range })
+    background: createEnrichedColor({
+      swatch: background,
+      input: 'background',
+      index: -1, // special index for background
+      totalLength: enrichedRange.length + 2, // +2 for bg and fg
+      previousColor: undefined,
+      lastSectionColor: undefined
+    }),
+    foreground: createEnrichedColor({
+      swatch: foreground,
+      input: 'foreground',
+      index: enrichedRange.length, // special index for foreground
+      totalLength: enrichedRange.length + 2,
+      previousColor: enrichedRange[enrichedRange.length - 1]?.swatch,
+      lastSectionColor: enrichedRange.length > 0 
+        ? enrichedRange.find(c => c?.section === 'foreground')?.swatch 
+        : undefined
+    }),
+    range: enrichedRange
   }
 }
 
 /**
  * Generates a complete Umbra color scheme
- * Creates base palette plus all accent palettes
+ * Creates base palette plus all accent palettes with enriched color metadata
  * @param input - Input color scheme configuration
  * @param adjusted - Adjusted and normalized color values
- * @returns Object containing palette array and validation warnings
+ * @returns Object containing palette array with enriched colors and validation warnings
  */
 export function umbraGenerate(input: UmbraScheme, adjusted: UmbraAdjusted): {
   output: Array<{
     name: string
-    background: UmbraSwatch
-    foreground: UmbraSwatch
-    range: UmbraSwatch[]
+    background: UmbraColour
+    foreground: UmbraColour
+    range: UmbraColour[]
   }>
   validationWarnings: ValidationWarning[]
 } {

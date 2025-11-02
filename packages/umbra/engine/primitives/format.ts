@@ -53,9 +53,9 @@ export const format = ({
   function getColors(c: UmbraRange, formater = defaultFormater) {
     return {
       name: getName(c.name),
-      background: formater(c.background),
-      shades: c.range.map((s) => formater(s)),
-      foreground: formater(c.foreground)
+      background: formater(c.background.swatch),
+      shades: c.range.map((s) => formater(s.swatch)),
+      foreground: formater(c.foreground.swatch)
     }
   }
 
@@ -111,13 +111,13 @@ function generateStableScheme(output: UmbraRange[], formater: Formater = hex): S
   const accentRanges = output.filter(range => range.name !== 'base')
 
   return {
-    background: formater(baseRange.background),
-    foreground: formater(baseRange.foreground),
-    baseRange: baseRange.range.map(color => formater(color)),
+    background: formater(baseRange.background.swatch),
+    foreground: formater(baseRange.foreground.swatch),
+    baseRange: baseRange.range.map(color => formater(color.swatch)),
     accents: accentRanges.map(accent => ({
       name: accent.name,
       color: findAccentColor(accent, formater),
-      range: accent.range.map(color => formater(color))
+      range: accent.range.map(color => formater(color.swatch))
     }))
   }
 }
@@ -132,14 +132,14 @@ function findAccentColor(accent: UmbraRange, formater: Formater): string {
   let accentColor = accent.range[0]
 
   accent.range.forEach(color => {
-    const hsl = color.toHsl()
+    const hsl = color.swatch.toHsl()
     if (hsl.s > maxSaturation) {
       maxSaturation = hsl.s
       accentColor = color
     }
   })
 
-  return formater(accentColor)
+  return formater(accentColor.swatch)
 }
 
 /**

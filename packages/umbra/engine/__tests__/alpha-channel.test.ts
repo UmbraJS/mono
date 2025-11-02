@@ -59,14 +59,14 @@ describe('Alpha Channel Integrity', () => {
     // Check raw output colors (UmbraSwatch objects)
     theme.output.forEach((range) => {
       // Check background
-      expect(range.background.toRgb().a).toBe(1)
+      expect(range.background.swatch.toRgb().a).toBe(1)
 
       // Check foreground
-      expect(range.foreground.toRgb().a).toBe(1)
+      expect(range.foreground.swatch.toRgb().a).toBe(1)
 
       // Check all range colors
       range.range.forEach((color) => {
-        const rgba = color.toRgb()
+        const rgba = color.swatch.toRgb()
         expect(rgba.a).toBe(1)
       })
     })
@@ -104,8 +104,8 @@ describe('Alpha Channel Integrity', () => {
 
     theme.output.forEach((range) => {
       range.range.forEach((color) => {
-        const rgba = color.toRgb()
-        const hex = color.toHex()
+        const rgba = color.swatch.toRgb()
+        const hex = color.swatch.toHex()
 
         // Must be opaque
         expect(rgba.a).toBe(1)
@@ -126,7 +126,7 @@ describe('Alpha Channel Integrity', () => {
 
     theme.output.forEach((range) => {
       range.range.forEach((color) => {
-        const rgba = color.toRgb()
+        const rgba = color.swatch.toRgb()
 
         // Should never have alpha=0 (fully transparent)
         expect(rgba.a).not.toBe(0)
@@ -150,8 +150,8 @@ describe('Alpha Channel Integrity', () => {
       ;[light, dark].forEach((theme) => {
         theme.output.forEach((range) => {
           range.range.forEach((color) => {
-            expect(color.toRgb().a).toBe(1)
-            expect(color.toHex().length).toBe(7)
+            expect(color.swatch.toRgb().a).toBe(1)
+            expect(color.swatch.toHex().length).toBe(7)
           })
         })
       })

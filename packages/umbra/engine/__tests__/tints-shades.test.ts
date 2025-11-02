@@ -21,7 +21,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       expect(lightTheme.output[0].range).toHaveLength(3)
 
       // First color should be close to 10% from white→black
-      const firstLightness = lightTheme.output[0].range[0].toHsl().l
+      const firstLightness = lightTheme.output[0].range[0].swatch.toHsl().l
       expect(firstLightness).toBeGreaterThan(85)  // Very light
     })
 
@@ -41,7 +41,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       expect(darkTheme.output[0].range).toHaveLength(3)
 
       // First color should be 20% from black→white (darker than tints would be)
-      const firstLightness = darkTheme.output[0].range[0].toHsl().l
+      const firstLightness = darkTheme.output[0].range[0].swatch.toHsl().l
       expect(firstLightness).toBeLessThan(30)  // Fairly dark
     })
 
@@ -84,7 +84,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       // Should contain colors - verify it worked
       const firstColor = accentRange!.range[0]
       expect(firstColor).toBeDefined()
-      expect(firstColor.toHex()).toBeTruthy()
+      expect(firstColor.swatch.toHex()).toBeTruthy()
     })
 
     it('should use accent shades for dark theme', () => {
@@ -105,7 +105,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       // Should contain valid colors
       const firstColor = accentRange!.range[0]
       expect(firstColor).toBeDefined()
-      expect(firstColor.toHex()).toBeTruthy()
+      expect(firstColor.swatch.toHex()).toBeTruthy()
     })
   })
 
@@ -190,10 +190,10 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       expect(darkTheme.output[0].range).toHaveLength(12)
 
       // Light theme first color should be very light
-      expect(lightTheme.output[0].range[0].toHsl().l).toBeGreaterThan(95)
+      expect(lightTheme.output[0].range[0].swatch.toHsl().l).toBeGreaterThan(95)
 
       // Dark theme first color should be very dark
-      expect(darkTheme.output[0].range[0].toHsl().l).toBeLessThan(10)
+      expect(darkTheme.output[0].range[0].swatch.toHsl().l).toBeLessThan(10)
     })
   })
 
@@ -236,7 +236,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       expect(darkTheme.output[1].range.length).toBeGreaterThan(0)
 
       // Light theme should have blue-ish color from next reference
-      const lightHue = lightTheme.output[1].range[0].toHsl().h
+      const lightHue = lightTheme.output[1].range[0].swatch.toHsl().h
       const blueHue = swatch('#0090ff').toHsl().h
 
       expect(Math.abs(lightHue - blueHue)).toBeLessThan(15)
@@ -244,7 +244,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       // Dark theme first color exists and is valid
       const darkColor = darkTheme.output[1].range[0]
       expect(darkColor).toBeDefined()
-      expect(darkColor.toHex()).toBeTruthy()
+      expect(darkColor.swatch.toHex()).toBeTruthy()
     })
 
     it('should allow different saturation strategies per theme', () => {
@@ -280,8 +280,8 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
         settings: {}
       })
 
-      const lightSat = lightTheme.output[1].range[0].toHsl().s
-      const darkSat = darkTheme.output[1].range[0].toHsl().s
+      const lightSat = lightTheme.output[1].range[0].swatch.toHsl().s
+      const darkSat = darkTheme.output[1].range[0].swatch.toHsl().s
 
       // Light theme should have higher saturation boost
       expect(lightSat).toBeGreaterThan(darkSat)
@@ -324,11 +324,11 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
 
       // All colors should be neutral (very low saturation)
       lightTheme.output[1].range.forEach(color => {
-        expect(color.toHsl().s).toBeLessThan(5)
+        expect(color.swatch.toHsl().s).toBeLessThan(5)
       })
 
       darkTheme.output[1].range.forEach(color => {
-        expect(color.toHsl().s).toBeLessThan(5)
+        expect(color.swatch.toHsl().s).toBeLessThan(5)
       })
     })
 
@@ -369,7 +369,7 @@ describe('Tints vs Shades (Light vs Dark Themes)', () => {
       // All should be blue-ish
       const blueHue = swatch('#0090ff').toHsl().h
       accentRange.forEach(color => {
-        const hue = color.toHsl().h
+        const hue = color.swatch.toHsl().h
         expect(Math.abs(hue - blueHue)).toBeLessThan(20)
       })
     })
