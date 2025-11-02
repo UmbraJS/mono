@@ -15,12 +15,12 @@ const inversed = ref(true);
 
 const warningAccent: Accent = {
   name: "warning",
-  color: "#ff0000",
+  color: "red",
 };
 
 const successAccent: Accent = {
   name: "success",
-  color: "#00ff00",
+  color: "green",
 };
 
 const theme = umbra({
@@ -38,9 +38,9 @@ const theme = umbra({
 //   }
 // });
 
-function toggleTheme() {
+async function toggleTheme() {
   try {
-    inversed.value ? theme.apply() : theme.inverse().apply();
+    await (inversed.value ? theme.apply() : theme.inverse().apply());
     inversed.value = !inversed.value;
   } catch (error) {
     console.error("Theme toggle error:", error);

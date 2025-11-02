@@ -77,22 +77,22 @@ function getMeta(selector?: string) {
   return `${targetIterations}-${iterations}`
 }
 
-export function attach({ outputs, target, alias, rangeMapping = true }: Attach) {
+export async function attach({ outputs, target, alias, rangeMapping = true }: Attach) {
   const meta = getMeta(target.selector)
 
   const colors = outputs.flattened.filter(({ name }) => !invalidColor(name))
   if (target.element) setElementColors(target.element, colors)
-  if (target.selector) setColorSheet(target.selector, colors, meta)
+  if (target.selector) await setColorSheet(target.selector, colors, meta)
 
   if (alias) {
     const aliases = Object.entries(alias)
     const array = aliases.map(([key, value]) => ({ name: '--' + key, color: `var(--${value})` }))
     array.forEach((p) => target.element && setProperty(target.element, p))
-    if (target.selector) setAliasSheet(target.selector, array, meta)
+    if (target.selector) await setAliasSheet(target.selector, array, meta)
   }
 
   if (rangeMapping && target.selector) {
-    setRangeMappingSheet(outputs, meta)
+    await setRangeMappingSheet(outputs, meta)
   }
 
   return outputs
@@ -110,12 +110,12 @@ interface MTS {
   selector?: string
 }
 
-function makeThemeSheet(
+async function makeThemeSheet(
   colors: FlattenColor[],
   { selector = ':root', meta = '1', marker = 'theme' }: MTS
 ) {
   const sheet = new CSSStyleSheet()
-  sheet.replace(
+  await sheet.replace(
     `${marker}-${meta}, ${selector} {${colors
       .map(({ name, color }) => `${name}: ${color};`)
       .join('')}}`
@@ -123,21 +123,21 @@ function makeThemeSheet(
   return sheet
 }
 
-function setColorSheet(selector = ':root', colors: FlattenColor[], meta?: string) {
+async function setColorSheet(selector = ':root', colors: FlattenColor[], meta?: string) {
   const marker = 'theme'
-  const sheet = makeThemeSheet(colors, { meta, marker, selector })
+  const sheet = await makeThemeSheet(colors, { meta, marker, selector })
   setSheet(sheet, selector, marker)
 }
 
-function setAliasSheet(selector = ':root', colors: FlattenColor[], meta?: string) {
+async function setAliasSheet(selector = ':root', colors: FlattenColor[], meta?: string) {
   const marker = 'alias'
-  const sheet = makeThemeSheet(colors, { meta, marker, selector })
+  const sheet = await makeThemeSheet(colors, { meta, marker, selector })
   setSheet(sheet, selector, marker)
 }
 
-function setRangeMappingSheet(outputs: UmbraOutputs, meta?: string) {
+async function setRangeMappingSheet(outputs: UmbraOutputs, meta?: string) {
   const marker = 'range-mapping'
-  
+
   // Get all accent ranges (excluding base/background/foreground)
   const accentRanges = outputs.formated.filter(
     (range) => !['base', 'background', 'foreground'].includes(range.name)
@@ -145,23 +145,23 @@ function setRangeMappingSheet(outputs: UmbraOutputs, meta?: string) {
 
   // Generate CSS for all range mappings
   const mappingRules: string[] = []
-  
+
   accentRanges.forEach((accent) => {
     const className = `.base-${accent.name}`
     const variables: string[] = []
-    
+
     // Map base variables to accent variables
     variables.push(`--base: var(--${accent.name});`)
-    
+
     // Map all 12 shade steps
     for (let i = 1; i <= 12; i++) {
       const step = i * 10
       variables.push(`--base-${step}: var(--${accent.name}-${step});`)
     }
-    
+
     // Map text variable
     variables.push(`--base-text: var(--${accent.name}-text);`)
-    
+
     mappingRules.push(`${className} { ${variables.join(' ')} }`)
   })
 
@@ -169,7 +169,7 @@ function setRangeMappingSheet(outputs: UmbraOutputs, meta?: string) {
   if (mappingRules.length > 0) {
     const cssText = mappingRules.join('\n')
     const sheet = new CSSStyleSheet()
-    sheet.replace(`${marker}-${meta || '1'} { } ${cssText}`)
+    await sheet.replace(`${marker}-${meta || '1'} { } ${cssText}`)
     setSheet(sheet, 'range-mapping', marker)
   }
 }

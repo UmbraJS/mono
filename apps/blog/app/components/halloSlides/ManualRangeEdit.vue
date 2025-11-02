@@ -18,7 +18,7 @@ const accent = formated.formated[1] as FormatedRange;
 const baseTokens = base.shades
 const accentTokens = accent.shades
 
-console.log('Base Tokens:', accentTokens);
+console.log('Base Tokens:', baseTokens);
 
 function getVariableName(prefix: string, entryNumber: number): string {
   return `--${prefix}-${entryNumber * 10}`;
@@ -44,7 +44,7 @@ function getVariableName(prefix: string, entryNumber: number): string {
             <div v-for="(token, index) in baseTokens" :key="token" class="SpaceToken">
               <p class="MyTokenName"><span>{{ getVariableName("base", index + 1) }}:</span></p>
               <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
-              <!-- <DyePicker :default-color="token" /> -->
+              <DyePicker :default-color="token" />
             </div>
           </div>
 
@@ -72,7 +72,7 @@ function getVariableName(prefix: string, entryNumber: number): string {
             <div v-for="(token, index) in accentTokens" :key="token" class="SpaceToken">
               <p class="MyTokenName"><span>{{ getVariableName("base", index + 1) }}:</span></p>
               <!-- <div class="Swatch border" :style="{ '--color': token }" /> -->
-              <!-- <DyePicker :default-color="token" /> -->
+              <DyePicker :default-color="token" />
             </div>
           </div>
 

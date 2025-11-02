@@ -108,12 +108,12 @@ onBeforeUpdate(() => {
   themeRefs.value = []
 })
 
-function applyThemeToElement(index: number) {
+async function applyThemeToElement(index: number) {
   const element = themeRefs.value[index]
   const themeInput = themes[index]
   if (!element || !themeInput) return
 
-  umbra({
+  await umbra({
     background: themeInput.background,
     foreground: themeInput.foreground,
     accents: themeInput.accents,
@@ -129,7 +129,7 @@ function setThemeRef(el: Element | ComponentPublicInstance | null, index: number
 }
 
 
-function applyTheme(themeName: string) {
+async function applyTheme(themeName: string) {
   const themeIndex = themes.findIndex((t) => t.name === themeName)
   if (themeIndex === -1) return
 
@@ -143,7 +143,7 @@ function applyTheme(themeName: string) {
 
   themeRefs.value[themeIndex]?.focus()
 
-  umbra({
+  await umbra({
     background: selectedTheme.background,
     foreground: selectedTheme.foreground,
     accents: selectedTheme.accents,

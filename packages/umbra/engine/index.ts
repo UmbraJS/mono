@@ -18,14 +18,14 @@ interface ApplyProps {
 }
 
 interface Format extends UmbraOutputs {
-  attach: (props: AttachProps) => UmbraOutputs
+  attach: (props: AttachProps) => Promise<UmbraOutputs>
 }
 
 export interface Umbra {
   output: UmbraRange[]
   input: UmbraInput
   validationWarnings: ValidationWarning[]
-  apply: (props?: ApplyProps) => UmbraOutputs
+  apply: (props?: ApplyProps) => Promise<UmbraOutputs>
   format: (formater?: Formater) => Format
   isDark: () => boolean
   inverse: () => Umbra
@@ -153,11 +153,11 @@ export function umbraHydrate({
     isDark: () => isDark(input.background),
     format: (formater?: Formater) => getFormat(formater),
     inverse: () => umbra(inverse(input, inversed)),
-    apply: (props?: ApplyProps) => {
+    apply: async (props?: ApplyProps) => {
       const { alias, formater } = props || {}
       const target = getTarget(props?.target)
       const formated = getFormat(formater)
-      const outputs = formated.attach({ alias, target })
+      const outputs = await formated.attach({ alias, target })
       if (input.settings?.callback) input.settings.callback(outputs)
       return outputs
     },

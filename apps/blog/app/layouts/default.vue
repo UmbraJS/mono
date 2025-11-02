@@ -19,8 +19,8 @@ const { data: posts, error: postsError } = await useAsyncData('blog', async () =
 
 const theme = useUmbra()
 
-onMounted(() => {
-  theme.inverse()
+onMounted(async () => {
+  await theme.inverse()
 })
 
 const reveal = ref(false)

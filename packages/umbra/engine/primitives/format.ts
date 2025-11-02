@@ -79,10 +79,10 @@ export const format = ({
 
   return {
     ...outputs,
-    attach: ({ target, alias, rangeMapping }: AttachProps) => {
+    attach: async ({ target, alias, rangeMapping }: AttachProps) => {
       if (!document) return outputs
       if (callback) callback(outputs)
-      return attach({
+      return await attach({
         outputs,
         alias: typeof alias === 'boolean' ? undefined : alias,
         rangeMapping,

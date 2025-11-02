@@ -65,7 +65,7 @@ export interface Accent {
   readability?: number
 }
 
-export type UmbraInput = Partial<UmbraScheme> | StableScheme
+export type UmbraInput = Partial<UmbraScheme>
 
 export interface UmbraScheme extends UmbraColors {
   settings: UmbraSettings

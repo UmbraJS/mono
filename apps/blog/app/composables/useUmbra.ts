@@ -5,22 +5,22 @@ import { umbra, isDark, getReadability } from '@umbrajs/core'
 
 const warningAccent: Accent = {
   name: 'warning',
-  color: '#ff0000',
+  color: 'red',
 }
 
 const successAccent: Accent = {
   name: 'success',
-  color: '#00ff00',
+  color: 'green',
 }
 
 const themeInput: UmbraInput = {
   foreground: '#16121f',
   background: '#f3f6ea',
-  accents: ['#9999ff', warningAccent, successAccent],
+  accents: ['violet', warningAccent, successAccent],
   inversed: {
     foreground: '#f3f6ea',
     background: '#16121f',
-    accents: ['#9999ff', warningAccent, successAccent],
+    accents: ['violet', warningAccent, successAccent],
   },
 }
 
@@ -76,7 +76,7 @@ export const useUmbra = defineStore('umbra', () => {
     return theme
   }
 
-  function apply({ scheme, element }: { scheme?: UmbraInput; element?: HTMLElement } = {}) {
+  async function apply({ scheme, element }: { scheme?: UmbraInput; element?: HTMLElement } = {}) {
     const schemeInput = {
       ...input.value, // previous input
       ...scheme, // new input
@@ -97,12 +97,12 @@ export const useUmbra = defineStore('umbra', () => {
       document.documentElement.classList.add('theme-changing')
     }
 
-    const output = theme.apply({
+    const output = await theme.apply({
       target: element,
     })
 
-    setTimeout(() => {
-      theme.inverse().apply({
+    setTimeout(async () => {
+      await theme.inverse().apply({
         target: '.inverted-theme',
       })
       if (import.meta.client) {
@@ -118,7 +118,7 @@ export const useUmbra = defineStore('umbra', () => {
     maxWait: 200,
   })
 
-  function inverse({ element }: { element?: HTMLElement } = {}) {
+  async function inverse({ element }: { element?: HTMLElement } = {}) {
     const theme = umbra({
       settings: settings,
       ...input.value,
@@ -128,11 +128,11 @@ export const useUmbra = defineStore('umbra', () => {
       document.documentElement.classList.add('theme-changing')
     }
 
-    const output = inverse.apply({
+    const output = await inverse.apply({
       target: element,
     })
-    setTimeout(() => {
-      theme.apply({
+    setTimeout(async () => {
+      await theme.apply({
         target: '.inverted-theme',
       })
       if (import.meta.client) {

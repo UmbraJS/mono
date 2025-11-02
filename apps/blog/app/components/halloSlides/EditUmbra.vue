@@ -57,8 +57,8 @@ function changeTheme({
   if (accentValue) ac.value = accentValue;
 }
 
-function applyTheme() {
-  umbra({
+async function applyTheme() {
+  await umbra({
     background: bg.value,
     foreground: fg.value,
     accents: [ac.value],
