@@ -4,14 +4,6 @@ import UmbraApplied from '../components/umbra/UmbraApplied.vue'
 
 <template>
   <div class="themes-page">
-    <div class="page-header">
-      <h1>Theme Presets</h1>
-      <p class="description">
-        Click on any theme to apply it instantly. Each theme demonstrates how Umbra generates
-        harmonious color scales from simple background, foreground, and accent inputs.
-      </p>
-    </div>
-
     <UmbraApplied />
   </div>
 </template>
@@ -21,7 +13,6 @@ import UmbraApplied from '../components/umbra/UmbraApplied.vue'
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-5);
 }
 
 .page-header {

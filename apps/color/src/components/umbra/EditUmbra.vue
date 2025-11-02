@@ -179,6 +179,5 @@ async function applyTheme() {
   justify-content: center;
   gap: var(--space-3);
   width: 100%;
-  padding: var(--space-4);
 }
 </style>

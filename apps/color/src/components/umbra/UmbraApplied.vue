@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onBeforeUpdate } from 'vue';
+import { ref, onBeforeUpdate } from 'vue';
 import { umbra } from '@umbrajs/core';
 import type { ComponentPublicInstance } from 'vue';
-import { Button } from "umbraco"
 import { useUmbra } from '../../stores/useUmbra';
 
 const umbraStore = useUmbra();
@@ -95,7 +94,6 @@ async function applyTheme(themeName: string) {
 <template>
   <div class="SpacingTokens">
     <div class="AliasedWrapper">
-      <h2 class="section-title">Multiple Themes!</h2>
       <div class="MyUmbraActions">
         <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)"
           :class="['Theme', { active: umbraStore.activeThemeName === value.name }]"

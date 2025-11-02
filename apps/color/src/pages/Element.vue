@@ -4,14 +4,6 @@ import UmbraAppliedToElement from '../components/umbra/UmbraAppliedToElement.vue
 
 <template>
   <div class="element-page">
-    <div class="page-header">
-      <h1>Element Annotation Demo</h1>
-      <p class="description">
-        This demonstrates how Umbra CSS variables are applied to real elements.
-        The visual annotations show which CSS custom properties control different parts of the button.
-      </p>
-    </div>
-
     <div class="demo-section">
       <UmbraAppliedToElement />
     </div>
@@ -33,7 +25,6 @@ import UmbraAppliedToElement from '../components/umbra/UmbraAppliedToElement.vue
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  padding: var(--space-5);
 }
 
 .page-header {
