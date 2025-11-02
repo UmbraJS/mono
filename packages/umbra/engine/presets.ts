@@ -1,6 +1,7 @@
 import type { UmbraShade, TintsInput } from './easing'
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
+import { saturate } from '../swatch/manipulate/saturate';
 
 // Shared tints and shades arrays
 const TINTS_GRAY = [2, 5, 8, 11, 13, 17, 24, 34, 'primer', 42, 46, 58] as const;
@@ -22,9 +23,9 @@ const evenContrastDark = [
 ] as const;
 
 const evenContrastLight = [
-  { mix: 5, hue: "next" },
   { mix: 8, hue: "next", saturation: "+=99" },
-  14, 24, 35, 49, 68, 88,
+  { mix: 14, hue: "next", saturation: "+=99" },
+  24, 34, 49, 59, 68, 88,
   "primer",
   { mix: "+=15", hue: 0, saturation: "-=4" },
   { mix: "+=10", hue: 0, saturation: "-=12" },
@@ -77,7 +78,7 @@ const deepContrast = [
 ] as const;
 
 const frontLoadedAmber = [
-  { mix: 8, hue: "next", saturation: 90 },
+  { mix: 20, hue: "next", saturation: 90 },
   { mix: 35, hue: "next-=5", saturation: 90 },
   { mix: 52, hue: "next-=5", saturation: 80 },
   { mix: 72, hue: "next-=5", saturation: 80 },
@@ -107,7 +108,7 @@ const frontLoadedAmber = [
 //   "+=5"
 // ] as const;
 
-const endLoadedBlue = [0.5, 2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 'primer'];
+const endLoadedBlue = [4, 8, 11, 17, 24, 34, 44, 54, 60, 70, 80, 'primer'];
 
 const limeLight = [
   { mix: 10, hue: "next", saturation: 90 },

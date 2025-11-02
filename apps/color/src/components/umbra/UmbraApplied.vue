@@ -1,62 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, watch, onBeforeUpdate } from 'vue';
+import { ref, computed, onBeforeUpdate } from 'vue';
 import { umbra } from '@umbrajs/core';
-import type { FormatedRange } from '@umbrajs/core';
 import type { ComponentPublicInstance } from 'vue';
 import { Button } from "umbraco"
+import { useUmbra } from '../../stores/useUmbra';
 
-const bg = ref("#000000");
-const fg = ref("#ffffff");
-const ac = ref("#6400ff");
-const accentPalette = ref<string[]>([ac.value]);
-
-const minimumReadability = ref(50);
-
-const theme = umbra({
-  background: bg.value,
-  foreground: fg.value,
-  accents: accentPalette.value,
-});
-
-const formated = ref(theme.format().formated)
-
-watch([bg, fg, ac, accentPalette, minimumReadability], ([newBg, newFg, _newAc, palette, newMinRead]) => {
-  const newTheme = umbra({
-    background: newBg,
-    foreground: newFg,
-    accents: palette,
-    settings: {
-      readability: newMinRead
-    }
-  });
-  formated.value = newTheme.format().formated;
-});
-
-const base = computed(() => formated.value[0] as FormatedRange);
-const accent = computed(() => formated.value[1] as FormatedRange);
-
-const baseTokens = computed(() => base.value.shades);
-const accentTokens = computed(() => accent.value.shades);
-
-const activeThemeName = ref<string | null>(null)
-
-function changeTheme({
-  background,
-  foreground,
-  accentValue
-}: {
-  background?: string;
-  foreground?: string;
-  accentValue?: string;
-}) {
-  activeThemeName.value = null
-  if (background) bg.value = background;
-  if (foreground) fg.value = foreground;
-  if (accentValue) {
-    ac.value = accentValue;
-    accentPalette.value = [accentValue];
-  }
-}
+const umbraStore = useUmbra();
 
 const themes = [
   {
@@ -129,19 +78,17 @@ async function applyTheme(themeName: string) {
 
   const selectedTheme = themes[themeIndex]
   if (!selectedTheme) return
-  activeThemeName.value = selectedTheme.name
-  bg.value = selectedTheme.background
-  fg.value = selectedTheme.foreground
-  ac.value = selectedTheme.accents[0] || ac.value
-  accentPalette.value = [...selectedTheme.accents]
 
+  umbraStore.setActiveTheme(selectedTheme.name)
   themeRefs.value[themeIndex]?.focus()
 
-  await umbra({
-    background: selectedTheme.background,
-    foreground: selectedTheme.foreground,
-    accents: selectedTheme.accents,
-  }).apply()
+  await umbraStore.apply({
+    scheme: {
+      background: selectedTheme.background,
+      foreground: selectedTheme.foreground,
+      accents: selectedTheme.accents,
+    }
+  })
 }
 </script>
 
@@ -151,8 +98,8 @@ async function applyTheme(themeName: string) {
       <h2 class="section-title">Multiple Themes!</h2>
       <div class="MyUmbraActions">
         <button v-for="(value, index) in themes" :key="value.name" :ref="(el) => setThemeRef(el, index)"
-          :class="['Theme', { active: activeThemeName === value.name }]" :aria-pressed="activeThemeName === value.name"
-          @click="applyTheme(value.name)">
+          :class="['Theme', { active: umbraStore.activeThemeName === value.name }]"
+          :aria-pressed="umbraStore.activeThemeName === value.name" @click="applyTheme(value.name)">
           <div class="AccentRange">
             <div class="PrimaryAccent"></div>
             <div class="AccentShade1"></div>

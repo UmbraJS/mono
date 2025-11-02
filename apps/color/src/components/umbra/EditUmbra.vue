@@ -1,48 +1,37 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { umbra } from '@umbrajs/core';
+import { ref, computed } from 'vue';
 import type { FormatedRange } from '@umbrajs/core';
 import { Slider, Button } from "umbraco"
 import DyePicker from '../DyePicker.vue';
 import ColorLayer from './ColorLayer.vue';
 import ColorLayerHorizontal from './ColorLayerHorizontal.vue';
+import { useUmbra } from '../../stores/useUmbra';
 
 const { showTokens = true, showHorizontal = false } = defineProps<{
   showTokens?: boolean
   showHorizontal?: boolean
 }>();
 
-const bg = ref("#000000");
-const fg = ref("#ffffff");
-const ac = ref("#6400ff");
+const umbraStore = useUmbra();
 
-const minimumReadability = ref(50);
+const bg = ref(umbraStore.input.background || "#000000");
+const fg = ref(umbraStore.input.foreground || "#ffffff");
+const ac = ref(
+  typeof umbraStore.input.accents?.[0] === 'string'
+    ? umbraStore.input.accents[0]
+    : umbraStore.input.accents?.[0]?.color || "#6400ff"
+);
 
-const theme = umbra({
-  background: bg.value,
-  foreground: fg.value,
-  accents: [ac.value]
+const minimumReadability = computed({
+  get: () => umbraStore.readability.target,
+  set: (value) => umbraStore.setReadability(value)
 });
 
-const formated = ref(theme.format().formated)
+const base = computed(() => umbraStore.formated[0] as FormatedRange);
+const accent = computed(() => umbraStore.formated[1] as FormatedRange);
 
-watch([bg, fg, ac, minimumReadability], ([newBg, newFg, newAc, newMinRead]) => {
-  const newTheme = umbra({
-    background: newBg,
-    foreground: newFg,
-    accents: [newAc],
-    settings: {
-      readability: newMinRead
-    }
-  });
-  formated.value = newTheme.format().formated;
-});
-
-const base = computed(() => formated.value[0] as FormatedRange);
-const accent = computed(() => formated.value[1] as FormatedRange);
-
-const baseTokens = computed(() => base.value.shades);
-const accentTokens = computed(() => accent.value.shades);
+const baseTokens = computed(() => base.value?.shades || []);
+const accentTokens = computed(() => accent.value?.shades || []);
 
 function changeTheme({
   background,
@@ -59,14 +48,17 @@ function changeTheme({
 }
 
 async function applyTheme() {
-  await umbra({
-    background: bg.value,
-    foreground: fg.value,
-    accents: [ac.value],
-    settings: {
-      readability: minimumReadability.value
+  umbraStore.setActiveTheme(null);
+  await umbraStore.apply({
+    scheme: {
+      background: bg.value,
+      foreground: fg.value,
+      accents: [ac.value],
+      settings: {
+        readability: minimumReadability.value
+      }
     }
-  }).apply()
+  });
 }
 </script>
 

@@ -4,7 +4,7 @@ export const defaultSettings: UmbraSettings = {
   readability: 70,
   insertion: 9,
   range: {
-    light: [0.5, 2, 5, 8, 11, 13, 17, 24, 42, 46, 58, 87],
+    light: [3, 9, 13, 17, 20, 25, 30, 41, 46, 51, 74, 94],
     dark: [5, 9, 13, 17, 20, 25, 30, 41, 46, 51, 74, 94],
   },
 }

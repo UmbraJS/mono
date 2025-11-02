@@ -1,40 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { Button } from "umbraco";
-import { umbra } from "@umbrajs/core";
 import { Icon } from "@iconify/vue";
-import type { Accent } from "@umbrajs/core";
 import "umbraco/styles/_index.css";
 import "umbraco/dist/umbraco.css";
+import { useUmbra } from "./stores/useUmbra";
 
 const route = useRoute();
+const umbraStore = useUmbra();
 
-const inversed = ref(true);
-
-const warningAccent: Accent = {
-  name: "warning",
-  color: "red",
-};
-
-const successAccent: Accent = {
-  name: "success",
-  color: "green",
-};
-
-const theme = umbra({
-  background: "#ffffff",
-  foreground: "#000000",
-  accents: ["#8888ff", warningAccent, successAccent],
-});
+// Initialize the theme
+umbraStore.apply();
 
 async function toggleTheme() {
-  try {
-    await (inversed.value ? theme.apply() : theme.inverse().apply());
-    inversed.value = !inversed.value;
-  } catch (error) {
-    console.error("Theme toggle error:", error);
-  }
+  await umbraStore.inverse();
 }
 </script>
 

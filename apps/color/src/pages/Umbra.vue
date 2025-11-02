@@ -147,10 +147,6 @@ const radixSkyMap: Accent = {
 const theme = useUmbra({
   foreground: '#000000',  // Pure black (shared across all accents)
   background: '#ffffff',  // Pure white (shared across all accents)
-  baseRange: {
-    dark: Object.values(slateDark),
-    light: Object.values(slate),
-  },
   accents: [
     radixBlueTestMap,
     radixBlueMap,
@@ -199,7 +195,8 @@ function useUmbra(schema: UmbraInput) {
     if (apply) applyTheme()
   }
 
-  applyTheme()
+  // Don't auto-apply to avoid overwriting the global theme
+  // applyTheme()
 
   return {
     applyTheme,
