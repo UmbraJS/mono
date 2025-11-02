@@ -178,10 +178,6 @@ const theme = useUmbra({
 
 const validationWarnings = computed(() => theme.generatedTheme.value.validationWarnings || [])
 
-// theme.generatedTheme.value.output.forEach(range => {
-//   range.range = range.range.map(color => swatch(color.toHex()))
-// })
-
 function useUmbra(schema: UmbraInput) {
   const initTheme = umbra(schema)
   const generatedTheme = ref<Umbra>(initTheme)
@@ -194,9 +190,6 @@ function useUmbra(schema: UmbraInput) {
     generatedTheme.value = generatedTheme.value.inverse()
     if (apply) applyTheme()
   }
-
-  // Don't auto-apply to avoid overwriting the global theme
-  // applyTheme()
 
   return {
     applyTheme,
@@ -361,7 +354,6 @@ function stringIncludesTheWordTuned(str: string) {
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
-  padding: var(--space-4);
 }
 
 .page-header {

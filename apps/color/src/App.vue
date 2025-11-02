@@ -19,7 +19,6 @@ async function toggleTheme() {
 
 <template>
   <header>
-    <h1>Umbra Color Testing</h1>
     <nav>
       <div class="nav-links">
         <RouterLink to="/" class="nav-link" activeClass="active">

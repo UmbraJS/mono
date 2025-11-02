@@ -120,7 +120,6 @@ async function applyTheme(themeName: string) {
   align-items: center;
   justify-content: center;
   gap: var(--space-3);
-  padding: var(--space-4);
   width: 100%;
 }
 
