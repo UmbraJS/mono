@@ -17,7 +17,6 @@ import UmbraApplied from '../components/umbra/UmbraApplied.vue'
 
 .page-header {
   text-align: center;
-  margin-bottom: var(--space-5);
 }
 
 .page-header h1 {

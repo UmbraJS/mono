@@ -29,7 +29,6 @@ import UmbraAppliedToElement from '../components/umbra/UmbraAppliedToElement.vue
 
 .page-header {
   text-align: center;
-  margin-bottom: var(--space-5);
 }
 
 .page-header h1 {
@@ -48,17 +47,14 @@ import UmbraAppliedToElement from '../components/umbra/UmbraAppliedToElement.vue
 }
 
 .demo-section {
-  background: var(--base-10);
-  border: 1px solid var(--base-20);
   border-radius: var(--radius-3);
-  padding: var(--space-4);
   margin-bottom: var(--space-4);
 }
 
 .info-section {
   background: var(--base-10);
-  border: 1px solid var(--base-20);
-  border-radius: var(--radius-3);
+  border: 1px solid var(--base-80);
+  border-radius: var(--radius);
   padding: var(--space-4);
 }
 

@@ -76,8 +76,8 @@ nav {
   gap: var(--space-2);
   padding: var(--space-1);
   background: var(--base-10);
-  border-radius: var(--radius-2);
-  border: 1px solid var(--base-20);
+  border-radius: var(--radius);
+  border: 1px solid var(--base-70);
 }
 
 .nav-link {
@@ -85,10 +85,10 @@ nav {
   align-items: center;
   gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
   text-decoration: none;
   color: var(--base-text);
-  border-radius: var(--radius-2);
-  font-size: var(--font-size-2);
+  border-radius: var(--radius);
   font-weight: 500;
   transition: all 0.2s ease;
 }

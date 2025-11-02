@@ -296,7 +296,7 @@ function stringIncludesTheWordTuned(str: string) {
       <div class="range-grid">
         <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorCard">
 
-          <div class="card-header" @click="finishedEntries.push(range.name)">
+          <div class="card-header">
             <h3 class="color-name">{{ range.name }}</h3>
             <button v-if="warningsByRange.get(range.name)?.length" class="warning-indicator"
               :class="{ expanded: expandedWarnings.has(range.name) }" @click.stop="toggleWarnings(range.name)"
@@ -351,13 +351,17 @@ function stringIncludesTheWordTuned(str: string) {
 
 <style scoped lang="scss">
 .umbra-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
 }
 
 .page-header {
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-2);
+  max-width: 1400px;
 }
 
 .controls {
@@ -365,10 +369,7 @@ function stringIncludesTheWordTuned(str: string) {
   gap: var(--space-4);
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-4);
-  padding: var(--space-3);
-  background: var(--base-10);
-  border-radius: var(--radius-3);
+  border-radius: var(--radius);
 }
 
 .mode-selector {
@@ -378,6 +379,7 @@ function stringIncludesTheWordTuned(str: string) {
 
 .umbra-wrapper {
   width: 100%;
+  max-width: 1400px;
 }
 
 .range-grid {
