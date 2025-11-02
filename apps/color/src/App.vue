@@ -95,13 +95,13 @@ nav {
 }
 
 .nav-link:hover {
-  background: var(--base-20);
+  background: var(--base-80);
   color: var(--base-text);
 }
 
 .nav-link.active {
-  background: var(--accent-20);
-  color: var(--accent-text);
+  background: var(--accent-90);
+  color: var(--accent-10);
 }
 
 body {
