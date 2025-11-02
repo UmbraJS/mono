@@ -1,5 +1,4 @@
 import { useDebounceFn } from '@vueuse/core'
-import type { Promisify } from '@vueuse/core'
 import type { UmbraInput, FormatedRange, UmbraOutputs, UmbraSettings, Accent } from '@umbrajs/core'
 import { umbra, isDark, getReadability } from '@umbrajs/core'
 
@@ -34,17 +33,6 @@ const themeInput: UmbraInput = {
   },
 }
 
-interface UseUmbra {
-  input: globalThis.Ref<UmbraInput>
-  formated: globalThis.Ref<FormatedRange[]>
-  isDark: globalThis.Ref<boolean>
-  readability: globalThis.Ref<{ target: number; output: number; input: number }>
-  setReadability: (value: number) => { target: number; output: number; input: number }
-  inverse: (props?: { element?: HTMLElement }) => UmbraOutputs
-  change: (scheme: UmbraInput) => Promisify<UmbraOutputs>
-  apply: (props?: { scheme?: UmbraInput; element?: HTMLElement }) => UmbraOutputs
-}
-
 export const useUmbra = defineStore('umbra', () => {
   const input = ref<UmbraInput>(themeInput)
   const formated = ref<FormatedRange[]>([])
@@ -76,14 +64,15 @@ export const useUmbra = defineStore('umbra', () => {
     }
   }
 
-  function store(theme: UmbraOutputs) {
+  async function store(theme: Promise<UmbraOutputs>) {
     const targetReadability = settings.readability
     detectReadability(targetReadability)
-    input.value = stringableInput(theme.input)
-    settings = theme.input.settings || settings
-    formated.value = theme.formated
-    dark.value = isDark(theme.input.background || '')
-    return theme
+    const themeResolved = await theme
+    input.value = stringableInput(themeResolved.input)
+    settings = themeResolved.input.settings || settings
+    formated.value = themeResolved.formated
+    dark.value = isDark(themeResolved.input.background || '')
+    return themeResolved
   }
 
   // const theme = umbra()
@@ -176,5 +165,5 @@ export const useUmbra = defineStore('umbra', () => {
     inverse,
     change: (scheme: UmbraInput) => debounced(scheme),
     apply: (props?: { scheme?: UmbraInput; element?: HTMLElement }) => apply(props),
-  } as UseUmbra
+  }
 })
