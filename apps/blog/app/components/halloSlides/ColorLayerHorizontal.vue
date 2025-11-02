@@ -10,11 +10,13 @@ interface Props {
   helpers?: boolean
 }
 
-const { helpers = false } = defineProps<Props>()
+const { helpers = false, tokens } = defineProps<Props>()
 
 function getVariableName(prefix: string, entryNumber: number): string {
   return `--${prefix}-${entryNumber * 10}`;
 }
+
+console.log("red: ", tokens)
 </script>
 
 <template>
@@ -24,7 +26,7 @@ function getVariableName(prefix: string, entryNumber: number): string {
       <!-- Range tokens -->
       <div class="TokensTable">
         <div class="Swatch border" :style="{ '--color': mainColorVar }" />
-        <div v-for="(token) in tokens" :key="token" class="Swatch border" :style="{ '--color': token }" />
+        <div v-for="(token, index) in tokens" :key="index" class="Swatch border" :style="{ '--color': token }" />
         <div class="Swatch border" :style="{ '--color': textColorVar }" />
       </div>
     </div>

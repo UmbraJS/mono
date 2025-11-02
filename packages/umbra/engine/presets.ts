@@ -265,7 +265,7 @@ export const colorPresets = [
     name: 'amber',
     hex: '#FFC53D',
     range: {
-      light: frontLoadedAmber,
+      light: orangeContrastLight,
       dark: antiMud
     }
   },
@@ -273,7 +273,7 @@ export const colorPresets = [
     name: 'yellow',
     hex: '#FFDC00',
     range: {
-      light: frontLoadedAmber,
+      light: orangeContrastLight,
       dark: antiMud
     }
   },
