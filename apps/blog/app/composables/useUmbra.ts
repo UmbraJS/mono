@@ -1,5 +1,4 @@
 import { useDebounceFn } from '@vueuse/core'
-import type { Promisify } from '@vueuse/core'
 import type { UmbraInput, FormatedRange, UmbraOutputs, UmbraSettings, Accent } from '@umbrajs/core'
 import { umbra, isDark, getReadability } from '@umbrajs/core'
 
@@ -22,17 +21,6 @@ const themeInput: UmbraInput = {
     background: '#16121f',
     accents: ['violet', warningAccent, successAccent],
   },
-}
-
-interface UseUmbra {
-  input: globalThis.Ref<UmbraInput>
-  formated: globalThis.Ref<FormatedRange[]>
-  isDark: globalThis.Ref<boolean>
-  readability: globalThis.Ref<{ target: number; output: number; input: number }>
-  setReadability: (value: number) => { target: number; output: number; input: number }
-  inverse: (props?: { element?: HTMLElement }) => UmbraOutputs
-  change: (scheme: UmbraInput) => Promisify<UmbraOutputs>
-  apply: (props?: { scheme?: UmbraInput; element?: HTMLElement }) => UmbraOutputs
 }
 
 export const useUmbra = defineStore('umbra', () => {
