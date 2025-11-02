@@ -42,6 +42,24 @@ async function toggleTheme() {
   <header>
     <h1>Umbra Color Testing</h1>
     <nav>
+      <div class="nav-links">
+        <RouterLink to="/" class="nav-link" activeClass="active">
+          <Icon icon="pixelarticons:color-palette" />
+          Ranges
+        </RouterLink>
+        <RouterLink to="/editor" class="nav-link" activeClass="active">
+          <Icon icon="pixelarticons:sliders" />
+          Editor
+        </RouterLink>
+        <RouterLink to="/themes" class="nav-link" activeClass="active">
+          <Icon icon="pixelarticons:layers" />
+          Themes
+        </RouterLink>
+        <RouterLink to="/element" class="nav-link" activeClass="active">
+          <Icon icon="pixelarticons:code" />
+          Element
+        </RouterLink>
+      </div>
       <Button variant="primary" size="small" @click="toggleTheme">
         <Icon icon="pixelarticons:paint-bucket" />
         Toggle Theme
@@ -70,7 +88,40 @@ nav {
   display: flex;
   gap: var(--space-3);
   justify-content: center;
+  align-items: center;
   margin-bottom: var(--space-3);
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  background: var(--base-10);
+  border-radius: var(--radius-2);
+  border: 1px solid var(--base-20);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  text-decoration: none;
+  color: var(--base-80);
+  border-radius: var(--radius-2);
+  font-size: var(--font-size-2);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: var(--base-20);
+  color: var(--base-text);
+}
+
+.nav-link.active {
+  background: var(--accent-20);
+  color: var(--accent-text);
 }
 
 body {
