@@ -181,5 +181,5 @@ export const useUmbra = defineStore('umbra', () => {
     inverse,
     change: (scheme: UmbraInput) => debounced(scheme),
     apply: (props?: { scheme?: UmbraInput; element?: HTMLElement }) => apply(props),
-  } as UseUmbra
+  }
 })
