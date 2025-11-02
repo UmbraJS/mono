@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { Button } from "umbraco";
 import { Icon } from "@iconify/vue";
@@ -24,7 +23,7 @@ async function toggleTheme() {
     <nav>
       <div class="nav-links">
         <RouterLink to="/" class="nav-link" activeClass="active">
-          <Icon icon="pixelarticons:color-palette" />
+          <Icon icon="pixelarticons:art-text" />
           Ranges
         </RouterLink>
         <RouterLink to="/editor" class="nav-link" activeClass="active">
@@ -32,7 +31,7 @@ async function toggleTheme() {
           Editor
         </RouterLink>
         <RouterLink to="/themes" class="nav-link" activeClass="active">
-          <Icon icon="pixelarticons:layers" />
+          <Icon icon="pixelarticons:paint-bucket" />
           Themes
         </RouterLink>
         <RouterLink to="/element" class="nav-link" activeClass="active">
@@ -40,9 +39,10 @@ async function toggleTheme() {
           Element
         </RouterLink>
       </div>
-      <Button variant="primary" size="small" @click="toggleTheme">
-        <Icon icon="pixelarticons:paint-bucket" />
-        Toggle Theme
+      <Button variant="primary" size="small" @click="toggleTheme"
+        :class="umbraStore.isDark ? 'base-accent' : 'base-accent'">
+        <Icon v-if="umbraStore.isDark" icon="pixelarticons:moon" />
+        <Icon v-else icon="pixelarticons:sun" />
       </Button>
     </nav>
   </header>
@@ -87,7 +87,7 @@ nav {
   gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
   text-decoration: none;
-  color: var(--base-80);
+  color: var(--base-text);
   border-radius: var(--radius-2);
   font-size: var(--font-size-2);
   font-weight: 500;
@@ -95,7 +95,7 @@ nav {
 }
 
 .nav-link:hover {
-  background: var(--base-80);
+  background: var(--base-20);
   color: var(--base-text);
 }
 
