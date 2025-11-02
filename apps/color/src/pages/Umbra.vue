@@ -257,51 +257,191 @@ function stringIncludesTheWordTuned(str: string) {
 </script>
 
 <template>
-  <div id="ThemeControls">
-    <Button @click="() => theme.inverseTheme(false)" class="base-warning">Inverse Theme</Button>
-    <!-- <Button @click="cycleMode">
-      Mode: {{ displayMode.charAt(0).toUpperCase() + displayMode.slice(1) }}
-    </Button> -->
-  </div>
-
-  <ValidationWarnings :warnings="validationWarnings" />
-
-  <div class="umbra-wrapper">
-    <div class="range-list">
-      <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorList"
-        @click="finishedEntries.push(range.name)">
-        <div v-if="displayMode === 'lightness'" class="TokensLightness">
-          <ColourLightness v-for="color in range.range" :color="color.swatch" />
+  <div class="umbra-page">
+    <div class="page-header">
+      <div class="controls">
+        <Button @click="() => theme.inverseTheme(false)" class="base-warning">Inverse Theme</Button>
+        <div class="mode-selector">
+          <Button 
+            :variant="displayMode === 'lightness' ? 'primary' : 'default'" 
+            size="small"
+            @click="displayMode = 'lightness'"
+          >
+            Lightness
+          </Button>
+          <Button 
+            :variant="displayMode === 'saturation' ? 'primary' : 'default'" 
+            size="small"
+            @click="displayMode = 'saturation'"
+          >
+            Saturation
+          </Button>
+          <Button 
+            :variant="displayMode === 'hue' ? 'primary' : 'default'" 
+            size="small"
+            @click="displayMode = 'hue'"
+          >
+            Hue
+          </Button>
         </div>
+      </div>
+      
+      <ValidationWarnings :warnings="validationWarnings" />
+    </div>
 
-        <div v-if="displayMode === 'saturation'" class="TokensSaturation">
-          <ColourSaturation v-for="color in range.range" :color="color.swatch" />
-        </div>
-
-        <div v-if="displayMode === 'hue'" class="TokensHue">
-          <ColourHue v-for="color in range.range" :color="color.swatch" />
-        </div>
-
-        <div class="tokens border">
-          <div id="StartCap" class="caps color" :style="`--color: ${range.background.swatch.toHex()}`"></div>
-          <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.swatch.toHex()}`">
-            <p v-if="true" id="TokenName" class="caption">{{ getTokenName(index) }}</p>
+    <div class="umbra-wrapper">
+      <div class="range-grid">
+        <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorCard"
+          @click="finishedEntries.push(range.name)">
+          
+          <div class="card-header">
+            <h3 class="color-name">{{ range.name }}</h3>
           </div>
-          <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.swatch.toHex()}`"></div>
+
+          <div class="card-content">
+            <div v-if="displayMode === 'lightness'" class="TokensLightness">
+              <ColourLightness v-for="color in range.range" :color="color.swatch" :key="color.index" />
+            </div>
+
+            <div v-if="displayMode === 'saturation'" class="TokensSaturation">
+              <ColourSaturation v-for="color in range.range" :color="color.swatch" :key="color.index" />
+            </div>
+
+            <div v-if="displayMode === 'hue'" class="TokensHue">
+              <ColourHue v-for="color in range.range" :color="color.swatch" :key="color.index" />
+            </div>
+
+            <div class="tokens">
+              <div class="caps color" :style="`--color: ${range.background.swatch.toHex()}`"></div>
+              <div v-for="(color, index) in range.range" :key="index" class="color" :style="`--color: ${color.swatch.toHex()}`">
+                <p class="token-label caption">{{ getTokenName(index) }}</p>
+              </div>
+              <div class="caps color" :style="`--color: ${range.foreground.swatch.toHex()}`"></div>
+            </div>
+          </div>
         </div>
-        <!-- <div class="color-name">{{ range.name }}</div> -->
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.umbra-page {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.page-header {
+  margin-bottom: var(--space-5);
+}
+
+.controls {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding: var(--space-3);
+  background: var(--base-10);
+  border-radius: var(--radius-3);
+}
+
+.mode-selector {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.umbra-wrapper {
+  width: 100%;
+}
+
+.range-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.ColorCard {
+  background: var(--base-10);
+  border: 1px solid var(--base-20);
+  border-radius: var(--radius-3);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.ColorCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--base-30);
+}
+
+.card-header {
+  padding: var(--space-3);
+  background: var(--base-20);
+  border-bottom: 1px solid var(--base-30);
+}
+
+.color-name {
+  margin: 0;
+  font-size: var(--font-size-3);
+  font-weight: 600;
+  color: var(--base-text);
+  text-transform: capitalize;
+}
+
+.card-content {
+  padding: var(--space-3);
+}
+
 .TokensLightness,
 .TokensSaturation,
 .TokensHue {
   display: flex;
   align-items: flex-end;
   height: 100px;
+  margin-bottom: var(--space-3);
+  gap: 2px;
+}
+
+.tokens {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-2);
+  border: 1px solid var(--base-30);
+}
+
+.color {
+  position: relative;
+  flex: 1;
+  min-width: 20px;
+  aspect-ratio: 1 / 1;
+  background: var(--color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.caps {
+  flex: 0.5;
+  opacity: 0.5;
+}
+
+.token-label {
+  opacity: 0;
+  font-weight: 900;
+  font-size: 10px;
+  color: var(--base-text);
+  transition: opacity 0.2s ease;
+}
+
+.color:hover .token-label {
+  opacity: 0.6;
 }
 
 :root {
@@ -319,78 +459,5 @@ function stringIncludesTheWordTuned(str: string) {
   --color-110: var(--accent-110);
   --color-120: var(--accent-120);
   --color-text: var(--accent-text);
-}
-
-#TokenName {
-  opacity: 0.2;
-  font-weight: 900;
-}
-
-.ColorList:first-of-type .tokens {
-  border-bottom: none;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
-.ColorList:last-of-type .tokens {
-  border-top: none;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-}
-
-.ColorList:not(:last-of-type, :first-of-type) .tokens {
-  border-top: none;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-
-  border-bottom: none;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
-.tokens {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-.tokens:first-of-type {
-  border-bottom: none;
-}
-
-.range-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.ColorList {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 0px;
-}
-
-.ColorList:hover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0px;
-}
-
-.color-name {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--space-5);
-}
-
-.color {
-  width: var(--space-3);
-  aspect-ratio: 1 / 1;
-  background: var(--color);
 }
 </style>
