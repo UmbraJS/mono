@@ -3,7 +3,7 @@ import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
 
 // Shared tints and shades arrays
-const TINTS_GRAY = [0.5, 2, 5, 8, 11, 13, 17, 24, 'primer', 42, 46, 58] as const;
+const TINTS_GRAY = [2, 5, 8, 11, 13, 17, 24, 34, 'primer', 42, 46, 58] as const;
 const SHADES_GRAY = TINTS_GRAY;
 
 const evenContrastDark = [
@@ -22,8 +22,8 @@ const evenContrastDark = [
 ] as const;
 
 const evenContrastLight = [
-  { mix: 3, hue: "next" },
-  { mix: 5, hue: "next", saturation: "+=99" },
+  { mix: 5, hue: "next" },
+  { mix: 8, hue: "next", saturation: "+=99" },
   14, 24, 35, 49, 68, 88,
   "primer",
   { mix: "+=15", hue: 0, saturation: "-=4" },
@@ -123,7 +123,6 @@ const limeLight = [
   "+=5",
   "+=15"
 ] as const;
-
 
 const evenContrast = {
   name: 'evenContrast',
