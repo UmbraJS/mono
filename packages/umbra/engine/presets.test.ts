@@ -2,7 +2,6 @@
  * Color presets test suite
  * Tests the preset lookup system and color matching functionality
  */
-
 import { describe, it, expect } from 'vitest'
 import { umbra } from '../index'
 import { colorPresets, getPresetByName, findClosestPreset, resolveColorPreset } from './presets'

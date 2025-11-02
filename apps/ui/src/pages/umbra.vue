@@ -271,23 +271,23 @@ function stringIncludesTheWordTuned(str: string) {
       <div v-for="range in filteredUmbraOutput" :key="range.name" class="ColorList"
         @click="finishedEntries.push(range.name)">
         <div v-if="displayMode === 'lightness'" class="TokensLightness">
-          <ColourLightness v-for="color in range.range" :color="color" />
+          <ColourLightness v-for="color in range.range" :color="color.swatch" />
         </div>
 
         <div v-if="displayMode === 'saturation'" class="TokensSaturation">
-          <ColourSaturation v-for="color in range.range" :color="color" />
+          <ColourSaturation v-for="color in range.range" :color="color.swatch" />
         </div>
 
         <div v-if="displayMode === 'hue'" class="TokensHue">
-          <ColourHue v-for="color in range.range" :color="color" />
+          <ColourHue v-for="color in range.range" :color="color.swatch" />
         </div>
 
         <div class="tokens border">
-          <div id="StartCap" class="caps color" :style="`--color: ${range.background.toHex()}`"></div>
-          <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.toHex()}`">
+          <div id="StartCap" class="caps color" :style="`--color: ${range.background.swatch.toHex()}`"></div>
+          <div v-for="(color, index) in range.range" class="color" :style="`--color: ${color.swatch.toHex()}`">
             <p v-if="true" id="TokenName" class="caption">{{ getTokenName(index) }}</p>
           </div>
-          <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.toHex()}`"></div>
+          <div id="EndCap" class="caps color" :style="`--color: ${range.foreground.swatch.toHex()}`"></div>
         </div>
         <!-- <div class="color-name">{{ range.name }}</div> -->
       </div>
