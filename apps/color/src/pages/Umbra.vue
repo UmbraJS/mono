@@ -2,7 +2,7 @@
 import { umbra, defaultSettings, resolveTints, format } from '@umbrajs/core'
 import type { Accent, Umbra, UmbraInput, UmbraSwatch } from '@umbrajs/core'
 import { Button } from "umbraco"
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import {
   gray,
   grayDark,
@@ -18,6 +18,7 @@ import {
 import PageHeader from '../components/PageHeader.vue';
 import ModeSelector from '../components/ModeSelector.vue';
 import UmbraRangeGrid from '../components/UmbraRangeGrid.vue';
+import { useUmbra as useUmbraStore } from '../stores/useUmbra';
 
 const radixBlueMap: Accent = {
   name: 'blue',
@@ -144,6 +145,9 @@ const radixSkyMap: Accent = {
   color: 'sky',
 }
 
+// Get the global pinia store to sync with
+const umbraStore = useUmbraStore()
+
 const theme = useUmbra({
   foreground: '#000000',  // Pure black (shared across all accents)
   background: '#ffffff',  // Pure white (shared across all accents)
@@ -190,6 +194,19 @@ function useUmbra(schema: UmbraInput) {
     generatedTheme.value = generatedTheme.value.inverse()
     if (apply) applyTheme()
   }
+
+  // Watch the global store's isDark state and sync this local theme
+  watch(
+    () => umbraStore.isDark,
+    (isDark) => {
+      // Check if we need to inverse the theme to match the global state
+      const currentThemeIsDark = generatedTheme.value.isDark()
+      if (isDark !== currentThemeIsDark) {
+        inverseTheme(true)
+      }
+    },
+    { immediate: true }
+  )
 
   return {
     applyTheme,
@@ -270,11 +287,7 @@ function stringIncludesTheWordTuned(str: string) {
 
 <template>
   <div class="umbra-page">
-    <PageHeader>
-      <template #actions>
-        <Button @click="() => theme.inverseTheme(false)" class="base-warning">Inverse Theme</Button>
-      </template>
-    </PageHeader>
+    <PageHeader />
 
     <UmbraRangeGrid :ranges="filteredUmbraOutput" :warningsByRange="warningsByRange"
       :expandedWarnings="expandedWarnings" @toggleWarnings="toggleWarnings" />
