@@ -13,12 +13,12 @@ const successAccent: Accent = {
 }
 
 const themeInput: UmbraInput = {
-  foreground: '#16121f',
+  foreground: '#080113',
   background: '#f3f6ea',
   accents: ['violet', warningAccent, successAccent],
   inversed: {
     foreground: '#f3f6ea',
-    background: '#16121f',
+    background: '#080113',
     accents: ['violet', warningAccent, successAccent],
   },
 }

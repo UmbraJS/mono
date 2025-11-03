@@ -1,17 +1,16 @@
 import type { UmbraShade, TintsInput } from './easing'
 import { swatch } from '../swatch'
 import type { UmbraSwatch } from '../swatch'
-import { saturate } from '../swatch/manipulate/saturate';
 
 // Shared tints and shades arrays
 const TINTS_GRAY = [2, 5, 8, 11, 13, 17, 24, 34, 'primer', 42, 46, 58] as const;
 const SHADES_GRAY = TINTS_GRAY;
 
 const evenContrastDark = [
-  { mix: 15, hue: "next", saturation: "+=99" },
+  { mix: 5, hue: "next", saturation: "+=99" },
+  { mix: 10, hue: "next", saturation: "+=99" },
   { mix: 20, hue: "next", saturation: "+=99" },
-  { mix: 25, hue: "next", saturation: "+=99" },
-  { mix: 32, hue: "next", saturation: "+=99" },
+  { mix: 30, hue: "next", saturation: "+=99" },
   { mix: 42, hue: "next", saturation: "+=99" },
   { mix: 52, hue: "next", saturation: "+=99" },
   { mix: 66, hue: "next", saturation: "+=99" },
