@@ -22,6 +22,8 @@ const defaultThemeInput: UmbraInput = {
 
 export const useUmbra = defineStore('umbra', () => {
   const input = ref<UmbraInput>(defaultThemeInput)
+
+
   const formated = ref<FormatedRange[]>([])
   const dark = ref<boolean>(false)
   const activeThemeName = ref<string | null>(null)

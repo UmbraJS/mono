@@ -20,7 +20,7 @@ const colourLightness = computed(() => {
 
 <style scoped lang="scss">
 .tokens:hover .token-meter {
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .token-meter {

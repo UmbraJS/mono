@@ -37,19 +37,11 @@ const {
   }[]
 }>()
 
-const open = ref(false)
-
 const moodClass = computed(() => {
-  if (mood === 'positive') return 'base-success'
-  if (mood === 'negative') return 'base-warning'
+  // if (mood === 'positive') return 'base-success'
+  // if (mood === 'negative') return 'base-warning'
   return 'base-base'
 })
-
-const openClass = computed(() => open.value ? 'open' : 'closed')
-
-function toggleOpen() {
-  open.value = !open.value
-}
 
 const allSources = computed(() => {
   return claims.flatMap(c => c.sources)
@@ -57,12 +49,11 @@ const allSources = computed(() => {
 </script>
 
 <template>
-  <div class="NarrativeFrame border" :class="[moodClass, openClass]">
-    <header @click="toggleOpen">
+  <div class="NarrativeFrame border" :class="[moodClass]">
+    <header>
       <!-- <NuxtImg :src="image" alt="Gandhi holding a gun" width="600" height="400" /> -->
-      <p>
+      <p class="display">
         <slot name="title" mdc-unwrap="p" />
-        <Icon name="carbon:chevron-down" size="16" class="Arrow" />
       </p>
       <!-- <Icon class="Bookmark" name="carbon:bookmark" size="24" /> -->
     </header>
@@ -167,7 +158,7 @@ const allSources = computed(() => {
   background-color: var(--base-10);
   cursor: pointer;
   transition: color var(--time), background-color var(--time), border-color var(--time), transform var(--time);
-  padding: var(--space-1) 0px;
+  padding: var(--space-3);
   padding-bottom: var(--space-2);
 }
 
@@ -186,12 +177,6 @@ const allSources = computed(() => {
 
 .NarrativeFrame>* {
   z-index: 1;
-}
-
-.closed .FrameSupport {
-  height: 0px;
-  padding: 0px;
-  opacity: 0;
 }
 
 .FrameSupport {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { UmbraRange, ValidationWarning } from '@umbrajs/core'
+import { Icon } from '@iconify/vue'
 import TokenMeter from './TokeMeter.vue';
 
 interface Props {
@@ -29,8 +30,9 @@ function getTokenName(index: number) {
           <button v-if="warningsByRange.get(range.name)?.length" class="warning-indicator"
             :class="{ expanded: expandedWarnings.has(range.name) }" @click.stop="emit('toggleWarnings', range.name)"
             :title="`${warningsByRange.get(range.name)?.length} warning(s)`">
-            <span class="warning-icon">⚠️</span>
-            <span class="warning-count">{{ warningsByRange.get(range.name)?.length }}</span>
+            <span class="warning-icon">
+              <Icon class="warning-icon" icon="carbon:warning" />
+            </span>
           </button>
         </div>
 
@@ -133,6 +135,7 @@ function getTokenName(index: number) {
 
 .warning-icon {
   font-size: var(--font-size-2);
+  color: var(--base-text);
 }
 
 .warning-count {

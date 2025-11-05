@@ -7,17 +7,26 @@ In times of peace we like to believe that nobody is truly bad. That every murder
 ## Behold Evil
 
 How do we stop them? How do you fight a chaos demon? Well MLK did it through love. Through dreams of living together which shamed evil men back into the shadows. Gandhi did it with selfless sacrifices - acts to challenge the humanity inside his oppressors hearts which emotionally drained their evil until it could no longer tolerate its own acts. Malcom X, and Muhammed Ali did it through dignity, by setting clear boundaries and standing their ground and the evil men could not deny respect for their bravery. Václav Havel in Czechoslovakia did it by appealing to reason, exposing the absurdities in the Soviet Union, his appeals to reason weakened the system until it collapsed under its own contradictions.
-
+  ::reference
+      local
+  ::
 But that only worked because his enemies wanted to appear intelligent. Appealing to reason only works if they care about truth. Love doesn't hold in a heart that's stone. Sacrifice doesn't impress someone who hates empathy. Dignity doesn't move someone who doesn't view you as human.
 
 ::scene
+
+  ::reference
+      local
+  ::
 #action
 ::NarrativeFrame{image="https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096" mood="positive"}
 #title
 Jesus of Nazareth preached forgiveness and mercy
 #description
   ::citation
-  In the West as it currently stands, these are the two demons
+  In the West as it currently stands, 
+    ::reference
+      local
+    ::
   ::
   Male loneliness and white Christian replacement. In the West as it currently stands, these are the two demons hiding in our closet which represent the fundamental insecurities of men. And since men are the custodians of violence these impulses become the chaos demons shaping the conflicts between us all. The underlying patterns of these dark impulses, superficially different in flavor but largely the same phenomenon once lead Europe into the most horrendous, depraved, war in world history. A war whose horrors still stalk the nightmares of our generation.
   ::citation

@@ -19,8 +19,8 @@
     "@nuxt/content": "catalog:",
     "@nuxt/eslint": "catalog:",
     "@nuxt/icon": "catalog:",
-    "@nuxt/image": "catalog:",
-    "@nuxt/kit": "npm:@nuxt/kit-nightly@latest",
+    "@nuxt/image": "^2.0.0",
+    "@nuxt/kit": "^4.2.0",
     "@nuxtjs/mdc": "catalog:",
     "@nuxtlabs/monarch-mdc": "catalog:",
     "@pinia/nuxt": "catalog:",
@@ -54,8 +54,8 @@
     "hast-util-to-mdast": "catalog:",
     "hast-util-to-string": "catalog:",
     "mdast": "catalog:",
-    "motion-v": "^1.7.1",
-    "nuxt": "catalog:",
+    "motion-v": "^1.7.4",
+    "nuxt": "^4.2.0",
     "nuxt-time": "catalog:",
     "pinia": "catalog:",
     "property-information": "catalog:",
@@ -78,7 +78,7 @@
     "vfile": "catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
-    "zod": "^4.1.11"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@iconify-json/pixelarticons": "catalog:",

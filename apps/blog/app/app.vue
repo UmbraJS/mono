@@ -6,8 +6,8 @@ import IslandMenu from "./components/IslandMenu.vue";
 import { SpeedInsights } from "@vercel/speed-insights/nuxt";
 
 useSeoMeta({
-  title: "Umbra Blog",
-  description: "A Nuxt app deployed on Vercel.",
+  title: "Noble Blog",
+  description: "Where thoughts meet words.",
 });
 </script>
 

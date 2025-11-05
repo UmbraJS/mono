@@ -20,11 +20,11 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
-    "@webgpu/types": "^0.1.64",
+    "@webgpu/types": "^0.1.66",
     "eslint-plugin-format": "catalog:",
     "vite": "catalog:"
   },
   "dependencies": {
-    "motion-v": "^1.7.1"
+    "motion-v": "^1.7.4"
   }
 }

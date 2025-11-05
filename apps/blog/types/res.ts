@@ -17,7 +17,6 @@ type MoralEvaluation = "excellent" | "good" | "neutral" | "bad" | "evil";
 // Ethical dimensions (meta-structure a user can commit to and re-use)
 
 // WHO is morally considerable?
-// (Retain your playful options but fix typos; allow extensibility)
 type MoralSubject =
   | "sapientism"
   | "sentientism"
@@ -85,7 +84,9 @@ export type ISODate = string; // e.g., "2025-09-18T12:34:56Z"
 export type CitationReliance =
   | "deductive"      // premises entail conclusion
   | "inductive"      // generalization/probabilistic support
-  | "abductive";     // inference to best explanation
+  | "abductive"     // inference to best explanation
+  | "contradiction" // source contradicts claim
+  | "irrelevant"    // source does not support the claim
 
 export type CitationDistance =
   | "primary"        // original data, firsthand reporting
@@ -99,7 +100,7 @@ export type CitationScope =
   | "study"          // single study/report
   | "meta-analysis"  // syntheses, systematic reviews
   | "scientific-theory" // well-corroborated explanatory framework
-  | "novel-theory";  // speculative / not yet corroborated
+  | "hypothesis";  // speculative / not yet corroborated
 
 export type SourceType =
   | "news-article"

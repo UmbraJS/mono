@@ -149,8 +149,8 @@ const radixSkyMap: Accent = {
 const umbraStore = useUmbraStore()
 
 const theme = useUmbra({
-  foreground: '#000000',  // Pure black (shared across all accents)
-  background: '#ffffff',  // Pure white (shared across all accents)
+  foreground: umbraStore.input.foreground || '#000000',
+  background: umbraStore.input.background || '#ffffff',
   accents: [
     radixBlueTestMap,
     radixBlueMap,
@@ -194,6 +194,27 @@ function useUmbra(schema: UmbraInput) {
     generatedTheme.value = generatedTheme.value.inverse()
     if (apply) applyTheme()
   }
+
+  function regenerateTheme(newSchema: UmbraInput) {
+    generatedTheme.value = umbra(newSchema)
+    applyTheme()
+  }
+
+  // Watch the global store's foreground and background colors
+  watch(
+    () => [umbraStore.input.foreground, umbraStore.input.background],
+    ([newForeground, newBackground]) => {
+      if (newForeground && newBackground) {
+        const newSchema: UmbraInput = {
+          ...schema,
+          foreground: newForeground,
+          background: newBackground,
+        }
+        regenerateTheme(newSchema)
+      }
+    },
+    { immediate: false }
+  )
 
   // Watch the global store's isDark state and sync this local theme
   watch(

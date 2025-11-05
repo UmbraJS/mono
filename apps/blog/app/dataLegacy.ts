@@ -1,4 +1,4 @@
-import type { Reason } from '../types/reasoning'
+import type { Reason } from '../types/reasoningLegacy'
 
 const user = {
   id: '1',

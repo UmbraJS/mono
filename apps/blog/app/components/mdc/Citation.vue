@@ -35,6 +35,18 @@ const relianceLegend: {
       points: 10,
       icon: 'carbon:condition-wait-point',
     },
+    {
+      label: 'irrelevant',
+      description: 'The source does not support the claim.',
+      points: -50,
+      icon: 'carbon:close',
+    },
+    {
+      label: "contradiction",
+      description: 'The source contradicts the claim.',
+      points: -100,
+      icon: 'carbon:warning',
+    }
   ]
 
 const distanceLegend: {
@@ -46,19 +58,19 @@ const distanceLegend: {
     {
       label: 'primary',
       description: 'The source is the original source of the information.',
-      points: 0,
+      points: 50,
       icon: 'carbon:sight',
     },
     {
       label: 'secondary',
       description: 'The source cites another source for the information.',
-      points: -20,
+      points: 0,
       icon: 'carbon:need',
     },
     {
       label: 'hearsay',
       description: 'The source is not directly related to the information.',
-      points: -90,
+      points: -100,
       icon: 'carbon:chat-bot',
     },
   ]
