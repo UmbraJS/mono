@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import RichText from '../components/RichText/RichText.vue'
+import InteractiveGridPattern from '../components/InteractiveGridPattern.vue'
 </script>
 
 <template>
