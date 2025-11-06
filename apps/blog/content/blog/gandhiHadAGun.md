@@ -23,10 +23,11 @@ But that only worked because his enemies wanted to appear intelligent. Appealing
 Jesus of Nazareth preached forgiveness and mercy
 #description
   ::citation
-  In the West as it currently stands, 
-    ::reference
-      local
-    ::
+  In the West as it
+  ::reference
+  local
+  ::
+   currently stands, 
   ::
   Male loneliness and white Christian replacement. In the West as it currently stands, these are the two demons hiding in our closet which represent the fundamental insecurities of men. And since men are the custodians of violence these impulses become the chaos demons shaping the conflicts between us all. The underlying patterns of these dark impulses, superficially different in flavor but largely the same phenomenon once lead Europe into the most horrendous, depraved, war in world history. A war whose horrors still stalk the nightmares of our generation.
   ::citation
