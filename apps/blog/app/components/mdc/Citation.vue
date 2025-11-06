@@ -142,7 +142,7 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
       <slot></slot>
     </blockquote>
     <div class="CitedQuoteInfo">
-      <CitationIcon title="Citation Information" description="Details about the source of this quote"
+      <CitationIcon title="Citation Reliance" description="Details about the source of this quote"
         :icon="activeReliance?.icon || 'carbon:condition-wait-point'">
         <div class="Wrapper">
           <div class="InfoText">
@@ -171,7 +171,7 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
         </div>
       </CitationIcon>
 
-      <CitationIcon title="Citation Information" description="Details about the source of this quote"
+      <CitationIcon title="Citation Distance" description="Details about the source of this quote"
         :icon="activeDistance?.icon || 'carbon:condition-wait-point'">
         <div class="Wrapper">
           <div class="InfoText">
@@ -198,7 +198,7 @@ const activeReliance = relianceLegend.find(r => r.label === cit.reliance)
         </div>
       </CitationIcon>
 
-      <CitationIcon title="Citation Information" description="Details about the source of this quote"
+      <CitationIcon title="Citation Credibility" description="Details about the source of this quote"
         :icon="(credibilityLegend.find(l => l.label === getCitationCredibility(((cit.quality?.sourceReliability || 0) + (cit.quality?.evidenceStrength || 0)) / 2))?.icon) || 'carbon:condition-wait-point'">
         <div class="Wrapper">
           <div class="InfoText">
