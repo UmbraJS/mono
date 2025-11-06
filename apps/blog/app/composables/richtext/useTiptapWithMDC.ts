@@ -12,11 +12,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 import { Overflow, validateOverflow } from './extensions/Overflow'
 import { Slugline } from './extensions/Slugline'
 import { DisplayHeader } from './extensions/DisplayHeader'
-// import Reference from './extensions/Reference'
-// import Extension from './extensions/Extension'
-// import { Mention } from './extensions/Mention'
-import { Citation } from "./extensions/Citation"
-import { NarrativeFrame } from "./extensions/NarrativeFrame"
+import { Citation } from './extensions/Citation'
+import { NarrativeFrame } from './extensions/NarrativeFrame'
 import { ref, onBeforeUnmount } from 'vue'
 
 interface useTiptapProps {
@@ -26,36 +23,7 @@ interface useTiptapProps {
   onChange?: (editor: Editor) => void
 }
 
-export function useTitleEditor({
-  limit = 120,
-  placeholder = 'Write a title...',
-  content,
-  onChange = () => { },
-}: useTiptapProps) {
-  const editor = useTiptap({
-    content,
-    onUpdate: ({ editor }) => onChange(editor),
-    extensions: [
-      Document,
-      Text,
-      Heading,
-      DisplayHeader,
-      CharacterCount.configure({ limit }),
-      Placeholder.configure({
-        placeholder: placeholder,
-      }),
-    ],
-  })
-
-  onBeforeUnmount(() => {
-    if (!editor.value) return
-    editor.value.destroy()
-  })
-
-  return editor
-}
-
-export function useEditor({
+export function useEditorWithMDC({
   limit = 4000,
   placeholder = 'Write something...',
   content,
@@ -78,9 +46,6 @@ export function useEditor({
       CharacterCount.configure({ limit }),
       Citation,
       NarrativeFrame,
-      // Reference,
-      // Extension,
-      // Mention,
     ],
   })
 

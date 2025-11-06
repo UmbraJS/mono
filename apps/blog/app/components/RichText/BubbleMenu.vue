@@ -22,6 +22,18 @@ defineProps<{
       <Button variant="base" size="small" @click="editor.chain().focus().toggleReference().run()">
         Reference
       </Button>
+      <Button variant="base" size="small" @click="editor.commands.setCitation({
+        reliance: 'deductive',
+        distance: 'primary',
+      })">
+        Citation
+      </Button>
+      <Button variant="base" size="small" @click="editor.commands.setNarrativeFrame({
+        type: 'premise',
+        mood: 'neutral',
+      })">
+        Narrative Frame
+      </Button>
     </ButtonGroup>
   </BubbleMenu>
 </template>
