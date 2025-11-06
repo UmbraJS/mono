@@ -9,6 +9,7 @@ import Heading from '@tiptap/extension-heading'
 import History from '@tiptap/extension-history'
 import CharacterCount from '@tiptap/extension-character-count'
 import Placeholder from '@tiptap/extension-placeholder'
+import BubbleMenuExtension from '@tiptap/extension-bubble-menu'
 import { Overflow, validateOverflow } from './extensions/Overflow'
 import { Slugline } from './extensions/Slugline'
 import { DisplayHeader } from './extensions/DisplayHeader'
@@ -73,6 +74,7 @@ export function useEditor({
       Slugline,
       History,
       Overflow,
+      BubbleMenuExtension,
       Placeholder.configure({ placeholder }),
       CharacterCount.configure({ limit }),
       Citation,
