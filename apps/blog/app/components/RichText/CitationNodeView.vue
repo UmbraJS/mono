@@ -32,6 +32,7 @@ const cit: Citation = {
 
 <style>
 .CitedQuote {
+  --divider-colour: var(--base-40);
   display: flex;
   flex-direction: column;
   margin: var(--space-2) 0;
@@ -39,8 +40,8 @@ const cit: Citation = {
 
 .CitedQuote blockquote {
   padding: var(--space-2);
-  border-left: 1px solid var(--base-60);
+  padding-bottom: var(--space-1);
+  border-left: 1px solid var(--divider-colour);
   margin: 0;
-
 }
 </style>

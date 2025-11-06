@@ -21,7 +21,8 @@ a.CitationChip {
   display: flex;
   gap: var(--space-1);
   color: var(--base-120);
-  background-color: var(--base);
+  background-color: var(--base-20);
+
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius);
   cursor: pointer;

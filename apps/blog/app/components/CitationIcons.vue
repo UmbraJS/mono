@@ -249,14 +249,14 @@ const activeCredibility = computed(() => {
   justify-content: flex-end;
   position: relative;
   z-index: 1;
-  border-left: 1px solid var(--base-60);
+  border-left: 1px solid var(--divider-colour);
 }
 
 .CitationIcons>.Divider {
   position: absolute;
   height: 1px;
   width: 100%;
-  background-color: var(--base-40);
+  background-color: var(--divider-colour);
 }
 
 .Wrapper {

@@ -177,6 +177,10 @@ const allSources = computed(() => {
   width: 100%;
 }
 
+.Description .CitationIcon:not(.CitationChip) {
+  background-color: var(--base-10);
+}
+
 .Citations {
   display: flex;
   gap: var(--space-2);
