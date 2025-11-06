@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RichText } from '@nobel/richtext'
+import RichText from '../components/RichText/RichText.vue'
 import PostFeed from '../components/PostFeed.vue'
 import ReasonList from '../components/Reason/List.vue'
 </script>
