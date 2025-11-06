@@ -28,7 +28,7 @@ defineProps<{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--base-10);
+  background-color: var(--base);
   border-color: transparent;
   color: var(--base-120);
   padding: var(--space-1);
