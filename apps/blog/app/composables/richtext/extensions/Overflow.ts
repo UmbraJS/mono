@@ -1,6 +1,7 @@
 import Bold from '@tiptap/extension-bold'
 import { mergeAttributes } from '@tiptap/core'
-import type { Editor, Mark } from '@tiptap/core'
+import type { Editor } from '@tiptap/core'
+import type { Mark } from '@tiptap/pm/model'
 
 export const Overflow = Bold.extend({
   name: 'overflow',
@@ -39,8 +40,13 @@ export function validateOverflow(editor: Editor, props: { limit: number }) {
   const limit = current.start + props.limit
   const inner = Math.min(current.end, limit)
 
-  const overflowMark = schema.marks.overflow.create()
+  const overflowMark = schema.marks.overflow?.create()
+
+  if (!overflowMark) return
 
   removeMark(current.start, inner, overflowMark)
-  atLimit && addMark(limit, current.end, overflowMark)
+
+  if (atLimit) {
+    addMark(limit, current.end, overflowMark)
+  }
 }

@@ -2,7 +2,7 @@ import { mergeAttributes, Node } from '@tiptap/core'
 import type { NodeViewProps } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import type { Component } from 'vue'
-import Reference from '../../components/Reference.vue'
+import Reference from '../../../components/RichText/Reference.vue'
 
 interface ReferenceOptions {
   id: string
@@ -59,19 +59,19 @@ export default Node.create<ReferenceOptions>({
     return {
       setReference:
         () =>
-        ({ commands }) => {
-          return commands.setMark(this.name)
-        },
+          ({ commands }) => {
+            return commands.setMark(this.name)
+          },
       toggleReference:
         () =>
-        ({ commands }) => {
-          return commands.toggleMark(this.name)
-        },
+          ({ commands }) => {
+            return commands.toggleMark(this.name)
+          },
       unsetReferece:
         () =>
-        ({ commands }) => {
-          return commands.unsetMark(this.name)
-        },
+          ({ commands }) => {
+            return commands.unsetMark(this.name)
+          },
     }
   },
 })

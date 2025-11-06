@@ -14,7 +14,7 @@ import { Slugline } from './extensions/Slugline'
 import { DisplayHeader } from './extensions/DisplayHeader'
 // import Reference from './extensions/Reference'
 // import Extension from './extensions/Extension'
-import { Mention } from './extensions/Mention'
+// import { Mention } from './extensions/Mention'
 import { ref, onBeforeUnmount } from 'vue'
 
 interface useTiptapProps {
@@ -28,7 +28,7 @@ export function useTitleEditor({
   limit = 120,
   placeholder = 'Write a title...',
   content,
-  onChange = () => {},
+  onChange = () => { },
 }: useTiptapProps) {
   const editor = useTiptap({
     content,
@@ -57,7 +57,7 @@ export function useEditor({
   limit = 4000,
   placeholder = 'Write something...',
   content,
-  onChange = () => {},
+  onChange = () => { },
 }: useTiptapProps) {
   const editor = useTiptap({
     content,
@@ -76,7 +76,7 @@ export function useEditor({
       CharacterCount.configure({ limit }),
       // Reference,
       // Extension,
-      Mention,
+      // Mention,
     ],
   })
 

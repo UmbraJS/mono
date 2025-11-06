@@ -1,7 +1,7 @@
 import { mergeAttributes, Node } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 
-import Component from '../../components/Component.vue'
+import Component from '../../../components/RichText/Component.vue'
 
 export default Node.create({
   name: 'vueComponent',
