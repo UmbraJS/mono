@@ -18,14 +18,14 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/dye.js",
-      "require": "./dist/dye.umd.cjs"
+      "import": "./index.ts",
+      "types": "./types/index.d.ts"
     },
     "./dist/dye.css": "./dist/dye.css"
   },
-  "main": "./dist/dye.umd.cjs",
-  "module": "./dist/dye.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./types/index.d.ts",
   "files": [
     "dist"
   ],
