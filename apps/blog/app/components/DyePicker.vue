@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DyePicker } from "@umbrajs/dye";
-import "@umbrajs/dye/dist/dye.css";
 
 defineProps<{
   // You can define props here if needed
