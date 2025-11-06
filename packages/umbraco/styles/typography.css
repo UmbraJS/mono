@@ -102,6 +102,7 @@ h6,
 }
 
 p,
+.p,
 button,
 input,
 input::placeholder,
@@ -122,24 +123,28 @@ pre {
   }
 }
 
-p.display-bold {
+p.display-bold,
+.p.display-bold {
   line-height: 1.4;
   font-size: clamp(14px, 4vw, 40px);
   font-variation-settings: var(--font-bold);
 }
 
-p.display {
+p.display,
+.p.display {
   line-height: 1.6;
   font-size: clamp(14px, 4vw, 24px);
 }
 
-p.caption {
+p.caption,
+.p.caption {
   font-size: 1rem;
   line-height: 1rem;
   font-variation-settings: var(--font-light);
 }
 
-p.mini {
+p.mini,
+.p.mini {
   line-height: var(--paragraph);
 }
 

@@ -7,6 +7,12 @@ import CitationChip from '../mdc/CitationChip.vue'
 const props = defineProps(nodeViewProps)
 
 // Access node attributes
+const title = computed({
+  get: () => props.node.attrs.title || 'Narrative Frame Title',
+  set: (value) => {
+    props.updateAttributes({ title: value })
+  }
+})
 const image = computed(() => props.node.attrs.image || 'https://pbs.twimg.com/media/Gzc2p7BWUAA2kER?format=jpg&name=4096x4096')
 const mood = computed(() => props.node.attrs.mood || 'neutral')
 const type = computed(() => props.node.attrs.type || 'premise')
@@ -45,9 +51,8 @@ const allSources = computed(() => {
 <template>
   <NodeViewWrapper class="NarrativeFrame border" :class="[moodClass]">
     <header>
-      <p class="display">
-        Narrative Frame Title
-      </p>
+      <input v-model="title" class="p display editable-title" placeholder="Enter frame title..."
+        @keydown.enter.prevent />
     </header>
     <div class="FrameSupport">
       <div class="FrameMeta">
@@ -110,6 +115,27 @@ const allSources = computed(() => {
   z-index: 1;
   transition: color var(--slower), transform var(--slower);
   will-change: transform;
+}
+
+.editable-title {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+  z-index: 1;
+  transition: color var(--slower), transform var(--slower);
+}
+
+.editable-title::placeholder {
+  color: var(--base-60);
+  opacity: 0.5;
 }
 
 .FrameSupport {
