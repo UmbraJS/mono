@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BubbleMenu } from '@tiptap/vue-3'
+import BubbleMenu from '@tiptap/extension-bubble-menu'
 import type { Editor } from '@tiptap/vue-3'
 import { Button, ButtonGroup } from 'umbraco'
 
