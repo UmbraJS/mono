@@ -38,7 +38,6 @@ export function useTitleEditor({
     extensions: [
       Document,
       Text,
-      Heading,
       DisplayHeader,
       CharacterCount.configure({ limit }),
       Placeholder.configure({

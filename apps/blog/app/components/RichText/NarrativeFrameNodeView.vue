@@ -46,7 +46,7 @@ const allSources = computed(() => {
   <NodeViewWrapper class="NarrativeFrame border" :class="[moodClass]">
     <header>
       <p class="display">
-        <NodeViewContent as="span" />
+        Narrative Frame Title
       </p>
     </header>
     <div class="FrameSupport">
@@ -65,6 +65,9 @@ const allSources = computed(() => {
         <p class="FrameMetaChip caption">sources:
           <span>{{ allSources.length }}</span>
         </p>
+      </div>
+      <div class="Description">
+        <NodeViewContent />
       </div>
       <div class="Citations">
         <CitationChip v-for="source in allSources" :key="source.id" :source="source" />
@@ -139,6 +142,13 @@ const allSources = computed(() => {
   background-color: var(--base-40);
   width: 100%;
   height: 1px;
+}
+
+.Description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
 }
 
 .Citations {

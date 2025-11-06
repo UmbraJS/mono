@@ -34,15 +34,13 @@ declare module '@tiptap/core' {
 export const Citation = Node.create<CitationOptions>({
   name: 'citation',
   group: 'block',
-  content: 'inline*',
+  content: 'block+',
 
   addOptions() {
     return {
       HTMLAttributes: {},
     }
-  },
-
-  addAttributes() {
+  }, addAttributes() {
     return {
       reliance: {
         default: 'deductive',
@@ -100,10 +98,40 @@ export const Citation = Node.create<CitationOptions>({
     return {
       setCitation:
         (attributes) =>
-          ({ commands }) => {
+          ({ state, commands }) => {
+            const { selection } = state
+            const { $from, $to } = selection
+
+            // Get the selected content
+            const selectedText = state.doc.textBetween($from.pos, $to.pos, ' ')
+
+            // If there's a selection, wrap it in a citation
+            if (selectedText) {
+              return commands.insertContentAt(
+                { from: $from.pos, to: $to.pos },
+                {
+                  type: this.name,
+                  attrs: attributes,
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [{ type: 'text', text: selectedText }],
+                    },
+                  ],
+                }
+              )
+            }
+
+            // Otherwise insert an empty citation with placeholder
             return commands.insertContent({
               type: this.name,
               attrs: attributes,
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [{ type: 'text', text: 'Add citation text...' }],
+                },
+              ],
             })
           },
       toggleCitation:
@@ -114,5 +142,3 @@ export const Citation = Node.create<CitationOptions>({
     }
   },
 })
-
-export default Citation

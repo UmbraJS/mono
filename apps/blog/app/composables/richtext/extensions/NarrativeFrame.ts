@@ -112,10 +112,40 @@ export const NarrativeFrame = Node.create<NarrativeFrameOptions>({
     return {
       setNarrativeFrame:
         (attributes) =>
-          ({ commands }) => {
+          ({ state, commands }) => {
+            const { selection } = state
+            const { $from, $to } = selection
+
+            // Get the selected content
+            const selectedText = state.doc.textBetween($from.pos, $to.pos, ' ')
+
+            // If there's a selection, wrap it in a narrative frame
+            if (selectedText) {
+              return commands.insertContentAt(
+                { from: $from.pos, to: $to.pos },
+                {
+                  type: this.name,
+                  attrs: attributes,
+                  content: [
+                    {
+                      type: 'paragraph',
+                      content: [{ type: 'text', text: selectedText }],
+                    },
+                  ],
+                }
+              )
+            }
+
+            // Otherwise insert an empty narrative frame with placeholder
             return commands.insertContent({
               type: this.name,
               attrs: attributes,
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [{ type: 'text', text: 'Add narrative frame content...' }],
+                },
+              ],
             })
           },
       toggleNarrativeFrame:

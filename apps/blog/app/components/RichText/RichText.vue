@@ -11,6 +11,9 @@ const contentEditor = useEditor({
   placeholder: 'Write your post here...',
   content: `
     <p>Nuxt layers are a <reference>powerful lol</reference> feature that you can use to share and reuse <strong>partial</strong> Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
+    <div data-type="citation" data-reliance="deductive" data-distance="primary" data-scope="study">
+      <p>Factory farming causes significant animal suffering, as documented by multiple peer-reviewed studies.</p>
+    </div>
     <p class="slugline">Nuxt applications within a monorepo, or from a git repository or npm package. Nuxt applications within a monorepo, or from a git repository or npm package</p>
     <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p>
     <h1>Title</h1>
