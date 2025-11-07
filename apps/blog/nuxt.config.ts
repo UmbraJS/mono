@@ -116,7 +116,7 @@ export default defineNuxtConfig({
         '/api/**', // Skip all API routes that might need server context
       ],
       // TEMP: enable to capture stack trace for '/' prerender failure
-      failOnError: true,
+      failOnError: false,
     },
     alias: {
       'pkg-types': 'unenv/runtime/mock/proxy',
