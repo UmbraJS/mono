@@ -19,7 +19,7 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
         console.warn("No user ID available for presence update");
         return;
       }
-      
+
       console.log("Rex er: ", currentUser.value.displayName);
       await updatePresence({
         userId: currentUser.value.userId,
@@ -82,7 +82,7 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
   };
 
   onMounted(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || import.meta.env.SSR) return
     // Set up page visibility listener
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
