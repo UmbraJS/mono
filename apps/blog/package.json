@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@10.12.3",
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt prepare && nuxt build",
     "dev": "nuxt dev --dotenv .env.local",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

@@ -129,7 +129,8 @@ export default defineNuxtConfig({
     hooks: {
       // Force exit after build to prevent hanging
       close: () => {
-        if (process.env.VERCEL || process.env.CI) {
+        // Only force exit during actual build, not during prepare/dev
+        if ((process.env.VERCEL || process.env.CI) && process.env.NODE_ENV === 'production') {
           console.log('[nitro] Build complete, exiting...')
           process.exit(0)
         }

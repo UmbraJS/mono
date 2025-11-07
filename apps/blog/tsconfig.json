@@ -1,9 +1,29 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
-  "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noEmit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": [
+      "node"
+    ],
     "paths": {
+      "#app": [
+        "../node_modules/.cache/nuxt/.nuxt"
+      ],
+      "#app/*": [
+        "../node_modules/.cache/nuxt/.nuxt/*"
+      ],
+      "~/*": [
+        "./*"
+      ],
+      "@/*": [
+        "./*"
+      ],
       "umbraco": [
         "../../packages/umbraco/index.ts"
       ],
@@ -17,5 +37,13 @@
         "../../packages/convue/src/*"
       ]
     }
-  }
+  },
+  "include": [
+    ".nuxt/**/*",
+    "**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".nuxt/dist"
+  ]
 }
