@@ -1,6 +1,3 @@
 {
-  "buildCommand": "pnpm run build && echo done",
-  "devCommand": "pnpm run dev",
-  "installCommand": "pnpm install",
   "framework": "nuxtjs"
 }
