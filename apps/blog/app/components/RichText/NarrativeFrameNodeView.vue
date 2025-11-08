@@ -86,7 +86,6 @@ const allSources = computed(() => {
   max-width: 90vw;
   overflow: hidden;
   color: var(--base-text);
-  margin: var(--space-4) 0;
 }
 
 .NarrativeFrame header {
