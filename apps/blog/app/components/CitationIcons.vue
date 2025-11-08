@@ -250,6 +250,7 @@ const activeCredibility = computed(() => {
   position: relative;
   z-index: 1;
   border-left: 1px solid var(--divider-colour);
+  padding-left: var(--space-2);
 }
 
 .CitationIcons>.Divider {

@@ -47,7 +47,7 @@ export const NarrativeFrame = Node.create<NarrativeFrameOptions>({
   addAttributes() {
     return {
       title: {
-        default: 'Narrative Frame Title',
+        default: null,
         parseHTML: element => element.getAttribute('data-title'),
         renderHTML: attributes => {
           if (!attributes.title) return {}
@@ -129,18 +129,13 @@ export const NarrativeFrame = Node.create<NarrativeFrameOptions>({
             const selectedText = state.doc.textBetween($from.pos, $to.pos, ' ')
 
             // Merge with default title
-            const attrs = {
-              title: 'Narrative Frame Title',
-              ...attributes,
-            }
-
             // If there's a selection, wrap it in a narrative frame
             if (selectedText) {
               return commands.insertContentAt(
                 { from: $from.pos, to: $to.pos },
                 {
                   type: this.name,
-                  attrs,
+                  attrs: attributes,
                   content: [
                     {
                       type: 'paragraph',
@@ -154,7 +149,7 @@ export const NarrativeFrame = Node.create<NarrativeFrameOptions>({
             // Otherwise insert an empty narrative frame with placeholder
             return commands.insertContent({
               type: this.name,
-              attrs,
+              attrs: attributes,
               content: [
                 {
                   type: 'paragraph',

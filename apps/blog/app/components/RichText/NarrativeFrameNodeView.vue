@@ -8,7 +8,7 @@ const props = defineProps(nodeViewProps)
 
 // Access node attributes
 const title = computed({
-  get: () => props.node.attrs.title || 'Narrative Frame Title',
+  get: () => props.node.attrs.title as string,
   set: (value) => {
     props.updateAttributes({ title: value })
   }
@@ -51,7 +51,7 @@ const allSources = computed(() => {
 <template>
   <NodeViewWrapper class="NarrativeFrame border" :class="[moodClass]">
     <header>
-      <input v-model="title" class="p display editable-title" placeholder="Enter frame title..."
+      <input v-model="title" class="p display editable-title" placeholder="Summarise the point being made"
         @keydown.enter.prevent />
     </header>
     <div class="FrameSupport">
@@ -71,9 +71,7 @@ const allSources = computed(() => {
           <span>{{ allSources.length }}</span>
         </p>
       </div>
-      <div class="Description">
-        <NodeViewContent />
-      </div>
+      <NodeViewContent class="NarrativeFrameDescription UmbraProse" />
       <div class="Citations">
         <CitationChip v-for="source in allSources" :key="source.id" :source="source" />
       </div>
@@ -134,8 +132,7 @@ const allSources = computed(() => {
 }
 
 .editable-title::placeholder {
-  color: var(--base-60);
-  opacity: 0.5;
+  color: var(--base-100);
 }
 
 .FrameSupport {
@@ -170,14 +167,11 @@ const allSources = computed(() => {
   height: 1px;
 }
 
-.Description {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+.NarrativeFrameDescription {
   width: 100%;
 }
 
-.Description .CitationIcon:not(.CitationChip) {
+.NarrativeFrameDescription .CitationIcon:not(.CitationChip) {
   background-color: var(--base-10);
 }
 

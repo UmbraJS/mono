@@ -52,7 +52,8 @@ const contentEditor = useEditor({
   align-items: center;
 }
 
-.ProseMirror {
+.ProseMirror,
+.UmbraProse {
   display: flex;
   flex-direction: column;
   align-items: center;
