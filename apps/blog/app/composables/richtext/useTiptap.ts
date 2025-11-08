@@ -13,7 +13,7 @@ import BubbleMenuExtension from '@tiptap/extension-bubble-menu'
 import { Overflow, validateOverflow } from './extensions/Overflow'
 import { Slugline } from './extensions/Slugline'
 import { DisplayHeader } from './extensions/DisplayHeader'
-// import Reference from './extensions/Reference'
+import Reference from './extensions/Reference'
 // import Extension from './extensions/Extension'
 // import { Mention } from './extensions/Mention'
 import { Citation } from "./extensions/Citation"
@@ -79,7 +79,7 @@ export function useEditor({
       CharacterCount.configure({ limit }),
       Citation,
       NarrativeFrame,
-      // Reference,
+      Reference,
       // Extension,
       // Mention,
     ],

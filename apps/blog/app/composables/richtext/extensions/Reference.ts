@@ -1,12 +1,7 @@
-import { mergeAttributes, Node } from '@tiptap/core'
-import type { NodeViewProps } from '@tiptap/core'
-import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import type { Component } from 'vue'
-import Reference from '../../../components/RichText/Reference.vue'
 
-interface ReferenceOptions {
-  id: string
-}
+import { Mark } from '@tiptap/core'
+import { VueMarkViewRenderer } from '@tiptap/vue-3'
+import ReferenceMarkView from '../../../components/RichText/ReferenceMarkView.vue'
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -25,36 +20,31 @@ declare module '@tiptap/core' {
        * Unset an italic mark
        * @example editor.commands.unsetItalic()
        */
-      unsetReferece: () => ReturnType
+      unsetReference: () => ReturnType
     }
   }
 }
 
-export default Node.create<ReferenceOptions>({
+export default Mark.create({
   name: 'reference',
-  group: 'block',
-  content: 'inline*',
   addAttributes() {
     return {
-      count: {
-        id: '0',
-      },
+      'data-count': { default: 0 },
     }
   },
-  addOptions() {
-    return {
-      id: '0',
-    }
-  },
+
   parseHTML() {
-    return [{ tag: 'reference' }]
+    return [
+      {
+        tag: 'reference',
+      },
+    ]
   },
+
   renderHTML({ HTMLAttributes }) {
-    return ['reference', mergeAttributes(HTMLAttributes), 0]
+    return ['reference', HTMLAttributes]
   },
-  addNodeView() {
-    return VueNodeViewRenderer(Reference as Component<NodeViewProps>)
-  },
+
   addCommands() {
     return {
       setReference:
@@ -67,11 +57,15 @@ export default Node.create<ReferenceOptions>({
           ({ commands }) => {
             return commands.toggleMark(this.name)
           },
-      unsetReferece:
+      unsetReference:
         () =>
           ({ commands }) => {
             return commands.unsetMark(this.name)
           },
     }
+  },
+
+  addMarkView() {
+    return VueMarkViewRenderer(ReferenceMarkView)
   },
 })
