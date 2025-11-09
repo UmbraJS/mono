@@ -35,7 +35,6 @@ const cit: Citation = {
   --divider-colour: var(--base-40);
   display: flex;
   flex-direction: column;
-  margin: var(--space-2) 0;
 }
 
 .CitedQuote blockquote {
