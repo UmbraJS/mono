@@ -18,12 +18,20 @@ const contentEditor = useEditor({
 </script>
 
 <template>
-  <div class="">
+  <div class="CaseWrapper">
     <div class="CaseHeader">
       <NuxtImg
         src="https://images.unsplash.com/photo-1762140170241-7c8e552f25bb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2670"
         width="1200" height="1000" alt="Author avatar" />
-      <EditorContent :editor="titleEditor" />
+      <EditorContent :editor="titleEditor" class="CaseTitle" />
+    </div>
+    <div class="AuthorBar">
+      <NuxtImg class="AuthorAvatar"
+        src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470"
+        width="50" height="50" alt="Author avatar" />
+      <p class="">
+        John Doe
+      </p>
     </div>
     <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
     <EditorContent :editor="contentEditor" />
@@ -31,12 +39,36 @@ const contentEditor = useEditor({
 </template>
 
 <style lang="scss">
+.AuthorBar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-2);
+  background-color: var(--base-20);
+  padding: var(--space-1);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: clamp(300px, 100vw, 700px);
+}
+
+.AuthorBar .AuthorAvatar {
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+.CaseTitle {
+  position: relative;
+  padding: var(--space-2);
+  /* background-color: rgba($color: black, $alpha: 0.2); */
+  /* box-shadow: 0px -70px 54px 0px rgba(0, 0, 0, 1); */
+  backdrop-filter: blur(5px);
+}
+
 .CaseHeader {
   position: relative;
   height: 70vh;
   display: flex;
   align-items: flex-end;
-  padding: var(--space-2);
 }
 
 .CaseHeader img {

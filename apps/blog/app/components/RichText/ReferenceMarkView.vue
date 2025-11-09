@@ -7,7 +7,7 @@ defineProps<MarkViewProps>()
 </script>
 
 <template>
-  <a className="ProseContent" data-test-id="mark-view"
+  <a className="ProseContent" data-test-id="mark-view" contenteditable="false"
     href="https://community.vercel.com/t/build-completes-successfully-but-deployment-never-starts/27085">
     <MarkViewContent />
     <Icon class="ReferenceLinkIcon" name="carbon:link" />

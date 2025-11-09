@@ -8,7 +8,7 @@ const { source } = defineProps<{
 
 <template>
   <a class="CitationChip base button buttonText buttonHover buttonActive buttonFocus buttonSmall CitationIcon"
-    :href="source.url" target="_blank" rel="noopener">
+    :href="source.url" target="_blank" rel="noopener" contenteditable="false">
     <Icon name="carbon:link" />
     <p class="caption">
       {{ source.publisher }}
