@@ -2,6 +2,8 @@
 import { EditorContent } from '@tiptap/vue-3'
 import { useEditor, useTitleEditor } from '../../composables/richtext/useTiptap'
 import BubbleMenu from './BubbleMenu.vue'
+import IdentityTag from '../IdentityTag.vue'
+import { author } from '../../../types/profile'
 
 const titleEditor = useTitleEditor({
   content: `<h1 class="display">THE RUBIK'S CUBE IS THE WORLD’S BEST SELLING PUZZLE TOY</h1>`,
@@ -26,12 +28,17 @@ const contentEditor = useEditor({
       <EditorContent :editor="titleEditor" class="CaseTitle" />
     </div>
     <div class="AuthorBar">
-      <NuxtImg class="AuthorAvatar"
-        src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470"
-        width="50" height="50" alt="Author avatar" />
-      <p class="">
-        John Doe
-      </p>
+      <NuxtImg class="AuthorAvatar" :src="author.avatarUrl" width="75" height="75" alt="Author avatar" />
+      <div class="AuthorInfo">
+        <p>
+          <span>
+            {{ author.name }}
+          </span>
+        </p>
+        <div class="MandatoryIdentityFields">
+          <IdentityTag v-for="tag in author.indentityTags" :key="tag.id" :identity-tag="tag" />
+        </div>
+      </div>
     </div>
     <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
     <EditorContent :editor="contentEditor" />
@@ -39,6 +46,18 @@ const contentEditor = useEditor({
 </template>
 
 <style lang="scss">
+.MandatoryIdentityFields {
+  display: grid;
+  grid-auto-flow: column;
+  gap: var(--space-quark);
+}
+
+.AuthorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 .AuthorBar {
   display: flex;
   align-items: center;
