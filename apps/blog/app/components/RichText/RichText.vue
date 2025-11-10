@@ -25,13 +25,36 @@ const headerImageUrl = 'https://images.unsplash.com/photo-1762140170241-7c8e552f
 <template>
   <div class="CaseWrapper">
     <CaseHeader :title-editor="titleEditor" :image-url="headerImageUrl" />
-    <AuthorBar :author="author" />
-    <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
-    <EditorContent :editor="contentEditor" />
+    <article class="CaseContent">
+      <AuthorBar :author="author" />
+      <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
+      <EditorContent :editor="contentEditor" />
+    </article>
   </div>
 </template>
 
 <style lang="scss">
+article.CaseContent {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+article.CaseContent::after {
+  content: "";
+  position: absolute;
+  background-color: var(--base-10);
+  border-radius: var(--radius);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
 .content.post {
   display: grid;
   gap: var(--space-3);

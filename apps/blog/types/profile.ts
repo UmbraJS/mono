@@ -78,12 +78,12 @@ export interface IdentityTagFamily extends IdentityTagBase {
 
 export interface IdentityTagGender extends IdentityTagBase {
   subject: "gender"
-  name: "male" | "female" | "non-binary"
+  name: "boy" | "girl" | "non-binary"
 }
 
 export interface IdentityTagAge extends IdentityTagBase {
   subject: "age"
-  name: "child" | "teen" | "young adult" | "adult" | "elder"
+  name: "kid" | "teen" | "young adult" | "adult" | "elder"
 }
 
 export type IdentityTag = (IdentityTagReligion | IdentityTagPolitics | IdentityTagNationality | IndentityTagOccupation | IndentityTagHobby | IndentityTagEducation | IndentityTagRelationship | IdentityTagFamily | IdentityTagEthnicity | IdentityTagHeritage | IdentityTagNativity | IdentityTagNationality | IdentityTagGender | IdentityTagAge)
@@ -109,7 +109,7 @@ export const author: AuthorIdentity = {
     {
       id: "tag-4",
       subject: "gender",
-      name: "male",
+      name: "boy",
       fervor: "medium"
     },
     // {

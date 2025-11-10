@@ -1,17 +1,59 @@
 <script setup lang="ts">
 import { EditorContent } from '@tiptap/vue-3'
 import type { Editor } from '@tiptap/vue-3'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onMounted, useTemplateRef } from 'vue'
+
+gsap.registerPlugin(ScrollTrigger)
 
 defineProps<{
   titleEditor: Editor | undefined
   imageUrl: string
 }>()
+
+const imageWrapperRef = useTemplateRef<HTMLDivElement>("imgRef")
+const titleRef = useTemplateRef<typeof EditorContent>("titleRef")
+const containerRef = useTemplateRef<HTMLElement>("containerRef")
+
+onMounted(() => {
+  if (!imageWrapperRef.value || !containerRef.value || !titleRef.value) return
+
+  console.log('Mounted CaseHeader with image and container:', titleRef.value)
+
+  const image = (imageWrapperRef.value as unknown as { imgEl: HTMLImageElement }).imgEl
+  const container = containerRef.value
+
+  gsap.to(image, {
+    height: 0,
+    y: image.offsetHeight,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: container,
+      start: '-50 top',
+      end: 'bottom top',
+      scrub: true,
+    }
+  })
+
+  gsap.to(titleRef.value.rootEl, {
+    y: 200,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: container,
+      start: '-50 top',
+      end: 'bottom+=200 top',
+      scrub: true,
+      markers: true,
+    }
+  })
+})
 </script>
 
 <template>
-  <div class="CaseHeader">
-    <NuxtImg :src="imageUrl" width="1200" height="1000" alt="Case header image" />
-    <EditorContent :editor="titleEditor" class="CaseTitle" />
+  <div ref="containerRef" class="CaseHeader">
+    <NuxtImg ref="imgRef" :src="imageUrl" width="1200" height="1000" alt="Case header image" />
+    <EditorContent ref="titleRef" :editor="titleEditor" class="CaseTitle" />
   </div>
 </template>
 

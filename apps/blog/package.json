@@ -49,6 +49,7 @@
     "convue": "workspace:*",
     "destr": "catalog:",
     "github-slugger": "catalog:",
+    "gsap": "catalog:",
     "hast-util-format": "catalog:",
     "hast-util-to-html": "catalog:",
     "hast-util-to-mdast": "catalog:",

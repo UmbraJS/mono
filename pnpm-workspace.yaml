@@ -45,7 +45,7 @@ catalog:
   eslint-plugin-vue: 10.0.0
   github-slugger: ^2.0.0
   gl-matrix: ^3.4.3
-  gsap: ^3.13.0
+  gsap: 3.13.0
   hast: ^1.0.0
   hast-util-format: ^1.1.0
   hast-util-to-html: ^9.0.5

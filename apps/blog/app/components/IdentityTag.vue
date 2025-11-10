@@ -21,9 +21,9 @@ function getIcon() {
 
 function switchGender(tag: IdentityTagGender) {
   switch (tag.name) {
-    case 'male':
+    case 'boy':
       return 'mdi:gender-male'
-    case 'female':
+    case 'girl':
       return 'mdi:gender-female'
     default:
       return fallbackIcon

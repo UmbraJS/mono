@@ -112,7 +112,7 @@ catalogs:
       specifier: ^2.0.0
       version: 2.0.0
     gsap:
-      specifier: ^3.13.0
+      specifier: 3.13.0
       version: 3.13.0
     hast-util-format:
       specifier: ^1.1.0
@@ -369,6 +369,9 @@ importers:
       github-slugger:
         specifier: 'catalog:'
         version: 2.0.0
+      gsap:
+        specifier: 'catalog:'
+        version: 3.13.0
       hast-util-format:
         specifier: 'catalog:'
         version: 1.1.0
