@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Button } from 'umbraco'
 import type { author as authorType } from '../../types/profile'
 import IdentityTag from './IdentityTag.vue'
 
@@ -19,6 +20,12 @@ defineProps<{
       <div class="MandatoryIdentityFields">
         <IdentityTag v-for="tag in author.indentityTags" :key="tag.id" :identity-tag="tag" />
       </div>
+
+      <!-- <div class="AuthorActions">
+        <Button size="small">
+          <Icon name="carbon:add" />
+        </Button>
+      </div> -->
     </div>
   </div>
 </template>

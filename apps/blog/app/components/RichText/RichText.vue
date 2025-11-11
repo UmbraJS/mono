@@ -15,7 +15,11 @@ function remapValue(value: number, inMin: number, inMax: number, outMin: number,
 }
 
 const shadowGrowth = computed(() => {
-  return `-${remapValue(y.value, 0, 100, 0, 39)}px`
+  return `${remapValue(y.value, 0, 300, 0, 39)}px`
+})
+
+const shadowGrowt2 = computed(() => {
+  return `${remapValue(y.value, 0, 300, 0, 80)}px`
 })
 
 const titleEditor = useTitleEditor({
@@ -32,21 +36,90 @@ const contentEditor = useEditor({
 })
 
 const headerImageUrl = 'https://images.unsplash.com/photo-1762140170241-7c8e552f25bb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2670'
+
+const hall: {
+  id: string
+  title: string
+  image: string
+}[] = [{
+  id: 'hall-1',
+  title: 'Main Hall',
+  image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2670',
+}, {
+  id: 'hall-2',
+  title: 'Exhibition Hall',
+  image: 'https://images.unsplash.com/photo-1749627995669-4d4dda3a9c1d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2371',
+}, {
+  id: 'hall-3',
+  title: 'Conference Hall',
+  image: 'https://images.unsplash.com/photo-1762450127876-515aed711718?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2704',
+}]
 </script>
 
 <template>
   <div class="CaseWrapper">
-    <CaseHeader :title-editor="titleEditor" :image-url="headerImageUrl" />
+    <div class="CaseHeadWrapper">
+      <div class="CaseHall">
+        <div v-for="value in hall" :key="value.id" class="ParentCase base-accent border">
+          <NuxtImg :src="value.image" width="200" height="100" :alt="value.title" />
+          <p class="">
+            {{ value.title }}
+          </p>
+        </div>
+      </div>
+      <CaseHeader :title-editor="titleEditor" :image-url="headerImageUrl" />
+    </div>
     <article ref="caseContentRef" class="CaseContent">
       <AuthorBar :author="author" />
       <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
       <EditorContent :editor="contentEditor" />
     </article>
-    <h1>lol: {{ y }}</h1>
   </div>
 </template>
 
 <style>
+.CaseHeadWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.CaseHall {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.CaseHall .ParentCase p {
+  position: absolute;
+  left: var(--space-3);
+  color: var(--base-120);
+  letter-spacing: 1px;
+}
+
+.ParentCase:nth-child(1) {
+  flex-grow: 3;
+}
+
+.ParentCase {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-grow: 1;
+  background-color: var(--base-20);
+  border-radius: var(--radius);
+  overflow: hidden;
+  height: 75px;
+}
+
+.ParentCase img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  filter: blur(2px);
+}
+
 article.CaseContent {
   position: relative;
   z-index: 5;
@@ -62,7 +135,7 @@ article.CaseContent::after {
   position: absolute;
   background-color: var(--base);
   border-radius: var(--radius);
-  box-shadow: 0px v-bind(shadowGrowth) 74px 31px var(--base);
+  box-shadow: 0px calc(0px - v-bind(shadowGrowth)) v-bind(shadowGrowt2) v-bind(shadowGrowth) var(--base);
   width: 100%;
   max-width: calc(var(--paragraph-width) + var(--space-2) * 2);
   height: 100%;

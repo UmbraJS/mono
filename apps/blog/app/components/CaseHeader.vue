@@ -30,7 +30,7 @@ onMounted(() => {
     ease: 'none',
     scrollTrigger: {
       trigger: container,
-      start: '-50 top',
+      start: '-10 top',
       end: 'bottom top',
       scrub: true,
     }
