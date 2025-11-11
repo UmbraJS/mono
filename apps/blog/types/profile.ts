@@ -30,7 +30,6 @@ type Origins =
   | "dutch"
   | "belgian"
 
-
 export interface IdentityTagEthnicity extends IdentityTagBase {
   subject: 'ethnicity'
   name: Origins
@@ -49,6 +48,11 @@ export interface IdentityTagNativity extends IdentityTagBase {
 export interface IdentityTagNationality extends IdentityTagBase {
   subject: 'nationality'
   name: Origins
+}
+
+interface IdentityTagNationalStatus extends IdentityTagBase {
+  subject: "national-status"
+  name: "citizen" | "immigrant" | "refugee"
 }
 
 export interface IndentityTagOccupation extends IdentityTagBase {
@@ -86,7 +90,7 @@ export interface IdentityTagAge extends IdentityTagBase {
   name: "kid" | "teen" | "young adult" | "adult" | "elder"
 }
 
-export type IdentityTag = (IdentityTagReligion | IdentityTagPolitics | IdentityTagNationality | IndentityTagOccupation | IndentityTagHobby | IndentityTagEducation | IndentityTagRelationship | IdentityTagFamily | IdentityTagEthnicity | IdentityTagHeritage | IdentityTagNativity | IdentityTagNationality | IdentityTagGender | IdentityTagAge)
+export type IdentityTag = (IdentityTagReligion | IdentityTagPolitics | IdentityTagNationality | IndentityTagOccupation | IndentityTagHobby | IndentityTagEducation | IndentityTagRelationship | IdentityTagFamily | IdentityTagEthnicity | IdentityTagHeritage | IdentityTagNativity | IdentityTagNationality | IdentityTagGender | IdentityTagAge | IdentityTagNationalStatus)
 
 interface AuthorIdentity {
   id: string
