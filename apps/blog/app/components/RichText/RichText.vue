@@ -5,6 +5,20 @@ import BubbleMenu from './BubbleMenu.vue'
 import { author } from '../../../types/profile'
 import CaseHeader from '../CaseHeader.vue'
 import AuthorBar from '../AuthorBar.vue'
+import { useScroll } from '@vueuse/core'
+import { useTemplateRef } from 'vue'
+
+const caseContent = useTemplateRef<HTMLElement>('caseContentRef')
+const { y } = useScroll(caseContent)
+
+function mapValue(value: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+}
+
+const shadowGrowth = computed(() => {
+  console.log('Scroll Y value:', y.value, caseContent.value)
+  return `-${mapValue(y.value, 0, 100, 0, 39)}px`
+})
 
 const titleEditor = useTitleEditor({
   content: `THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY`,
@@ -25,15 +39,16 @@ const headerImageUrl = 'https://images.unsplash.com/photo-1762140170241-7c8e552f
 <template>
   <div class="CaseWrapper">
     <CaseHeader :title-editor="titleEditor" :image-url="headerImageUrl" />
-    <article class="CaseContent">
+    <article ref="caseContentRef" class="CaseContent">
       <AuthorBar :author="author" />
       <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
       <EditorContent :editor="contentEditor" />
     </article>
+    <h1>lol: {{ y }}</h1>
   </div>
 </template>
 
-<style lang="scss">
+<style>
 article.CaseContent {
   position: relative;
   z-index: 5;
@@ -49,6 +64,7 @@ article.CaseContent::after {
   position: absolute;
   background-color: var(--base);
   border-radius: var(--radius);
+  box-shadow: 0px v-bind(shadowGrowth) 74px 31px var(--base);
   width: 100%;
   max-width: calc(var(--paragraph-width) + var(--space-2) * 2);
   height: 100%;
@@ -88,7 +104,7 @@ article.CaseContent::after {
   pointer-events: none;
 }
 
-// Overflowing text
+/* Overflowing text */
 .ProseMirror p span.overflow {
   color: var(--warning-100);
   text-decoration: line-through;
