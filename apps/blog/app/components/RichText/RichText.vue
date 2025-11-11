@@ -43,11 +43,11 @@ const hall: {
   image: string
 }[] = [{
   id: 'hall-1',
-  title: 'Main Hall',
+  title: 'Science',
   image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2670',
 }, {
   id: 'hall-2',
-  title: 'Exhibition Hall',
+  title: 'The Rubix Cube Sucks',
   image: 'https://images.unsplash.com/photo-1749627995669-4d4dda3a9c1d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2371',
 }, {
   id: 'hall-3',
@@ -67,7 +67,7 @@ const hall: {
           </p>
         </div>
       </div>
-      <CaseHeader :title-editor="titleEditor" :image-url="headerImageUrl" />
+      <CaseHeader :title-editor="titleEditor" :image-url="'/rocks.avif'" />
     </div>
     <article ref="caseContentRef" class="CaseContent">
       <AuthorBar :author="author" />

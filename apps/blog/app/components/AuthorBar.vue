@@ -9,8 +9,8 @@ defineProps<{
 </script>
 
 <template>
-  <div class="AuthorBar">
-    <NuxtImg class="AuthorAvatar" :src="author.avatarUrl" width="75" height="75" alt="Author avatar" />
+  <div class="AuthorBar border base-warning">
+    <NuxtImg class="AuthorAvatar border" :src="author.avatarUrl" width="75" height="75" alt="Author avatar" />
     <div class="AuthorInfo">
       <p>
         <span>
@@ -48,7 +48,8 @@ defineProps<{
   align-items: center;
   justify-content: flex-start;
   gap: var(--space-2);
-  background-color: var(--base-20);
+  background-color: var(--base);
+  color: var(--base-100);
   padding: var(--space-1);
   border-radius: var(--radius);
   width: 100%;

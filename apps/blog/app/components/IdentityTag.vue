@@ -70,7 +70,7 @@ const icon = getIcon()
 </script>
 
 <template>
-  <div class="IdentityTag base-accent">
+  <div class="IdentityTag">
     <Icon class="IdentityIcon" :name="icon" />
     <p class="caption">{{ identityTag.name }}</p>
   </div>

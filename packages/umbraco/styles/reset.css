@@ -45,7 +45,7 @@
   }
 
   img {
-    background: var(--accent);
+    background: var(--accent-40);
   }
   /*
       7. Remove built-in form typography styles
