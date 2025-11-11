@@ -10,15 +10,12 @@ import { useScroll } from '@vueuse/core'
 const { y } = useScroll(window)
 
 function remapValue(value: number, inMin: number, inMax: number, outMin: number, outMax: number) {
-  // Clamp the input value to the input range
   const clampedValue = Math.min(Math.max(value, inMin), inMax)
   return ((clampedValue - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
 }
 
 const shadowGrowth = computed(() => {
-  const mapped = remapValue(y.value, 0, 100, 0, 39)
-  console.log('Scroll Y value:', mapped)
-  return `-${mapped}px`
+  return `-${remapValue(y.value, 0, 100, 0, 39)}px`
 })
 
 const titleEditor = useTitleEditor({
