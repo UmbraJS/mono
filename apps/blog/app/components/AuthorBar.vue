@@ -45,7 +45,7 @@ defineProps<{
   padding: var(--space-1);
   border-radius: var(--radius);
   width: 100%;
-  max-width: clamp(300px, 100vw, 700px);
+  max-width: var(--paragraph-width);
 }
 
 .AuthorBar .AuthorAvatar {

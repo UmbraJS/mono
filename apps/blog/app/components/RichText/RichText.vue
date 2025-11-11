@@ -41,17 +41,18 @@ article.CaseContent {
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
+  padding: var(--space-2) 0px;
 }
 
 article.CaseContent::after {
   content: "";
   position: absolute;
-  background-color: var(--base-10);
+  background-color: var(--base);
   border-radius: var(--radius);
   width: 100%;
+  max-width: calc(var(--paragraph-width) + var(--space-2) * 2);
   height: 100%;
-  top: 0;
-  left: 0;
+  top: 0px;
   z-index: -1;
 }
 

@@ -17,6 +17,11 @@
   --h4-size: clamp(1rem, 1.3vw, 1.5rem);
   --h5-size: clamp(1rem, 1.2vw, 1.2rem);
   --h6-size: clamp(1rem, 1vw, 1rem);
+
+  --paragraph-width: clamp(300px, 100vw, 1000px);
+  @media (max-width: 2000px) {
+    --paragraph-width: clamp(300px, 100vw, 700px);
+  }
 }
 
 html {
@@ -115,12 +120,8 @@ pre {
   font-weight: 700;
   line-height: 1.5;
   letter-spacing: 0px;
-  max-width: clamp(300px, 100vw, 1000px);
+  max-width: var(--paragraph-width);
   font-variation-settings: var(--font-regular);
-
-  @media (max-width: 2000px) {
-    max-width: clamp(300px, 100vw, 700px);
-  }
 }
 
 p.display-bold,
