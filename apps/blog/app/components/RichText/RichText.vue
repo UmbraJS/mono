@@ -6,18 +6,19 @@ import { author } from '../../../types/profile'
 import CaseHeader from '../CaseHeader.vue'
 import AuthorBar from '../AuthorBar.vue'
 import { useScroll } from '@vueuse/core'
-import { useTemplateRef } from 'vue'
 
-const caseContent = useTemplateRef<HTMLElement>('caseContentRef')
-const { y } = useScroll(caseContent)
+const { y } = useScroll(window)
 
-function mapValue(value: number, inMin: number, inMax: number, outMin: number, outMax: number) {
-  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
+function remapValue(value: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+  // Clamp the input value to the input range
+  const clampedValue = Math.min(Math.max(value, inMin), inMax)
+  return ((clampedValue - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
 }
 
 const shadowGrowth = computed(() => {
-  console.log('Scroll Y value:', y.value, caseContent.value)
-  return `-${mapValue(y.value, 0, 100, 0, 39)}px`
+  const mapped = remapValue(y.value, 0, 100, 0, 39)
+  console.log('Scroll Y value:', mapped)
+  return `-${mapped}px`
 })
 
 const titleEditor = useTitleEditor({
