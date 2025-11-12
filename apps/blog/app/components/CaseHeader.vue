@@ -69,8 +69,6 @@ onMounted(() => {
   position: relative;
   padding: var(--space-2);
   color: v-bind(contrastColor);
-  /* background-color: rgba($color: black, $alpha: 0.2); */
-  /* box-shadow: 0px -70px 54px 0px rgba(0, 0, 0, 1); */
   backdrop-filter: blur(5px);
 }
 

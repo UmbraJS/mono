@@ -41,7 +41,7 @@ onKeyStroke('Escape', () => toggleReveal())
     <!-- <FrostLayer /> -->
     <div class="content-layer">
       <div class="vignet" @click="toggleReveal" />
-      <main class="page">
+      <main class="UmbraPage">
         <slot />
       </main>
     </div>
@@ -55,7 +55,6 @@ onKeyStroke('Escape', () => toggleReveal())
       <div class="sidebar">
         <AuthorCard />
         <PostList :posts="posts" />
-
         <ProjectList />
       </div>
     </div>
@@ -101,10 +100,7 @@ onKeyStroke('Escape', () => toggleReveal())
   transition: background-color var(--slow), color var(--slow), border-color var(--slow), transform var(--slow);
 }
 
-.layout .content-layer main.page {
-  display: flex;
-  justify-content: center;
-
+.UmbraPage {
   width: 80dvw;
   max-width: 1900px;
   min-height: 100vh;
@@ -112,6 +108,11 @@ onKeyStroke('Escape', () => toggleReveal())
   @media (max-width: 800px) {
     width: 100dvw;
   }
+}
+
+.layout .content-layer main.UmbraPage {
+  display: flex;
+  justify-content: center;
 }
 
 .layout .content-layer .vignet {
