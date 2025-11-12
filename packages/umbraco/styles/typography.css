@@ -25,6 +25,13 @@
   }
 }
 
+:root {
+  --umbra-page: clamp(300px, 80dvw, 1900px);
+  @media (max-width: 800px) {
+   --umbra-page: clamp(300px, 100dvw, 1900px);
+  }
+}
+
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -10,7 +10,6 @@ import InteractiveGridPattern from '../components/InteractiveGridPattern.vue'
   <InteractiveGridPattern />
 </template>
 
-
 <style lang="scss">
 // Typographic styles specific to markdown pages
 #MarkdownArticle {

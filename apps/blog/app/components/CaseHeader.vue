@@ -75,6 +75,7 @@ onMounted(() => {
 .CaseHeader {
   position: relative;
   height: 70vh;
+  width: var(--umbra-page);
   display: flex;
   align-items: flex-end;
 }

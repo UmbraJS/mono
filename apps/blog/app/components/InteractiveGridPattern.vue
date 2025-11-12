@@ -1,11 +1,3 @@
-<template>
-  <svg ref="svgRef" :width="gridWidth" :height="gridHeight" :class="['grid-svg', className]">
-    <rect v-for="(_, index) in totalSquares" :key="index" :x="getX(index)" :y="getY(index)" :width="width"
-      :height="height" :class="['grid-rect', hoveredSquare === index ? 'grid-rect--active' : '', squaresClassName]"
-      @mouseenter="handleMouseEnter(index)" @mouseleave="handleMouseLeave" />
-  </svg>
-</template>
-
 <script lang="ts" setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
@@ -96,6 +88,14 @@ function handleMouseLeave() {
 const className = computed(() => props.className)
 const squaresClassName = computed(() => props.squaresClassName)
 </script>
+
+<template>
+  <svg ref="svgRef" :width="gridWidth" :height="gridHeight" :class="['grid-svg', className]">
+    <rect v-for="(_, index) in totalSquares" :key="index" :x="getX(index)" :y="getY(index)" :width="width"
+      :height="height" :class="['grid-rect', hoveredSquare === index ? 'grid-rect--active' : '', squaresClassName]"
+      @mouseenter="handleMouseEnter(index)" @mouseleave="handleMouseLeave" />
+  </svg>
+</template>
 
 <style scoped>
 .grid-svg {
