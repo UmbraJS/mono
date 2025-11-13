@@ -46,6 +46,7 @@ export function useAuth(): UseAuthReturn {
     throw new Error('Better Auth client is missing required methods (useSession or convex.token)')
   }
 
+  // TODO - This type is any? How come?
   // Get session data from Better Auth
   const sessionResult = authClient.useSession()
 

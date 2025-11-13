@@ -46,12 +46,10 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
   })
 
   const suspense = () => {
-    if (data.value) {
+    if (data.value)
       return Promise.resolve(data.value)
-    }
-    if (error.value) {
+    if (error.value)
       return Promise.reject(error.value)
-    }
 
     return new Promise<FunctionReturnType<Query>>((resolve, reject) => {
       const stop = watch(
