@@ -1,7 +1,9 @@
 import type { ConvexClientOptions } from 'convex/browser'
 import type { ObjectPlugin, Ref } from 'vue'
+import type { BetterAuthClient } from './composables/useBetterAuthClient'
 import { ConvexClient, ConvexHttpClient } from 'convex/browser'
 import { shallowRef } from 'vue'
+import { provideBetterAuthClient } from './composables/useBetterAuthClient'
 
 export interface ConvexAuthOptions {
   forceRefreshToken: boolean
@@ -11,6 +13,12 @@ export interface ConvexVueOptions {
   url: string
   clientOptions?: ConvexClientOptions
   auth?: ConvexAuthOptions
+
+  /**
+   * Better Auth client instance for authentication
+   * When provided, the plugin will set up authentication integration automatically
+   */
+  authClient?: BetterAuthClient
 
   /**
    * If true, the global default client wont be initialized automatically,
@@ -51,6 +59,11 @@ export const convexVue: ObjectPlugin<ConvexVueOptions> = {
 
     if (!initialOptions.manualInit)
       initClient(initialOptions)
+
+    // Provide Better Auth client if provided
+    if (initialOptions.authClient) {
+      provideBetterAuthClient(app, initialOptions.authClient)
+    }
 
     app.provide<ConvexVueContext>('convex-vue', {
       options: initialOptions,

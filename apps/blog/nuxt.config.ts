@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       convexUrl: process.env.CONVEX_URL || '',
+      convexSiteUrl: process.env.VITE_CONVEX_SITE_URL || '',
     },
   },
 
@@ -66,6 +67,9 @@ export default defineNuxtConfig({
   // https://nuxt.com/docs/getting-started/upgrade#testing-nuxt-4
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2024-07-30',
+
+  // Disable SSR to avoid auth client issues during prerendering
+  ssr: false,
 
   // Ensure source is transpiled when aliased (dev only); always transpile motion-v
   build: {
@@ -106,12 +110,12 @@ export default defineNuxtConfig({
     },
     sourceMap: process.env.NODE_ENV === 'production' ? false : undefined,
     prerender: {
-      // Dev-friendly toggles: disable crawling or add extra routes via env
-      routes: [
+      // Disable prerendering in development to avoid SSR issues
+      routes: isDev ? [] : [
         '/',
         ...prerenderExtraRoutes,
       ],
-      crawlLinks: shouldCrawl, // Disable with NUXT_PRERENDER_CRAWL=false
+      crawlLinks: isDev ? false : shouldCrawl,
       ignore: [
         '/api/**', // Skip all API routes that might need server context
       ],

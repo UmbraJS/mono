@@ -12,7 +12,7 @@ export const sendMessage = mutation({
 
     // Update or create user with the current display name
     const existingUser = await ctx.db
-      .query("users")
+      .query("chatUsers")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .first();
 
@@ -26,7 +26,7 @@ export const sendMessage = mutation({
       });
     } else {
       // Create new user record
-      await ctx.db.insert("users", {
+      await ctx.db.insert("chatUsers", {
         userId: args.userId,
         displayName: args.displayName,
         lastSeen: now,
@@ -50,7 +50,7 @@ export const getMessages = query({
     const messagesWithUsers = await Promise.all(
       messages.map(async (message) => {
         const user = await ctx.db
-          .query("users")
+          .query("chatUsers")
           .withIndex("by_userId", (q) => q.eq("userId", message.userId))
           .first();
 
@@ -72,7 +72,7 @@ export const updateUserPresence = mutation({
   },
   handler: async (ctx, args) => {
     const existingUser = await ctx.db
-      .query("users")
+      .query("chatUsers")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .first();
 
@@ -86,7 +86,7 @@ export const updateUserPresence = mutation({
       });
     } else {
       console.log("REX: Creating new user record for", args.userId);
-      await ctx.db.insert("users", {
+      await ctx.db.insert("chatUsers", {
         userId: args.userId,
         displayName: "Anonymous",
         lastSeen: now,
@@ -103,7 +103,7 @@ export const setUserOffline = mutation({
     console.log("REX: setUserOffline called for", args.userId);
 
     const user = await ctx.db
-      .query("users")
+      .query("chatUsers")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .first();
 
@@ -122,7 +122,7 @@ export const getUser = query({
   },
   handler: async (ctx, args) => {
     const user = await ctx.db
-      .query("users")
+      .query("chatUsers")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .first();
 
@@ -141,7 +141,7 @@ export const getOnlineUsers = query({
 
     // Get users who were seen within the last 5 minutes
     const users = await ctx.db
-      .query("users")
+      .query("chatUsers")
       .filter((q) => q.gt(q.field("lastSeen"), fiveMinutesAgo))
       .collect();
 
@@ -162,7 +162,7 @@ export const cleanupStaleUsers = mutation({
     const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000; // 1 week
 
     const veryOldUsers = await ctx.db
-      .query("users")
+      .query("chatUsers")
       .filter((q) => q.lt(q.field("lastSeen"), oneWeekAgo))
       .collect();
 

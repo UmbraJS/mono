@@ -36,6 +36,7 @@
 + 👌 Supports Convex realtime queries
 + 🔄️ SSR and SSG support via suspense
 + 🎉 Optimistic updates for mutations
++ 🔐 Better Auth integration for authentication
 
 ## Usage
 
@@ -135,6 +136,171 @@ Either use the result of the suspense function like below, or simply use the dat
 The suspense function will only return the result once on server and client (like a normal promise).  
 The data property will be reactive and update when the query result changes on the client.  
 Recommended to use the data property for SSR support and realtime clientside updates.
+
+### Better Auth Integration
+
+Convex Vue provides seamless integration with [Better Auth](https://www.better-auth.com) for authentication. Better Auth is a modern, framework-agnostic authentication library for TypeScript.
+
+#### Setup
+
+First, install Better Auth and the Convex Better Auth plugin:
+
+```sh
+# npm
+npm install better-auth @convex-dev/better-auth
+
+# bun
+bun add better-auth @convex-dev/better-auth
+
+# pnpm
+pnpm install better-auth @convex-dev/better-auth
+```
+
+#### Create Better Auth Client
+
+Create a Better Auth client instance. For Vue, use `better-auth/vue` instead of `better-auth/react`:
+
+```ts
+// src/lib/auth-client.ts
+import { createAuthClient } from 'better-auth/vue'
+import { convexClient } from '@convex-dev/better-auth/client/plugins'
+
+export const authClient = createAuthClient({
+  baseURL: import.meta.env.VITE_CONVEX_SITE_URL, // Your Convex site URL
+  plugins: [convexClient()],
+})
+```
+
+#### Configure Convex Vue Plugin
+
+Pass the Better Auth client to the Convex Vue plugin:
+
+```ts
+import { convexVue } from 'convue'
+import { createApp } from 'vue'
+import { authClient } from './lib/auth-client'
+import App from './App.vue'
+
+const app = createApp(App)
+
+app.use(convexVue, {
+  url: 'your-convex-deployment-url',
+  authClient, // Pass the Better Auth client
+})
+
+app.mount('#app')
+```
+
+#### Authentication Composables
+
+Convex Vue provides three composables for working with Better Auth:
+
+##### useAuth
+
+Provides authentication state and automatically manages Convex client authentication:
+
+```vue
+<script setup lang="ts">
+import { useAuth } from 'convue'
+
+const { isAuthenticated, isLoading } = useAuth()
+</script>
+
+<template>
+  <div>
+    <p v-if="isLoading">Loading...</p>
+    <p v-else-if="isAuthenticated">You are logged in!</p>
+    <p v-else>You are logged out</p>
+  </div>
+</template>
+```
+
+##### useSession
+
+Access the current session data:
+
+```vue
+<script setup lang="ts">
+import { useSession } from 'convue'
+
+const { data: session, isPending, error } = useSession()
+</script>
+
+<template>
+  <div v-if="session">
+    <p>Welcome, {{ session.user.name }}!</p>
+    <p>Email: {{ session.user.email }}</p>
+  </div>
+</template>
+```
+
+##### useBetterAuthClient
+
+Direct access to the Better Auth client for calling auth methods:
+
+```vue
+<script setup lang="ts">
+import { useBetterAuthClient } from 'convue'
+
+const authClient = useBetterAuthClient()
+
+async function signIn() {
+  await authClient.signIn.email({
+    email: 'user@example.com',
+    password: 'password123',
+  })
+}
+
+async function signOut() {
+  await authClient.signOut()
+}
+</script>
+```
+
+#### Server Setup
+
+On your Convex backend, you'll need to set up Better Auth. Follow the [official Convex + Better Auth documentation](https://convex-better-auth.netlify.app) for complete setup instructions including:
+
+- Installing the Better Auth Convex component
+- Configuring authentication providers
+- Setting up HTTP routes
+- Creating auth functions
+
+#### Example: Protected Route
+
+Combine authentication with Convex queries:
+
+```vue
+<script setup lang="ts">
+import { useAuth, useConvexQuery } from 'convue'
+import { api } from '../convex/_generated/api'
+
+const { isAuthenticated, isLoading: authLoading } = useAuth()
+const { data: userData, isPending } = useConvexQuery(
+  api.users.getCurrentUser,
+  {}
+)
+
+const isLoading = computed(() => authLoading.value || isPending.value)
+</script>
+
+<template>
+  <div>
+    <div v-if="isLoading">Loading...</div>
+    <div v-else-if="!isAuthenticated">
+      <p>Please sign in to view this page</p>
+    </div>
+    <div v-else>
+      <h1>Welcome back!</h1>
+      <p>Your data: {{ userData }}</p>
+    </div>
+  </div>
+</template>
+```
+
+For more information about Better Auth with Convex, see:
+- [Better Auth Documentation](https://www.better-auth.com)
+- [Convex + Better Auth Integration](https://convex-better-auth.netlify.app)
 
 ## License
 

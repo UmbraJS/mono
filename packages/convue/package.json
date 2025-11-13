@@ -48,8 +48,14 @@
     "prepack": "pnpm run build"
   },
   "peerDependencies": {
+    "better-auth": ">=1.0.0",
     "convex": ">=1.24.0",
     "vue": ">=3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "better-auth": {
+      "optional": true
+    }
   },
   "dependencies": {
     "consola": "^3.4.2",

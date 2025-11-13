@@ -1,12 +1,13 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-export default defineSchema({
+const schema = defineSchema({
   tasks: defineTable({
     text: v.string(),
     isCompleted: v.boolean(),
   }),
-  users: defineTable({
+  // Renamed from 'users' to avoid conflict with auth tables
+  chatUsers: defineTable({
     userId: v.string(),
     displayName: v.string(),
     lastSeen: v.number(),
@@ -23,3 +24,5 @@ export default defineSchema({
     .index("by_timestamp", ["timestamp"])
     .index("by_userId_timestamp", ["userId", "timestamp"]),
 });
+
+export default schema;

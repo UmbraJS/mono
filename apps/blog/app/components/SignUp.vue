@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { Button, toast, Input } from 'umbraco'
+import { useBetterAuthClient } from 'convue'
 
-const auth = useAuth()
+const authClient = useBetterAuthClient()
+const router = useRouter()
 
 const email = ref('')
 const password = ref('')
@@ -12,18 +14,19 @@ async function signUp() {
   if (loading.value) return
   loading.value = true
 
-  // const { error } = await auth.signUp.email({
-  //   email: email.value,
-  //   password: password.value,
-  //   name: name.value,
-  // })
+  const { error } = await authClient.signUp.email({
+    email: email.value,
+    password: password.value,
+    name: name.value,
+  })
 
-  // if (error) {
-  //   toast.error(error.message || 'Error signing up')
-  // } else {
-  //   toast.success('You have been signed up!')
-  // }
-  loading.value = false
+  if (error) {
+    toast.error(error.message || 'Error signing up')
+    loading.value = false
+  } else {
+    toast.success('You have been signed up! Please sign in.')
+    loading.value = false
+  }
 }
 </script>
 

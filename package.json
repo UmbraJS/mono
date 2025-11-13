@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@10.12.3",
   "scripts": {
-    "dev": "cd apps/ui && pnpm run dev",
+    "dev": "cd apps/blog && pnpm run dev",
     "ui": "cd apps/ui && pnpm run dev",
     "carbon": "cd apps/carbon && pnpm run dev",
     "dye": "cd packages/dye && pnpm run dev",

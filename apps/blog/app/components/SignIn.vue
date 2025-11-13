@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { Button, toast, Input } from 'umbraco'
+import { useBetterAuthClient } from 'convue'
 
-// const auth = useAuth()
+const authClient = useBetterAuthClient()
+const router = useRouter()
 
 const email = ref('')
 const password = ref('')
@@ -11,34 +13,33 @@ async function signIn() {
   if (loading.value) return
   loading.value = true
 
-  // const { error } = await auth.signIn.email({
-  //   email: email.value,
-  //   password: password.value,
-  // })
+  const { error } = await authClient.signIn.email({
+    email: email.value,
+    password: password.value,
+  })
 
-  // if (error) {
-  //   toast.error(error.message || 'Error signing in')
-  //   loading.value = false
-  // } else onSuccessfulSignIn()
+  if (error) {
+    toast.error(error.message || 'Error signing in')
+    loading.value = false
+  } else {
+    toast.success('You have been signed in!')
+    await router.push('/profile')
+  }
 }
 
 const signinWithGithub = async () => {
   if (loading.value) return
   loading.value = true
 
-  // const { error } = await auth.signIn.social({
-  //   provider: 'github',
-  //   callbackURL: '/user',
-  // })
+  const { error } = await authClient.signIn.social({
+    provider: 'github',
+    callbackURL: '/profile',
+  })
 
-  // if (error) {
-  //   toast.error('Error signing in')
-  //   loading.value = false
-  // } else onSuccessfulSignIn()
-}
-
-const onSuccessfulSignIn = async () => {
-  toast.success('You have been signed in!')
+  if (error) {
+    toast.error('Error signing in')
+    loading.value = false
+  }
 }
 </script>
 
