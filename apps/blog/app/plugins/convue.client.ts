@@ -1,6 +1,5 @@
-import { convexVue, type ConvexVueOptions } from "convue";
+import { convexClient, convexVue, type ConvexVueOptions } from "convue";
 import { createAuthClient } from 'better-auth/vue'
-import { convexClient } from '@convex-dev/better-auth/client/plugins'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const runtime = useRuntimeConfig();

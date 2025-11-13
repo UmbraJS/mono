@@ -13,7 +13,6 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@convex-dev/better-auth": "^0.9.7",
     "@monaco-editor/loader": "catalog:",
     "@nobel/bifrost": "workspace:*",
     "@nuxt/content": "catalog:",

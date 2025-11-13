@@ -1,6 +1,5 @@
-import { createApi } from "@convex-dev/better-auth";
+import { convex, createApi } from "convue";
 import { betterAuth } from "better-auth";
-import { convex } from "@convex-dev/better-auth/plugins";
 import schema from "./schema";
 
 // Create a static auth config for schema generation
