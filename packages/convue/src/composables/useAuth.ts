@@ -1,9 +1,15 @@
 import type { Ref } from 'vue'
-import { computed, ref, watch } from 'vue'
+import type { BetterAuthClient, BetterAuthSessionResult, Session } from './useBetterAuthClient'
+import { computed, isRef, ref, watch } from 'vue'
 import { useBetterAuthClient } from './useBetterAuthClient'
 import { useConvexClient } from './useConvexClient'
 
 export interface UseAuthReturn {
+  /**
+   * The current session data, or null if not authenticated
+   */
+  session: Ref<Session | null>
+
   /**
    * Whether authentication is currently loading
    */
@@ -15,6 +21,21 @@ export interface UseAuthReturn {
   isAuthenticated: Ref<boolean>
 
   /**
+   * Any error that occurred while loading the session
+   */
+  error: Ref<Error | null>
+
+  /**
+   * The Better Auth client instance for auth operations
+   */
+  client: BetterAuthClient
+
+  /**
+   * Manually refetch the session data
+   */
+  refetch: () => Promise<void>
+
+  /**
    * Function to fetch a Convex auth token for the current session
    * This is used internally by the Convex client
    */
@@ -22,19 +43,35 @@ export interface UseAuthReturn {
 }
 
 /**
- * Composable that provides authentication state and token management
- * for integrating Better Auth with Convex.
+ * Unified composable for all authentication concerns
  *
- * This composable:
- * - Tracks authentication state (isLoading, isAuthenticated)
- * - Provides a token fetcher for Convex client authentication
- * - Automatically sets/clears auth on the Convex client
+ * This is the main auth composable that provides:
+ * - Session data and authentication state
+ * - Loading and error states
+ * - Better Auth client for sign in/out operations
+ * - Session refetch capability
+ * - Automatic Convex client authentication
  *
  * @example
  * ```ts
  * import { useAuth } from 'convue'
  *
- * const { isAuthenticated, isLoading } = useAuth()
+ * const {
+ *   session,           // Current user session
+ *   isAuthenticated,   // Boolean auth state
+ *   isLoading,         // Loading state
+ *   client,            // Better Auth client
+ *   refetch            // Refetch session
+ * } = useAuth()
+ *
+ * // Sign in
+ * await client.signIn.email({ email, password })
+ *
+ * // Sign out
+ * await client.signOut()
+ *
+ * // Access user data
+ * console.log(session.value?.user.email)
  * ```
  */
 export function useAuth(): UseAuthReturn {
@@ -42,29 +79,58 @@ export function useAuth(): UseAuthReturn {
   const convexClient = useConvexClient()
 
   // Ensure required methods exist
-  if (!authClient.useSession || !authClient.convex?.token) {
-    throw new Error('Better Auth client is missing required methods (useSession or convex.token)')
+  if (!authClient.useSession) {
+    throw new Error('Better Auth client is missing useSession method')
   }
 
-  // TODO - This type is any? How come?
+  if (!authClient.convex?.token) {
+    throw new Error('Better Auth client is missing convex.token method')
+  }
+
   // Get session data from Better Auth
+  // The return type varies based on the Better Auth implementation
   const sessionResult = authClient.useSession()
 
-  // Better Auth Vue returns a readonly ref object, not { data, isPending }
-  // Handle both possible return structures
-  let session: any
-  let isPending: any
+  // Better Auth Vue may return:
+  // 1. A ref containing { data, isPending, error } object
+  // 2. { data, isPending, error } object directly
+  // 3. A direct ref to session data
+  let session: Ref<Session | null>
+  let isPending: Ref<boolean>
+  let error: Ref<Error | null>
+  let refetch: () => Promise<void>
 
-  if (sessionResult && typeof sessionResult === 'object') {
+  // Unwrap ref if needed
+  const unwrapped = isRef(sessionResult) ? sessionResult.value : sessionResult
+
+  if (unwrapped && typeof unwrapped === 'object') {
     // Check if it's the { data, isPending, error } structure
-    if ('data' in sessionResult && 'isPending' in sessionResult) {
-      session = sessionResult.data
-      isPending = sessionResult.isPending
+    if ('data' in unwrapped && 'isPending' in unwrapped) {
+      // It's a query-like structure from Better Auth Vue
+      // The sessionResult itself is a reactive ref, so we need to access properties reactively
+      if (isRef(sessionResult)) {
+        // Access properties from the ref reactively using computed
+        const result = sessionResult.value as BetterAuthSessionResult
+        session = computed(() => result.data)
+        isPending = computed(() => result.isPending)
+        error = computed(() => result.error)
+        refetch = result.refetch || (async () => { })
+      }
+      else {
+        // It's a plain object, wrap individual properties
+        const result = unwrapped as BetterAuthSessionResult
+        session = ref(result.data)
+        isPending = ref(result.isPending)
+        error = ref(result.error)
+        refetch = result.refetch || (async () => { })
+      }
     }
     else {
-      // It might be a direct readonly ref structure
-      session = ref(sessionResult)
+      // It's direct session data
+      session = ref(unwrapped as Session | null)
       isPending = ref(false)
+      error = ref(null)
+      refetch = async () => { }
     }
   }
   else {
@@ -87,6 +153,8 @@ export function useAuth(): UseAuthReturn {
       return data?.token || null
     }
     catch {
+      // Return null on error - Convex will treat this as unauthenticated
+      // This can happen if the session expired or the token endpoint is unavailable
       return null
     }
   }
@@ -101,20 +169,27 @@ export function useAuth(): UseAuthReturn {
 
       if (newSessionId) {
         // User is authenticated, set auth on Convex client
-        // Convex expects an object with fetchToken property
-        convexClient.setAuth({ fetchToken: fetchAccessToken } as any)
+        // Convex setAuth expects an async function that returns the token
+        convexClient.setAuth(async () => {
+          const token = await fetchAccessToken()
+          return token
+        })
       }
       else {
-        // User is not authenticated, clear auth by passing null
-        convexClient.setAuth(null as any)
+        // User is not authenticated, clear auth
+        convexClient.setAuth(async () => null)
       }
     },
     { immediate: false },
   )
 
   return {
+    session,
     isLoading,
     isAuthenticated,
+    error: error || ref(null),
+    client: authClient,
+    refetch,
     fetchAccessToken,
   }
 }

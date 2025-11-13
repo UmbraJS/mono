@@ -1,4 +1,4 @@
-import { computed, onScopeDispose, ref, shallowRef, toValue, watch } from "vue";
+import { computed, isRef, onScopeDispose, ref, shallowRef, toValue, watch } from "vue";
 import { getFunctionName, httpActionGeneric, mutationGeneric, queryGeneric } from "convex/server";
 import { ConvexClient, ConvexHttpClient } from "convex/browser";
 import { v } from "convex/values";
@@ -71,20 +71,49 @@ function useConvexClient() {
 function useAuth() {
 	const authClient = useBetterAuthClient();
 	const convexClient$1 = useConvexClient();
-	if (!authClient.useSession || !authClient.convex?.token) throw new Error("Better Auth client is missing required methods (useSession or convex.token)");
+	if (!authClient.useSession) {
+		console.error("Better Auth client missing useSession method");
+		throw new Error("Better Auth client is missing useSession method");
+	}
+	if (!authClient.convex?.token) {
+		console.error("Better Auth client missing convex.token method");
+		throw new Error("Better Auth client is missing convex.token method");
+	}
 	const sessionResult = authClient.useSession();
+	console.warn("[useAuth] sessionResult:", sessionResult);
 	let session;
 	let isPending;
-	if (sessionResult && typeof sessionResult === "object") if ("data" in sessionResult && "isPending" in sessionResult) {
-		session = sessionResult.data;
-		isPending = sessionResult.isPending;
+	const unwrapped = isRef(sessionResult) ? sessionResult.value : sessionResult;
+	if (unwrapped && typeof unwrapped === "object") if ("data" in unwrapped && "isPending" in unwrapped) {
+		if (isRef(sessionResult)) {
+			session = computed(() => sessionResult.value.data);
+			isPending = computed(() => sessionResult.value.isPending);
+		} else {
+			session = isRef(unwrapped.data) ? unwrapped.data : ref(unwrapped.data);
+			isPending = isRef(unwrapped.isPending) ? unwrapped.isPending : ref(unwrapped.isPending);
+		}
+		console.warn("[useAuth] Using data/isPending structure", {
+			session,
+			isPending
+		});
 	} else {
-		session = ref(sessionResult);
+		session = isRef(sessionResult) ? sessionResult : ref(sessionResult);
 		isPending = ref(false);
+		console.warn("[useAuth] Using direct ref structure", {
+			session,
+			isPending
+		});
 	}
-	else throw new Error("Better Auth useSession() returned unexpected value");
+	else {
+		console.error("[useAuth] sessionResult invalid:", sessionResult);
+		throw new Error("Better Auth useSession() returned unexpected value");
+	}
 	const isLoading = computed(() => isPending?.value ?? false);
 	const isAuthenticated = computed(() => session?.value !== null && session?.value !== void 0);
+	console.warn("[useAuth] Computed refs created:", {
+		isLoading,
+		isAuthenticated
+	});
 	const sessionId = computed(() => session?.value?.session?.id ?? null);
 	/**
 	* Fetch a Convex auth token from Better Auth
@@ -334,7 +363,13 @@ function useSession() {
 	const authClient = useBetterAuthClient();
 	if (!authClient.useSession) throw new Error("Better Auth client does not have useSession method");
 	const result = authClient.useSession();
-	return result;
+	if (result && typeof result === "object") if ("data" in result && "isPending" in result) return result;
+	else return {
+		data: result,
+		isPending: ref(false),
+		error: ref(null)
+	};
+	throw new Error("Better Auth useSession() returned unexpected value");
 }
 
 //#endregion
@@ -612,6 +647,12 @@ function createApi(_schema, _createAuth) {
 //#endregion
 //#region src/server/createClient.ts
 /**
+* Get static auth instance (for accessing options without context)
+*/
+function getStaticAuth(createAuth) {
+	return createAuth({}, { optionsOnly: true });
+}
+/**
 * Creates the component client that Better Auth uses to interact with Convex
 */
 function createClient(component, config) {
@@ -644,6 +685,33 @@ function createClient(component, config) {
 					return {
 						id: "convex",
 						options: { isRunMutationCtx: "runMutation" in ctx },
+						createSchema: async ({ file: _file, tables }) => {
+							const schemaLines = [
+								"import { defineSchema, defineTable } from \"convex/server\"",
+								"import { v } from \"convex/values\"",
+								"",
+								"export default defineSchema({"
+							];
+							for (const [tableName, table] of Object.entries(tables)) {
+								schemaLines.push(`  ${tableName}: defineTable({`);
+								const fields = table.fields;
+								for (const [fieldName, field] of Object.entries(fields)) {
+									let validator = "v.any()";
+									if (field.type === "string") validator = "v.string()";
+									else if (field.type === "number") validator = "v.number()";
+									else if (field.type === "boolean") validator = "v.boolean()";
+									else if (field.type === "date") validator = "v.number() // timestamp";
+									schemaLines.push(`    ${fieldName}: ${validator},`);
+								}
+								schemaLines.push("  }),");
+							}
+							schemaLines.push("})");
+							return {
+								code: schemaLines.join("\n"),
+								path: "convex/schema.ts",
+								success: true
+							};
+						},
 						create: async ({ model, data, select }) => {
 							if (!("runMutation" in ctx)) throw new Error("ctx is not a mutation ctx");
 							return ctx.runMutation(component.adapter.create, {
@@ -661,7 +729,8 @@ function createClient(component, config) {
 								select
 							});
 						},
-						findMany: async ({ model, where, limit, sortBy }) => {
+						findMany: async ({ model, where, limit, sortBy, offset }) => {
+							if (offset) throw new Error("offset not supported");
 							return await ctx.runQuery(component.adapter.findMany, {
 								model,
 								where,
@@ -729,7 +798,25 @@ function createClient(component, config) {
 					const user = await ctx.runQuery(component.adapter.findOne, {
 						model: "user",
 						where: [{
-							field: "id",
+							field: "_id",
+							value: identity.subject,
+							operator: "eq"
+						}]
+					});
+					if (!user) throw new Error("Unauthenticated");
+					return user;
+				}
+			}
+			throw new Error("Unauthenticated");
+		},
+		async safeGetAuthUser(ctx) {
+			if (ctx.auth?.getUserIdentity) {
+				const identity = await ctx.auth.getUserIdentity();
+				if (identity) {
+					const user = await ctx.runQuery(component.adapter.findOne, {
+						model: "user",
+						where: [{
+							field: "_id",
 							value: identity.subject,
 							operator: "eq"
 						}]
@@ -738,6 +825,24 @@ function createClient(component, config) {
 				}
 			}
 			return null;
+		},
+		async getAnyUserById(ctx, id) {
+			return await ctx.runQuery(component.adapter.findOne, {
+				model: "user",
+				where: [{
+					field: "_id",
+					value: id
+				}]
+			});
+		},
+		async migrationGetUser(ctx, userId) {
+			return await ctx.runQuery(component.adapter.findOne, {
+				model: "user",
+				where: [{
+					field: "userId",
+					value: userId
+				}]
+			});
 		},
 		triggersApi() {
 			return {
@@ -822,4 +927,4 @@ function createClient(component, config) {
 }
 
 //#endregion
-export { convex, convexClient, createApi, createClient, createConvexClients, useAuth, useBetterAuthClient, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery, useSession };
+export { convex, convexClient, createApi, createClient, createConvexClients, getStaticAuth, useAuth, useBetterAuthClient, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery, useSession };

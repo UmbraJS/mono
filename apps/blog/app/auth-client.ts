@@ -1,9 +1,12 @@
 import { createAuthClient } from 'better-auth/vue'
-import { convexClient } from '@convex-dev/better-auth/client/plugins'
+import { convexClient } from 'convue'
 
-const config = useRuntimeConfig()
+// Better Auth requires a full URL with protocol
+const baseURL = typeof window !== 'undefined'
+  ? `${window.location.protocol}//${window.location.host}/api/auth`
+  : 'http://localhost:3001/api/auth'
 
 export const authClient = createAuthClient({
-  baseURL: config.public.convexSiteUrl || 'http://localhost:3000',
+  baseURL,
   plugins: [convexClient()],
 })

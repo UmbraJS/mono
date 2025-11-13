@@ -1,5 +1,7 @@
 import type { Ref } from 'vue'
 import type { Session } from './useBetterAuthClient'
+
+import { ref } from 'vue'
 import { useBetterAuthClient } from './useBetterAuthClient'
 
 export interface UseSessionReturn {
@@ -17,6 +19,11 @@ export interface UseSessionReturn {
    * Any error that occurred while loading the session
    */
   error: Ref<Error | null>
+
+  /**
+   * Manually refetch the session data
+   */
+  refetch: () => Promise<void>
 }
 
 /**
@@ -46,6 +53,30 @@ export function useSession(): UseSessionReturn {
 
   const result = authClient.useSession()
 
-  // Return the result as-is, it should match UseSessionReturn
-  return result as UseSessionReturn
+  // Handle both return types from Better Auth:
+  // 1. { data, isPending, error } - from Better Auth React/Next
+  // 2. Direct Ref<Session> - from Better Auth Vue
+  if (result && typeof result === 'object') {
+    if ('data' in result && 'isPending' in result) {
+      // Already in the correct format, but need to ensure refetch exists
+      const typedResult = result as any
+      return {
+        data: typedResult.data,
+        isPending: typedResult.isPending,
+        error: typedResult.error || ref(null),
+        refetch: typedResult.refetch || (async () => { }),
+      } as UseSessionReturn
+    }
+    else {
+      // It's a direct ref, wrap it in the expected structure
+      return {
+        data: result as Ref<Session | null>,
+        isPending: ref(false),
+        error: ref(null),
+        refetch: async () => { },
+      }
+    }
+  }
+
+  throw new Error('Better Auth useSession() returned unexpected value')
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Button, toast, Input } from 'umbraco'
-import { useBetterAuthClient } from 'convue'
+import { useAuth } from 'convue'
 
-const authClient = useBetterAuthClient()
+const { session, client: authClient, refetch } = useAuth()
 const router = useRouter()
 
 const email = ref('')
@@ -10,19 +10,47 @@ const password = ref('')
 const loading = ref(false)
 
 async function signIn() {
-  if (loading.value) return
+  if (loading.value) {
+    return
+  }
   loading.value = true
 
-  const { error } = await authClient.signIn.email({
+  const result = await authClient.signIn.email({
     email: email.value,
     password: password.value,
   })
 
-  if (error) {
-    toast.error(error.message || 'Error signing in')
+  if (result.error) {
+    toast.error(result.error.message || 'Error signing in')
     loading.value = false
   } else {
     toast.success('You have been signed in!')
+
+    // Manually refetch the session after sign in
+    await refetch()
+
+    // Wait for the refetch to actually complete
+    // Watch for data to be populated
+    await new Promise<void>((resolve) => {
+      const stopWatch = watch(
+        () => session.value,
+        (newSession) => {
+          if (newSession) {
+            if (stopWatch) stopWatch()
+            resolve()
+          }
+        },
+        { immediate: true, deep: true }
+      )
+
+      // Fallback timeout
+      setTimeout(() => {
+        if (stopWatch) stopWatch()
+        resolve()
+      }, 5000)
+    })
+
+    // Navigate to profile
     await router.push('/profile')
   }
 }

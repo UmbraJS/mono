@@ -38,7 +38,24 @@ export interface ClientConfig {
   local?: {
     schema: any
   }
-  triggers?: Record<string, any>
+  triggers?: Record<string, {
+    onCreate?: (ctx: any, doc: any) => Promise<void>
+    onUpdate?: (ctx: any, newDoc: any, oldDoc: any) => Promise<void>
+    onDelete?: (ctx: any, doc: any) => Promise<void>
+  }>
+}
+
+export type CreateAuth<_DataModel extends GenericDataModel>
+  = | ((ctx: any) => any)
+  | ((ctx: any, opts?: { optionsOnly?: boolean }) => any)
+
+/**
+ * Get static auth instance (for accessing options without context)
+ */
+export function getStaticAuth<Auth extends ReturnType<any>>(
+  createAuth: CreateAuth<any>,
+): Auth {
+  return createAuth({} as any, { optionsOnly: true })
 }
 
 /**
@@ -96,6 +113,39 @@ export function createClient<
               isRunMutationCtx: 'runMutation' in ctx,
             },
 
+            createSchema: async ({ file: _file, tables }) => {
+              // Generate Convex schema from Better Auth tables
+              // This is called during setup to help create schema.ts
+              const schemaLines = ['import { defineSchema, defineTable } from "convex/server"', 'import { v } from "convex/values"', '', 'export default defineSchema({']
+
+              for (const [tableName, table] of Object.entries(tables)) {
+                schemaLines.push(`  ${tableName}: defineTable({`)
+                const fields = table.fields as Record<string, any>
+                for (const [fieldName, field] of Object.entries(fields)) {
+                  let validator = 'v.any()'
+                  if (field.type === 'string')
+                    validator = 'v.string()'
+                  else if (field.type === 'number')
+                    validator = 'v.number()'
+                  else if (field.type === 'boolean')
+                    validator = 'v.boolean()'
+                  else if (field.type === 'date')
+                    validator = 'v.number() // timestamp'
+
+                  schemaLines.push(`    ${fieldName}: ${validator},`)
+                }
+                schemaLines.push('  }),')
+              }
+
+              schemaLines.push('})')
+
+              return {
+                code: schemaLines.join('\n'),
+                path: 'convex/schema.ts',
+                success: true,
+              }
+            },
+
             create: async ({ model, data, select }): Promise<any> => {
               if (!('runMutation' in ctx)) {
                 throw new Error('ctx is not a mutation ctx')
@@ -114,7 +164,10 @@ export function createClient<
               })
             },
 
-            findMany: async ({ model, where, limit, sortBy }): Promise<any> => {
+            findMany: async ({ model, where, limit, sortBy, offset }): Promise<any> => {
+              if (offset) {
+                throw new Error('offset not supported')
+              }
               return await ctx.runQuery(component.adapter.findMany, {
                 model,
                 where,
@@ -199,12 +252,53 @@ export function createClient<
           // Query the user from the database
           const user = await ctx.runQuery(component.adapter.findOne, {
             model: 'user',
-            where: [{ field: 'id', value: identity.subject, operator: 'eq' }],
+            where: [{ field: '_id', value: identity.subject, operator: 'eq' }],
+          })
+          if (!user) {
+            throw new Error('Unauthenticated')
+          }
+          return user
+        }
+      }
+      throw new Error('Unauthenticated')
+    },
+
+    /**
+     * Safely get the authenticated user (returns null instead of throwing)
+     */
+    async safeGetAuthUser(ctx: GenericCtx<DataModel>) {
+      if (ctx.auth?.getUserIdentity) {
+        const identity = await ctx.auth.getUserIdentity()
+        if (identity) {
+          // Query the user from the database
+          const user = await ctx.runQuery(component.adapter.findOne, {
+            model: 'user',
+            where: [{ field: '_id', value: identity.subject, operator: 'eq' }],
           })
           return user
         }
       }
       return null
+    },
+
+    /**
+     * Get user by their Better Auth ID
+     */
+    async getAnyUserById(ctx: GenericCtx<DataModel>, id: string) {
+      return await ctx.runQuery(component.adapter.findOne, {
+        model: 'user',
+        where: [{ field: '_id', value: id }],
+      })
+    },
+
+    /**
+     * Get user by legacy userId field (migration helper)
+     */
+    async migrationGetUser(ctx: GenericCtx<DataModel>, userId: string) {
+      return await ctx.runQuery(component.adapter.findOne, {
+        model: 'user',
+        where: [{ field: 'userId', value: userId }],
+      })
     },
 
     /**

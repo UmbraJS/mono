@@ -2,13 +2,28 @@
  * Interface for the Better Auth client
  * This accepts any Better Auth client (React, Vue, or vanilla)
  */
+
+/**
+ * Better Auth session result that can be returned by useSession()
+ */
+export interface BetterAuthSessionResult {
+  data: Session | null
+  isPending: boolean
+  error: Error | null
+  refetch?: () => Promise<void>
+}
+
 export interface BetterAuthClient {
-  useSession?: () => any
-  getSession?: (...args: any[]) => Promise<any>
+  useSession?: () => BetterAuthSessionResult | { value: BetterAuthSessionResult }
+  getSession?: () => Promise<{ data: Session | null, error: Error | null }>
+  signIn: {
+    email: (credentials: { email: string, password: string }) => Promise<{ data?: Session, error?: Error }>
+    social: (options: { provider: string, callbackURL?: string }) => Promise<{ data?: Session, error?: Error }>
+  }
+  signOut: () => Promise<{ data?: unknown, error?: Error }>
   convex?: {
     token: () => Promise<{ data: { token: string } | null, error: Error | null }>
   }
-  [key: string]: any
 }
 
 export interface Session {
@@ -16,13 +31,15 @@ export interface Session {
     id: string
     userId: string
     expiresAt: string
-    [key: string]: any
+    token?: string
+    [key: string]: unknown
   }
   user: {
     id: string
     email: string
     name: string
-    [key: string]: any
+    emailVerified?: boolean
+    [key: string]: unknown
   }
 }
 

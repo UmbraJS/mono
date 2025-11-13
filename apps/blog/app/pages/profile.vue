@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import { Button, toast } from 'umbraco'
-import { useAuth, useSession, useBetterAuthClient } from 'convue'
+import { useAuth } from 'convue'
 
-const { isAuthenticated, isLoading } = useAuth()
-const { data: session, isPending } = useSession()
-const authClient = useBetterAuthClient()
+const { session, isAuthenticated, isLoading, client: authClient } = useAuth()
 const router = useRouter()
 
 // Redirect to signin if not authenticated
 watch([isAuthenticated, isLoading], ([auth, loading]) => {
-  if (!loading && !auth) {
-    router.push('/signin')
-  }
+  if (loading || auth) return
+  router.push('/signin')
 }, { immediate: true })
 
 async function signOut() {
@@ -28,7 +25,7 @@ async function signOut() {
 
 <template>
   <div class="profile-container">
-    <div v-if="isLoading || isPending" class="loading">
+    <div v-if="isLoading" class="loading">
       <Icon name="svg-spinners:pulse-multiple" size="4em" />
       <p>Loading...</p>
     </div>
@@ -42,20 +39,20 @@ async function signOut() {
       </div>
 
       <div class="user-info">
-        <div class="info-card">
+        <div v-if="session.user" class="info-card">
           <h2>User Information</h2>
           <div class="info-grid">
             <div class="info-item">
               <label>Name</label>
-              <p>{{ session.user.name }}</p>
+              <p>{{ session.user.name || 'N/A' }}</p>
             </div>
             <div class="info-item">
               <label>Email</label>
-              <p>{{ session.user.email }}</p>
+              <p>{{ session.user.email || 'N/A' }}</p>
             </div>
             <div class="info-item">
               <label>User ID</label>
-              <p class="mono">{{ session.user.id }}</p>
+              <p class="mono">{{ session.user.id || 'N/A' }}</p>
             </div>
             <div v-if="session.user.emailVerified !== undefined" class="info-item">
               <label>Email Verified</label>
@@ -68,16 +65,16 @@ async function signOut() {
           </div>
         </div>
 
-        <div class="info-card">
+        <div v-if="session.session" class="info-card">
           <h2>Session Information</h2>
           <div class="info-grid">
             <div class="info-item">
               <label>Session ID</label>
-              <p class="mono">{{ session.session.id }}</p>
+              <p class="mono">{{ session.session.id || 'N/A' }}</p>
             </div>
             <div class="info-item">
               <label>Expires At</label>
-              <p>{{ new Date(session.session.expiresAt).toLocaleString() }}</p>
+              <p>{{ session.session.expiresAt ? new Date(session.session.expiresAt).toLocaleString() : 'N/A' }}</p>
             </div>
           </div>
         </div>

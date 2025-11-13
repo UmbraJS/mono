@@ -1,7 +1,7 @@
+import * as vue1 from "vue";
 import * as vue3 from "vue";
-import * as vue0 from "vue";
 import { MaybeRefOrGetter, Ref } from "vue";
-import * as convex_server2 from "convex/server";
+import * as convex_server0 from "convex/server";
 import * as convex_server5 from "convex/server";
 import { FunctionArgs, FunctionReference, FunctionReturnType, GenericDataModel, SchemaDefinition } from "convex/server";
 import { ConvexClient, ConvexClientOptions, ConvexHttpClient, OptimisticUpdate } from "convex/browser";
@@ -121,9 +121,9 @@ interface MutationOptions<Mutation extends FunctionReference<'mutation'>> {
 declare function useConvexMutation<Mutation extends FunctionReference<'mutation'>>(mutationReference: Mutation, {
   optimisticUpdate
 }?: MutationOptions<Mutation>): {
-  mutate: (args: MaybeRefOrGetter<FunctionArgs<Mutation>>) => Promise<convex_server2.FunctionReturnType<Mutation>>;
-  error: vue3.Ref<Error | null, Error | null>;
-  isPending: vue3.ComputedRef<boolean>;
+  mutate: (args: MaybeRefOrGetter<FunctionArgs<Mutation>>) => Promise<convex_server0.FunctionReturnType<Mutation>>;
+  error: vue1.Ref<Error | null, Error | null>;
+  isPending: vue1.ComputedRef<boolean>;
 };
 
 //#endregion
@@ -228,8 +228,8 @@ interface ConvexVueContext {
  * Creates Convex clients to be provided in a Nuxt plugin
  */
 declare function createConvexClients(url: string, clientOptions?: ConvexClientOptions): {
-  clientRef: vue0.ShallowRef<ConvexClient | undefined, ConvexClient | undefined>;
-  httpClientRef: vue0.ShallowRef<ConvexHttpClient | undefined, ConvexHttpClient | undefined>;
+  clientRef: vue3.ShallowRef<ConvexClient | undefined, ConvexClient | undefined>;
+  httpClientRef: vue3.ShallowRef<ConvexHttpClient | undefined, ConvexHttpClient | undefined>;
   initClient: (options?: ConvexVueOptions) => void;
 };
 
@@ -350,8 +350,19 @@ interface ClientConfig {
   local?: {
     schema: any;
   };
-  triggers?: Record<string, any>;
+  triggers?: Record<string, {
+    onCreate?: (ctx: any, doc: any) => Promise<void>;
+    onUpdate?: (ctx: any, newDoc: any, oldDoc: any) => Promise<void>;
+    onDelete?: (ctx: any, doc: any) => Promise<void>;
+  }>;
 }
+type CreateAuth$1<_DataModel extends GenericDataModel> = ((ctx: any) => any) | ((ctx: any, opts?: {
+  optionsOnly?: boolean;
+}) => any);
+/**
+ * Get static auth instance (for accessing options without context)
+ */
+declare function getStaticAuth<Auth extends ReturnType<any>>(createAuth: CreateAuth$1<any>): Auth;
 /**
  * Creates the component client that Better Auth uses to interact with Convex
  */
@@ -371,6 +382,18 @@ declare function createClient<DataModel extends GenericDataModel, _Schema = any>
    * Helper to get the authenticated user
    */
   getAuthUser(ctx: GenericCtx<DataModel>): Promise<any>;
+  /**
+   * Safely get the authenticated user (returns null instead of throwing)
+   */
+  safeGetAuthUser(ctx: GenericCtx<DataModel>): Promise<any>;
+  /**
+   * Get user by their Better Auth ID
+   */
+  getAnyUserById(ctx: GenericCtx<DataModel>, id: string): Promise<any>;
+  /**
+   * Get user by legacy userId field (migration helper)
+   */
+  migrationGetUser(ctx: GenericCtx<DataModel>, userId: string): Promise<any>;
   /**
    * Triggers API for component lifecycle hooks
    */
@@ -401,4 +424,4 @@ declare function createClient<DataModel extends GenericDataModel, _Schema = any>
 };
 
 //#endregion
-export { AreAllPropertiesOptional, BetterAuthClient, ClientConfig, ComponentReference, ConvexAuthOptions, ConvexVueContext, ConvexVueOptions, CreateAuth, GenericCtx, IsOptionalKey, OptionalRestArgs, OptionalRestArgsAndOptions, convex, convexClient, createApi, createClient, createConvexClients, useAuth, useBetterAuthClient, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery, useSession };
+export { AreAllPropertiesOptional, BetterAuthClient, ClientConfig, ComponentReference, ConvexAuthOptions, ConvexVueContext, ConvexVueOptions, CreateAuth, GenericCtx, IsOptionalKey, OptionalRestArgs, OptionalRestArgsAndOptions, convex, convexClient, createApi, createClient, createConvexClients, getStaticAuth, useAuth, useBetterAuthClient, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery, useSession };

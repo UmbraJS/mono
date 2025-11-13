@@ -7,18 +7,19 @@ export default defineNuxtPlugin(() => {
   const convexSiteUrl = runtime.public?.convexSiteUrl;
 
   if (!convexUrl || typeof convexUrl !== 'string') {
-    console.warn("[convue] Missing or invalid CONVEX_URL. Set it in .env.local. Queries will fail.");
-    return;
+    throw new Error("[convue] Missing or invalid CONVEX_URL. Set it in .env.local");
   }
 
   if (!convexSiteUrl || typeof convexSiteUrl !== 'string') {
-    console.warn("[convue] Missing or invalid VITE_CONVEX_SITE_URL. Set it in .env.local. Auth will fail.");
-    return;
+    throw new Error("[convue] Missing or invalid VITE_CONVEX_SITE_URL. Set it in .env.local");
   }
 
-  // Create auth client with runtime config
+  // Create auth client with local proxy to avoid cross-domain cookie issues
+  // Better Auth requires a full URL with protocol, so we construct it from window.location
+  const baseURL = `${window.location.protocol}//${window.location.host}/api/auth`
+
   const authClient = createAuthClient({
-    baseURL: convexSiteUrl,
+    baseURL,
     plugins: [convexClient()],
   })
 
