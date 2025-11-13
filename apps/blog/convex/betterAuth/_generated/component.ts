@@ -28,57 +28,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         "mutation",
         "internal",
         {
-          input:
-            | {
-                data: {
-                  createdAt: number;
-                  email: string;
-                  emailVerified: boolean;
-                  image?: null | string;
-                  name: string;
-                  updatedAt: number;
-                };
-                model: "user";
-              }
-            | {
-                data: {
-                  createdAt: number;
-                  expiresAt: number;
-                  ipAddress?: null | string;
-                  token: string;
-                  updatedAt: number;
-                  userAgent?: null | string;
-                  userId: string;
-                };
-                model: "session";
-              }
-            | {
-                data: {
-                  accessToken?: null | string;
-                  accessTokenExpiresAt?: null | number;
-                  accountId: string;
-                  createdAt: number;
-                  idToken?: null | string;
-                  password?: null | string;
-                  providerId: string;
-                  refreshToken?: null | string;
-                  refreshTokenExpiresAt?: null | number;
-                  scope?: null | string;
-                  updatedAt: number;
-                  userId: string;
-                };
-                model: "account";
-              }
-            | {
-                data: {
-                  createdAt: number;
-                  expiresAt: number;
-                  identifier: string;
-                  updatedAt: number;
-                  value: string;
-                };
-                model: "verification";
-              };
+          input: { data: any; model: string };
           onCreateHandle?: string;
           select?: Array<string>;
         },
@@ -89,153 +39,31 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         "mutation",
         "internal",
         {
-          input:
-            | {
-                model: "user";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "name"
-                    | "email"
-                    | "emailVerified"
-                    | "image"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "session";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "expiresAt"
-                    | "token"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "ipAddress"
-                    | "userAgent"
-                    | "userId"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "account";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "accountId"
-                    | "providerId"
-                    | "userId"
-                    | "accessToken"
-                    | "refreshToken"
-                    | "idToken"
-                    | "accessTokenExpiresAt"
-                    | "refreshTokenExpiresAt"
-                    | "scope"
-                    | "password"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "verification";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "identifier"
-                    | "value"
-                    | "expiresAt"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              };
-          onDeleteHandle?: string;
-          paginationOpts: {
-            cursor: string | null;
-            endCursor?: string | null;
-            id?: number;
-            maximumBytesRead?: number;
-            maximumRowsRead?: number;
-            numItems: number;
+          input: {
+            model: string;
+            where?: Array<{
+              connector?: "AND" | "OR";
+              field: string;
+              operator?:
+                | "lt"
+                | "lte"
+                | "gt"
+                | "gte"
+                | "eq"
+                | "in"
+                | "not_in"
+                | "ne"
+                | "contains"
+                | "starts_with"
+                | "ends_with";
+              value:
+                | string
+                | number
+                | boolean
+                | Array<string>
+                | Array<number>
+                | null;
+            }>;
           };
         },
         any,
@@ -245,146 +73,32 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         "mutation",
         "internal",
         {
-          input:
-            | {
-                model: "user";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "name"
-                    | "email"
-                    | "emailVerified"
-                    | "image"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "session";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "expiresAt"
-                    | "token"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "ipAddress"
-                    | "userAgent"
-                    | "userId"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "account";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "accountId"
-                    | "providerId"
-                    | "userId"
-                    | "accessToken"
-                    | "refreshToken"
-                    | "idToken"
-                    | "accessTokenExpiresAt"
-                    | "refreshTokenExpiresAt"
-                    | "scope"
-                    | "password"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "verification";
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "identifier"
-                    | "value"
-                    | "expiresAt"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              };
-          onDeleteHandle?: string;
+          input: {
+            model: string;
+            where?: Array<{
+              connector?: "AND" | "OR";
+              field: string;
+              operator?:
+                | "lt"
+                | "lte"
+                | "gt"
+                | "gte"
+                | "eq"
+                | "in"
+                | "not_in"
+                | "ne"
+                | "contains"
+                | "starts_with"
+                | "ends_with";
+              value:
+                | string
+                | number
+                | boolean
+                | Array<string>
+                | Array<number>
+                | null;
+            }>;
+          };
         },
         any,
         Name
@@ -394,16 +108,9 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         "internal",
         {
           limit?: number;
-          model: "user" | "session" | "account" | "verification";
+          model: string;
           offset?: number;
-          paginationOpts: {
-            cursor: string | null;
-            endCursor?: string | null;
-            id?: number;
-            maximumBytesRead?: number;
-            maximumRowsRead?: number;
-            numItems: number;
-          };
+          select?: Array<string>;
           sortBy?: { direction: "asc" | "desc"; field: string };
           where?: Array<{
             connector?: "AND" | "OR";
@@ -436,7 +143,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         "query",
         "internal",
         {
-          model: "user" | "session" | "account" | "verification";
+          model: string;
           select?: Array<string>;
           where?: Array<{
             connector?: "AND" | "OR";
@@ -476,192 +183,34 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         "mutation",
         "internal",
         {
-          input:
-            | {
-                model: "user";
-                update: {
-                  createdAt?: number;
-                  email?: string;
-                  emailVerified?: boolean;
-                  image?: null | string;
-                  name?: string;
-                  updatedAt?: number;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "name"
-                    | "email"
-                    | "emailVerified"
-                    | "image"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "session";
-                update: {
-                  createdAt?: number;
-                  expiresAt?: number;
-                  ipAddress?: null | string;
-                  token?: string;
-                  updatedAt?: number;
-                  userAgent?: null | string;
-                  userId?: string;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "expiresAt"
-                    | "token"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "ipAddress"
-                    | "userAgent"
-                    | "userId"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "account";
-                update: {
-                  accessToken?: null | string;
-                  accessTokenExpiresAt?: null | number;
-                  accountId?: string;
-                  createdAt?: number;
-                  idToken?: null | string;
-                  password?: null | string;
-                  providerId?: string;
-                  refreshToken?: null | string;
-                  refreshTokenExpiresAt?: null | number;
-                  scope?: null | string;
-                  updatedAt?: number;
-                  userId?: string;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "accountId"
-                    | "providerId"
-                    | "userId"
-                    | "accessToken"
-                    | "refreshToken"
-                    | "idToken"
-                    | "accessTokenExpiresAt"
-                    | "refreshTokenExpiresAt"
-                    | "scope"
-                    | "password"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "verification";
-                update: {
-                  createdAt?: number;
-                  expiresAt?: number;
-                  identifier?: string;
-                  updatedAt?: number;
-                  value?: string;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "identifier"
-                    | "value"
-                    | "expiresAt"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              };
-          onUpdateHandle?: string;
-          paginationOpts: {
-            cursor: string | null;
-            endCursor?: string | null;
-            id?: number;
-            maximumBytesRead?: number;
-            maximumRowsRead?: number;
-            numItems: number;
+          input: {
+            model: string;
+            update: any;
+            where?: Array<{
+              connector?: "AND" | "OR";
+              field: string;
+              operator?:
+                | "lt"
+                | "lte"
+                | "gt"
+                | "gte"
+                | "eq"
+                | "in"
+                | "not_in"
+                | "ne"
+                | "contains"
+                | "starts_with"
+                | "ends_with";
+              value:
+                | string
+                | number
+                | boolean
+                | Array<string>
+                | Array<number>
+                | null;
+            }>;
           };
+          onUpdateHandle?: string;
         },
         any,
         Name
@@ -670,183 +219,33 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
         "mutation",
         "internal",
         {
-          input:
-            | {
-                model: "user";
-                update: {
-                  createdAt?: number;
-                  email?: string;
-                  emailVerified?: boolean;
-                  image?: null | string;
-                  name?: string;
-                  updatedAt?: number;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "name"
-                    | "email"
-                    | "emailVerified"
-                    | "image"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "session";
-                update: {
-                  createdAt?: number;
-                  expiresAt?: number;
-                  ipAddress?: null | string;
-                  token?: string;
-                  updatedAt?: number;
-                  userAgent?: null | string;
-                  userId?: string;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "expiresAt"
-                    | "token"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "ipAddress"
-                    | "userAgent"
-                    | "userId"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "account";
-                update: {
-                  accessToken?: null | string;
-                  accessTokenExpiresAt?: null | number;
-                  accountId?: string;
-                  createdAt?: number;
-                  idToken?: null | string;
-                  password?: null | string;
-                  providerId?: string;
-                  refreshToken?: null | string;
-                  refreshTokenExpiresAt?: null | number;
-                  scope?: null | string;
-                  updatedAt?: number;
-                  userId?: string;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "accountId"
-                    | "providerId"
-                    | "userId"
-                    | "accessToken"
-                    | "refreshToken"
-                    | "idToken"
-                    | "accessTokenExpiresAt"
-                    | "refreshTokenExpiresAt"
-                    | "scope"
-                    | "password"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              }
-            | {
-                model: "verification";
-                update: {
-                  createdAt?: number;
-                  expiresAt?: number;
-                  identifier?: string;
-                  updatedAt?: number;
-                  value?: string;
-                };
-                where?: Array<{
-                  connector?: "AND" | "OR";
-                  field:
-                    | "identifier"
-                    | "value"
-                    | "expiresAt"
-                    | "createdAt"
-                    | "updatedAt"
-                    | "_id";
-                  operator?:
-                    | "lt"
-                    | "lte"
-                    | "gt"
-                    | "gte"
-                    | "eq"
-                    | "in"
-                    | "not_in"
-                    | "ne"
-                    | "contains"
-                    | "starts_with"
-                    | "ends_with";
-                  value:
-                    | string
-                    | number
-                    | boolean
-                    | Array<string>
-                    | Array<number>
-                    | null;
-                }>;
-              };
+          input: {
+            model: string;
+            update: any;
+            where?: Array<{
+              connector?: "AND" | "OR";
+              field: string;
+              operator?:
+                | "lt"
+                | "lte"
+                | "gt"
+                | "gte"
+                | "eq"
+                | "in"
+                | "not_in"
+                | "ne"
+                | "contains"
+                | "starts_with"
+                | "ends_with";
+              value:
+                | string
+                | number
+                | boolean
+                | Array<string>
+                | Array<number>
+                | null;
+            }>;
+          };
           onUpdateHandle?: string;
         },
         any,

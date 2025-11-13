@@ -6,6 +6,9 @@
  */
 
 import type { GenericDataModel } from 'convex/server'
+import { createAdapterFactory } from 'better-auth/adapters'
+import { corsRouter } from 'convex-helpers/server/cors'
+import { httpActionGeneric } from 'convex/server'
 
 export interface ComponentReference {
   adapter: {
@@ -50,95 +53,122 @@ export function createClient<
 ) {
   return {
     /**
-     * Returns the database adapter for Better Auth
+     * Returns the database adapter for Better Auth using createAdapterFactory
      */
     adapter(ctx: GenericCtx<DataModel>) {
-      return {
-        id: 'convex',
+      return createAdapterFactory({
+        config: {
+          adapterId: 'convex',
+          adapterName: 'Convex Adapter',
+          debugLogs: config?.verbose || false,
+          disableIdGeneration: true,
+          transaction: false,
+          supportsNumericIds: false,
+          supportsJSON: false,
+          usePlural: false,
+          mapKeysTransformInput: {
+            id: '_id',
+          },
+          mapKeysTransformOutput: {
+            _id: 'id',
+          },
+          supportsDates: false,
+          customTransformInput: ({ data, fieldAttributes }) => {
+            if (data && fieldAttributes.type === 'date') {
+              return new Date(data).getTime()
+            }
+            return data
+          },
+          customTransformOutput: ({ data, fieldAttributes }) => {
+            if (data && fieldAttributes.type === 'date') {
+              return new Date(data).getTime()
+            }
+            return data
+          },
+        },
+        adapter: ({ options }) => {
+          // Disable telemetry in all cases because it requires Node
+          options.telemetry = { enabled: false }
 
-        async create(data: { model: string, data: any, select?: string[] }) {
-          const result = await ctx.runMutation(component.adapter.create, {
-            input: {
-              model: data.model,
-              data: data.data,
+          return {
+            id: 'convex',
+            options: {
+              isRunMutationCtx: 'runMutation' in ctx,
             },
-            select: data.select,
-          })
-          return result
-        },
 
-        async findOne(data: { model: string, where: any[], select?: string[] }) {
-          const result = await ctx.runQuery(component.adapter.findOne, {
-            model: data.model,
-            where: data.where,
-            select: data.select,
-          })
-          return result
-        },
-
-        async findMany(data: { model: string, where?: any[], limit?: number, sortBy?: any, select?: string[] }) {
-          const result = await ctx.runQuery(component.adapter.findMany, {
-            model: data.model,
-            where: data.where,
-            limit: data.limit,
-            sortBy: data.sortBy,
-            select: data.select,
-          })
-          return result
-        },
-
-        async update(data: { model: string, where: any[], update: any }) {
-          const result = await ctx.runMutation(component.adapter.updateOne, {
-            input: {
-              model: data.model,
-              where: data.where,
-              update: data.update,
+            create: async ({ model, data, select }): Promise<any> => {
+              if (!('runMutation' in ctx)) {
+                throw new Error('ctx is not a mutation ctx')
+              }
+              return ctx.runMutation(component.adapter.create, {
+                input: { model, data },
+                select,
+              })
             },
-          })
-          return result
-        },
 
-        async updateMany(data: { model: string, where: any[], update: any }) {
-          const result = await ctx.runMutation(component.adapter.updateMany, {
-            input: {
-              model: data.model,
-              where: data.where,
-              update: data.update,
+            findOne: async ({ model, where, select }): Promise<any> => {
+              return await ctx.runQuery(component.adapter.findOne, {
+                model,
+                where,
+                select,
+              })
             },
-          })
-          return result
-        },
 
-        async delete(data: { model: string, where: any[] }) {
-          await ctx.runMutation(component.adapter.deleteOne, {
-            input: {
-              model: data.model,
-              where: data.where,
+            findMany: async ({ model, where, limit, sortBy }): Promise<any> => {
+              return await ctx.runQuery(component.adapter.findMany, {
+                model,
+                where,
+                limit,
+                sortBy,
+              })
             },
-          })
-        },
 
-        async deleteMany(data: { model: string, where: any[] }) {
-          const result = await ctx.runMutation(component.adapter.deleteMany, {
-            input: {
-              model: data.model,
-              where: data.where,
+            update: async ({ model, where, update }): Promise<any> => {
+              if (!('runMutation' in ctx)) {
+                throw new Error('ctx is not a mutation ctx')
+              }
+              return await ctx.runMutation(component.adapter.updateOne, {
+                input: { model, where, update },
+              })
             },
-          })
-          return result
-        },
 
-        async count(data: { model: string, where?: any[] }) {
-          // Simple count - query all and count
-          const results = await ctx.runQuery(component.adapter.findMany, {
-            model: data.model,
-            where: data.where,
-          })
-          return results.length
-        },
+            updateMany: async ({ model, where, update }): Promise<any> => {
+              if (!('runMutation' in ctx)) {
+                throw new Error('ctx is not a mutation ctx')
+              }
+              return await ctx.runMutation(component.adapter.updateMany, {
+                input: { model, where, update },
+              })
+            },
 
-        options: config,
-      }
+            delete: async ({ model, where }): Promise<void> => {
+              if (!('runMutation' in ctx)) {
+                throw new Error('ctx is not a mutation ctx')
+              }
+              await ctx.runMutation(component.adapter.deleteOne, {
+                input: { model, where },
+              })
+            },
+
+            deleteMany: async ({ model, where }): Promise<any> => {
+              if (!('runMutation' in ctx)) {
+                throw new Error('ctx is not a mutation ctx')
+              }
+              return await ctx.runMutation(component.adapter.deleteMany, {
+                input: { model, where },
+              })
+            },
+
+            count: async ({ model, where }): Promise<number> => {
+              const results = await ctx.runQuery(component.adapter.findMany, {
+                model,
+                where,
+              })
+              return results.length
+            },
+          }
+        },
+      })
     },
 
     /**
@@ -222,6 +252,97 @@ export function createClient<
           userId,
         })
       }
+    },
+
+    /**
+     * Register Better Auth HTTP routes with Convex HTTP router
+     * Handles CORS and forwards requests to Better Auth
+     */
+    registerRoutes(
+      http: any,
+      createAuth: (ctx: GenericCtx<DataModel>, options?: any) => any,
+      opts: {
+        cors?: boolean | {
+          allowedOrigins?: string[]
+          allowedHeaders?: string[]
+          exposedHeaders?: string[]
+        }
+      } = {},
+    ) {
+      // Get static auth to determine base path
+      const staticAuth = createAuth({} as any, { optionsOnly: true })
+      const path = staticAuth.options.basePath ?? '/api/auth'
+
+      // Create the auth request handler
+      const authRequestHandler = httpActionGeneric(async (ctx: any, request: Request) => {
+        const auth = createAuth(ctx)
+        return await auth.handler(request)
+      })
+
+      // If CORS is disabled, just register the routes
+      if (!opts.cors) {
+        http.route({
+          pathPrefix: `${path}/`,
+          method: 'GET',
+          handler: authRequestHandler,
+        })
+
+        http.route({
+          pathPrefix: `${path}/`,
+          method: 'POST',
+          handler: authRequestHandler,
+        })
+
+        return
+      }
+
+      // Setup CORS with Better Auth's trusted origins
+      const corsOpts
+        = typeof opts.cors === 'boolean'
+          ? { allowedOrigins: [], allowedHeaders: [], exposedHeaders: [] }
+          : opts.cors
+
+      const cors = corsRouter(http, {
+        allowedOrigins: async (_request: Request) => {
+          // Get trusted origins from static auth options
+          const trustedOrigins = staticAuth.options.trustedOrigins ?? []
+          const trustedOriginsArray = Array.isArray(trustedOrigins)
+            ? trustedOrigins
+            : []
+
+          return trustedOriginsArray
+            .map((origin: string) =>
+              // Strip trailing wildcards, unsupported for allowedOrigins
+              origin.endsWith('*') && origin.length > 1
+                ? origin.slice(0, -1)
+                : origin,
+            )
+            .concat(corsOpts.allowedOrigins ?? [])
+        },
+        allowCredentials: true,
+        allowedHeaders: [
+          'Content-Type',
+          'Better-Auth-Cookie',
+          'Authorization',
+        ].concat(corsOpts.allowedHeaders ?? []),
+        exposedHeaders: ['Set-Better-Auth-Cookie'].concat(
+          corsOpts.exposedHeaders ?? [],
+        ),
+        debug: config?.verbose,
+        enforceAllowOrigins: false,
+      })
+
+      cors.route({
+        pathPrefix: `${path}/`,
+        method: 'GET',
+        handler: authRequestHandler,
+      })
+
+      cors.route({
+        pathPrefix: `${path}/`,
+        method: 'POST',
+        handler: authRequestHandler,
+      })
     },
   }
 }

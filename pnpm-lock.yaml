@@ -261,9 +261,6 @@ importers:
 
   apps/blog:
     dependencies:
-      '@convex-dev/better-auth':
-        specifier: ^0.9.7
-        version: 0.9.7(@standard-schema/spec@1.0.0)(better-auth@1.3.34(next@15.5.6(@babel/core@7.28.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vue@3.5.22(typescript@5.9.3)))(convex@1.29.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       '@monaco-editor/loader':
         specifier: 'catalog:'
         version: 1.5.0
@@ -363,6 +360,9 @@ importers:
       convex:
         specifier: ^1.29.0
         version: 1.29.0(react@19.2.0)
+      convex-helpers:
+        specifier: ^0.1.95
+        version: 0.1.104(@standard-schema/spec@1.0.0)(convex@1.29.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)(zod@4.1.12)
       convue:
         specifier: workspace:*
         version: link:../../packages/convue
@@ -1019,6 +1019,9 @@ importers:
       convex:
         specifier: '>=1.24.0'
         version: 1.27.3(react@19.2.0)
+      convex-helpers:
+        specifier: ^0.1.95
+        version: 0.1.104(@standard-schema/spec@1.0.0)(convex@1.27.3(react@19.2.0))(react@19.2.0)(typescript@5.9.3)(zod@4.1.12)
       std-env:
         specifier: ^3.9.0
         version: 3.10.0
@@ -1682,14 +1685,6 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
-
-  '@convex-dev/better-auth@0.9.7':
-    resolution: {integrity: sha512-ni0oLM3IQho8KVBlMoyTk50IIbckhZmlEMxLgaVSixKmFJ4N/kGC6T91MjPTw3+bVLn/qHmIinLp7Dm+NRYzBw==}
-    peerDependencies:
-      better-auth: 1.3.27
-      convex: '>=1.28.2 <1.35.0'
-      react: ^18.3.1 || ^19.0.0
-      react-dom: ^18.3.1 || ^19.0.0
 
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
@@ -11240,24 +11235,6 @@ snapshots:
     optionalDependencies:
       react: 19.2.0
 
-  '@convex-dev/better-auth@0.9.7(@standard-schema/spec@1.0.0)(better-auth@1.3.34(next@15.5.6(@babel/core@7.28.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vue@3.5.22(typescript@5.9.3)))(convex@1.29.0(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)':
-    dependencies:
-      better-auth: 1.3.34(next@15.5.6(@babel/core@7.28.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vue@3.5.22(typescript@5.9.3))
-      common-tags: 1.8.2
-      convex: 1.29.0(react@19.2.0)
-      convex-helpers: 0.1.104(@standard-schema/spec@1.0.0)(convex@1.29.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)(zod@3.25.76)
-      jose: 6.1.1
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      remeda: 2.32.0
-      semver: 7.7.3
-      type-fest: 4.41.0
-      zod: 3.25.76
-    transitivePeerDependencies:
-      - '@standard-schema/spec'
-      - hono
-      - typescript
-
   '@csstools/color-helpers@5.1.0': {}
 
   '@csstools/css-calc@2.1.4(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)':
@@ -16118,6 +16095,15 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
+  convex-helpers@0.1.104(@standard-schema/spec@1.0.0)(convex@1.27.3(react@19.2.0))(react@19.2.0)(typescript@5.9.3)(zod@4.1.12):
+    dependencies:
+      convex: 1.27.3(react@19.2.0)
+    optionalDependencies:
+      '@standard-schema/spec': 1.0.0
+      react: 19.2.0
+      typescript: 5.9.3
+      zod: 4.1.12
+
   convex-helpers@0.1.104(@standard-schema/spec@1.0.0)(convex@1.29.0(react@19.2.0))(react@19.2.0)(typescript@5.8.3)(zod@3.25.76):
     dependencies:
       convex: 1.29.0(react@19.2.0)
@@ -16127,14 +16113,14 @@ snapshots:
       typescript: 5.8.3
       zod: 3.25.76
 
-  convex-helpers@0.1.104(@standard-schema/spec@1.0.0)(convex@1.29.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)(zod@3.25.76):
+  convex-helpers@0.1.104(@standard-schema/spec@1.0.0)(convex@1.29.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)(zod@4.1.12):
     dependencies:
       convex: 1.29.0(react@19.2.0)
     optionalDependencies:
       '@standard-schema/spec': 1.0.0
       react: 19.2.0
       typescript: 5.9.3
-      zod: 3.25.76
+      zod: 4.1.12
 
   convex-nuxt@0.1.5(convex-vue@0.1.5(convex@1.27.3(react@19.2.0))(vue@3.5.22(typescript@5.9.3)))(magicast@0.5.1):
     dependencies:

@@ -59,6 +59,7 @@
   },
   "dependencies": {
     "consola": "^3.4.2",
+    "convex-helpers": "^0.1.95",
     "std-env": "^3.9.0"
   },
   "devDependencies": {

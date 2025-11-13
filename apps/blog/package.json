@@ -46,6 +46,7 @@
     "@vueuse/nuxt": "catalog:",
     "better-sqlite3": "catalog:",
     "convex": "^1.29.0",
+    "convex-helpers": "^0.1.95",
     "convue": "workspace:*",
     "destr": "catalog:",
     "github-slugger": "catalog:",
