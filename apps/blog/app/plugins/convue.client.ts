@@ -1,7 +1,7 @@
-import { convexClient, convexVue, type ConvexVueOptions } from "convue";
+import { convexClient, createConvexClients, type BetterAuthClient } from "convue";
 import { createAuthClient } from 'better-auth/vue'
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
   const runtime = useRuntimeConfig();
   const convexUrl = runtime.public?.convexUrl;
   const convexSiteUrl = runtime.public?.convexSiteUrl;
@@ -22,12 +22,19 @@ export default defineNuxtPlugin((nuxtApp) => {
     plugins: [convexClient()],
   })
 
-  const options: ConvexVueOptions = {
-    url: convexUrl,
-    server: false, // Disable SSR to avoid hydration mismatches
-    authClient: authClient as unknown as never, // Add Better Auth client
-  };
+  // Create Convex clients
+  const { clientRef, httpClientRef, initClient } = createConvexClients(convexUrl)
 
-  // Install the convex-vue plugin
-  nuxtApp.vueApp.use(convexVue, options);
+  // Provide everything using Nuxt's pattern
+  return {
+    provide: {
+      betterAuthClient: authClient as BetterAuthClient,
+      convex: {
+        options: { url: convexUrl, server: false },
+        clientRef,
+        httpClientRef,
+        initClient,
+      },
+    },
+  }
 });

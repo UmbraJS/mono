@@ -1,6 +1,7 @@
 // Better Auth integration
 export { useAuth } from './composables/useAuth'
 export { useBetterAuthClient } from './composables/useBetterAuthClient'
+export type { BetterAuthClient } from './composables/useBetterAuthClient'
 
 // Convex composables
 export { useConvexClient } from './composables/useConvexClient'
@@ -11,6 +12,7 @@ export { useConvexQuery } from './composables/useConvexQuery'
 export { useSession } from './composables/useSession'
 
 export * from './plugin'
+export { createConvexClients } from './plugin'
 
 // Better Auth plugins - client
 export { convexClient } from './plugins/convexClient'

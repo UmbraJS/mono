@@ -1,20 +1,10 @@
-import type { App } from 'vue'
-import { inject } from 'vue'
-
-/**
- * Symbol key for providing/injecting the Better Auth client
- */
-export const BETTER_AUTH_CLIENT_KEY = Symbol('better-auth-client')
-
 /**
  * Interface for the Better Auth client
  * This accepts any Better Auth client (React, Vue, or vanilla)
  */
 export interface BetterAuthClient {
   useSession?: () => any
-  getSession?: (opts?: {
-    fetchOptions?: RequestInit
-  }) => Promise<{ data: Session | null, error: Error | null }>
+  getSession?: (...args: any[]) => Promise<any>
   convex?: {
     token: () => Promise<{ data: { token: string } | null, error: Error | null }>
   }
@@ -38,7 +28,7 @@ export interface Session {
 
 /**
  * Composable to access the Better Auth client instance
- * The client must be provided via Vue's provide/inject system
+ * The client must be provided via Nuxt's plugin provide system
  *
  * @example
  * ```ts
@@ -49,25 +39,20 @@ export interface Session {
  * ```
  */
 export function useBetterAuthClient(): BetterAuthClient {
-  const client = inject<BetterAuthClient>(BETTER_AUTH_CLIENT_KEY)
-
-  if (!client) {
-    throw new Error(
-      'useBetterAuthClient() is called without a provider. '
-      + 'Make sure to provide the authClient when installing the convexVue plugin:\n'
-      + 'app.use(convexVue, { url: "...", authClient })',
-    )
+  try {
+    // @ts-expect-error - useNuxtApp is auto-imported in Nuxt context
+    const nuxtApp = globalThis.useNuxtApp?.()
+    if (nuxtApp?.$betterAuthClient) {
+      return nuxtApp.$betterAuthClient as BetterAuthClient
+    }
+  }
+  catch {
+    // Not in Nuxt context or useNuxtApp not available
   }
 
-  return client
-}
-
-/**
- * Helper to provide the Better Auth client to the app
- * This is typically called internally by the convexVue plugin
- *
- * @internal
- */
-export function provideBetterAuthClient(app: App, client: BetterAuthClient): void {
-  app.provide(BETTER_AUTH_CLIENT_KEY, client)
+  throw new Error(
+    'useBetterAuthClient() is called without a provider. '
+    + 'Make sure to provide the authClient in your Nuxt plugin:\n'
+    + 'return { provide: { betterAuthClient: authClient } }',
+  )
 }

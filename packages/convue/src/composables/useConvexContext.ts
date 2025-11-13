@@ -1,13 +1,23 @@
 import type { ConvexVueContext } from '#src/plugin.ts'
-import { inject } from 'vue'
 
 /**
- * Returns the Convex plugin context
+ * Returns the Convex plugin context from Nuxt app
  */
 export function useConvexContext(): ConvexVueContext {
-  const convexVueContext = inject<ConvexVueContext>('convex-vue')
-  if (!convexVueContext)
-    throw new Error('Context not found')
+  try {
+    // @ts-expect-error - useNuxtApp is auto-imported in Nuxt context
+    const nuxtApp = globalThis.useNuxtApp?.()
+    if (nuxtApp?.$convex) {
+      return nuxtApp.$convex as ConvexVueContext
+    }
+  }
+  catch {
+    // Not in Nuxt context
+  }
 
-  return convexVueContext
+  throw new Error(
+    'useConvexContext() is called without a provider. '
+    + 'Make sure to provide convex in your Nuxt plugin:\n'
+    + 'return { provide: { convex: convexContext } }',
+  )
 }

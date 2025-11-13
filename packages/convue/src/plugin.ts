@@ -1,9 +1,7 @@
 import type { ConvexClientOptions } from 'convex/browser'
-import type { ObjectPlugin, Ref } from 'vue'
-import type { BetterAuthClient } from './composables/useBetterAuthClient'
+import type { Ref } from 'vue'
 import { ConvexClient, ConvexHttpClient } from 'convex/browser'
 import { shallowRef } from 'vue'
-import { provideBetterAuthClient } from './composables/useBetterAuthClient'
 
 export interface ConvexAuthOptions {
   forceRefreshToken: boolean
@@ -13,18 +11,6 @@ export interface ConvexVueOptions {
   url: string
   clientOptions?: ConvexClientOptions
   auth?: ConvexAuthOptions
-
-  /**
-   * Better Auth client instance for authentication
-   * When provided, the plugin will set up authentication integration automatically
-   */
-  authClient?: BetterAuthClient
-
-  /**
-   * If true, the global default client wont be initialized automatically,
-   * you will need to init the client yourself before using the composables.
-   */
-  manualInit?: boolean
   /**
    * Set to `false` to disable queries during server-side rendering.
    * This global option can be overridden for individual queries by setting their `server` option to `true`
@@ -43,33 +29,27 @@ export interface ConvexVueContext {
   initClient: (options?: ConvexVueOptions) => void
 }
 
-export const convexVue: ObjectPlugin<ConvexVueOptions> = {
-  install(app, initialOptions) {
-    const clientRef = shallowRef<ConvexClient>()
-    const httpClientRef = shallowRef<ConvexHttpClient>()
+/**
+ * Creates Convex clients to be provided in a Nuxt plugin
+ */
+export function createConvexClients(url: string, clientOptions?: ConvexClientOptions) {
+  const clientRef = shallowRef<ConvexClient>()
+  const httpClientRef = shallowRef<ConvexHttpClient>()
 
-    const initClient = (options?: ConvexVueOptions): void => {
-      options ??= initialOptions
-      clientRef.value = new ConvexClient(options.url, options.clientOptions)
-      httpClientRef.value = new ConvexHttpClient(options.url, {
-        logger: options?.clientOptions?.logger,
-        skipConvexDeploymentUrlCheck: options.clientOptions?.skipConvexDeploymentUrlCheck,
-      })
-    }
-
-    if (!initialOptions.manualInit)
-      initClient(initialOptions)
-
-    // Provide Better Auth client if provided
-    if (initialOptions.authClient) {
-      provideBetterAuthClient(app, initialOptions.authClient)
-    }
-
-    app.provide<ConvexVueContext>('convex-vue', {
-      options: initialOptions,
-      clientRef,
-      httpClientRef,
-      initClient,
+  const initClient = (options?: ConvexVueOptions): void => {
+    const opts = options ?? { url, clientOptions }
+    clientRef.value = new ConvexClient(opts.url, opts.clientOptions)
+    httpClientRef.value = new ConvexHttpClient(opts.url, {
+      logger: opts?.clientOptions?.logger,
+      skipConvexDeploymentUrlCheck: opts.clientOptions?.skipConvexDeploymentUrlCheck,
     })
-  },
+  }
+
+  initClient()
+
+  return {
+    clientRef,
+    httpClientRef,
+    initClient,
+  }
 }
