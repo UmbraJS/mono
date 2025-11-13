@@ -10,9 +10,7 @@ const password = ref('')
 const loading = ref(false)
 
 async function signIn() {
-  if (loading.value) {
-    return
-  }
+  if (loading.value) return
   loading.value = true
 
   const result = await auth.client.signIn.email({
@@ -32,7 +30,9 @@ async function signIn() {
     // Wait for the refetch to actually complete
     // Watch for data to be populated
     await new Promise<void>((resolve) => {
-      const stopWatch = watch(
+      let stopWatch: (() => void) | undefined
+
+      stopWatch = watch(
         () => auth.session.value,
         (newSession) => {
           if (newSession) {

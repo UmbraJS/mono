@@ -9,6 +9,23 @@ export default defineEventHandler(async (event) => {
   // Get the path after /api/auth/ and prepend /api/auth back for Convex
   const path = event.path.replace(/^\/api\/auth/, '/api/auth')
 
+  // Handle /convex/token endpoint locally - don't forward to Convex
+  if (path === '/api/auth/convex/token') {
+    // Get session token from cookies
+    const cookies = getHeaders(event).cookie || ''
+    const sessionToken = cookies
+      .split(';')
+      .find((c: string) => c.trim().startsWith('better-auth.session_token='))
+      ?.split('=')[1]
+
+    if (!sessionToken) {
+      return { error: 'Unauthorized', data: null }
+    }
+
+    // Return the decoded session token
+    return { data: { token: decodeURIComponent(sessionToken) }, error: null }
+  }
+
   // Forward the request to Convex
   const targetUrl = `${convexUrl}${path}`
 

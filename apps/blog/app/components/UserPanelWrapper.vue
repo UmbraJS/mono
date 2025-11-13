@@ -13,27 +13,22 @@ onMounted(async () => {
 
   try {
     // Dynamically import to avoid calling during setup
-    const { useBetterAuthClient } = await import('convue')
-    const authClient = useBetterAuthClient()
-    const sessionData = authClient?.useSession?.()
+    const { useAuth } = await import('convue')
+    const auth = useAuth()
 
-    if (sessionData?.data) {
-      session.value = sessionData.data.value
-      // Watch for session changes
-      watch(sessionData.data, (newSession) => {
-        session.value = newSession
-      })
-    }
+    // Set initial session value
+    session.value = auth.session.value
+    isPending.value = auth.isLoading.value
 
-    if (sessionData?.isPending) {
-      isPending.value = sessionData.isPending.value
-      watch(sessionData.isPending, (newPending) => {
-        isPending.value = newPending
-      })
-    }
-    else {
-      isPending.value = false
-    }
+    // Watch for session changes
+    watch(auth.session, (newSession) => {
+      session.value = newSession
+    })
+
+    // Watch for loading state changes
+    watch(auth.isLoading, (newPending) => {
+      isPending.value = newPending
+    })
   }
   catch (error) {
     console.error('Failed to initialize auth:', error)

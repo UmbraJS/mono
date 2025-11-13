@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { Button, toast } from 'umbraco'
+import { useAuth } from 'convue'
 import DeleteUser from './Dialogs/DeleteUser.vue'
 
-const { user, session, client } = useAuth()
+const { session, client } = useAuth()
+const user = computed(() => session.value?.user)
 
 const signOut = async () => {
   await client.signOut()

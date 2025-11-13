@@ -18,8 +18,9 @@ export function convex() {
   return {
     id: 'convex',
     endpoints: {
-      '/convex/token': {
+      convexToken: {
         method: 'POST',
+        path: '/convex/token',
         handler: async (ctx: any) => {
           // Get the session from the request
           const session = await ctx.getSession()

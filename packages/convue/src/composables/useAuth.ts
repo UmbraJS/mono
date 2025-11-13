@@ -110,11 +110,10 @@ export function useAuth(): UseAuthReturn {
       // The sessionResult itself is a reactive ref, so we need to access properties reactively
       if (isRef(sessionResult)) {
         // Access properties from the ref reactively using computed
-        const result = sessionResult.value as BetterAuthSessionResult
-        session = computed(() => result.data)
-        isPending = computed(() => result.isPending)
-        error = computed(() => result.error)
-        refetch = result.refetch || (async () => { })
+        session = computed(() => (sessionResult.value as BetterAuthSessionResult).data)
+        isPending = computed(() => (sessionResult.value as BetterAuthSessionResult).isPending)
+        error = computed(() => (sessionResult.value as BetterAuthSessionResult).error)
+        refetch = (sessionResult.value as BetterAuthSessionResult).refetch || (async () => { })
       }
       else {
         // It's a plain object, wrap individual properties
