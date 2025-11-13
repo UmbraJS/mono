@@ -1,7 +1,7 @@
 // Better Auth integration
 // Main unified auth composable - use this for all auth concerns
 export { useAuth } from './composables/useAuth'
-export type { BetterAuthClient, Session } from './composables/useBetterAuthClient'
+export type { BetterAuthClient, BetterAuthSessionResult, Session } from './composables/useBetterAuthClient'
 
 // Convex composables
 export { useConvexClient } from './composables/useConvexClient'

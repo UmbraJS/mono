@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Button, toast, Input } from 'umbraco'
-import { useBetterAuthClient } from 'convue'
+import { useAuth } from 'convue'
 
-const authClient = useBetterAuthClient()
+const { client: authClient } = useAuth()
 const router = useRouter()
 
 const email = ref('')

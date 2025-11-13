@@ -2,7 +2,7 @@
 import { Button, toast, Input } from 'umbraco'
 import { useAuth } from 'convue'
 
-const { session, client: authClient, refetch } = useAuth()
+const auth = useAuth()
 const router = useRouter()
 
 const email = ref('')
@@ -15,7 +15,7 @@ async function signIn() {
   }
   loading.value = true
 
-  const result = await authClient.signIn.email({
+  const result = await auth.client.signIn.email({
     email: email.value,
     password: password.value,
   })
@@ -27,13 +27,13 @@ async function signIn() {
     toast.success('You have been signed in!')
 
     // Manually refetch the session after sign in
-    await refetch()
+    await auth.refetch()
 
     // Wait for the refetch to actually complete
     // Watch for data to be populated
     await new Promise<void>((resolve) => {
       const stopWatch = watch(
-        () => session.value,
+        () => auth.session.value,
         (newSession) => {
           if (newSession) {
             if (stopWatch) stopWatch()
@@ -59,7 +59,7 @@ const signinWithGithub = async () => {
   if (loading.value) return
   loading.value = true
 
-  const { error } = await authClient.signIn.social({
+  const { error } = await auth.client.signIn.social({
     provider: 'github',
     callbackURL: '/profile',
   })
