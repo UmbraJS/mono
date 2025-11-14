@@ -1,9 +1,8 @@
 import { useConvexClient } from 'convue'
 import { api } from '@/convex/_generated/api'
-import type { Id } from '@/convex/_generated/dataModel'
 
 export interface ConvexAuthUser {
-  id: Id<"users">
+  id: string
   name?: string
   email?: string
   image?: string
@@ -19,7 +18,7 @@ export function useConvexAuth() {
   onMounted(async () => {
     try {
       // Query current user from Convex
-      const currentUser = await client.query(api.auth.isAuthenticated, {})
+      const currentUser = await client.query(api.auth.getCurrentUser, {})
       if (currentUser) {
         user.value = currentUser as ConvexAuthUser
       }
