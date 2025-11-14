@@ -19,6 +19,7 @@
   "scripts": {
     "build": "vite build && tsc --emitDeclarationOnly",
     "dev": "vite build --watch",
+    "prepare": "pnpm build",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
