@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Button, toast, Input, Spinner } from 'umbraco'
-import { useAuth } from 'convue'
 
 const auth = useAuth()
 const router = useRouter()

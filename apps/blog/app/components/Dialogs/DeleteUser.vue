@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from 'umbraco'
-import { useAuth } from 'convue'
 
 const { client } = useAuth()
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SignUser from '../components/SignUser.vue'
-import { useAuth } from 'convue'
 
 const { isAuthenticated } = useAuth()
 const router = useRouter()

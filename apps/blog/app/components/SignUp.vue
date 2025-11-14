@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { Button, toast, Input } from 'umbraco'
-import { useAuth } from 'convue'
+import { Button, Input, toast } from 'umbraco'
 
 const { client: authClient } = useAuth()
-const router = useRouter()
 
 const email = ref('')
 const password = ref('')

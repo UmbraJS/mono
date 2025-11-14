@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Button, toast } from 'umbraco'
-import { useAuth } from 'convue'
 import Reveal from '../components/Reveal.vue'
 
 const { session, isAuthenticated, isLoading, client: authClient } = useAuth()
