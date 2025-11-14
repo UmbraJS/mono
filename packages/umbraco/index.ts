@@ -3,6 +3,7 @@ import { defineAsyncComponent, defineComponent } from 'vue'
 
 // Composables
 export { useButtonSize, type ComponentSize } from './composables/useButtonSize'
+export { useUmbra } from './composables/useUmbra'
 
 // Components
 export { default as Button } from './components/ui/Button/Button.vue'

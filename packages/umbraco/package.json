@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "@iconify/vue": "catalog:",
+    "@umbrajs/core": "workspace:*",
     "reka-ui": "catalog:",
     "vaul-vue": "catalog:",
     "vue-sonner": "catalog:",

@@ -1291,6 +1291,9 @@ importers:
       '@iconify/vue':
         specifier: 'catalog:'
         version: 4.3.0(vue@3.5.22(typescript@5.9.3))
+      '@umbrajs/core':
+        specifier: workspace:*
+        version: link:../umbra
       '@unovis/vue':
         specifier: 'catalog:'
         version: 1.6.1(@unovis/ts@1.6.1)(vue@3.5.22(typescript@5.9.3))

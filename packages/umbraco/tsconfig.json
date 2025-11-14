@@ -23,6 +23,7 @@
     "index.ts",
     "components/**/*.ts",
     "components/**/*.vue",
+    "composables/**/*.ts",
     "types/**/*.ts"
   ],
   "exclude": [
