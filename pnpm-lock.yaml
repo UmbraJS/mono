@@ -195,6 +195,9 @@ catalogs:
     tippy.js:
       specifier: ^6.3.7
       version: 6.3.7
+    tsx:
+      specifier: ^4.19.2
+      version: 4.20.6
     typescript:
       specifier: ^5.8.3
       version: 5.9.3
@@ -481,6 +484,9 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.36.0(jiti@2.6.1)
+      tsx:
+        specifier: 'catalog:'
+        version: 4.20.6
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
