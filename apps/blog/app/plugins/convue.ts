@@ -7,7 +7,7 @@ export default defineNuxtPlugin(() => {
 
   // During prerendering/build, Convex isn't needed - provide dummy context
   const isPrerendering = import.meta.server && (!convexUrl || !convexSiteUrl);
-  
+
   if (!isPrerendering) {
     // Only validate when NOT prerendering
     if (!convexUrl || typeof convexUrl !== 'string') {
