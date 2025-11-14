@@ -15,13 +15,28 @@ const defaultThemeInput: UmbraInput = {
 }
 
 export function useUmbra(initialTheme: UmbraInput = defaultThemeInput) {
-  const input = ref<UmbraInput>(initialTheme)
-  const formated = ref<FormatedRange[]>([])
-  const dark = ref<boolean>(false)
-  const settings = ref<UmbraSettings>({
-    readability: 50,
-  })
+  // Try to load saved theme from localStorage (client-side only)
+  let savedTheme = initialTheme
 
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('umbra-theme-input')
+      if (stored) {
+        const parsed = JSON.parse(stored) as UmbraInput
+        savedTheme = parsed
+        console.log('[useUmbra] Loaded theme from localStorage:', isDark(parsed.background || '') ? 'dark' : 'light')
+      }
+    } catch {
+      // Invalid JSON or not available, use default
+    }
+  }
+
+  const input = ref<UmbraInput>(savedTheme)
+  const formated = ref<FormatedRange[]>([])
+  const dark = ref<boolean>(isDark(savedTheme.background || ''))
+  const settings = ref<UmbraSettings>({
+    readability: savedTheme.settings?.readability || 50,
+  })
   const readability = ref({
     target: 50,
     input: 50,

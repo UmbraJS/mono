@@ -12,7 +12,7 @@ const successAccent: Accent = {
   color: 'green',
 }
 
-const themeInput: UmbraInput = {
+const defaultThemeInput: UmbraInput = {
   foreground: '#080113',
   background: '#f3f6ea',
   accents: ['violet', warningAccent, successAccent],
@@ -23,5 +23,17 @@ const themeInput: UmbraInput = {
   },
 }
 
-export const useUmbra = defineStore('umbra', () => useUmbraCore(themeInput))
+export const useUmbra = defineStore('umbra', () => {
+  // Check if we have a saved theme from the cookie (SSR) or localStorage (client)
+  let initialTheme = defaultThemeInput
+
+  // During SSR, check if umbra-ssr plugin stored a theme
+  const themeCookie = useCookie<UmbraInput>('umbra-theme')
+  if (themeCookie.value) {
+    console.log('[useUmbra store] Using theme from cookie:', themeCookie.value)
+    initialTheme = themeCookie.value
+  }
+
+  return useUmbraCore(initialTheme)
+})
 
