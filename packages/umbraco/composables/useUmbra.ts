@@ -51,6 +51,21 @@ export function useUmbra(initialTheme: UmbraInput = defaultThemeInput) {
     settings.value = theme.input.settings || settings.value
     formated.value = theme.formated
     dark.value = isDark(theme.input.background || '')
+
+    // Save to localStorage for cookie sync
+    if (typeof window !== 'undefined') {
+      const themeToStore = {
+        ...theme.input,
+        settings: settings.value,
+      }
+      localStorage.setItem('umbra-theme-input', JSON.stringify(themeToStore))
+      // Trigger storage event for cookie sync plugin
+      window.dispatchEvent(new StorageEvent('storage', {
+        key: 'umbra-theme-input',
+        newValue: JSON.stringify(themeToStore),
+      }))
+    }
+
     return theme
   }
 

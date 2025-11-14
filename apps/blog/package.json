@@ -4,9 +4,10 @@
   "private": true,
   "packageManager": "pnpm@10.12.3",
   "scripts": {
-    "build": "nuxt prepare && nuxt build",
-    "dev": "nuxt dev --dotenv .env.local",
+    "build": "nuxt prepare && pnpm generate:umbra && nuxt build",
+    "dev": "pnpm generate:umbra && nuxt dev --dotenv .env.local",
     "generate": "nuxt generate",
+    "generate:umbra": "tsx ../../scripts/generate-umbra-css.ts",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",

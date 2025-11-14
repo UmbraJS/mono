@@ -70,7 +70,10 @@ async function signOut() {
               </div>
               <div class="info-item">
                 <label>Expires At</label>
-                <p>{{ session.session.expiresAt ? new Date(session.session.expiresAt).toLocaleString() : 'N/A' }}</p>
+                <p v-if="session.session.expiresAt">
+                  <NuxtTime :datetime="new Date(session.session.expiresAt)" />
+                </p>
+                <p v-else>N/A</p>
               </div>
             </div>
           </div>
