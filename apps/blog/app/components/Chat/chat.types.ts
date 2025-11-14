@@ -1,4 +1,4 @@
-import type { useFormula } from "../../composables/useForm";
+import type { useFormula } from "@umbrajs/formula";
 
 export interface ChatMessage {
   message: string;

@@ -5,7 +5,7 @@ import { api } from "../../../convex/_generated/api";
 import { Input, Button, TextArea, toast } from "umbraco";
 import { z } from "zod";
 import { useUser } from "../../composables/useUser";
-import { useFormula } from "../../composables/useForm";
+import { useFormula } from "@umbrajs/formula";
 import { usePresence } from "../../composables/usePresence";
 import type { ChatMessage } from "./chat.types"
 

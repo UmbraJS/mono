@@ -53,67 +53,69 @@ function useConvexClient() {
 //#endregion
 //#region src/composables/useAuth.ts
 /**
-* Composable that provides authentication state and token management
-* for integrating Better Auth with Convex.
+* Unified composable for all authentication concerns
 *
-* This composable:
-* - Tracks authentication state (isLoading, isAuthenticated)
-* - Provides a token fetcher for Convex client authentication
-* - Automatically sets/clears auth on the Convex client
+* This is the main auth composable that provides:
+* - Session data and authentication state
+* - Loading and error states
+* - Better Auth client for sign in/out operations
+* - Session refetch capability
+* - Automatic Convex client authentication
 *
 * @example
 * ```ts
 * import { useAuth } from 'convue'
 *
-* const { isAuthenticated, isLoading } = useAuth()
+* const {
+*   session,           // Current user session
+*   isAuthenticated,   // Boolean auth state
+*   isLoading,         // Loading state
+*   client,            // Better Auth client
+*   refetch            // Refetch session
+* } = useAuth()
+*
+* // Sign in
+* await client.signIn.email({ email, password })
+*
+* // Sign out
+* await client.signOut()
+*
+* // Access user data
+* console.log(session.value?.user.email)
 * ```
 */
 function useAuth() {
 	const authClient = useBetterAuthClient();
 	const convexClient$1 = useConvexClient();
-	if (!authClient.useSession) {
-		console.error("Better Auth client missing useSession method");
-		throw new Error("Better Auth client is missing useSession method");
-	}
-	if (!authClient.convex?.token) {
-		console.error("Better Auth client missing convex.token method");
-		throw new Error("Better Auth client is missing convex.token method");
-	}
+	if (!authClient.useSession) throw new Error("Better Auth client is missing useSession method");
+	if (!authClient.convex?.token) throw new Error("Better Auth client is missing convex.token method");
 	const sessionResult = authClient.useSession();
-	console.warn("[useAuth] sessionResult:", sessionResult);
 	let session;
 	let isPending;
+	let error;
+	let refetch;
 	const unwrapped = isRef(sessionResult) ? sessionResult.value : sessionResult;
-	if (unwrapped && typeof unwrapped === "object") if ("data" in unwrapped && "isPending" in unwrapped) {
-		if (isRef(sessionResult)) {
-			session = computed(() => sessionResult.value.data);
-			isPending = computed(() => sessionResult.value.isPending);
-		} else {
-			session = isRef(unwrapped.data) ? unwrapped.data : ref(unwrapped.data);
-			isPending = isRef(unwrapped.isPending) ? unwrapped.isPending : ref(unwrapped.isPending);
-		}
-		console.warn("[useAuth] Using data/isPending structure", {
-			session,
-			isPending
-		});
+	if (unwrapped && typeof unwrapped === "object") if ("data" in unwrapped && "isPending" in unwrapped) if (isRef(sessionResult)) {
+		session = computed(() => sessionResult.value.data);
+		isPending = computed(() => sessionResult.value.isPending);
+		error = computed(() => sessionResult.value.error);
+		refetch = sessionResult.value.refetch || (async () => {});
 	} else {
-		session = isRef(sessionResult) ? sessionResult : ref(sessionResult);
-		isPending = ref(false);
-		console.warn("[useAuth] Using direct ref structure", {
-			session,
-			isPending
-		});
+		const result = unwrapped;
+		session = ref(result.data);
+		isPending = ref(result.isPending);
+		error = ref(result.error);
+		refetch = result.refetch || (async () => {});
 	}
 	else {
-		console.error("[useAuth] sessionResult invalid:", sessionResult);
-		throw new Error("Better Auth useSession() returned unexpected value");
+		session = ref(unwrapped);
+		isPending = ref(false);
+		error = ref(null);
+		refetch = async () => {};
 	}
+	else throw new Error("Better Auth useSession() returned unexpected value");
 	const isLoading = computed(() => isPending?.value ?? false);
 	const isAuthenticated = computed(() => session?.value !== null && session?.value !== void 0);
-	console.warn("[useAuth] Computed refs created:", {
-		isLoading,
-		isAuthenticated
-	});
 	const sessionId = computed(() => session?.value?.session?.id ?? null);
 	/**
 	* Fetch a Convex auth token from Better Auth
@@ -128,12 +130,19 @@ function useAuth() {
 	};
 	watch(sessionId, (newSessionId) => {
 		if (isLoading.value) return;
-		if (newSessionId) convexClient$1.setAuth({ fetchToken: fetchAccessToken });
-		else convexClient$1.setAuth(null);
+		if (newSessionId) convexClient$1.setAuth(async () => {
+			const token = await fetchAccessToken();
+			return token;
+		});
+		else convexClient$1.setAuth(async () => null);
 	}, { immediate: false });
 	return {
+		session,
 		isLoading,
 		isAuthenticated,
+		error: error || ref(null),
+		client: authClient,
+		refetch,
 		fetchAccessToken
 	};
 }
@@ -342,37 +351,6 @@ function useConvexQuery(query, ...rest) {
 }
 
 //#endregion
-//#region src/composables/useSession.ts
-/**
-* Composable that provides access to the current Better Auth session
-*
-* This composable returns reactive session data, loading state, and any errors.
-* The session data includes both user information and session metadata.
-*
-* @example
-* ```ts
-* import { useSession } from 'convue'
-*
-* const { data: session, isPending, error } = useSession()
-*
-* // Access user data
-* console.log(session.value?.user.email)
-* ```
-*/
-function useSession() {
-	const authClient = useBetterAuthClient();
-	if (!authClient.useSession) throw new Error("Better Auth client does not have useSession method");
-	const result = authClient.useSession();
-	if (result && typeof result === "object") if ("data" in result && "isPending" in result) return result;
-	else return {
-		data: result,
-		isPending: ref(false),
-		error: ref(null)
-	};
-	throw new Error("Better Auth useSession() returned unexpected value");
-}
-
-//#endregion
 //#region src/plugin.ts
 /**
 * Creates Convex clients to be provided in a Nuxt plugin
@@ -433,10 +411,20 @@ function convexClient() {
 * - Configuring the adapter for Convex's database structure
 * - Handling ID generation (Convex uses _id instead of id)
 * - Setting up proper field mappings
+* - Adding a /convex/token endpoint for Convex client authentication
 */
 function convex() {
 	return {
 		id: "convex",
+		endpoints: { convexToken: {
+			method: "POST",
+			path: "/convex/token",
+			handler: async (ctx) => {
+				const session = await ctx.getSession();
+				if (!session) return ctx.json({ error: "Unauthorized" }, { status: 401 });
+				return ctx.json({ token: session.session.token || session.session.id });
+			}
+		} },
 		init(_ctx) {
 			return { options: { advanced: { generateId: false } } };
 		}
@@ -927,4 +915,4 @@ function createClient(component, config) {
 }
 
 //#endregion
-export { convex, convexClient, createApi, createClient, createConvexClients, getStaticAuth, useAuth, useBetterAuthClient, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery, useSession };
+export { convex, convexClient, createApi, createClient, createConvexClients, getStaticAuth, useAuth, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery };

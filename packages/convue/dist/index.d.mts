@@ -7,49 +7,55 @@ import { FunctionArgs, FunctionReference, FunctionReturnType, GenericDataModel, 
 import { ConvexClient, ConvexClientOptions, ConvexHttpClient, OptimisticUpdate } from "convex/browser";
 import * as better_auth_adapters13 from "better-auth/adapters";
 
-//#region src/composables/useAuth.d.ts
-interface UseAuthReturn {
-  /**
-   * Whether authentication is currently loading
-   */
-  isLoading: Ref<boolean>;
-  /**
-   * Whether the user is authenticated
-   */
-  isAuthenticated: Ref<boolean>;
-  /**
-   * Function to fetch a Convex auth token for the current session
-   * This is used internally by the Convex client
-   */
-  fetchAccessToken: () => Promise<string | null>;
-}
-/**
- * Composable that provides authentication state and token management
- * for integrating Better Auth with Convex.
- *
- * This composable:
- * - Tracks authentication state (isLoading, isAuthenticated)
- * - Provides a token fetcher for Convex client authentication
- * - Automatically sets/clears auth on the Convex client
- *
- * @example
- * ```ts
- * import { useAuth } from 'convue'
- *
- * const { isAuthenticated, isLoading } = useAuth()
- * ```
- */
-declare function useAuth(): UseAuthReturn;
-
-//#endregion
 //#region src/composables/useBetterAuthClient.d.ts
+/**
+* Interface for the Better Auth client
+* This accepts any Better Auth client (React, Vue, or vanilla)
+*/
+/**
+* Better Auth session result that can be returned by useSession()
+*/
 /**
  * Interface for the Better Auth client
  * This accepts any Better Auth client (React, Vue, or vanilla)
  */
+/**
+ * Better Auth session result that can be returned by useSession()
+ */
+interface BetterAuthSessionResult {
+  data: Session | null;
+  isPending: boolean;
+  error: Error | null;
+  refetch?: () => Promise<void>;
+}
 interface BetterAuthClient {
-  useSession?: () => any;
-  getSession?: (...args: any[]) => Promise<any>;
+  useSession?: () => BetterAuthSessionResult | {
+    value: BetterAuthSessionResult;
+  };
+  getSession?: () => Promise<{
+    data: Session | null;
+    error: Error | null;
+  }>;
+  signIn: {
+    email: (credentials: {
+      email: string;
+      password: string;
+    }) => Promise<{
+      data?: Session;
+      error?: Error;
+    }>;
+    social: (options: {
+      provider: string;
+      callbackURL?: string;
+    }) => Promise<{
+      data?: Session;
+      error?: Error;
+    }>;
+  };
+  signOut: () => Promise<{
+    data?: unknown;
+    error?: Error;
+  }>;
   convex?: {
     token: () => Promise<{
       data: {
@@ -58,22 +64,25 @@ interface BetterAuthClient {
       error: Error | null;
     }>;
   };
-  [key: string]: any;
 }
 interface Session {
   session: {
     id: string;
     userId: string;
     expiresAt: string;
-    [key: string]: any;
+    token?: string;
+    [key: string]: unknown;
   };
   user: {
     id: string;
     email: string;
     name: string;
-    [key: string]: any;
+    emailVerified?: boolean;
+    [key: string]: unknown;
   };
-}
+} //#endregion
+//#region src/composables/useAuth.d.ts
+
 /**
  * Composable to access the Better Auth client instance
  * The client must be provided via Nuxt's plugin provide system
@@ -86,7 +95,70 @@ interface Session {
  * await authClient.signIn.email({ email, password })
  * ```
  */
-declare function useBetterAuthClient(): BetterAuthClient;
+interface UseAuthReturn {
+  /**
+   * The current session data, or null if not authenticated
+   */
+  session: Ref<Session | null>;
+  /**
+   * Whether authentication is currently loading
+   */
+  isLoading: Ref<boolean>;
+  /**
+   * Whether the user is authenticated
+   */
+  isAuthenticated: Ref<boolean>;
+  /**
+   * Any error that occurred while loading the session
+   */
+  error: Ref<Error | null>;
+  /**
+   * The Better Auth client instance for auth operations
+   */
+  client: BetterAuthClient;
+  /**
+   * Manually refetch the session data
+   */
+  refetch: () => Promise<void>;
+  /**
+   * Function to fetch a Convex auth token for the current session
+   * This is used internally by the Convex client
+   */
+  fetchAccessToken: () => Promise<string | null>;
+}
+/**
+ * Unified composable for all authentication concerns
+ *
+ * This is the main auth composable that provides:
+ * - Session data and authentication state
+ * - Loading and error states
+ * - Better Auth client for sign in/out operations
+ * - Session refetch capability
+ * - Automatic Convex client authentication
+ *
+ * @example
+ * ```ts
+ * import { useAuth } from 'convue'
+ *
+ * const {
+ *   session,           // Current user session
+ *   isAuthenticated,   // Boolean auth state
+ *   isLoading,         // Loading state
+ *   client,            // Better Auth client
+ *   refetch            // Refetch session
+ * } = useAuth()
+ *
+ * // Sign in
+ * await client.signIn.email({ email, password })
+ *
+ * // Sign out
+ * await client.signOut()
+ *
+ * // Access user data
+ * console.log(session.value?.user.email)
+ * ```
+ */
+declare function useAuth(): UseAuthReturn;
 
 //#endregion
 //#region src/composables/useConvexClient.d.ts
@@ -167,40 +239,6 @@ interface UseConvexQueryReturn<Query extends FunctionReference<'query'>> {
 declare function useConvexQuery<Query extends FunctionReference<'query'>>(query: Query, ...rest: OptionalRestArgsAndOptions<Query, UseConvexQueryOptions>): UseConvexQueryReturn<Query>;
 
 //#endregion
-//#region src/composables/useSession.d.ts
-interface UseSessionReturn {
-  /**
-   * The current session data, or null if not authenticated
-   */
-  data: Ref<Session | null>;
-  /**
-   * Whether the session is currently being loaded
-   */
-  isPending: Ref<boolean>;
-  /**
-   * Any error that occurred while loading the session
-   */
-  error: Ref<Error | null>;
-}
-/**
- * Composable that provides access to the current Better Auth session
- *
- * This composable returns reactive session data, loading state, and any errors.
- * The session data includes both user information and session metadata.
- *
- * @example
- * ```ts
- * import { useSession } from 'convue'
- *
- * const { data: session, isPending, error } = useSession()
- *
- * // Access user data
- * console.log(session.value?.user.email)
- * ```
- */
-declare function useSession(): UseSessionReturn;
-
-//#endregion
 //#region src/plugin.d.ts
 interface ConvexAuthOptions {
   forceRefreshToken: boolean;
@@ -267,9 +305,17 @@ declare function convexClient(): {
  * - Configuring the adapter for Convex's database structure
  * - Handling ID generation (Convex uses _id instead of id)
  * - Setting up proper field mappings
+ * - Adding a /convex/token endpoint for Convex client authentication
  */
 declare function convex(): {
   id: string;
+  endpoints: {
+    convexToken: {
+      method: string;
+      path: string;
+      handler: (ctx: any) => Promise<any>;
+    };
+  };
   init(_ctx: any): {
     options: {
       advanced: {
@@ -424,4 +470,4 @@ declare function createClient<DataModel extends GenericDataModel, _Schema = any>
 };
 
 //#endregion
-export { AreAllPropertiesOptional, BetterAuthClient, ClientConfig, ComponentReference, ConvexAuthOptions, ConvexVueContext, ConvexVueOptions, CreateAuth, GenericCtx, IsOptionalKey, OptionalRestArgs, OptionalRestArgsAndOptions, convex, convexClient, createApi, createClient, createConvexClients, getStaticAuth, useAuth, useBetterAuthClient, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery, useSession };
+export { AreAllPropertiesOptional, BetterAuthClient, BetterAuthSessionResult, ClientConfig, ComponentReference, ConvexAuthOptions, ConvexVueContext, ConvexVueOptions, CreateAuth, GenericCtx, IsOptionalKey, OptionalRestArgs, OptionalRestArgsAndOptions, Session, convex, convexClient, createApi, createClient, createConvexClients, getStaticAuth, useAuth, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery };

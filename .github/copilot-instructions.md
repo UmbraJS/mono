@@ -37,6 +37,7 @@ Key packages:
 - `packages/moonbow` – Shader helpers for WebGPU, render to shapes
 - `packages/bifrost` – SVG spline connections between elements
 - `packages/convue`  – Convex + Nuxt + better-auth integration
+- `packages/formula` – Form library with change tracking, diffing, and Zod validation
 
 **Copilot: when choosing where to put or read code, follow this structure.**
 
@@ -52,7 +53,7 @@ Key packages:
 - `packages/umbraco`:
   - May depend on `umbra` and external UI libs (e.g. reka-ui)
   - No dependencies on apps
-- `packages/dye`, `packages/moonbow`, `packages/bifrost`, `packages/convue`:
+- `packages/dye`, `packages/moonbow`, `packages/bifrost`, `packages/convue`, `packages/formula`:
   - May depend on relevant external libs and core internal packages
   - Must not depend on apps
 
@@ -67,6 +68,7 @@ If you see that pattern, propose moving shared logic into a package instead.**
 - **WebGPU / shader helpers** → `packages/moonbow`
 - **SVG connection / link visuals** → `packages/bifrost`
 - **Convex + auth integration** → `packages/convue`
+- **Form state management / validation** → `packages/formula`
 - **Product-specific logic**:
   - `apps/blog` for Noble (social / ideas)
   - `apps/carbon` for the game
@@ -437,6 +439,22 @@ All Convex + auth integration should go through Convue:
 - Do not wire Convex or auth differently per app
 
 **Copilot: when adding backend calls or auth to an app, use Convue's utilities instead of talking to Convex directly.**
+
+### 8.5 packages/formula – Form state management
+
+Formula is a form library for Vue 3 with:
+
+- Change tracking and diffing (baseline vs current data)
+- Automatic dirty state computation
+- Deep merge and reset capabilities
+- Zod validation integration with field-level errors
+
+Two main composables:
+
+- `useForm` - Basic form with change tracking (no validation)
+- `useFormula` - Enhanced form with Zod schema validation
+
+**Copilot: when building forms that need change tracking, validation, or diff-based updates, use Formula instead of manual state management.**
 
 
 ## 9. Apps: Roles

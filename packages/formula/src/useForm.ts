@@ -1,7 +1,7 @@
 // useForm.ts
 import { ref, computed, toRaw, watch } from "vue";
-import type { Ref } from "vue";
-import type { ZodSchema, ZodError } from "zod";
+import type { Ref, ComputedRef, UnwrapRef } from "vue";
+import type { ZodType, ZodError } from "zod";
 
 /**
  * Primitive types that don't need deep partial transformation
@@ -45,7 +45,7 @@ export interface UseValidatedFormOptions extends UseFormOptions {
   /**
    * Zod schema for validating form data
    */
-  schema: ZodSchema;
+  schema: ZodType;
 
   /**
    * When to perform validation
@@ -269,7 +269,17 @@ function deepDiff<T>(a: T, b: T, eq: (x: unknown, y: unknown) => boolean): DeepP
 export function useForm<T extends Record<string, unknown>>(
   initial: T,
   opts: UseFormOptions = {}
-) {
+): {
+  data: Ref<UnwrapRef<T>>;
+  baseline: Ref<UnwrapRef<T>>;
+  dirtyValues: ComputedRef<DeepPartial<T>>;
+  isDirty: ComputedRef<boolean>;
+  setForm: (patch: DeepPartial<T>) => void;
+  replace: (next: T) => void;
+  reset: () => void;
+  setBaseline: (next: T) => void;
+  commit: () => void;
+} {
   const eq = opts.equals ?? deepEqual;
   const arrayMerge = opts.arrayMerge ?? "replace";
 
@@ -315,8 +325,8 @@ export function useForm<T extends Record<string, unknown>>(
 
   // Expose refs so consumers can .value or unref in templates
   return {
-    data,
-    baseline,
+    data: data as Ref<UnwrapRef<T>>,
+    baseline: baseline as Ref<UnwrapRef<T>>,
     dirtyValues: _dirtyValues,
     isDirty: _isDirty,
     setForm,
@@ -353,7 +363,7 @@ export function useForm<T extends Record<string, unknown>>(
  *   age: z.number().min(18, "Must be at least 18 years old")
  * });
  *
- * const form = useValidatedForm({
+ * const form = useFormula({
  *   name: "",
  *   email: "",
  *   age: 0

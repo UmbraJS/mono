@@ -1,7 +1,7 @@
 {
   "name": "umbrajs",
   "private": true,
-  "packageManager": "pnpm@10.12.3",
+  "packageManager": "pnpm@10.22.0",
   "scripts": {
     "dev": "cd apps/blog && pnpm run dev",
     "ui": "cd apps/ui && pnpm run dev",

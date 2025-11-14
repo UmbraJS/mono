@@ -41,6 +41,7 @@
     "@types/mdast": "catalog:",
     "@umbrajs/core": "workspace:*",
     "@umbrajs/dye": "workspace:*",
+    "@umbrajs/formula": "workspace:*",
     "@vercel/speed-insights": "^1.2.0",
     "@vueuse/core": "catalog:",
     "@vueuse/nuxt": "catalog:",
