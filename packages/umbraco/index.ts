@@ -24,6 +24,7 @@ export { default as Input } from './components/ui/Inputs/Input.vue'
 export { default as TextArea } from "./components/ui/Inputs/TextArea.vue"
 export { default as PixelTransition } from './components/ui/PixelTransition.vue'
 export { default as Radio } from './components/ui/Radio/Radio.vue'
+export { default as Reveal } from './components/ui/Reveal/Reveal.vue'
 export { default as ScrollArea } from './components/ui/ScrollArea.vue'
 export { default as Select } from './components/ui/Select.vue'
 export { default as Slider } from './components/ui/Slider/Slider.vue'

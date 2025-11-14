@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Button, toast, Spinner } from 'umbraco'
+import { Button, toast } from 'umbraco'
 import { useAuth } from 'convue'
+import Reveal from '../components/Reveal.vue'
 
 const { session, isAuthenticated, isLoading, client: authClient } = useAuth()
 const router = useRouter()
@@ -25,79 +26,77 @@ async function signOut() {
 
 <template>
   <div class="profile-container">
-    <div v-if="isLoading" class="loading">
-      <Spinner size="4em" />
-    </div>
+    <Reveal :loading="isLoading">
+      <div v-if="isAuthenticated && session" class="profile-content">
+        <div class="profile-header">
+          <h1>Profile</h1>
+          <Button variant="secondary" @click="signOut">
+            Sign Out
+          </Button>
+        </div>
 
-    <div v-else-if="isAuthenticated && session" class="profile-content">
-      <div class="profile-header">
-        <h1>Profile</h1>
-        <Button variant="secondary" @click="signOut">
-          Sign Out
-        </Button>
-      </div>
+        <div class="user-info">
+          <div v-if="session.user" class="info-card">
+            <h2>User Information</h2>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Name</label>
+                <p>{{ session.user.name || 'N/A' }}</p>
+              </div>
+              <div class="info-item">
+                <label>Email</label>
+                <p>{{ session.user.email || 'N/A' }}</p>
+              </div>
+              <div class="info-item">
+                <label>User ID</label>
+                <p class="mono">{{ session.user.id || 'N/A' }}</p>
+              </div>
+              <div v-if="session.user.emailVerified !== undefined" class="info-item">
+                <label>Email Verified</label>
+                <p>
+                  <Icon :name="session.user.emailVerified ? 'i-heroicons-check-circle' : 'i-heroicons-x-circle'"
+                    :class="session.user.emailVerified ? 'verified' : 'unverified'" />
+                  {{ session.user.emailVerified ? 'Yes' : 'No' }}
+                </p>
+              </div>
+            </div>
+          </div>
 
-      <div class="user-info">
-        <div v-if="session.user" class="info-card">
-          <h2>User Information</h2>
-          <div class="info-grid">
-            <div class="info-item">
-              <label>Name</label>
-              <p>{{ session.user.name || 'N/A' }}</p>
+          <div v-if="session.session" class="info-card">
+            <h2>Session Information</h2>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Session ID</label>
+                <p class="mono">{{ session.session.id || 'N/A' }}</p>
+              </div>
+              <div class="info-item">
+                <label>Expires At</label>
+                <p>{{ session.session.expiresAt ? new Date(session.session.expiresAt).toLocaleString() : 'N/A' }}</p>
+              </div>
             </div>
-            <div class="info-item">
-              <label>Email</label>
-              <p>{{ session.user.email || 'N/A' }}</p>
-            </div>
-            <div class="info-item">
-              <label>User ID</label>
-              <p class="mono">{{ session.user.id || 'N/A' }}</p>
-            </div>
-            <div v-if="session.user.emailVerified !== undefined" class="info-item">
-              <label>Email Verified</label>
-              <p>
-                <Icon :name="session.user.emailVerified ? 'i-heroicons-check-circle' : 'i-heroicons-x-circle'"
-                  :class="session.user.emailVerified ? 'verified' : 'unverified'" />
-                {{ session.user.emailVerified ? 'Yes' : 'No' }}
-              </p>
-            </div>
+          </div>
+
+          <div class="info-card debug">
+            <h2>Full Session Data</h2>
+            <pre>{{ JSON.stringify(session, null, 2) }}</pre>
           </div>
         </div>
 
-        <div v-if="session.session" class="info-card">
-          <h2>Session Information</h2>
-          <div class="info-grid">
-            <div class="info-item">
-              <label>Session ID</label>
-              <p class="mono">{{ session.session.id || 'N/A' }}</p>
-            </div>
-            <div class="info-item">
-              <label>Expires At</label>
-              <p>{{ session.session.expiresAt ? new Date(session.session.expiresAt).toLocaleString() : 'N/A' }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="info-card debug">
-          <h2>Full Session Data</h2>
-          <pre>{{ JSON.stringify(session, null, 2) }}</pre>
+        <div class="navigation">
+          <Button variant="base" @click="router.push('/')">
+            <Icon name="i-heroicons-home" />
+            Go to Home
+          </Button>
         </div>
       </div>
 
-      <div class="navigation">
-        <Button variant="base" @click="router.push('/')">
-          <Icon name="i-heroicons-home" />
-          Go to Home
+      <div v-else class="not-authenticated">
+        <p>Not authenticated</p>
+        <Button @click="router.push('/signin')">
+          Sign In
         </Button>
       </div>
-    </div>
-
-    <div v-else class="not-authenticated">
-      <p>Not authenticated</p>
-      <Button @click="router.push('/signin')">
-        Sign In
-      </Button>
-    </div>
+    </Reveal>
   </div>
 </template>
 
