@@ -65,7 +65,7 @@ function inverseScale(scale: number) {
   height: 25%;
   width: 0.2px;
   background: var(--base-80);
-  transition: var(--slow);
+  transition: var(--time-2);
 }
 
 .SliderRuler .tick.mark {

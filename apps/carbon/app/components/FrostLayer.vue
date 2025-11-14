@@ -112,7 +112,7 @@ const getLayerStyle = (index: number, entry: number) => {
     {{ mappedStrength }} -
   </p> -->
   <div class="frost-layers" :class="{ reversed }">
-    <div v-for="(entry, i) in exponentialLayers" :key="entry" class="layer" :style="getLayerStyle(i - 1, entry)"/>
+    <div v-for="(entry, i) in exponentialLayers" :key="entry" class="layer" :style="getLayerStyle(i - 1, entry)" />
   </div>
 </template>
 
@@ -156,7 +156,7 @@ const getLayerStyle = (index: number, entry: number) => {
   &>div {
     position: absolute;
     inset: 0;
-    transition: var(--slower);
+    transition: var(--time-4);
     opacity: v-bind(opacity);
   }
 }

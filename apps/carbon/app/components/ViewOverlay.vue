@@ -23,7 +23,7 @@ defineProps<{
 
 #ViewOverlay {
   clip-path: circle(100% at 50% 100%);
-  transition: var(--slower);
+  transition: var(--time-4);
 }
 
 #ViewOverlay.hidden {

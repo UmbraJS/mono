@@ -31,8 +31,10 @@
 
 :root {
   --time: 0.1s;
-  --slow: 0.2s;
-  --slower: 0.4s;
+  --time-2: calc(var(--time) * 2);
+  --time-3: calc(var(--time) * 3);
+  --time-4: calc(var(--time) * 4);
+  --time-6: calc(var(--time) * 6);
   --timing: ease-in-out;
 }
 

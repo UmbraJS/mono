@@ -24,7 +24,7 @@ defineProps<{
   background-color: var(--base);
   color: var(--base-50);
 
-  transition: var(--slower);
+  transition: var(--time-4);
 }
 
 .cardSpace.drag-hit-real {

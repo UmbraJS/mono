@@ -36,7 +36,7 @@ li.change {
   color: var(--base-120);
   padding: var(--space-1);
   border-radius: var(--radius);
-  animation: fade-in var(--slow) ease-in-out;
+  animation: fade-in var(--time-2) ease-in-out;
 }
 
 @keyframes fade-in {

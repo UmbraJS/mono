@@ -276,7 +276,7 @@ button#CardWrapper.rejected {
   position: relative;
   height: 100%;
   width: 100%;
-  transition: opacity var(--slower), filter var(--slower);
+  transition: opacity var(--time-4), filter var(--time-4);
 }
 
 #CardWrapper.dragging {

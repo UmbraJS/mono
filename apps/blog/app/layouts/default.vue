@@ -97,7 +97,7 @@ onKeyStroke('Escape', () => toggleReveal())
   overflow: hidden;
 
   transform: translateY(0px) translateX(0px);
-  transition: background-color var(--slow), color var(--slow), border-color var(--slow), transform var(--slow);
+  transition: background-color var(--time-2), color var(--time-2), border-color var(--time-2), transform var(--time-2);
 }
 
 .UmbraPage {
@@ -125,7 +125,7 @@ onKeyStroke('Escape', () => toggleReveal())
   opacity: 0;
   z-index: 1;
   pointer-events: none;
-  transition: opacity var(--slow);
+  transition: opacity var(--time-2);
   border-radius: var(--radius);
 }
 
@@ -145,7 +145,7 @@ onKeyStroke('Escape', () => toggleReveal())
 
   @media (max-width: 800px) {
     transform: translateY(0) translateX(calc(0px - var(--sidebar-width) + 1px));
-    transition: background-color var(--slower), color var(--slower), border-color var(--slower), transform var(--slower);
+    transition: background-color var(--time-4), color var(--time-4), border-color var(--time-4), transform var(--time-4);
   }
 }
 
@@ -164,7 +164,7 @@ onKeyStroke('Escape', () => toggleReveal())
   grid-template-areas:
     'header header'
     'content sidebar';
-  transition: background-color var(--slower);
+  transition: background-color var(--time-4);
 }
 
 .underbar header {

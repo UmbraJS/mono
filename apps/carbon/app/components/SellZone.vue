@@ -19,7 +19,7 @@ const store = useUser()
   height: 100%;
   width: 100%;
   border-radius: var(--radius);
-  transition: var(--slow);
+  transition: var(--time-2);
 }
 
 #SellZone.active-zone {

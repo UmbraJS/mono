@@ -146,7 +146,7 @@ const allSources = computed(() => {
   background-color: var(--base-10);
   opacity: 1;
   overflow: hidden;
-  transition: background-color var(--slower), opacity var(--slower), color var(--slower), padding var(--slower), height var(--slower);
+  transition: background-color var(--time-4), opacity var(--time-4), color var(--time-4), padding var(--time-4), height var(--time-4);
 }
 
 .FrameMetaChip {

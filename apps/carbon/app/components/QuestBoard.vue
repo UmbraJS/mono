@@ -63,7 +63,7 @@ function triggerEffects(event: EventCard) {
   background: var(--base-20);
   border-radius: var(--radius);
   border: solid 1px var(--base);
-  transition: var(--slow);
+  transition: var(--time-2);
 }
 
 .quest-events .event:hover {

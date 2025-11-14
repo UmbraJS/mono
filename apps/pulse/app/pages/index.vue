@@ -67,9 +67,9 @@ const todaysMood = ref<number>(0);
   color: var(--base-text);
   outline: none;
   resize: vertical;
-  transition: border-color var(--slow) var(--timing),
-    background-color var(--slow) var(--timing),
-    box-shadow var(--slow) var(--timing);
+  transition: border-color var(--time-2) var(--timing),
+    background-color var(--time-2) var(--timing),
+    box-shadow var(--time-2) var(--timing);
 }
 
 .Textarea::placeholder {

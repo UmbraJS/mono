@@ -104,7 +104,7 @@ const signinWithGithub = async () => {
   left: 0%;
   z-index: 20;
   backdrop-filter: blur(4px);
-  animation: reveal var(--slower) forwards;
+  animation: reveal var(--time-4) forwards;
 }
 
 @keyframes reveal {

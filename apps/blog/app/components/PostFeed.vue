@@ -28,6 +28,6 @@
   background: var(--base-10);
   border-radius: var(--radius);
   border: solid var(--border-size) var(--base-30);
-  transition: background-color var(--slower), color var(--slower), border-color var(--slower), box-shadow var(--slower), opacity var(--slower), transform var(--slower);
+  transition: background-color var(--time-4), color var(--time-4), border-color var(--time-4), box-shadow var(--time-4), opacity var(--time-4), transform var(--time-4);
 }
 </style>

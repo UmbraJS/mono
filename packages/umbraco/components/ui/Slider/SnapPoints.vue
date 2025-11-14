@@ -35,7 +35,7 @@ defineProps<{
   border-radius: var(--radius);
   height: var(--block-small);
   aspect-ratio: 1 / 1;
-  transition: var(--slow);
+  transition: var(--time-2);
 }
 
 .SnapPoint.active {

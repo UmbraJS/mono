@@ -80,7 +80,7 @@ onMounted(() => {
   opacity: 0;
   z-index: 1;
   pointer-events: none;
-  transition: opacity var(--slow);
+  transition: opacity var(--time-2);
   border-radius: var(--radius);
 }
 
@@ -100,7 +100,7 @@ onMounted(() => {
 
   @media (max-width: 800px) {
     transform: translateY(0) translateX(calc(0px - var(--sidebar-width) + 1px));
-    transition: var(--slower);
+    transition: var(--time-4);
   }
 }
 
@@ -119,7 +119,7 @@ onMounted(() => {
   grid-template-areas:
     'header header'
     'content sidebar';
-  transition: background-color var(--slower);
+  transition: background-color var(--time-4);
 }
 
 .underbar header {
