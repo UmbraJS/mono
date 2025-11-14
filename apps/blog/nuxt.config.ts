@@ -115,6 +115,8 @@ export default defineNuxtConfig({
       crawlLinks: isDev ? false : shouldCrawl,
       ignore: [
         '/api/**', // Skip all API routes that might need server context
+        '/tasks', // Requires runtime Convex queries
+        '/chat',  // Requires runtime Convex queries
       ],
       // TEMP: enable to capture stack trace for '/' prerender failure
       failOnError: true,
