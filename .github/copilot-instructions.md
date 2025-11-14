@@ -172,6 +172,24 @@ If a function is doing multiple conceptual things, split it
 - Use VueUse when it clearly simplifies reactive utilities or browser APIs
 - Use GSAP through well-encapsulated helpers/composables (not scattered raw calls)
 
+### 4.1 Props with defaults
+
+Use destructuring with default values instead of `withDefaults`:
+
+```ts
+// Bad - outdated pattern
+const props = withDefaults(defineProps<Props>(), {
+  loading: false,
+  size: 'medium',
+})
+
+// Good - modern Vue 3 pattern
+const {
+  loading = false,
+  size = 'medium',
+} = defineProps<Props>()
+```
+
 **Copilot: when adding logic to a component, prefer creating a small composable and consuming it.**
 
 

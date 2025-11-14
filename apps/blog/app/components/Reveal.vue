@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { Spinner } from 'umbraco'
 
 export interface RevealProps {
@@ -11,12 +10,11 @@ export interface RevealProps {
   spinnerVariant?: 'primary' | 'secondary'
 }
 
-withDefaults(defineProps<RevealProps>(), {
-  loading: false,
-  spinnerSize: '4em',
-  spinnerVariant: 'primary',
-})
-
+const {
+  loading = false,
+  spinnerSize = '4em',
+  spinnerVariant = 'primary',
+} = defineProps<RevealProps>()
 </script>
 
 <template>
