@@ -179,7 +179,7 @@ onUnmounted(() => {
 }
 
 .LiveEmojis button.button span {
-  transition: transform var(--slow);
+  transition: transform var(--time-2);
 }
 
 .LiveEmojis button.button:active span {

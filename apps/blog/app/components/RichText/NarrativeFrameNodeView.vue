@@ -110,7 +110,7 @@ const allSources = computed(() => {
   align-items: center;
   justify-content: center;
   z-index: 1;
-  transition: color var(--slower), transform var(--slower);
+  transition: color var(--time-4), transform var(--time-4);
   will-change: transform;
 }
 
@@ -127,7 +127,7 @@ const allSources = computed(() => {
   padding: 0;
   margin: 0;
   z-index: 1;
-  transition: color var(--slower), transform var(--slower);
+  transition: color var(--time-4), transform var(--time-4);
 }
 
 .editable-title::placeholder {

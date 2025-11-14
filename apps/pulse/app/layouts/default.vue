@@ -54,7 +54,7 @@ onMounted(() => {
   overflow: hidden;
 
   transform: translateY(0px) translateX(0px);
-  transition: var(--slow);
+  transition: var(--time-2);
 }
 
 .layout .content-layer main.page {

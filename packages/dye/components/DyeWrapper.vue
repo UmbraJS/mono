@@ -40,7 +40,7 @@ const dye = useDyeContext()
   overflow: hidden;
 
   /* transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, width 0.2s ease-in-out, height 0.2s ease-in-out; */
-  transition: var(--slower);
+  transition: var(--time-4);
 
   .DyePallet {
     grid-column: span 2;

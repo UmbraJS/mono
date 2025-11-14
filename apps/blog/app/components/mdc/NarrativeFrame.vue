@@ -171,7 +171,7 @@ const allSources = computed(() => {
   align-items: center;
   justify-content: center;
   z-index: 1;
-  transition: color var(--slower), transform var(--slower);
+  transition: color var(--time-4), transform var(--time-4);
   will-change: transform;
 }
 
@@ -193,7 +193,7 @@ const allSources = computed(() => {
   opacity: 1;
 
   overflow: hidden;
-  transition: background-color var(--slower), opacity var(--slower), color var(--slower), padding var(--slower), height var(--slower);
+  transition: background-color var(--time-4), opacity var(--time-4), color var(--time-4), padding var(--time-4), height var(--time-4);
 }
 
 .NarrativeFrame header:hover img {
@@ -212,6 +212,6 @@ const allSources = computed(() => {
   top: 0px;
   left: 0px;
   z-index: 0;
-  transition: opacity var(--slower), filter var(--slower), transform var(--slower);
+  transition: opacity var(--time-4), filter var(--time-4), transform var(--time-4);
 }
 </style>
