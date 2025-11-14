@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, toast, Input } from 'umbraco'
+import { Button, toast, Input, Spinner } from 'umbraco'
 import { useAuth } from 'convue'
 
 const auth = useAuth()
@@ -73,7 +73,7 @@ const signinWithGithub = async () => {
 
 <template>
   <div v-if="loading" class="loading-panel">
-    <Icon name="svg-spinners:pulse-multiple" size="8em" />
+    <Spinner size="8em" />
   </div>
   <form @submit.prevent="signIn">
     <Input type="email" label="Email" @input="(e: InputEvent) => (email = (e.target as HTMLInputElement).value)" />
@@ -81,12 +81,12 @@ const signinWithGithub = async () => {
       @input="(e: InputEvent) => (password = (e.target as HTMLInputElement).value)" />
     <Button type="submit" :disabled="!email.length || !password.length">
       <span v-if="!loading"> Sign In </span>
-      <Icon v-else name="svg-spinners:3-dots-move" />
+      <Spinner v-else variant="secondary" size="1.5em" />
     </Button>
     <Button type="button" :disabled="loading" @click="signinWithGithub">
       <Icon v-if="!loading" name="i-simple-icons-github" />
       <span v-if="!loading"> Sign In with Github </span>
-      <Icon v-if="loading" name="svg-spinners:3-dots-move" />
+      <Spinner v-if="loading" variant="secondary" size="1.5em" />
     </Button>
   </form>
 </template>

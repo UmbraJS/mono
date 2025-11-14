@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, toast } from 'umbraco'
+import { Button, toast, Spinner } from 'umbraco'
 import { useAuth } from 'convue'
 
 const { session, isAuthenticated, isLoading, client: authClient } = useAuth()
@@ -26,7 +26,7 @@ async function signOut() {
 <template>
   <div class="profile-container">
     <div v-if="isLoading" class="loading">
-      <Icon name="svg-spinners:gooey-balls-2" size="4em" />
+      <Spinner size="4em" />
     </div>
 
     <div v-else-if="isAuthenticated && session" class="profile-content">
