@@ -5,17 +5,22 @@ export default defineNuxtPlugin(() => {
   const convexUrl = runtime.public?.convexUrl;
   const convexSiteUrl = runtime.public?.convexSiteUrl;
 
-  if (!convexUrl || typeof convexUrl !== 'string') {
-    throw new Error("[convue] Missing or invalid CONVEX_URL. Set it in .env.local");
-  }
+  // During prerendering/build, Convex isn't needed - provide dummy values
+  const isPrerendering = import.meta.server && !convexUrl && !convexSiteUrl;
+  
+  if (!isPrerendering) {
+    if (!convexUrl || typeof convexUrl !== 'string') {
+      throw new Error("[convue] Missing or invalid CONVEX_URL. Set it in .env.local");
+    }
 
-  if (!convexSiteUrl || typeof convexSiteUrl !== 'string') {
-    throw new Error("[convue] Missing or invalid VITE_CONVEX_SITE_URL. Set it in .env.local");
+    if (!convexSiteUrl || typeof convexSiteUrl !== 'string') {
+      throw new Error("[convue] Missing or invalid VITE_CONVEX_SITE_URL. Set it in .env.local");
+    }
   }
 
   // Create Convex clients (only on client side for now to avoid WebSocket issues)
-  const convexContext = import.meta.client
-    ? createConvexClients(convexUrl)
+  const convexContext = import.meta.client && !isPrerendering
+    ? createConvexClients(convexUrl!)
     : {
       clientRef: { value: undefined },
       httpClientRef: { value: undefined },
@@ -26,7 +31,7 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       convex: {
-        options: { url: convexUrl, server: false },
+        options: { url: convexUrl || '', server: false },
         ...convexContext,
       },
     },
