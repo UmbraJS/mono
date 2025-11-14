@@ -26,8 +26,7 @@ async function signOut() {
 <template>
   <div class="profile-container">
     <div v-if="isLoading" class="loading">
-      <Icon name="svg-spinners:pulse-multiple" size="4em" />
-      <p>Loading...</p>
+      <Icon name="svg-spinners:gooey-balls-2" size="4em" />
     </div>
 
     <div v-else-if="isAuthenticated && session" class="profile-content">
@@ -116,6 +115,8 @@ async function signOut() {
   justify-content: center;
   gap: var(--space-2);
   padding: var(--space-8);
+  width: 100%;
+  height: 100%;
 
   p {
     color: var(--text-secondary);
