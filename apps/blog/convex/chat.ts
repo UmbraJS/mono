@@ -1,5 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import type { Id } from "./_generated/dataModel";
+import { components } from "./_generated/api";
 
 export const sendMessage = mutation({
   args: {
@@ -38,13 +40,18 @@ export const getMessages = query({
   handler: async (ctx) => {
     const messages = await ctx.db.query("messages").order("desc").take(50);
 
-    // Enrich messages with user display names
+    // Enrich messages with user display names from Better Auth component
     const messagesWithUsers = await Promise.all(
       messages.map(async (message) => {
-        const user = await ctx.db.query("user").filter((q) => q.eq(q.field("_id"), message.userId)).first();
+        const userId = message.userId as Id<"user">;
+        const user = await ctx.runQuery(components.betterAuth.adapter.findOne, {
+          model: "user",
+          where: [{ field: "_id", value: userId, operator: "eq", connector: "AND" }]
+        });
+        const displayName = user?.name || "Anonymous";
         return {
           ...message,
-          displayName: user?.name || "Anonymous",
+          displayName,
         };
       })
     );
@@ -108,14 +115,20 @@ export const getOnlineUsers = query({
       .filter((q) => q.gt(q.field("lastSeen"), fiveMinutesAgo))
       .collect();
 
-    // Get display names from user table
+    // Get display names from user table in Better Auth component
     const usersWithNames = await Promise.all(
       presences.map(async (presence) => {
-        const user = await ctx.db.query("user").filter((q) => q.eq(q.field("_id"), presence.userId)).first();
+        const userId = presence.userId as Id<"user">;
+        const user = await ctx.runQuery(components.betterAuth.adapter.findOne, {
+          model: "user",
+          where: [{ field: "_id", value: userId, operator: "eq", connector: "AND" }],
+        });
+
+        const displayName: string = user?.name || "Anonymous";
 
         return {
           userId: presence.userId,
-          displayName: user?.name || "Anonymous",
+          displayName,
           lastSeen: presence.lastSeen,
           isOnline: true,
         };

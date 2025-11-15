@@ -109,9 +109,6 @@ function isThisYou(userId: string) {
     <header class="ConvexChatHeader border">
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
         <p class="caption">Recent Online users: {{ onlineUsers.length }}</p>
-        <div class="OnlineUsers">
-          <UserChip :message="{ user: 'spacer', userId: 'someid', lastSeen: 1234 }" :color="'#808080'" :isYou="true" />
-        </div>
       </ChatMessagesLoading>
       <p v-else class="caption">Recent Online users: {{ onlineUsers.length }}</p>
       <div v-if="onlineUsers.length > 0" class="OnlineUsers">
