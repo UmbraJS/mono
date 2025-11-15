@@ -13,10 +13,6 @@ import type { ChatMessage } from "../components/Chat/chat.types"
 import EmojiBubbles from "../components/EmojiBubbles/EmojiBubbles.vue";
 import LiveEmojiPanel from "../components/Chat/LiveEmojiPanel.vue";
 
-definePageMeta({
-  ssr: false // Disable SSR for this page to avoid hydration issues
-});
-
 useSeoMeta({ title: "Convex Chat" });
 
 // User management

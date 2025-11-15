@@ -15,6 +15,19 @@ export function useConvexMutation<Mutation extends FunctionReference<'mutation'>
   mutationReference: Mutation,
   { optimisticUpdate }: MutationOptions<Mutation> = {},
 ) {
+  const isServer = typeof window === 'undefined'
+
+  // On server, return a noop mutation (mutations only work on client)
+  if (isServer) {
+    return {
+      mutate: async () => {
+        throw new Error('Mutations cannot be called during server-side rendering')
+      },
+      error: ref<Error | null>(null),
+      isPending: computed(() => false),
+    }
+  }
+
   const client = useConvexClient()
   const error = ref<Error | null>(null)
   const isPendingCount = ref(0)
