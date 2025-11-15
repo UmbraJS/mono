@@ -8,36 +8,30 @@ export const sendMessage = mutation({
     displayName: v.string(),
   },
   handler: async (ctx, args) => {
-    console.log("REX: sendMessage called");
-
-    // Update or create user with the current display name
-    const existingUser = await ctx.db
-      .query("chatUsers")
-      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
-      .first();
-
-    const now = Date.now();
-
-    if (existingUser) {
-      // Update existing user's display name and last seen
-      await ctx.db.patch(existingUser._id, {
-        displayName: args.displayName,
-        lastSeen: now,
-      });
-    } else {
-      // Create new user record
-      await ctx.db.insert("chatUsers", {
-        userId: args.userId,
-        displayName: args.displayName,
-        lastSeen: now,
-      });
-    }
-
-    // Insert the message
+    // Insert the message with timestamp
     await ctx.db.insert("messages", {
       userId: args.userId,
       body: args.body,
+      displayName: args.displayName,
+      timestamp: Date.now(),
     });
+
+    // Update user presence
+    const existingPresence = await ctx.db
+      .query("userPresence")
+      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .first();
+
+    if (existingPresence) {
+      await ctx.db.patch(existingPresence._id, {
+        lastSeen: Date.now(),
+      });
+    } else {
+      await ctx.db.insert("userPresence", {
+        userId: args.userId,
+        lastSeen: Date.now(),
+      });
+    }
   },
 });
 
@@ -45,24 +39,7 @@ export const getMessages = query({
   args: {},
   handler: async (ctx) => {
     const messages = await ctx.db.query("messages").order("desc").take(50);
-
-    // Get user info for each message
-    const messagesWithUsers = await Promise.all(
-      messages.map(async (message) => {
-        const user = await ctx.db
-          .query("chatUsers")
-          .withIndex("by_userId", (q) => q.eq("userId", message.userId))
-          .first();
-
-        return {
-          ...message,
-          lastSeen: user?.lastSeen || 0,
-          displayName: user?.displayName || "Anonymous",
-        };
-      })
-    );
-
-    return messagesWithUsers.reverse();
+    return messages.reverse();
   },
 });
 
@@ -71,24 +48,20 @@ export const updateUserPresence = mutation({
     userId: v.string(),
   },
   handler: async (ctx, args) => {
-    const existingUser = await ctx.db
-      .query("chatUsers")
+    const existingPresence = await ctx.db
+      .query("userPresence")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .first();
 
-    console.log("REX: updateUserPresence called for", args.userId);
-
     const now = Date.now();
 
-    if (existingUser) {
-      await ctx.db.patch(existingUser._id, {
+    if (existingPresence) {
+      await ctx.db.patch(existingPresence._id, {
         lastSeen: now,
       });
     } else {
-      console.log("REX: Creating new user record for", args.userId);
-      await ctx.db.insert("chatUsers", {
+      await ctx.db.insert("userPresence", {
         userId: args.userId,
-        displayName: "Anonymous",
         lastSeen: now,
       });
     }
@@ -100,37 +73,16 @@ export const setUserOffline = mutation({
     userId: v.string(),
   },
   handler: async (ctx, args) => {
-    console.log("REX: setUserOffline called for", args.userId);
-
-    const user = await ctx.db
-      .query("chatUsers")
+    const presence = await ctx.db
+      .query("userPresence")
       .withIndex("by_userId", (q) => q.eq("userId", args.userId))
       .first();
 
-    if (user) {
-      // Just update lastSeen - no need to explicitly set offline
-      await ctx.db.patch(user._id, {
+    if (presence) {
+      await ctx.db.patch(presence._id, {
         lastSeen: Date.now(),
       });
     }
-  },
-});
-
-export const getUser = query({
-  args: {
-    userId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("chatUsers")
-      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
-      .first();
-
-    return user ? {
-      userId: user.userId,
-      displayName: user.displayName,
-      lastSeen: user.lastSeen
-    } : null;
   },
 });
 
@@ -140,39 +92,53 @@ export const getOnlineUsers = query({
     const fiveMinutesAgo = Date.now() - 5 * 60 * 1000; // 5 minutes
 
     // Get users who were seen within the last 5 minutes
-    const users = await ctx.db
-      .query("chatUsers")
+    const presences = await ctx.db
+      .query("userPresence")
+      .withIndex("by_lastSeen")
       .filter((q) => q.gt(q.field("lastSeen"), fiveMinutesAgo))
       .collect();
 
-    return users.map(user => ({
-      userId: user.userId,
-      displayName: user.displayName,
-      lastSeen: user.lastSeen,
-      isOnline: true, // All returned users are considered online by definition
-    }));
+    // Get display names from recent messages
+    const usersWithNames = await Promise.all(
+      presences.map(async (presence) => {
+        // Get the most recent message from this user to get their display name
+        const recentMessage = await ctx.db
+          .query("messages")
+          .withIndex("by_userId", (q) => q.eq("userId", presence.userId))
+          .order("desc")
+          .first();
+
+        return {
+          userId: presence.userId,
+          displayName: recentMessage?.displayName || "Anonymous",
+          lastSeen: presence.lastSeen,
+          isOnline: true,
+        };
+      })
+    );
+
+    return usersWithNames;
   },
 });
 
 export const cleanupStaleUsers = mutation({
   args: {},
   handler: async (ctx) => {
-    // This function is now less necessary since we compute online status dynamically
-    // But we could use it to delete very old user records if needed
+    // Delete presence records older than 1 week to prevent database bloat
     const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000; // 1 week
 
-    const veryOldUsers = await ctx.db
-      .query("chatUsers")
+    const veryOldPresences = await ctx.db
+      .query("userPresence")
+      .withIndex("by_lastSeen")
       .filter((q) => q.lt(q.field("lastSeen"), oneWeekAgo))
       .collect();
 
     let deletedCount = 0;
-    for (const user of veryOldUsers) {
-      await ctx.db.delete(user._id);
+    for (const presence of veryOldPresences) {
+      await ctx.db.delete(presence._id);
       deletedCount++;
     }
 
-    console.log(`REX Cleaned up ${deletedCount} very old user records`);
     return { deletedCount };
   },
 });
@@ -183,8 +149,6 @@ export const sendEmoji = mutation({
     emoji: v.string(),
   },
   handler: async (ctx, args) => {
-    console.log("REX: sendEmoji called", args.emoji);
-
     const now = Date.now();
     const thirtySecondsAgo = now - 30 * 1000; // 30 seconds ago
 
@@ -241,7 +205,6 @@ export const cleanupOldEmojiEvents = mutation({
       deletedCount++;
     }
 
-    console.log(`REX Cleaned up ${deletedCount} old emoji events`);
     return { deletedCount };
   },
 });

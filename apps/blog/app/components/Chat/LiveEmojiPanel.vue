@@ -3,7 +3,6 @@ import { ref, computed, onUnmounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../../convex/_generated/api";
 import { toast } from "umbraco";
-import { useUser } from "../../composables/useUser";
 
 interface Props {
   disabled?: boolean;
@@ -13,8 +12,14 @@ const props = withDefaults(defineProps<Props>(), {
   disabled: false
 });
 
-// User management
-const { currentUser } = useUser();
+// Auth management
+const { session } = useAuth()
+
+// Get user info from session
+const currentUser = computed(() => ({
+  userId: session.value?.user?.id || '',
+  displayName: session.value?.user?.name || 'Anonymous',
+}))
 
 // Emoji combo counter state
 const comboCount = ref<{

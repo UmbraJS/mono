@@ -6,7 +6,6 @@ import { toast, ScrollArea } from "umbraco";
 import MessageChip from "../components/Chat/MessageChip.vue";
 import UserChip from "../components/Chat/UserChip.vue";
 import MyMessageBubble from "../components/Chat/MyMessageBubble.vue";
-import { useUser } from "../composables/useUser";
 import ChatMessagesLoading from "../components/Chat/ChatMessagesLoading.vue";
 import MessageComposer from "../components/Chat/MessageComposer.vue";
 import type { ChatMessage } from "../components/Chat/chat.types"
@@ -15,14 +14,44 @@ import LiveEmojiPanel from "../components/Chat/LiveEmojiPanel.vue";
 
 useSeoMeta({ title: "Convex Chat" });
 
-// User management
-const { currentUser, getUserColor } = useUser();
+// Auth management
+const { session, isAuthenticated, isLoading } = useAuth()
+const router = useRouter()
+
+// Redirect to signin if not authenticated
+watch([isAuthenticated, isLoading], ([auth, loading]) => {
+  if (loading || auth) return
+  router.push('/signin')
+}, { immediate: true })
+
+// Get user info from session
+const currentUser = computed(() => ({
+  userId: session.value?.user?.id || '',
+  displayName: session.value?.user?.name || 'Anonymous',
+}))
+
+// Generate deterministic color from user ID
+const getUserColor = (userId: string) => {
+  const colors = [
+    "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
+    "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe",
+    "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000",
+    "#aaffc3", "#808000", "#ffd8b1", "#000075", "#808080"
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    const char = userId.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+
+  return colors[Math.abs(hash) % colors.length];
+};
 
 // Create reactive values that will be populated after mounting
 const isPending = ref(true);
 const isClientReady = ref(false);
-
-
 
 // Function to handle real query results
 const realQuery = useConvexQuery(api.chat.getMessages);
@@ -45,12 +74,12 @@ const messages = computed(() => realQuery.data.value || []);
 const onlineUsers = computed(() => onlineUsersQuery.data.value || []);
 const emojiEvents = computed(() => emojiEventsQuery.data.value || []);
 
-async function onSubmit({ message, displayName, form }: ChatMessage) {
+async function onSubmit({ message, form }: ChatMessage) {
   try {
     await sendMessage({
       userId: currentUser.value.userId,
       body: message,
-      displayName: displayName
+      displayName: currentUser.value.displayName
     });
 
     form.setForm({ message: "" });
@@ -77,7 +106,7 @@ function isThisYou(userId: string) {
 </script>
 
 <template>
-  <main class="ConvexChat">
+  <main v-if="isAuthenticated && session" class="ConvexChat">
     <header class="ConvexChatHeader border">
       <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
         <p class="caption">Recent Online users: {{ onlineUsers.length }}</p>
@@ -103,7 +132,7 @@ function isThisYou(userId: string) {
         <div class="Messages">
           <template v-for="m in messages" :key="m._id">
             <MyMessageBubble v-if="m.userId === currentUser.userId" :body="m.body" />
-            <MessageChip v-else :message="{ user: m.displayName, body: m.body, userId: m.userId, lastSeen: m.lastSeen }"
+            <MessageChip v-else :message="{ user: m.displayName, body: m.body, userId: m.userId }"
               :color="getUserColor(m.userId) || '#808080'" />
           </template>
         </div>

@@ -6,15 +6,17 @@ const schema = defineSchema({
     text: v.string(),
     isCompleted: v.boolean(),
   }),
-  // Renamed from 'users' to avoid conflict with auth tables
-  chatUsers: defineTable({
+  // Track user presence/online status
+  userPresence: defineTable({
     userId: v.string(),
-    displayName: v.string(),
     lastSeen: v.number(),
-  }).index("by_userId", ["userId"]),
+  }).index("by_userId", ["userId"])
+    .index("by_lastSeen", ["lastSeen"]),
   messages: defineTable({
     userId: v.string(),
     body: v.string(),
+    displayName: v.string(),
+    timestamp: v.number(),
   }).index("by_userId", ["userId"]),
   emojiEvents: defineTable({
     userId: v.string(),

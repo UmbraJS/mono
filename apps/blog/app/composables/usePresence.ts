@@ -1,9 +1,14 @@
 import { ref, onMounted, onUnmounted } from "vue";
+import type { ComputedRef } from "vue";
 import { useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
-import type { UseUser } from "./useUser";
 
-export const usePresence = (currentUser: UseUser["currentUser"]) => {
+interface CurrentUser {
+  userId: string;
+  displayName: string;
+}
+
+export const usePresence = (currentUser: ComputedRef<CurrentUser>) => {
   const isVisible = ref(true);
   const heartbeatInterval = ref<NodeJS.Timeout | null>(null);
 
@@ -15,12 +20,10 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
     try {
       // Add safety checks for client environment
       if (typeof window === 'undefined') return;
-      if (!currentUser.value?.userId) {
-        console.warn("No user ID available for presence update");
-        return;
+      if (!currentUser.value?.userId || currentUser.value.userId === '') {
+        return; // Don't update presence for empty/missing user IDs
       }
 
-      console.log("Rex er: ", currentUser.value.displayName);
       await updatePresence({
         userId: currentUser.value.userId,
       });
@@ -32,6 +35,9 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
 
   const setUserOffline = async () => {
     try {
+      if (!currentUser.value?.userId || currentUser.value.userId === '') {
+        return; // Don't set offline for empty/missing user IDs
+      }
       await setOffline({ userId: currentUser.value.userId });
     } catch (error) {
       console.error("Failed to set user offline:", error);
@@ -53,6 +59,11 @@ export const usePresence = (currentUser: UseUser["currentUser"]) => {
   };
 
   const startHeartbeat = () => {
+    // Don't start heartbeat if we don't have a valid user ID
+    if (!currentUser.value?.userId || currentUser.value.userId === '') {
+      return;
+    }
+
     stopHeartbeat(); // Clear any existing interval
 
     // Add a small delay before the first update to ensure everything is ready

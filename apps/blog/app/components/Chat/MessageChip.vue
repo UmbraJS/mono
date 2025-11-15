@@ -24,14 +24,9 @@ const props = defineProps<{
   message: {
     user: string;
     body: string;
-    lastSeen: number;
     userId: string;
   };
 }>();
-
-const timeSinceLastSeen = computed(() => {
-  return Date.now() - props.message.lastSeen;
-});
 
 const shortId = computedAsync(async () => {
   return getShortId(props.message.userId, 8);
