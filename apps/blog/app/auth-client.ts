@@ -1,11 +1,11 @@
 import { createAuthClient } from 'better-auth/vue'
 import { convexClient } from 'convue'
 
-// Better Auth API is hosted on Convex site URL, not Vercel app URL
-// Use runtime config to get the convex site URL
-const config = useRuntimeConfig()
-const convexSiteUrl = config.public.convexSiteUrl || 'http://127.0.0.1:8187'
-const baseURL = `${convexSiteUrl}/api/auth`
+// Better Auth API is hosted on Convex site URL
+// This will be replaced at build time by Vite
+const baseURL = `${import.meta.env.NUXT_PUBLIC_CONVEX_SITE_URL || 'http://127.0.0.1:8187'}/api/auth`
+
+console.log('[auth-client] Better Auth baseURL:', baseURL)
 
 export const authClient = createAuthClient({
   baseURL,
