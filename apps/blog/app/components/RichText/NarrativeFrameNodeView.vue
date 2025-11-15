@@ -80,6 +80,7 @@ const allSources = computed(() => {
 </template>
 
 <style>
+/* Unscoped so SSR fallback has correct layout */
 .NarrativeFrame {
   border-radius: var(--radius);
   width: 60em;

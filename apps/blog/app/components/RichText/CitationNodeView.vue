@@ -26,11 +26,19 @@ const cit: Citation = {
     <blockquote>
       <NodeViewContent />
     </blockquote>
-    <CitationIcons :citation="cit" />
+    <ClientOnly>
+      <CitationIcons :citation="cit" />
+      <template #fallback>
+        <div class="CitationIconsPlaceholder">
+          <span class="caption">Citation info will load...</span>
+        </div>
+      </template>
+    </ClientOnly>
   </NodeViewWrapper>
 </template>
 
 <style>
+/* Unscoped so SSR fallback has correct layout */
 .CitedQuote {
   --divider-colour: var(--base-40);
   display: flex;
@@ -42,5 +50,12 @@ const cit: Citation = {
   padding-bottom: var(--space-1);
   border-left: 1px solid var(--divider-colour);
   margin: 0;
+}
+
+.CitationIconsPlaceholder {
+  padding: var(--space-1);
+  color: var(--base-60);
+  font-style: italic;
+  min-height: var(--space-3);
 }
 </style>

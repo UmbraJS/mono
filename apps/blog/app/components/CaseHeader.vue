@@ -10,11 +10,12 @@ gsap.registerPlugin(ScrollTrigger)
 
 defineProps<{
   titleEditor: Editor | undefined
+  titleSsrHtml: string
   imageUrl: string
 }>()
 
 const imageWrapperRef = useTemplateRef<HTMLDivElement>("imgRef")
-const titleRef = useTemplateRef<typeof EditorContent>("titleRef")
+const titleRef = useTemplateRef<HTMLElement>("titleRef")
 const containerRef = useTemplateRef<HTMLElement>("containerRef")
 
 // Get the actual img element from NuxtImg wrapper
@@ -43,7 +44,7 @@ onMounted(() => {
     }
   })
 
-  gsap.to(titleRef.value.rootEl, {
+  gsap.to(titleRef.value, {
     y: 200,
     ease: 'none',
     scrollTrigger: {
@@ -60,7 +61,14 @@ onMounted(() => {
   <div ref="containerRef" class="CaseHeader">
     <NuxtImg ref="imgRef" :src="imageUrl" width="2670" height="1780" fit="cover" alt="Case header image"
       crossorigin="anonymous" />
-    <EditorContent ref="titleRef" :editor="titleEditor" class="CaseTitle" />
+    <div ref="titleRef" class="CaseTitle">
+      <ClientOnly>
+        <EditorContent :editor="titleEditor" />
+        <template #fallback>
+          <div class="ProseMirror" v-html="titleSsrHtml" />
+        </template>
+      </ClientOnly>
+    </div>
   </div>
 </template>
 

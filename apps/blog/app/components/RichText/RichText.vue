@@ -22,11 +22,11 @@ const shadowGrowt2 = computed(() => {
   return `${remapValue(y.value, 0, 300, 0, 80)}px`
 })
 
-const titleEditor = useTitleEditor({
+const { editor: titleEditor, ssrHtml: titleSsrHtml } = useTitleEditor({
   content: `THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY`,
 })
 
-const contentEditor = useEditor({
+const { editor: contentEditor, ssrHtml: contentSsrHtml } = useEditor({
   placeholder: 'Write your post here...',
   // onChange: (editor) => {
   //   const html = editor.getHTML()
@@ -67,12 +67,17 @@ const hall: {
           </p>
         </div>
       </div>
-      <CaseHeader :title-editor="titleEditor" :image-url="'/rocks.avif'" />
+      <CaseHeader :title-editor="titleEditor" :title-ssr-html="titleSsrHtml" :image-url="'/rocks.avif'" />
     </div>
     <article ref="caseContentRef" class="CaseContent">
       <AuthorBar :author="author" />
       <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
-      <EditorContent :editor="contentEditor" />
+      <ClientOnly>
+        <EditorContent :editor="contentEditor" />
+        <template #fallback>
+          <div class="ProseMirror" v-html="contentSsrHtml" />
+        </template>
+      </ClientOnly>
     </article>
   </div>
 </template>

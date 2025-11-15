@@ -1,5 +1,6 @@
 import { useEditor as useTiptap } from '@tiptap/vue-3'
 import type { Editor } from '@tiptap/core'
+import { generateJSON, generateHTML } from '@tiptap/html'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -27,24 +28,56 @@ interface useTiptapProps {
   onChange?: (editor: Editor) => void
 }
 
+function getExtensionsForTitle(limit: number, placeholder: string) {
+  return [
+    Document,
+    Text,
+    DisplayHeader,
+    CharacterCount.configure({ limit }),
+    Placeholder.configure({ placeholder }),
+  ]
+}
+
+function getExtensionsForContent(limit: number, placeholder: string) {
+  return [
+    Document,
+    Text,
+    Bold,
+    Italic,
+    Heading,
+    Paragraph,
+    Slugline,
+    History,
+    Overflow,
+    BubbleMenuExtension,
+    Placeholder.configure({ placeholder }),
+    CharacterCount.configure({ limit }),
+    Citation,
+    NarrativeFrame,
+    Reference,
+  ]
+}
+
 export function useTitleEditor({
   limit = 120,
   placeholder = 'Write a title...',
   content,
   onChange = () => { },
 }: useTiptapProps) {
+  const extensions = getExtensionsForTitle(limit, placeholder)
+
+  // Generate SSR HTML using Tiptap v3's server-side rendering
+  const ssrHtml = ref('')
+  if (import.meta.server && content) {
+    // Convert HTML to JSON, then back to HTML with proper rendering (works on server)
+    const jsonContent = generateJSON(content, extensions)
+    ssrHtml.value = generateHTML(jsonContent, extensions)
+  }
+
   const editor = useTiptap({
     content,
     onUpdate: ({ editor }) => onChange(editor),
-    extensions: [
-      Document,
-      Text,
-      DisplayHeader,
-      CharacterCount.configure({ limit }),
-      Placeholder.configure({
-        placeholder: placeholder,
-      }),
-    ],
+    extensions,
   })
 
   onBeforeUnmount(() => {
@@ -52,7 +85,7 @@ export function useTitleEditor({
     editor.value.destroy()
   })
 
-  return editor
+  return { editor, ssrHtml }
 }
 
 export function useEditor({
@@ -61,28 +94,20 @@ export function useEditor({
   content,
   onChange = () => { },
 }: useTiptapProps) {
+  const extensions = getExtensionsForContent(limit, placeholder)
+
+  // Generate SSR HTML using Tiptap v3's server-side rendering
+  const ssrHtml = ref('')
+  if (import.meta.server && content) {
+    // Convert HTML to JSON, then back to HTML with proper rendering (works on server)
+    const jsonContent = generateJSON(content, extensions)
+    ssrHtml.value = generateHTML(jsonContent, extensions)
+  }
+
   const editor = useTiptap({
     content,
     onUpdate,
-    extensions: [
-      Document,
-      Text,
-      Bold,
-      Italic,
-      Heading,
-      Paragraph,
-      Slugline,
-      History,
-      Overflow,
-      BubbleMenuExtension,
-      Placeholder.configure({ placeholder }),
-      CharacterCount.configure({ limit }),
-      Citation,
-      NarrativeFrame,
-      Reference,
-      // Extension,
-      // Mention,
-    ],
+    extensions,
   })
 
   const currentNodeLength = ref(0)
@@ -105,5 +130,5 @@ export function useEditor({
     editor.value.destroy()
   })
 
-  return editor
+  return { editor, ssrHtml }
 }

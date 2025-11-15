@@ -85,8 +85,17 @@ export const Citation = Node.create<CitationOptions>({
       'div',
       mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
         'data-type': 'citation',
+        'class': 'CitedQuote',
       }),
-      0,
+      [
+        'blockquote',
+        0, // content goes here
+      ],
+      [
+        'div',
+        { class: 'CitationIconsPlaceholder' },
+        ['span', { class: 'caption' }, 'Citation info will load...'],
+      ],
     ]
   },
 

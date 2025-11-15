@@ -42,7 +42,14 @@ export default Mark.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['reference', HTMLAttributes]
+    return [
+      'reference',
+      {
+        ...HTMLAttributes,
+        class: 'ProseContent',
+      },
+      0,
+    ]
   },
 
   addCommands() {

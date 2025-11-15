@@ -103,13 +103,18 @@ export const NarrativeFrame = Node.create<NarrativeFrameOptions>({
     ]
   },
 
-  renderHTML({ HTMLAttributes }) {
+  renderHTML({ node, HTMLAttributes }) {
     return [
       'div',
       mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
         'data-component': 'narrative-frame',
+        'class': 'NarrativeFrame border',
       }),
-      0,
+      [
+        'header',
+        ['p', { class: 'p display' }, node.attrs.title || 'Summarise the point being made'],
+      ],
+      ['div', { class: 'FrameSupport' }, 0],
     ]
   },
 

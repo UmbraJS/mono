@@ -15,6 +15,7 @@ defineProps<MarkViewProps>()
 </template>
 
 <style>
+/* Unscoped so SSR fallback has correct styling */
 .ProseContent {
   color: var(--base-text);
   position: relative;
@@ -38,5 +39,17 @@ defineProps<MarkViewProps>()
 .ReferenceLinkIcon {
   margin-left: var(--space-1);
   vertical-align: middle;
+}
+
+/* Add emoji icon via CSS for SSR (before Vue component loads) */
+.ProseContent[data-icon]::after {
+  content: attr(data-icon);
+  margin-left: var(--space-1);
+  vertical-align: middle;
+}
+
+/* Hide CSS icon when Vue component renders the Icon */
+.ProseContent:has(.ReferenceLinkIcon)::after {
+  display: none;
 }
 </style>
