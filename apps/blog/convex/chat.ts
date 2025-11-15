@@ -5,14 +5,12 @@ export const sendMessage = mutation({
   args: {
     userId: v.string(),
     body: v.string(),
-    displayName: v.string(),
   },
   handler: async (ctx, args) => {
     // Insert the message with timestamp
     await ctx.db.insert("messages", {
       userId: args.userId,
       body: args.body,
-      displayName: args.displayName,
       timestamp: Date.now(),
     });
 
@@ -39,7 +37,19 @@ export const getMessages = query({
   args: {},
   handler: async (ctx) => {
     const messages = await ctx.db.query("messages").order("desc").take(50);
-    return messages.reverse();
+
+    // Enrich messages with user display names
+    const messagesWithUsers = await Promise.all(
+      messages.map(async (message) => {
+        const user = await ctx.db.query("user").filter((q) => q.eq(q.field("_id"), message.userId)).first();
+        return {
+          ...message,
+          displayName: user?.name || "Anonymous",
+        };
+      })
+    );
+
+    return messagesWithUsers.reverse();
   },
 });
 
@@ -98,19 +108,14 @@ export const getOnlineUsers = query({
       .filter((q) => q.gt(q.field("lastSeen"), fiveMinutesAgo))
       .collect();
 
-    // Get display names from recent messages
+    // Get display names from user table
     const usersWithNames = await Promise.all(
       presences.map(async (presence) => {
-        // Get the most recent message from this user to get their display name
-        const recentMessage = await ctx.db
-          .query("messages")
-          .withIndex("by_userId", (q) => q.eq("userId", presence.userId))
-          .order("desc")
-          .first();
+        const user = await ctx.db.query("user").filter((q) => q.eq(q.field("_id"), presence.userId)).first();
 
         return {
           userId: presence.userId,
-          displayName: recentMessage?.displayName || "Anonymous",
+          displayName: user?.name || "Anonymous",
           lastSeen: presence.lastSeen,
           isOnline: true,
         };

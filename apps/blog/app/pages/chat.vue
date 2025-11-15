@@ -79,7 +79,6 @@ async function onSubmit({ message, form }: ChatMessage) {
     await sendMessage({
       userId: currentUser.value.userId,
       body: message,
-      displayName: currentUser.value.displayName
     });
 
     form.setForm({ message: "" });

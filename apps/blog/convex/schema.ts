@@ -17,7 +17,6 @@ const schema = defineSchema({
   messages: defineTable({
     userId: v.string(),
     body: v.string(),
-    displayName: v.string(),
     timestamp: v.number(),
   }).index("by_userId", ["userId"]),
   emojiEvents: defineTable({
