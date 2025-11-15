@@ -26,14 +26,7 @@ const cit: Citation = {
     <blockquote>
       <NodeViewContent />
     </blockquote>
-    <ClientOnly>
-      <CitationIcons :citation="cit" />
-      <template #fallback>
-        <div class="CitationIconsPlaceholder">
-          <span class="caption">Citation info will load...</span>
-        </div>
-      </template>
-    </ClientOnly>
+    <CitationIcons :citation="cit" />
   </NodeViewWrapper>
 </template>
 

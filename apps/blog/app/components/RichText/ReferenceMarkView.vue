@@ -7,7 +7,7 @@ defineProps<MarkViewProps>()
 </script>
 
 <template>
-  <a className="ProseContent" data-test-id="mark-view" contenteditable="false"
+  <a className="ReferenceMark" data-test-id="mark-view" contenteditable="false"
     href="https://community.vercel.com/t/build-completes-successfully-but-deployment-never-starts/27085">
     <MarkViewContent />
     <Icon class="ReferenceLinkIcon" name="carbon:link" />
@@ -16,13 +16,13 @@ defineProps<MarkViewProps>()
 
 <style>
 /* Unscoped so SSR fallback has correct styling */
-.ProseContent {
+.ReferenceMark {
   color: var(--base-text);
   position: relative;
   z-index: 1;
 }
 
-.ProseContent::after {
+.ReferenceMark::after {
   content: '';
   background-color: var(--base-20);
   border-radius: var(--radius);
@@ -39,17 +39,5 @@ defineProps<MarkViewProps>()
 .ReferenceLinkIcon {
   margin-left: var(--space-1);
   vertical-align: middle;
-}
-
-/* Add emoji icon via CSS for SSR (before Vue component loads) */
-.ProseContent[data-icon]::after {
-  content: attr(data-icon);
-  margin-left: var(--space-1);
-  vertical-align: middle;
-}
-
-/* Hide CSS icon when Vue component renders the Icon */
-.ProseContent:has(.ReferenceLinkIcon)::after {
-  display: none;
 }
 </style>
