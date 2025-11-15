@@ -28,6 +28,7 @@ export const createAuth = (
     "http://localhost:3001",
     "http://localhost:3002",
     "http://localhost:3003",
+    "https://blog-myriadjs.vercel.app", // Production Vercel app
   ];
 
   // Add production site URL if available
