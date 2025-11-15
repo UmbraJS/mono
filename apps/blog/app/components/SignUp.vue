@@ -61,6 +61,21 @@ async function signUp() {
     loading.value = false
   }
 }
+
+async function signUpWithGithub() {
+  if (loading.value) return
+  loading.value = true
+
+  const { error } = await authClient.signIn.social({
+    provider: 'github',
+    callbackURL: '/profile',
+  })
+
+  if (error) {
+    toast.error('Error signing up with GitHub')
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -72,6 +87,11 @@ async function signUp() {
     <Button type="submit" :disabled="loading">
       <span v-if="!loading">Sign Up</span>
       <Spinner v-else variant="secondary" size="1.5em" />
+    </Button>
+    <Button type="button" :disabled="loading" @click="signUpWithGithub">
+      <Icon v-if="!loading" name="i-simple-icons-github" />
+      <span v-if="!loading"> Sign Up with Github </span>
+      <Spinner v-if="loading" variant="secondary" size="1.5em" />
     </Button>
   </form>
 </template>

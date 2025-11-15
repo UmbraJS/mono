@@ -5,6 +5,7 @@ import { convex, createClient, type GenericCtx } from "convue";
 import { betterAuth } from "better-auth";
 import type { BetterAuthOptions } from "better-auth";
 import type { DataModel } from "./_generated/dataModel";
+import { github } from "better-auth/social-providers";
 
 const siteUrl = process.env.SITE_URL || process.env.CONVEX_SITE_URL;
 
@@ -47,6 +48,12 @@ export const createAuth = (
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: false, // Simplified for now
+    },
+    socialProviders: {
+      github: github({
+        clientId: process.env.GITHUB_CLIENT_ID || "",
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+      }),
     },
     plugins: [
       convex(),
