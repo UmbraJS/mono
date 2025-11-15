@@ -66,17 +66,10 @@ export function useTitleEditor({
 }: useTiptapProps) {
   const extensions = getExtensionsForTitle(limit, placeholder)
 
-  // Generate SSR HTML using Tiptap's static renderer
+  // Generate SSR HTML using generateHTML (server-safe, no DOM required)
   const ssrHtml = ref('')
-  if (import.meta.server && content) {
-    // If content is JSON, use it directly with generateHTML (static renderer)
-    // If content is HTML string, editor will parse it client-side (no SSR for HTML strings)
-    if (typeof content === 'object') {
-      ssrHtml.value = generateHTML(content, extensions)
-    } else {
-      // For HTML strings, we'll let client parse it (fallback to empty for SSR)
-      ssrHtml.value = content
-    }
+  if (import.meta.server && content && typeof content === 'object') {
+    ssrHtml.value = generateHTML(content, extensions)
   }
 
   const editor = useTiptap({
@@ -101,17 +94,10 @@ export function useEditor({
 }: useTiptapProps) {
   const extensions = getExtensionsForContent(limit, placeholder)
 
-  // Generate SSR HTML using Tiptap's static renderer
+  // Generate SSR HTML using generateHTML (server-safe, no DOM required)
   const ssrHtml = ref('')
-  if (import.meta.server && content) {
-    // If content is JSON, use it directly with generateHTML (static renderer)
-    // If content is HTML string, editor will parse it client-side (no SSR for HTML strings)
-    if (typeof content === 'object') {
-      ssrHtml.value = generateHTML(content, extensions)
-    } else {
-      // For HTML strings, we'll let client parse it (fallback to empty for SSR)
-      ssrHtml.value = content
-    }
+  if (import.meta.server && content && typeof content === 'object') {
+    ssrHtml.value = generateHTML(content, extensions)
   }
 
   const editor = useTiptap({

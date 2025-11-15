@@ -93,8 +93,12 @@ export const Citation = Node.create<CitationOptions>({
       ],
       [
         'div',
-        { class: 'CitationIconsPlaceholder' },
-        ['span', { class: 'caption' }, 'Citation info will load...'],
+        {
+          class: 'CitationIconsPlaceholder',
+          style: 'min-height: 12px; display: flex; align-items: center; justify-content: flex-end; padding-left: var(--space-2); border-left: 1px solid var(--divider-colour);'
+        },
+        "...loading"
+        // Empty placeholder that reserves space but doesn't show "loading" text
       ],
     ]
   },
