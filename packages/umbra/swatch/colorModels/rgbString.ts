@@ -1,4 +1,4 @@
-import { RgbaColor } from "../types";
+import type { RgbaColor } from "../types";
 import { roundRgba, clampRgba } from "./rgb";
 
 // Functional syntax

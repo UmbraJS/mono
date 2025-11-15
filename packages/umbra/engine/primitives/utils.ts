@@ -4,7 +4,7 @@ import type { UmbraSwatch } from '../../swatch'
 import type { UmbraScheme, UmbraSettings } from '../types'
 import { getReadability } from './color'
 import { defaultSettings } from '../defaults'
-import { UmbraShade } from '../easing'
+import type { UmbraShade } from '../easing'
 
 interface RandomSettings extends UmbraSettings {
   amount: number

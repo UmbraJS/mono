@@ -1,4 +1,4 @@
-import { RgbaColor } from "../types";
+import type { RgbaColor } from "../types";
 import { round } from "../helpers";
 import { roundRgba } from "./rgb";
 

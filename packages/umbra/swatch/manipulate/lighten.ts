@@ -1,5 +1,5 @@
 import { rgbaToHsla } from "../colorModels/hsl";
-import { HslaColor, RgbaColor } from "../types";
+import type { HslaColor, RgbaColor } from "../types";
 import { clamp } from "../helpers";
 
 export const lighten = (rgba: RgbaColor, amount: number): HslaColor => {

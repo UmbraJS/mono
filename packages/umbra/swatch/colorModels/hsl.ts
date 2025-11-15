@@ -1,4 +1,4 @@
-import { InputObject, RgbaColor, HslaColor, HsvaColor } from "../types";
+import type { InputObject, RgbaColor, HslaColor, HsvaColor } from "../types";
 import { ALPHA_PRECISION } from "../constants";
 import { clamp, clampHue, round, isPresent } from "../helpers";
 import { hsvaToRgba, rgbaToHsva } from "./hsv";

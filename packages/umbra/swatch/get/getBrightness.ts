@@ -1,4 +1,4 @@
-import { RgbaColor } from "../types";
+import type { RgbaColor } from "../types";
 
 /**
  * Returns the brightness of a color [0-1].

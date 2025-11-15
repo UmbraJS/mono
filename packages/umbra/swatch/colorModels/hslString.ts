@@ -1,5 +1,5 @@
 import { parseHue } from "../helpers";
-import { RgbaColor } from "../types";
+import type { RgbaColor } from "../types";
 import { clampHsla, rgbaToHsla, hslaToRgba, roundHsla } from "./hsl";
 
 // Functional syntax

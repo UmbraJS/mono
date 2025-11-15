@@ -1,6 +1,6 @@
 import { UmbraSwatch } from "./swatch";
+import type { Parsers } from "./types";
 import { parsers } from "./parse";
-import { Parsers } from "./types";
 
 export type Plugin = (ColordClass: typeof UmbraSwatch, parsers: Parsers) => void;
 

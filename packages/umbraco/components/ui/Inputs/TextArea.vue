@@ -53,5 +53,6 @@ function adjustHeight(area: EventTarget | null) {
   overflow-y: hidden;
 
   field-sizing: content;
+  width: 100%;
 }
 </style>

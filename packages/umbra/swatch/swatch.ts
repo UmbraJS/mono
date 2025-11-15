@@ -1,4 +1,4 @@
-import { Input, AnyColor, RgbaColor, HslaColor, HsvaColor } from "./types";
+import type { Input, AnyColor, RgbaColor, HslaColor, HsvaColor } from "./types";
 import { round } from "./helpers";
 import { ALPHA_PRECISION } from "./constants";
 import { parse } from "./parse";

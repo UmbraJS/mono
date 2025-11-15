@@ -1,5 +1,5 @@
 import { clampLaba, labaToRgba, rgbaToLaba } from "../colorModels/lab";
-import { RgbaColor } from "../types";
+import type { RgbaColor } from "../types";
 
 export const mix = (rgba1: RgbaColor, rgba2: RgbaColor, ratio: number): RgbaColor => {
   const laba1 = rgbaToLaba(rgba1);

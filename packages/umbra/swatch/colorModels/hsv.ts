@@ -1,4 +1,4 @@
-import { InputObject, RgbaColor, HsvaColor } from "../types";
+import type { InputObject, RgbaColor, HsvaColor } from "../types";
 import { ALPHA_PRECISION } from "../constants";
 import { clamp, clampHue, isPresent, round } from "../helpers";
 
@@ -37,8 +37,8 @@ export const rgbaToHsva = ({ r, g, b, a }: RgbaColor): HsvaColor => {
     ? max === r
       ? (g - b) / delta
       : max === g
-      ? 2 + (b - r) / delta
-      : 4 + (r - g) / delta
+        ? 2 + (b - r) / delta
+        : 4 + (r - g) / delta
     : 0;
 
   return {

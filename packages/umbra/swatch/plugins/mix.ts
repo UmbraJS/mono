@@ -1,7 +1,7 @@
-import { AnyColor } from "../types";
-import { Plugin } from "../extend";
+import type { AnyColor } from "../types";
+import type { Plugin } from "../extend";
+import type { UmbraSwatch } from "../swatch";
 import { mix } from "../manipulate/mix";
-import { UmbraSwatch } from "../swatch";
 
 declare module "../swatch" {
   interface UmbraSwatch {

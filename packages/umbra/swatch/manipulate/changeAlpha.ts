@@ -1,4 +1,4 @@
-import { RgbaColor } from "../types";
+import type { RgbaColor } from "../types";
 
 export const changeAlpha = (rgba: RgbaColor, a: number): RgbaColor => ({
   r: rgba.r,

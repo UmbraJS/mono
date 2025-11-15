@@ -1,4 +1,4 @@
-import { RgbaColor } from "../types";
+import type { RgbaColor } from "../types";
 
 export const invert = (rgba: RgbaColor): RgbaColor => ({
   r: 255 - rgba.r,

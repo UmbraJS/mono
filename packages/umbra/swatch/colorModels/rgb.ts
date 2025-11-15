@@ -1,4 +1,4 @@
-import { InputObject, RgbaColor } from "../types";
+import type { InputObject, RgbaColor } from "../types";
 import { ALPHA_PRECISION } from "../constants";
 import { round, clamp, isPresent } from "../helpers";
 

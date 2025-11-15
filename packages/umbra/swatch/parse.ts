@@ -1,4 +1,4 @@
-import { Parser, Parsers, ParseResult, Input, InputObject, Format } from "./types";
+import type { Parser, Parsers, ParseResult, Input, InputObject, Format } from "./types";
 import { parseHex } from "./colorModels/hex";
 import { parseRgba } from "./colorModels/rgb";
 import { parseHsla } from "./colorModels/hsl";

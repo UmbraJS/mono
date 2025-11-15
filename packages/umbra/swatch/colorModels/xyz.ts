@@ -1,4 +1,4 @@
-import { InputObject, RgbaColor, XyzColor, XyzaColor } from "../types";
+import type { InputObject, RgbaColor, XyzColor, XyzaColor } from "../types";
 import { ALPHA_PRECISION } from "../constants";
 import { clamp, isPresent, round } from "../helpers";
 import { clampRgba, linearizeRgbChannel, unlinearizeRgbChannel } from "./rgb";
