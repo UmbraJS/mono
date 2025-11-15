@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
 import { toast, ScrollArea } from "umbraco";

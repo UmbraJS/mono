@@ -1,21 +1,57 @@
 <script setup lang="ts">
-import { Button, Input, toast } from 'umbraco'
+import { Button, Input, toast, Spinner } from 'umbraco'
+import { z } from 'zod'
+import { useFormula } from '@umbrajs/formula'
 
 const { client: authClient } = useAuth()
 
-const email = ref('')
-const password = ref('')
-const name = ref('')
 const loading = ref(false)
 
+const form = useFormula(
+  {
+    email: '',
+    password: '',
+    name: '',
+  },
+  {
+    validationMode: 'onSubmit',
+    schema: z.object({
+      email: z.string().email('Invalid email address').min(1, 'Email is required'),
+      password: z
+        .string()
+        .min(8, 'Password must be at least 8 characters')
+        .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .regex(/[0-9]/, 'Password must contain at least one number'),
+      name: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Name must be less than 50 characters'),
+    }),
+  }
+)
+
 async function signUp() {
-  if (loading.value) return
+  const validation = form.validate()
+
+  if (!validation.success) {
+    const errors = Object.entries(validation.fieldErrors)
+    if (errors.length > 0) {
+      const firstError = errors[0]
+      if (firstError) {
+        const [field, messages] = firstError
+        toast.error(`${messages[0]}`)
+      }
+    } else if (validation.formErrors.length > 0 && validation.formErrors[0]) {
+      toast.error(validation.formErrors[0])
+    }
+    return
+  }
+
+  if (!validation.data || loading.value) return
   loading.value = true
 
   const { error } = await authClient.signUp.email({
-    email: email.value,
-    password: password.value,
-    name: name.value,
+    email: validation.data.email,
+    password: validation.data.password,
+    name: validation.data.name,
   })
 
   if (error) {
@@ -23,6 +59,7 @@ async function signUp() {
     loading.value = false
   } else {
     toast.success('You have been signed up! Please sign in.')
+    form.reset()
     loading.value = false
   }
 }
@@ -30,10 +67,27 @@ async function signUp() {
 
 <template>
   <form @submit.prevent="signUp">
-    <Input type="email" label="Email" @input="(e: InputEvent) => (email = (e.target as HTMLInputElement).value)" />
-    <Input label="Password" type="password"
-      @input="(e: InputEvent) => (password = (e.target as HTMLInputElement).value)" />
-    <Input label="Name" type="name" @input="(e: InputEvent) => (name = (e.target as HTMLInputElement).value)" />
-    <Button type="submit">Sign Up</Button>
+    <Input
+      v-model="form.data.value.email"
+      type="email"
+      label="Email"
+      :error="form.errors.value.email ? form.errors.value.email[0] : ''"
+    />
+    <Input
+      v-model="form.data.value.password"
+      type="password"
+      label="Password"
+      :error="form.errors.value.password ? form.errors.value.password[0] : ''"
+    />
+    <Input
+      v-model="form.data.value.name"
+      type="text"
+      label="Name"
+      :error="form.errors.value.name ? form.errors.value.name[0] : ''"
+    />
+    <Button type="submit" :disabled="loading">
+      <span v-if="!loading">Sign Up</span>
+      <Spinner v-else variant="secondary" size="1.5em" />
+    </Button>
   </form>
 </template>

@@ -5,8 +5,6 @@ import { convexClient } from 'convue'
 // This will be replaced at build time by Vite
 const baseURL = `${import.meta.env.NUXT_PUBLIC_CONVEX_SITE_URL || 'http://127.0.0.1:8187'}/api/auth`
 
-console.log('[auth-client] Better Auth baseURL:', baseURL)
-
 export const authClient = createAuthClient({
   baseURL,
   plugins: [convexClient()],

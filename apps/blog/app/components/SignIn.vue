@@ -1,20 +1,50 @@
 <script setup lang="ts">
 import { Button, toast, Input, Spinner } from 'umbraco'
+import { z } from 'zod'
+import { useFormula } from '@umbrajs/formula'
 
 const auth = useAuth()
 const router = useRouter()
 
-const email = ref('')
-const password = ref('')
 const loading = ref(false)
 
+const form = useFormula(
+  {
+    email: '',
+    password: '',
+  },
+  {
+    validationMode: 'onSubmit',
+    schema: z.object({
+      email: z.string().email('Invalid email address').min(1, 'Email is required'),
+      password: z.string().min(1, 'Password is required'),
+    }),
+  }
+)
+
 async function signIn() {
-  if (loading.value) return
+  const validation = form.validate()
+
+  if (!validation.success) {
+    const errors = Object.entries(validation.fieldErrors)
+    if (errors.length > 0) {
+      const firstError = errors[0]
+      if (firstError) {
+        const [field, messages] = firstError
+        toast.error(`${messages[0]}`)
+      }
+    } else if (validation.formErrors.length > 0 && validation.formErrors[0]) {
+      toast.error(validation.formErrors[0])
+    }
+    return
+  }
+
+  if (!validation.data || loading.value) return
   loading.value = true
 
   const result = await auth.client.signIn.email({
-    email: email.value,
-    password: password.value,
+    email: validation.data.email,
+    password: validation.data.password,
   })
 
   if (result.error) {
@@ -53,10 +83,19 @@ const signinWithGithub = async () => {
     <Spinner size="8em" />
   </div>
   <form @submit.prevent="signIn">
-    <Input type="email" label="Email" @input="(e: InputEvent) => (email = (e.target as HTMLInputElement).value)" />
-    <Input type="password" label="Password"
-      @input="(e: InputEvent) => (password = (e.target as HTMLInputElement).value)" />
-    <Button type="submit" :disabled="!email.length || !password.length">
+    <Input
+      v-model="form.data.value.email"
+      type="email"
+      label="Email"
+      :error="form.errors.value.email ? form.errors.value.email[0] : ''"
+    />
+    <Input
+      v-model="form.data.value.password"
+      type="password"
+      label="Password"
+      :error="form.errors.value.password ? form.errors.value.password[0] : ''"
+    />
+    <Button type="submit" :disabled="loading">
       <span v-if="!loading"> Sign In </span>
       <Spinner v-else variant="secondary" size="1.5em" />
     </Button>
