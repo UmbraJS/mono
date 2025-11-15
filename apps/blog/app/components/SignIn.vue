@@ -23,34 +23,12 @@ async function signIn() {
   } else {
     toast.success('You have been signed in!')
 
-    // Manually refetch the session after sign in
-    await auth.refetch()
-
-    // Wait for the refetch to actually complete
-    // Watch for data to be populated
-    await new Promise<void>((resolve) => {
-      let stopWatch: (() => void) | undefined
-
-      stopWatch = watch(
-        () => auth.session.value,
-        (newSession) => {
-          if (newSession) {
-            if (stopWatch) stopWatch()
-            resolve()
-          }
-        },
-        { immediate: true, deep: true }
-      )
-
-      // Fallback timeout
-      setTimeout(() => {
-        if (stopWatch) stopWatch()
-        resolve()
-      }, 5000)
-    })
+    // Manually fetch the session after sign in
+    await auth.fetchSession()
 
     // Navigate to profile
     await router.push('/profile')
+    loading.value = false
   }
 }
 
