@@ -83,18 +83,10 @@ const signinWithGithub = async () => {
     <Spinner size="8em" />
   </div>
   <form @submit.prevent="signIn">
-    <Input
-      v-model="form.data.value.email"
-      type="email"
-      label="Email"
-      :error="form.errors.value.email ? form.errors.value.email[0] : ''"
-    />
-    <Input
-      v-model="form.data.value.password"
-      type="password"
-      label="Password"
-      :error="form.errors.value.password ? form.errors.value.password[0] : ''"
-    />
+    <Input v-model="form.data.value.email" type="email" label="Email"
+      :error="form.errors.value.email ? form.errors.value.email[0] : ''" />
+    <Input v-model="form.data.value.password" type="password" label="Password"
+      :error="form.errors.value.password ? form.errors.value.password[0] : ''" />
     <Button type="submit" :disabled="loading">
       <span v-if="!loading"> Sign In </span>
       <Spinner v-else variant="secondary" size="1.5em" />

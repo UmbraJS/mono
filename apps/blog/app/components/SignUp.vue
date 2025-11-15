@@ -11,7 +11,6 @@ const form = useFormula(
   {
     email: '',
     password: '',
-    name: '',
   },
   {
     validationMode: 'onSubmit',
@@ -23,7 +22,6 @@ const form = useFormula(
         .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
         .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
         .regex(/[0-9]/, 'Password must contain at least one number'),
-      name: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Name must be less than 50 characters'),
     }),
   }
 )
@@ -51,7 +49,7 @@ async function signUp() {
   const { error } = await authClient.signUp.email({
     email: validation.data.email,
     password: validation.data.password,
-    name: validation.data.name,
+    name: 'Anonymous',
   })
 
   if (error) {
@@ -67,24 +65,10 @@ async function signUp() {
 
 <template>
   <form @submit.prevent="signUp">
-    <Input
-      v-model="form.data.value.email"
-      type="email"
-      label="Email"
-      :error="form.errors.value.email ? form.errors.value.email[0] : ''"
-    />
-    <Input
-      v-model="form.data.value.password"
-      type="password"
-      label="Password"
-      :error="form.errors.value.password ? form.errors.value.password[0] : ''"
-    />
-    <Input
-      v-model="form.data.value.name"
-      type="text"
-      label="Name"
-      :error="form.errors.value.name ? form.errors.value.name[0] : ''"
-    />
+    <Input v-model="form.data.value.email" type="email" label="Email"
+      :error="form.errors.value.email ? form.errors.value.email[0] : ''" />
+    <Input v-model="form.data.value.password" type="password" label="Password"
+      :error="form.errors.value.password ? form.errors.value.password[0] : ''" />
     <Button type="submit" :disabled="loading">
       <span v-if="!loading">Sign Up</span>
       <Spinner v-else variant="secondary" size="1.5em" />
