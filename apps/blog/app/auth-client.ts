@@ -1,10 +1,9 @@
 import { createAuthClient } from 'better-auth/vue'
 import { convexClient } from 'convue'
 
-// Better Auth requires a full URL with protocol
-const baseURL = typeof window !== 'undefined'
-  ? `${window.location.protocol}//${window.location.host}/api/auth`
-  : 'http://localhost:3001/api/auth'
+// Better Auth API is hosted on Convex site URL, not Vercel app URL
+const convexSiteUrl = import.meta.env.VITE_CONVEX_SITE_URL || 'http://127.0.0.1:8187'
+const baseURL = `${convexSiteUrl}/api/auth`
 
 export const authClient = createAuthClient({
   baseURL,
