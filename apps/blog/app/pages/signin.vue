@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SignUser from '~/components/SignUser.vue'
+import SignUser from '../components/SignUser.vue'
 
 definePageMeta({
   auth: {

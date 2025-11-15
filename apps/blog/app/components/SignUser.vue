@@ -7,21 +7,13 @@ const signMode = ref<"signin" | "signup">("signin");
 </script>
 
 <template>
-  <div class="signin panel-wrapper">
+  <div class="SigninWrapper">
     <div class="multi-toggle-wrapper sibling-group-blur">
       <ButtonGroup>
-        <Button
-          :variant="signMode === 'signin' ? 'primary' : 'base'"
-          size="small"
-          @click="signMode = 'signin'"
-        >
+        <Button :variant="signMode === 'signin' ? 'primary' : 'base'" size="small" @click="signMode = 'signin'">
           Sign in
         </Button>
-        <Button
-          :variant="signMode === 'signup' ? 'primary' : 'base'"
-          size="small"
-          @click="signMode = 'signup'"
-        >
+        <Button :variant="signMode === 'signup' ? 'primary' : 'base'" size="small" @click="signMode = 'signup'">
           Sign up
         </Button>
       </ButtonGroup>
@@ -32,24 +24,20 @@ const signMode = ref<"signin" | "signup">("signin");
 </template>
 
 <style lang="scss">
-form {
-  display: grid;
-  gap: var(--space-1);
-}
-
-.signin {
-  position: relative;
-  display: grid;
+.SigninWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: var(--space-2);
 }
 
-.multi-toggle-wrapper {
-  .buttonGroup {
-    width: 100%;
-  }
+.SigninWrapper form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
 
-  button {
-    width: 100%;
-  }
+.SigninWrapper button {
+  width: 100%;
 }
 </style>
