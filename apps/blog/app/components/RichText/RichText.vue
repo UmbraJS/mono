@@ -22,17 +22,144 @@ const shadowGrowt2 = computed(() => {
   return `${remapValue(y.value, 0, 300, 0, 80)}px`
 })
 
+// Content as JSON for proper SSR with custom node views
 const { editor: titleEditor, ssrHtml: titleSsrHtml } = useTitleEditor({
-  content: `THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY`,
+  content: {
+    type: 'doc',
+    content: [{
+      type: 'displayHeader',
+      content: [{
+        type: 'text',
+        text: "THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY",
+      }],
+    }],
+  },
 })
 
 const { editor: contentEditor, ssrHtml: contentSsrHtml } = useEditor({
   placeholder: 'Write your post here...',
-  // onChange: (editor) => {
-  //   const html = editor.getHTML()
-  //   console.log('Content changed:', html)
-  // },
-  content: `Nuxt layers are a powerful lol feature that you can use to share and reuse <strong> partial </strong> Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a <reference data-count="0">standard</reference > Nuxt application, which makes them easy to author and maintain.< /p><div data-reliance="deductive" data-distance="primary" data-scope="study" data-type="citation"><p>Nuxt applications within a monorepo, or from a git repository or npm package. Nuxt applications within a monorepo, or from a git repository or npm package</p > </div><p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p > <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package.The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.< /p><div data-title="Nuxt Won The Web Awards 2078" data-mood="neutral" data-type="premise" data-component="narrative-frame"><p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p > <div data - reliance="deductive" data - distance="primary" data - scope="study" data - type="citation" > <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package.The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.< /p></div > <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package.The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.< /p></div > <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package.The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.< /p><h2>THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY</h2 > <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package.The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.< /p><h3>THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY</h3 > <p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package.The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.< /p><p>Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.</p > `,
+  content: {
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Nuxt layers are a powerful lol feature that you can use to share and reuse ' },
+          { type: 'text', marks: [{ type: 'bold' }], text: 'partial' },
+          { type: 'text', text: ' Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a ' },
+          { type: 'text', marks: [{ type: 'reference', attrs: { 'data-count': 0 } }], text: 'standard' },
+          { type: 'text', text: ' Nuxt application, which makes them easy to author and maintain.' },
+        ],
+      },
+      {
+        type: 'citation',
+        attrs: {
+          'data-reliance': 'deductive',
+          'data-distance': 'primary',
+          'data-scope': 'study',
+          'data-type': 'citation',
+        },
+        content: [
+          {
+            type: 'paragraph',
+            content: [
+              { type: 'text', text: 'Nuxt applications within a monorepo, or from a git repository or npm package. Nuxt applications within a monorepo, or from a git repository or npm package' },
+            ],
+          },
+        ],
+      },
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+        ],
+      },
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+        ],
+      },
+      {
+        type: 'narrativeFrame',
+        attrs: {
+          'data-title': 'Nuxt Won The Web Awards 2078',
+          'data-mood': 'neutral',
+          'data-type': 'premise',
+          'data-component': 'narrative-frame',
+        },
+        content: [
+          {
+            type: 'paragraph',
+            content: [
+              { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+            ],
+          },
+          {
+            type: 'citation',
+            attrs: {
+              'data-reliance': 'deductive',
+              'data-distance': 'primary',
+              'data-scope': 'study',
+              'data-type': 'citation',
+            },
+            content: [
+              {
+                type: 'paragraph',
+                content: [
+                  { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'paragraph',
+            content: [
+              { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+            ],
+          },
+        ],
+      },
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+        ],
+      },
+      {
+        type: 'heading',
+        attrs: { level: 2 },
+        content: [
+          { type: 'text', text: "THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY" },
+        ],
+      },
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+        ],
+      },
+      {
+        type: 'heading',
+        attrs: { level: 3 },
+        content: [
+          { type: 'text', text: "THE RUBIK'S CUBE IS THE WORLD'S BEST SELLING PUZZLE TOY" },
+        ],
+      },
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+        ],
+      },
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: 'Nuxt layers are a powerful feature that you can use to share and reuse Nuxt applications within a monorepo, or from a git repository or npm package. The layers structure is almost identical to a standard Nuxt application, which makes them easy to author and maintain.' },
+        ],
+      },
+    ],
+  },
 })
 
 const headerImageUrl = 'https://images.unsplash.com/photo-1762140170241-7c8e552f25bb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2670'

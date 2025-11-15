@@ -1,6 +1,6 @@
 import { useEditor as useTiptap } from '@tiptap/vue-3'
-import type { Editor } from '@tiptap/core'
-import { generateJSON, generateHTML } from '@tiptap/html'
+import type { Editor, JSONContent } from '@tiptap/core'
+import { generateHTML } from '@tiptap/html'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -24,7 +24,7 @@ import { ref, onBeforeUnmount } from 'vue'
 interface useTiptapProps {
   limit?: number
   placeholder?: string
-  content?: string
+  content?: string | JSONContent
   onChange?: (editor: Editor) => void
 }
 
@@ -66,12 +66,17 @@ export function useTitleEditor({
 }: useTiptapProps) {
   const extensions = getExtensionsForTitle(limit, placeholder)
 
-  // Generate SSR HTML using Tiptap v3's server-side rendering
+  // Generate SSR HTML using Tiptap's static renderer
   const ssrHtml = ref('')
   if (import.meta.server && content) {
-    // Convert HTML to JSON, then back to HTML with proper rendering (works on server)
-    const jsonContent = generateJSON(content, extensions)
-    ssrHtml.value = generateHTML(jsonContent, extensions)
+    // If content is JSON, use it directly with generateHTML (static renderer)
+    // If content is HTML string, editor will parse it client-side (no SSR for HTML strings)
+    if (typeof content === 'object') {
+      ssrHtml.value = generateHTML(content, extensions)
+    } else {
+      // For HTML strings, we'll let client parse it (fallback to empty for SSR)
+      ssrHtml.value = content
+    }
   }
 
   const editor = useTiptap({
@@ -96,12 +101,17 @@ export function useEditor({
 }: useTiptapProps) {
   const extensions = getExtensionsForContent(limit, placeholder)
 
-  // Generate SSR HTML using Tiptap v3's server-side rendering
+  // Generate SSR HTML using Tiptap's static renderer
   const ssrHtml = ref('')
   if (import.meta.server && content) {
-    // Convert HTML to JSON, then back to HTML with proper rendering (works on server)
-    const jsonContent = generateJSON(content, extensions)
-    ssrHtml.value = generateHTML(jsonContent, extensions)
+    // If content is JSON, use it directly with generateHTML (static renderer)
+    // If content is HTML string, editor will parse it client-side (no SSR for HTML strings)
+    if (typeof content === 'object') {
+      ssrHtml.value = generateHTML(content, extensions)
+    } else {
+      // For HTML strings, we'll let client parse it (fallback to empty for SSR)
+      ssrHtml.value = content
+    }
   }
 
   const editor = useTiptap({
