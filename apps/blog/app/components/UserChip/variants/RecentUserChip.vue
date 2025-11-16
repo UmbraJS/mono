@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import UserChip from "../UserChip/UserChip.vue";
-import UserChipTitle from "../UserChip/UserChipTitle.vue";
-import UserChipAvatar from "../UserChip/UserChipAvatar.vue";
-import UserChipPresence from "../UserChip/UserChipPresence.vue";
+import UserChipWrapper from "../UserChipWrapper.vue";
+import UserChipTitle from "../UserChipTitle.vue";
+import UserChipAvatar from "../UserChipAvatar.vue";
+import UserChipPresence from "../UserChipPresence.vue";
 
 defineProps<{
   color: string;
@@ -16,11 +16,11 @@ defineProps<{
 </script>
 
 <template>
-  <UserChip :color="color">
+  <UserChipWrapper :color="color">
     <UserChipAvatar />
     <div class="MessageContent">
       <UserChipTitle :userName="message.user" :userId="message.userId" />
       <UserChipPresence :isYou="isYou" :message="message" />
     </div>
-  </UserChip>
+  </UserChipWrapper>
 </template>

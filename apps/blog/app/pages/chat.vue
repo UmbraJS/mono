@@ -4,7 +4,7 @@ import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
 import { toast, ScrollArea } from "umbraco";
 import MessageChip from "../components/Chat/MessageChip.vue";
-import RecentUserChip from "../components/Chat/RecentUserChip.vue";
+import RecentUserChip from "../components/UserChip/variants/RecentUserChip.vue";
 import MyMessageBubble from "../components/Chat/MyMessageBubble.vue";
 import ChatMessagesLoading from "../components/Chat/ChatMessagesLoading.vue";
 import MessageComposer from "../components/Chat/MessageComposer.vue";

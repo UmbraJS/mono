@@ -14,14 +14,18 @@ const shortId = computedAsync(async () => {
 
 <template>
   <div class="MessageContentTitle">
-    <p class="MessageName">{{ userName }}</p>
+    <p class="MessageName">
+      <span>
+        {{ userName }}
+      </span>
+    </p>
     <p class="UserID caption">#{{ shortId }}</p>
   </div>
 </template>
 
 <style>
 .MessageName {
-  color: var(--color);
+  color: var(--base-100);
 }
 
 .UserID {

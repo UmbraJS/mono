@@ -1,20 +1,3 @@
-<template>
-  <li class="OtherMessage" :style="{ '--color': color }">
-    <div class="OtherMessageBubble">
-      <div class="MessageHead">
-        <Icon name="mdi:account" />
-      </div>
-      <div class="MessageContent">
-        <div class="MessageContentTitle">
-          <p class="MessageName caption">{{ message.user }}</p>
-          <p v-if="shortId" class="UserID caption">#{{ shortId }}</p>
-        </div>
-        <p>{{ message.body }}</p>
-      </div>
-    </div>
-  </li>
-</template>
-
 <script setup lang="ts">
 import { computedAsync } from "@vueuse/core";
 import { getShortId } from "../../utils";
@@ -32,6 +15,23 @@ const shortId = computedAsync(async () => {
   return getShortId(props.message.userId, 8);
 }, null);
 </script>
+
+<template>
+  <li class="OtherMessage" :style="{ '--color': color }">
+    <div class="OtherMessageBubble">
+      <div class="MessageHead">
+        <Icon name="mdi:account" />
+      </div>
+      <div class="MessageContent">
+        <div class="MessageContentTitle">
+          <p class="MessageName caption">{{ message.user }}</p>
+          <p v-if="shortId" class="UserID caption">#{{ shortId }}</p>
+        </div>
+        <p>{{ message.body }}</p>
+      </div>
+    </div>
+  </li>
+</template>
 
 <style scoped>
 .MessageName {

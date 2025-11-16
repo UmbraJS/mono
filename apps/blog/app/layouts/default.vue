@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { Button } from 'umbraco'
 import { onKeyStroke } from '@vueuse/core'
 import FrostLayer from '../components/FrostLayer.vue'
-import AuthorCard from '../components/AuthorCard.vue'
-import SidebarList from '../components/SidebarList.vue'
 import PostList from '../components/PostList.vue'
 import ProjectList from '../components/ProjectList.vue'
 
+import UserChip from "../components/UserChip/variants/UserChip.vue";
+import { author } from '../../types/profile'
+
 // SSR-safe: guard content query to avoid crashing prerender
-const { data: posts, error: postsError } = await useAsyncData('blog', async () => {
+const { data: posts } = await useAsyncData('blog', async () => {
   try {
     // queryCollection provided by @nuxt/content
     return await queryCollection('blog').all()
@@ -18,7 +20,6 @@ const { data: posts, error: postsError } = await useAsyncData('blog', async () =
 })
 
 const theme = useUmbra()
-
 const reveal = ref(false)
 
 function toggleReveal() {
@@ -34,7 +35,7 @@ onKeyStroke('Escape', () => toggleReveal())
     dark: theme.isDark,
   }">
     <div class="burger" @click="toggleReveal" />
-    <!-- <FrostLayer /> -->
+    <FrostLayer />
     <div class="content-layer">
       <div class="vignet" @click="toggleReveal" />
       <main class="UmbraPage">
@@ -49,7 +50,11 @@ onKeyStroke('Escape', () => toggleReveal())
       </header>
       <div class="content" />
       <div class="sidebar">
-        <AuthorCard />
+        <UserChip :author="author">
+          <Button size="medium">
+            <Icon name="carbon:settings" />
+          </Button>
+        </UserChip>
         <PostList :posts="posts" />
         <ProjectList />
       </div>
@@ -58,9 +63,11 @@ onKeyStroke('Escape', () => toggleReveal())
 </template>
 
 <style lang="scss">
-/* author card styles moved to AuthorCard.vue */
-
-/* list item card styles moved into components */
+.MandatoryIdentityFields {
+  display: grid;
+  grid-auto-flow: column;
+  gap: var(--space-quark);
+}
 
 .inverted-theme {
   color: var(--base-120);
@@ -194,6 +201,7 @@ onKeyStroke('Escape', () => toggleReveal())
 
 .underbar .content {
   grid-area: content;
-  background-color: var(--base-20);
+  background-color: var(--accent-100);
+  border-radius: var(--radius);
 }
 </style>

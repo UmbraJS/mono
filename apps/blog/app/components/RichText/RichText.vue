@@ -4,8 +4,10 @@ import { useEditor, useTitleEditor } from '../../composables/richtext/useTiptap'
 import BubbleMenu from './BubbleMenu.vue'
 import { author } from '../../../types/profile'
 import CaseHeader from '../CaseHeader.vue'
-import AuthorBar from '../AuthorBar.vue'
 import { useScroll } from '@vueuse/core'
+
+import { Button } from 'umbraco'
+import UserChip from '../UserChip/variants/UserChip.vue'
 
 const { y } = useScroll(window)
 
@@ -195,7 +197,11 @@ const hall: {
       <CaseHeader :title-editor="titleEditor" :title-ssr-html="titleSsrHtml" :image-url="'/rocks.avif'" />
     </div>
     <article ref="caseContentRef" class="CaseContent">
-      <AuthorBar :author="author" />
+      <UserChip :author="author">
+        <Button size="medium">
+          <Icon name="carbon:add" />
+        </Button>
+      </UserChip>
       <BubbleMenu v-if="contentEditor" :editor="contentEditor" />
       <ClientOnly>
         <EditorContent :editor="contentEditor" />
