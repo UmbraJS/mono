@@ -18,10 +18,10 @@ const signupSchema = z.object({
   email: z.string().email('Invalid email address').min(1, 'Email is required'),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number'),
+    .min(8, 'needs at least 8 characters')
+    .regex(/[A-Z]/, 'needs at least one uppercase letter')
+    .regex(/[a-z]/, 'needs at least one lowercase letter')
+    .regex(/[0-9]/, 'needs at least one number'),
 })
 
 // Use basic form without validation (we'll validate manually on submit)
@@ -39,12 +39,37 @@ const form = useFormula(
 // Local errors for input field display
 const fieldErrors = ref<{ email?: string; password?: string }>({})
 
-// Clear errors when switching modes or typing
-watch([signMode, () => form.data.value.email, () => form.data.value.password], () => {
+// Clear errors when switching modes
+watch(signMode, () => {
   fieldErrors.value = {}
 })
 
+// Validate individual fields when they change (only if there's already an error)
+watch(() => form.data.value.email, () => {
+  if (!fieldErrors.value.email) return
+
+  const schema = signMode.value === 'signin' ? signinSchema : signupSchema
+  const result = schema.shape.email.safeParse(form.data.value.email)
+
+  if (result.success) {
+    fieldErrors.value = { ...fieldErrors.value, email: undefined }
+  }
+})
+
+watch(() => form.data.value.password, () => {
+  if (!fieldErrors.value.password) return
+
+  const schema = signMode.value === 'signin' ? signinSchema : signupSchema
+  const result = schema.shape.password.safeParse(form.data.value.password)
+
+  if (result.success) {
+    fieldErrors.value = { ...fieldErrors.value, password: undefined }
+  }
+})
+
 async function handleSubmit() {
+  console.log('handleSubmit called')
+
   // Clear previous errors
   fieldErrors.value = {}
 
@@ -55,30 +80,26 @@ async function handleSubmit() {
     password: form.data.value.password,
   })
 
+  console.log('Validation result:', result)
+
   if (!result.success) {
     const formatted = result.error.flatten()
     const errors = formatted.fieldErrors
 
+    console.log('Field errors:', errors)
+
     // Store errors for input field display
-    if (errors.email?.[0]) {
-      fieldErrors.value.email = errors.email[0]
-    }
-    if (errors.password?.[0]) {
-      fieldErrors.value.password = errors.password[0]
+    fieldErrors.value = {
+      email: errors.email?.[0],
+      password: errors.password?.[0],
     }
 
+    console.log('Set fieldErrors to:', fieldErrors.value)
+
     // Show first error in toast
-    if (errors.email?.[0]) {
-      toast.error(errors.email[0])
-      return
-    }
-    if (errors.password?.[0]) {
-      toast.error(errors.password[0])
-      return
-    }
-    if (formatted.formErrors[0]) {
-      toast.error(formatted.formErrors[0])
-      return
+    const firstError = errors.email?.[0] || errors.password?.[0] || formatted.formErrors[0]
+    if (firstError) {
+      toast.error(firstError)
     }
     return
   }
@@ -102,12 +123,13 @@ async function signIn(data: { email: string; password: string }) {
   if (result.error) {
     toast.error(result.error.message || 'Error signing in')
     loading.value = false
-  } else {
-    toast.success('You have been signed in!')
-    await auth.fetchSession()
-    await router.push('/profile')
-    loading.value = false
+    return
   }
+
+  toast.success('You have been signed in!')
+  await auth.fetchSession()
+  await router.push('/profile')
+  loading.value = false
 }
 
 async function signUp(data: { email: string; password: string }) {
@@ -120,11 +142,12 @@ async function signUp(data: { email: string; password: string }) {
   if (error) {
     toast.error(error.message || 'Error signing up')
     loading.value = false
-  } else {
-    toast.success('You have been signed up! Please sign in.')
-    signMode.value = 'signin'
-    loading.value = false
+    return
   }
+
+  toast.success('You have been signed up! Please sign in.')
+  signMode.value = 'signin'
+  loading.value = false
 }
 
 async function handleGithubAuth() {
@@ -161,7 +184,7 @@ async function handleGithubAuth() {
       <Spinner size="8em" />
     </div>
 
-    <form @submit.prevent="handleSubmit">
+    <form novalidate @submit.prevent="handleSubmit">
       <Input v-model="form.data.value.email" type="email" label="Email" :error="fieldErrors.email || ''" />
       <Input v-model="form.data.value.password" type="password" label="Password" :error="fieldErrors.password || ''" />
       <Button type="submit" :disabled="loading">
@@ -179,7 +202,7 @@ async function handleGithubAuth() {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .SigninWrapper {
   display: flex;
   flex-direction: column;
