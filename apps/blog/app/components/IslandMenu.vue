@@ -7,9 +7,7 @@ import SettingsPanel from './SettingsPanel.vue'
 
 const theme = useUmbra()
 const hover = ref(false)
-const hazeStrength = computed(() => {
-  return hover.value ? '58px' : '28px'
-})
+const hazeStrength = computed(() => hover.value ? '58px' : '28px')
 
 type Tab = 'user' | 'settings'
 

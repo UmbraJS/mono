@@ -2,18 +2,7 @@ import { umbra } from '../packages/umbra/index.js'
 import { writeFileSync, mkdirSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { join } from 'path'
-
-// Match the default theme from packages/umbraco/composables/useUmbra.ts
-const defaultThemeInput = {
-  foreground: '#080113',
-  background: '#f3f6ea',
-  accents: ['violet', 'red', 'green'],
-  inversed: {
-    foreground: '#f3f6ea',
-    background: '#080113',
-    accents: ['violet', 'red', 'green'],
-  },
-}
+import { defaultThemeInput } from '../apps/blog/app/theme.js'
 
 console.log('🎨 Generating Umbra default theme CSS...')
 

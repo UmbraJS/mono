@@ -1,27 +1,7 @@
 import { defineStore } from 'pinia'
 import { useUmbra as useUmbraCore } from 'umbraco'
-import type { UmbraInput, Accent } from '@umbrajs/core'
-
-const warningAccent: Accent = {
-  name: 'warning',
-  color: 'red',
-}
-
-const successAccent: Accent = {
-  name: 'success',
-  color: 'green',
-}
-
-const defaultThemeInput: UmbraInput = {
-  foreground: '#080113',
-  background: '#f3f6ea',
-  accents: ['violet', warningAccent, successAccent],
-  inversed: {
-    foreground: '#f3f6ea',
-    background: '#080113',
-    accents: ['violet', warningAccent, successAccent],
-  },
-}
+import type { UmbraInput } from '@umbrajs/core'
+import { defaultThemeInput } from '../theme'
 
 export const useUmbra = defineStore('umbra', () => {
   // Check if we have a saved theme from the cookie (SSR) or localStorage (client)
