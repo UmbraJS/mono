@@ -43,13 +43,6 @@ export default defineNuxtPlugin({
         }
 
     // Provide Convex clients
-    console.log('[convue plugin] Providing context:', {
-      isPrerendering,
-      isClient: import.meta.client,
-      isServer: import.meta.server,
-      hasHttpClient: !!convexContext.httpClientRef.value,
-    })
-
     return {
       provide: {
         convex: {

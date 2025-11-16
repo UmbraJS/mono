@@ -20,7 +20,6 @@ export default defineNuxtPlugin(() => {
           try {
             const themeInput = JSON.parse(currentValue) as UmbraInput
             themeCookie.value = themeInput
-            console.log('[cookie-sync] Theme saved to cookie')
           } catch {
             // Invalid JSON, ignore
           }

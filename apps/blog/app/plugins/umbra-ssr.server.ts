@@ -50,9 +50,6 @@ export default defineNuxtPlugin(() => {
         },
       ],
     })
-
-    const logPrefix = themeCookie.value ? 'custom' : 'default'
-    console.log(`[umbra-ssr] Injected ${logPrefix} theme`)
   } catch (error) {
     console.error('[umbra-ssr] Failed to apply theme:', error)
   }

@@ -13,18 +13,15 @@ export default defineNuxtPlugin(() => {
       try {
         const savedTheme = JSON.parse(stored) as UmbraInput
         const savedIsDark = isDark(savedTheme.background || '')
-        console.log('[umbra-init] Found saved theme in localStorage:', savedIsDark ? 'dark' : 'light')
 
         // Get the Pinia store
         const theme = useUmbra()
 
         // Check if store state matches localStorage (it should if cookie worked)
         const storeIsDark = theme.isDark
-        console.log('[umbra-init] Store isDark:', storeIsDark, 'vs localStorage isDark:', savedIsDark)
 
         // Only apply if there's a mismatch (shouldn't happen if cookie worked)
         if (storeIsDark !== savedIsDark) {
-          console.log('[umbra-init] Mismatch detected, applying saved theme')
           theme.apply({ scheme: savedTheme })
         }
       } catch (e) {
@@ -32,7 +29,6 @@ export default defineNuxtPlugin(() => {
       }
     } else if (themeCookie.value) {
       // If no localStorage but cookie exists, sync cookie to localStorage
-      console.log('[umbra-init] Syncing cookie to localStorage')
       localStorage.setItem('umbra-theme-input', JSON.stringify(themeCookie.value))
     }
   }

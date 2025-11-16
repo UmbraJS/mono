@@ -12,12 +12,10 @@ export const useUmbra = defineStore('umbra', () => {
   try {
     const themeCookie = useCookie<UmbraInput>('umbra-theme')
     if (themeCookie.value) {
-      console.log('[useUmbra store] Using theme from cookie:', themeCookie.value)
       initialTheme = themeCookie.value
     }
   } catch {
     // During prerendering, cookies might not be available - use default theme
-    console.log('[useUmbra store] Cookie not available (prerendering), using default theme')
   }
 
   return useUmbraCore(initialTheme)
