@@ -36,7 +36,18 @@ const form = useFormula(
   }
 )
 
+// Local errors for input field display
+const fieldErrors = ref<{ email?: string; password?: string }>({})
+
+// Clear errors when switching modes or typing
+watch([signMode, () => form.data.value.email, () => form.data.value.password], () => {
+  fieldErrors.value = {}
+})
+
 async function handleSubmit() {
+  // Clear previous errors
+  fieldErrors.value = {}
+
   // Manually validate with the appropriate schema based on mode
   const schema = signMode.value === 'signin' ? signinSchema : signupSchema
   const result = schema.safeParse({
@@ -46,15 +57,23 @@ async function handleSubmit() {
 
   if (!result.success) {
     const formatted = result.error.flatten()
-    const fieldErrors = formatted.fieldErrors
+    const errors = formatted.fieldErrors
 
-    // Show first error found
-    if (fieldErrors.email?.[0]) {
-      toast.error(fieldErrors.email[0])
+    // Store errors for input field display
+    if (errors.email?.[0]) {
+      fieldErrors.value.email = errors.email[0]
+    }
+    if (errors.password?.[0]) {
+      fieldErrors.value.password = errors.password[0]
+    }
+
+    // Show first error in toast
+    if (errors.email?.[0]) {
+      toast.error(errors.email[0])
       return
     }
-    if (fieldErrors.password?.[0]) {
-      toast.error(fieldErrors.password[0])
+    if (errors.password?.[0]) {
+      toast.error(errors.password[0])
       return
     }
     if (formatted.formErrors[0]) {
@@ -143,10 +162,8 @@ async function handleGithubAuth() {
     </div>
 
     <form @submit.prevent="handleSubmit">
-      <Input v-model="form.data.value.email" type="email" label="Email"
-        :error="form.errors.value.email ? form.errors.value.email[0] : ''" />
-      <Input v-model="form.data.value.password" type="password" label="Password"
-        :error="form.errors.value.password ? form.errors.value.password[0] : ''" />
+      <Input v-model="form.data.value.email" type="email" label="Email" :error="fieldErrors.email || ''" />
+      <Input v-model="form.data.value.password" type="password" label="Password" :error="fieldErrors.password || ''" />
       <Button type="submit" :disabled="loading">
         <span v-if="!loading">{{ signMode === 'signin' ? 'Sign In' : 'Sign Up' }}</span>
         <Spinner v-else variant="secondary" size="1.5em" />
