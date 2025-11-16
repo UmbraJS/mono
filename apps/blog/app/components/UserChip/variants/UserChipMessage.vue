@@ -2,15 +2,13 @@
 import UserChipWrapper from "../UserChipWrapper.vue";
 import UserChipTitle from "../UserChipTitle.vue";
 import UserChipAvatar from "../UserChipAvatar.vue";
-import UserChipPresence from "../UserChipPresence.vue";
 import { useScopedTheme } from "../../../composables/useScopedTheme";
 
 const props = defineProps<{
   color: string;
-  isYou: boolean;
   message: {
     user: string;
-    lastSeen: number;
+    body: string;
     userId: string;
   };
 }>();
@@ -19,19 +17,13 @@ useScopedTheme("chipWrapperRef", () => props.color);
 </script>
 
 <template>
-  <div ref="chipWrapperRef" class="RecentUserWrapper">
+  <div ref="chipWrapperRef">
     <UserChipWrapper :color="color" class="base-accent">
       <UserChipAvatar />
       <div class="MessageContent">
         <UserChipTitle :userName="message.user" :userId="message.userId" />
-        <UserChipPresence :isYou="isYou" :message="message" />
+        <p>{{ message.body }}</p>
       </div>
     </UserChipWrapper>
   </div>
 </template>
-
-<style>
-.RecentUserWrapper {
-  width: 100%;
-}
-</style>

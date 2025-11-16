@@ -26,4 +26,8 @@ defineProps<{ color: string; }>();
   word-wrap: break-word;
   overflow-wrap: anywhere;
 }
+
+.UserChip p {
+  color: var(--base-120);
+}
 </style>

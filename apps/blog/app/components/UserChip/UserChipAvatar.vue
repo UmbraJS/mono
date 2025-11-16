@@ -7,7 +7,7 @@
 <style>
 .MessageHead span {
   width: 40px;
-  color: var(--color);
+  color: var(--base-100);
 }
 
 .MessageHead {

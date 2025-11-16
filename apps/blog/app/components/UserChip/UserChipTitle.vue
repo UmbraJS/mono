@@ -24,11 +24,11 @@ const shortId = computedAsync(async () => {
 </template>
 
 <style>
-.MessageName {
+p.MessageName {
   color: var(--base-100);
 }
 
-.UserID {
+p.UserID {
   color: var(--base-70);
 }
 

@@ -118,14 +118,12 @@ export const getOnlineUsers = query({
     // Get display names from user table in Better Auth component
     const usersWithNames = await Promise.all(
       presences.map(async (presence) => {
-        console.log("Looking up user:", presence.userId);
         const userId = presence.userId as Id<"user">;
         const user = await ctx.runQuery(components.betterAuth.adapter.findOne, {
           model: "user",
           where: [{ field: "_id", value: userId, operator: "eq", connector: "AND" }],
         });
 
-        console.log("User found:", user);
         const displayName: string = user?.name || "Anonymous";
 
         return {

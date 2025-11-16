@@ -3,11 +3,11 @@ import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
 import { toast, ScrollArea } from "umbraco";
-import MessageChip from "../components/Chat/MessageChip.vue";
 import RecentUserChip from "../components/UserChip/variants/RecentUserChip.vue";
 import MyMessageBubble from "../components/Chat/MyMessageBubble.vue";
 import ChatMessagesLoading from "../components/Chat/ChatMessagesLoading.vue";
 import MessageComposer from "../components/Chat/MessageComposer.vue";
+import UserChipMessage from "../components/UserChip/variants/UserChipMessage.vue";
 import type { ChatMessage } from "../components/Chat/chat.types"
 import EmojiBubbles from "../components/EmojiBubbles/EmojiBubbles.vue";
 import LiveEmojiPanel from "../components/Chat/LiveEmojiPanel.vue";
@@ -36,7 +36,7 @@ const getUserColor = (userId: string) => {
     "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
     "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe",
     "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000",
-    "#aaffc3", "#808000", "#ffd8b1", "#000075", "#808080"
+    "#aaffc3", "#808000", "#ffd8b1", "#000075", "#ff0000"
   ];
 
   let hash = 0;
@@ -100,8 +100,6 @@ function scrollToBottom() {
 function isThisYou(userId: string) {
   return userId === currentUser.value.userId
 }
-
-
 </script>
 
 <template>
@@ -128,7 +126,7 @@ function isThisYou(userId: string) {
         <div class="Messages">
           <template v-for="m in messages" :key="m._id">
             <MyMessageBubble v-if="m.userId === currentUser.userId" :body="m.body" />
-            <MessageChip v-else :message="{ user: m.displayName, body: m.body, userId: m.userId }"
+            <UserChipMessage v-else :message="{ user: m.displayName, body: m.body, userId: m.userId }"
               :color="getUserColor(m.userId) || '#808080'" />
           </template>
         </div>
