@@ -9,13 +9,15 @@ const router = useRouter()
 const loading = ref(false)
 
 // Define validation schemas
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 const signinSchema = z.object({
-  email: z.string().email('Invalid email address').min(1, 'Email is required'),
+  email: z.string().min(1, 'Email is required').regex(emailRegex, 'Invalid email address'),
   password: z.string().min(1, 'Password is required'),
 })
 
 const signupSchema = z.object({
-  email: z.string().email('Invalid email address').min(1, 'Email is required'),
+  email: z.string().min(1, 'Email is required').regex(emailRegex, 'Invalid email address'),
   password: z
     .string()
     .min(8, 'needs at least 8 characters')
@@ -68,8 +70,6 @@ watch(() => form.data.value.password, () => {
 })
 
 async function handleSubmit() {
-  console.log('handleSubmit called')
-
   // Clear previous errors
   fieldErrors.value = {}
 
@@ -80,24 +80,22 @@ async function handleSubmit() {
     password: form.data.value.password,
   })
 
-  console.log('Validation result:', result)
-
   if (!result.success) {
-    const formatted = result.error.flatten()
-    const errors = formatted.fieldErrors
+    // Extract field errors from issues
+    const errors: { email?: string; password?: string } = {}
 
-    console.log('Field errors:', errors)
-
-    // Store errors for input field display
-    fieldErrors.value = {
-      email: errors.email?.[0],
-      password: errors.password?.[0],
+    for (const issue of result.error.issues) {
+      const field = issue.path[0] as 'email' | 'password'
+      if (field && !errors[field]) {
+        errors[field] = issue.message
+      }
     }
 
-    console.log('Set fieldErrors to:', fieldErrors.value)
+    // Store errors for input field display
+    fieldErrors.value = errors
 
     // Show first error in toast
-    const firstError = errors.email?.[0] || errors.password?.[0] || formatted.formErrors[0]
+    const firstError = errors.email || errors.password
     if (firstError) {
       toast.error(firstError)
     }
