@@ -1,14 +1,14 @@
-import * as better_auth_client3 from "better-auth/client";
-import * as vue0 from "vue";
-import * as vue456 from "vue";
-import * as vue467 from "vue";
+import * as better_auth_client17 from "better-auth/client";
+import * as vue14 from "vue";
+import * as vue1 from "vue";
+import * as vue3 from "vue";
 import { MaybeRefOrGetter, Ref } from "vue";
-import * as convex_server455 from "convex/server";
-import * as convex_server458 from "convex/server";
+import * as convex_server0 from "convex/server";
+import * as convex_server5 from "convex/server";
 import { FunctionArgs, FunctionReference, FunctionReturnType, GenericDataModel, SchemaDefinition } from "convex/server";
 import { ConvexClient, ConvexClientOptions, ConvexHttpClient, OptimisticUpdate } from "convex/browser";
-import * as better_auth_adapters466 from "better-auth/adapters";
-import * as node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17 from "node_modules/better-auth/dist/shared/better-auth.DNnBkMGu";
+import * as better_auth_adapters13 from "better-auth/adapters";
+import * as node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31 from "node_modules/better-auth/dist/shared/better-auth.DNnBkMGu";
 
 //#region src/composables/useAuth.d.ts
 /**
@@ -55,9 +55,9 @@ declare function createUseAuth(nuxtComposables: {
   isClient: boolean;
 }): () => {
   session: Ref<any, any>;
-  user: vue0.ComputedRef<any>;
-  isAuthenticated: vue0.ComputedRef<boolean>;
-  isLoading: vue0.ComputedRef<boolean>;
+  user: vue14.ComputedRef<any>;
+  isAuthenticated: vue14.ComputedRef<boolean>;
+  isLoading: vue14.ComputedRef<boolean>;
   client: {
     signIn: {
       social: <FetchOptions extends {
@@ -78,17 +78,17 @@ declare function createUseAuth(nuxtComposables: {
         referrerPolicy?: ReferrerPolicy | undefined;
         signal?: (AbortSignal | null) | undefined;
         window?: null | undefined;
-        onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-        onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-        onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-        onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-        onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+        onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+        onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+        onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+        onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+        onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
         hookOptions?: {
           cloneResponse?: boolean;
         } | undefined;
         timeout?: number | undefined;
-        customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-        plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+        customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+        plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
         baseURL?: string | undefined;
         throw?: boolean | undefined;
         auth?: ({
@@ -124,12 +124,12 @@ declare function createUseAuth(nuxtComposables: {
         params?: Record<string, any> | undefined;
         duplex?: "full" | "half" | undefined;
         jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-        retry?: better_auth_client3.RetryOptions | undefined;
+        retry?: better_auth_client17.RetryOptions | undefined;
         retryAttempt?: number | undefined;
-        output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-        errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+        output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+        errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
         disableValidation?: boolean | undefined;
-      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
         provider: unknown;
         callbackURL?: string | undefined;
         newUserCallbackURL?: string | undefined;
@@ -147,7 +147,7 @@ declare function createUseAuth(nuxtComposables: {
         loginHint?: string | undefined;
       } & {
         fetchOptions?: FetchOptions | undefined;
-      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<NonNullable<{
+      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<NonNullable<{
         redirect: boolean;
         token: string;
         url: undefined;
@@ -187,17 +187,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -217,15 +217,15 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       query?: Record<string, any> | undefined;
       fetchOptions?: FetchOptions | undefined;
-    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       success: boolean;
     }, {
       code?: string;
@@ -251,17 +251,17 @@ declare function createUseAuth(nuxtComposables: {
         referrerPolicy?: ReferrerPolicy | undefined;
         signal?: (AbortSignal | null) | undefined;
         window?: null | undefined;
-        onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-        onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-        onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-        onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-        onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+        onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+        onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+        onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+        onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+        onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
         hookOptions?: {
           cloneResponse?: boolean;
         } | undefined;
         timeout?: number | undefined;
-        customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-        plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+        customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+        plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
         baseURL?: string | undefined;
         throw?: boolean | undefined;
         auth?: ({
@@ -288,19 +288,19 @@ declare function createUseAuth(nuxtComposables: {
         params?: Record<string, any> | undefined;
         duplex?: "full" | "half" | undefined;
         jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-        retry?: better_auth_client3.RetryOptions | undefined;
+        retry?: better_auth_client17.RetryOptions | undefined;
         retryAttempt?: number | undefined;
-        output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-        errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+        output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+        errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
         disableValidation?: boolean | undefined;
-      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
         email: string;
         name: string;
         password: string;
         image?: string;
         callbackURL?: string;
         fetchOptions?: FetchOptions | undefined;
-      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<NonNullable<{
+      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<NonNullable<{
         token: null;
         user: {
           id: string;
@@ -347,17 +347,17 @@ declare function createUseAuth(nuxtComposables: {
         referrerPolicy?: ReferrerPolicy | undefined;
         signal?: (AbortSignal | null) | undefined;
         window?: null | undefined;
-        onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-        onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-        onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-        onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-        onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+        onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+        onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+        onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+        onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+        onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
         hookOptions?: {
           cloneResponse?: boolean;
         } | undefined;
         timeout?: number | undefined;
-        customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-        plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+        customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+        plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
         baseURL?: string | undefined;
         throw?: boolean | undefined;
         auth?: ({
@@ -382,19 +382,19 @@ declare function createUseAuth(nuxtComposables: {
         params?: Record<string, any> | undefined;
         duplex?: "full" | "half" | undefined;
         jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-        retry?: better_auth_client3.RetryOptions | undefined;
+        retry?: better_auth_client17.RetryOptions | undefined;
         retryAttempt?: number | undefined;
-        output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-        errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+        output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+        errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
         disableValidation?: boolean | undefined;
-      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
         email: string;
         password: string;
         callbackURL?: string | undefined;
         rememberMe?: boolean | undefined;
       } & {
         fetchOptions?: FetchOptions | undefined;
-      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
         redirect: boolean;
         token: string;
         url: string | undefined;
@@ -431,17 +431,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -464,17 +464,17 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       email: string;
       redirectTo?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -499,17 +499,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -534,17 +534,17 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       newPassword: string;
       token?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -569,17 +569,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -602,18 +602,18 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       query: {
         token: string;
         callbackURL?: string | undefined;
       };
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<NonNullable<void | {
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<NonNullable<void | {
       status: boolean;
       user: {
         id: string;
@@ -650,17 +650,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -683,17 +683,17 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       email: string;
       callbackURL?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -718,17 +718,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -751,17 +751,17 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       newEmail: string;
       callbackURL?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -786,17 +786,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -820,18 +820,18 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       newPassword: string;
       currentPassword: string;
       revokeOtherSessions?: boolean | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       token: string | null;
       user: {
         id: string;
@@ -865,17 +865,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -898,16 +898,16 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       image?: string | null;
       name?: string;
       fetchOptions?: FetchOptions | undefined;
-    } & Partial<{}>> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    } & Partial<{}>> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -932,17 +932,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -966,18 +966,18 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       callbackURL?: string | undefined;
       password?: string | undefined;
       token?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       success: boolean;
       message: string;
     }, {
@@ -1004,17 +1004,17 @@ declare function createUseAuth(nuxtComposables: {
         referrerPolicy?: ReferrerPolicy | undefined;
         signal?: (AbortSignal | null) | undefined;
         window?: null | undefined;
-        onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-        onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-        onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-        onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-        onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+        onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+        onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+        onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+        onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+        onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
         hookOptions?: {
           cloneResponse?: boolean;
         } | undefined;
         timeout?: number | undefined;
-        customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-        plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+        customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+        plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
         baseURL?: string | undefined;
         throw?: boolean | undefined;
         auth?: ({
@@ -1038,17 +1038,17 @@ declare function createUseAuth(nuxtComposables: {
         } | undefined;
         duplex?: "full" | "half" | undefined;
         jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-        retry?: better_auth_client3.RetryOptions | undefined;
+        retry?: better_auth_client17.RetryOptions | undefined;
         retryAttempt?: number | undefined;
-        output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-        errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+        output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+        errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
         disableValidation?: boolean | undefined;
-      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
         query: {
           callbackURL: string;
         };
         fetchOptions?: FetchOptions | undefined;
-      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<never, {
+      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<never, {
         code?: string;
         message?: string;
       }, FetchOptions["throw"] extends true ? true : false>>;
@@ -1072,17 +1072,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1105,17 +1105,17 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       email: string;
       redirectTo?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
       message: string;
     }, {
@@ -1142,17 +1142,17 @@ declare function createUseAuth(nuxtComposables: {
         referrerPolicy?: ReferrerPolicy | undefined;
         signal?: (AbortSignal | null) | undefined;
         window?: null | undefined;
-        onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-        onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-        onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-        onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-        onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+        onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+        onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+        onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+        onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+        onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
         hookOptions?: {
           cloneResponse?: boolean;
         } | undefined;
         timeout?: number | undefined;
-        customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-        plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+        customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+        plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
         baseURL?: string | undefined;
         throw?: boolean | undefined;
         auth?: ({
@@ -1176,17 +1176,17 @@ declare function createUseAuth(nuxtComposables: {
         } | undefined;
         duplex?: "full" | "half" | undefined;
         jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-        retry?: better_auth_client3.RetryOptions | undefined;
+        retry?: better_auth_client17.RetryOptions | undefined;
         retryAttempt?: number | undefined;
-        output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-        errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+        output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+        errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
         disableValidation?: boolean | undefined;
-      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
         query: {
           callbackURL: string;
         };
         fetchOptions?: FetchOptions | undefined;
-      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<never, {
+      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<never, {
         code?: string;
         message?: string;
       }, FetchOptions["throw"] extends true ? true : false>>;
@@ -1210,17 +1210,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1240,15 +1240,15 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       query?: Record<string, any> | undefined;
       fetchOptions?: FetchOptions | undefined;
-    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       id: string;
       createdAt: Date;
       updatedAt: Date;
@@ -1280,17 +1280,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1312,16 +1312,16 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       token: string;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -1346,17 +1346,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1376,15 +1376,15 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       query?: Record<string, any> | undefined;
       fetchOptions?: FetchOptions | undefined;
-    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -1409,17 +1409,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1439,15 +1439,15 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       query?: Record<string, any> | undefined;
       fetchOptions?: FetchOptions | undefined;
-    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -1472,17 +1472,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1516,12 +1516,12 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       provider: unknown;
       callbackURL?: string | undefined;
       idToken?: {
@@ -1537,7 +1537,7 @@ declare function createUseAuth(nuxtComposables: {
       disableRedirect?: boolean | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       url: string;
       redirect: boolean;
     }, {
@@ -1563,17 +1563,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1593,15 +1593,15 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       query?: Record<string, any> | undefined;
       fetchOptions?: FetchOptions | undefined;
-    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       id: string;
       providerId: string;
       createdAt: Date;
@@ -1632,17 +1632,17 @@ declare function createUseAuth(nuxtComposables: {
         referrerPolicy?: ReferrerPolicy | undefined;
         signal?: (AbortSignal | null) | undefined;
         window?: null | undefined;
-        onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-        onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-        onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-        onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-        onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+        onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+        onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+        onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+        onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+        onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
         hookOptions?: {
           cloneResponse?: boolean;
         } | undefined;
         timeout?: number | undefined;
-        customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-        plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+        customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+        plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
         baseURL?: string | undefined;
         throw?: boolean | undefined;
         auth?: ({
@@ -1665,18 +1665,18 @@ declare function createUseAuth(nuxtComposables: {
         params?: Record<string, any> | undefined;
         duplex?: "full" | "half" | undefined;
         jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-        retry?: better_auth_client3.RetryOptions | undefined;
+        retry?: better_auth_client17.RetryOptions | undefined;
         retryAttempt?: number | undefined;
-        output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-        errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+        output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+        errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
         disableValidation?: boolean | undefined;
-      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+      }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
         query: {
           token: string;
           callbackURL?: string | undefined;
         };
         fetchOptions?: FetchOptions | undefined;
-      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+      }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
         success: boolean;
         message: string;
       }, {
@@ -1703,17 +1703,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1736,17 +1736,17 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       providerId: string;
       accountId?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       status: boolean;
     }, {
       code?: string;
@@ -1771,17 +1771,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1805,18 +1805,18 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       providerId: string;
       accountId?: string | undefined;
       userId?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<any, {
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<any, {
       code?: string;
       message?: string;
     }, FetchOptions["throw"] extends true ? true : false>>;
@@ -1839,17 +1839,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1873,18 +1873,18 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       providerId: string;
       accountId?: string | undefined;
       userId?: string | undefined;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       accessToken: string;
       accessTokenExpiresAt: Date | undefined;
       scopes: string[];
@@ -1912,17 +1912,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -1944,16 +1944,16 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       accountId: string;
     } & {
       fetchOptions?: FetchOptions | undefined;
-    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }>, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       user: packages_core_dist_oauth2.OAuth2UserInfo;
       data: Record<string, any>;
     }, {
@@ -1979,17 +1979,17 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRequest?: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-      onResponse?: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
-      onSuccess?: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-      onError?: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRequest?: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+      onResponse?: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
+      onSuccess?: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+      onError?: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl?: better_auth_client3.FetchEsque | undefined;
-      plugins?: better_auth_client3.BetterFetchPlugin[] | undefined;
+      customFetchImpl?: better_auth_client17.FetchEsque | undefined;
+      plugins?: better_auth_client17.BetterFetchPlugin[] | undefined;
       baseURL?: string | undefined;
       throw?: boolean | undefined;
       auth?: ({
@@ -2012,18 +2012,18 @@ declare function createUseAuth(nuxtComposables: {
       params?: Record<string, any> | undefined;
       duplex?: "full" | "half" | undefined;
       jsonParser?: ((text: string) => Promise<any> | any) | undefined;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
-    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu17.a<{
+    }>(data_0?: node_modules_better_auth_dist_shared_better_auth_DNnBkMGu31.a<{
       query?: {
         disableCookieCache?: unknown;
         disableRefresh?: unknown;
       } | undefined;
       fetchOptions?: FetchOptions | undefined;
-    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client3.BetterFetchResponse<{
+    }> | undefined, data_1?: FetchOptions | undefined) => Promise<better_auth_client17.BetterFetchResponse<{
       user: {
         id: string;
         createdAt: Date;
@@ -2054,7 +2054,7 @@ declare function createUseAuth(nuxtComposables: {
       };
     }>;
   } & {
-    useSession: better_auth_client3.Atom<{
+    useSession: better_auth_client17.Atom<{
       data: {
         user: {
           id: string;
@@ -2076,24 +2076,24 @@ declare function createUseAuth(nuxtComposables: {
           userAgent?: string | null | undefined;
         };
       } | null;
-      error: better_auth_client3.BetterFetchError | null;
+      error: better_auth_client17.BetterFetchError | null;
       isPending: boolean;
     }>;
-    $fetch: better_auth_client3.BetterFetch<{
-      plugins: (better_auth_client3.BetterFetchPlugin | {
+    $fetch: better_auth_client17.BetterFetch<{
+      plugins: (better_auth_client17.BetterFetchPlugin | {
         id: string;
         name: string;
         hooks: {
-          onSuccess: ((context: better_auth_client3.SuccessContext<any>) => Promise<void> | void) | undefined;
-          onError: ((context: better_auth_client3.ErrorContext) => Promise<void> | void) | undefined;
-          onRequest: (<T extends Record<string, any>>(context: better_auth_client3.RequestContext<T>) => Promise<better_auth_client3.RequestContext | void> | better_auth_client3.RequestContext | void) | undefined;
-          onResponse: ((context: better_auth_client3.ResponseContext) => Promise<Response | void | better_auth_client3.ResponseContext> | Response | better_auth_client3.ResponseContext | void) | undefined;
+          onSuccess: ((context: better_auth_client17.SuccessContext<any>) => Promise<void> | void) | undefined;
+          onError: ((context: better_auth_client17.ErrorContext) => Promise<void> | void) | undefined;
+          onRequest: (<T extends Record<string, any>>(context: better_auth_client17.RequestContext<T>) => Promise<better_auth_client17.RequestContext | void> | better_auth_client17.RequestContext | void) | undefined;
+          onResponse: ((context: better_auth_client17.ResponseContext) => Promise<Response | void | better_auth_client17.ResponseContext> | Response | better_auth_client17.ResponseContext | void) | undefined;
         };
       } | {
         id: string;
         name: string;
         hooks: {
-          onSuccess(context: better_auth_client3.SuccessContext<any>): void;
+          onSuccess(context: better_auth_client17.SuccessContext<any>): void;
         };
       })[];
       cache?: RequestCache | undefined;
@@ -2113,12 +2113,12 @@ declare function createUseAuth(nuxtComposables: {
       referrerPolicy?: ReferrerPolicy | undefined;
       signal?: (AbortSignal | null) | undefined;
       window?: null | undefined;
-      onRetry?: ((response: better_auth_client3.ResponseContext) => Promise<void> | void) | undefined;
+      onRetry?: ((response: better_auth_client17.ResponseContext) => Promise<void> | void) | undefined;
       hookOptions?: {
         cloneResponse?: boolean;
       } | undefined;
       timeout?: number | undefined;
-      customFetchImpl: better_auth_client3.FetchEsque;
+      customFetchImpl: better_auth_client17.FetchEsque;
       baseURL: string;
       throw?: boolean | undefined;
       auth?: ({
@@ -2138,16 +2138,16 @@ declare function createUseAuth(nuxtComposables: {
       params?: any;
       duplex?: "full" | "half" | undefined;
       jsonParser: (text: string) => Promise<any> | any;
-      retry?: better_auth_client3.RetryOptions | undefined;
+      retry?: better_auth_client17.RetryOptions | undefined;
       retryAttempt?: number | undefined;
-      output?: (better_auth_client3.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
-      errorSchema?: better_auth_client3.StandardSchemaV1 | undefined;
+      output?: (better_auth_client17.StandardSchemaV1 | typeof Blob | typeof File) | undefined;
+      errorSchema?: better_auth_client17.StandardSchemaV1 | undefined;
       disableValidation?: boolean | undefined;
     }, unknown, unknown, {}>;
     $store: {
       notify: (signal?: Omit<string, "$sessionSignal"> | "$sessionSignal") => void;
       listen: (signal: Omit<string, "$sessionSignal"> | "$sessionSignal", listener: (value: boolean, oldValue?: boolean | undefined) => void) => void;
-      atoms: Record<string, better_auth_client3.WritableAtom<any>>;
+      atoms: Record<string, better_auth_client17.WritableAtom<any>>;
     };
     $Infer: {
       Session: {
@@ -2306,6 +2306,7 @@ interface Session {
  */
 /**
  * Returns the Convex client instance.
+ * Note: This only works on the client-side. Use useConvexHttpClient for server-side queries.
  */
 declare function useConvexClient(): ConvexClient;
 
@@ -2335,9 +2336,9 @@ interface MutationOptions<Mutation extends FunctionReference<'mutation'>> {
 declare function useConvexMutation<Mutation extends FunctionReference<'mutation'>>(mutationReference: Mutation, {
   optimisticUpdate
 }?: MutationOptions<Mutation>): {
-  mutate: (args: MaybeRefOrGetter<FunctionArgs<Mutation>>) => Promise<convex_server455.FunctionReturnType<Mutation>>;
-  error: vue456.Ref<Error | null, Error | null>;
-  isPending: vue456.ComputedRef<boolean>;
+  mutate: (args: MaybeRefOrGetter<FunctionArgs<Mutation>>) => Promise<convex_server0.FunctionReturnType<Mutation>>;
+  error: vue1.Ref<Error | null, Error | null>;
+  isPending: vue1.ComputedRef<boolean>;
 };
 
 //#endregion
@@ -2408,8 +2409,8 @@ interface ConvexVueContext {
  * Creates Convex clients to be provided in a Nuxt plugin
  */
 declare function createConvexClients(url: string, clientOptions?: ConvexClientOptions): {
-  clientRef: vue467.ShallowRef<ConvexClient | undefined, ConvexClient | undefined>;
-  httpClientRef: vue467.ShallowRef<ConvexHttpClient | undefined, ConvexHttpClient | undefined>;
+  clientRef: vue3.ShallowRef<ConvexClient | undefined, ConvexClient | undefined>;
+  httpClientRef: vue3.ShallowRef<ConvexHttpClient | undefined, ConvexHttpClient | undefined>;
   initClient: (options?: ConvexVueOptions) => void;
 };
 
@@ -2479,35 +2480,35 @@ declare function createApi<DataModel extends GenericDataModel, Schema extends Sc
   /**
    * Create a new document
    */
-  create: convex_server458.RegisteredMutation<"public", any, Promise<any>>;
+  create: convex_server5.RegisteredMutation<"public", any, Promise<any>>;
   /**
    * Find a single document
    */
-  findOne: convex_server458.RegisteredQuery<"public", any, Promise<any>>;
+  findOne: convex_server5.RegisteredQuery<"public", any, Promise<any>>;
   /**
    * Find multiple documents
    */
-  findMany: convex_server458.RegisteredQuery<"public", any, Promise<any>>;
+  findMany: convex_server5.RegisteredQuery<"public", any, Promise<any>>;
   /**
    * Update a single document
    */
-  updateOne: convex_server458.RegisteredMutation<"public", any, Promise<any>>;
+  updateOne: convex_server5.RegisteredMutation<"public", any, Promise<any>>;
   /**
    * Update multiple documents
    */
-  updateMany: convex_server458.RegisteredMutation<"public", any, Promise<any>>;
+  updateMany: convex_server5.RegisteredMutation<"public", any, Promise<any>>;
   /**
    * Delete a single document
    */
-  deleteOne: convex_server458.RegisteredMutation<"public", any, Promise<void>>;
+  deleteOne: convex_server5.RegisteredMutation<"public", any, Promise<void>>;
   /**
    * Delete multiple documents
    */
-  deleteMany: convex_server458.RegisteredMutation<"public", any, Promise<any>>;
+  deleteMany: convex_server5.RegisteredMutation<"public", any, Promise<any>>;
   /**
    * Migration helper to remove userId field
    */
-  migrationRemoveUserId: convex_server458.RegisteredMutation<"public", any, Promise<void>>;
+  migrationRemoveUserId: convex_server5.RegisteredMutation<"public", any, Promise<void>>;
 };
 
 //#endregion
@@ -2558,7 +2559,7 @@ declare function createClient<DataModel extends GenericDataModel, _Schema = any>
   /**
    * Returns the database adapter for Better Auth using createAdapterFactory
    */
-  adapter(ctx: GenericCtx<DataModel>): better_auth_adapters466.AdapterFactory;
+  adapter(ctx: GenericCtx<DataModel>): better_auth_adapters13.AdapterFactory;
   /**
    * Helper to get Better Auth instance with headers
    */

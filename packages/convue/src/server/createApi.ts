@@ -14,24 +14,36 @@ export type CreateAuth<_DataModel extends GenericDataModel>
   | ((ctx: any, opts?: { optionsOnly?: boolean }) => any)
 
 /**
+ * Converts Date strings to timestamps in where clauses
+ * Better Auth sends Date objects which get serialized to ISO strings during RPC
+ */
+function normalizeDateInWhere(where: any[] | undefined): any[] | undefined {
+  if (!where) return where
+
+  return where.map(condition => {
+    let { value } = condition
+
+    // Check if value is an ISO date string
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value)) {
+      value = new Date(value).getTime()
+    }
+
+    return { ...condition, value }
+  })
+}
+
+/**
  * Generates the CRUD operations that Better Auth needs to work with Convex
  */
 export function createApi<
   DataModel extends GenericDataModel,
   Schema extends SchemaDefinition<any, any>,
 >(_schema: Schema, _createAuth: CreateAuth<DataModel>) {
-  // Get the validator for where clauses
+  // Get the validator for where clauses - now accepts strings that might be dates
   const whereValidator = v.array(
     v.object({
       field: v.string(),
-      value: v.union(
-        v.string(),
-        v.number(),
-        v.boolean(),
-        v.array(v.string()),
-        v.array(v.number()),
-        v.null(),
-      ),
+      value: v.union(v.string(), v.number(), v.boolean(), v.null(), v.array(v.any())),
       operator: v.optional(
         v.union(
           v.literal('lt'),
@@ -84,7 +96,8 @@ export function createApi<
         select: v.optional(v.array(v.string())),
       },
       handler: async (ctx: any, args: any) => {
-        const { model, where } = args
+        const { model } = args
+        const where = normalizeDateInWhere(args.where)
 
         // Simple implementation - get all and filter
         // In production, you'd want to use indexes
@@ -151,7 +164,8 @@ export function createApi<
         select: v.optional(v.array(v.string())),
       },
       handler: async (ctx: any, args: any) => {
-        const { model, where, limit, sortBy } = args
+        const { model, limit, sortBy } = args
+        const where = normalizeDateInWhere(args.where)
 
         let all = await ctx.db.query(model).collect()
 
@@ -224,7 +238,8 @@ export function createApi<
         onUpdateHandle: v.optional(v.string()),
       },
       handler: async (ctx: any, args: any) => {
-        const { model, where, update } = args.input
+        const { model, update } = args.input
+        const where = normalizeDateInWhere(args.input.where)
 
         // Find the document
         const all = await ctx.db.query(model).collect()
@@ -262,7 +277,8 @@ export function createApi<
         onUpdateHandle: v.optional(v.string()),
       },
       handler: async (ctx: any, args: any) => {
-        const { model, where, update } = args.input
+        const { model, update } = args.input
+        const where = normalizeDateInWhere(args.input.where)
 
         const all = await ctx.db.query(model).collect()
 
@@ -296,7 +312,8 @@ export function createApi<
         }),
       },
       handler: async (ctx: any, args: any) => {
-        const { model, where } = args.input
+        const { model } = args.input
+        const where = normalizeDateInWhere(args.input.where)
 
         const all = await ctx.db.query(model).collect()
 
@@ -329,7 +346,9 @@ export function createApi<
         }),
       },
       handler: async (ctx: any, args: any) => {
-        const { model, where } = args.input
+        const { model } = args.input
+        // Normalize Date strings to timestamps
+        const where = normalizeDateInWhere(args.input.where)
 
         const all = await ctx.db.query(model).collect()
 
@@ -338,7 +357,24 @@ export function createApi<
           docsToDelete = all.filter((d: any) => {
             return where.every((condition: any) => {
               const { field, value, operator = 'eq' } = condition
-              return operator === 'eq' ? d[field] === value : false
+              const fieldValue = d[field]
+
+              switch (operator) {
+                case 'eq':
+                  return fieldValue === value
+                case 'lt':
+                  return fieldValue < value
+                case 'lte':
+                  return fieldValue <= value
+                case 'gt':
+                  return fieldValue > value
+                case 'gte':
+                  return fieldValue >= value
+                case 'ne':
+                  return fieldValue !== value
+                default:
+                  return false
+              }
             })
           })
         }

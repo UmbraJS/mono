@@ -56,13 +56,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
         },
@@ -90,13 +84,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
         },
@@ -127,13 +115,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
               | "contains"
               | "starts_with"
               | "ends_with";
-            value:
-              | string
-              | number
-              | boolean
-              | Array<string>
-              | Array<number>
-              | null;
+            value: string | number | boolean | null | Array<any>;
           }>;
         },
         any,
@@ -160,13 +142,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
               | "contains"
               | "starts_with"
               | "ends_with";
-            value:
-              | string
-              | number
-              | boolean
-              | Array<string>
-              | Array<number>
-              | null;
+            value: string | number | boolean | null | Array<any>;
           }>;
         },
         any,
@@ -201,13 +177,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
           onUpdateHandle?: string;
@@ -237,13 +207,7 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
           onUpdateHandle?: string;

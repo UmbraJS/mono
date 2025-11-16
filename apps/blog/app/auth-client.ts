@@ -1,9 +1,9 @@
 import { createAuthClient } from 'better-auth/vue'
 import { convexClient } from 'convue'
 
-// Better Auth API is hosted on Convex site URL
-// This will be replaced at build time by Vite
-const baseURL = `${import.meta.env.NUXT_PUBLIC_CONVEX_SITE_URL || 'http://127.0.0.1:8187'}/api/auth`
+// Use local proxy for Better Auth API to ensure cookies work correctly
+// The Nuxt server will forward requests to Convex
+const baseURL = '/api/auth'
 
 export const authClient = createAuthClient({
   baseURL,

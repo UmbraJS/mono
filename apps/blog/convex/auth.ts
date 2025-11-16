@@ -5,9 +5,15 @@ import { convex, createClient, type GenericCtx } from "convue";
 import { betterAuth } from "better-auth";
 import type { BetterAuthOptions } from "better-auth";
 import type { DataModel } from "./_generated/dataModel";
-import { github } from "better-auth/social-providers";
 
-const siteUrl = process.env.SITE_URL || process.env.CONVEX_SITE_URL;
+const siteUrl = process.env.AUTH_BASE_URL || process.env.SITE_URL || process.env.CONVEX_SITE_URL;
+
+console.log('[auth] Environment check:', {
+  AUTH_BASE_URL: process.env.AUTH_BASE_URL,
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID ? 'set' : 'missing',
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET ? 'set' : 'missing',
+  siteUrl,
+});
 
 export const authComponent = createClient<DataModel, typeof authSchema>(
   components.betterAuth,
@@ -37,6 +43,27 @@ export const createAuth = (
     trustedOrigins.push(siteUrl);
   }
 
+  const githubClientId = process.env.GITHUB_CLIENT_ID;
+  const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+  console.log('[auth] GitHub credentials:', {
+    clientId: githubClientId,
+    clientSecretLength: githubClientSecret?.length,
+    hasClientId: !!githubClientId,
+    hasClientSecret: !!githubClientSecret,
+  });
+
+  // Build social providers object - only add GitHub if credentials are available
+  const socialProviders: Record<string, any> = {};
+  if (githubClientId && githubClientSecret) {
+    socialProviders.github = {
+      clientId: githubClientId,
+      clientSecret: githubClientSecret,
+    };
+  }
+
+  console.log('[auth] Social providers:', Object.keys(socialProviders));
+
   return betterAuth({
     baseURL: siteUrl,
     trustedOrigins,
@@ -49,11 +76,11 @@ export const createAuth = (
       enabled: true,
       requireEmailVerification: false, // Simplified for now
     },
-    socialProviders: {
-      github: github({
-        clientId: process.env.GITHUB_CLIENT_ID || "",
-        clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-      }),
+    socialProviders,
+    advanced: {
+      cookiePrefix: "better-auth",
+      // Use secure cookies only in production
+      useSecureCookies: siteUrl?.startsWith("https://") || false,
     },
     plugins: [
       convex(),

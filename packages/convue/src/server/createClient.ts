@@ -157,9 +157,16 @@ export function createClient<
             },
 
             findOne: async ({ model, where, select }): Promise<any> => {
+              const normalizedWhere = where?.map((condition: any) => {
+                if (condition.value instanceof Date) {
+                  return { ...condition, value: condition.value.getTime() }
+                }
+                return condition
+              })
+
               return await ctx.runQuery(component.adapter.findOne, {
                 model,
-                where,
+                where: normalizedWhere,
                 select,
               })
             },
@@ -168,9 +175,17 @@ export function createClient<
               if (offset) {
                 throw new Error('offset not supported')
               }
+
+              const normalizedWhere = where?.map((condition: any) => {
+                if (condition.value instanceof Date) {
+                  return { ...condition, value: condition.value.getTime() }
+                }
+                return condition
+              })
+
               return await ctx.runQuery(component.adapter.findMany, {
                 model,
-                where,
+                where: normalizedWhere,
                 limit,
                 sortBy,
               })
@@ -180,8 +195,16 @@ export function createClient<
               if (!('runMutation' in ctx)) {
                 throw new Error('ctx is not a mutation ctx')
               }
+
+              const normalizedWhere = where?.map((condition: any) => {
+                if (condition.value instanceof Date) {
+                  return { ...condition, value: condition.value.getTime() }
+                }
+                return condition
+              })
+
               return await ctx.runMutation(component.adapter.updateOne, {
-                input: { model, where, update },
+                input: { model, where: normalizedWhere, update },
               })
             },
 
@@ -189,8 +212,16 @@ export function createClient<
               if (!('runMutation' in ctx)) {
                 throw new Error('ctx is not a mutation ctx')
               }
+
+              const normalizedWhere = where?.map((condition: any) => {
+                if (condition.value instanceof Date) {
+                  return { ...condition, value: condition.value.getTime() }
+                }
+                return condition
+              })
+
               return await ctx.runMutation(component.adapter.updateMany, {
-                input: { model, where, update },
+                input: { model, where: normalizedWhere, update },
               })
             },
 
@@ -198,8 +229,16 @@ export function createClient<
               if (!('runMutation' in ctx)) {
                 throw new Error('ctx is not a mutation ctx')
               }
+
+              const normalizedWhere = where?.map((condition: any) => {
+                if (condition.value instanceof Date) {
+                  return { ...condition, value: condition.value.getTime() }
+                }
+                return condition
+              })
+
               await ctx.runMutation(component.adapter.deleteOne, {
-                input: { model, where },
+                input: { model, where: normalizedWhere },
               })
             },
 
@@ -207,15 +246,31 @@ export function createClient<
               if (!('runMutation' in ctx)) {
                 throw new Error('ctx is not a mutation ctx')
               }
+
+              // Convert Date objects to timestamps before sending to Convex
+              const normalizedWhere = where?.map((condition: any) => {
+                if (condition.value instanceof Date) {
+                  return { ...condition, value: condition.value.getTime() }
+                }
+                return condition
+              })
+
               return await ctx.runMutation(component.adapter.deleteMany, {
-                input: { model, where },
+                input: { model, where: normalizedWhere },
               })
             },
 
             count: async ({ model, where }): Promise<number> => {
+              const normalizedWhere = where?.map((condition: any) => {
+                if (condition.value instanceof Date) {
+                  return { ...condition, value: condition.value.getTime() }
+                }
+                return condition
+              })
+
               const results = await ctx.runQuery(component.adapter.findMany, {
                 model,
-                where,
+                where: normalizedWhere,
               })
               return results.length
             },

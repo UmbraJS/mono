@@ -90,13 +90,7 @@ export declare const components: {
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
         },
@@ -123,13 +117,7 @@ export declare const components: {
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
         },
@@ -159,13 +147,7 @@ export declare const components: {
               | "contains"
               | "starts_with"
               | "ends_with";
-            value:
-              | string
-              | number
-              | boolean
-              | Array<string>
-              | Array<number>
-              | null;
+            value: string | number | boolean | null | Array<any>;
           }>;
         },
         any
@@ -191,13 +173,7 @@ export declare const components: {
               | "contains"
               | "starts_with"
               | "ends_with";
-            value:
-              | string
-              | number
-              | boolean
-              | Array<string>
-              | Array<number>
-              | null;
+            value: string | number | boolean | null | Array<any>;
           }>;
         },
         any
@@ -230,13 +206,7 @@ export declare const components: {
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
           onUpdateHandle?: string;
@@ -265,13 +235,7 @@ export declare const components: {
                 | "contains"
                 | "starts_with"
                 | "ends_with";
-              value:
-                | string
-                | number
-                | boolean
-                | Array<string>
-                | Array<number>
-                | null;
+              value: string | number | boolean | null | Array<any>;
             }>;
           };
           onUpdateHandle?: string;

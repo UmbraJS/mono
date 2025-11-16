@@ -50,10 +50,8 @@ export default defineEventHandler(async (event) => {
     }
 
     if (lowerKey === 'cookie') {
-      // Add __Secure- prefix to session token for Convex
-      const modifiedCookie = (Array.isArray(value) ? value[0] : value)
-        .replace(/\bbetter-auth\.session_token=/g, '__Secure-better-auth.session_token=')
-      headers[key] = modifiedCookie
+      // Forward cookies as-is (Better Auth handles __Secure- prefix based on environment)
+      headers[key] = Array.isArray(value) ? value[0] : value
     } else {
       headers[key] = Array.isArray(value) ? value[0] : value
     }
@@ -65,21 +63,51 @@ export default defineEventHandler(async (event) => {
       headers,
       body,
       credentials: 'include',
+      redirect: 'manual', // Don't follow redirects automatically
     })
 
+    // Handle redirects from Convex
+    const locationHeader = response.headers.get('location')
+    if (locationHeader && (response.status === 301 || response.status === 302 || response.status === 303 || response.status === 307 || response.status === 308)) {
+      // Forward all set-cookie headers first (there may be multiple)
+      const setCookieHeaders = response.headers.getSetCookie ? response.headers.getSetCookie() : [response.headers.get('set-cookie')].filter(Boolean)
+
+      for (const cookieHeader of setCookieHeaders) {
+        if (cookieHeader) {
+          const modifiedCookie = cookieHeader
+            .replace(/__Secure-/g, '') // Remove __Secure- prefix
+            .replace(/; Secure/gi, '') // Remove Secure flag
+            .replace(/;\s*Domain=[^;]+/gi, '') // Remove domain restrictions
+
+          appendHeader(event, 'set-cookie', modifiedCookie)
+        }
+      }
+
+      // Return redirect to the client
+      return sendRedirect(event, locationHeader, response.status)
+    }
+
     // Forward response headers back to client
+    // Handle set-cookie headers specially (there may be multiple)
+    const setCookieHeaders = response.headers.getSetCookie ? response.headers.getSetCookie() : [response.headers.get('set-cookie')].filter(Boolean)
+
+    for (const cookieHeader of setCookieHeaders) {
+      if (cookieHeader) {
+        const modifiedCookie = cookieHeader
+          .replace(/__Secure-/g, '') // Remove __Secure- prefix
+          .replace(/; Secure/gi, '') // Remove Secure flag
+          .replace(/;\s*Domain=[^;]+/gi, '') // Remove domain restrictions
+
+        appendHeader(event, 'set-cookie', modifiedCookie)
+      }
+    }
+
+    // Forward other headers
     response.headers.forEach((value, key) => {
       const lowerKey = key.toLowerCase()
 
-      if (lowerKey === 'set-cookie') {
-        // Modify cookies for localhost compatibility
-        const modifiedCookie = value.toString()
-          .replace('__Secure-', '') // Remove __Secure- prefix
-          .replace(/; Secure/gi, '') // Remove Secure flag
-          .replace(/Domain=[^;]+/gi, '') // Remove domain restrictions
-
-        appendHeader(event, 'set-cookie', modifiedCookie)
-      } else if (
+      if (
+        lowerKey !== 'set-cookie' && // Already handled above
         lowerKey !== 'transfer-encoding' &&
         lowerKey !== 'connection' &&
         lowerKey !== 'content-encoding'

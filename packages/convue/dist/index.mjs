@@ -87,10 +87,13 @@ function createUseAuth(nuxtComposables) {
 * Returns the Convex plugin context from Nuxt app
 */
 function useConvexContext() {
-	try {
-		const nuxtApp = globalThis.useNuxtApp?.();
-		if (nuxtApp?.$convex) return nuxtApp.$convex;
-	} catch {}
+	const nuxtApp = useNuxtApp();
+	console.log("[useConvexContext] Checking for context:", {
+		hasNuxtApp: !!nuxtApp,
+		has$convex: !!nuxtApp?.$convex,
+		$convexKeys: nuxtApp?.$convex ? Object.keys(nuxtApp.$convex) : []
+	});
+	if (nuxtApp?.$convex) return nuxtApp.$convex;
 	throw new Error("useConvexContext() is called without a provider. Make sure to provide convex in your Nuxt plugin:\nreturn { provide: { convex: convexContext } }");
 }
 
@@ -98,10 +101,13 @@ function useConvexContext() {
 //#region src/composables/useConvexClient.ts
 /**
 * Returns the Convex client instance.
+* Note: This only works on the client-side. Use useConvexHttpClient for server-side queries.
 */
 function useConvexClient() {
+	const isServer = typeof window === "undefined";
+	if (isServer) throw new Error("useConvexClient() cannot be called during server-side rendering. The WebSocket client is only available on the client. Use useConvexHttpClient() for server-side queries instead.");
 	const convexVueContext = useConvexContext();
-	if (!convexVueContext.clientRef.value) throw new Error("Client not initialized");
+	if (!convexVueContext.clientRef.value) throw new Error("Convex client not initialized");
 	return convexVueContext.clientRef.value;
 }
 
@@ -133,6 +139,14 @@ function useConvexHttpQuery(query, args = {}) {
 * Appliess a mutation to the Convex server.
 */
 function useConvexMutation(mutationReference, { optimisticUpdate } = {}) {
+	const isServer = typeof window === "undefined";
+	if (isServer) return {
+		mutate: async () => {
+			throw new Error("Mutations cannot be called during server-side rendering");
+		},
+		error: ref(null),
+		isPending: computed(() => false)
+	};
 	const client = useConvexClient();
 	const error = ref(null);
 	const isPendingCount = ref(0);
@@ -373,12 +387,27 @@ function convex() {
 //#endregion
 //#region src/server/createApi.ts
 /**
+* Converts Date strings to timestamps in where clauses
+* Better Auth sends Date objects which get serialized to ISO strings during RPC
+*/
+function normalizeDateInWhere(where) {
+	if (!where) return where;
+	return where.map((condition) => {
+		let { value } = condition;
+		if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value)) value = new Date(value).getTime();
+		return {
+			...condition,
+			value
+		};
+	});
+}
+/**
 * Generates the CRUD operations that Better Auth needs to work with Convex
 */
 function createApi(_schema, _createAuth) {
 	const whereValidator = v.array(v.object({
 		field: v.string(),
-		value: v.union(v.string(), v.number(), v.boolean(), v.array(v.string()), v.array(v.number()), v.null()),
+		value: v.union(v.string(), v.number(), v.boolean(), v.null(), v.array(v.any())),
 		operator: v.optional(v.union(v.literal("lt"), v.literal("lte"), v.literal("gt"), v.literal("gte"), v.literal("eq"), v.literal("in"), v.literal("not_in"), v.literal("ne"), v.literal("contains"), v.literal("starts_with"), v.literal("ends_with"))),
 		connector: v.optional(v.union(v.literal("AND"), v.literal("OR")))
 	}));
@@ -406,7 +435,8 @@ function createApi(_schema, _createAuth) {
 				select: v.optional(v.array(v.string()))
 			},
 			handler: async (ctx, args) => {
-				const { model, where } = args;
+				const { model } = args;
+				const where = normalizeDateInWhere(args.where);
 				const all = await ctx.db.query(model).collect();
 				if (!where || where.length === 0) return all[0] || null;
 				const filtered = all.filter((doc) => {
@@ -445,7 +475,8 @@ function createApi(_schema, _createAuth) {
 				select: v.optional(v.array(v.string()))
 			},
 			handler: async (ctx, args) => {
-				const { model, where, limit, sortBy } = args;
+				const { model, limit, sortBy } = args;
+				const where = normalizeDateInWhere(args.where);
 				let all = await ctx.db.query(model).collect();
 				if (where && where.length > 0) all = all.filter((doc) => {
 					return where.every((condition) => {
@@ -487,7 +518,8 @@ function createApi(_schema, _createAuth) {
 				onUpdateHandle: v.optional(v.string())
 			},
 			handler: async (ctx, args) => {
-				const { model, where, update } = args.input;
+				const { model, update } = args.input;
+				const where = normalizeDateInWhere(args.input.where);
 				const all = await ctx.db.query(model).collect();
 				let doc = all[0];
 				if (where && where.length > 0) doc = all.find((d) => {
@@ -511,7 +543,8 @@ function createApi(_schema, _createAuth) {
 				onUpdateHandle: v.optional(v.string())
 			},
 			handler: async (ctx, args) => {
-				const { model, where, update } = args.input;
+				const { model, update } = args.input;
+				const where = normalizeDateInWhere(args.input.where);
 				const all = await ctx.db.query(model).collect();
 				let docsToUpdate = all;
 				if (where && where.length > 0) docsToUpdate = all.filter((d) => {
@@ -530,7 +563,8 @@ function createApi(_schema, _createAuth) {
 				where: v.optional(whereValidator)
 			}) },
 			handler: async (ctx, args) => {
-				const { model, where } = args.input;
+				const { model } = args.input;
+				const where = normalizeDateInWhere(args.input.where);
 				const all = await ctx.db.query(model).collect();
 				let doc = all[0];
 				if (where && where.length > 0) doc = all.find((d) => {
@@ -549,13 +583,23 @@ function createApi(_schema, _createAuth) {
 				where: v.optional(whereValidator)
 			}) },
 			handler: async (ctx, args) => {
-				const { model, where } = args.input;
+				const { model } = args.input;
+				const where = normalizeDateInWhere(args.input.where);
 				const all = await ctx.db.query(model).collect();
 				let docsToDelete = all;
 				if (where && where.length > 0) docsToDelete = all.filter((d) => {
 					return where.every((condition) => {
 						const { field, value, operator = "eq" } = condition;
-						return operator === "eq" ? d[field] === value : false;
+						const fieldValue = d[field];
+						switch (operator) {
+							case "eq": return fieldValue === value;
+							case "lt": return fieldValue < value;
+							case "lte": return fieldValue <= value;
+							case "gt": return fieldValue > value;
+							case "gte": return fieldValue >= value;
+							case "ne": return fieldValue !== value;
+							default: return false;
+						}
 					});
 				});
 				await Promise.all(docsToDelete.map((doc) => ctx.db.delete(doc._id)));
@@ -650,55 +694,104 @@ function createClient(component, config) {
 							});
 						},
 						findOne: async ({ model, where, select }) => {
+							const normalizedWhere = where?.map((condition) => {
+								if (condition.value instanceof Date) return {
+									...condition,
+									value: condition.value.getTime()
+								};
+								return condition;
+							});
 							return await ctx.runQuery(component.adapter.findOne, {
 								model,
-								where,
+								where: normalizedWhere,
 								select
 							});
 						},
 						findMany: async ({ model, where, limit, sortBy, offset }) => {
 							if (offset) throw new Error("offset not supported");
+							const normalizedWhere = where?.map((condition) => {
+								if (condition.value instanceof Date) return {
+									...condition,
+									value: condition.value.getTime()
+								};
+								return condition;
+							});
 							return await ctx.runQuery(component.adapter.findMany, {
 								model,
-								where,
+								where: normalizedWhere,
 								limit,
 								sortBy
 							});
 						},
 						update: async ({ model, where, update }) => {
 							if (!("runMutation" in ctx)) throw new Error("ctx is not a mutation ctx");
+							const normalizedWhere = where?.map((condition) => {
+								if (condition.value instanceof Date) return {
+									...condition,
+									value: condition.value.getTime()
+								};
+								return condition;
+							});
 							return await ctx.runMutation(component.adapter.updateOne, { input: {
 								model,
-								where,
+								where: normalizedWhere,
 								update
 							} });
 						},
 						updateMany: async ({ model, where, update }) => {
 							if (!("runMutation" in ctx)) throw new Error("ctx is not a mutation ctx");
+							const normalizedWhere = where?.map((condition) => {
+								if (condition.value instanceof Date) return {
+									...condition,
+									value: condition.value.getTime()
+								};
+								return condition;
+							});
 							return await ctx.runMutation(component.adapter.updateMany, { input: {
 								model,
-								where,
+								where: normalizedWhere,
 								update
 							} });
 						},
 						delete: async ({ model, where }) => {
 							if (!("runMutation" in ctx)) throw new Error("ctx is not a mutation ctx");
+							const normalizedWhere = where?.map((condition) => {
+								if (condition.value instanceof Date) return {
+									...condition,
+									value: condition.value.getTime()
+								};
+								return condition;
+							});
 							await ctx.runMutation(component.adapter.deleteOne, { input: {
 								model,
-								where
+								where: normalizedWhere
 							} });
 						},
 						deleteMany: async ({ model, where }) => {
 							if (!("runMutation" in ctx)) throw new Error("ctx is not a mutation ctx");
+							const normalizedWhere = where?.map((condition) => {
+								if (condition.value instanceof Date) return {
+									...condition,
+									value: condition.value.getTime()
+								};
+								return condition;
+							});
 							return await ctx.runMutation(component.adapter.deleteMany, { input: {
 								model,
-								where
+								where: normalizedWhere
 							} });
 						},
 						count: async ({ model, where }) => {
+							const normalizedWhere = where?.map((condition) => {
+								if (condition.value instanceof Date) return {
+									...condition,
+									value: condition.value.getTime()
+								};
+								return condition;
+							});
 							const results = await ctx.runQuery(component.adapter.findMany, {
 								model,
-								where
+								where: normalizedWhere
 							});
 							return results.length;
 						}
