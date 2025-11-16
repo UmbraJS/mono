@@ -1,0 +1,36 @@
+<script setup lang="ts">
+import { computedAsync } from "@vueuse/core";
+import { getShortId } from "../../utils";
+
+const props = defineProps<{
+  userName: string;
+  userId: string;
+}>();
+
+const shortId = computedAsync(async () => {
+  return getShortId(props.userId, 8);
+}, null);
+</script>
+
+<template>
+  <div class="MessageContentTitle">
+    <p class="MessageName">{{ userName }}</p>
+    <p class="UserID caption">#{{ shortId }}</p>
+  </div>
+</template>
+
+<style>
+.MessageName {
+  color: var(--color);
+}
+
+.UserID {
+  color: var(--base-70);
+}
+
+.MessageContentTitle {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+</style>

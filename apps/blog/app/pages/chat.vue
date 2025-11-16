@@ -4,7 +4,7 @@ import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
 import { toast, ScrollArea } from "umbraco";
 import MessageChip from "../components/Chat/MessageChip.vue";
-import UserChip from "../components/Chat/UserChip.vue";
+import RecentUserChip from "../components/Chat/RecentUserChip.vue";
 import MyMessageBubble from "../components/Chat/MyMessageBubble.vue";
 import ChatMessagesLoading from "../components/Chat/ChatMessagesLoading.vue";
 import MessageComposer from "../components/Chat/MessageComposer.vue";
@@ -112,7 +112,7 @@ function isThisYou(userId: string) {
       </ChatMessagesLoading>
       <p v-else class="caption">Recent Online users: {{ onlineUsers.length }}</p>
       <div v-if="onlineUsers.length > 0" class="OnlineUsers">
-        <UserChip v-for="user in onlineUsers" :key="user.userId"
+        <RecentUserChip v-for="user in onlineUsers" :key="user.userId"
           :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
           :color="getUserColor(user.userId) || '#808080'" :isYou="isThisYou(user.userId)" />
       </div>

@@ -398,11 +398,100 @@ Built on:
 - Umbra for theming
 - reka-ui / shadcn-style primitives
 
-Use compound component patterns:
+### 7.1 Compound Component Pattern (Strongly Preferred)
 
-- e.g. `<Dialog>` `<Dialog.Trigger>` `<Dialog.Content>` … `</Dialog>`
+We **strongly prefer compound components** – breaking complex UI into small, composable parts.
 
-Avoid prop drilling by using internal context within compound components
+**Philosophy:**
+- Break complex UI into small, focused, composable parts
+- Each part does one thing well
+- Props go directly to the components that need them
+- Result: flexible, readable, maintainable component APIs
+
+**The Problem with Prop Drilling:**
+
+Prop drilling happens when you pass props through multiple component levels to reach their destination:
+
+```vue
+<!-- Bad: Prop drilling through layers -->
+<Dialog
+  :title="title"
+  :description="description"
+  :show-close="true"
+  :close-label="closeLabel"
+  :trigger-text="Open"
+>
+  <!-- Dialog internally passes these props down through DialogHeader → DialogTitle -->
+  <!-- And through DialogFooter → DialogCloseButton -->
+</Dialog>
+```
+
+This creates problems:
+- Parent component needs to know about all nested component props
+- Can't reorder or customize structure without changing parent API
+- Adding new features requires changing parent signature
+- Hard to make optional parts (e.g., sometimes no footer)
+
+**The Compound Component Solution:**
+
+```vue
+<!-- Good: Compose directly, props go where needed -->
+<Dialog>
+  <DialogTrigger>Open</DialogTrigger>
+  <DialogContent>
+    <DialogTitle>{{ title }}</DialogTitle>
+    <DialogDescription>{{ description }}</DialogDescription>
+    <p>Custom content here</p>
+    <DialogClose :label="closeLabel" />
+  </DialogContent>
+</Dialog>
+```
+
+Benefits:
+- Props go directly to components that use them
+- Full control over structure and order
+- Easy to add, remove, or reorder parts
+- Optional parts are naturally optional (just don't include them)
+- Parent component is simpler - no complex prop API needed
+
+**Benefits:**
+- **Composition over configuration**: Flexible arrangement of parts without complex prop APIs
+- **Clear relationships**: Visual hierarchy matches DOM structure
+- **No prop drilling**: Props go directly to their destination component
+- **Discoverability**: Autocomplete shows all available parts
+- **Extensibility**: Easy to add new parts without breaking existing API
+- **Flexibility**: Reorder, conditionally render, or customize any part
+
+**When to use compound components:**
+- Complex UI with multiple related pieces (modals, dropdowns, tabs, accordions)
+- Multiple composition patterns for same base component
+- Avoiding prop drilling through multiple layers
+
+**Examples in Umbraco:**
+- `<Dialog>` + `<Dialog.Trigger>` + `<Dialog.Content>` + `<Dialog.Close>`
+- `<Tabs>` + `<Tabs.List>` + `<Tabs.Trigger>` + `<Tabs.Content>`
+- `<Accordion>` + `<Accordion.Item>` + `<Accordion.Trigger>` + `<Accordion.Content>`
+- `<Dropdown>` + `<Dropdown.Trigger>` + `<Dropdown.Content>` + `<Dropdown.Item>`
+
+**File organization:**
+```
+components/
+  Dialog/
+    Dialog.vue          # Parent with context
+    DialogTrigger.vue   # Child part
+    DialogContent.vue   # Child part
+    DialogTitle.vue     # Child part
+    DialogClose.vue     # Child part
+    index.ts            # Re-exports all parts
+```
+
+**Copilot: when designing new UI components:**
+1. First consider if it has multiple related parts → use compound pattern
+2. Break into smallest logical pieces (trigger, content, header, footer, etc.)
+3. Each part accepts its own props directly
+4. Parts are independent and composable
+
+Avoid prop drilling - let users import each part and compose them directly with their own props.
 
 **Copilot: when apps need common UI (buttons, dialogs, inputs, layouts, etc.), prefer Umbraco components over raw HTML.  
 New generic UI components should be created in Umbraco, not directly in apps.**
@@ -414,6 +503,7 @@ Rules:
   - Use Umbra Color Tokens variables
   - Follow accessibility best practices (keyboard, focus, ARIA)
   - Respect the design guidelines (calm, clear, finite, not noisy)
+  - Use compound component pattern when component has multiple related parts
 
 
 ## 8. Other Packages
