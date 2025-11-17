@@ -6,6 +6,7 @@ import PostList from '../components/PostList.vue'
 import ProjectList from '../components/ProjectList.vue'
 
 import UserChip from "../components/UserChip/variants/UserChip.vue";
+import GlobalChatPanel from "../components/GlobalChatPanel.vue";
 import { author } from '../../types/profile'
 
 // SSR-safe: guard content query to avoid crashing prerender
@@ -55,12 +56,12 @@ onKeyStroke('Escape', () => toggleReveal())
             <Icon name="carbon:settings" />
           </Button>
         </UserChip>
-        <div class="ContentPosts">
+        <!-- <div class="ContentPosts">
           <PostList :posts="posts" />
           <ProjectList />
-        </div>
+        </div> -->
         <div class="ChatRoom">
-
+          <GlobalChatPanel slug="global" name="Global Chat" description="General discussion for everyone" />
         </div>
       </div>
     </div>

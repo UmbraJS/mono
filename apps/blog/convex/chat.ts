@@ -10,6 +10,7 @@ export const createChatroom = mutation({
     description: v.optional(v.string()),
     createdBy: v.string(),
     isPrivate: v.boolean(),
+    slug: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const chatroomId = await ctx.db.insert("chatrooms", {
@@ -18,6 +19,7 @@ export const createChatroom = mutation({
       createdBy: args.createdBy,
       createdAt: Date.now(),
       isPrivate: args.isPrivate,
+      slug: args.slug,
     });
     return chatroomId;
   },
@@ -40,6 +42,49 @@ export const getChatroom = query({
   handler: async (ctx, args) => {
     const chatroom = await ctx.db.get(args.chatroomId);
     return chatroom;
+  },
+});
+
+export const getChatroomBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, args) => {
+    const chatroom = await ctx.db
+      .query("chatrooms")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .first();
+    return chatroom;
+  },
+});
+
+export const getOrCreateChatroomBySlug = mutation({
+  args: {
+    slug: v.string(),
+    name: v.string(),
+    description: v.optional(v.string()),
+    createdBy: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Check if chatroom exists
+    const existing = await ctx.db
+      .query("chatrooms")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .first();
+
+    if (existing) {
+      return existing._id;
+    }
+
+    // Create new chatroom
+    const chatroomId = await ctx.db.insert("chatrooms", {
+      name: args.name,
+      description: args.description,
+      createdBy: args.createdBy,
+      createdAt: Date.now(),
+      isPrivate: false,
+      slug: args.slug,
+    });
+
+    return chatroomId;
   },
 });
 

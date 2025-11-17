@@ -15,7 +15,10 @@ const schema = defineSchema({
     createdBy: v.string(),
     createdAt: v.number(),
     isPrivate: v.boolean(),
-  }).index("by_createdAt", ["createdAt"]),
+    slug: v.optional(v.string()), // Unique identifier for page-specific chatrooms
+  })
+    .index("by_createdAt", ["createdAt"])
+    .index("by_slug", ["slug"]),
   // Track user presence/online status (now per room)
   userPresence: defineTable({
     userId: v.string(),
