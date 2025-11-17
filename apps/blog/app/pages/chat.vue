@@ -2,15 +2,11 @@
 import { ref, computed, watch, nextTick, onMounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
-import { toast, ScrollArea } from "umbraco";
-import RecentUserChip from "../components/UserChip/variants/RecentUserChip.vue";
-import MyMessageBubble from "../components/Chat/MyMessageBubble.vue";
-import ChatMessagesLoading from "../components/Chat/ChatMessagesLoading.vue";
-import MessageComposer from "../components/Chat/MessageComposer.vue";
-import UserChipMessage from "../components/UserChip/variants/UserChipMessage.vue";
+import { toast } from "umbraco";
+import ChatHeader from "../components/Chat/ChatHeader.vue";
+import ChatMessages from "../components/Chat/ChatMessages.vue";
+import ChatFooter from "../components/Chat/ChatFooter.vue";
 import type { ChatMessage } from "../components/Chat/chat.types"
-import EmojiBubbles from "../components/EmojiBubbles/EmojiBubbles.vue";
-import LiveEmojiPanel from "../components/Chat/LiveEmojiPanel.vue";
 
 useSeoMeta({ title: "Convex Chat" });
 
@@ -92,9 +88,9 @@ async function onSubmit({ message, form }: ChatMessage) {
   }
 }
 
-const scrollArea = useTemplateRef('scrollArea')
+const chatMessages = useTemplateRef('chatMessages')
 function scrollToBottom() {
-  scrollArea.value?.scrollToBottom()
+  chatMessages.value?.scrollToBottom()
 }
 
 function isThisYou(userId: string) {
@@ -103,48 +99,19 @@ function isThisYou(userId: string) {
 </script>
 
 <template>
-  <main v-if="isAuthenticated && session" class="ConvexChat">
-    <header class="ConvexChatHeader border">
-      <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
-        <p class="caption">Recent Online users: {{ onlineUsers.length }}</p>
-      </ChatMessagesLoading>
-      <p v-else class="caption">Recent Online users: {{ onlineUsers.length }}</p>
-      <div v-if="onlineUsers.length > 0" class="OnlineUsers">
-        <RecentUserChip v-for="user in onlineUsers" :key="user.userId"
-          :message="{ user: user.displayName, userId: user.userId, lastSeen: user.lastSeen }"
-          :color="getUserColor(user.userId) || '#808080'" :isYou="isThisYou(user.userId)" />
-      </div>
-      <EmojiBubbles :emojiEvents="emojiEvents" />
-    </header>
+  <main v-if="isAuthenticated && session" class="ChatPage">
+    <ChatHeader :isPending="isPending" :isClientReady="isClientReady" :onlineUsers="onlineUsers"
+      :emojiEvents="emojiEvents" :getUserColor="getUserColor" :isThisYou="isThisYou" />
 
-    <section class="ChatMessagesWrapper border">
-      <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady" />
-      <div v-else-if="realQuery.error.value" class="MessagesState messagesStateError">
-        Error: {{ String(realQuery.error.value) }}
-      </div>
-      <ScrollArea v-else ref="scrollArea">
-        <div class="Messages">
-          <template v-for="m in messages" :key="m._id">
-            <MyMessageBubble v-if="m.userId === currentUser.userId" :body="m.body" />
-            <UserChipMessage v-else :message="{ user: m.displayName, body: m.body, userId: m.userId }"
-              :color="getUserColor(m.userId) || '#808080'" />
-          </template>
-        </div>
-      </ScrollArea>
-    </section>
+    <ChatMessages ref="chatMessages" :isPending="isPending" :isClientReady="isClientReady"
+      :error="realQuery.error.value" :messages="messages" :currentUserId="currentUser.userId"
+      :getUserColor="getUserColor" />
 
-    <footer class="ConvexChatFooter">
-      <LiveEmojiPanel :disabled="isPending || !isClientReady" />
-
-      <ChatMessagesLoading v-if="isPending" :isClientReady="isClientReady">
-        <MessageComposer :isDisabled="true" :onSend="onSubmit" />
-      </ChatMessagesLoading>
-      <MessageComposer v-else :isDisabled="isSending || !isClientReady" :onSend="onSubmit" />
-    </footer>
+    <ChatFooter :isPending="isPending" :isClientReady="isClientReady" :isSending="isSending" :onSend="onSubmit" />
   </main>
 </template>
 
-<style>
+<style scoped>
 .ChatMessagesLoading {
   display: flex;
   justify-content: center;
@@ -153,7 +120,7 @@ function isThisYou(userId: string) {
   height: 100%;
 }
 
-.ConvexChat {
+.ChatPage {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto 1fr auto;
@@ -166,65 +133,5 @@ function isThisYou(userId: string) {
   padding: var(--space-2);
   padding-bottom: 100px;
   width: 100%;
-}
-
-header.ConvexChatHeader {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  grid-area: header;
-  background-color: var(--base-10);
-  padding: var(--space-2);
-  border-radius: var(--radius);
-}
-
-.ChatMessagesWrapper {
-  grid-area: messages;
-  overflow-y: auto;
-  background: var(--base-10);
-  border-radius: var(--radius);
-}
-
-footer.ConvexChatFooter {
-  grid-area: footer;
-  display: grid;
-  grid-template-columns: 1fr 30em;
-  gap: var(--space-1);
-}
-
-@media (max-width: 768px) {
-  footer.ConvexChatFooter {
-    grid-template-columns: 1fr;
-  }
-}
-
-.MessagesState {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  text-align: center;
-  color: var(--base-80);
-  padding: var(--space-2) 0;
-}
-
-.messagesStateError {
-  color: var(--warning-100);
-}
-
-.Messages {
-  list-style: none;
-  margin: 0;
-  padding: var(--space-2);
-  padding-left: var(--space-1);
-  display: grid;
-  gap: var(--space-1);
-  overflow-y: auto;
-}
-
-.OnlineUsers,
-.Emojis {
-  display: flex;
-  gap: var(--space-1);
 }
 </style>

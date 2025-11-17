@@ -55,8 +55,13 @@ onKeyStroke('Escape', () => toggleReveal())
             <Icon name="carbon:settings" />
           </Button>
         </UserChip>
-        <PostList :posts="posts" />
-        <ProjectList />
+        <div class="ContentPosts">
+          <PostList :posts="posts" />
+          <ProjectList />
+        </div>
+        <div class="ChatRoom">
+
+        </div>
       </div>
     </div>
   </div>
