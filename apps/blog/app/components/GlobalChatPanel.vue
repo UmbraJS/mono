@@ -20,41 +20,57 @@ const { user } = useAuth()
 const scrollArea = ref<InstanceType<typeof ScrollArea> | null>(null)
 const messageBody = ref('')
 const isSending = ref(false)
-const chatroomId = ref<Id<"chatrooms"> | null>(null)
 
-// Get or create the chatroom for this slug
-const { mutate: getOrCreateChatroom } = useConvexMutation(api.chat.getOrCreateChatroomBySlug)
-
-// Fetch the chatroom ID
-const initializeChatroom = async () => {
-  if (!user.value?.id) return
-
-  try {
-    const id = await getOrCreateChatroom({
-      slug: props.slug,
-      name: props.name,
-      description: props.description,
-      createdBy: user.value.id,
-    })
-    chatroomId.value = id
-  } catch (error) {
-    console.error('Failed to initialize chatroom:', error)
-  }
-}
-
-// Initialize when user is available
-watch(() => user.value?.id, (userId) => {
-  if (userId && !chatroomId.value) {
-    initializeChatroom()
-  }
-}, { immediate: true })
-
-// Fetch messages for the chatroom
-const messagesQuery = useConvexQuery(api.chat.getMessages, () => ({
-  chatroomId: chatroomId.value!
+// Query for chatroom by slug (returns null if doesn't exist)
+const chatroomQuery = useConvexQuery(api.chat.getChatroomBySlug, () => ({
+  slug: props.slug
 }))
 
-const { mutate: sendMessage } = useConvexMutation(api.chat.sendMessage)
+const chatroomId = computed(() => chatroomQuery.data.value?._id ?? null)
+
+interface Message {
+  _id: string
+  userId: string
+  displayName: string
+  body: string
+  timestamp: number
+}
+
+// Messages state
+const messagesData = ref<Message[]>([])
+const messagesError = ref<Error | null>(null)
+const messagesPending = ref(false)
+
+// Watch for chatroom changes and conditionally fetch messages
+let messagesUnsub: (() => void) | null = null
+
+watch(chatroomId, async (id) => {
+  // Clean up previous subscription
+  if (messagesUnsub) {
+    messagesUnsub()
+    messagesUnsub = null
+  }
+
+  if (!id) {
+    messagesData.value = []
+    messagesPending.value = false
+    return
+  }
+
+  // Manually subscribe to messages when chatroom exists
+  const query = useConvexQuery(api.chat.getMessages, () => ({ chatroomId: id }))
+
+  watch([() => query.data.value, () => query.error.value, () => query.isPending.value],
+    ([data, error, pending]) => {
+      messagesData.value = data || []
+      messagesError.value = error
+      messagesPending.value = pending
+    },
+    { immediate: true }
+  )
+}, { immediate: true })
+
+const { mutate: sendMessageToSlug } = useConvexMutation(api.chat.sendMessageToSlug)
 
 const currentUserId = computed(() => user.value?.id ?? '')
 
@@ -92,15 +108,18 @@ const scrollToBottom = () => {
 
 const handleSend = async () => {
   const body = messageBody.value.trim()
-  if (!body || !user.value?.id || !chatroomId.value) return
+  if (!body || !user.value?.id) return
 
   isSending.value = true
   try {
-    await sendMessage({
+    const roomId = await sendMessageToSlug({
       userId: user.value.id,
-      chatroomId: chatroomId.value,
+      slug: props.slug,
+      name: props.name,
+      description: props.description,
       body,
     })
+
     messageBody.value = ''
     scrollToBottom()
   } catch (error) {
@@ -119,42 +138,58 @@ const handleKeydown = (e: Event) => {
 }
 
 // Scroll to bottom when new messages arrive
-watch(() => messagesQuery.data.value?.length, () => {
+watch(() => messagesData.value.length, () => {
   scrollToBottom()
 })
 </script>
 
 <template>
   <div class="GlobalChatPanel">
-    <div v-if="!chatroomId" class="ChatLoading">
-      Initializing chatroom...
+    <div v-if="chatroomQuery.isPending.value" class="ChatLoading">
+      Loading chatroom...
     </div>
 
-    <div v-else-if="messagesQuery.isPending.value" class="ChatLoading">
-      Loading messages...
-    </div>
-
-    <div v-else-if="messagesQuery.error.value" class="ChatError">
-      Error: {{ String(messagesQuery.error.value) }}
-    </div>
-
-    <ScrollArea v-else ref="scrollArea" class="ChatMessages">
-      <div class="MessagesList">
-        <template v-for="m in messagesQuery.data.value" :key="m._id">
-          <MyMessageBubble v-if="m.userId === currentUserId" :body="m.body" />
-          <UserChipMessage v-else :message="{ user: m.displayName, body: m.body, userId: m.userId }"
-            :color="getUserColor(m.userId)" />
-        </template>
+    <div v-else-if="!chatroomId">
+      <!-- No chatroom yet - show empty state with composer -->
+      <div class="ChatEmpty">
+        <p>No messages yet. Be the first to start the conversation!</p>
       </div>
-    </ScrollArea>
-
-    <div class="MessageComposer">
-      <Input v-model="messageBody" label="Message" placeholder="Type a message..."
-        :disabled="isSending || !user || !chatroomId" @keydown="handleKeydown" />
-      <Button size="medium" :disabled="!messageBody.trim() || isSending || !user || !chatroomId" @click="handleSend">
-        <Icon name="carbon:send" />
-      </Button>
+      <div class="MessageComposer">
+        <Input v-model="messageBody" label="Message" placeholder="Type a message to start..."
+          :disabled="isSending || !user" @keydown="handleKeydown" />
+        <Button size="medium" :disabled="!messageBody.trim() || isSending || !user" @click="handleSend">
+          <Icon name="carbon:send" />
+        </Button>
+      </div>
     </div>
+
+    <template v-else>
+      <div v-if="messagesPending" class="ChatLoading">
+        Loading messages...
+      </div>
+
+      <div v-else-if="messagesError" class="ChatError">
+        Error: {{ String(messagesError) }}
+      </div>
+
+      <ScrollArea v-else ref="scrollArea" class="ChatMessages">
+        <div class="MessagesList">
+          <template v-for="m in messagesData" :key="m._id">
+            <MyMessageBubble v-if="m.userId === currentUserId" :body="m.body" />
+            <UserChipMessage v-else :message="{ user: m.displayName, body: m.body, userId: m.userId }"
+              :color="getUserColor(m.userId)" />
+          </template>
+        </div>
+      </ScrollArea>
+
+      <div class="MessageComposer">
+        <Input v-model="messageBody" label="Message" placeholder="Type a message..." :disabled="isSending || !user"
+          @keydown="handleKeydown" />
+        <Button size="medium" :disabled="!messageBody.trim() || isSending || !user" @click="handleSend">
+          <Icon name="carbon:send" />
+        </Button>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -176,7 +211,8 @@ watch(() => messagesQuery.data.value?.length, () => {
 }
 
 .ChatLoading,
-.ChatError {
+.ChatError,
+.ChatEmpty {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -187,6 +223,12 @@ watch(() => messagesQuery.data.value?.length, () => {
 
 .ChatError {
   color: var(--warning-100);
+}
+
+.ChatEmpty {
+  flex-direction: column;
+  text-align: center;
+  font-size: var(--paragraph);
 }
 
 .ChatMessages {

@@ -56,35 +56,64 @@ export const getChatroomBySlug = query({
   },
 });
 
-export const getOrCreateChatroomBySlug = mutation({
+export const sendMessageToSlug = mutation({
   args: {
+    userId: v.string(),
     slug: v.string(),
     name: v.string(),
     description: v.optional(v.string()),
-    createdBy: v.string(),
+    body: v.string(),
   },
   handler: async (ctx, args) => {
     // Check if chatroom exists
-    const existing = await ctx.db
+    let chatroom = await ctx.db
       .query("chatrooms")
       .withIndex("by_slug", (q) => q.eq("slug", args.slug))
       .first();
 
-    if (existing) {
-      return existing._id;
+    // Create chatroom if it doesn't exist
+    if (!chatroom) {
+      const chatroomId = await ctx.db.insert("chatrooms", {
+        name: args.name,
+        description: args.description,
+        createdBy: args.userId,
+        createdAt: Date.now(),
+        isPrivate: false,
+        slug: args.slug,
+      });
+      chatroom = await ctx.db.get(chatroomId);
+      if (!chatroom) throw new Error("Failed to create chatroom");
     }
 
-    // Create new chatroom
-    const chatroomId = await ctx.db.insert("chatrooms", {
-      name: args.name,
-      description: args.description,
-      createdBy: args.createdBy,
-      createdAt: Date.now(),
-      isPrivate: false,
-      slug: args.slug,
+    // Insert the message with timestamp
+    await ctx.db.insert("messages", {
+      userId: args.userId,
+      chatroomId: chatroom._id,
+      body: args.body,
+      timestamp: Date.now(),
     });
 
-    return chatroomId;
+    // Update user presence for this chatroom
+    const existingPresence = await ctx.db
+      .query("userPresence")
+      .withIndex("by_userId_chatroomId", (q) =>
+        q.eq("userId", args.userId).eq("chatroomId", chatroom._id)
+      )
+      .first();
+
+    if (existingPresence) {
+      await ctx.db.patch(existingPresence._id, {
+        lastSeen: Date.now(),
+      });
+    } else {
+      await ctx.db.insert("userPresence", {
+        userId: args.userId,
+        chatroomId: chatroom._id,
+        lastSeen: Date.now(),
+      });
+    }
+
+    return chatroom._id;
   },
 });
 
