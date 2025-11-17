@@ -9,6 +9,8 @@ import UserChip from "../components/UserChip/variants/UserChip.vue";
 import GlobalChatPanel from "../components/GlobalChatPanel.vue";
 import { author } from '../../types/profile'
 
+const { user } = useAuth()
+
 // SSR-safe: guard content query to avoid crashing prerender
 const { data: posts } = await useAsyncData('blog', async () => {
   try {
@@ -51,11 +53,16 @@ onKeyStroke('Escape', () => toggleReveal())
       </header>
       <div class="content" />
       <div class="sidebar">
-        <UserChip :author="author">
+        <UserChip v-if="user" :author="author">
           <Button size="medium">
             <Icon name="carbon:settings" />
           </Button>
         </UserChip>
+
+        <div v-else class="SignupChip base-accent button buttonText buttonHover buttonActive buttonFocus">
+          <Icon name="carbon:user-follow" />
+          <p>Sign Up</p>
+        </div>
 
         <div class="Divider"></div>
         <!-- <div class="ContentPosts">
@@ -71,6 +78,11 @@ onKeyStroke('Escape', () => toggleReveal())
 </template>
 
 <style lang="scss">
+.SignupChip {
+  display: flex;
+  padding: var(--space-2) var(--space-1);
+}
+
 .Divider {
   height: 1px;
   background-color: var(--base-60);

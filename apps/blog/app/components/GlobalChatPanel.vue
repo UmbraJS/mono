@@ -2,7 +2,6 @@
 import { ScrollArea, Input, Button, toast } from 'umbraco'
 import { useConvexQuery, useConvexMutation } from 'convue'
 import { api } from '../../convex/_generated/api'
-import type { Id } from '../../convex/_generated/dataModel'
 import MyMessageBubble from './Chat/MyMessageBubble.vue'
 import UserChipMessage from './UserChip/variants/UserChipMessage.vue'
 
