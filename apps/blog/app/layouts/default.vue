@@ -2,31 +2,26 @@
 import { Button } from 'umbraco'
 import { onKeyStroke } from '@vueuse/core'
 import FrostLayer from '../components/FrostLayer.vue'
-import PostList from '../components/PostList.vue'
-import ProjectList from '../components/ProjectList.vue'
+// import PostList from '../components/PostList.vue'
+// import ProjectList from '../components/ProjectList.vue'
 
 import UserChip from "../components/UserChip/variants/UserChip.vue";
 import GlobalChatPanel from "../components/GlobalChatPanel.vue";
 import AuthToggle from "../components/AuthToggle.vue";
 import AuthForm from "../components/AuthForm.vue";
+import SettingsPanel from "../components/SettingsPanel.vue";
 import { author } from '../../types/profile'
 
 const { user } = useAuth()
 
-// SSR-safe: guard content query to avoid crashing prerender
-const { data: posts } = await useAsyncData('blog', async () => {
-  try {
-    // queryCollection provided by @nuxt/content
-    return await queryCollection('blog').all()
-  } catch (e) {
-    console.error('[home] Failed to load blog posts during SSR:', e)
-    return []
-  }
-})
-
 const theme = useUmbra()
 const reveal = ref(false)
 const signMode = ref<'signin' | 'signup' | null>(null)
+const showSettings = ref(false)
+
+function toggleSettings() {
+  showSettings.value = !showSettings.value
+}
 
 function toggleReveal() {
   reveal.value = !reveal.value
@@ -57,7 +52,7 @@ onKeyStroke('Escape', () => toggleReveal())
       <div class="content" />
       <div class="sidebar">
         <UserChip v-if="user" :author="author">
-          <Button size="medium">
+          <Button size="medium" @click="toggleSettings">
             <Icon name="carbon:settings" />
           </Button>
         </UserChip>
@@ -65,16 +60,19 @@ onKeyStroke('Escape', () => toggleReveal())
         <AuthToggle v-else v-model:sign-mode="signMode" />
 
         <div class="Divider"></div>
-        <!-- <div class="ContentPosts">
-          <PostList :posts="posts" />
-          <ProjectList />
-        </div> -->
+
         <div v-if="!user && signMode" class="AuthFormContainer">
           <AuthForm :sign-mode="signMode" />
         </div>
+
+        <div v-else-if="user && showSettings" class="SettingsPanelContainer">
+          <SettingsPanel />
+        </div>
+
         <div v-else class="ChatRoom">
           <GlobalChatPanel slug="global" name="Global Chat" description="General discussion for everyone" />
         </div>
+
       </div>
     </div>
   </div>
@@ -97,6 +95,12 @@ onKeyStroke('Escape', () => toggleReveal())
 }
 
 .AuthFormContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.SettingsPanelContainer {
   height: 100%;
   display: flex;
   flex-direction: column;

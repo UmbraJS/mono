@@ -149,7 +149,8 @@ p.display,
 
 p.caption,
 .p.caption,
-.p.caption::placeholder {
+.p.caption::placeholder,
+label.caption {
   font-size: 1rem;
   line-height: 1rem;
   font-variation-settings: var(--font-light);
