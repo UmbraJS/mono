@@ -3,23 +3,67 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { components } from "./_generated/api";
 
+// Chatroom management
+export const createChatroom = mutation({
+  args: {
+    name: v.string(),
+    description: v.optional(v.string()),
+    createdBy: v.string(),
+    isPrivate: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const chatroomId = await ctx.db.insert("chatrooms", {
+      name: args.name,
+      description: args.description,
+      createdBy: args.createdBy,
+      createdAt: Date.now(),
+      isPrivate: args.isPrivate,
+    });
+    return chatroomId;
+  },
+});
+
+export const getChatrooms = query({
+  args: {},
+  handler: async (ctx) => {
+    const chatrooms = await ctx.db
+      .query("chatrooms")
+      .order("desc")
+      .collect();
+
+    return chatrooms;
+  },
+});
+
+export const getChatroom = query({
+  args: { chatroomId: v.id("chatrooms") },
+  handler: async (ctx, args) => {
+    const chatroom = await ctx.db.get(args.chatroomId);
+    return chatroom;
+  },
+});
+
 export const sendMessage = mutation({
   args: {
     userId: v.string(),
+    chatroomId: v.id("chatrooms"),
     body: v.string(),
   },
   handler: async (ctx, args) => {
     // Insert the message with timestamp
     await ctx.db.insert("messages", {
       userId: args.userId,
+      chatroomId: args.chatroomId,
       body: args.body,
       timestamp: Date.now(),
     });
 
-    // Update user presence
+    // Update user presence for this chatroom
     const existingPresence = await ctx.db
       .query("userPresence")
-      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .withIndex("by_userId_chatroomId", (q) =>
+        q.eq("userId", args.userId).eq("chatroomId", args.chatroomId)
+      )
       .first();
 
     if (existingPresence) {
@@ -29,6 +73,7 @@ export const sendMessage = mutation({
     } else {
       await ctx.db.insert("userPresence", {
         userId: args.userId,
+        chatroomId: args.chatroomId,
         lastSeen: Date.now(),
       });
     }
@@ -36,9 +81,15 @@ export const sendMessage = mutation({
 });
 
 export const getMessages = query({
-  args: {},
-  handler: async (ctx) => {
-    const messages = await ctx.db.query("messages").order("desc").take(50);
+  args: { chatroomId: v.id("chatrooms") },
+  handler: async (ctx, args) => {
+    const messages = await ctx.db
+      .query("messages")
+      .withIndex("by_chatroomId_timestamp", (q) =>
+        q.eq("chatroomId", args.chatroomId)
+      )
+      .order("desc")
+      .take(50);
 
     // Enrich messages with user display names from Better Auth component
     const messagesWithUsers = await Promise.all(
@@ -63,11 +114,14 @@ export const getMessages = query({
 export const updateUserPresence = mutation({
   args: {
     userId: v.string(),
+    chatroomId: v.optional(v.id("chatrooms")),
   },
   handler: async (ctx, args) => {
     const existingPresence = await ctx.db
       .query("userPresence")
-      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .withIndex("by_userId_chatroomId", (q) =>
+        q.eq("userId", args.userId).eq("chatroomId", args.chatroomId)
+      )
       .first();
 
     const now = Date.now();
@@ -79,6 +133,7 @@ export const updateUserPresence = mutation({
     } else {
       await ctx.db.insert("userPresence", {
         userId: args.userId,
+        chatroomId: args.chatroomId,
         lastSeen: now,
       });
     }
@@ -88,11 +143,14 @@ export const updateUserPresence = mutation({
 export const setUserOffline = mutation({
   args: {
     userId: v.string(),
+    chatroomId: v.optional(v.id("chatrooms")),
   },
   handler: async (ctx, args) => {
     const presence = await ctx.db
       .query("userPresence")
-      .withIndex("by_userId", (q) => q.eq("userId", args.userId))
+      .withIndex("by_userId_chatroomId", (q) =>
+        q.eq("userId", args.userId).eq("chatroomId", args.chatroomId)
+      )
       .first();
 
     if (presence) {
@@ -104,14 +162,14 @@ export const setUserOffline = mutation({
 });
 
 export const getOnlineUsers = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { chatroomId: v.optional(v.id("chatrooms")) },
+  handler: async (ctx, args) => {
     const fiveMinutesAgo = Date.now() - 5 * 60 * 1000; // 5 minutes
 
-    // Get users who were seen within the last 5 minutes
+    // Get users who were seen within the last 5 minutes in this chatroom
     const presences = await ctx.db
       .query("userPresence")
-      .withIndex("by_lastSeen")
+      .withIndex("by_chatroomId", (q) => q.eq("chatroomId", args.chatroomId))
       .filter((q) => q.gt(q.field("lastSeen"), fiveMinutesAgo))
       .collect();
 
@@ -164,6 +222,7 @@ export const cleanupStaleUsers = mutation({
 export const sendEmoji = mutation({
   args: {
     userId: v.string(),
+    chatroomId: v.id("chatrooms"),
     emoji: v.string(),
   },
   handler: async (ctx, args) => {
@@ -185,6 +244,7 @@ export const sendEmoji = mutation({
     // Insert the emoji event
     await ctx.db.insert("emojiEvents", {
       userId: args.userId,
+      chatroomId: args.chatroomId,
       emoji: args.emoji,
       timestamp: now,
     });
@@ -192,14 +252,16 @@ export const sendEmoji = mutation({
 });
 
 export const getRecentEmojiEvents = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { chatroomId: v.id("chatrooms") },
+  handler: async (ctx, args) => {
     // Get emoji events from the last 10 seconds to catch real-time events
     const tenSecondsAgo = Date.now() - 10 * 1000;
 
     const emojiEvents = await ctx.db
       .query("emojiEvents")
-      .withIndex("by_timestamp", (q) => q.gt("timestamp", tenSecondsAgo))
+      .withIndex("by_chatroomId_timestamp", (q) =>
+        q.eq("chatroomId", args.chatroomId).gt("timestamp", tenSecondsAgo)
+      )
       .collect();
 
     return emojiEvents;

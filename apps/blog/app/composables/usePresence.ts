@@ -2,19 +2,28 @@ import { ref, onMounted, onUnmounted } from "vue";
 import type { ComputedRef } from "vue";
 import { useConvexMutation } from "convue";
 import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 
 interface CurrentUser {
   userId: string;
   displayName: string;
 }
 
-export const usePresence = (currentUser: ComputedRef<CurrentUser>) => {
+export const usePresence = (
+  currentUser: ComputedRef<CurrentUser>,
+  chatroomId?: ComputedRef<Id<"chatrooms">> | Id<"chatrooms">
+) => {
   const isVisible = ref(true);
   const heartbeatInterval = ref<NodeJS.Timeout | null>(null);
 
   const { mutate: updatePresence } = useConvexMutation(api.chat.updateUserPresence);
   const { mutate: setOffline } = useConvexMutation(api.chat.setUserOffline);
   const { mutate: cleanup } = useConvexMutation(api.chat.cleanupStaleUsers);
+
+  const getChatroomId = () => {
+    if (!chatroomId) return undefined
+    return typeof chatroomId === 'function' || 'value' in chatroomId ? chatroomId.value : chatroomId
+  }
 
   const updateUserPresence = async () => {
     try {
@@ -26,6 +35,7 @@ export const usePresence = (currentUser: ComputedRef<CurrentUser>) => {
 
       await updatePresence({
         userId: currentUser.value.userId,
+        chatroomId: getChatroomId(),
       });
     } catch (error) {
       console.error("Failed to update presence:", error);
@@ -38,7 +48,10 @@ export const usePresence = (currentUser: ComputedRef<CurrentUser>) => {
       if (!currentUser.value?.userId || currentUser.value.userId === '') {
         return; // Don't set offline for empty/missing user IDs
       }
-      await setOffline({ userId: currentUser.value.userId });
+      await setOffline({
+        userId: currentUser.value.userId,
+        chatroomId: getChatroomId(),
+      });
     } catch (error) {
       console.error("Failed to set user offline:", error);
     }

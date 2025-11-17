@@ -3,9 +3,11 @@ import { ref, computed, onUnmounted } from "vue";
 import { useConvexQuery, useConvexMutation } from "convue";
 import { api } from "../../../convex/_generated/api";
 import { toast } from "umbraco";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 interface Props {
   disabled?: boolean;
+  chatroomId: Id<"chatrooms">;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -32,7 +34,9 @@ const COMBO_LIMIT = 30;
 const COOLDOWN_DURATION = 30; // 30 seconds
 
 // Convex mutations and queries
-const emojiEventsQuery = useConvexQuery(api.chat.getRecentEmojiEvents);
+const emojiEventsQuery = useConvexQuery(api.chat.getRecentEmojiEvents, () => ({
+  chatroomId: props.chatroomId
+}));
 const { mutate: sendEmoji } = useConvexMutation(api.chat.sendEmoji);
 
 const emojiEvents = computed(() => emojiEventsQuery.data.value || []);
@@ -66,6 +70,7 @@ async function onEmojiClick(emoji: string) {
   try {
     await sendEmoji({
       userId: currentUser.value.userId,
+      chatroomId: props.chatroomId,
       emoji: emoji,
     });
 
