@@ -88,7 +88,6 @@ const { mutate: executeGithubAuth, asyncStatus: githubStatus } = useMutation({
   mutation: async () => {
     const { error } = await auth.client.signIn.social({
       provider: 'github',
-      callbackURL: '/profile',
     })
 
     if (error) {

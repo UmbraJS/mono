@@ -126,7 +126,6 @@ async function signIn(data: { email: string; password: string }) {
 
   toast.success('You have been signed in!')
   await auth.fetchSession()
-  await router.push('/profile')
   loading.value = false
 }
 
@@ -154,7 +153,6 @@ async function handleGithubAuth() {
 
   const { error } = await auth.client.signIn.social({
     provider: 'github',
-    callbackURL: '/profile',
   })
 
   if (error) {
