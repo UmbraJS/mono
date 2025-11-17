@@ -1,9 +1,3 @@
-<template>
-  <li class="my-message">
-    <div class="my-message__bubble">{{ body }}</div>
-  </li>
-</template>
-
 <script setup lang="ts">
 interface Props {
   body: string;
@@ -11,6 +5,12 @@ interface Props {
 
 defineProps<Props>();
 </script>
+
+<template>
+  <li class="my-message">
+    <div class="my-message__bubble">{{ body }}</div>
+  </li>
+</template>
 
 <style scoped>
 .my-message {

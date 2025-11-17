@@ -15,6 +15,10 @@ const { error } = defineProps<{
   position: relative;
 }
 
+.InputWrapper input {
+  width: 100%;
+}
+
 div.sibling-blur:has(+ * .InputElement:focus) {
   filter: blur(4px);
 }

@@ -60,10 +60,22 @@ const currentUserId = computed(() => user.value?.id ?? '')
 
 // Simple color assignment based on user ID hash
 const getUserColor = (userId: string) => {
-  const colors = ['accent', 'success', 'warning', 'info']
-  const hash = userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
-  return colors[hash % colors.length]
-}
+  const colors = [
+    "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
+    "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe",
+    "#008080", "#e6beff", "#9a6324", "#fffac8", "#800000",
+    "#aaffc3", "#808000", "#ffd8b1", "#000075", "#ff0000"
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) {
+    const char = userId.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+
+  return colors[Math.abs(hash) % colors.length];
+};
 
 const scrollToBottom = () => {
   const area = scrollArea.value
@@ -114,8 +126,6 @@ watch(() => messagesQuery.data.value?.length, () => {
 
 <template>
   <div class="GlobalChatPanel">
-    <h3 class="ChatTitle">{{ name }}</h3>
-
     <div v-if="!chatroomId" class="ChatLoading">
       Initializing chatroom...
     </div>
@@ -188,8 +198,6 @@ watch(() => messagesQuery.data.value?.length, () => {
 }
 
 .MessagesList {
-  padding: var(--space-2);
-  padding-left: var(--space-1);
   display: grid;
   gap: var(--space-1);
 }

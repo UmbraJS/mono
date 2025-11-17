@@ -36,7 +36,7 @@ onKeyStroke('Escape', () => toggleReveal())
     dark: theme.isDark,
   }">
     <div class="burger" @click="toggleReveal" />
-    <FrostLayer />
+    <!-- <FrostLayer /> -->
     <div class="content-layer">
       <div class="vignet" @click="toggleReveal" />
       <main class="UmbraPage">
@@ -69,6 +69,11 @@ onKeyStroke('Escape', () => toggleReveal())
 </template>
 
 <style lang="scss">
+.ChatRoom {
+  height: 100%;
+
+}
+
 .MandatoryIdentityFields {
   display: grid;
   grid-auto-flow: column;
