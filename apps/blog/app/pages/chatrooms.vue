@@ -9,13 +9,6 @@ useSeoMeta({ title: "Chatrooms" });
 const { session, isAuthenticated } = useAuth()
 const router = useRouter()
 
-// Redirect to signin if not authenticated
-watchEffect(() => {
-  if (!isAuthenticated.value) {
-    router.push('/signin')
-  }
-})
-
 const currentUser = computed(() => ({
   userId: session.value?.user?.id || '',
   displayName: session.value?.user?.name || 'Anonymous',

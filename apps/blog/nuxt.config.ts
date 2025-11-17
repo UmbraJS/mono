@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
     '@pinia/nuxt',
+    '@pinia/colada-nuxt',
     '@nuxt/icon',
     '@nuxt/content',
     '@nuxtjs/mdc',

@@ -2,14 +2,13 @@
 import { Button, Input, toast, Spinner } from 'umbraco'
 import { z } from 'zod'
 import { useFormula } from '@umbrajs/formula'
+import { useMutation } from '@pinia/colada'
 
 const props = defineProps<{
   signMode: 'signin' | 'signup'
 }>()
 
 const auth = useAuth()
-const router = useRouter()
-const loading = ref(false)
 
 // Define validation schemas
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -43,6 +42,70 @@ const form = useFormula(
 
 // Local errors for input field display
 const fieldErrors = ref<{ email?: string; password?: string }>({})
+
+// Sign in mutation
+const { mutate: executeSignIn, asyncStatus: signInStatus } = useMutation({
+  mutation: async (data: { email: string; password: string }) => {
+    const result = await auth.client.signIn.email({
+      email: data.email,
+      password: data.password,
+    })
+
+    if (result.error) {
+      throw new Error(result.error.message || 'Error signing in')
+    }
+
+    toast.success('You have been signed in!')
+    await auth.fetchSession()
+  },
+  onError: (error) => {
+    toast.error(error.message)
+  },
+})
+
+// Sign up mutation
+const { mutate: executeSignUp, asyncStatus: signUpStatus } = useMutation({
+  mutation: async (data: { email: string; password: string }) => {
+    const { error } = await auth.client.signUp.email({
+      email: data.email,
+      password: data.password,
+      name: 'Anonymous',
+    })
+
+    if (error) {
+      throw new Error(error.message || 'Error signing up')
+    }
+
+    toast.success('You have been signed up! Please sign in.')
+  },
+  onError: (error) => {
+    toast.error(error.message)
+  },
+})
+
+// GitHub auth mutation
+const { mutate: executeGithubAuth, asyncStatus: githubStatus } = useMutation({
+  mutation: async () => {
+    const { error } = await auth.client.signIn.social({
+      provider: 'github',
+      callbackURL: '/profile',
+    })
+
+    if (error) {
+      const action = props.signMode === 'signin' ? 'signing in' : 'signing up'
+      throw new Error(`Error ${action} with GitHub`)
+    }
+  },
+  onError: (error) => {
+    toast.error(error.message)
+  },
+})
+
+const isLoading = computed(() =>
+  signInStatus.value === 'loading' ||
+  signUpStatus.value === 'loading' ||
+  githubStatus.value === 'loading'
+)
 
 // Clear errors when switching modes
 watch(() => props.signMode, () => {
@@ -105,71 +168,24 @@ async function handleSubmit() {
     return
   }
 
-  if (loading.value) return
-  loading.value = true
+  if (isLoading.value) return
 
   if (props.signMode === 'signin') {
-    await signIn(result.data)
+    executeSignIn(result.data)
   } else {
-    await signUp(result.data)
+    executeSignUp(result.data)
   }
 }
 
-async function signIn(data: { email: string; password: string }) {
-  const result = await auth.client.signIn.email({
-    email: data.email,
-    password: data.password,
-  })
-
-  if (result.error) {
-    toast.error(result.error.message || 'Error signing in')
-    loading.value = false
-    return
-  }
-
-  toast.success('You have been signed in!')
-  await auth.fetchSession()
-  await router.push('/profile')
-  loading.value = false
-}
-
-async function signUp(data: { email: string; password: string }) {
-  const { error } = await auth.client.signUp.email({
-    email: data.email,
-    password: data.password,
-    name: 'Anonymous',
-  })
-
-  if (error) {
-    toast.error(error.message || 'Error signing up')
-    loading.value = false
-    return
-  }
-
-  toast.success('You have been signed up! Please sign in.')
-  loading.value = false
-}
-
-async function handleGithubAuth() {
-  if (loading.value) return
-  loading.value = true
-
-  const { error } = await auth.client.signIn.social({
-    provider: 'github',
-    callbackURL: '/profile',
-  })
-
-  if (error) {
-    const action = props.signMode === 'signin' ? 'signing in' : 'signing up'
-    toast.error(`Error ${action} with GitHub`)
-    loading.value = false
-  }
+function handleGithubAuth() {
+  if (isLoading.value) return
+  executeGithubAuth()
 }
 </script>
 
 <template>
   <div class="AuthForm">
-    <div v-if="loading" class="loading-panel">
+    <div v-if="isLoading" class="loading-panel">
       <Spinner size="8em" />
     </div>
 
@@ -177,16 +193,16 @@ async function handleGithubAuth() {
       <Input v-model="form.data.value.email" type="email" label="Email" :error="fieldErrors.email || ''" />
       <Input v-model="form.data.value.password" type="password" label="Password" :error="fieldErrors.password || ''" />
       <div class="Spacer"></div>
-      <Button type="submit" :disabled="loading">
-        <span v-if="!loading">{{ signMode === 'signin' ? 'Sign In' : 'Sign Up' }}</span>
+      <Button type="submit" :disabled="isLoading">
+        <span v-if="!isLoading">{{ signMode === 'signin' ? 'Sign In' : 'Sign Up' }}</span>
         <Spinner v-else variant="secondary" size="1.5em" />
       </Button>
-      <Button type="button" :disabled="loading" @click="handleGithubAuth">
-        <Icon v-if="!loading" name="i-simple-icons-github" />
-        <span v-if="!loading">
+      <Button type="button" :disabled="isLoading" @click="handleGithubAuth">
+        <Icon v-if="!isLoading" name="i-simple-icons-github" />
+        <span v-if="!isLoading">
           {{ signMode === 'signin' ? 'Sign In with Github' : 'Sign Up with Github' }}
         </span>
-        <Spinner v-if="loading" variant="secondary" size="1.5em" />
+        <Spinner v-if="isLoading" variant="secondary" size="1.5em" />
       </Button>
     </form>
   </div>

@@ -89,6 +89,8 @@
     "@iconify-json/carbon": "^1.2.14",
     "@iconify-json/pixelarticons": "catalog:",
     "@nuxt/eslint-config": "catalog:",
+    "@pinia/colada": "^0.17.8",
+    "@pinia/colada-nuxt": "^0.2.4",
     "better-auth": "^1.3.34",
     "eslint": "catalog:",
     "tsx": "catalog:",

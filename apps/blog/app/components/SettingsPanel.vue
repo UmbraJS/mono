@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { Button, Toggle, toast } from 'umbraco'
+import { Button, Toggle, toast, Spinner } from 'umbraco'
+import { useMutation } from '@pinia/colada'
 
 const theme = useUmbra()
 const auth = useAuth()
 const router = useRouter()
 
-async function handleLogout() {
-  await auth.client.signOut()
-  await auth.fetchSession()
-  toast.success('You have been signed out')
-  router.push('/')
-}
+const { mutate: logout, asyncStatus } = useMutation({
+  mutation: async () => {
+    await auth.client.signOut()
+    await auth.fetchSession()
+    toast.success('You have been signed out')
+  },
+})
+
+const isLoggingOut = computed(() => asyncStatus.value === 'loading')
 </script>
 
 <template>
@@ -24,8 +28,9 @@ async function handleLogout() {
     </div>
 
     <div class="settings-section">
-      <Button @click="handleLogout">
-        <Icon name="carbon:logout" />
+      <Button :disabled="isLoggingOut" @click="logout">
+        <Spinner v-if="isLoggingOut" size="1.5em" />
+        <Icon v-else name="carbon:logout" />
         <p>Sign Out</p>
       </Button>
     </div>

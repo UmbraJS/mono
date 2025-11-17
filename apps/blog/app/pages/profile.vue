@@ -5,20 +5,13 @@ import Reveal from '../components/Reveal.vue'
 const { session, isAuthenticated, isLoading, client: authClient } = useAuth()
 const router = useRouter()
 
-// Redirect to signin if not authenticated
-watch([isAuthenticated, isLoading], ([auth, loading]) => {
-  if (loading || auth) return
-  router.push('/signin')
-}, { immediate: true })
-
 async function signOut() {
   const { error } = await authClient.signOut()
-
   if (error) {
     toast.error('Error signing out')
   } else {
     toast.success('You have been signed out!')
-    router.push('/signin')
+    router.push('/')
   }
 }
 </script>
@@ -94,9 +87,6 @@ async function signOut() {
 
       <div v-else class="not-authenticated">
         <p>Not authenticated</p>
-        <Button @click="router.push('/signin')">
-          Sign In
-        </Button>
       </div>
     </Reveal>
   </div>
