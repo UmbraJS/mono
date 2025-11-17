@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ScrollArea, Input, Button } from 'umbraco'
+import { ScrollArea, Input, Button, toast } from 'umbraco'
 import { useConvexQuery, useConvexMutation } from 'convue'
 import { api } from '../../convex/_generated/api'
 import type { Id } from '../../convex/_generated/dataModel'
@@ -20,6 +20,7 @@ const { user } = useAuth()
 const scrollArea = ref<InstanceType<typeof ScrollArea> | null>(null)
 const messageBody = ref('')
 const isSending = ref(false)
+const inputError = ref('')
 
 // Query for chatroom by slug (returns null if doesn't exist)
 const chatroomQuery = useConvexQuery(api.chat.getChatroomBySlug, () => ({
@@ -108,7 +109,27 @@ const scrollToBottom = () => {
 
 const handleSend = async () => {
   const body = messageBody.value.trim()
-  if (!body || !user.value?.id) return
+
+  // Clear previous error
+  inputError.value = ''
+
+  if (!user.value?.id) {
+    inputError.value = 'You must be signed in to send messages'
+    toast.error('You must be signed in to send messages')
+    return
+  }
+
+  if (!body) {
+    inputError.value = 'Message cannot be empty'
+    toast.error('Message cannot be empty')
+    return
+  }
+
+  if (body.length > 1000) {
+    inputError.value = 'Message must be less than 1000 characters'
+    toast.error('Message must be less than 1000 characters')
+    return
+  }
 
   isSending.value = true
   try {
@@ -124,6 +145,8 @@ const handleSend = async () => {
     scrollToBottom()
   } catch (error) {
     console.error('Failed to send message:', error)
+    inputError.value = 'Failed to send message. Please try again.'
+    toast.error('Failed to send message. Please try again.')
   } finally {
     isSending.value = false
   }
@@ -137,6 +160,12 @@ const handleKeydown = (e: Event) => {
   }
 }
 
+// Clear error when user starts typing
+watch(messageBody, () => {
+  if (!inputError.value) return
+  inputError.value = ''
+})
+
 // Scroll to bottom when new messages arrive
 watch(() => messagesData.value.length, () => {
   scrollToBottom()
@@ -149,18 +178,9 @@ watch(() => messagesData.value.length, () => {
       Loading chatroom...
     </div>
 
-    <div v-else-if="!chatroomId">
-      <!-- No chatroom yet - show empty state with composer -->
-      <div class="ChatEmpty">
-        <p>No messages yet. Be the first to start the conversation!</p>
-      </div>
-      <div class="MessageComposer">
-        <Input v-model="messageBody" label="Message" placeholder="Type a message to start..."
-          :disabled="isSending || !user" @keydown="handleKeydown" />
-        <Button size="medium" :disabled="!messageBody.trim() || isSending || !user" @click="handleSend">
-          <Icon name="carbon:send" />
-        </Button>
-      </div>
+    <!-- No chatroom yet - show empty state with composer -->
+    <div v-else-if="!chatroomId" class="ChatEmpty">
+      <p>No messages yet. Be the first to start the conversation!</p>
     </div>
 
     <template v-else>
@@ -181,15 +201,15 @@ watch(() => messagesData.value.length, () => {
           </template>
         </div>
       </ScrollArea>
-
-      <div class="MessageComposer">
-        <Input v-model="messageBody" label="Message" placeholder="Type a message..." :disabled="isSending || !user"
-          @keydown="handleKeydown" />
-        <Button size="medium" :disabled="!messageBody.trim() || isSending || !user" @click="handleSend">
-          <Icon name="carbon:send" />
-        </Button>
-      </div>
     </template>
+
+    <div v-if="user" class="MessageComposer">
+      <Input v-model="messageBody" label="Message" placeholder="Type a message..." :disabled="isSending"
+        :error="inputError" @keydown="handleKeydown" />
+      <Button size="medium" @click="handleSend">
+        <Icon name="carbon:send" />
+      </Button>
+    </div>
   </div>
 </template>
 

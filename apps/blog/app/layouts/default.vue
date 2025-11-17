@@ -207,6 +207,7 @@ onKeyStroke('Escape', () => toggleReveal())
   gap: var(--space-2);
 
   padding: var(--space-2);
+  padding-right: var(--space-3);
   padding-top: 0px;
 }
 
