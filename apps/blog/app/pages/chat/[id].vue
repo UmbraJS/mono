@@ -16,13 +16,7 @@ const chatroomId = computed(() => route.params.id as Id<"chatrooms">)
 useSeoMeta({ title: "Chat" });
 
 // Auth management
-const { session, isAuthenticated, isLoading } = useAuth()
-
-// Redirect to signin if not authenticated
-watch([isAuthenticated, isLoading], ([auth, loading]) => {
-  if (loading || auth) return
-  router.push('/signin')
-}, { immediate: true })
+const { session, isAuthenticated } = useAuth()
 
 // Get user info from session
 const currentUser = computed(() => ({
@@ -131,8 +125,8 @@ function goBack() {
       :error="realQuery.error.value" :messages="messages" :currentUserId="currentUser.userId"
       :getUserColor="getUserColor" />
 
-    <ChatFooter :isPending="isPending" :isClientReady="isClientReady" :isSending="isSending" :chatroomId="chatroomId"
-      :onSend="onSubmit" />
+    <ChatFooter v-if="isAuthenticated" :isPending="isPending" :isClientReady="isClientReady" :isSending="isSending"
+      :chatroomId="chatroomId" :onSend="onSubmit" />
   </main>
 </template>
 
