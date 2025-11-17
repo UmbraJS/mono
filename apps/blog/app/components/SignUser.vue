@@ -207,6 +207,7 @@ async function handleGithubAuth() {
   justify-content: center;
   gap: var(--space-2);
   position: relative;
+  width: calc(var(--paragraph-width) / 2);
 }
 
 .SigninWrapper form {

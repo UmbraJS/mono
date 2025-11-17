@@ -56,6 +56,8 @@ onKeyStroke('Escape', () => toggleReveal())
             <Icon name="carbon:settings" />
           </Button>
         </UserChip>
+
+        <div class="Divider"></div>
         <!-- <div class="ContentPosts">
           <PostList :posts="posts" />
           <ProjectList />
@@ -69,9 +71,14 @@ onKeyStroke('Escape', () => toggleReveal())
 </template>
 
 <style lang="scss">
+.Divider {
+  height: 1px;
+  background-color: var(--base-60);
+  width: 100%;
+}
+
 .ChatRoom {
   height: 100%;
-
 }
 
 .MandatoryIdentityFields {
