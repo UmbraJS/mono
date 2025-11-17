@@ -7,6 +7,8 @@ import ProjectList from '../components/ProjectList.vue'
 
 import UserChip from "../components/UserChip/variants/UserChip.vue";
 import GlobalChatPanel from "../components/GlobalChatPanel.vue";
+import AuthToggle from "../components/AuthToggle.vue";
+import AuthForm from "../components/AuthForm.vue";
 import { author } from '../../types/profile'
 
 const { user } = useAuth()
@@ -24,6 +26,7 @@ const { data: posts } = await useAsyncData('blog', async () => {
 
 const theme = useUmbra()
 const reveal = ref(false)
+const signMode = ref<'signin' | 'signup' | null>(null)
 
 function toggleReveal() {
   reveal.value = !reveal.value
@@ -38,7 +41,7 @@ onKeyStroke('Escape', () => toggleReveal())
     dark: theme.isDark,
   }">
     <div class="burger" @click="toggleReveal" />
-    <!-- <FrostLayer /> -->
+    <FrostLayer v-if="!reveal" />
     <div class="content-layer">
       <div class="vignet" @click="toggleReveal" />
       <main class="UmbraPage">
@@ -59,17 +62,17 @@ onKeyStroke('Escape', () => toggleReveal())
           </Button>
         </UserChip>
 
-        <div v-else class="SignupChip base-accent button buttonText buttonHover buttonActive buttonFocus">
-          <Icon name="carbon:user-follow" />
-          <p>Sign Up</p>
-        </div>
+        <AuthToggle v-else v-model:sign-mode="signMode" />
 
         <div class="Divider"></div>
         <!-- <div class="ContentPosts">
           <PostList :posts="posts" />
           <ProjectList />
         </div> -->
-        <div class="ChatRoom">
+        <div v-if="!user && signMode" class="AuthFormContainer">
+          <AuthForm :sign-mode="signMode" />
+        </div>
+        <div v-else class="ChatRoom">
           <GlobalChatPanel slug="global" name="Global Chat" description="General discussion for everyone" />
         </div>
       </div>
@@ -91,6 +94,12 @@ onKeyStroke('Escape', () => toggleReveal())
 
 .ChatRoom {
   height: 100%;
+}
+
+.AuthFormContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .MandatoryIdentityFields {
