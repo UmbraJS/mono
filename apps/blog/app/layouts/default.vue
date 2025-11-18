@@ -5,6 +5,8 @@ import FrostLayer from '../components/FrostLayer.vue'
 // import PostList from '../components/PostList.vue'
 // import ProjectList from '../components/ProjectList.vue'
 
+import TransitionPanel from '../components/TransitionPanel.vue';
+import TransitionPanelGroup from '../components/TransitionPanelGroup.vue';
 import UserChip from "../components/UserChip/variants/UserChip.vue";
 import GlobalChatPanel from "../components/GlobalChatPanel.vue";
 import AuthToggle from "../components/AuthToggle.vue";
@@ -65,14 +67,15 @@ onKeyStroke('Escape', () => toggleReveal())
           <AuthForm :sign-mode="signMode" />
         </div>
 
-        <div v-else-if="user && showSettings" class="SettingsPanelContainer">
-          <SettingsPanel />
-        </div>
+        <TransitionPanelGroup v-else>
+          <TransitionPanel :show-panel="showSettings" class="SettingsPanelContainer">
+            <SettingsPanel />
+          </TransitionPanel>
 
-        <div v-else class="ChatRoom">
-          <GlobalChatPanel slug="global" name="Global Chat" description="General discussion for everyone" />
-        </div>
-
+          <TransitionPanel :show-panel="!showSettings" class="ChatRoom">
+            <GlobalChatPanel slug="global" name="Global Chat" description="General discussion for everyone" />
+          </TransitionPanel>
+        </TransitionPanelGroup>
       </div>
     </div>
   </div>
