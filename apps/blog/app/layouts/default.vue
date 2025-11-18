@@ -54,7 +54,7 @@ onKeyStroke('Escape', () => toggleReveal())
       <div class="content" />
       <div class="sidebar">
         <UserChip v-if="user" :author="author">
-          <Button size="medium" @click="toggleSettings">
+          <Button size="medium" :variant="showSettings ? 'primary' : 'base'" @click="toggleSettings">
             <Icon name="carbon:settings" />
           </Button>
         </UserChip>
