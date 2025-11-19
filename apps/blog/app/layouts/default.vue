@@ -19,10 +19,10 @@ const { user } = useAuth()
 const theme = useUmbra()
 const reveal = ref(false)
 const signMode = ref<'signin' | 'signup' | null>(null)
-const showSettings = ref(false)
+const activePanel = ref<"settings" | "chat">("chat")
 
 function toggleSettings() {
-  showSettings.value = !showSettings.value
+  activePanel.value = activePanel.value === "settings" ? "chat" : "settings"
 }
 
 function toggleReveal() {
@@ -54,7 +54,7 @@ onKeyStroke('Escape', () => toggleReveal())
       <div class="content" />
       <div class="sidebar">
         <UserChip v-if="user" :author="author">
-          <Button size="medium" :variant="showSettings ? 'primary' : 'base'" @click="toggleSettings">
+          <Button size="medium" :variant="activePanel === 'settings' ? 'primary' : 'base'" @click="toggleSettings">
             <Icon name="carbon:settings" />
           </Button>
         </UserChip>
@@ -68,11 +68,11 @@ onKeyStroke('Escape', () => toggleReveal())
         </div>
 
         <TransitionPanelGroup v-else>
-          <TransitionPanel :show-panel="showSettings" class="SettingsPanelContainer" name="settings">
+          <TransitionPanel :active-panel="activePanel" class="SettingsPanelContainer" name="settings">
             <SettingsPanel />
           </TransitionPanel>
 
-          <TransitionPanel :show-panel="!showSettings" class="ChatRoom" name="chat">
+          <TransitionPanel :active-panel="activePanel" class="ChatRoom" name="chat">
             <GlobalChatPanel slug="global" name="Global Chat" description="General discussion for everyone" />
           </TransitionPanel>
         </TransitionPanelGroup>

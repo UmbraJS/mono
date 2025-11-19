@@ -3,18 +3,18 @@ import { ref, watch } from 'vue'
 import { useRefHistory } from '@vueuse/core'
 
 const props = defineProps<{
-  showPanel: boolean
+  activePanel: "settings" | "chat"
   name: "settings" | "chat"
 }>()
 
-const showPanel = ref(props.showPanel)
+const showPanel = ref(props.activePanel)
 const { history } = useRefHistory(showPanel, { capacity: 1 })
 
-watch(() => props.showPanel, (next) => {
+watch(() => props.activePanel, (next) => {
   showPanel.value = next
 })
 
-const direction = ref<'open' | 'closed'>(props.showPanel ? 'open' : 'closed')
+const direction = ref<'open' | 'closed'>(props.activePanel === props.name ? 'open' : 'closed')
 
 watch(
   history,
@@ -24,12 +24,12 @@ watch(
     const current = entries[0]?.snapshot
     if (previous === undefined || current === undefined) return
     if (previous === current) return
-    direction.value = current ? 'open' : 'closed'
+    direction.value = current === props.name ? 'open' : 'closed'
   })
 </script>
 
 <template>
-  <div class="TransitionPanel" :class="[{ showPanel: props.showPanel }, direction]">
+  <div class="TransitionPanel" :class="[{ showPanel: props.activePanel === props.name }, direction]">
     <slot></slot>
   </div>
 </template>
