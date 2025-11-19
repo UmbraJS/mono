@@ -4,29 +4,28 @@ import { useRefHistory } from '@vueuse/core'
 
 const props = defineProps<{
   showPanel: boolean
+  name: "settings" | "chat"
 }>()
 
 const showPanel = ref(props.showPanel)
-const { history } = useRefHistory(showPanel, { capacity: 2 })
+const { history } = useRefHistory(showPanel, { capacity: 1 })
 
 watch(() => props.showPanel, (next) => {
   showPanel.value = next
 })
 
-const direction = ref<'opening' | 'closing'>('opening')
+const direction = ref<'open' | 'closed'>(props.showPanel ? 'open' : 'closed')
 
 watch(
   history,
   (entries) => {
-    if (entries.length < 2) return
-    const previous = entries[entries.length - 2]?.snapshot
-    const current = entries[entries.length - 1]?.snapshot
+    if (entries.length <= 1) return
+    const previous = entries[1]?.snapshot
+    const current = entries[0]?.snapshot
     if (previous === undefined || current === undefined) return
     if (previous === current) return
-    direction.value = current ? 'opening' : 'closing'
-  },
-  { deep: true },
-)
+    direction.value = current ? 'open' : 'closed'
+  })
 </script>
 
 <template>
@@ -42,24 +41,21 @@ watch(
   height: 100%;
   opacity: 0;
   pointer-events: none;
+
+  animation-duration: 0.4s;
+  animation-timing-function: var(--timing, ease);
+  animation-fill-mode: forwards;
 }
 
 .TransitionPanel.showPanel {
   pointer-events: auto;
 }
 
-.TransitionPanel.opening,
-.TransitionPanel.closing {
-  animation-duration: 0.4s;
-  animation-timing-function: var(--timing, ease);
-  animation-fill-mode: forwards;
-}
-
-.TransitionPanel.opening {
+.TransitionPanel.open {
   animation-name: slideInFromRight;
 }
 
-.TransitionPanel.closing {
+.TransitionPanel.closed {
   animation-name: slideOutToLeft;
 }
 

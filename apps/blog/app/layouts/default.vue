@@ -68,11 +68,11 @@ onKeyStroke('Escape', () => toggleReveal())
         </div>
 
         <TransitionPanelGroup v-else>
-          <TransitionPanel :show-panel="showSettings" class="SettingsPanelContainer">
+          <TransitionPanel :show-panel="showSettings" class="SettingsPanelContainer" name="settings">
             <SettingsPanel />
           </TransitionPanel>
 
-          <TransitionPanel :show-panel="!showSettings" class="ChatRoom">
+          <TransitionPanel :show-panel="!showSettings" class="ChatRoom" name="chat">
             <GlobalChatPanel slug="global" name="Global Chat" description="General discussion for everyone" />
           </TransitionPanel>
         </TransitionPanelGroup>
