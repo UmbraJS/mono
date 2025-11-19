@@ -1,35 +1,26 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRefHistory } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
-  activePanel: "settings" | "chat"
-  name: "settings" | "chat"
+  activePanel: 'settings' | 'chat'
+  name: 'settings' | 'chat'
 }>()
 
-const showPanel = ref(props.activePanel)
-const { history } = useRefHistory(showPanel, { capacity: 1 })
-
-watch(() => props.activePanel, (next) => {
-  showPanel.value = next
-})
-
-const direction = ref<'open' | 'closed'>(props.activePanel === props.name ? 'open' : 'closed')
+const transitionVariant = ref<'default' | 'reverse'>('default')
 
 watch(
-  history,
-  (entries) => {
-    if (entries.length <= 1) return
-    const previous = entries[1]?.snapshot
-    const current = entries[0]?.snapshot
-    if (previous === undefined || current === undefined) return
-    if (previous === current) return
-    direction.value = current === props.name ? 'open' : 'closed'
-  })
+  () => props.activePanel,
+  (next, previous) => {
+    if (!previous) return
+    transitionVariant.value = previous === 'settings' ? 'reverse' : 'default'
+  },
+)
+
+const direction = computed(() => (props.activePanel === props.name ? 'open' : 'closed'))
 </script>
 
 <template>
-  <div class="TransitionPanel" :class="[{ showPanel: props.activePanel === props.name }, direction]">
+  <div class="TransitionPanel" :class="[{ showPanel: props.activePanel === props.name }, direction, transitionVariant]">
     <slot></slot>
   </div>
 </template>
@@ -59,6 +50,14 @@ watch(
   animation-name: slideOutToLeft;
 }
 
+.TransitionPanel.open.reverse {
+  animation-name: slideInFromLeft;
+}
+
+.TransitionPanel.closed.reverse {
+  animation-name: slideOutToRight;
+}
+
 @keyframes slideInFromRight {
   from {
     opacity: 0;
@@ -81,6 +80,30 @@ watch(
   to {
     opacity: 0;
     transform: translateX(-150%);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-150%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(150%);
   }
 }
 </style>
