@@ -28,5 +28,6 @@ defineProps<Props>();
   color: var(--base-text);
   word-wrap: break-word;
   overflow-wrap: anywhere;
+  animation: fadeUpMessage var(--time-3, 0.4s) var(--timing, ease) both;
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ScrollArea, Input, Button, toast } from 'umbraco'
+import { ScrollArea, Input, Button, Spinner, toast } from 'umbraco'
 import { useConvexQuery, useConvexMutation } from 'convue'
+import { useMutation } from '@pinia/colada'
 import { api } from '../../convex/_generated/api'
 import MyMessageBubble from './Chat/MyMessageBubble.vue'
 import UserChipMessage from './UserChip/variants/UserChipMessage.vue'
@@ -18,7 +19,6 @@ const props = withDefaults(defineProps<{
 const { user } = useAuth()
 const scrollArea = ref<InstanceType<typeof ScrollArea> | null>(null)
 const messageBody = ref('')
-const isSending = ref(false)
 const inputError = ref('')
 
 // Query for chatroom by slug (returns null if doesn't exist)
@@ -72,6 +72,32 @@ watch(chatroomId, async (id) => {
 
 const { mutate: sendMessageToSlug } = useConvexMutation(api.chat.sendMessageToSlug)
 
+const {
+  mutate: executeSendMessage,
+  asyncStatus: sendAsyncStatus,
+} = useMutation({
+  mutation: async (payload: { body: string; userId: string }) => {
+    await sendMessageToSlug({
+      userId: payload.userId,
+      slug: props.slug,
+      name: props.name,
+      description: props.description,
+      body: payload.body,
+    })
+  },
+  onSuccess: () => {
+    messageBody.value = ''
+    scrollToBottom()
+  },
+  onError: (error) => {
+    console.error('Failed to send message:', error)
+    inputError.value = 'Failed to send message. Please try again.'
+    toast.error('Failed to send message. Please try again.')
+  },
+})
+
+const isSending = computed(() => sendAsyncStatus.value === 'loading')
+
 const currentUserId = computed(() => user.value?.id ?? '')
 
 // Simple color assignment based on user ID hash
@@ -106,11 +132,13 @@ const scrollToBottom = () => {
   })
 }
 
-const handleSend = async () => {
+const handleSend = () => {
   const body = messageBody.value.trim()
 
   // Clear previous error
   inputError.value = ''
+
+  if (isSending.value) return
 
   if (!user.value?.id) {
     inputError.value = 'You must be signed in to send messages'
@@ -130,25 +158,7 @@ const handleSend = async () => {
     return
   }
 
-  isSending.value = true
-  try {
-    const roomId = await sendMessageToSlug({
-      userId: user.value.id,
-      slug: props.slug,
-      name: props.name,
-      description: props.description,
-      body,
-    })
-
-    messageBody.value = ''
-    scrollToBottom()
-  } catch (error) {
-    console.error('Failed to send message:', error)
-    inputError.value = 'Failed to send message. Please try again.'
-    toast.error('Failed to send message. Please try again.')
-  } finally {
-    isSending.value = false
-  }
+  executeSendMessage({ body, userId: user.value.id })
 }
 
 const handleKeydown = (e: Event) => {
@@ -205,8 +215,9 @@ watch(() => messagesData.value.length, () => {
     <div v-if="user" class="MessageComposer">
       <Input v-model="messageBody" label="Message" placeholder="Type a message..." :disabled="isSending"
         :error="inputError" @keydown="handleKeydown" />
-      <Button size="medium" @click="handleSend">
-        <Icon name="carbon:send" />
+      <Button size="medium" :disabled="isSending" @click="handleSend">
+        <Spinner v-if="isSending" size="1.25em" />
+        <Icon v-else name="carbon:send" />
       </Button>
     </div>
   </div>

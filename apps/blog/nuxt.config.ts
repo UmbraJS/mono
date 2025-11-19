@@ -8,6 +8,7 @@ const prerenderExtraRoutes = (process.env.NUXT_PRERENDER_ROUTES || '')
   .split(',')
   .map(r => r.trim())
   .filter(Boolean)
+const animationsCssPath = fileURLToPath(new URL('./assets/styles/animations.css', import.meta.url))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -36,8 +37,11 @@ export default defineNuxtConfig({
     },
   },
 
-  // Ensure Umbraco styles are applied when consuming the built package
-  css: ['umbraco/dist/umbraco.css'],
+  // Ensure Umbraco styles plus shared animations are applied when consuming the built package
+  css: [
+    'umbraco/dist/umbraco.css',
+    animationsCssPath,
+  ],
 
   // Use Umbraco source during dev for instant HMR across the monorepo
   alias: isDev
