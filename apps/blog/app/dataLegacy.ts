@@ -1,14 +1,5 @@
 import type { Reason } from '../types/reasoningLegacy'
 
-const user = {
-  id: '1',
-  name: 'John Doe',
-  email: '',
-  avatar:
-    'https://media.istockphoto.com/id/959577452/photo/ancient-marble-statue-of-the-great-greek-philosopher-socrates-on-background-the-blue-sky.jpg?s=2048x2048&w=is&k=20&c=WtJU-qeeItsS3qctpWc8mbZpGXRooouQXsrCW5RN5qA=',
-  bookmarks: [{ id: '1', type: 'reason' }],
-}
-
 const reasons: Reason[] = [
   {
     id: '1',
@@ -153,6 +144,5 @@ const reasons: Reason[] = [
 ]
 
 export default {
-  user,
   reasons,
 }
