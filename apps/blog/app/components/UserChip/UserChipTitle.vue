@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computedAsync } from "@vueuse/core";
-import { getShortId } from "../../utils";
+import { getShortId } from "../../utils/crypto";
 
 const props = defineProps<{
   userName: string;

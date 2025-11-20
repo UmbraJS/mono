@@ -54,14 +54,23 @@ export function createUseAuth(nuxtComposables: {
         return
       }
       sessionFetching.value = true
-      const { data } = await client.getSession({
-        fetchOptions: {
-          headers,
-        },
-      })
-      session.value = data || null
-      sessionFetching.value = false
-      return data
+      try {
+        const { data } = await client.getSession({
+          fetchOptions: {
+            headers,
+          },
+        })
+        session.value = data || null
+        return data
+      }
+      catch (error) {
+        console.warn('[convue] Failed to fetch auth session', error)
+        session.value = null
+        return null
+      }
+      finally {
+        sessionFetching.value = false
+      }
     }
 
     // Listen for session changes on client
