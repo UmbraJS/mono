@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { defineAsyncComponent, defineComponent } from 'vue'
 import Bio from '../components/Bio.vue'
-
-// Lazy-load BlackHole only on client to avoid SSR/prerender errors
-const BlackHole = import.meta.client
-  ? defineAsyncComponent(() => import('../components/BlackHole.vue'))
-  : defineComponent({ name: 'BlackHoleSSRStub', setup: () => () => null })
+import BlackHole from '../components/BlackHole.vue'
 
 useSeoMeta({
   title: "Sam is Blogging at 2am",
@@ -17,7 +12,9 @@ useSeoMeta({
   <div id="BlogFrontPage">
     <Bio />
     <div id="BackgroundElement">
-      <component :is="BlackHole" />
+      <ClientOnly fallback-tag="div" fallback="">
+        <component :is="BlackHole" />
+      </ClientOnly>
     </div>
   </div>
 </template>

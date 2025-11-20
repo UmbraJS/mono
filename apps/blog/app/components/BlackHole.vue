@@ -220,7 +220,9 @@ function tick() {
 function init() { setSize(); setDiscs(); setLines(); setParticles() }
 function handleResize() { setSize(); setDiscs(); setLines(); setParticles() }
 
-onMounted(() => { nextTick(() => { setSize(); init(); tick(); window.addEventListener('resize', handleResize) }) })
+onMounted(() => {
+  nextTick(() => { setSize(); init(); tick(); window.addEventListener('resize', handleResize) })
+})
 onBeforeUnmount(() => { window.removeEventListener('resize', handleResize); cancelAnimationFrame(animationFrameIdRef.value) })
 </script>
 

@@ -43,8 +43,6 @@ export function useScopedTheme(
         ? accentColor
         : accentColor.value
 
-    console.log('rex: Accent color:', color)
-
     umbra({
       foreground: theme.input.foreground,
       background: theme.input.background,

@@ -8,6 +8,7 @@ export { useConvexHttpClient } from './composables/useConvexHttpClient'
 export { useConvexHttpQuery } from './composables/useConvexHttpQuery'
 export { useConvexMutation } from './composables/useConvexMutation'
 export { useConvexQuery } from './composables/useConvexQuery'
+export { debugLog, setConvueDebug, isConvueDebugEnabled } from './utils/debug'
 
 export * from './plugin'
 export { createConvexClients } from './plugin'

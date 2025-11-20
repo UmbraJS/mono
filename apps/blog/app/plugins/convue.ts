@@ -1,4 +1,4 @@
-import { createConvexClients } from "convue";
+import { createConvexClients, setConvueDebug } from "convue";
 import { ConvexHttpClient } from "convex/browser";
 
 export default defineNuxtPlugin({
@@ -8,6 +8,9 @@ export default defineNuxtPlugin({
     const runtime = useRuntimeConfig();
     const convexUrl = runtime.public?.convexUrl;
     const convexSiteUrl = runtime.public?.convexSiteUrl;
+    const runtimeDebugFlag = runtime.public?.convueDebug ?? runtime.convueDebug;
+    const debugEnabled = runtimeDebugFlag === true || runtimeDebugFlag === 'true';
+    setConvueDebug(debugEnabled);
 
     // During prerendering/build, Convex isn't needed - provide dummy context
     const isPrerendering = import.meta.server && (!convexUrl || !convexSiteUrl);

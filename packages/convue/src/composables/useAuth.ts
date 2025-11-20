@@ -2,6 +2,7 @@ import type { Ref } from 'vue'
 import { createAuthClient } from 'better-auth/client'
 import { computed, ref } from 'vue'
 import { convexClient } from '../plugins/convexClient'
+import { debugLog } from '../utils/debug.ts'
 
 /**
  * Creates an SSR-compatible auth composable for Nuxt
@@ -64,7 +65,7 @@ export function createUseAuth(nuxtComposables: {
         return data
       }
       catch (error) {
-        console.warn('[convue] Failed to fetch auth session', error)
+        debugLog('[convue] Failed to fetch auth session', error)
         session.value = null
         return null
       }

@@ -8,12 +8,6 @@ export function useConvexContext(): ConvexVueContext {
   // @ts-expect-error - useNuxtApp is auto-imported in Nuxt context
   const nuxtApp = useNuxtApp()
 
-  console.log('[useConvexContext] Checking for context:', {
-    hasNuxtApp: !!nuxtApp,
-    has$convex: !!nuxtApp?.$convex,
-    $convexKeys: nuxtApp?.$convex ? Object.keys(nuxtApp.$convex) : [],
-  })
-
   if (nuxtApp?.$convex) {
     return nuxtApp.$convex as ConvexVueContext
   }

@@ -9,6 +9,7 @@ import { computed, onScopeDispose, ref, watch } from 'vue'
 import { useConvexClient } from '../useConvexClient'
 import { useQueryArgs } from './lib/useQueryArgs.ts'
 import { useServerQuery } from './lib/useServerQuery.ts'
+import { debugLog } from '../../utils/debug.ts'
 
 /**
  * A composable that provides a Realtime Convex query. It supports reactivity and can be used both on the client and server side.
@@ -21,7 +22,7 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
 
   const isServer = typeof window === 'undefined'
 
-  console.warn('[useConvexQuery] Starting query:', {
+  debugLog('[useConvexQuery] Starting query:', {
     isServer,
     queryName: getFunctionName(query),
     args: args.value,
@@ -29,18 +30,18 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
 
   // use http client on server-side
   if (isServer) {
-    console.warn('[useConvexQuery] Using server path')
+    debugLog('[useConvexQuery] Using server path')
     return useServerQuery(query, args, options)
   }
 
-  console.warn('[useConvexQuery] Using client path')
+  debugLog('[useConvexQuery] Using client path')
   const convex = useConvexClient()
 
   // Initial data
   const data: Ref<FunctionReturnType<Query> | undefined> = ref<FunctionReturnType<Query> | undefined>(convex.client.localQueryResult(getFunctionName(query), args.value))
   const error = ref<Error | null>(null)
 
-  console.warn('[useConvexQuery] Initial client state:', {
+  debugLog('[useConvexQuery] Initial client state:', {
     data: data.value,
     error: error.value,
   })
@@ -70,13 +71,13 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
   }
 
   const handleError = (err: Error) => {
-    console.warn('[useConvexQuery] handleError called:', err)
+    debugLog('[useConvexQuery] handleError called:', err)
     data.value = undefined
     error.value = err
   }
 
   const handleResult = (result: FunctionReturnType<Query>) => {
-    console.warn('[useConvexQuery] handleResult called:', result)
+    debugLog('[useConvexQuery] handleResult called:', result)
     data.value = result
     error.value = null
   }
@@ -95,7 +96,7 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
   }
 
   const createSubscription = (args: FunctionArgs<Query>) => {
-    console.warn('[useConvexQuery] Creating subscription with args:', args)
+    debugLog('[useConvexQuery] Creating subscription with args:', args)
     return convex.onUpdate(
       query,
       args,
@@ -107,7 +108,7 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
   // recreate subscription when args change
   let cancelSubscription: () => void | undefined
   watch(args, (newArgs) => {
-    console.warn('[useConvexQuery] Args changed, recreating subscription:', newArgs)
+    debugLog('[useConvexQuery] Args changed, recreating subscription:', newArgs)
     cancelSubscription?.()
     cancelSubscription = createSubscription(newArgs)
   }, {
@@ -116,7 +117,7 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
 
   // cleanup subscription when component is unmounted
   onScopeDispose(() => {
-    console.warn('[useConvexQuery] Component unmounting, cleaning up subscription')
+    debugLog('[useConvexQuery] Component unmounting, cleaning up subscription')
     cancelSubscription?.()
   })
 
@@ -125,7 +126,7 @@ export function useConvexQuery<Query extends FunctionReference<'query'>>(query: 
     error,
     isPending: computed(() => {
       const result = data.value === undefined && error.value === null
-      console.warn('[useConvexQuery] isPending computed:', {
+      debugLog('[useConvexQuery] isPending computed:', {
         dataValue: data.value,
         errorValue: error.value,
         isPending: result,

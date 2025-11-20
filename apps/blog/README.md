@@ -49,6 +49,10 @@ Common issues:
 
 After setting the URL, restart `pnpm dev` so Vite picks up the new environment variable.
 
+### Verbose Convex logging
+
+Convex composables now keep the console quiet by default. If you need the old lifecycle logging to investigate a query, set `NUXT_PUBLIC_CONVUE_DEBUG=true` (or `CONVUE_DEBUG=true` for server-only contexts) in `.env.local` and restart the dev server.
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:

@@ -10,6 +10,7 @@ const prerenderExtraRoutes = (process.env.NUXT_PRERENDER_ROUTES || '')
   .filter(Boolean)
 const animationsCssPath = fileURLToPath(new URL('./assets/styles/animations.css', import.meta.url))
 const disableAuthFetch = (process.env.NUXT_PUBLIC_AUTH_FETCH_DISABLED || process.env.AUTH_FETCH_DISABLED) === 'true'
+const enableConvueDebug = (process.env.NUXT_PUBLIC_CONVUE_DEBUG || process.env.CONVUE_DEBUG) === 'true'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -33,10 +34,12 @@ export default defineNuxtConfig({
   // Runtime config for environment variables
   runtimeConfig: {
     authFetchDisabled: disableAuthFetch,
+    convueDebug: enableConvueDebug,
     public: {
       convexUrl: process.env.CONVEX_URL || '',
       convexSiteUrl: process.env.VITE_CONVEX_SITE_URL || '',
       authFetchDisabled: disableAuthFetch,
+      convueDebug: enableConvueDebug,
     },
   },
 
