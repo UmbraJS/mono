@@ -4,6 +4,8 @@ import { computed, ref } from 'vue'
 import { convexClient } from '../plugins/convexClient'
 import { debugLog } from '../utils/debug.ts'
 
+type BetterAuthSession = import('./useBetterAuthClient').Session
+
 /**
  * Creates an SSR-compatible auth composable for Nuxt
  *
@@ -22,7 +24,7 @@ import { debugLog } from '../utils/debug.ts'
  * })
  * ```
  */
-export function createUseAuth(nuxtComposables: {
+export function createUseAuth<TSession extends BetterAuthSession = BetterAuthSession>(nuxtComposables: {
   useRequestURL: () => URL
   useRequestHeaders: () => Record<string, string>
   useState: <T>(key: string, init: () => T) => Ref<T>
@@ -30,6 +32,8 @@ export function createUseAuth(nuxtComposables: {
   isClient: boolean
 }) {
   return function useAuth() {
+    type SessionUser = TSession['user']
+
     const url = nuxtComposables.useRequestURL()
     const headers = nuxtComposables.isServer ? nuxtComposables.useRequestHeaders() : undefined
 
@@ -42,17 +46,18 @@ export function createUseAuth(nuxtComposables: {
     })
 
     // Use useState for SSR-safe reactive state
-    type SessionResponse = Awaited<ReturnType<typeof client.getSession>>['data']
-    const session = nuxtComposables.useState<SessionResponse>('auth:session', () => null)
-    const sessionFetching = nuxtComposables.isServer ? ref(false) : nuxtComposables.useState('auth:sessionFetching', () => false)
+    const session = nuxtComposables.useState<TSession | null>('auth:session', (): TSession | null => null)
+    const sessionFetching = nuxtComposables.isServer
+      ? ref(false)
+      : nuxtComposables.useState<boolean>('auth:sessionFetching', () => false)
 
-    const user = computed(() => session.value?.user || null)
+    const user = computed<SessionUser | null>(() => session.value?.user ?? null)
     const isAuthenticated = computed(() => !!session.value)
     const isLoading = computed(() => sessionFetching.value)
 
-    const fetchSession = async () => {
+    const fetchSession = async (): Promise<TSession | null> => {
       if (sessionFetching.value) {
-        return
+        return session.value
       }
       sessionFetching.value = true
       try {
@@ -61,8 +66,9 @@ export function createUseAuth(nuxtComposables: {
             headers,
           },
         })
-        session.value = data || null
-        return data
+        const typedData = (data ?? null) as TSession | null
+        session.value = typedData
+        return typedData
       }
       catch (error) {
         debugLog('[convue] Failed to fetch auth session', error)

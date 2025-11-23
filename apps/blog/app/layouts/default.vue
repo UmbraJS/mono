@@ -12,8 +12,6 @@ import GlobalChatPanel from "../components/GlobalChatPanel.vue";
 import AuthToggle from "../components/AuthToggle.vue";
 import AuthForm from "../components/AuthForm.vue";
 import SettingsPanel from "../components/SettingsPanel.vue";
-import { author } from '../../types/profile'
-
 const { user } = useAuth()
 
 const theme = useUmbra()
@@ -53,7 +51,7 @@ onKeyStroke('Escape', () => toggleReveal())
       </header>
       <div class="content" />
       <div class="sidebar">
-        <UserChip v-if="user" :author="author">
+        <UserChip v-if="user" :author="user">
           <Button size="medium" :variant="activePanel === 'settings' ? 'primary' : 'base'" @click="toggleSettings">
             <Icon name="carbon:settings" />
           </Button>

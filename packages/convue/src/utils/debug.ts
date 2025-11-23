@@ -7,23 +7,26 @@ interface MaybeHasEnv {
 }
 
 function getGlobalFlag(): boolean | undefined {
-  if (typeof globalThis === 'undefined') return undefined
+  if (typeof globalThis === 'undefined')
+    return undefined
   return (globalThis as Record<string, unknown>)[GLOBAL_FLAG] as boolean | undefined
 }
 
 function getProcessEnvFlag(): boolean | undefined {
-  if (!process?.env) return undefined
+  if (!process?.env)
+    return undefined
   const value = process.env.CONVUE_DEBUG
-  if (typeof value === 'undefined') return undefined
+  if (typeof value === 'undefined')
+    return undefined
   return value === 'true'
 }
 
 function getImportMetaFlag(): boolean | undefined {
   try {
-    // eslint-disable-next-line no-undef
     const meta = import.meta as MaybeHasEnv
     const value = meta?.env?.VITE_CONVUE_DEBUG
-    if (typeof value === 'undefined') return undefined
+    if (typeof value === 'undefined')
+      return undefined
     return value === true || value === 'true'
   }
   catch {
@@ -34,7 +37,8 @@ function getImportMetaFlag(): boolean | undefined {
 let cachedFlag: boolean | undefined
 
 export function isConvueDebugEnabled(): boolean {
-  if (cachedFlag !== undefined) return cachedFlag
+  if (cachedFlag !== undefined)
+    return cachedFlag
   const fromGlobal = getGlobalFlag()
   if (fromGlobal !== undefined) {
     cachedFlag = fromGlobal
@@ -62,6 +66,7 @@ export function setConvueDebug(enabled: boolean): void {
 }
 
 export function debugLog(...args: unknown[]): void {
-  if (!isConvueDebugEnabled()) return
+  if (!isConvueDebugEnabled())
+    return
   console.warn(...args)
 }

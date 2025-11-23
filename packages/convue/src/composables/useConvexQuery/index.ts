@@ -6,10 +6,10 @@ import {
   getFunctionName,
 } from 'convex/server'
 import { computed, onScopeDispose, ref, watch } from 'vue'
+import { debugLog } from '../../utils/debug.ts'
 import { useConvexClient } from '../useConvexClient'
 import { useQueryArgs } from './lib/useQueryArgs.ts'
 import { useServerQuery } from './lib/useServerQuery.ts'
-import { debugLog } from '../../utils/debug.ts'
 
 /**
  * A composable that provides a Realtime Convex query. It supports reactivity and can be used both on the client and server side.
