@@ -1,5 +1,3 @@
-import process from 'node:process'
-
 const GLOBAL_FLAG = '__CONVUE_DEBUG__'
 
 interface MaybeHasEnv {
@@ -13,7 +11,7 @@ function getGlobalFlag(): boolean | undefined {
 }
 
 function getProcessEnvFlag(): boolean | undefined {
-  if (!process?.env)
+  if (typeof process === 'undefined' || !process?.env)
     return undefined
   const value = process.env.CONVUE_DEBUG
   if (typeof value === 'undefined')

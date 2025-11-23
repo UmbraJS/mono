@@ -56,14 +56,14 @@ const schema = defineSchema({
     .index("by_lastSeen", ["lastSeen"])
     .index("by_userId_chatroomId", ["userId", "chatroomId"]),
   messages: defineTable({
-    personaId: v.id('personas'), // Who sent the message (public identity)
+    personaId: v.id('personas'),
     chatroomId: v.id("chatrooms"),
     body: v.string(),
     timestamp: v.number(),
   }).index('by_personaId', ['personaId'])
     .index("by_chatroomId_timestamp", ["chatroomId", "timestamp"]),
   emojiEvents: defineTable({
-    personaId: v.id('personas'), // Who sent the emoji (public identity)
+    personaId: v.id('personas'),
     chatroomId: v.id("chatrooms"),
     emoji: v.string(),
     timestamp: v.number(),
