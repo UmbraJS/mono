@@ -5,7 +5,6 @@ import { useMutation } from '@pinia/colada'
 import { useConvexMutation } from 'convue'
 import { Button, Input, TextArea } from 'umbraco'
 import { api } from '../../../convex/_generated/api'
-import type { IdentityTag } from '../../../types/profile'
 
 definePageMeta({
   middleware: 'auth',
@@ -15,7 +14,7 @@ const router = useRouter()
 
 const name = ref('')
 const bio = ref('')
-const identityTags = ref<IdentityTag[]>([])
+const identityTagIds = ref<string[]>([])
 
 const { mutate: createPersonaMutation } = useConvexMutation(api.personas.create)
 
@@ -28,7 +27,7 @@ const { mutate: createPersona, status, error } = useMutation({
       name: name.value,
       handle,
       bio: bio.value || undefined,
-      identityTags: identityTags.value,
+      identityTagIds: identityTagIds.value,
     })
     return personaId
   },

@@ -1,5 +1,6 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
+import { getTagDefinition } from "./identityTags"
 
 /**
  * Create a new persona for the authenticated user
@@ -10,12 +11,7 @@ export const create = mutation({
     handle: v.string(),
     bio: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
-    identityTags: v.array(v.object({
-      id: v.string(),
-      subject: v.string(),
-      name: v.string(),
-      fervor: v.union(v.literal('low'), v.literal('medium'), v.literal('high')),
-    })),
+    identityTagIds: v.array(v.string()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
@@ -35,6 +31,21 @@ export const create = mutation({
       throw new Error("Handle already taken")
     }
 
+    // Validate and build identity tags from IDs
+    const identityTags = args.identityTagIds.map(tagId => {
+      const tagDef = getTagDefinition(tagId)
+      if (!tagDef) {
+        throw new Error(`Invalid tag ID: ${tagId}`)
+      }
+      // Default to medium fervor for new tags
+      return {
+        id: tagDef.id,
+        subject: tagDef.subject,
+        name: tagDef.name,
+        fervor: 'medium' as const,
+      }
+    })
+
     const now = Date.now()
 
     // Create the persona
@@ -43,7 +54,7 @@ export const create = mutation({
       handle: args.handle,
       bio: args.bio,
       avatarUrl: args.avatarUrl,
-      identityTags: args.identityTags,
+      identityTags,
       createdAt: now,
       updatedAt: now,
     })
@@ -70,12 +81,7 @@ export const update = mutation({
     handle: v.optional(v.string()),
     bio: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
-    identityTags: v.optional(v.array(v.object({
-      id: v.string(),
-      subject: v.string(),
-      name: v.string(),
-      fervor: v.union(v.literal('low'), v.literal('medium'), v.literal('high')),
-    }))),
+    identityTagIds: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
@@ -115,13 +121,31 @@ export const update = mutation({
       throw new Error("Persona not found")
     }
 
+    // Build identity tags from IDs if provided
+    let identityTags
+    if (args.identityTagIds !== undefined) {
+      identityTags = args.identityTagIds.map(tagId => {
+        const tagDef = getTagDefinition(tagId)
+        if (!tagDef) {
+          throw new Error(`Invalid tag ID: ${tagId}`)
+        }
+        // Default to medium fervor for new tags
+        return {
+          id: tagDef.id,
+          subject: tagDef.subject,
+          name: tagDef.name,
+          fervor: 'medium' as const,
+        }
+      })
+    }
+
     // Update the persona
     await ctx.db.patch(args.personaId, {
       ...(args.name !== undefined && { name: args.name }),
       ...(args.handle !== undefined && { handle: args.handle }),
       ...(args.bio !== undefined && { bio: args.bio }),
       ...(args.avatarUrl !== undefined && { avatarUrl: args.avatarUrl }),
-      ...(args.identityTags !== undefined && { identityTags: args.identityTags }),
+      ...(identityTags !== undefined && { identityTags }),
       updatedAt: Date.now(),
     })
 
