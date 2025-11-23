@@ -74,27 +74,15 @@ function handleSubmit() {
       <div class="FormSection">
         <label class="FormLabel">Identity Tags</label>
         <p class="FormHint">Select tags that represent this persona's identity</p>
-        
+
         <div v-if="tagsBySubject" class="IdentityTagsGrid">
-          <div
-            v-for="(tags, subject) in tagsBySubject"
-            :key="subject"
-            class="TagSubjectSection"
-          >
+          <div v-for="(tags, subject) in tagsBySubject" :key="subject" class="TagSubjectSection">
             <h3 class="SubjectHeading">{{ subject }}</h3>
             <div class="TagChips">
-              <button
-                v-for="tag in tags"
-                :key="tag.id"
-                type="button"
-                class="TagChip"
-                :class="{
-                  selected: isTagSelected(tag.id),
-                  locked: !isTagUnlocked(tag.id)
-                }"
-                :disabled="!isTagUnlocked(tag.id)"
-                @click="toggleTag(tag.id)"
-              >
+              <button v-for="tag in tags" :key="tag.id" type="button" class="TagChip" :class="{
+                selected: isTagSelected(tag.id),
+                locked: !isTagUnlocked(tag.id)
+              }" :disabled="!isTagUnlocked(tag.id)" @click="toggleTag(tag.id)">
                 <span class="TagName">{{ tag.displayName }}</span>
                 <span v-if="!isTagUnlocked(tag.id)" class="LockIcon">🔒</span>
               </button>

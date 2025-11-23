@@ -219,7 +219,7 @@ watch(() => messagesData.value.length, () => {
         Error: {{ String(messagesError) }}
       </div>
 
-      <ScrollArea v-else ref="scrollArea" class="ChatMessages">
+      <ScrollArea v-else-if="messagesData.length > 0" ref="scrollArea" class="ChatMessages">
         <div class="MessagesList">
           <template v-for="m in messagesData" :key="m._id">
             <MyMessageBubble v-if="m.personaId === currentPersonaId" :body="m.body" />
@@ -240,7 +240,8 @@ watch(() => messagesData.value.length, () => {
     </div>
 
     <div v-else-if="user && !selectedPersonaId" class="NoPersonaPrompt">
-      <p>You need to create a persona to participate in chat</p>
+      <p v-if="messagesData.length > 0">You need to create a persona to participate in chat</p>
+      <p v-else>This user has no personas yet</p>
       <Button @click="$router.push('/personas/create')">
         Create Persona
       </Button>
