@@ -12,6 +12,7 @@ import type * as auth from "../auth.js";
 import type * as chat from "../chat.js";
 import type * as crons from "../crons.js";
 import type * as http from "../http.js";
+import type * as identityTags from "../identityTags.js";
 import type * as migrations_clearOldUsersTable from "../migrations/clearOldUsersTable.js";
 import type * as personas from "../personas.js";
 import type * as tasks from "../tasks.js";
@@ -27,6 +28,7 @@ declare const fullApi: ApiFromModules<{
   chat: typeof chat;
   crons: typeof crons;
   http: typeof http;
+  identityTags: typeof identityTags;
   "migrations/clearOldUsersTable": typeof migrations_clearOldUsersTable;
   personas: typeof personas;
   tasks: typeof tasks;

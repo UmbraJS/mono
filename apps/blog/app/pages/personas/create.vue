@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMutation } from '@pinia/colada'
-import { useConvexMutation } from 'convue'
+import { useConvexMutation, useConvexQuery } from 'convue'
 import { Button, Input, TextArea } from 'umbraco'
 import { api } from '../../../convex/_generated/api'
 
@@ -15,6 +15,23 @@ const router = useRouter()
 const name = ref('')
 const bio = ref('')
 const identityTagIds = ref<string[]>([])
+
+// Fetch tags grouped by subject
+const { data: tagsBySubject } = useConvexQuery(api.identityTags.listTagsBySubject, {})
+
+// For now, all tags are unlocked (we'll add prerequisite checking later)
+const isTagUnlocked = (_tagId: string) => true
+
+const toggleTag = (tagId: string) => {
+  const index = identityTagIds.value.indexOf(tagId)
+  if (index === -1) {
+    identityTagIds.value.push(tagId)
+  } else {
+    identityTagIds.value.splice(index, 1)
+  }
+}
+
+const isTagSelected = (tagId: string) => identityTagIds.value.includes(tagId)
 
 const { mutate: createPersonaMutation } = useConvexMutation(api.personas.create)
 
@@ -56,8 +73,34 @@ function handleSubmit() {
 
       <div class="FormSection">
         <label class="FormLabel">Identity Tags</label>
-        <p class="FormHint">Add identity tags to help others understand this persona (coming soon)</p>
-        <!-- TODO: Identity tag selector component -->
+        <p class="FormHint">Select tags that represent this persona's identity</p>
+        
+        <div v-if="tagsBySubject" class="IdentityTagsGrid">
+          <div
+            v-for="(tags, subject) in tagsBySubject"
+            :key="subject"
+            class="TagSubjectSection"
+          >
+            <h3 class="SubjectHeading">{{ subject }}</h3>
+            <div class="TagChips">
+              <button
+                v-for="tag in tags"
+                :key="tag.id"
+                type="button"
+                class="TagChip"
+                :class="{
+                  selected: isTagSelected(tag.id),
+                  locked: !isTagUnlocked(tag.id)
+                }"
+                :disabled="!isTagUnlocked(tag.id)"
+                @click="toggleTag(tag.id)"
+              >
+                <span class="TagName">{{ tag.displayName }}</span>
+                <span v-if="!isTagUnlocked(tag.id)" class="LockIcon">🔒</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div v-if="error" class="ErrorMessage">
@@ -132,5 +175,78 @@ function handleSubmit() {
   gap: var(--space-2);
   justify-content: flex-end;
   margin-top: var(--space-2);
+}
+
+.IdentityTagsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.TagSubjectSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.SubjectHeading {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--base-110);
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.TagChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-quark);
+}
+
+.TagChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-quark);
+  padding: var(--space-quark) var(--space-atom);
+  background: var(--base-20);
+  border: 1px solid var(--base-50);
+  border-radius: var(--radius);
+  color: var(--base-110);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all calc(var(--time) * 2) var(--timing);
+}
+
+.TagChip:hover:not(:disabled) {
+  background: var(--base-30);
+  border-color: var(--base-60);
+}
+
+.TagChip.selected {
+  background: var(--accent-30);
+  border-color: var(--accent-70);
+  color: var(--accent-text);
+}
+
+.TagChip.selected:hover {
+  background: var(--accent-40);
+  border-color: var(--accent-80);
+}
+
+.TagChip.locked {
+  background: var(--base-10);
+  border-color: var(--base-40);
+  color: var(--base-80);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.TagName {
+  user-select: none;
+}
+
+.LockIcon {
+  font-size: 0.75rem;
 }
 </style>
