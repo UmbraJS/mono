@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useConvexQuery } from 'convue'
 import { Button } from 'umbraco'
-import { api } from '~/convex/_generated/api'
+import { api } from '../../../convex/_generated/api'
 
 const { data: personas, isPending } = useConvexQuery(api.personas.listMine, {})
 </script>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useConvexQuery } from 'convue'
 import { Button } from 'umbraco'
-import { api } from '~/convex/_generated/api'
-import type { Id } from '~/convex/_generated/dataModel'
+import { api } from '../../../convex/_generated/api'
+import type { Id } from '../../../convex/_generated/dataModel'
 
 const route = useRoute()
 const personaId = computed(() => route.params.id as Id<'personas'>)

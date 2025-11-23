@@ -54,5 +54,17 @@ function adjustHeight(area: EventTarget | null) {
 
   field-sizing: content;
   width: 100%;
+  max-width: var(--paragraph-width);
+  min-height: calc(var(--block) * 3);
+}
+
+/* TextArea-specific label styles */
+.InputWrapper:has(textarea) label.InputLabel {
+  opacity: 0;
+  height: var(--block-big);
+}
+
+.InputWrapper:has(textarea):focus-within label.InputLabel {
+  opacity: 1;
 }
 </style>

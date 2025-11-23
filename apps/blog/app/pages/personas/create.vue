@@ -2,31 +2,32 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMutation } from '@pinia/colada'
-import { useConvexClient } from 'convue'
-import { Button } from 'umbraco'
-import { api } from '~/convex/_generated/api'
-import type { IdentityTag } from '~/types/profile'
+import { useConvexMutation } from 'convue'
+import { Button, Input, TextArea } from 'umbraco'
+import { api } from '../../../convex/_generated/api'
+import type { IdentityTag } from '../../../types/profile'
 
 definePageMeta({
   middleware: 'auth',
 })
 
 const router = useRouter()
-const convex = useConvexClient()
 
 const name = ref('')
-const handle = ref('')
 const bio = ref('')
-const avatarUrl = ref('')
 const identityTags = ref<IdentityTag[]>([])
+
+const { mutate: createPersonaMutation } = useConvexMutation(api.personas.create)
 
 const { mutate: createPersona, status, error } = useMutation({
   mutation: async () => {
-    const personaId = await convex.mutation(api.personas.create, {
+    // Generate a short handle (6 character alphanumeric)
+    const handle = Math.random().toString(36).substring(2, 8)
+
+    const personaId = await createPersonaMutation({
       name: name.value,
-      handle: handle.value,
+      handle,
       bio: bio.value || undefined,
-      avatarUrl: avatarUrl.value || undefined,
       identityTags: identityTags.value,
     })
     return personaId
@@ -37,12 +38,10 @@ const { mutate: createPersona, status, error } = useMutation({
 })
 
 function handleSubmit() {
-  if (!name.value || !handle.value) return
+  if (!name.value) return
   createPersona()
 }
-</script>
-
-<template>
+</script><template>
   <div class="CreatePersonaPage">
     <div class="PageHeader">
       <h1>Create Persona</h1>
@@ -52,37 +51,9 @@ function handleSubmit() {
     </div>
 
     <form class="PersonaForm" @submit.prevent="handleSubmit">
-      <div class="FormSection">
-        <label for="name" class="FormLabel">
-          Display Name
-          <span class="required">*</span>
-        </label>
-        <input id="name" v-model="name" type="text" class="FormInput" placeholder="John Doe" required>
-      </div>
+      <Input v-model="name" label="Display Name" placeholder="John Doe" required />
 
-      <div class="FormSection">
-        <label for="handle" class="FormLabel">
-          Handle
-          <span class="required">*</span>
-        </label>
-        <div class="HandleInput">
-          <span class="HandlePrefix">@</span>
-          <input id="handle" v-model="handle" type="text" class="FormInput" placeholder="johndoe"
-            pattern="[a-zA-Z0-9_]+" title="Only letters, numbers, and underscores" required>
-        </div>
-        <p class="FormHint">Only letters, numbers, and underscores</p>
-      </div>
-
-      <div class="FormSection">
-        <label for="bio" class="FormLabel">Bio</label>
-        <textarea id="bio" v-model="bio" class="FormTextarea" placeholder="Tell us about this persona..." rows="4" />
-      </div>
-
-      <div class="FormSection">
-        <label for="avatarUrl" class="FormLabel">Avatar URL</label>
-        <input id="avatarUrl" v-model="avatarUrl" type="url" class="FormInput"
-          placeholder="https://example.com/avatar.jpg">
-      </div>
+      <TextArea v-model="bio" placeholder="Tell us about this persona..." />
 
       <div class="FormSection">
         <label class="FormLabel">Identity Tags</label>
@@ -98,7 +69,7 @@ function handleSubmit() {
         <Button type="button" variant="base" @click="router.back()">
           Cancel
         </Button>
-        <Button type="submit" variant="primary" :disabled="status === 'pending' || !name || !handle">
+        <Button type="submit" variant="primary" :disabled="status === 'pending' || !name">
           {{ status === 'pending' ? 'Creating...' : 'Create Persona' }}
         </Button>
       </div>
@@ -141,46 +112,6 @@ function handleSubmit() {
 .FormLabel {
   font-weight: 600;
   color: var(--base-110);
-}
-
-.required {
-  color: var(--danger-text);
-}
-
-.FormInput,
-.FormTextarea {
-  height: var(--block);
-  padding: 0 var(--space-atom);
-  background: var(--base-10);
-  border: 1px solid var(--base-60);
-  border-radius: var(--radius);
-  color: var(--base-text);
-  font-family: inherit;
-  font-size: var(--paragraph);
-  transition: border-color var(--time);
-}
-
-.FormTextarea {
-  height: auto;
-  padding: var(--space-atom);
-  resize: vertical;
-}
-
-.FormInput:focus,
-.FormTextarea:focus {
-  outline: none;
-  border-color: var(--accent-80);
-}
-
-.HandleInput {
-  display: flex;
-  align-items: center;
-  gap: var(--space-quark);
-}
-
-.HandlePrefix {
-  color: var(--base-90);
-  font-weight: 600;
 }
 
 .FormHint {

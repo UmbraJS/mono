@@ -3,6 +3,7 @@ import { ScrollArea, Input, Button, Spinner, toast } from 'umbraco'
 import { useConvexQuery, useConvexMutation } from 'convue'
 import { useMutation } from '@pinia/colada'
 import { api } from '../../convex/_generated/api'
+import type { Id } from '../../convex/_generated/dataModel'
 import MyMessageBubble from './Chat/MyMessageBubble.vue'
 import UserChipMessage from './UserChip/variants/UserChipMessage.vue'
 
@@ -21,6 +22,16 @@ const scrollArea = ref<InstanceType<typeof ScrollArea> | null>(null)
 const messageBody = ref('')
 const inputError = ref('')
 
+// Fetch user's personas
+const personasQuery = useConvexQuery(api.personas.listMine, () => ({}))
+const userPersonas = computed(() => personasQuery.data.value || [])
+
+// Use first persona as default (or allow selection in the future)
+const selectedPersonaId = computed(() => {
+  const personas = userPersonas.value
+  return personas.length > 0 ? personas[0]._id : null
+})
+
 // Query for chatroom by slug (returns null if doesn't exist)
 const chatroomQuery = useConvexQuery(api.chat.getChatroomBySlug, () => ({
   slug: props.slug
@@ -30,7 +41,7 @@ const chatroomId = computed(() => chatroomQuery.data.value?._id ?? null)
 
 interface Message {
   _id: string
-  userId: string
+  personaId: string
   displayName: string
   body: string
   timestamp: number
@@ -76,9 +87,9 @@ const {
   mutate: executeSendMessage,
   asyncStatus: sendAsyncStatus,
 } = useMutation({
-  mutation: async (payload: { body: string; userId: string }) => {
+  mutation: async (payload: { body: string; personaId: Id<'personas'> }) => {
     await sendMessageToSlug({
-      userId: payload.userId,
+      personaId: payload.personaId,
       slug: props.slug,
       name: props.name,
       description: props.description,
@@ -98,10 +109,10 @@ const {
 
 const isSending = computed(() => sendAsyncStatus.value === 'loading')
 
-const currentUserId = computed(() => user.value?.id ?? '')
+const currentPersonaId = computed(() => selectedPersonaId.value)
 
-// Simple color assignment based on user ID hash
-const getUserColor = (userId: string) => {
+// Simple color assignment based on persona ID hash
+const getPersonaColor = (personaId: string) => {
   const colors = [
     "#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231",
     "#911eb4", "#46f0f0", "#f032e6", "#bcf60c", "#fabebe",
@@ -110,8 +121,8 @@ const getUserColor = (userId: string) => {
   ];
 
   let hash = 0;
-  for (let i = 0; i < userId.length; i++) {
-    const char = userId.charCodeAt(i);
+  for (let i = 0; i < personaId.length; i++) {
+    const char = personaId.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash;
   }
@@ -146,6 +157,13 @@ const handleSend = () => {
     return
   }
 
+  if (!selectedPersonaId.value) {
+    inputError.value = 'You must create a persona first'
+    toast.error('You must create a persona first')
+    // Optionally redirect to persona creation
+    return
+  }
+
   if (!body) {
     inputError.value = 'Message cannot be empty'
     toast.error('Message cannot be empty')
@@ -158,7 +176,7 @@ const handleSend = () => {
     return
   }
 
-  executeSendMessage({ body, userId: user.value.id })
+  executeSendMessage({ body, personaId: selectedPersonaId.value })
 }
 
 const handleKeydown = (e: Event) => {
@@ -204,20 +222,27 @@ watch(() => messagesData.value.length, () => {
       <ScrollArea v-else ref="scrollArea" class="ChatMessages">
         <div class="MessagesList">
           <template v-for="m in messagesData" :key="m._id">
-            <MyMessageBubble v-if="m.userId === currentUserId" :body="m.body" />
-            <UserChipMessage v-else :message="{ user: m.displayName, body: m.body, userId: m.userId }"
-              :color="getUserColor(m.userId)" />
+            <MyMessageBubble v-if="m.personaId === currentPersonaId" :body="m.body" />
+            <UserChipMessage v-else :message="{ user: m.displayName, body: m.body, userId: m.personaId }"
+              :color="getPersonaColor(m.personaId)" />
           </template>
         </div>
       </ScrollArea>
     </template>
 
-    <div v-if="user" class="MessageComposer">
+    <div v-if="user && selectedPersonaId" class="MessageComposer">
       <Input v-model="messageBody" label="Message" placeholder="Type a message..." :disabled="isSending"
         :error="inputError" @keydown="handleKeydown" />
       <Button size="medium" :disabled="isSending" @click="handleSend">
         <Spinner v-if="isSending" size="1.25em" />
         <Icon v-else name="carbon:send" />
+      </Button>
+    </div>
+
+    <div v-else-if="user && !selectedPersonaId" class="NoPersonaPrompt">
+      <p>You need to create a persona to participate in chat</p>
+      <Button @click="$router.push('/personas/create')">
+        Create Persona
       </Button>
     </div>
   </div>
@@ -279,5 +304,22 @@ watch(() => messagesData.value.length, () => {
   grid-template-columns: 1fr auto;
   gap: var(--space-quark);
   align-items: end;
+}
+
+.NoPersonaPrompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: center;
+  padding: var(--space-2);
+  background: var(--base-10);
+  border-radius: var(--radius);
+  border: var(--border);
+  text-align: center;
+}
+
+.NoPersonaPrompt p {
+  margin: 0;
+  color: var(--base-80);
 }
 </style>

@@ -58,13 +58,29 @@ export const getChatroomBySlug = query({
 
 export const sendMessageToSlug = mutation({
   args: {
-    userId: v.string(),
+    personaId: v.id('personas'),
     slug: v.string(),
     name: v.string(),
     description: v.optional(v.string()),
     body: v.string(),
   },
   handler: async (ctx, args) => {
+    // Get the persona to find userId for chatroom creation
+    const persona = await ctx.db.get(args.personaId);
+    if (!persona) {
+      throw new Error("Persona not found");
+    }
+
+    // Get persona membership to find userId
+    const membership = await ctx.db
+      .query("personaMembers")
+      .withIndex("by_personaId", (q) => q.eq("personaId", args.personaId))
+      .first();
+
+    if (!membership) {
+      throw new Error("Persona membership not found");
+    }
+
     // Check if chatroom exists
     let chatroom = await ctx.db
       .query("chatrooms")
@@ -76,7 +92,7 @@ export const sendMessageToSlug = mutation({
       const chatroomId = await ctx.db.insert("chatrooms", {
         name: args.name,
         description: args.description,
-        createdBy: args.userId,
+        createdBy: membership.userId,
         createdAt: Date.now(),
         isPrivate: false,
         slug: args.slug,
@@ -87,7 +103,7 @@ export const sendMessageToSlug = mutation({
 
     // Insert the message with timestamp
     await ctx.db.insert("messages", {
-      userId: args.userId,
+      personaId: args.personaId,
       chatroomId: chatroom._id,
       body: args.body,
       timestamp: Date.now(),
@@ -97,7 +113,7 @@ export const sendMessageToSlug = mutation({
     const existingPresence = await ctx.db
       .query("userPresence")
       .withIndex("by_userId_chatroomId", (q) =>
-        q.eq("userId", args.userId).eq("chatroomId", chatroom._id)
+        q.eq("userId", membership.userId).eq("chatroomId", chatroom._id)
       )
       .first();
 
@@ -107,7 +123,7 @@ export const sendMessageToSlug = mutation({
       });
     } else {
       await ctx.db.insert("userPresence", {
-        userId: args.userId,
+        userId: membership.userId,
         chatroomId: chatroom._id,
         lastSeen: Date.now(),
       });
@@ -119,14 +135,24 @@ export const sendMessageToSlug = mutation({
 
 export const sendMessage = mutation({
   args: {
-    userId: v.string(),
+    personaId: v.id('personas'),
     chatroomId: v.id("chatrooms"),
     body: v.string(),
   },
   handler: async (ctx, args) => {
+    // Get persona membership to find userId for presence tracking
+    const membership = await ctx.db
+      .query("personaMembers")
+      .withIndex("by_personaId", (q) => q.eq("personaId", args.personaId))
+      .first();
+
+    if (!membership) {
+      throw new Error("Persona membership not found");
+    }
+
     // Insert the message with timestamp
     await ctx.db.insert("messages", {
-      userId: args.userId,
+      personaId: args.personaId,
       chatroomId: args.chatroomId,
       body: args.body,
       timestamp: Date.now(),
@@ -136,7 +162,7 @@ export const sendMessage = mutation({
     const existingPresence = await ctx.db
       .query("userPresence")
       .withIndex("by_userId_chatroomId", (q) =>
-        q.eq("userId", args.userId).eq("chatroomId", args.chatroomId)
+        q.eq("userId", membership.userId).eq("chatroomId", args.chatroomId)
       )
       .first();
 
@@ -146,7 +172,7 @@ export const sendMessage = mutation({
       });
     } else {
       await ctx.db.insert("userPresence", {
-        userId: args.userId,
+        userId: membership.userId,
         chatroomId: args.chatroomId,
         lastSeen: Date.now(),
       });
@@ -165,23 +191,20 @@ export const getMessages = query({
       .order("desc")
       .take(50);
 
-    // Enrich messages with user display names from Better Auth component
-    const messagesWithUsers = await Promise.all(
+    // Enrich messages with persona display names
+    const messagesWithPersonas = await Promise.all(
       messages.map(async (message) => {
-        const userId = message.userId as Id<"user">;
-        const user = await ctx.runQuery(components.betterAuth.adapter.findOne, {
-          model: "user",
-          where: [{ field: "_id", value: userId, operator: "eq", connector: "AND" }]
-        });
-        const displayName = user?.name || "Anonymous";
+        const persona = await ctx.db.get(message.personaId);
+        const displayName = persona?.name || "Anonymous";
         return {
           ...message,
           displayName,
+          personaHandle: persona?.handle,
         };
       })
     );
 
-    return messagesWithUsers.reverse();
+    return messagesWithPersonas.reverse();
   },
 });
 
@@ -295,7 +318,7 @@ export const cleanupStaleUsers = mutation({
 
 export const sendEmoji = mutation({
   args: {
-    userId: v.string(),
+    personaId: v.id('personas'),
     chatroomId: v.id("chatrooms"),
     emoji: v.string(),
   },
@@ -303,11 +326,11 @@ export const sendEmoji = mutation({
     const now = Date.now();
     const thirtySecondsAgo = now - 30 * 1000; // 30 seconds ago
 
-    // Check how many emojis this user has sent in the last 30 seconds
+    // Check how many emojis this persona has sent in the last 30 seconds
     const recentEmojiEvents = await ctx.db
       .query("emojiEvents")
-      .withIndex("by_userId_timestamp", (q) =>
-        q.eq("userId", args.userId).gt("timestamp", thirtySecondsAgo)
+      .withIndex("by_personaId_timestamp", (q) =>
+        q.eq("personaId", args.personaId).gt("timestamp", thirtySecondsAgo)
       )
       .collect();
 
@@ -317,7 +340,7 @@ export const sendEmoji = mutation({
 
     // Insert the emoji event
     await ctx.db.insert("emojiEvents", {
-      userId: args.userId,
+      personaId: args.personaId,
       chatroomId: args.chatroomId,
       emoji: args.emoji,
       timestamp: now,
