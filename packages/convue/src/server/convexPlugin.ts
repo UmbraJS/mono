@@ -18,22 +18,18 @@ export function convex() {
   return {
     id: 'convex',
     endpoints: {
-      convexToken: {
-        method: 'POST',
-        path: '/convex/token',
-        handler: async (ctx: any) => {
-          // Get the session from the request
-          const session = await ctx.getSession()
+      convexToken: async (ctx: any) => {
+        // Get the session from the request
+        const session = await ctx.getSession()
 
-          if (!session) {
-            return ctx.json({ error: 'Unauthorized' }, { status: 401 })
-          }
+        if (!session) {
+          return ctx.json({ error: 'Unauthorized' }, { status: 401 })
+        }
 
-          // Return the session token - Convex will validate this on the backend
-          return ctx.json({
-            token: session.session.token || session.session.id,
-          })
-        },
+        // Return the session token - Convex will validate this on the backend
+        return ctx.json({
+          token: session.session.token || session.session.id,
+        })
       },
     },
     init(_ctx: any) {

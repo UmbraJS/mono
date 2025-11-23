@@ -13,6 +13,7 @@ import type * as chat from "../chat.js";
 import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as migrations_clearOldUsersTable from "../migrations/clearOldUsersTable.js";
+import type * as personas from "../personas.js";
 import type * as tasks from "../tasks.js";
 
 import type {
@@ -27,6 +28,7 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   http: typeof http;
   "migrations/clearOldUsersTable": typeof migrations_clearOldUsersTable;
+  personas: typeof personas;
   tasks: typeof tasks;
 }>;
 

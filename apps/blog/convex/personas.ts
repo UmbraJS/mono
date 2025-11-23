@@ -19,11 +19,11 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
-    if (!identity) {
+    if (!identity?.subject) {
       throw new Error("Not authenticated")
     }
 
-    const userId = identity.subject
+    const userId = identity.subject!
 
     // Check if handle is already taken
     const existing = await ctx.db
@@ -79,16 +79,16 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
-    if (!identity) {
+    if (!identity?.subject) {
       throw new Error("Not authenticated")
     }
 
-    const userId = identity.subject
+    const userId = identity.subject!
 
     // Check if user is owner
     const membership = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", userId)
       )
       .first()
@@ -98,10 +98,11 @@ export const update = mutation({
     }
 
     // If handle is being changed, check if new handle is available
-    if (args.handle) {
+    const handle = args.handle;
+    if (handle) {
       const existing = await ctx.db
         .query("personas")
-        .withIndex("by_handle", (q) => q.eq("handle", args.handle))
+        .withIndex("by_handle", (q) => q.eq("handle", handle))
         .first()
 
       if (existing && existing._id !== args.personaId) {
@@ -135,11 +136,11 @@ export const listMine = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity()
-    if (!identity) {
+    if (!identity?.subject) {
       return []
     }
 
-    const userId = identity.subject
+    const userId = identity.subject!
 
     // Get all persona memberships for this user
     const memberships = await ctx.db
@@ -225,16 +226,16 @@ export const addMember = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
-    if (!identity) {
+    if (!identity?.subject) {
       throw new Error("Not authenticated")
     }
 
-    const currentUserId = identity.subject
+    const currentUserId = identity.subject!
 
     // Check if current user is owner
     const currentMembership = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", currentUserId)
       )
       .first()
@@ -246,7 +247,7 @@ export const addMember = mutation({
     // Check if user is already a member
     const existingMembership = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", args.userId)
       )
       .first()
@@ -275,16 +276,16 @@ export const removeMember = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
-    if (!identity) {
+    if (!identity?.subject) {
       throw new Error("Not authenticated")
     }
 
-    const currentUserId = identity.subject
+    const currentUserId = identity.subject!
 
     // Check if current user is owner or removing themselves
     const currentMembership = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", currentUserId)
       )
       .first()
@@ -299,7 +300,7 @@ export const removeMember = mutation({
     // Find the membership to remove
     const membershipToRemove = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", args.userId)
       )
       .first()
@@ -337,16 +338,16 @@ export const updateMemberRole = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
-    if (!identity) {
+    if (!identity?.subject) {
       throw new Error("Not authenticated")
     }
 
-    const currentUserId = identity.subject
+    const currentUserId = identity.subject!
 
     // Check if current user is owner
     const currentMembership = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", currentUserId)
       )
       .first()
@@ -358,7 +359,7 @@ export const updateMemberRole = mutation({
     // Find the membership to update
     const membershipToUpdate = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", args.userId)
       )
       .first()
@@ -394,16 +395,16 @@ export const remove = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity()
-    if (!identity) {
+    if (!identity?.subject) {
       throw new Error("Not authenticated")
     }
 
-    const userId = identity.subject
+    const userId = identity.subject!
 
     // Check if user is owner
     const membership = await ctx.db
       .query("personaMembers")
-      .withIndex("by_personaId_userId", (q) => 
+      .withIndex("by_personaId_userId", (q) =>
         q.eq("personaId", args.personaId).eq("userId", userId)
       )
       .first()

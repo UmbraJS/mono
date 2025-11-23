@@ -54,7 +54,7 @@ export const createAuth = (
   });
 
   // Build social providers object - only add GitHub if credentials are available
-  const socialProviders: Record<string, any> = {};
+  const socialProviders: Record<string, { clientId: string, clientSecret: string }> = {};
   if (githubClientId && githubClientSecret) {
     socialProviders.github = {
       clientId: githubClientId,
