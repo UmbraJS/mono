@@ -25,6 +25,59 @@ function convexClient() {
 }
 
 //#endregion
+//#region src/utils/debug.ts
+const GLOBAL_FLAG = "__CONVUE_DEBUG__";
+function getGlobalFlag() {
+	if (typeof globalThis === "undefined") return void 0;
+	return globalThis[GLOBAL_FLAG];
+}
+function getProcessEnvFlag() {
+	if (typeof process === "undefined" || !process?.env) return void 0;
+	const value = process.env.CONVUE_DEBUG;
+	if (typeof value === "undefined") return void 0;
+	return value === "true";
+}
+function getImportMetaFlag() {
+	try {
+		const meta = import.meta;
+		const value = meta?.env?.VITE_CONVUE_DEBUG;
+		if (typeof value === "undefined") return void 0;
+		return value === true || value === "true";
+	} catch {
+		return void 0;
+	}
+}
+let cachedFlag;
+function isConvueDebugEnabled() {
+	if (cachedFlag !== void 0) return cachedFlag;
+	const fromGlobal = getGlobalFlag();
+	if (fromGlobal !== void 0) {
+		cachedFlag = fromGlobal;
+		return cachedFlag;
+	}
+	const fromProcess = getProcessEnvFlag();
+	if (fromProcess !== void 0) {
+		cachedFlag = fromProcess;
+		return cachedFlag;
+	}
+	const fromImportMeta = getImportMetaFlag();
+	if (fromImportMeta !== void 0) {
+		cachedFlag = fromImportMeta;
+		return cachedFlag;
+	}
+	cachedFlag = false;
+	return cachedFlag;
+}
+function setConvueDebug(enabled) {
+	cachedFlag = enabled;
+	if (typeof globalThis !== "undefined") globalThis[GLOBAL_FLAG] = enabled;
+}
+function debugLog(...args) {
+	if (!isConvueDebugEnabled()) return;
+	console.warn(...args);
+}
+
+//#endregion
 //#region src/composables/useAuth.ts
 /**
 * Creates an SSR-compatible auth composable for Nuxt
@@ -55,16 +108,24 @@ function createUseAuth(nuxtComposables) {
 		});
 		const session = nuxtComposables.useState("auth:session", () => null);
 		const sessionFetching = nuxtComposables.isServer ? ref(false) : nuxtComposables.useState("auth:sessionFetching", () => false);
-		const user = computed(() => session.value?.user || null);
+		const user = computed(() => session.value?.user ?? null);
 		const isAuthenticated = computed(() => !!session.value);
 		const isLoading = computed(() => sessionFetching.value);
 		const fetchSession = async () => {
-			if (sessionFetching.value) return;
+			if (sessionFetching.value) return session.value;
 			sessionFetching.value = true;
-			const { data } = await client.getSession({ fetchOptions: { headers } });
-			session.value = data || null;
-			sessionFetching.value = false;
-			return data;
+			try {
+				const { data } = await client.getSession({ fetchOptions: { headers } });
+				const typedData = data ?? null;
+				session.value = typedData;
+				return typedData;
+			} catch (error) {
+				debugLog("[convue] Failed to fetch auth session", error);
+				session.value = null;
+				return null;
+			} finally {
+				sessionFetching.value = false;
+			}
 		};
 		if (nuxtComposables.isClient) client.$store.listen("$sessionSignal", async (signal) => {
 			if (!signal) return;
@@ -88,11 +149,6 @@ function createUseAuth(nuxtComposables) {
 */
 function useConvexContext() {
 	const nuxtApp = useNuxtApp();
-	console.log("[useConvexContext] Checking for context:", {
-		hasNuxtApp: !!nuxtApp,
-		has$convex: !!nuxtApp?.$convex,
-		$convexKeys: nuxtApp?.$convex ? Object.keys(nuxtApp.$convex) : []
-	});
 	if (nuxtApp?.$convex) return nuxtApp.$convex;
 	throw new Error("useConvexContext() is called without a provider. Make sure to provide convex in your Nuxt plugin:\nreturn { provide: { convex: convexContext } }");
 }
@@ -238,20 +294,20 @@ function useServerQuery(query, args, options) {
 function useConvexQuery(query, ...rest) {
 	const { args, options } = useQueryArgs(rest);
 	const isServer = typeof window === "undefined";
-	console.warn("[useConvexQuery] Starting query:", {
+	debugLog("[useConvexQuery] Starting query:", {
 		isServer,
 		queryName: getFunctionName(query),
 		args: args.value
 	});
 	if (isServer) {
-		console.warn("[useConvexQuery] Using server path");
+		debugLog("[useConvexQuery] Using server path");
 		return useServerQuery(query, args, options);
 	}
-	console.warn("[useConvexQuery] Using client path");
+	debugLog("[useConvexQuery] Using client path");
 	const convex$1 = useConvexClient();
 	const data = ref(convex$1.client.localQueryResult(getFunctionName(query), args.value));
 	const error = ref(null);
-	console.warn("[useConvexQuery] Initial client state:", {
+	debugLog("[useConvexQuery] Initial client state:", {
 		data: data.value,
 		error: error.value
 	});
@@ -271,12 +327,12 @@ function useConvexQuery(query, ...rest) {
 		});
 	};
 	const handleError = (err) => {
-		console.warn("[useConvexQuery] handleError called:", err);
+		debugLog("[useConvexQuery] handleError called:", err);
 		data.value = void 0;
 		error.value = err;
 	};
 	const handleResult = (result) => {
-		console.warn("[useConvexQuery] handleResult called:", result);
+		debugLog("[useConvexQuery] handleResult called:", result);
 		data.value = result;
 		error.value = null;
 	};
@@ -292,17 +348,17 @@ function useConvexQuery(query, ...rest) {
 		}
 	};
 	const createSubscription = (args$1) => {
-		console.warn("[useConvexQuery] Creating subscription with args:", args$1);
+		debugLog("[useConvexQuery] Creating subscription with args:", args$1);
 		return convex$1.onUpdate(query, args$1, handleResult, handleError);
 	};
 	let cancelSubscription;
 	watch(args, (newArgs) => {
-		console.warn("[useConvexQuery] Args changed, recreating subscription:", newArgs);
+		debugLog("[useConvexQuery] Args changed, recreating subscription:", newArgs);
 		cancelSubscription?.();
 		cancelSubscription = createSubscription(newArgs);
 	}, { immediate: true });
 	onScopeDispose(() => {
-		console.warn("[useConvexQuery] Component unmounting, cleaning up subscription");
+		debugLog("[useConvexQuery] Component unmounting, cleaning up subscription");
 		cancelSubscription?.();
 	});
 	return {
@@ -310,7 +366,7 @@ function useConvexQuery(query, ...rest) {
 		error,
 		isPending: computed(() => {
 			const result = data.value === void 0 && error.value === null;
-			console.warn("[useConvexQuery] isPending computed:", {
+			debugLog("[useConvexQuery] isPending computed:", {
 				dataValue: data.value,
 				errorValue: error.value,
 				isPending: result
@@ -369,14 +425,10 @@ function createConvexClients(url, clientOptions) {
 function convex() {
 	return {
 		id: "convex",
-		endpoints: { convexToken: {
-			method: "POST",
-			path: "/convex/token",
-			handler: async (ctx) => {
-				const session = await ctx.getSession();
-				if (!session) return ctx.json({ error: "Unauthorized" }, { status: 401 });
-				return ctx.json({ token: session.session.token || session.session.id });
-			}
+		endpoints: { convexToken: async (ctx) => {
+			const session = await ctx.getSession();
+			if (!session) return ctx.json({ error: "Unauthorized" }, { status: 401 });
+			return ctx.json({ token: session.session.token || session.session.id });
 		} },
 		init(_ctx) {
 			return { options: { advanced: { generateId: false } } };
@@ -947,4 +999,4 @@ function createClient(component, config) {
 }
 
 //#endregion
-export { convex, convexClient, createApi, createClient, createConvexClients, createUseAuth, getStaticAuth, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery };
+export { convex, convexClient, createApi, createClient, createConvexClients, createUseAuth, debugLog, getStaticAuth, isConvueDebugEnabled, setConvueDebug, useConvexClient, useConvexHttpClient, useConvexHttpQuery, useConvexMutation, useConvexQuery };

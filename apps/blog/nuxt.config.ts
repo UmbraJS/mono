@@ -21,8 +21,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia/colada-nuxt',
     '@nuxt/icon',
-    '@nuxt/content',
-    '@nuxtjs/mdc',
     'nuxt-time',
     '@vueuse/nuxt',
     'motion-v/nuxt',
@@ -156,50 +154,6 @@ export default defineNuxtConfig({
   eslint: {
     config: {
       stylistic: false,
-    },
-  },
-
-  mdc: {
-    remarkPlugins: {
-      // Override remark-emoji options
-      'remark-emoji': {
-        options: {
-          emoticon: true,
-        },
-      },
-    },
-  },
-
-  // Ensure Prose components are auto-registered with exact names (e.g. `ProseH1`)
-  components: {
-    global: true,
-    dirs: [
-      { path: './components/prose', pathPrefix: false },
-    ],
-  },
-
-  content: {
-    preview: {
-      api: 'https://api.nuxt.studio'
-    },
-    build: {
-      markdown: {
-        highlight: {
-          theme: {
-            // TODO: Figure out why this doesn't work
-            default: 'dracula',
-            dark: 'github-dark',
-          },
-        },
-        remarkPlugins: {
-          // Override remark-emoji options
-          'remark-emoji': {
-            options: {
-              emoticon: true,
-            },
-          },
-        },
-      },
     },
   },
 })

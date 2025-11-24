@@ -24,7 +24,8 @@
     "components/**/*.ts",
     "components/**/*.vue",
     "composables/**/*.ts",
-    "types/**/*.ts"
+    "types/**/*.ts",
+    "../../types/**/*.d.ts"
   ],
   "exclude": [
     "dist",
