@@ -12,7 +12,7 @@ definePageMeta({
 })
 
 const router = useRouter()
-const { isAuthenticated } = useAuth()
+const { isAuthenticated, user } = useAuth()
 
 const name = ref('')
 const bio = ref('')
@@ -102,16 +102,17 @@ const selectTag = (tagId: string) => {
 const client = typeof window !== 'undefined' ? useConvexClient() : null
 
 const { mutate: createPersona, asyncStatus, error } = useMutation({
-  mutation: async (data: { name: string; handle: string; bio?: string; identityTagIds: string[]; userId: Id<'user'> }): Promise<Id<'personas'>> => {
+  mutation: async (data: { name: string; handle: string; bio?: string; identityTagIds: string[] }): Promise<Id<'personas'>> => {
     if (!client) throw new Error('Client not available')
     if (!isAuthenticated.value) throw new Error('You must be signed in to create a persona')
+    if (!user.value?.id) throw new Error('User ID not available')
 
     const result = await client.mutation(api.personas.create, {
+      userId: user.value.id,
       name: data.name,
       handle: data.handle,
       bio: data.bio,
       identityTagIds: data.identityTagIds,
-      userId: data.userId,
     })
 
     return result
@@ -121,16 +122,8 @@ const { mutate: createPersona, asyncStatus, error } = useMutation({
   },
 })
 
-async function handleSubmit() {
+function handleSubmit() {
   if (!name.value || !isAuthenticated.value) return
-
-  // Get userId from session
-  const { session } = useAuth()
-  const userId = session.value?.user?._id
-
-  if (!userId) {
-    throw new Error('No user ID found in session')
-  }
 
   // Generate a short handle (6 character alphanumeric)
   const handle = Math.random().toString(36).substring(2, 8)
@@ -140,7 +133,6 @@ async function handleSubmit() {
     handle,
     bio: bio.value || undefined,
     identityTagIds: identityTagIds.value,
-    userId: userId as Id<'user'>,
   })
 }
 </script><template>

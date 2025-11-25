@@ -11,15 +11,19 @@ export const MAX_IDENTITY_TAGS = 3
  */
 export const create = mutation({
   args: {
+    userId: v.string(),
     name: v.string(),
     handle: v.string(),
     bio: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
     identityTagIds: v.array(v.string()),
-    userId: v.id('user'), // TEMPORARY: Accept userId from client until auth works
   },
   handler: async (ctx, args) => {
-    const userId = args.userId
+    // Verify the user exists in the database
+    const user = await authComponent.getAnyUserById(ctx, args.userId)
+    if (!user) {
+      throw new Error('User not found')
+    }
 
     // Validate identity tag limit
     if (args.identityTagIds.length > MAX_IDENTITY_TAGS) {
@@ -67,7 +71,7 @@ export const create = mutation({
     // Add the creator as owner
     await ctx.db.insert("personaMembers", {
       personaId,
-      userId,
+      userId: args.userId,
       role: "owner",
       joinedAt: now,
     })
@@ -164,7 +168,8 @@ export const update = mutation({
 export const listMine = query({
   args: {},
   handler: async (ctx) => {
-    const authUser = await authComponent.getAuthUser(ctx)
+    // Use safeGetAuthUser to avoid throwing when not authenticated
+    const authUser = await authComponent.safeGetAuthUser(ctx)
     if (!authUser?.userId) {
       return []
     }

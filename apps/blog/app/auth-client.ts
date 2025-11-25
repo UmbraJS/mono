@@ -8,4 +8,6 @@ const baseURL = '/api/auth'
 export const authClient = createAuthClient({
   baseURL,
   plugins: [convexClient()],
+  // Explicitly disable localStorage - let the server set cookies naturally
+  disableDefaultFetch: false,
 })
