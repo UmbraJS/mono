@@ -18,16 +18,20 @@ export default defineEventHandler(async (event) => {
   // Handle /convex/token endpoint locally - don't forward to Convex
   if (path === '/api/auth/convex/token') {
     const cookies = getHeaders(event).cookie || ''
+
+    // Try to get the session token from cookies
     const sessionToken = cookies
       .split(';')
-      .find((c) => c.trim().startsWith('better-auth.session_token='))
+      .map(c => c.trim())
+      .find((c) => c.startsWith('better-auth.session_token='))
       ?.split('=')[1]
 
     if (!sessionToken) {
       return { error: 'Unauthorized', data: null }
     }
 
-    return { data: { token: decodeURIComponent(sessionToken) }, error: null }
+    // Return the decoded session token - Convex + Better Auth expects this
+    return { data: { token: decodeURIComponent(sessionToken) } }
   }
 
   // Forward the request to Convex
